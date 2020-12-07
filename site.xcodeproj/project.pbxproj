@@ -8,6 +8,17 @@
 
 /* Begin PBXBuildFile section */
 		FE513783257DE1680070DB08 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE513782257DE1680070DB08 /* main.swift */; };
+		FE51378B257DE18C0070DB08 /* Diary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE51378A257DE18C0070DB08 /* Diary.swift */; };
+		FE51378E257DE26E0070DB08 /* Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE51378D257DE26E0070DB08 /* Entry.swift */; };
+		FECA079B258C64BF00A95DBF /* Music.swift in Sources */ = {isa = PBXBuildFile; fileRef = FECA079A258C64BF00A95DBF /* Music.swift */; };
+		FECA079F258C662E00A95DBF /* Album.swift in Sources */ = {isa = PBXBuildFile; fileRef = FECA079E258C662E00A95DBF /* Album.swift */; };
+		FECA07A2258C67C400A95DBF /* Artist.swift in Sources */ = {isa = PBXBuildFile; fileRef = FECA07A1258C67C400A95DBF /* Artist.swift */; };
+		FECA07A5258C688000A95DBF /* Relation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FECA07A4258C688000A95DBF /* Relation.swift */; };
+		FECA07A8258C68F800A95DBF /* Show.swift in Sources */ = {isa = PBXBuildFile; fileRef = FECA07A7258C68F800A95DBF /* Show.swift */; };
+		FECA07AB258C699500A95DBF /* Song.swift in Sources */ = {isa = PBXBuildFile; fileRef = FECA07AA258C699500A95DBF /* Song.swift */; };
+		FECA07AE258C6A6A00A95DBF /* Venue.swift in Sources */ = {isa = PBXBuildFile; fileRef = FECA07AD258C6A6A00A95DBF /* Venue.swift */; };
+		FECA07B1258D5B5E00A95DBF /* PartialDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FECA07B0258D5B5E00A95DBF /* PartialDate.swift */; };
+		FECA07B4258D5C2200A95DBF /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = FECA07B3258D5C2200A95DBF /* Location.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +36,17 @@
 /* Begin PBXFileReference section */
 		FE51377F257DE1680070DB08 /* site */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = site; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE513782257DE1680070DB08 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		FE51378A257DE18C0070DB08 /* Diary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Diary.swift; sourceTree = "<group>"; };
+		FE51378D257DE26E0070DB08 /* Entry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entry.swift; sourceTree = "<group>"; };
+		FECA079A258C64BF00A95DBF /* Music.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Music.swift; sourceTree = "<group>"; };
+		FECA079E258C662E00A95DBF /* Album.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Album.swift; sourceTree = "<group>"; };
+		FECA07A1258C67C400A95DBF /* Artist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Artist.swift; sourceTree = "<group>"; };
+		FECA07A4258C688000A95DBF /* Relation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Relation.swift; sourceTree = "<group>"; };
+		FECA07A7258C68F800A95DBF /* Show.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Show.swift; sourceTree = "<group>"; };
+		FECA07AA258C699500A95DBF /* Song.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Song.swift; sourceTree = "<group>"; };
+		FECA07AD258C6A6A00A95DBF /* Venue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Venue.swift; sourceTree = "<group>"; };
+		FECA07B0258D5B5E00A95DBF /* PartialDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartialDate.swift; sourceTree = "<group>"; };
+		FECA07B3258D5C2200A95DBF /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +80,17 @@
 			isa = PBXGroup;
 			children = (
 				FE513782257DE1680070DB08 /* main.swift */,
+				FE51378A257DE18C0070DB08 /* Diary.swift */,
+				FE51378D257DE26E0070DB08 /* Entry.swift */,
+				FECA079A258C64BF00A95DBF /* Music.swift */,
+				FECA079E258C662E00A95DBF /* Album.swift */,
+				FECA07A1258C67C400A95DBF /* Artist.swift */,
+				FECA07A4258C688000A95DBF /* Relation.swift */,
+				FECA07A7258C68F800A95DBF /* Show.swift */,
+				FECA07AA258C699500A95DBF /* Song.swift */,
+				FECA07AD258C6A6A00A95DBF /* Venue.swift */,
+				FECA07B0258D5B5E00A95DBF /* PartialDate.swift */,
+				FECA07B3258D5C2200A95DBF /* Location.swift */,
 			);
 			path = site;
 			sourceTree = "<group>";
@@ -119,7 +152,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FECA07AB258C699500A95DBF /* Song.swift in Sources */,
+				FECA07AE258C6A6A00A95DBF /* Venue.swift in Sources */,
+				FECA07A2258C67C400A95DBF /* Artist.swift in Sources */,
+				FE51378E257DE26E0070DB08 /* Entry.swift in Sources */,
 				FE513783257DE1680070DB08 /* main.swift in Sources */,
+				FECA07B1258D5B5E00A95DBF /* PartialDate.swift in Sources */,
+				FECA07A5258C688000A95DBF /* Relation.swift in Sources */,
+				FE51378B257DE18C0070DB08 /* Diary.swift in Sources */,
+				FECA079B258C64BF00A95DBF /* Music.swift in Sources */,
+				FECA07A8258C68F800A95DBF /* Show.swift in Sources */,
+				FECA07B4258D5C2200A95DBF /* Location.swift in Sources */,
+				FECA079F258C662E00A95DBF /* Album.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
