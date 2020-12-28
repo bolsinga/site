@@ -34,7 +34,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		FE51377F257DE1680070DB08 /* site */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = site; sourceTree = BUILT_PRODUCTS_DIR; };
+		FE51377F257DE1680070DB08 /* site_tool */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = site_tool; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE513782257DE1680070DB08 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		FE51378A257DE18C0070DB08 /* Diary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Diary.swift; sourceTree = "<group>"; };
 		FE51378D257DE26E0070DB08 /* Entry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entry.swift; sourceTree = "<group>"; };
@@ -71,7 +71,7 @@
 		FE513780257DE1680070DB08 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				FE51377F257DE1680070DB08 /* site */,
+				FE51377F257DE1680070DB08 /* site_tool */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -98,9 +98,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		FE51377E257DE1680070DB08 /* site */ = {
+		FE51377E257DE1680070DB08 /* site_tool */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = FE513786257DE1680070DB08 /* Build configuration list for PBXNativeTarget "site" */;
+			buildConfigurationList = FE513786257DE1680070DB08 /* Build configuration list for PBXNativeTarget "site_tool" */;
 			buildPhases = (
 				FE51377B257DE1680070DB08 /* Sources */,
 				FE51377C257DE1680070DB08 /* Frameworks */,
@@ -110,9 +110,9 @@
 			);
 			dependencies = (
 			);
-			name = site;
+			name = site_tool;
 			productName = site;
-			productReference = FE51377F257DE1680070DB08 /* site */;
+			productReference = FE51377F257DE1680070DB08 /* site_tool */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -142,7 +142,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				FE51377E257DE1680070DB08 /* site */,
+				FE51377E257DE1680070DB08 /* site_tool */,
 			);
 		};
 /* End PBXProject section */
@@ -319,7 +319,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		FE513786257DE1680070DB08 /* Build configuration list for PBXNativeTarget "site" */ = {
+		FE513786257DE1680070DB08 /* Build configuration list for PBXNativeTarget "site_tool" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				FE513787257DE1680070DB08 /* Debug */,

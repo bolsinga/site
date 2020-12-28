@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "FE51377E257DE1680070DB08"
-               BuildableName = "site"
-               BlueprintName = "site"
+               BuildableName = "site_tool"
+               BlueprintName = "site_tool"
                ReferencedContainer = "container:site.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -45,8 +45,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "FE51377E257DE1680070DB08"
-            BuildableName = "site"
-            BlueprintName = "site"
+            BuildableName = "site_tool"
+            BlueprintName = "site_tool"
             ReferencedContainer = "container:site.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -72,8 +72,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "FE51377E257DE1680070DB08"
-            BuildableName = "site"
-            BlueprintName = "site"
+            BuildableName = "site_tool"
+            BlueprintName = "site_tool"
             ReferencedContainer = "container:site.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
