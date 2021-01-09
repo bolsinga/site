@@ -130,7 +130,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1220;
-				LastUpgradeCheck = 1220;
+				LastUpgradeCheck = 1230;
 				TargetAttributes = {
 					FE51377E257DE1680070DB08 = {
 						CreatedOnToolsVersion = 12.2;
@@ -229,7 +229,6 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -284,7 +283,6 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
@@ -296,6 +294,7 @@
 		FE513787257DE1680070DB08 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = D3F44CA7F4;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -307,6 +306,7 @@
 		FE513788257DE1680070DB08 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = D3F44CA7F4;
 				ENABLE_HARDENED_RUNTIME = YES;
