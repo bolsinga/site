@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import json
 
 let diaryURL = URL(fileURLWithPath: CommandLine.arguments[1])
 let diaryJsonData = try Data(contentsOf: diaryURL, options: .mappedIfSafe)
