@@ -52,11 +52,11 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "/Users/bolsinga/Documents/code/git/web_data/diary.json"
+            argument = "/Users/bolsinga/Sites/json/diary.json"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "/Users/bolsinga/Documents/code/git/web_data/music.json"
+            argument = "/Users/bolsinga/Sites/json/music.json"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
