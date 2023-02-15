@@ -7,12 +7,12 @@
 
 import Foundation
 
-struct Music : Codable {
-    var albums: [Album]
-    var artists: [Artist]
-    var relations: [Relation]
-    var shows: [Show]
-    var songs: [Song]
-    var timestamp: Date
-    var venues: [Venue]
+public struct Music : Codable {
+    public var albums: [Album]
+    public var artists: [Artist]
+    public var relations: [Relation]
+    public var shows: [Show]
+    public var songs: [Song]
+    public var timestamp: Date
+    public var venues: [Venue]
 }

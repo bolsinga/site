@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct Relation : Codable {
-    var id : String
-    var members: [String]
-    var reason: String?
+public struct Relation : Codable {
+    public var id : String
+    public var members: [String]
+    public var reason: String?
 }

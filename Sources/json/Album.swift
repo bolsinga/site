@@ -7,9 +7,9 @@
 
 import Foundation
 
-struct Album : Codable {
-    var id : String
-    var performer: String?
-    var release: PartialDate?
-    var songs: [String]
+public struct Album : Codable {
+    public var id : String
+    public var performer: String?
+    public var release: PartialDate?
+    public var songs: [String]
 }

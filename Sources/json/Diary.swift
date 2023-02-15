@@ -7,12 +7,12 @@
 
 import Foundation
 
-struct Diary : Codable {
-    var timestamp: Date
-    var colophon: [String]
-    var header: [String]
-    var title: String
-    var statics: [String]
-    var friends: [String]
-    var entries: [Entry]
+public struct Diary : Codable {
+    public var timestamp: Date
+    public var colophon: [String]
+    public var header: [String]
+    public var title: String
+    public var statics: [String]
+    public var friends: [String]
+    public var entries: [Entry]
 }

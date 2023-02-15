@@ -7,14 +7,14 @@
 
 import Foundation
 
-struct Song : Codable {
-    var artist: String
-    var digitized: Bool
-    var genre: String?
-    var id: String
-    var lastPlayed: Date?
-    var playCount: Int?
-    var release: PartialDate?
-    var title: String
-    var track: Int?
+public struct Song : Codable {
+    public var artist: String
+    public var digitized: Bool
+    public var genre: String?
+    public var id: String
+    public var lastPlayed: Date?
+    public var playCount: Int?
+    public var release: PartialDate?
+    public var title: String
+    public var track: Int?
 }
