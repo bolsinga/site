@@ -4,11 +4,14 @@ import PackageDescription
 
 let package = Package(
   name: "site",
+  defaultLocalization: "en",
   platforms: [
-    .macOS(.v13)
+    .macOS(.v13),
+    .iOS(.v16),
   ],
   products: [
     .library(name: "json", targets: ["json"]),
+    .library(name: "MusicUI", targets: ["MusicUI"]),
     .executable(name: "site_tool", targets: ["site_tool"]),
   ],
   dependencies: [
@@ -17,6 +20,7 @@ let package = Package(
   ],
   targets: [
     .target(name: "json", dependencies: [.product(name: "LoadingState", package: "LoadingState")]),
+    .target(name: "MusicUI", dependencies: [.byName(name: "json")]),
     .executableTarget(
       name: "site_tool",
       dependencies: [
