@@ -18,7 +18,7 @@ let decoder = JSONDecoder()
 decoder.dateDecodingStrategy = .iso8601
 
 let diary = try decoder.decode(Diary.self, from: diaryJsonData)
-print("\(diary.title) has \(diary.entries.count) entries.");
+print("\(diary.title) has \(diary.entries.count) entries.")
 
 let music = try decoder.decode(Music.self, from: musicJsonData)
 print("Albums: \(music.albums.count)")

@@ -7,9 +7,9 @@
 
 import Foundation
 
-public struct Entry : Codable {
-    public var timestamp: Date
-    public var title: String?
-    public var id: String
-    public var comment: String
+public struct Entry: Codable {
+  public var timestamp: Date
+  public var title: String?
+  public var id: String
+  public var comment: String
 }
