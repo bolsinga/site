@@ -7,9 +7,9 @@
 
 import Foundation
 
-struct Artist : Codable {
-    var albums: [String]?
-    var id : String
-    var name : String
-    var sortname : String?
+public struct Artist : Codable {
+    public var albums: [String]?
+    public var id : String
+    public var name : String
+    public var sortname : String?
 }

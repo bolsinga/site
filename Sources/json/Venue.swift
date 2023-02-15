@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct Venue : Codable {
-    var id : String
-    var location : Location
-    var name: String
+public struct Venue : Codable {
+    public var id : String
+    public var location : Location
+    public var name: String
 }

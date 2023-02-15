@@ -7,9 +7,9 @@
 
 import Foundation
 
-struct PartialDate : Codable {
-    var year : Int?
-    var month : Int?
-    var day : Int?
-    var unknown : Bool?
+public struct PartialDate : Codable {
+    public var year : Int?
+    public var month : Int?
+    public var day : Int?
+    public var unknown : Bool?
 }

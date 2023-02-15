@@ -7,10 +7,10 @@
 
 import Foundation
 
-struct Show : Codable {
-    var artists: [String]
-    var comment : String?
-    var date : PartialDate
-    var id : String
-    var venue : String
+public struct Show : Codable {
+    public var artists: [String]
+    public var comment : String?
+    public var date : PartialDate
+    public var id : String
+    public var venue : String
 }

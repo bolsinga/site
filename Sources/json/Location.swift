@@ -7,9 +7,9 @@
 
 import Foundation
 
-struct Location : Codable {
-    var city : String
-    var web : URL?
-    var street : String?
-    var state : String
+public struct Location : Codable {
+    public var city : String
+    public var web : URL?
+    public var street : String?
+    public var state : String
 }
