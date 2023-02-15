@@ -8,19 +8,10 @@
 import Foundation
 import json
 
-let diaryURL = URL(fileURLWithPath: CommandLine.arguments[1])
-let diaryJsonData = try Data(contentsOf: diaryURL, options: .mappedIfSafe)
-
-let musicURL = URL(fileURLWithPath: CommandLine.arguments[2])
-let musicJsonData = try Data(contentsOf: musicURL, options: .mappedIfSafe)
-
-let decoder = JSONDecoder()
-decoder.dateDecodingStrategy = .iso8601
-
-let diary = try decoder.decode(Diary.self, from: diaryJsonData)
+let diary = try Diary.diaryFromPath(CommandLine.arguments[1])
 print("\(diary.title) has \(diary.entries.count) entries.")
 
-let music = try decoder.decode(Music.self, from: musicJsonData)
+let music = try Music.musicFromPath(CommandLine.arguments[2])
 print("Albums: \(music.albums.count)")
 print("Artists: \(music.artists.count)")
 print("Relations: \(music.relations.count)")
