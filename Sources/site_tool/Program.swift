@@ -7,6 +7,7 @@
 
 import ArgumentParser
 import Foundation
+import LoadingState
 import json
 
 @main
@@ -27,15 +28,21 @@ struct Program: AsyncParsableCommand {
   var rootURL: URL
 
   func run() async throws {
-    let diary = try await Diary.diaryFromURL(rootURL.appending(path: "diary.json"))
-    print("\(diary.title) has \(diary.entries.count) entries.")
+    var diaryLoadingState: LoadingState<Diary> = .idle
+    await diaryLoadingState.load(url: rootURL.appending(path: "diary.json"))
+    if let diary = diaryLoadingState.value {
+      print("\(diary.title) has \(diary.entries.count) entries.")
+    }
 
-    let music = try await Music.musicFromURL(rootURL.appending(path: "music.json"))
-    print("Albums: \(music.albums.count)")
-    print("Artists: \(music.artists.count)")
-    print("Relations: \(music.relations.count)")
-    print("Shows: \(music.shows.count)")
-    print("Songs: \(music.songs.count)")
-    print("Venues: \(music.venues.count)")
+    var musicLoadingState: LoadingState<Music> = .idle
+    await musicLoadingState.load(url: rootURL.appending(path: "music.json"))
+    if let music = musicLoadingState.value {
+      print("Albums: \(music.albums.count)")
+      print("Artists: \(music.artists.count)")
+      print("Relations: \(music.relations.count)")
+      print("Shows: \(music.shows.count)")
+      print("Songs: \(music.songs.count)")
+      print("Venues: \(music.venues.count)")
+    }
   }
 }
