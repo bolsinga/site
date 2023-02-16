@@ -12,10 +12,11 @@ let package = Package(
     .executable(name: "site_tool", targets: ["site_tool"]),
   ],
   dependencies: [
-    .package(url: "https://github.com/apple/swift-argument-parser", from: "1.2.2")
+    .package(url: "https://github.com/apple/swift-argument-parser", from: "1.2.2"),
+    .package(url: "https://github.com/bolsinga/LoadingState", branch: "main"),
   ],
   targets: [
-    .target(name: "json"),
+    .target(name: "json", dependencies: [.product(name: "LoadingState", package: "LoadingState")]),
     .executableTarget(
       name: "site_tool",
       dependencies: [
