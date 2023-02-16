@@ -13,9 +13,6 @@ extension Music {
     let url = URL(fileURLWithPath: path)
     let jsonData = try Data(contentsOf: url, options: .mappedIfSafe)
 
-    let decoder = JSONDecoder()
-    decoder.dateDecodingStrategy = .iso8601
-
-    return try decoder.decode(Music.self, from: jsonData)
+    return try Music.musicFromJsonData(jsonData)
   }
 }
