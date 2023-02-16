@@ -12,8 +12,7 @@ struct VenueView: View {
   var body: some View {
     VStack(alignment: .leading) {
       Text(venue.name)
-        .font(.title)
-      Divider()
+        .font(.headline)
       AddressView(location: venue.location)
     }
   }
