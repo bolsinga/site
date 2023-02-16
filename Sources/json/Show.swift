@@ -8,9 +8,19 @@
 import Foundation
 
 public struct Show: Codable {
-  public var artists: [String]
-  public var comment: String?
-  public var date: PartialDate
-  public var id: String
-  public var venue: String
+  public let artists: [String]
+  public let comment: String?
+  public let date: PartialDate
+  public let id: String
+  public let venue: String
+
+  public init(
+    artists: [String], comment: String? = nil, date: PartialDate, id: String, venue: String
+  ) {
+    self.artists = artists
+    self.comment = comment
+    self.date = date
+    self.id = id
+    self.venue = venue
+  }
 }

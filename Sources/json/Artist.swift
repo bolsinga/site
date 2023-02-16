@@ -8,8 +8,15 @@
 import Foundation
 
 public struct Artist: Codable {
-  public var albums: [String]?
-  public var id: String
-  public var name: String
-  public var sortname: String?
+  public let albums: [String]?
+  public let id: String
+  public let name: String
+  public let sortname: String?
+
+  public init(albums: [String]? = nil, id: String, name: String, sortname: String? = nil) {
+    self.albums = albums
+    self.id = id
+    self.name = name
+    self.sortname = sortname
+  }
 }

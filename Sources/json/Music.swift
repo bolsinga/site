@@ -8,11 +8,24 @@
 import Foundation
 
 public struct Music: Codable {
-  public var albums: [Album]
-  public var artists: [Artist]
-  public var relations: [Relation]
-  public var shows: [Show]
-  public var songs: [Song]
-  public var timestamp: Date
-  public var venues: [Venue]
+  public let albums: [Album]
+  public let artists: [Artist]
+  public let relations: [Relation]
+  public let shows: [Show]
+  public let songs: [Song]
+  public let timestamp: Date
+  public let venues: [Venue]
+
+  public init(
+    albums: [Album], artists: [Artist], relations: [Relation], shows: [Show], songs: [Song],
+    timestamp: Date, venues: [Venue]
+  ) {
+    self.albums = albums
+    self.artists = artists
+    self.relations = relations
+    self.shows = shows
+    self.songs = songs
+    self.timestamp = timestamp
+    self.venues = venues
+  }
 }
