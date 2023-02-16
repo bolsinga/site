@@ -10,24 +10,27 @@ import Foundation
 import json
 
 @main
-struct Program: ParsableCommand {
-  @Argument(
-    help:
-      "The path at which find diary.json."
-  )
-  var diaryPath: String
+struct Program: AsyncParsableCommand {
+  enum URLError: Error {
+    case notURLString(String)
+  }
 
   @Argument(
     help:
-      "The path at which find music.json."
+      "The root URL for the json files.",
+    transform: ({
+      let url = URL(string: $0)
+      guard let url else { throw URLError.notURLString($0) }
+      return url
+    })
   )
-  var musicPath: String
+  var rootURL: URL
 
-  func run() throws {
-    let diary = try Diary.diaryFromPath(diaryPath)
+  func run() async throws {
+    let diary = try await Diary.diaryFromURL(rootURL.appending(path: "diary.json"))
     print("\(diary.title) has \(diary.entries.count) entries.")
 
-    let music = try Music.musicFromPath(musicPath)
+    let music = try await Music.musicFromURL(rootURL.appending(path: "music.json"))
     print("Albums: \(music.albums.count)")
     print("Artists: \(music.artists.count)")
     print("Relations: \(music.relations.count)")
