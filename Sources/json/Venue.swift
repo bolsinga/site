@@ -8,7 +8,13 @@
 import Foundation
 
 public struct Venue: Codable {
-  public var id: String
-  public var location: Location
-  public var name: String
+  public let id: String
+  public let location: Location
+  public let name: String
+
+  public init(id: String, location: Location, name: String) {
+    self.id = id
+    self.location = location
+    self.name = name
+  }
 }

@@ -8,13 +8,28 @@
 import Foundation
 
 public struct Song: Codable {
-  public var artist: String
-  public var digitized: Bool
-  public var genre: String?
-  public var id: String
-  public var lastPlayed: Date?
-  public var playCount: Int?
-  public var release: PartialDate?
-  public var title: String
-  public var track: Int?
+  public let artist: String
+  public let digitized: Bool
+  public let genre: String?
+  public let id: String
+  public let lastPlayed: Date?
+  public let playCount: Int?
+  public let release: PartialDate?
+  public let title: String
+  public let track: Int?
+
+  public init(
+    artist: String, digitized: Bool, genre: String? = nil, id: String, lastPlayed: Date? = nil,
+    playCount: Int? = nil, release: PartialDate? = nil, title: String, track: Int? = nil
+  ) {
+    self.artist = artist
+    self.digitized = digitized
+    self.genre = genre
+    self.id = id
+    self.lastPlayed = lastPlayed
+    self.playCount = playCount
+    self.release = release
+    self.title = title
+    self.track = track
+  }
 }

@@ -8,8 +8,15 @@
 import Foundation
 
 public struct Location: Codable {
-  public var city: String
-  public var web: URL?
-  public var street: String?
-  public var state: String
+  public let city: String
+  public let web: URL?
+  public let street: String?
+  public let state: String
+
+  public init(city: String, web: URL? = nil, street: String? = nil, state: String) {
+    self.city = city
+    self.web = web
+    self.street = street
+    self.state = state
+  }
 }

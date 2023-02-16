@@ -8,11 +8,24 @@
 import Foundation
 
 public struct Diary: Codable {
-  public var timestamp: Date
-  public var colophon: [String]
-  public var header: [String]
-  public var title: String
-  public var statics: [String]
-  public var friends: [String]
-  public var entries: [Entry]
+  public let timestamp: Date
+  public let colophon: [String]
+  public let header: [String]
+  public let title: String
+  public let statics: [String]
+  public let friends: [String]
+  public let entries: [Entry]
+
+  public init(
+    timestamp: Date, colophon: [String], header: [String], title: String, statics: [String],
+    friends: [String], entries: [Entry]
+  ) {
+    self.timestamp = timestamp
+    self.colophon = colophon
+    self.header = header
+    self.title = title
+    self.statics = statics
+    self.friends = friends
+    self.entries = entries
+  }
 }
