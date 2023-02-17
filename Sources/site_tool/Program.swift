@@ -43,6 +43,9 @@ struct Program: AsyncParsableCommand {
       print("Shows: \(music.shows.count)")
       print("Songs: \(music.songs.count)")
       print("Venues: \(music.venues.count)")
+
+      let show = music.shows[200]
+      print(music.description(for: show))
     }
   }
 }
