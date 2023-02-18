@@ -10,8 +10,8 @@ let package = Package(
     .iOS(.v16),
   ],
   products: [
-    .library(name: "json", targets: ["json"]),
-    .library(name: "MusicUI", targets: ["MusicUI"]),
+    .library(name: "Diary", targets: ["Diary"]),
+    .library(name: "Music", targets: ["Music"]),
     .executable(name: "site_tool", targets: ["site_tool"]),
   ],
   dependencies: [
@@ -19,12 +19,18 @@ let package = Package(
     .package(url: "https://github.com/bolsinga/LoadingState", branch: "main"),
   ],
   targets: [
-    .target(name: "json", dependencies: [.product(name: "LoadingState", package: "LoadingState")]),
-    .target(name: "MusicUI", dependencies: [.byName(name: "json")]),
+    .target(
+      name: "Diary",
+      dependencies: [.product(name: "LoadingState", package: "LoadingState")]),
+    .target(
+      name: "Music",
+      dependencies: [.product(name: "LoadingState", package: "LoadingState")]),
     .executableTarget(
       name: "site_tool",
       dependencies: [
-        .byName(name: "json"), .product(name: "ArgumentParser", package: "swift-argument-parser"),
+        .byName(name: "Diary"),
+        .byName(name: "Music"),
+        .product(name: "ArgumentParser", package: "swift-argument-parser"),
       ]),
   ]
 )
