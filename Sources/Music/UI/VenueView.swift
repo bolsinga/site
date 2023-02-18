@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import json
 
 struct VenueView: View {
   let venue: Venue

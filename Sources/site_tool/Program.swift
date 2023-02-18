@@ -6,9 +6,10 @@
 //
 
 import ArgumentParser
+import Diary
 import Foundation
 import LoadingState
-import json
+import Music
 
 @main
 struct Program: AsyncParsableCommand {

@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import json
 
 extension Location {
   fileprivate var addressString: String {
