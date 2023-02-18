@@ -11,15 +11,7 @@ extension Music {
   public func description(for show: Show) -> String {
     var description = "\(show.id) -"
 
-    let dateFormatter = DateFormatter()
-    dateFormatter.dateStyle = .medium
-    dateFormatter.timeStyle = .none
-
-    if let date = show.date.date {
-      description = description + " \(dateFormatter.string(from: date))"
-    } else {
-      description = description + " Date Unknown"
-    }
+    description = description + " \(PartialDate.FormatStyle().format(show.date))"
 
     var artistList = "[Unknown Artists]"
     do {
