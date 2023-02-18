@@ -52,6 +52,10 @@ struct Program: AsyncParsableCommand {
       for album in music.albums.sorted(by: <).reversed() {
         print(music.description(for: album))
       }
+
+      for artist in music.artists.sorted(by: <) {
+        print(music.description(for: artist))
+      }
     }
   }
 }
