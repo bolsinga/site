@@ -35,4 +35,19 @@ extension Music {
 
     return description
   }
+
+  public func description(for album: Album) -> String {
+    var description = "\(album.id) -"
+
+    if let release = album.release {
+      description = description + " \(PartialDate.FormatStyle().format(release))"
+    }
+
+    if let artist = self.artistForAlbum(album) {
+      description = description + " \(artist.name):"
+    }
+    description = description + " \(album.title)"
+
+    return description
+  }
 }
