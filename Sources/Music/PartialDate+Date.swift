@@ -14,7 +14,7 @@ extension PartialDate {
     return dateComponents.date
   }
 
-  private var isUnknown: Bool {
+  internal var isUnknown: Bool {
     if let unknown {
       return unknown
     }
@@ -50,5 +50,21 @@ extension PartialDate {
           comment: "String for when a Show.PartialDate is unknown.")
       }
     }
+  }
+}
+
+extension PartialDate: Comparable {
+  public static func < (lhs: PartialDate, rhs: PartialDate) -> Bool {
+    if lhs.isUnknown, rhs.isUnknown {
+      return false
+    }
+
+    if let lhDate = lhs.date {
+      if let rhDate = rhs.date {
+        return lhDate < rhDate
+      }
+      return true
+    }
+    return false
   }
 }
