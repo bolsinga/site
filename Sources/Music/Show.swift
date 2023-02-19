@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Show: Codable {
+public struct Show: Codable, Equatable {
   public let artists: [String]
   public let comment: String?
   public let date: PartialDate
@@ -22,5 +22,11 @@ public struct Show: Codable {
     self.date = date
     self.id = id
     self.venue = venue
+  }
+}
+
+extension Show: Comparable {
+  public static func < (lhs: Show, rhs: Show) -> Bool {
+    return lhs.date < rhs.date
   }
 }
