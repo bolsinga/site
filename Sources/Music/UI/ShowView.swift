@@ -69,7 +69,7 @@ struct ShowView_Previews: PreviewProvider {
 
     let show3 = Show(
       artists: [artist1.id],
-      date: PartialDate(unknown: true), id: "sh17", venue: venue.id)
+      date: PartialDate(), id: "sh17", venue: venue.id)
 
     let music = Music(
       albums: [],

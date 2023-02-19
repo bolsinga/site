@@ -30,4 +30,11 @@ extension Music {
     }
     return showArtists
   }
+
+  public func artistForAlbum(_ album: Album) -> Artist? {
+    if let id = album.performer {
+      return artistMap[id]
+    }
+    return nil
+  }
 }

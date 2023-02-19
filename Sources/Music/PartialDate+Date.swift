@@ -15,8 +15,8 @@ extension PartialDate {
   }
 
   internal var isUnknown: Bool {
-    if let unknown {
-      return unknown
+    if year == nil, month == nil, day == nil {
+      return true
     }
     return false
   }

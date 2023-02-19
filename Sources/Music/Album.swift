@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Album: Codable {
+public struct Album: Codable, Equatable {
   public let id: String
   public let performer: String?
   public let release: PartialDate?
@@ -23,5 +23,25 @@ public struct Album: Codable {
     self.release = release
     self.songs = songs
     self.title = title
+  }
+}
+
+extension Album: Comparable {
+  internal var isUnknownRelease: Bool {
+    return release == nil
+  }
+
+  public static func < (lhs: Album, rhs: Album) -> Bool {
+    if lhs.isUnknownRelease, rhs.isUnknownRelease {
+      return false
+    }
+
+    if let lhRelease = lhs.release {
+      if let rhRelease = rhs.release {
+        return lhRelease < rhRelease
+      }
+      return true
+    }
+    return false
   }
 }
