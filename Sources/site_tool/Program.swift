@@ -56,6 +56,10 @@ struct Program: AsyncParsableCommand {
       for artist in music.artists.sorted(by: <) {
         print(music.description(for: artist))
       }
+
+      for location in music.venues.map({ $0.location }).sorted(by: <) {
+        print(music.description(for: location))
+      }
     }
   }
 }
