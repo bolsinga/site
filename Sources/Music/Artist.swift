@@ -39,20 +39,13 @@ extension Artist: Comparable {
         }
       }
       ZeroOrMore {
-        ChoiceOf {
-          .whitespace
-          CharacterClass.generalCategory(.openPunctuation)
-          CharacterClass.generalCategory(.otherPunctuation)
-        }
+        .word.inverted
       }
       Capture {
         ZeroOrMore(.word)
       }
       ZeroOrMore {
-        ChoiceOf {
-          .whitespace
-          CharacterClass.generalCategory(.closePunctuation)
-        }
+        .word.inverted
       }
     }
 
