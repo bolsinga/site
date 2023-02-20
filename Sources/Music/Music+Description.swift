@@ -67,4 +67,18 @@ extension Music {
 
     return description
   }
+
+  public func description(for location: Location) -> String {
+    var description = "\(location.city), \(location.state)"
+
+    if let street = location.street {
+      description = description + " (\(street))"
+    }
+
+    if let url = location.web {
+      description = description + ": \(url.absoluteString)"
+    }
+
+    return description
+  }
 }
