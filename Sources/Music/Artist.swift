@@ -34,6 +34,9 @@ extension Artist: Comparable {
           "A"
           "An"
         }
+        OneOrMore {
+          .whitespace
+        }
       }
       ZeroOrMore {
         ChoiceOf {
