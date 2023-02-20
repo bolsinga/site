@@ -50,4 +50,21 @@ extension Music {
 
     return description
   }
+
+  public func description(for artist: Artist) -> String {
+    var description = "\(artist.id) - \(artist.name)"
+
+    if let sortname = artist.sortname {
+      description = description + " (\(sortname))"
+    }
+
+    do {
+      let albumList = try self.albumsForArtist(artist).map { $0.title }.joined(separator: ", ")
+      if !albumList.isEmpty {
+        description = description + " [\(albumList)]"
+      }
+    } catch {}
+
+    return description
+  }
 }

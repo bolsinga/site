@@ -11,6 +11,7 @@ extension Music {
   enum LookupError: Error {
     case missingVenue(Show)
     case missingArtist(Show, String)
+    case missingAlbum(Artist, String)
   }
 
   public func venueForShow(_ show: Show) throws -> Venue {
@@ -36,5 +37,16 @@ extension Music {
       return artistMap[id]
     }
     return nil
+  }
+
+  public func albumsForArtist(_ artist: Artist) throws -> [Album] {
+    var artistAlbums = [Album]()
+    for id in artist.albums ?? [] {
+      guard let album = albumMap[id] else {
+        throw LookupError.missingAlbum(artist, id)
+      }
+      artistAlbums.append(album)
+    }
+    return artistAlbums
   }
 }
