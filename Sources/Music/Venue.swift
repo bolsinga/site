@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Venue: Codable {
+public struct Venue: Codable, Equatable {
   public let id: String
   public let location: Location
   public let name: String

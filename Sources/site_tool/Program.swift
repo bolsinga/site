@@ -15,6 +15,10 @@ extension Artist: LibraryComparable {
 
 }
 
+extension Venue: LibraryComparable {
+
+}
+
 @main
 struct Program: AsyncParsableCommand {
   enum URLError: Error {
@@ -75,6 +79,10 @@ struct Program: AsyncParsableCommand {
 
       for artist in music.artists.sorted(by: libraryCompare(lhs:rhs:)) {
         print(music.description(for: artist))
+      }
+
+      for venue in music.venues.sorted(by: libraryCompare(lhs:rhs:)) {
+        print(music.description(for: venue))
       }
 
       for location in music.venues.map({ $0.location }).sorted(by: <) {
