@@ -43,7 +43,7 @@ extension Music {
       description = description + " \(PartialDate.FormatStyle().format(release))"
     }
 
-    if let compilation = album.compilation {
+    if let compilation = album.compilation, compilation {
       description = description + " [Compilation]"
     }
 
