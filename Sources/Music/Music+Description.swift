@@ -43,6 +43,10 @@ extension Music {
       description = description + " \(PartialDate.FormatStyle().format(release))"
     }
 
+    if let compilation = album.compilation {
+      description = description + " [Compilation]"
+    }
+
     if let artist = self.artistForAlbum(album) {
       description = description + " \(artist.name):"
     }
