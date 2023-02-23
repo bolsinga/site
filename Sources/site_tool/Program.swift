@@ -28,11 +28,27 @@ struct Program: AsyncParsableCommand {
   )
   var rootURL: URL
 
+  @Option(
+    name: .customLong("json"),
+    help: "Pass this to output json files to a directory.",
+    transform: ({
+      let url = URL(filePath: $0, directoryHint: .isDirectory)
+      let manager = FileManager.default
+      if !manager.fileExists(atPath: url.relativePath) {
+        try manager.createDirectory(at: url, withIntermediateDirectories: true)
+      }
+      return url
+    })
+  )
+  var jsonDirectoryURL: URL? = nil
+
   func run() async throws {
     var diaryLoadingState: LoadingState<Diary> = .idle
     await diaryLoadingState.load(url: rootURL.appending(path: "diary.json"))
     if let diary = diaryLoadingState.value {
       print("\(diary.title) has \(diary.entries.count) entries.")
+
+      try jsonDirectoryURL?.appending(path: "diary.json").writeJSON(diary)
     }
 
     var musicLoadingState: LoadingState<Music> = .idle
@@ -60,6 +76,8 @@ struct Program: AsyncParsableCommand {
       for location in music.venues.map({ $0.location }).sorted(by: <) {
         print(music.description(for: location))
       }
+
+      try jsonDirectoryURL?.appending(path: "music.json").writeJSON(music)
     }
   }
 }
