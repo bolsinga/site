@@ -5,6 +5,7 @@
 //  Created by Greg Bolsinga on 2/15/23.
 //
 
+import Diary
 import Foundation
 import LoadingState
 
@@ -18,9 +19,7 @@ extension LoadingState where Value == Diary {
 
     do {
       let (data, _) = try await URLSession.shared.data(from: url)
-      let diary = try Diary.diaryFromJsonData(data)
-
-      self = .loaded(diary)
+      self = .loaded(try Diary.diaryFromJsonData(data))
     } catch {
       self = .error(error)
     }
