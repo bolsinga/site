@@ -8,7 +8,7 @@
 import Foundation
 import LoadingState
 
-extension LoadingState where Value : Decodable {
+extension LoadingState where Value: Decodable {
   public mutating func load(url: URL) async {
     guard case .idle = self else {
       return
