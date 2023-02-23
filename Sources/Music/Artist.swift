@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import RegexBuilder
 
 public struct Artist: Codable, Equatable {
   public let albums: [String]?
@@ -19,48 +18,5 @@ public struct Artist: Codable, Equatable {
     self.id = id
     self.name = name
     self.sortname = sortname
-  }
-}
-
-extension Artist: Comparable {
-  public static func < (lhs: Artist, rhs: Artist) -> Bool {
-    var lhSort = lhs.sortname ?? lhs.name
-    var rhSort = rhs.sortname ?? rhs.name
-
-    let regex = Regex {
-      ZeroOrMore {
-        ChoiceOf {
-          "The"
-          "A"
-          "An"
-        }
-        OneOrMore {
-          .whitespace
-        }
-      }
-      ZeroOrMore {
-        .word.inverted
-      }
-      Capture {
-        ZeroOrMore(.word)
-      }
-      ZeroOrMore {
-        .word.inverted
-      }
-    }
-
-    if let match = lhSort.prefixMatch(of: regex) {
-      lhSort = String(match.output.1)
-    }
-
-    if let match = rhSort.prefixMatch(of: regex) {
-      rhSort = String(match.output.1)
-    }
-
-    var options = String.CompareOptions()
-    options.insert(.caseInsensitive)
-    options.insert(.diacriticInsensitive)
-
-    return lhSort.compare(rhSort, options: options) == ComparisonResult.orderedAscending
   }
 }
