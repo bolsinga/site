@@ -19,17 +19,14 @@ let package = Package(
     .package(url: "https://github.com/bolsinga/LoadingState", branch: "main"),
   ],
   targets: [
-    .target(
-      name: "Diary",
-      dependencies: [.product(name: "LoadingState", package: "LoadingState")]),
-    .target(
-      name: "Music",
-      dependencies: [.product(name: "LoadingState", package: "LoadingState")]),
+    .target(name: "Diary", dependencies: []),
+    .target(name: "Music", dependencies: []),
     .executableTarget(
       name: "site_tool",
       dependencies: [
         .byName(name: "Diary"),
         .byName(name: "Music"),
+        .product(name: "LoadingState", package: "LoadingState"),
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
       ]),
   ]

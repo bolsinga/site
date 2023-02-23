@@ -7,6 +7,7 @@
 
 import Foundation
 import LoadingState
+import Music
 
 extension LoadingState where Value == Music {
   public mutating func load(url: URL) async {
@@ -18,9 +19,7 @@ extension LoadingState where Value == Music {
 
     do {
       let (data, _) = try await URLSession.shared.data(from: url)
-      let music = try Music.musicFromJsonData(data)
-
-      self = .loaded(music)
+      self = .loaded(try Music.musicFromJsonData(data))
     } catch {
       self = .error(error)
     }
