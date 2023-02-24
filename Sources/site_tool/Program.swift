@@ -11,6 +11,10 @@ import Foundation
 import LoadingState
 import Music
 
+extension Artist: LibraryComparable {
+
+}
+
 @main
 struct Program: AsyncParsableCommand {
   enum URLError: Error {
@@ -69,7 +73,7 @@ struct Program: AsyncParsableCommand {
         print(music.description(for: album))
       }
 
-      for artist in music.artists.sorted(by: <) {
+      for artist in music.artists.sorted(by: libraryCompare(lhs:rhs:)) {
         print(music.description(for: artist))
       }
 
