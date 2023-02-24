@@ -8,12 +8,12 @@
 import Foundation
 import RegexBuilder
 
-protocol LibraryComparable {
+public protocol LibraryComparable {
   var sortname: String? { get }
   var name: String { get }
 }
 
-func libraryCompare(lhs: any LibraryComparable, rhs: any LibraryComparable) -> Bool {
+public func libraryCompare(lhs: any LibraryComparable, rhs: any LibraryComparable) -> Bool {
   var lhSort = lhs.sortname ?? lhs.name
   var rhSort = rhs.sortname ?? rhs.name
 
