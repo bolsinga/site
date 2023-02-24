@@ -6,18 +6,9 @@
 //
 
 import ArgumentParser
-import Diary
 import Foundation
 import LoadingState
-import Music
-
-extension Artist: LibraryComparable {
-
-}
-
-extension Venue: LibraryComparable {
-
-}
+import Site
 
 @main
 struct Program: AsyncParsableCommand {
