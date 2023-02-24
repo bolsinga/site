@@ -27,23 +27,3 @@ public struct Album: Codable, Equatable {
     self.compilation = compilation
   }
 }
-
-extension Album: Comparable {
-  internal var isUnknownRelease: Bool {
-    return release == nil
-  }
-
-  public static func < (lhs: Album, rhs: Album) -> Bool {
-    if lhs.isUnknownRelease, rhs.isUnknownRelease {
-      return false
-    }
-
-    if let lhRelease = lhs.release {
-      if let rhRelease = rhs.release {
-        return lhRelease < rhRelease
-      }
-      return true
-    }
-    return false
-  }
-}
