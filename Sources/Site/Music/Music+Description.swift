@@ -11,7 +11,7 @@ extension Music {
   public func description(for show: Show) -> String {
     var description = "\(show.id) -"
 
-    description = description + " \(PartialDate.FormatStyle().format(show.date))"
+    description = description + " \(Music.description(for: show.date))"
 
     var artistList = "[Unknown Artists]"
     do {
@@ -40,7 +40,7 @@ extension Music {
     var description = "\(album.id) -"
 
     if let release = album.release {
-      description = description + " \(PartialDate.FormatStyle().format(release))"
+      description = description + " \(Music.description(for: release))"
     }
 
     if let compilation = album.compilation, compilation {
@@ -95,5 +95,20 @@ extension Music {
     description = description + ": \(self.description(for: venue.location))"
 
     return description
+  }
+
+  public static func description(for partialDate: PartialDate) -> String {
+    /*
+     NOTE: This is needed since if using it from Program.swift if attempted, it
+     will give the following error, which I haven't spent time trying to decipher.
+
+     site/Sources/site_tool/Program.swift:61:42: error: missing argument for parameter 'from' in call
+             print("\(PartialDate.FormatStyle().format(partialDate))")
+                                              ^
+                                              from: <#Decoder#>
+     Site.PartialDate:10:16: note: 'init(from:)' declared here
+             public init(from decoder: Decoder) throws
+     */
+    return "\(PartialDate.FormatStyle().format(partialDate))"
   }
 }
