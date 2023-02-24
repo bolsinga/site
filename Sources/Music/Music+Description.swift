@@ -82,6 +82,17 @@ extension Music {
     if let url = location.web {
       description = description + ": \(url.absoluteString)"
     }
+    return description
+  }
+
+  public func description(for venue: Venue) -> String {
+    var description = "\(venue.id) - \(venue.name)"
+
+    if let sortname = venue.sortname {
+      description = description + " (\(sortname))"
+    }
+
+    description = description + ": \(self.description(for: venue.location))"
 
     return description
   }
