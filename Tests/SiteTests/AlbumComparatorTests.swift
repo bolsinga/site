@@ -33,9 +33,7 @@ final class AlbumComparatorTests: XCTestCase {
 
     XCTAssertNotEqual(album1, album2)
     XCTAssertTrue(music.albumCompare(lhs: album1, rhs: album2))
-    XCTExpectFailure("albums with identical unknown dates should sort by artist.") {
-      XCTAssertFalse(music.albumCompare(lhs: album2, rhs: album1))
-    }
+    XCTAssertFalse(music.albumCompare(lhs: album2, rhs: album1))
   }
 
   func testUnknownRelease_fullDate() throws {
@@ -80,7 +78,6 @@ final class AlbumComparatorTests: XCTestCase {
     let music = createMusic(albums: [album1, album2], artists: [artist1])
 
     XCTAssertNotEqual(album1, album2)
-
     XCTAssertFalse(music.albumCompare(lhs: album1, rhs: album2))
     XCTAssertTrue(music.albumCompare(lhs: album2, rhs: album1))
   }
@@ -93,9 +90,7 @@ final class AlbumComparatorTests: XCTestCase {
 
     XCTAssertNotEqual(album1, album2)
     XCTAssertTrue(music.albumCompare(lhs: album1, rhs: album2))
-    XCTExpectFailure("albums without performers sort by album title.") {
-      XCTAssertFalse(music.albumCompare(lhs: album2, rhs: album1))
-    }
+    XCTAssertFalse(music.albumCompare(lhs: album2, rhs: album1))
   }
 
   func testSameDates_sameArtists() throws {
@@ -116,11 +111,7 @@ final class AlbumComparatorTests: XCTestCase {
     let music = createMusic(albums: [album1, album2], artists: [artist1])
 
     XCTAssertNotEqual(album1, album2)
-    XCTExpectFailure(
-      "albums with identical performer, date, title, should fallback to sort by album id."
-    ) {
-      XCTAssertTrue(music.albumCompare(lhs: album1, rhs: album2))
-    }
+    XCTAssertTrue(music.albumCompare(lhs: album1, rhs: album2))
     XCTAssertFalse(music.albumCompare(lhs: album2, rhs: album1))
   }
 
