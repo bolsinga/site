@@ -14,8 +14,15 @@ public protocol LibraryComparable {
 }
 
 public func libraryCompare(lhs: any LibraryComparable, rhs: any LibraryComparable) -> Bool {
-  var lhSort = lhs.sortname ?? lhs.name
-  var rhSort = rhs.sortname ?? rhs.name
+  let lhSort = lhs.sortname ?? lhs.name
+  let rhSort = rhs.sortname ?? rhs.name
+
+  return libraryCompare(lhs: lhSort, rhs: rhSort)
+}
+
+public func libraryCompare(lhs: String, rhs: String) -> Bool {
+  var lhSort = lhs
+  var rhSort = rhs
 
   let regex = Regex {
     ZeroOrMore {
