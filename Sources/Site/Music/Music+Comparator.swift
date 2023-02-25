@@ -38,4 +38,15 @@ extension Music {
     assert(rhs.release == nil)
     return false
   }
+
+  public func showCompare(lhs: Show, rhs: Show) -> Bool {
+    if lhs.date == rhs.date {
+      do {
+        return libraryCompare(lhs: try self.venueForShow(lhs), rhs: try self.venueForShow(rhs))
+      } catch {
+        // just sort by date.
+      }
+    }
+    return lhs.date < rhs.date
+  }
 }

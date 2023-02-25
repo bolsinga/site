@@ -24,9 +24,3 @@ public struct Show: Codable, Equatable {
     self.venue = venue
   }
 }
-
-extension Show: Comparable {
-  public static func < (lhs: Show, rhs: Show) -> Bool {
-    return lhs.date < rhs.date
-  }
-}

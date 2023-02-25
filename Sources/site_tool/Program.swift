@@ -60,7 +60,7 @@ struct Program: AsyncParsableCommand {
       print("Songs: \(music.songs.count)")
       print("Venues: \(music.venues.count)")
 
-      for show in music.shows.sorted(by: <).reversed() {
+      for show in music.shows.sorted(by: music.showCompare(lhs:rhs:)).reversed() {
         print(music.description(for: show))
       }
 
