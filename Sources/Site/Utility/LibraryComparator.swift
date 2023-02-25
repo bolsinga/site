@@ -42,18 +42,27 @@ func chomp(_ string: String) -> String {
   var result = chompPrefix(string)
 
   let regex = Regex {
-    ZeroOrMore {
-      .word.inverted
+    Optionally {
+      ZeroOrMore {
+        .word.inverted
+      }
     }
     Capture {
-      ZeroOrMore(.word)
+      OneOrMore {
+        .word
+        Optionally {
+          .whitespace
+        }
+      }
     }
-    ZeroOrMore {
-      .word.inverted
+    Optionally {
+      ZeroOrMore {
+        .word.inverted
+      }
     }
   }
 
-  if let match = result.prefixMatch(of: regex) {
+  if let match = result.wholeMatch(of: regex) {
     result = String(match.output.1)
   }
   return result
