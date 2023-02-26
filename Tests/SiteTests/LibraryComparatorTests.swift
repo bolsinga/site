@@ -16,9 +16,7 @@ final class LibraryComparatorTests: XCTestCase {
   }
 
   func testStringThePrefix() throws {
-    XCTExpectFailure("Prefix does not work currently.") {
-      XCTAssertTrue(libraryCompare(lhs: "The White Album", rhs: "White Denim"))
-    }
+    XCTAssertTrue(libraryCompare(lhs: "The White Album", rhs: "White Denim"))
     XCTAssertFalse(libraryCompare(lhs: "White Denim", rhs: "The White Album"))
   }
 
@@ -54,29 +52,22 @@ final class LibraryComparatorTests: XCTestCase {
   }
 
   func testStringQuotation() throws {
-    // This is actually funky since this becomes a comparison of the string "Song" not "Song Title".
     XCTAssertFalse(libraryCompare(lhs: "\"Song Title\"", rhs: "Song Title"))
     XCTAssertFalse(libraryCompare(lhs: "Song Title", rhs: "\"Song Title\""))
   }
 
   func testAPrefixChomp() throws {
-    XCTExpectFailure("Multiple Words Do Not Work Correctly.") {
-      XCTAssertEqual(chomp("A Cord Down"), "Cord Down")
-    }
+    XCTAssertEqual(chomp("A Cord Down"), "Cord Down")
     XCTAssertEqual(chomp("A Cord"), "Cord")
   }
 
   func testAnPrefixChomp() throws {
-    XCTExpectFailure("Multiple Words Do Not Work Correctly.") {
-      XCTAssertEqual(chomp("An Other Word"), "Other Word")
-    }
+    XCTAssertEqual(chomp("An Other Word"), "Other Word")
     XCTAssertEqual(chomp("An Other"), "Other")
   }
 
   func testThePrefixChomp() throws {
-    XCTExpectFailure("Multiple Words Do Not Work Correctly.") {
-      XCTAssertEqual(chomp("The White Album"), "White Album")
-    }
+    XCTAssertEqual(chomp("The White Album"), "White Album")
     XCTAssertEqual(chomp("The White"), "White")
   }
 
@@ -89,39 +80,27 @@ final class LibraryComparatorTests: XCTestCase {
   }
 
   func testMultipleSmogChomp() throws {
-    XCTExpectFailure("Multiple words in parenthesis does not work currently.") {
-      XCTAssertEqual(chomp("(Smog Haze)"), "Smog Haze")
-    }
+    XCTAssertEqual(chomp("(Smog Haze)"), "Smog Haze")
   }
 
   func testTrailOfDeadChomp() throws {
-    XCTExpectFailure("This just does not work currently.") {
-      XCTAssertEqual(
-        chomp("...And You Will Know Us By The Trail Of Dead"),
-        "And You Will Know Us By The Trail Of Dead")
-    }
+    XCTAssertEqual(
+      chomp("...And You Will Know Us By The Trail Of Dead"),
+      "And You Will Know Us By The Trail Of Dead")
   }
 
   func testHardDaysChomp() throws {
-    XCTExpectFailure("This just does not work currently.") {
-      XCTAssertEqual(chomp("A Hard Day's Night"), "Hard Day's Night")
-    }
+    XCTAssertEqual(chomp("A Hard Day's Night"), "Hard Day's Night")
   }
 
   func testOldEnoughChomp() throws {
-    XCTExpectFailure("This just does not work currently.") {
-      XCTAssertEqual(
-        chomp("Old Enough To Know Better - 15 Years Of Merge Records (Disc 1)"),
-        "Old Enough To Know Better - 15 Years Of Merge Records (Disc 1)")
-    }
+    XCTAssertEqual(
+      chomp("Old Enough To Know Better - 15 Years Of Merge Records (Disc 1)"),
+      "Old Enough To Know Better - 15 Years Of Merge Records (Disc 1)")
   }
 
   func testQuotedChomp() throws {
-    XCTExpectFailure("This just chomps to the first word") {
-      XCTAssertEqual(chomp("\"Song Title\""), "Song Title")
-    }
-    XCTExpectFailure("This just chomps to the first word") {
-      XCTAssertEqual(chomp("\"Longer Song Title\""), "Longer Song Title")
-    }
+    XCTAssertEqual(chomp("\"Song Title\""), "Song Title")
+    XCTAssertEqual(chomp("\"Longer Song Title\""), "Longer Song Title")
   }
 }
