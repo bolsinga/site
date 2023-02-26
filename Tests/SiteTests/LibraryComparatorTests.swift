@@ -73,6 +73,16 @@ final class LibraryComparatorTests: XCTestCase {
     }
   }
 
+  func testPrefixTwoWords() throws {
+    XCTAssertEqual(chomp("The White"), "White")
+  }
+
+  func testPrefixLowercaseTwoWords() throws {
+    XCTExpectFailure("Lower case tests do not work.") {
+      XCTAssertEqual(chomp("the White"), "White")
+    }
+  }
+
   func testSmogChomp() throws {
     XCTAssertEqual(chomp("(Smog)"), "Smog")
   }
