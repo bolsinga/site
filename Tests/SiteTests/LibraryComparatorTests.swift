@@ -54,4 +54,40 @@ final class LibraryComparatorTests: XCTestCase {
     XCTAssertFalse(libraryCompare(lhs: "\"Song Title\"", rhs: "Song Title"))
     XCTAssertFalse(libraryCompare(lhs: "Song Title", rhs: "\"Song Title\""))
   }
+
+  func testAPrefixChomp() throws {
+    XCTExpectFailure("Prefix does not work currently.") {
+      XCTAssertEqual(chomp("A Cord Down"), "Cord Down")
+    }
+  }
+
+  func testAnPrefixChomp() throws {
+    XCTExpectFailure("Prefix does not work currently.") {
+      XCTAssertEqual(chomp("An Other Word"), "Other Word")
+    }
+  }
+
+  func testThePrefixChomp() throws {
+    XCTExpectFailure("Prefix does not work currently.") {
+      XCTAssertEqual(chomp("The White Album"), "White Album")
+    }
+  }
+
+  func testSmogChomp() throws {
+    XCTAssertEqual(chomp("(Smog)"), "Smog")
+  }
+
+  func testMultipleSmogChomp() throws {
+    XCTExpectFailure("Multiple words in parenthesis does not work currently.") {
+      XCTAssertEqual(chomp("(Smog Haze)"), "Smog Haze")
+    }
+  }
+
+  func testTrailOfDeadChomp() throws {
+    XCTExpectFailure("This just does not work currently.") {
+      XCTAssertEqual(
+        chomp("...And You Will Know Us By The Trail Of Dead"),
+        "And You Will Know Us By The Trail Of Dead")
+    }
+  }
 }
