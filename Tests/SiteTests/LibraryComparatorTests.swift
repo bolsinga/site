@@ -19,7 +19,7 @@ final class LibraryComparatorTests: XCTestCase {
     XCTExpectFailure("Prefix does not work currently.") {
       XCTAssertTrue(libraryCompare(lhs: "The White Album", rhs: "White Denim"))
     }
-    XCTAssertFalse(libraryCompare(lhs: "The White Album", rhs: "White Denim"))
+    XCTAssertFalse(libraryCompare(lhs: "White Denim", rhs: "The White Album"))
   }
 
   func testStringAPrefix() throws {
