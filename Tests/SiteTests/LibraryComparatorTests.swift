@@ -23,17 +23,21 @@ final class LibraryComparatorTests: XCTestCase {
   }
 
   func testStringAPrefix() throws {
-    XCTExpectFailure("Prefix does not work currently.") {
-      XCTAssertTrue(libraryCompare(lhs: "A Cord", rhs: "Cord"))
-    }
+    // These should compare as false, since removing the prefix matches the other word.
+    XCTAssertFalse(libraryCompare(lhs: "A Cord", rhs: "Cord"))
     XCTAssertFalse(libraryCompare(lhs: "Cord", rhs: "A Cord"))
   }
 
   func testStringAnPrefix() throws {
-    XCTExpectFailure("Prefix does not work currently.") {
-      XCTAssertTrue(libraryCompare(lhs: "An Other", rhs: "Other"))
-    }
+    // These should compare as false, since removing the prefix matches the other word.
+    XCTAssertFalse(libraryCompare(lhs: "An Other", rhs: "Other"))
     XCTAssertFalse(libraryCompare(lhs: "Other", rhs: "An Other"))
+  }
+
+  func testPrefixThreeWords() throws {
+    // These should compare as false, since removing the prefix matches the other words.
+    XCTAssertFalse(libraryCompare(lhs: "An Other Test", rhs: "Other Test"))
+    XCTAssertFalse(libraryCompare(lhs: "Other Test", rhs: "An Other Test"))
   }
 
   func testStringPartialPrefix() throws {
@@ -59,21 +63,20 @@ final class LibraryComparatorTests: XCTestCase {
     XCTExpectFailure("Multiple Words Do Not Work Correctly.") {
       XCTAssertEqual(chomp("A Cord Down"), "Cord Down")
     }
+    XCTAssertEqual(chomp("A Cord"), "Cord")
   }
 
   func testAnPrefixChomp() throws {
     XCTExpectFailure("Multiple Words Do Not Work Correctly.") {
       XCTAssertEqual(chomp("An Other Word"), "Other Word")
     }
+    XCTAssertEqual(chomp("An Other"), "Other")
   }
 
   func testThePrefixChomp() throws {
     XCTExpectFailure("Multiple Words Do Not Work Correctly.") {
       XCTAssertEqual(chomp("The White Album"), "White Album")
     }
-  }
-
-  func testPrefixTwoWords() throws {
     XCTAssertEqual(chomp("The White"), "White")
   }
 
