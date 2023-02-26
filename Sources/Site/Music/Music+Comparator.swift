@@ -47,6 +47,9 @@ extension Music {
             let rhArtists = try? self.artistsForShow(rhs)
           {
             if let lhHeadliner = lhArtists.first, let rhHeadliner = rhArtists.first {
+              if lhHeadliner == rhHeadliner {
+                return lhs.id < rhs.id
+              }
               return libraryCompare(lhs: lhHeadliner, rhs: rhHeadliner)
             }
           }
