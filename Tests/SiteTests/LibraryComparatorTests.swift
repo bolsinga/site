@@ -115,4 +115,13 @@ final class LibraryComparatorTests: XCTestCase {
         "Old Enough To Know Better - 15 Years Of Merge Records (Disc 1)")
     }
   }
+
+  func testQuotedChomp() throws {
+    XCTExpectFailure("This just chomps to the first word") {
+      XCTAssertEqual(chomp("\"Song Title\""), "Song Title")
+    }
+    XCTExpectFailure("This just chomps to the first word") {
+      XCTAssertEqual(chomp("\"Longer Song Title\""), "Longer Song Title")
+    }
+  }
 }
