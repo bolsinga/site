@@ -56,19 +56,19 @@ final class LibraryComparatorTests: XCTestCase {
   }
 
   func testAPrefixChomp() throws {
-    XCTExpectFailure("Prefix does not work currently.") {
+    XCTExpectFailure("Multiple Words Do Not Work Correctly.") {
       XCTAssertEqual(chomp("A Cord Down"), "Cord Down")
     }
   }
 
   func testAnPrefixChomp() throws {
-    XCTExpectFailure("Prefix does not work currently.") {
+    XCTExpectFailure("Multiple Words Do Not Work Correctly.") {
       XCTAssertEqual(chomp("An Other Word"), "Other Word")
     }
   }
 
   func testThePrefixChomp() throws {
-    XCTExpectFailure("Prefix does not work currently.") {
+    XCTExpectFailure("Multiple Words Do Not Work Correctly.") {
       XCTAssertEqual(chomp("The White Album"), "White Album")
     }
   }
@@ -78,9 +78,7 @@ final class LibraryComparatorTests: XCTestCase {
   }
 
   func testPrefixLowercaseTwoWords() throws {
-    XCTExpectFailure("Lower case tests do not work.") {
-      XCTAssertEqual(chomp("the White"), "White")
-    }
+    XCTAssertEqual(chomp("the White"), "White")
   }
 
   func testSmogChomp() throws {

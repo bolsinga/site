@@ -20,9 +20,9 @@ public func libraryCompare(lhs: any LibraryComparable, rhs: any LibraryComparabl
   return libraryCompare(lhs: lhSort, rhs: rhSort)
 }
 
-func chomp(_ string: String) -> String {
+func chompPrefix(_ string: String) -> String {
   let regex = Regex {
-    ZeroOrMore {
+    Optionally {
       ChoiceOf {
         "The"
         "A"
@@ -32,6 +32,16 @@ func chomp(_ string: String) -> String {
         .whitespace
       }
     }
+  }.ignoresCase()
+
+  let result = string.trimmingPrefix(regex)
+  return String(result)
+}
+
+func chomp(_ string: String) -> String {
+  var result = chompPrefix(string)
+
+  let regex = Regex {
     ZeroOrMore {
       .word.inverted
     }
@@ -43,8 +53,7 @@ func chomp(_ string: String) -> String {
     }
   }
 
-  var result = string
-  if let match = string.prefixMatch(of: regex) {
+  if let match = result.prefixMatch(of: regex) {
     result = String(match.output.1)
   }
   return result
