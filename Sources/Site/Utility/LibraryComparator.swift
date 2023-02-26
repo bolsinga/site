@@ -20,10 +20,7 @@ public func libraryCompare(lhs: any LibraryComparable, rhs: any LibraryComparabl
   return libraryCompare(lhs: lhSort, rhs: rhSort)
 }
 
-public func libraryCompare(lhs: String, rhs: String) -> Bool {
-  var lhSort = lhs
-  var rhSort = rhs
-
+func chomp(_ string: String) -> String {
   let regex = Regex {
     ZeroOrMore {
       ChoiceOf {
@@ -46,13 +43,16 @@ public func libraryCompare(lhs: String, rhs: String) -> Bool {
     }
   }
 
-  if let match = lhSort.prefixMatch(of: regex) {
-    lhSort = String(match.output.1)
+  var result = string
+  if let match = string.prefixMatch(of: regex) {
+    result = String(match.output.1)
   }
+  return result
+}
 
-  if let match = rhSort.prefixMatch(of: regex) {
-    rhSort = String(match.output.1)
-  }
+public func libraryCompare(lhs: String, rhs: String) -> Bool {
+  let lhSort = chomp(lhs)
+  let rhSort = chomp(rhs)
 
   var options = String.CompareOptions()
   options.insert(.caseInsensitive)
