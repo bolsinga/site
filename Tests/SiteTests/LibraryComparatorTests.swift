@@ -90,4 +90,18 @@ final class LibraryComparatorTests: XCTestCase {
         "And You Will Know Us By The Trail Of Dead")
     }
   }
+
+  func testHardDaysChomp() throws {
+    XCTExpectFailure("This just does not work currently.") {
+      XCTAssertEqual(chomp("A Hard Day's Night"), "Hard Day's Night")
+    }
+  }
+
+  func testOldEnoughChomp() throws {
+    XCTExpectFailure("This just does not work currently.") {
+      XCTAssertEqual(
+        chomp("Old Enough To Know Better - 15 Years Of Merge Records (Disc 1)"),
+        "Old Enough To Know Better - 15 Years Of Merge Records (Disc 1)")
+    }
+  }
 }
