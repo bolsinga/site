@@ -19,6 +19,7 @@ let package = Package(
   ],
   targets: [
     .target(name: "Site", dependencies: [.product(name: "LoadingState", package: "LoadingState")]),
+    .testTarget(name: "SiteTests", dependencies: ["Site"]),
     .executableTarget(
       name: "site_tool",
       dependencies: [
