@@ -22,15 +22,23 @@ public struct Location: Codable, Equatable {
 }
 
 extension Location: Comparable {
-  private var addressString: String {
-    var result = "\(city), \(state)"
-    if let street {
-      result = result + "\(street)"
-    }
-    return result
-  }
-
   public static func < (lhs: Location, rhs: Location) -> Bool {
-    return lhs.addressString < rhs.addressString
+    if lhs.state == rhs.state {
+      if lhs.city == rhs.city {
+        let lhStreet = lhs.street
+        let rhStreet = rhs.street
+
+        if let lhStreet, let rhStreet {
+          return lhStreet < rhStreet
+        }
+
+        if lhStreet != nil || rhStreet != nil {
+          // Now lhs or rhs is nil. If lhs is nil it sorts before the non nil rhs
+          return lhStreet == nil
+        }
+      }
+      return lhs.city < rhs.city
+    }
+    return lhs.state < rhs.state
   }
 }
