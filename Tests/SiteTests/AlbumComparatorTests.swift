@@ -80,12 +80,9 @@ final class AlbumComparatorTests: XCTestCase {
     let music = createMusic(albums: [album1, album2], artists: [artist1])
 
     XCTAssertNotEqual(album1, album2)
-    XCTExpectFailure("album with performer should come before album without.") {
-      XCTAssertTrue(music.albumCompare(lhs: album1, rhs: album2))
-    }
-    XCTExpectFailure("album with performer should come before album without.") {
-      XCTAssertFalse(music.albumCompare(lhs: album2, rhs: album1))
-    }
+
+    XCTAssertFalse(music.albumCompare(lhs: album1, rhs: album2))
+    XCTAssertTrue(music.albumCompare(lhs: album2, rhs: album1))
   }
 
   func testSameDates_twoUnknownArtists() throws {
