@@ -7,16 +7,6 @@
 
 import SwiftUI
 
-extension Location {
-  fileprivate var addressString: String {
-    var address = ""
-    if let street = self.street {
-      address = "\(street), "
-    }
-    return address.appending("\(self.city), \(self.state)")
-  }
-}
-
 struct AddressView: View {
   let location: Location
 
