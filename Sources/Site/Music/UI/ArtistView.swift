@@ -7,6 +7,17 @@
 
 import SwiftUI
 
+extension Album {
+  var formattedTitle: String {
+    var parts = [String]()
+    parts.append(title)
+    if let release {
+      parts.append("(\(Music.description(for: release)))")
+    }
+    return parts.joined(separator: " ")
+  }
+}
+
 struct ArtistView: View {
   let music: Music
   let artist: Artist
@@ -26,10 +37,7 @@ struct ArtistView: View {
       Divider()
       ForEach(albums, id: \.id) { album in
         HStack {
-          Text(album.title)
-          if let release = album.release {
-            Text("(\(Music.description(for: release)))")
-          }
+          Text(album.formattedTitle)
         }
       }
     }
