@@ -1,5 +1,5 @@
 //
-//  LoadingState+MapItem.swift
+//  LoadingState+Geocode.swift
 //
 //
 //  Created by Greg Bolsinga on 2/27/23.
@@ -15,7 +15,7 @@ private enum MapItemLoadingError: Error {
 }
 
 extension LoadingState where Value == MKMapItem {
-  public mutating func geocode(location: Location) async {
+  public mutating func geocode(postalAddress: CNPostalAddress) async {
     guard case .idle = self else {
       return
     }
@@ -23,7 +23,7 @@ extension LoadingState where Value == MKMapItem {
     self = .loading
 
     do {
-      let placemarks = try await CLGeocoder().geocodePostalAddress(location.postalAddress)
+      let placemarks = try await CLGeocoder().geocodePostalAddress(postalAddress)
       if let placemark = placemarks.first {
         self = .loaded(MKMapItem(placemark: MKPlacemark(placemark: placemark)))
       } else {
@@ -32,5 +32,11 @@ extension LoadingState where Value == MKMapItem {
     } catch {
       self = .error(error)
     }
+  }
+}
+
+extension LoadingState where Value == MKMapItem {
+  public mutating func geocode(location: Location) async {
+    return await geocode(postalAddress: location.postalAddress)
   }
 }
