@@ -34,10 +34,12 @@ struct ArtistView: View {
     VStack(alignment: .leading) {
       Text(artist.name)
         .font(.title)
-      Divider()
-      ForEach(albums, id: \.id) { album in
-        HStack {
-          Text(album.formattedTitle)
+      if !albums.isEmpty {
+        Divider()
+        ForEach(albums, id: \.id) { album in
+          HStack {
+            Text(album.formattedTitle)
+          }
         }
       }
     }
@@ -68,6 +70,8 @@ struct ArtistView_Previews: PreviewProvider {
 
     let artist1 = Artist(albums: [album1.id, album2.id, album3.id], id: "ar0", name: "An Artist")
 
+    let artist2 = Artist(id: "ar1", name: "Live Only Band")
+
     let music = Music(
       albums: [album1, album2, album3],
       artists: [artist1],
@@ -78,5 +82,7 @@ struct ArtistView_Previews: PreviewProvider {
       venues: [])
 
     ArtistView(music: music, artist: artist1)
+
+    ArtistView(music: music, artist: artist2)
   }
 }
