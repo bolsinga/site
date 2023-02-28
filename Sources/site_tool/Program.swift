@@ -80,6 +80,13 @@ struct Program: AsyncParsableCommand {
         print(music.description(for: location))
       }
 
+      for artist in music.artists.sorted(by: libraryCompare(lhs:rhs:)) {
+        let shows = music.showsForArtist(artist).sorted(by: music.showCompare(lhs:rhs:))
+        if !shows.isEmpty {
+          print(music.description(for: artist, shows: shows))
+        }
+      }
+
       try jsonDirectoryURL?.appending(path: "music.json").writeJSON(music)
     }
   }

@@ -100,6 +100,20 @@ extension Music {
     return parts.joined(separator: ": ")
   }
 
+  public func description(for artist: Artist, shows: [Show]) -> String {
+    var parts: [String] = []
+    parts.append(artist.name)
+
+    var showParts: [String] = []
+    for show in shows {
+      showParts.append(description(for: show))
+    }
+
+    parts.append("(\(showParts.joined(separator: "; ")))")
+
+    return parts.joined(separator: ": ")
+  }
+
   public static func description(for partialDate: PartialDate) -> String {
     /*
      NOTE: This is needed since if using it from Program.swift if attempted, it

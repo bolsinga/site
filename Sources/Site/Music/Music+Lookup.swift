@@ -49,4 +49,8 @@ extension Music {
     }
     return artistAlbums
   }
+
+  public func showsForArtist(_ artist: Artist) -> [Show] {
+    shows.filter { $0.artists.contains(artist.id) }
+  }
 }
