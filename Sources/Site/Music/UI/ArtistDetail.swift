@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ArtistDetail: View {
-  let music: Music
+  @Environment(\.music) var music: Music
   let artist: Artist
 
   private var shows: [Show] {
@@ -22,7 +22,7 @@ struct ArtistDetail: View {
       if !shows.isEmpty {
         Divider()
         ForEach(shows, id: \.id) { show in
-          ShowBlurbView(music: music, show: show)
+          ShowBlurbView(show: show)
         }
       }
     }
@@ -62,8 +62,10 @@ struct ArtistDetail_Previews: PreviewProvider {
       timestamp: Date.now,
       venues: [venue])
 
-    ArtistDetail(music: music, artist: artist1)
+    ArtistDetail(artist: artist1)
+      .environment(\.music, music)
 
-    ArtistDetail(music: music, artist: artist2)
+    ArtistDetail(artist: artist2)
+      .environment(\.music, music)
   }
 }

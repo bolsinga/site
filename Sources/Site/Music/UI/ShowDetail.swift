@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ShowDetail: View {
-  let music: Music
+  @Environment(\.music) var music: Music
   let show: Show
 
   private var artists: [Artist] {
@@ -80,10 +80,13 @@ struct ShowDetail_Previews: PreviewProvider {
       timestamp: Date.now,
       venues: [venue])
 
-    ShowDetail(music: music, show: show1)
+    ShowDetail(show: show1)
+      .environment(\.music, music)
 
-    ShowDetail(music: music, show: show2)
+    ShowDetail(show: show2)
+      .environment(\.music, music)
 
-    ShowDetail(music: music, show: show3)
+    ShowDetail(show: show3)
+      .environment(\.music, music)
   }
 }
