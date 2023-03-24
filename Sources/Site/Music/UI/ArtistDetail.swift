@@ -1,5 +1,5 @@
 //
-//  ArtistView.swift
+//  ArtistDetail.swift
 //
 //
 //  Created by Greg Bolsinga on 2/18/23.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ArtistView: View {
+struct ArtistDetail: View {
   let music: Music
   let artist: Artist
 
@@ -29,7 +29,7 @@ struct ArtistView: View {
   }
 }
 
-struct ArtistView_Previews: PreviewProvider {
+struct ArtistDetail_Previews: PreviewProvider {
   static var previews: some View {
     let venue = Venue(
       id: "v10",
@@ -62,8 +62,8 @@ struct ArtistView_Previews: PreviewProvider {
       timestamp: Date.now,
       venues: [venue])
 
-    ArtistView(music: music, artist: artist1)
+    ArtistDetail(music: music, artist: artist1)
 
-    ArtistView(music: music, artist: artist2)
+    ArtistDetail(music: music, artist: artist2)
   }
 }
