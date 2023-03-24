@@ -15,6 +15,7 @@ struct VenueView: View {
         .font(.headline)
       AddressView(location: venue.location)
     }
+    .navigationTitle(venue.name)
   }
 }
 
