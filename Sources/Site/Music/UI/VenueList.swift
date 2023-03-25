@@ -16,7 +16,7 @@ struct VenueList: View {
     }
     .navigationTitle("Venues")
     .navigationDestination(for: Venue.self) { venue in
-      VenueView(venue: venue)
+      VenueDetail(venue: venue)
     }
   }
 }

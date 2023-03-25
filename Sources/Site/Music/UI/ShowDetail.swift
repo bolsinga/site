@@ -35,7 +35,7 @@ struct ShowDetail: View {
       }
 
       if let venue {
-        VenueView(venue: venue)
+        VenueDetail(venue: venue)  // Likely to change in the future to a blurb.
       }
       Text(PartialDate.FormatStyle().format(show.date))
         .font(.caption)
