@@ -10,10 +10,18 @@ import SwiftUI
 struct VenueList: View {
   let venues: [Venue]
 
+  @State private var searchString: String = ""
+
+  private var filteredVenues: [Venue] {
+    guard !searchString.isEmpty else { return venues }
+    return venues.filter { $0.name.lowercased().contains(searchString.lowercased()) }
+  }
+
   var body: some View {
-    List(venues) { venue in
+    List(filteredVenues) { venue in
       NavigationLink(venue.name, value: venue)
     }
+    .searchable(text: $searchString)
     .navigationTitle("Venues")
     .navigationDestination(for: Venue.self) { venue in
       VenueDetail(venue: venue)
