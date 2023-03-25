@@ -8,7 +8,7 @@
 import SwiftUI
 
 extension EnvironmentValues {
-  var music: Music {
+  public var music: Music {
     get {
       return self[MusicKey.self]
     }
