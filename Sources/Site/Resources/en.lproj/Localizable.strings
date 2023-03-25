@@ -1,3 +1,8 @@
 /* String for when a Show.PartialDate is unknown. */
 "Date Unknown" = "Date Unknown";
 
+/* Title of the Location / Address Section for VenueDetail. */
+"Location" = "Location";
+
+/* Title of the Related Venues Section for VenueDetail. */
+"Related Venues" = "Related Venues";
