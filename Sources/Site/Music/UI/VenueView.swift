@@ -10,12 +10,8 @@ import SwiftUI
 struct VenueView: View {
   let venue: Venue
   var body: some View {
-    VStack(alignment: .leading) {
-      Text(venue.name)
-        .font(.headline)
-      AddressView(location: venue.location)
-    }
-    .navigationTitle(venue.name)
+    AddressView(location: venue.location)
+      .navigationTitle(venue.name)
   }
 }
 
