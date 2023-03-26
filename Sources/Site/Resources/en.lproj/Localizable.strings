@@ -1,8 +1,17 @@
 /* Title for the Artist Detail */
 "Artists" = "Artists";
 
+/* Title of the comment section of ShowDetail */
+"Comment" = "Comment";
+
+/* Title of the data section of ShowDetail */
+"Date" = "Date";
+
 /* String for when a Show.PartialDate is unknown. */
 "Date Unknown" = "Date Unknown";
+
+/* Title of the Lineup for ShowDetail. */
+"Lineup" = "Lineup";
 
 /* Title of the Location / Address Section for VenueDetail. */
 "Location" = "Location";

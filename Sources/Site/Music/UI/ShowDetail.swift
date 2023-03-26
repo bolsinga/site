@@ -19,31 +19,46 @@ struct ShowDetail: View {
     }
   }
 
-  private var venue: Venue? {
+  private var venueName: String {
     do {
-      return try music.venueForShow(show)
+      return try music.venueForShow(show).name
     } catch {
-      return nil
+      return ""
     }
   }
 
   var body: some View {
     VStack(alignment: .leading) {
-      ForEach(artists, id: \.id) { artist in
-        Text(artist.name)
-          .font(.title)
-      }
+      List {
+        Section(
+          header: Text(
+            "Lineup", bundle: .module,
+            comment: "Title of the Lineup for ShowDetail.")
+        ) {
+          ForEach(artists) { artist in
+            NavigationLink(artist.name, value: artist)
+          }
+        }
 
-      if let venue {
-        VenueDetail(venue: venue)  // Likely to change in the future to a blurb.
-      }
-      Text(PartialDate.FormatStyle().format(show.date))
-        .font(.caption)
+        Section(
+          header: Text("Date", bundle: .module, comment: "Title of the data section of ShowDetail")
+        ) {
+          Text(PartialDate.FormatStyle().format(show.date))
+        }
 
-      if let comment = show.comment {
-        Divider()
-        Text(comment)
+        if let comment = show.comment {
+          Section(
+            header: Text(
+              "Comment", bundle: .module, comment: "Title of the comment section of ShowDetail")
+          ) {
+            Text(comment)
+          }
+        }
       }
+      .navigationDestination(for: Artist.self) { artist in
+        ArtistDetail(artist: artist)
+      }
+      .navigationTitle(venueName)
     }
   }
 }
@@ -80,13 +95,19 @@ struct ShowDetail_Previews: PreviewProvider {
       timestamp: Date.now,
       venues: [venue])
 
-    ShowDetail(show: show1)
-      .environment(\.music, music)
+    NavigationStack {
+      ShowDetail(show: show1)
+        .environment(\.music, music)
+    }
 
-    ShowDetail(show: show2)
-      .environment(\.music, music)
+    NavigationStack {
+      ShowDetail(show: show2)
+        .environment(\.music, music)
+    }
 
-    ShowDetail(show: show3)
-      .environment(\.music, music)
+    NavigationStack {
+      ShowDetail(show: show3)
+        .environment(\.music, music)
+    }
   }
 }
