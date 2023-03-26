@@ -21,8 +21,10 @@ struct ArtistDetail: View {
         .font(.title)
       if !shows.isEmpty {
         Divider()
-        ForEach(shows, id: \.id) { show in
-          ShowBlurbView(show: show)
+        List {
+          ForEach(shows, id: \.id) { show in
+            ShowBlurbView(show: show)
+          }
         }
       }
     }
