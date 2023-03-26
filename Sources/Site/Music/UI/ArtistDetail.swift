@@ -25,7 +25,7 @@ struct ArtistDetail: View {
               comment: "Title of the Shows Section for ArtistDetail.")
           ) {
             ForEach(shows) { show in
-              ShowBlurbView(show: show)
+              ShowBlurb(show: show)
             }
           }
         }
