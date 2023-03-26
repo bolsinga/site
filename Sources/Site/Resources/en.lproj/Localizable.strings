@@ -1,3 +1,6 @@
+/* Artist count shown at the bottom of the ArtistList. */
+"%lld / %lld Artists" = "%lld / %lld Artists";
+
 /* Title for the Artist Detail */
 "Artists" = "Artists";
 
