@@ -36,13 +36,7 @@ struct VenueDetail: View {
             "Location", bundle: .module,
             comment: "Title of the Location / Address Section for VenueDetail.")
         ) {
-          VStack(alignment: .leading) {
-            AddressView(location: venue.location)
-            Divider()
-            Text(
-              "\(shows.count) Show(s)", bundle: .module,
-              comment: "Number of shows seen at this venue.")
-          }
+          AddressView(location: venue.location)
         }
         if !relatedVenues.isEmpty {
           Section(
@@ -58,7 +52,7 @@ struct VenueDetail: View {
         if !yearsOfShows.isEmpty {
           Section(
             header: Text(
-              "Shows By Year", bundle: .module,
+              "\(shows.count) Show(s)", bundle: .module,
               comment: "Title of the Shows by Year Section for VenueDetail.")
           ) {
             ForEach(yearsOfShows, id: \.self) { year in
