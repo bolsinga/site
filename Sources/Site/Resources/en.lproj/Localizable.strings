@@ -1,6 +1,9 @@
 /* Artist count shown at the bottom of the ArtistList. */
 "%lld / %lld Artists" = "%lld / %lld Artists";
 
+/* Venue count shown at the bottom of the VenueList. */
+"%lld / %lld Venues" = "%lld / %lld Venues";
+
 /* Title for the Artist Detail */
 "Artists" = "Artists";
 
