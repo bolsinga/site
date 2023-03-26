@@ -22,7 +22,7 @@ struct VenueList: View {
       NavigationLink(venue.name, value: venue)
     }
     .searchable(text: $searchString)
-    .navigationTitle("Venues")
+    .navigationTitle(Text("Venues", bundle: .module, comment: "Title for the Venue Detail"))
     .navigationDestination(for: Venue.self) { venue in
       VenueDetail(venue: venue)
     }
