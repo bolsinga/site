@@ -20,5 +20,23 @@
 			<string>%lld Shows</string>
 		</dict>
 	</dict>
+	<key>%lld Artist(s)</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@Artists@</string>
+		<key>Artists</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>lld</string>
+			<key>zero</key>
+			<string>No Artists</string>
+			<key>one</key>
+			<string>%lld Artist</string>
+			<key>other</key>
+			<string>%lld Artists</string>
+		</dict>
+	</dict>
 </dict>
 </plist>
