@@ -18,13 +18,21 @@ struct ArtistList: View {
   }
 
   var body: some View {
-    List(filteredArtists) { artist in
-      NavigationLink(artist.name, value: artist)
-    }
-    .searchable(text: $searchString)
-    .navigationTitle(Text("Artists", bundle: .module, comment: "Title for the Artist Detail"))
-    .navigationDestination(for: Artist.self) { artist in
-      ArtistDetail(artist: artist)
+    VStack {
+      List(filteredArtists) { artist in
+        NavigationLink(artist.name, value: artist)
+      }
+      .searchable(text: $searchString)
+      .navigationTitle(Text("Artists", bundle: .module, comment: "Title for the Artist Detail"))
+      .navigationDestination(for: Artist.self) { artist in
+        ArtistDetail(artist: artist)
+      }
+      Divider()
+      Text(
+        "\(filteredArtists.count) / \(artists.count) Artists", bundle: .module,
+        comment:
+          "Artist count shown at the bottom of the ArtistList."
+      )
     }
   }
 }
@@ -62,7 +70,9 @@ struct ArtistList_Previews: PreviewProvider {
       timestamp: Date.now,
       venues: [venue])
 
-    ArtistList(artists: music.artists)
-      .environment(\.music, music)
+    NavigationStack {
+      ArtistList(artists: music.artists)
+        .environment(\.music, music)
+    }
   }
 }
