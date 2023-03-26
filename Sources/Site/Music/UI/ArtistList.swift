@@ -1,37 +1,35 @@
 //
-//  ArtistDetail.swift
+//  ArtistList.swift
 //
 //
-//  Created by Greg Bolsinga on 2/18/23.
+//  Created by Greg Bolsinga on 3/26/23.
 //
 
 import SwiftUI
 
-struct ArtistDetail: View {
-  @Environment(\.music) var music: Music
-  let artist: Artist
+struct ArtistList: View {
+  let artists: [Artist]
 
-  private var shows: [Show] {
-    return music.showsForArtist(artist).sorted(by: music.showCompare(lhs:rhs:))
+  @State private var searchString: String = ""
+
+  private var filteredArtists: [Artist] {
+    guard !searchString.isEmpty else { return artists }
+    return artists.filter { $0.name.lowercased().contains(searchString.lowercased()) }
   }
 
   var body: some View {
-    VStack(alignment: .leading) {
-      Text(artist.name)
-        .font(.title)
-      if !shows.isEmpty {
-        Divider()
-        List {
-          ForEach(shows, id: \.id) { show in
-            ShowBlurbView(show: show)
-          }
-        }
-      }
+    List(filteredArtists) { artist in
+      NavigationLink(artist.name, value: artist)
+    }
+    .searchable(text: $searchString)
+    .navigationTitle(Text("Artists", bundle: .module, comment: "Title for the Artist Detail"))
+    .navigationDestination(for: Artist.self) { artist in
+      ArtistDetail(artist: artist)
     }
   }
 }
 
-struct ArtistDetail_Previews: PreviewProvider {
+struct ArtistList_Previews: PreviewProvider {
   static var previews: some View {
     let venue = Venue(
       id: "v10",
@@ -64,10 +62,7 @@ struct ArtistDetail_Previews: PreviewProvider {
       timestamp: Date.now,
       venues: [venue])
 
-    ArtistDetail(artist: artist1)
-      .environment(\.music, music)
-
-    ArtistDetail(artist: artist2)
+    ArtistList(artists: music.artists)
       .environment(\.music, music)
   }
 }
