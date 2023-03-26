@@ -15,6 +15,10 @@ struct ArtistDetail: View {
     return music.showsForArtist(artist).sorted(by: music.showCompare(lhs:rhs:))
   }
 
+  private var relatedArtists: [Artist] {
+    music.related(artist).sorted(by: libraryCompare(lhs:rhs:))
+  }
+
   var body: some View {
     VStack(alignment: .leading) {
       List {
@@ -28,6 +32,17 @@ struct ArtistDetail: View {
               NavigationLink(value: show) {
                 ShowBlurb(show: show)
               }
+            }
+          }
+        }
+        if !relatedArtists.isEmpty {
+          Section(
+            header: Text(
+              "Related Artists", bundle: .module,
+              comment: "Title of the Related Artists Section for ArtistDetail.")
+          ) {
+            ForEach(relatedArtists) { relatedArtist in
+              NavigationLink(relatedArtist.name, value: relatedArtist)
             }
           }
         }
@@ -73,10 +88,14 @@ struct ArtistDetail_Previews: PreviewProvider {
       timestamp: Date.now,
       venues: [venue])
 
-    ArtistDetail(artist: artist1)
-      .environment(\.music, music)
+    NavigationStack {
+      ArtistDetail(artist: artist1)
+        .environment(\.music, music)
+    }
 
-    ArtistDetail(artist: artist2)
-      .environment(\.music, music)
+    NavigationStack {
+      ArtistDetail(artist: artist2)
+        .environment(\.music, music)
+    }
   }
 }
