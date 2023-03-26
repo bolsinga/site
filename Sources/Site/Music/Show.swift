@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Show: Codable, Equatable {
+public struct Show: Codable, Equatable, Hashable, Identifiable {
   public let artists: [String]
   public let comment: String?
   public let date: PartialDate
