@@ -16,6 +16,14 @@ struct VenueDetail: View {
     music.related(venue).sorted(by: libraryCompare(lhs:rhs:))
   }
 
+  private var shows: [Show] {
+    music.showsForVenue(venue)
+  }
+
+  private var yearsOfShows: [Int] {
+    return Array(Set(shows.map { $0.date.normalizedYear })).sorted(by: <)
+  }
+
   var body: some View {
     VStack(alignment: .leading) {
       List {
@@ -24,7 +32,13 @@ struct VenueDetail: View {
             "Location", bundle: .module,
             comment: "Title of the Location / Address Section for VenueDetail.")
         ) {
-          AddressView(location: venue.location)
+          VStack(alignment: .leading) {
+            AddressView(location: venue.location)
+            Divider()
+            Text(
+              "\(shows.count) Show(s)", bundle: .module,
+              comment: "Number of shows seen at this venue.")
+          }
         }
         if !relatedVenues.isEmpty {
           Section(
@@ -34,6 +48,17 @@ struct VenueDetail: View {
           ) {
             ForEach(relatedVenues) { relatedVenue in
               NavigationLink(relatedVenue.name, value: relatedVenue)
+            }
+          }
+        }
+        if !yearsOfShows.isEmpty {
+          Section(
+            header: Text(
+              "Shows By Year", bundle: .module,
+              comment: "Title of the Shows by Year Section for VenueDetail.")
+          ) {
+            ForEach(yearsOfShows, id: \.self) { year in
+              Text(String(year))
             }
           }
         }
