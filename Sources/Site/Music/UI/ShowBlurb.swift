@@ -1,5 +1,5 @@
 //
-//  ShowBlurbView.swift
+//  ShowBlurb.swift
 //
 //
 //  Created by Greg Bolsinga on 2/28/23.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ShowBlurbView: View {
+struct ShowBlurb: View {
   @Environment(\.music) var music: Music
   let show: Show
 
@@ -23,10 +23,9 @@ struct ShowBlurbView: View {
     HStack(alignment: .bottom) {
       if let venue {
         Text(venue.name)
-          .font(.headline)
+          .bold()
       }
       Text(PartialDate.FormatStyle().format(show.date))
-        .font(.caption)
     }
     .padding(EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0))
   }
@@ -64,13 +63,13 @@ struct ShowBlurbView_Previews: PreviewProvider {
       timestamp: Date.now,
       venues: [venue])
 
-    ShowBlurbView(show: show1)
+    ShowBlurb(show: show1)
       .environment(\.music, music)
 
-    ShowBlurbView(show: show2)
+    ShowBlurb(show: show2)
       .environment(\.music, music)
 
-    ShowBlurbView(show: show3)
+    ShowBlurb(show: show3)
       .environment(\.music, music)
   }
 }
