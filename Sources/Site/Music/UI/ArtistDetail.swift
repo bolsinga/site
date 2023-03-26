@@ -25,10 +25,15 @@ struct ArtistDetail: View {
               comment: "Title of the Shows Section for ArtistDetail.")
           ) {
             ForEach(shows) { show in
-              ShowBlurb(show: show)
+              NavigationLink(value: show) {
+                ShowBlurb(show: show)
+              }
             }
           }
         }
+      }
+      .navigationDestination(for: Show.self) { show in
+        ShowDetail(show: show)
       }
     }
     .navigationTitle(artist.name)
