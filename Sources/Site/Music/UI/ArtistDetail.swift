@@ -17,17 +17,21 @@ struct ArtistDetail: View {
 
   var body: some View {
     VStack(alignment: .leading) {
-      Text(artist.name)
-        .font(.title)
-      if !shows.isEmpty {
-        Divider()
-        List {
-          ForEach(shows, id: \.id) { show in
-            ShowBlurbView(show: show)
+      List {
+        if !shows.isEmpty {
+          Section(
+            header: Text(
+              "\(shows.count) Show(s)", bundle: .module,
+              comment: "Title of the Shows Section for ArtistDetail.")
+          ) {
+            ForEach(shows) { show in
+              ShowBlurbView(show: show)
+            }
           }
         }
       }
     }
+    .navigationTitle(artist.name)
   }
 }
 
