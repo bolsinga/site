@@ -57,4 +57,10 @@ extension Music {
   public func showsForVenue(_ venue: Venue) -> [Show] {
     shows.filter { $0.venue == venue.id }
   }
+
+  public func artistsForVenue(_ venue: Venue) -> [Artist] {
+    return Set(showsForVenue(venue).reduce(into: []) { $0 += $1.artists }).compactMap {
+      artistMap[$0]
+    }
+  }
 }

@@ -24,6 +24,10 @@ struct VenueDetail: View {
     return Array(Set(shows.map { $0.date.normalizedYear })).sorted(by: <)
   }
 
+  private var artists: [Artist] {
+    music.artistsForVenue(venue).sorted(by: libraryCompare(lhs:rhs:))
+  }
+
   var body: some View {
     VStack(alignment: .leading) {
       List {
@@ -62,6 +66,20 @@ struct VenueDetail: View {
             }
           }
         }
+        if !artists.isEmpty {
+          Section(
+            header: Text(
+              "\(artists.count) Artist(s)", bundle: .module,
+              comment: "Title of the Artists Section for VenueDetail.")
+          ) {
+            ForEach(artists) { artist in
+              NavigationLink(artist.name, value: artist)
+            }
+          }
+        }
+      }
+      .navigationDestination(for: Artist.self) { artist in
+        ArtistDetail(artist: artist)
       }
       #if os(iOS)
         .listStyle(GroupedListStyle())
