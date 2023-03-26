@@ -1,3 +1,6 @@
+/* Title for the Artist Detail */
+"Artists" = "Artists";
+
 /* String for when a Show.PartialDate is unknown. */
 "Date Unknown" = "Date Unknown";
 
