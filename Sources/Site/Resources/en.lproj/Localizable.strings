@@ -16,6 +16,9 @@
 /* Title of the Location / Address Section for VenueDetail. */
 "Location" = "Location";
 
+/* Title of the Related Artists Section for ArtistDetail. */
+"Related Artists" = "Related Artists";
+
 /* Title of the Related Venues Section for VenueDetail. */
 "Related Venues" = "Related Venues";
 
