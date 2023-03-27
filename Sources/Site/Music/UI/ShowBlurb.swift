@@ -25,6 +25,7 @@ struct ShowBlurb: View {
         Text(venue.name)
           .bold()
       }
+      Spacer()
       Text(PartialDate.FormatStyle().format(show.date))
     }
     .padding(EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0))
