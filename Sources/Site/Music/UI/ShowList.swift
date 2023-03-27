@@ -1,5 +1,5 @@
 //
-//  ShowYearList.swift
+//  ShowList.swift
 //
 //
 //  Created by Greg Bolsinga on 3/26/23.
@@ -7,35 +7,29 @@
 
 import SwiftUI
 
-struct ShowYearList: View {
-  @Environment(\.music) private var music: Music
-
+struct ShowList: View {
   let shows: [Show]
-
-  private var yearsOfShows: [Int] {
-    return Array(Set(shows.map { $0.date.normalizedYear })).sorted(by: <)
-  }
 
   var body: some View {
     VStack {
-      List(yearsOfShows, id: \.self) { year in
-        NavigationLink(String(year), value: year)
+      List(shows) { show in
+        NavigationLink(value: show) { ShowBlurb(show: show) }
       }
-      .navigationTitle(Text("Show Years", bundle: .module, comment: "Title for the ShowYearList."))
-      .navigationDestination(for: Int.self) { year in
-        ShowList(shows: music.showsForYear(year))
+      .navigationTitle(Text("Shows", bundle: .module, comment: "Title for the ShowList"))
+      .navigationDestination(for: Show.self) { show in
+        ShowDetail(show: show)
       }
       Divider()
       Text(
-        "\(yearsOfShows.count) Year(s)", bundle: .module,
+        "\(shows.count) Show(s)", bundle: .module,
         comment:
-          "Years count shown at the bottom of the ShowYearList."
+          "Show count shown at the bottom of the ShowList."
       )
     }
   }
 }
 
-struct ShowYearList_Previews: PreviewProvider {
+struct ShowList_Previews: PreviewProvider {
   static var previews: some View {
     let artist1 = Artist(id: "ar0", name: "Artist With Longer Name")
     let artist2 = Artist(id: "ar1", name: "Artist 2")
@@ -68,7 +62,7 @@ struct ShowYearList_Previews: PreviewProvider {
       venues: [venue])
 
     NavigationStack {
-      ShowYearList(shows: music.shows)
+      ShowList(shows: music.shows)
         .environment(\.music, music)
     }
   }
