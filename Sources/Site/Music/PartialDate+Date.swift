@@ -36,7 +36,7 @@ extension PartialDate {
       result = result.year()
     }
     if month != nil {
-      result = result.month(.wide)
+      result = result.month(.defaultDigits)
     }
     if day != nil {
       result = result.day()
