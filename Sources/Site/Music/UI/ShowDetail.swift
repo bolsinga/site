@@ -55,9 +55,6 @@ struct ShowDetail: View {
           }
         }
       }
-      .navigationDestination(for: Artist.self) { artist in
-        ArtistDetail(artist: artist)
-      }
       .navigationTitle(venueName)
     }
   }

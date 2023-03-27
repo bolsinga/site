@@ -67,4 +67,8 @@ extension Music {
   public func showsForYear(_ year: Int) -> [Show] {
     shows.filter { $0.date.normalizedYear == year }
   }
+
+  public func artistsWithShows() -> [Artist] {
+    return Set(shows.reduce(into: []) { $0 += $1.artists }).compactMap { artistMap[$0] }
+  }
 }

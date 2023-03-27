@@ -28,11 +28,11 @@
 /* Title of the Related Venues Section for VenueDetail. */
 "Related Venues" = "Related Venues";
 
-/* Title for the ShowList. */
-"Shows" = "Shows";
-
 /* Title for the ShowYearList. */
 "Show Years" = "Show Years";
+
+/* Title for the ShowList */
+"Shows" = "Shows";
 
 /* Title for the Venue Detail */
 "Venues" = "Venues";
