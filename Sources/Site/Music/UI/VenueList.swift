@@ -18,13 +18,21 @@ struct VenueList: View {
   }
 
   var body: some View {
-    List(filteredVenues) { venue in
-      NavigationLink(venue.name, value: venue)
-    }
-    .searchable(text: $searchString)
-    .navigationTitle(Text("Venues", bundle: .module, comment: "Title for the Venue Detail"))
-    .navigationDestination(for: Venue.self) { venue in
-      VenueDetail(venue: venue)
+    VStack {
+      List(filteredVenues) { venue in
+        NavigationLink(venue.name, value: venue)
+      }
+      .searchable(text: $searchString)
+      .navigationTitle(Text("Venues", bundle: .module, comment: "Title for the Venue Detail"))
+      .navigationDestination(for: Venue.self) { venue in
+        VenueDetail(venue: venue)
+      }
+      Divider()
+      Text(
+        "\(filteredVenues.count) / \(venues.count) Venues", bundle: .module,
+        comment:
+          "Venue count shown at the bottom of the VenueList."
+      )
     }
   }
 }
@@ -43,9 +51,18 @@ struct VenueList_Previews: PreviewProvider {
         city: "San Francisco", web: URL(string: "http://www.amoeba.com"), street: "1855 Haight St.",
         state: "CA"), name: "Amoeba Records")
 
-    let venues: [Venue] = [venue1, venue2].sorted(by: libraryCompare(lhs:rhs:))
+    let music = Music(
+      albums: [],
+      artists: [],
+      relations: [],
+      shows: [],
+      songs: [],
+      timestamp: Date.now,
+      venues: [venue1, venue2])
+
     NavigationStack {
-      VenueList(venues: venues)
+      VenueList(venues: music.venues)
+        .environment(\.music, music)
     }
   }
 }
