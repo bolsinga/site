@@ -24,9 +24,6 @@ struct ArtistList: View {
       }
       .searchable(text: $searchString)
       .navigationTitle(Text("Artists", bundle: .module, comment: "Title for the Artist Detail"))
-      .navigationDestination(for: Artist.self) { artist in
-        ArtistDetail(artist: artist)
-      }
       Divider()
       Text(
         "\(filteredArtists.count) / \(artists.count) Artists", bundle: .module,

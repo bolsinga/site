@@ -16,9 +16,6 @@ struct ShowList: View {
         NavigationLink(value: show) { ShowBlurb(show: show) }
       }
       .navigationTitle(Text("Shows", bundle: .module, comment: "Title for the ShowList"))
-      .navigationDestination(for: Show.self) { show in
-        ShowDetail(show: show)
-      }
       Divider()
       Text(
         "\(shows.count) Show(s)", bundle: .module,

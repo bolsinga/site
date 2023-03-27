@@ -72,9 +72,6 @@ struct VenueDetail: View {
           }
         }
       }
-      .navigationDestination(for: Artist.self) { artist in
-        ArtistDetail(artist: artist)
-      }
       #if os(iOS)
         .listStyle(GroupedListStyle())
       #endif

@@ -47,9 +47,6 @@ struct ArtistDetail: View {
           }
         }
       }
-      .navigationDestination(for: Show.self) { show in
-        ShowDetail(show: show)
-      }
     }
     .navigationTitle(artist.name)
   }

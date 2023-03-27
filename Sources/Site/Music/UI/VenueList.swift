@@ -24,9 +24,6 @@ struct VenueList: View {
       }
       .searchable(text: $searchString)
       .navigationTitle(Text("Venues", bundle: .module, comment: "Title for the Venue Detail"))
-      .navigationDestination(for: Venue.self) { venue in
-        VenueDetail(venue: venue)
-      }
       Divider()
       Text(
         "\(filteredVenues.count) / \(venues.count) Venues", bundle: .module,
