@@ -22,6 +22,7 @@ struct ArtistList: View {
       List(filteredArtists) { artist in
         NavigationLink(artist.name, value: artist)
       }
+      .listStyle(.plain)
       .searchable(text: $searchString)
       .navigationTitle(Text("Artists", bundle: .module, comment: "Title for the Artist Detail"))
       Divider()

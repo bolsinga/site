@@ -15,6 +15,7 @@ struct ShowList: View {
       List(shows) { show in
         NavigationLink(value: show) { ShowBlurb(show: show) }
       }
+      .listStyle(.plain)
       .navigationTitle(Text("Shows", bundle: .module, comment: "Title for the ShowList"))
       Divider()
       Text(
