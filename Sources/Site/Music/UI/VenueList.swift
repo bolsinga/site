@@ -22,6 +22,7 @@ struct VenueList: View {
       List(filteredVenues) { venue in
         NavigationLink(venue.name, value: venue)
       }
+      .listStyle(.plain)
       .searchable(text: $searchString)
       .navigationTitle(Text("Venues", bundle: .module, comment: "Title for the Venue Detail"))
       Divider()
