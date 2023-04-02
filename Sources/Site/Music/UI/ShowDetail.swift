@@ -51,7 +51,7 @@ struct ShowDetail: View {
             header: Text(
               "Comment", bundle: .module, comment: "Title of the comment section of ShowDetail")
           ) {
-            Text(comment)
+            Text(comment.asAttributedString)
           }
         }
       }
