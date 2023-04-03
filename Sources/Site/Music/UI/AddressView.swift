@@ -11,7 +11,7 @@ struct AddressView: View {
   let location: Location
 
   var body: some View {
-    HStack {
+    HStack(alignment: .bottom) {
       Text(location.addressString)
       if let web = location.web {
         Link(destination: web) {
