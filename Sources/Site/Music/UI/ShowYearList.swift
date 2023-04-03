@@ -24,7 +24,7 @@ struct ShowYearList: View {
       .listStyle(.plain)
       .navigationTitle(Text("Show Years", bundle: .module, comment: "Title for the ShowYearList."))
       .navigationDestination(for: Int.self) { year in
-        ShowList(shows: music.showsForYear(year))
+        ShowList(shows: music.showsForYear(year), year: year)
       }
       Divider()
       Text(
