@@ -20,15 +20,14 @@ struct ShowBlurb: View {
   }
 
   var body: some View {
-    HStack(alignment: .bottom) {
+    VStack(alignment: .leading) {
       if let venue {
         Text(venue.name)
-          .bold()
+          .font(.headline)
       }
-      Spacer()
       Text(PartialDate.FormatStyle().format(show.date))
+        .font(.subheadline)
     }
-    .padding(EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0))
   }
 }
 
