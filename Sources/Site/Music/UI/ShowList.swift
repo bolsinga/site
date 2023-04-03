@@ -9,6 +9,20 @@ import SwiftUI
 
 struct ShowList: View {
   let shows: [Show]
+  var year: Int?
+
+  private var title: String {
+    if let year {
+      return String(
+        localized: "\(year, format: .number.grouping(.never)) Shows",
+        bundle: .module,
+        comment: "Title for the ShowList when there is a year")
+    }
+    return String(
+      localized: "Shows",
+      bundle: .module,
+      comment: "Title for the ShowList")
+  }
 
   var body: some View {
     VStack {
@@ -16,7 +30,7 @@ struct ShowList: View {
         NavigationLink(value: show) { ShowBlurb(show: show) }
       }
       .listStyle(.plain)
-      .navigationTitle(Text("Shows", bundle: .module, comment: "Title for the ShowList"))
+      .navigationTitle(Text(title))
       Divider()
       Text(
         "\(shows.count) Show(s)", bundle: .module,
