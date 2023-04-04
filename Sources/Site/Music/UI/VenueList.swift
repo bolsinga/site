@@ -18,17 +18,11 @@ struct VenueList: View {
   }
 
   private var filteredSections: [String] {
-    return Set(
-      filteredVenues.map { $0.sortname != nil ? $0.sortname! : $0.name }.map {
-        String($0.prefix(1))
-      }
-    ).sorted()
+    return Set(filteredVenues.map { librarySection($0) }).sorted()
   }
 
   private func filteredVenues(for section: String) -> [Venue] {
-    return filteredVenues.filter {
-      $0.sortname != nil ? $0.sortname!.hasPrefix(section) : $0.name.hasPrefix(section)
-    }
+    return filteredVenues.filter { librarySection($0) == section }
   }
 
   var body: some View {
