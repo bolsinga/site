@@ -17,10 +17,24 @@ struct ArtistList: View {
     return artists.filter { $0.name.lowercased().contains(searchString.lowercased()) }
   }
 
+  private var filteredSections: [String] {
+    return Set(filteredArtists.map { librarySection($0) }).sorted()
+  }
+
+  private func filteredArtists(for section: String) -> [Artist] {
+    return filteredArtists.filter { librarySection($0) == section }
+  }
+
   var body: some View {
     VStack {
-      List(filteredArtists) { artist in
-        NavigationLink(artist.name, value: artist)
+      List {
+        ForEach(filteredSections, id: \.self) { section in
+          Section(section) {
+            ForEach(filteredArtists(for: section)) { artist in
+              NavigationLink(artist.name, value: artist)
+            }
+          }
+        }
       }
       .listStyle(.plain)
       .searchable(text: $searchString)
