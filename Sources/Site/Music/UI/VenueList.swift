@@ -17,10 +17,30 @@ struct VenueList: View {
     return venues.filter { $0.name.lowercased().contains(searchString.lowercased()) }
   }
 
+  private var filteredSections: [String] {
+    return Set(
+      filteredVenues.map { $0.sortname != nil ? $0.sortname! : $0.name }.map {
+        String($0.prefix(1))
+      }
+    ).sorted()
+  }
+
+  private func filteredVenues(for section: String) -> [Venue] {
+    return filteredVenues.filter {
+      $0.sortname != nil ? $0.sortname!.hasPrefix(section) : $0.name.hasPrefix(section)
+    }
+  }
+
   var body: some View {
     VStack {
-      List(filteredVenues) { venue in
-        NavigationLink(venue.name, value: venue)
+      List {
+        ForEach(filteredSections, id: \.self) { section in
+          Section(section) {
+            ForEach(filteredVenues(for: section)) { venue in
+              NavigationLink(venue.name, value: venue)
+            }
+          }
+        }
       }
       .listStyle(.plain)
       .searchable(text: $searchString)
