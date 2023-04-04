@@ -7,7 +7,8 @@
 /* Venue count shown at the bottom of the VenueList. */
 "%lld / %lld Venues" = "%lld / %lld Venues";
 
-/* Title for the Artist Detail */
+/* Title for the Artist Detail
+Title Of the Artist List Tab */
 "Artists" = "Artists";
 
 /* Title of the comment section of ShowDetail */
@@ -34,9 +35,11 @@
 /* Title for the ShowYearList. */
 "Show Years" = "Show Years";
 
-/* Title for the ShowList */
+/* Title for the ShowList
+Title Of the Show List Tab */
 "Shows" = "Shows";
 
-/* Title for the Venue Detail */
+/* Title for the Venue Detail
+Title Of the Venue List Tab */
 "Venues" = "Venues";
 
