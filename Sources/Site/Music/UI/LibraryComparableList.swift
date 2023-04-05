@@ -1,35 +1,35 @@
 //
-//  ArtistList.swift
+//  LibraryComparableList.swift
 //
 //
-//  Created by Greg Bolsinga on 3/26/23.
+//  Created by Greg Bolsinga on 4/4/23.
 //
 
 import SwiftUI
 
-struct ArtistList: View {
-  let artists: [Artist]
+struct LibraryComparableList<T>: View where T: LibraryComparable, T: Identifiable, T: Hashable {
+  let items: [T]
 
   @State private var searchString: String = ""
 
-  private var filteredArtists: [Artist] {
-    guard !searchString.isEmpty else { return artists }
-    return artists.filter { $0.name.lowercased().contains(searchString.lowercased()) }
+  private var filteredItems: [T] {
+    guard !searchString.isEmpty else { return items }
+    return items.filter { $0.name.lowercased().contains(searchString.lowercased()) }
   }
 
   private var filteredSections: [String] {
-    return Set(filteredArtists.map { librarySection($0) }).sorted()
+    return Set(filteredItems.map { librarySection($0) }).sorted()
   }
 
-  private func filteredArtists(for section: String) -> [Artist] {
-    return filteredArtists.filter { librarySection($0) == section }
+  private func filteredItems(for section: String) -> [T] {
+    return filteredItems.filter { librarySection($0) == section }
   }
 
   var body: some View {
     List {
       ForEach(filteredSections, id: \.self) { section in
         Section(section) {
-          ForEach(filteredArtists(for: section)) { artist in
+          ForEach(filteredItems(for: section)) { artist in
             NavigationLink(artist.name, value: artist)
           }
         }
@@ -37,11 +37,10 @@ struct ArtistList: View {
     }
     .listStyle(.plain)
     .searchable(text: $searchString)
-    .navigationTitle(Text("Artists", bundle: .module, comment: "Title for the Artist Detail"))
   }
 }
 
-struct ArtistList_Previews: PreviewProvider {
+struct LibraryComparableList_Previews: PreviewProvider {
   static var previews: some View {
     let venue = Venue(
       id: "v10",
@@ -75,7 +74,14 @@ struct ArtistList_Previews: PreviewProvider {
       venues: [venue])
 
     NavigationStack {
-      ArtistList(artists: music.artists)
+      LibraryComparableList(items: music.artists)
+        .navigationTitle("Artists")
+        .environment(\.music, music)
+    }
+
+    NavigationStack {
+      LibraryComparableList(items: music.venues)
+        .navigationTitle("Venues")
         .environment(\.music, music)
     }
   }
