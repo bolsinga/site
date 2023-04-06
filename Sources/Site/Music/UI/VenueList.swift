@@ -26,26 +26,18 @@ struct VenueList: View {
   }
 
   var body: some View {
-    VStack {
-      List {
-        ForEach(filteredSections, id: \.self) { section in
-          Section(section) {
-            ForEach(filteredVenues(for: section)) { venue in
-              NavigationLink(venue.name, value: venue)
-            }
+    List {
+      ForEach(filteredSections, id: \.self) { section in
+        Section(section) {
+          ForEach(filteredVenues(for: section)) { venue in
+            NavigationLink(venue.name, value: venue)
           }
         }
       }
-      .listStyle(.plain)
-      .searchable(text: $searchString)
-      .navigationTitle(Text("Venues", bundle: .module, comment: "Title for the Venue Detail"))
-      Divider()
-      Text(
-        "\(filteredVenues.count) / \(venues.count) Venues", bundle: .module,
-        comment:
-          "Venue count shown at the bottom of the VenueList."
-      )
     }
+    .listStyle(.plain)
+    .searchable(text: $searchString)
+    .navigationTitle(Text("Venues", bundle: .module, comment: "Title for the Venue Detail"))
   }
 }
 

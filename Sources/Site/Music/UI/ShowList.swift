@@ -25,19 +25,11 @@ struct ShowList: View {
   }
 
   var body: some View {
-    VStack {
-      List(shows) { show in
-        NavigationLink(value: show) { ShowBlurb(show: show) }
-      }
-      .listStyle(.plain)
-      .navigationTitle(Text(title))
-      Divider()
-      Text(
-        "\(shows.count) Show(s)", bundle: .module,
-        comment:
-          "Show count shown at the bottom of the ShowList."
-      )
+    List(shows) { show in
+      NavigationLink(value: show) { ShowBlurb(show: show) }
     }
+    .listStyle(.plain)
+    .navigationTitle(Text(title))
   }
 }
 
