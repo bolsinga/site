@@ -17,21 +17,13 @@ struct ShowYearList: View {
   }
 
   var body: some View {
-    VStack {
-      List(yearsOfShows, id: \.self) { year in
-        NavigationLink(String(year), value: year)
-      }
-      .listStyle(.plain)
-      .navigationTitle(Text("Show Years", bundle: .module, comment: "Title for the ShowYearList."))
-      .navigationDestination(for: Int.self) { year in
-        ShowList(shows: music.showsForYear(year), year: year)
-      }
-      Divider()
-      Text(
-        "\(yearsOfShows.count) Year(s)", bundle: .module,
-        comment:
-          "Years count shown at the bottom of the ShowYearList."
-      )
+    List(yearsOfShows, id: \.self) { year in
+      NavigationLink(String(year), value: year)
+    }
+    .listStyle(.plain)
+    .navigationTitle(Text("Show Years", bundle: .module, comment: "Title for the ShowYearList."))
+    .navigationDestination(for: Int.self) { year in
+      ShowList(shows: music.showsForYear(year), year: year)
     }
   }
 }

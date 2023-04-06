@@ -26,26 +26,18 @@ struct ArtistList: View {
   }
 
   var body: some View {
-    VStack {
-      List {
-        ForEach(filteredSections, id: \.self) { section in
-          Section(section) {
-            ForEach(filteredArtists(for: section)) { artist in
-              NavigationLink(artist.name, value: artist)
-            }
+    List {
+      ForEach(filteredSections, id: \.self) { section in
+        Section(section) {
+          ForEach(filteredArtists(for: section)) { artist in
+            NavigationLink(artist.name, value: artist)
           }
         }
       }
-      .listStyle(.plain)
-      .searchable(text: $searchString)
-      .navigationTitle(Text("Artists", bundle: .module, comment: "Title for the Artist Detail"))
-      Divider()
-      Text(
-        "\(filteredArtists.count) / \(artists.count) Artists", bundle: .module,
-        comment:
-          "Artist count shown at the bottom of the ArtistList."
-      )
     }
+    .listStyle(.plain)
+    .searchable(text: $searchString)
+    .navigationTitle(Text("Artists", bundle: .module, comment: "Title for the Artist Detail"))
   }
 }
 
