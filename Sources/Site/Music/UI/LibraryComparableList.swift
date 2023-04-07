@@ -17,20 +17,22 @@ struct LibraryComparableList<T>: View where T: LibraryComparable, T: Identifiabl
     return items.filter { $0.name.lowercased().contains(searchString.lowercased()) }
   }
 
-  private var filteredSections: [String] {
-    return Set(filteredItems.map { librarySection($0) }).sorted()
-  }
-
-  private func filteredItems(for section: String) -> [T] {
-    return filteredItems.filter { librarySection($0) == section }
+  private var sectionMap: [String: [T]] {
+    filteredItems.reduce(into: [String: [T]]()) {
+      let section = librarySection($1)
+      var arr = ($0[section] ?? [])
+      arr.append($1)
+      $0[section] = arr
+    }
   }
 
   var body: some View {
     List {
-      ForEach(filteredSections, id: \.self) { section in
+      let sectionMap = sectionMap
+      ForEach(sectionMap.keys.sorted(), id: \.self) { section in
         Section(section) {
-          ForEach(filteredItems(for: section)) { artist in
-            NavigationLink(artist.name, value: artist)
+          ForEach(sectionMap[section] ?? []) { item in
+            NavigationLink(item.name, value: item)
           }
         }
       }
