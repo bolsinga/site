@@ -20,15 +20,6 @@ public func libraryCompare(lhs: any LibraryComparable, rhs: any LibraryComparabl
   return libraryCompare(lhs: lhSort, rhs: rhSort)
 }
 
-public func librarySection(_ item: any LibraryComparable) -> String {
-  let itemSort = item.sortname ?? item.name
-  return librarySection(itemSort)
-}
-
-internal func librarySection(_ string: String) -> String {
-  return String(chomp(string).prefix(1)).uppercased()
-}
-
 private func chompPrefix(_ string: String) -> String {
   let regex = Regex {
     Optionally {
