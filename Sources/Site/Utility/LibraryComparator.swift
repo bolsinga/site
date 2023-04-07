@@ -26,7 +26,7 @@ public func librarySection(_ item: any LibraryComparable) -> String {
 }
 
 func librarySection(_ string: String) -> String {
-  return String(chomp(string).prefix(1))
+  return String(chomp(string).prefix(1)).uppercased()
 }
 
 func chompPrefix(_ string: String) -> String {
