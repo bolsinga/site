@@ -36,15 +36,7 @@ public struct NavigateTab: View {
               systemImage: "music.mic")
           }
       }
-      .navigationDestination(for: Show.self) { show in
-        ShowDetail(show: show)
-      }
-      .navigationDestination(for: Venue.self) { venue in
-        VenueDetail(venue: venue)
-      }
-      .navigationDestination(for: Artist.self) { artist in
-        ArtistDetail(artist: artist)
-      }
+      .musicDestinations()
     }
   }
 }
