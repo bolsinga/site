@@ -25,11 +25,11 @@ public func librarySection(_ item: any LibraryComparable) -> String {
   return librarySection(itemSort)
 }
 
-func librarySection(_ string: String) -> String {
+internal func librarySection(_ string: String) -> String {
   return String(chomp(string).prefix(1)).uppercased()
 }
 
-func chompPrefix(_ string: String) -> String {
+private func chompPrefix(_ string: String) -> String {
   let regex = Regex {
     Optionally {
       ChoiceOf {
@@ -47,7 +47,7 @@ func chompPrefix(_ string: String) -> String {
   return String(result)
 }
 
-func chomp(_ string: String) -> String {
+internal func chomp(_ string: String) -> String {
   var result = chompPrefix(string)
 
   let regex = Regex {
