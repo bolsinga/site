@@ -17,8 +17,8 @@ struct LibraryComparableList<T>: View where T: LibraryComparable, T: Identifiabl
     return items.filter { $0.name.lowercased().contains(searchString.lowercased()) }
   }
 
-  private var sectionMap: [String: [T]] {
-    filteredItems.reduce(into: [String: [T]]()) {
+  private var sectionMap: [LibrarySection: [T]] {
+    filteredItems.reduce(into: [LibrarySection: [T]]()) {
       let section = librarySection($1)
       var arr = ($0[section] ?? [])
       arr.append($1)
@@ -30,7 +30,7 @@ struct LibraryComparableList<T>: View where T: LibraryComparable, T: Identifiabl
     List {
       let sectionMap = sectionMap
       ForEach(sectionMap.keys.sorted(), id: \.self) { section in
-        Section(section) {
+        Section(String(describing: section)) {
           ForEach(sectionMap[section] ?? []) { item in
             NavigationLink(item.name, value: item)
           }

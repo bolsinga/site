@@ -103,8 +103,4 @@ final class LibraryComparatorTests: XCTestCase {
     XCTAssertEqual(chomp("\"Song Title\""), "Song Title")
     XCTAssertEqual(chomp("\"Longer Song Title\""), "Longer Song Title")
   }
-
-  func testLibrarySection() throws {
-    XCTAssertEqual(librarySection("The Chapel"), "C")
-  }
 }

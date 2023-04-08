@@ -1,8 +1,7 @@
 /* Title for the ShowList when there is a year */
 "%@ Shows" = "%@ Shows";
 
-/* Title for the Artist Detail
-Title Of the Artist List Tab */
+/* Title for the Artist Detail */
 "Artists" = "Artists";
 
 /* Title of the comment section of ShowDetail */
@@ -20,6 +19,12 @@ Title Of the Artist List Tab */
 /* Title of the Location / Address Section for VenueDetail. */
 "Location" = "Location";
 
+/* String used to describe LibrarySection.numeric. */
+"Numeric" = "Numeric";
+
+/* String used to describe LibrarySection.punctuation. */
+"Punctuation" = "Punctuation";
+
 /* Title of the Related Artists Section for ArtistDetail. */
 "Related Artists" = "Related Artists";
 
@@ -33,7 +38,6 @@ Title Of the Artist List Tab */
 Title Of the Show List Tab */
 "Shows" = "Shows";
 
-/* Title for the Venue Detail
-Title Of the Venue List Tab */
+/* Title for the Venue Detail */
 "Venues" = "Venues";
 
