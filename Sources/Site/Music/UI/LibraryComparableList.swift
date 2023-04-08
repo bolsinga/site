@@ -30,7 +30,7 @@ struct LibraryComparableList<T>: View where T: LibraryComparable, T: Identifiabl
     let sectionMap = sectionMap
     List {
       ForEach(sectionMap.keys.sorted(), id: \.self) { section in
-        Section(String(describing: section)) {
+        Section(section.formatted(.long)) {
           ForEach(sectionMap[section] ?? []) { item in
             NavigationLink(item.name, value: item)
           }

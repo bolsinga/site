@@ -24,7 +24,7 @@ struct LibrarySectionIndexModifier: ViewModifier {
                   }
                 },
                 label: {
-                  Text(String(describing: section)).font(.system(size: 12))
+                  Text(section.formatted(.short)).font(.system(size: 12))
                 })
             }
           }

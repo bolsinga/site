@@ -31,4 +31,18 @@ final class LibrarySectionTests: XCTestCase {
     XCTAssertTrue(LibrarySection.numeric < .punctuation)
     XCTAssertFalse(LibrarySection.numeric > .punctuation)
   }
+
+  func testFormat() throws {
+    XCTAssertEqual(LibrarySection.alphabetic("A").formatted(), "A")
+    XCTAssertEqual(LibrarySection.numeric.formatted(), "Numeric")
+    XCTAssertEqual(LibrarySection.punctuation.formatted(), "Punctuation")
+
+    XCTAssertEqual(LibrarySection.alphabetic("A").formatted(.long), "A")
+    XCTAssertEqual(LibrarySection.numeric.formatted(.long), "Numeric")
+    XCTAssertEqual(LibrarySection.punctuation.formatted(.long), "Punctuation")
+
+    XCTAssertEqual(LibrarySection.alphabetic("A").formatted(.short), "A")
+    XCTAssertEqual(LibrarySection.numeric.formatted(.short), "#")
+    XCTAssertEqual(LibrarySection.punctuation.formatted(.short), "!")
+  }
 }

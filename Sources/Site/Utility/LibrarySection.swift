@@ -13,23 +13,6 @@ enum LibrarySection: Hashable {
   case punctuation
 }
 
-extension LibrarySection: CustomStringConvertible {
-  var description: String {
-    switch self {
-    case .alphabetic(let string):
-      return string
-    case .numeric:
-      return String(
-        localized: "Numeric", bundle: .module,
-        comment: "String used to describe LibrarySection.numeric.")
-    case .punctuation:
-      return String(
-        localized: "Punctuation", bundle: .module,
-        comment: "String used to describe LibrarySection.punctuation.")
-    }
-  }
-}
-
 extension LibrarySection: Comparable {
   public static func < (lhs: LibrarySection, rhs: LibrarySection) -> Bool {
     switch (lhs, rhs) {
