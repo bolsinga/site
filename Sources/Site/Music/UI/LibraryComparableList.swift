@@ -27,8 +27,8 @@ struct LibraryComparableList<T>: View where T: LibraryComparable, T: Identifiabl
   }
 
   var body: some View {
+    let sectionMap = sectionMap
     List {
-      let sectionMap = sectionMap
       ForEach(sectionMap.keys.sorted(), id: \.self) { section in
         Section(String(describing: section)) {
           ForEach(sectionMap[section] ?? []) { item in
@@ -37,6 +37,7 @@ struct LibraryComparableList<T>: View where T: LibraryComparable, T: Identifiabl
         }
       }
     }
+    .sectionIndex(sectionMap.keys.sorted())
     .listStyle(.plain)
     .searchable(text: $searchString)
   }
