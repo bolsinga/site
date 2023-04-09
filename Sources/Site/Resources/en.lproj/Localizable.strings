@@ -41,3 +41,6 @@ Title Of the Show List Tab */
 /* Title for the Venue Detail */
 "Venues" = "Venues";
 
+/* String for when a Show.PartialDate is unknown, and only the year is being shown. */
+"Year Unknown" = "Year Unknown";
+
