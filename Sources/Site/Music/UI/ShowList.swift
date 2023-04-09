@@ -9,12 +9,12 @@ import SwiftUI
 
 struct ShowList: View {
   let shows: [Show]
-  var year: Int?
+  var yearPartialDate: PartialDate?
 
   private var title: String {
-    if let year {
+    if let yearPartialDate {
       return String(
-        localized: "\(year, format: .number.grouping(.never)) Shows",
+        localized: "\(yearPartialDate.formatted(.yearOnly)) Shows",
         bundle: .module,
         comment: "Title for the ShowList when there is a year")
     }

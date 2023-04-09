@@ -64,8 +64,8 @@ extension Music {
     }
   }
 
-  public func showsForYear(_ year: Int) -> [Show] {
-    shows.filter { $0.date.normalizedYear == year }
+  public func showsForYear(_ year: PartialDate) -> [Show] {
+    shows.filter { $0.date.normalizedYear == year.normalizedYear }
   }
 
   public func artistsWithShows() -> [Artist] {
