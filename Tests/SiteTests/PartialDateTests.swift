@@ -99,4 +99,22 @@ final class PartialDateTests: XCTestCase {
     XCTAssertFalse(date1 < date2)
     XCTAssertFalse(date2 < date1)
   }
+
+  func testFormat() throws {
+    let date1 = PartialDate(year: 1995, month: 12, day: 31)
+    let date2 = PartialDate(year: 1997)
+    let unknownDate = PartialDate()
+
+    XCTAssertEqual(date1.formatted(), "12/31/1995")
+    XCTAssertEqual(date2.formatted(), "1997")
+    XCTAssertEqual(unknownDate.formatted(), "Date Unknown")
+
+    XCTAssertEqual(date1.formatted(.compact), "12/31/1995")
+    XCTAssertEqual(date2.formatted(.compact), "1997")
+    XCTAssertEqual(unknownDate.formatted(.compact), "Date Unknown")
+
+    XCTAssertEqual(date1.formatted(.yearOnly), "1995")
+    XCTAssertEqual(date2.formatted(.yearOnly), "1997")
+    XCTAssertEqual(unknownDate.formatted(.yearOnly), "Year Unknown")
+  }
 }

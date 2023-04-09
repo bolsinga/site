@@ -25,7 +25,7 @@ struct ShowBlurb: View {
         Text(venue.name)
           .font(.headline)
       }
-      Text(PartialDate.FormatStyle().format(show.date))
+      Text(show.date.formatted(.compact))
         .font(.subheadline)
     }
   }

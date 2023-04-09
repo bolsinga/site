@@ -43,7 +43,7 @@ struct ShowDetail: View {
         Section(
           header: Text("Date", bundle: .module, comment: "Title of the data section of ShowDetail")
         ) {
-          Text(PartialDate.FormatStyle().format(show.date))
+          Text(show.date.formatted(.compact))
         }
 
         if let comment = show.comment {

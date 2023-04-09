@@ -29,37 +29,6 @@ extension PartialDate {
   }
 }
 
-extension PartialDate {
-  private var knownDateFormatStyle: Date.FormatStyle {
-    var result = Date.FormatStyle.dateTime
-    if year != nil {
-      result = result.year()
-    }
-    if month != nil {
-      result = result.month(.defaultDigits)
-    }
-    if day != nil {
-      result = result.day()
-    }
-    return result
-  }
-}
-
-extension PartialDate {
-  public struct FormatStyle: Codable, Equatable, Hashable, Foundation.FormatStyle {
-    public func format(_ value: PartialDate) -> String {
-      if !value.isUnknown, let date = value.date {
-        return value.knownDateFormatStyle.format(date)
-      } else {
-        return String(
-          localized: "Date Unknown",
-          bundle: .module,
-          comment: "String for when a Show.PartialDate is unknown.")
-      }
-    }
-  }
-}
-
 extension PartialDate: Comparable {
   public static func < (lhs: PartialDate, rhs: PartialDate) -> Bool {
     if lhs.isUnknown, rhs.isUnknown {
