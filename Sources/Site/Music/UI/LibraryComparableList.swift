@@ -37,7 +37,9 @@ struct LibraryComparableList<T>: View where T: LibraryComparable, T: Identifiabl
         }
       }
     }
-    .sectionIndex(sectionMap.keys.sorted())
+    #if os(iOS)
+      .sectionIndex(sectionMap.keys.sorted())
+    #endif
     .listStyle(.plain)
     .searchable(text: $searchString)
   }
