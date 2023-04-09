@@ -12,18 +12,20 @@ struct ShowYearList: View {
 
   let shows: [Show]
 
-  private var yearsOfShows: [Int] {
-    return Array(Set(shows.map { $0.date.normalizedYear })).sorted(by: <)
+  private var yearPartialDates: [PartialDate] {
+    return Array(
+      Set(shows.map { $0.date.year != nil ? PartialDate(year: $0.date.year!) : PartialDate() })
+    ).sorted(by: <)
   }
 
   var body: some View {
-    List(yearsOfShows, id: \.self) { year in
-      NavigationLink(String(year), value: year)
+    List(yearPartialDates, id: \.self) { yearPartialDate in
+      NavigationLink(yearPartialDate.formatted(.yearOnly), value: yearPartialDate)
     }
     .listStyle(.plain)
     .navigationTitle(Text("Show Years", bundle: .module, comment: "Title for the ShowYearList."))
-    .navigationDestination(for: Int.self) { year in
-      ShowList(shows: music.showsForYear(year), year: year)
+    .navigationDestination(for: PartialDate.self) { yearPartialDate in
+      ShowList(shows: music.showsForYear(yearPartialDate), yearPartialDate: yearPartialDate)
     }
   }
 }
