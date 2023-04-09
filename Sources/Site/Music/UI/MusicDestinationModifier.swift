@@ -10,15 +10,9 @@ import SwiftUI
 struct MusicDestinationModifier: ViewModifier {
   func body(content: Content) -> some View {
     content
-      .navigationDestination(for: Show.self) { show in
-        ShowDetail(show: show)
-      }
-      .navigationDestination(for: Venue.self) { venue in
-        VenueDetail(venue: venue)
-      }
-      .navigationDestination(for: Artist.self) { artist in
-        ArtistDetail(artist: artist)
-      }
+      .navigationDestination(for: Show.self) { ShowDetail(show: $0) }
+      .navigationDestination(for: Venue.self) { VenueDetail(venue: $0) }
+      .navigationDestination(for: Artist.self) { ArtistDetail(artist: $0) }
   }
 }
 
