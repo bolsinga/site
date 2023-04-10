@@ -55,6 +55,9 @@ struct ShowDetail: View {
           }
         }
       }
+      #if os(iOS)
+        .listStyle(.grouped)
+      #endif
       .navigationTitle(venueName)
     }
   }
