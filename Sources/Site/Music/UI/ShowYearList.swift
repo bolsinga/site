@@ -20,7 +20,14 @@ struct ShowYearList: View {
 
   var body: some View {
     List(yearPartialDates, id: \.self) { yearPartialDate in
-      NavigationLink(yearPartialDate.formatted(.yearOnly), value: yearPartialDate)
+      NavigationLink(value: yearPartialDate) {
+        LabeledContent(
+          yearPartialDate.formatted(.yearOnly),
+          value: String(
+            localized:
+              "\(music.showsForYear(yearPartialDate).count) Show(s)", bundle: .module,
+            comment: "Value for the ShowYearList Shows per year."))
+      }
     }
     .listStyle(.plain)
     .navigationTitle(Text("Show Years", bundle: .module, comment: "Title for the ShowYearList."))
