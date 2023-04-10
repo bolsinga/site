@@ -20,13 +20,15 @@ struct ShowBlurb: View {
   }
 
   var body: some View {
-    VStack(alignment: .leading) {
+    LabeledContent {
+      Text(
+        "\(show.artists.count) Artist(s)", bundle: .module,
+        comment: "Content of the LabeledContent in a ShowBlurb.")
+    } label: {
       if let venue {
         Text(venue.name)
-          .font(.headline)
       }
       Text(show.date.formatted(.compact))
-        .font(.subheadline)
     }
   }
 }
