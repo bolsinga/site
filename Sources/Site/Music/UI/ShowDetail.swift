@@ -40,11 +40,10 @@ struct ShowDetail: View {
           }
         }
 
-        Section(
-          header: Text("Date", bundle: .module, comment: "Title of the data section of ShowDetail")
-        ) {
-          Text(show.date.formatted(.compact))
-        }
+        LabeledContent(
+          String(
+            localized: "Date", bundle: .module, comment: "Title of the data section of ShowDetail"),
+          value: show.date.formatted(.compact))
 
         if let comment = show.comment {
           Section(
