@@ -19,33 +19,41 @@ struct ArtistDetail: View {
     music.related(artist).sorted(by: libraryCompare(lhs:rhs:))
   }
 
+  @ViewBuilder private var showsElement: some View {
+    if !shows.isEmpty {
+      Section(
+        header: Text(
+          "\(shows.count) Show(s)", bundle: .module,
+          comment: "Title of the Shows Section for ArtistDetail.")
+      ) {
+        ForEach(shows) { show in
+          NavigationLink(value: show) {
+            ShowBlurb(show: show)
+          }
+        }
+      }
+    }
+  }
+
+  @ViewBuilder private var relatedsElement: some View {
+    if !relatedArtists.isEmpty {
+      Section(
+        header: Text(
+          "Related Artists", bundle: .module,
+          comment: "Title of the Related Artists Section for ArtistDetail.")
+      ) {
+        ForEach(relatedArtists) { relatedArtist in
+          NavigationLink(relatedArtist.name, value: relatedArtist)
+        }
+      }
+    }
+  }
+
   var body: some View {
     VStack(alignment: .leading) {
       List {
-        if !shows.isEmpty {
-          Section(
-            header: Text(
-              "\(shows.count) Show(s)", bundle: .module,
-              comment: "Title of the Shows Section for ArtistDetail.")
-          ) {
-            ForEach(shows) { show in
-              NavigationLink(value: show) {
-                ShowBlurb(show: show)
-              }
-            }
-          }
-        }
-        if !relatedArtists.isEmpty {
-          Section(
-            header: Text(
-              "Related Artists", bundle: .module,
-              comment: "Title of the Related Artists Section for ArtistDetail.")
-          ) {
-            ForEach(relatedArtists) { relatedArtist in
-              NavigationLink(relatedArtist.name, value: relatedArtist)
-            }
-          }
-        }
+        showsElement
+        relatedsElement
       }
       #if os(iOS)
         .listStyle(.grouped)
