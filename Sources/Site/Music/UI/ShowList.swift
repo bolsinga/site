@@ -68,6 +68,7 @@ struct ShowList_Previews: PreviewProvider {
     NavigationStack {
       ShowList(shows: music.shows)
         .environment(\.music, music)
+        .musicDestinations()
     }
   }
 }
