@@ -73,7 +73,7 @@ struct VenueDetail: View {
         }
       }
       #if os(iOS)
-        .listStyle(GroupedListStyle())
+        .listStyle(.grouped)
       #endif
     }
     .navigationTitle(venue.name)

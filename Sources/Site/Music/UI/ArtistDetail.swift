@@ -47,6 +47,9 @@ struct ArtistDetail: View {
           }
         }
       }
+      #if os(iOS)
+        .listStyle(.grouped)
+      #endif
     }
     .navigationTitle(artist.name)
   }
