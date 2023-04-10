@@ -29,53 +29,51 @@ struct VenueDetail: View {
   }
 
   var body: some View {
-    VStack(alignment: .leading) {
-      List {
+    List {
+      Section(
+        header: Text(
+          "Location", bundle: .module,
+          comment: "Title of the Location / Address Section for VenueDetail.")
+      ) {
+        AddressView(location: venue.location)
+      }
+      if !relatedVenues.isEmpty {
         Section(
           header: Text(
-            "Location", bundle: .module,
-            comment: "Title of the Location / Address Section for VenueDetail.")
+            "Related Venues", bundle: .module,
+            comment: "Title of the Related Venues Section for VenueDetail.")
         ) {
-          AddressView(location: venue.location)
-        }
-        if !relatedVenues.isEmpty {
-          Section(
-            header: Text(
-              "Related Venues", bundle: .module,
-              comment: "Title of the Related Venues Section for VenueDetail.")
-          ) {
-            ForEach(relatedVenues) { relatedVenue in
-              NavigationLink(relatedVenue.name, value: relatedVenue)
-            }
-          }
-        }
-        if !yearsOfShows.isEmpty {
-          Section(
-            header: Text(
-              "\(shows.count) Show(s)", bundle: .module,
-              comment: "Title of the Shows by Year Section for VenueDetail.")
-          ) {
-            ForEach(yearsOfShows, id: \.self) { year in
-              Text(String(year))
-            }
-          }
-        }
-        if !artists.isEmpty {
-          Section(
-            header: Text(
-              "\(artists.count) Artist(s)", bundle: .module,
-              comment: "Title of the Artists Section for VenueDetail.")
-          ) {
-            ForEach(artists) { artist in
-              NavigationLink(artist.name, value: artist)
-            }
+          ForEach(relatedVenues) { relatedVenue in
+            NavigationLink(relatedVenue.name, value: relatedVenue)
           }
         }
       }
-      #if os(iOS)
-        .listStyle(.grouped)
-      #endif
+      if !yearsOfShows.isEmpty {
+        Section(
+          header: Text(
+            "\(shows.count) Show(s)", bundle: .module,
+            comment: "Title of the Shows by Year Section for VenueDetail.")
+        ) {
+          ForEach(yearsOfShows, id: \.self) { year in
+            Text(String(year))
+          }
+        }
+      }
+      if !artists.isEmpty {
+        Section(
+          header: Text(
+            "\(artists.count) Artist(s)", bundle: .module,
+            comment: "Title of the Artists Section for VenueDetail.")
+        ) {
+          ForEach(artists) { artist in
+            NavigationLink(artist.name, value: artist)
+          }
+        }
+      }
     }
+    #if os(iOS)
+      .listStyle(.grouped)
+    #endif
     .navigationTitle(venue.name)
   }
 }
