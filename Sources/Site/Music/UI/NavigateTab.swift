@@ -25,9 +25,13 @@ public struct NavigateTab: View {
           systemImage: "person.and.background.dotted")
       }
       NavigationStack {
-        LibraryComparableList(items: music.venues.sorted(by: libraryCompare(lhs:rhs:)))
-          .navigationTitle(Text("Venues", bundle: .module, comment: "Title for the Venue Detail"))
-          .musicDestinations()
+        LibraryComparableList(items: music.venues.sorted(by: libraryCompare(lhs:rhs:))) {
+          String(
+            localized: "\(music.showsForVenue($0).count) Show(s)", bundle: .module,
+            comment: "Value for the Venue # of Shows.")
+        }
+        .navigationTitle(Text("Venues", bundle: .module, comment: "Title for the Venue Detail"))
+        .musicDestinations()
       }
       .tabItem {
         Label(
@@ -36,8 +40,13 @@ public struct NavigateTab: View {
       }
       NavigationStack {
         LibraryComparableList(items: music.artistsWithShows().sorted(by: libraryCompare(lhs:rhs:)))
-          .navigationTitle(Text("Artists", bundle: .module, comment: "Title for the Artist Detail"))
-          .musicDestinations()
+        {
+          String(
+            localized: "\(music.showsForArtist($0).count) Show(s)", bundle: .module,
+            comment: "Value for the Artist # of Shows.")
+        }
+        .navigationTitle(Text("Artists", bundle: .module, comment: "Title for the Artist Detail"))
+        .musicDestinations()
       }
       .tabItem {
         Label(

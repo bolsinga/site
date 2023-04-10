@@ -9,6 +9,7 @@ import SwiftUI
 
 struct LibraryComparableList<T>: View where T: LibraryComparable, T: Identifiable, T: Hashable {
   let items: [T]
+  let contentValue: (T) -> String
 
   @State private var searchString: String = ""
 
@@ -32,7 +33,9 @@ struct LibraryComparableList<T>: View where T: LibraryComparable, T: Identifiabl
       ForEach(sectionMap.keys.sorted(), id: \.self) { section in
         Section(section.formatted(.long)) {
           ForEach(sectionMap[section] ?? []) { item in
-            NavigationLink(item.name, value: item)
+            NavigationLink(value: item) {
+              LabeledContent(item.name, value: contentValue(item))
+            }
           }
         }
       }
@@ -79,13 +82,13 @@ struct LibraryComparableList_Previews: PreviewProvider {
       venues: [venue])
 
     NavigationStack {
-      LibraryComparableList(items: music.artists)
+      LibraryComparableList(items: music.artists) { "\(music.showsForArtist($0).count) Shows" }
         .navigationTitle("Artists")
         .environment(\.music, music)
     }
 
     NavigationStack {
-      LibraryComparableList(items: music.venues)
+      LibraryComparableList(items: music.venues) { "\(music.showsForVenue($0).count) Shows" }
         .navigationTitle("Venues")
         .environment(\.music, music)
     }
