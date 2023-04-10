@@ -50,15 +50,13 @@ struct ArtistDetail: View {
   }
 
   var body: some View {
-    VStack(alignment: .leading) {
-      List {
-        showsElement
-        relatedsElement
-      }
-      #if os(iOS)
-        .listStyle(.grouped)
-      #endif
+    List {
+      showsElement
+      relatedsElement
     }
+    #if os(iOS)
+      .listStyle(.grouped)
+    #endif
     .navigationTitle(artist.name)
   }
 }
