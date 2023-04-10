@@ -11,15 +11,16 @@ struct ArtistDetail: View {
   @Environment(\.music) var music: Music
   let artist: Artist
 
-  private var shows: [Show] {
+  private var computedShows: [Show] {
     return music.showsForArtist(artist).sorted(by: music.showCompare(lhs:rhs:))
   }
 
-  private var relatedArtists: [Artist] {
+  private var computedRelatedArtists: [Artist] {
     music.related(artist).sorted(by: libraryCompare(lhs:rhs:))
   }
 
   @ViewBuilder private var showsElement: some View {
+    let shows = computedShows
     if !shows.isEmpty {
       Section(
         header: Text(
@@ -36,6 +37,7 @@ struct ArtistDetail: View {
   }
 
   @ViewBuilder private var relatedsElement: some View {
+    let relatedArtists = computedRelatedArtists
     if !relatedArtists.isEmpty {
       Section(
         header: Text(

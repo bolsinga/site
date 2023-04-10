@@ -12,7 +12,7 @@ struct VenueDetail: View {
 
   let venue: Venue
 
-  private var relatedVenues: [Venue] {
+  private var computedRelatedVenues: [Venue] {
     music.related(venue).sorted(by: libraryCompare(lhs:rhs:))
   }
 
@@ -20,11 +20,11 @@ struct VenueDetail: View {
     music.showsForVenue(venue)
   }
 
-  private var yearsOfShows: [Int] {
+  private var computedYearsOfShows: [Int] {
     return Array(Set(shows.map { $0.date.normalizedYear })).sorted(by: <)
   }
 
-  private var artists: [Artist] {
+  private var computedArtists: [Artist] {
     music.artistsForVenue(venue).sorted(by: libraryCompare(lhs:rhs:))
   }
 
@@ -39,6 +39,7 @@ struct VenueDetail: View {
   }
 
   @ViewBuilder private var showsElement: some View {
+    let yearsOfShows = computedYearsOfShows
     if !yearsOfShows.isEmpty {
       Section(
         header: Text(
@@ -53,6 +54,7 @@ struct VenueDetail: View {
   }
 
   @ViewBuilder private var artistsElement: some View {
+    let artists = computedArtists
     if !artists.isEmpty {
       Section(
         header: Text(
@@ -67,6 +69,7 @@ struct VenueDetail: View {
   }
 
   @ViewBuilder private var relatedsElement: some View {
+    let relatedVenues = computedRelatedVenues
     if !relatedVenues.isEmpty {
       Section(
         header: Text(
