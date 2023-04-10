@@ -25,13 +25,8 @@ public struct NavigateTab: View {
           systemImage: "person.and.background.dotted")
       }
       NavigationStack {
-        LibraryComparableList(items: music.venues.sorted(by: libraryCompare(lhs:rhs:))) {
-          String(
-            localized: "\(music.showsForVenue($0).count) Show(s)", bundle: .module,
-            comment: "Value for the Venue # of Shows.")
-        }
-        .navigationTitle(Text("Venues", bundle: .module, comment: "Title for the Venue Detail"))
-        .musicDestinations()
+        VenueList(venues: music.venues.sorted(by: libraryCompare(lhs:rhs:)))
+          .musicDestinations()
       }
       .tabItem {
         Label(
