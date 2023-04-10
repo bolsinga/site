@@ -95,16 +95,19 @@ struct ShowDetail_Previews: PreviewProvider {
     NavigationStack {
       ShowDetail(show: show1)
         .environment(\.music, music)
+        .musicDestinations()
     }
 
     NavigationStack {
       ShowDetail(show: show2)
         .environment(\.music, music)
+        .musicDestinations()
     }
 
     NavigationStack {
       ShowDetail(show: show3)
         .environment(\.music, music)
+        .musicDestinations()
     }
   }
 }

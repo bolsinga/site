@@ -85,12 +85,14 @@ struct LibraryComparableList_Previews: PreviewProvider {
       LibraryComparableList(items: music.artists) { "\(music.showsForArtist($0).count) Shows" }
         .navigationTitle("Artists")
         .environment(\.music, music)
+        .musicDestinations()
     }
 
     NavigationStack {
       LibraryComparableList(items: music.venues) { "\(music.showsForVenue($0).count) Shows" }
         .navigationTitle("Venues")
         .environment(\.music, music)
+        .musicDestinations()
     }
   }
 }

@@ -88,11 +88,13 @@ struct ArtistDetail_Previews: PreviewProvider {
     NavigationStack {
       ArtistDetail(artist: artist1)
         .environment(\.music, music)
+        .musicDestinations()
     }
 
     NavigationStack {
       ArtistDetail(artist: artist2)
         .environment(\.music, music)
+        .musicDestinations()
     }
   }
 }
