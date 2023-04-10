@@ -37,17 +37,6 @@ struct VenueDetail: View {
       ) {
         AddressView(location: venue.location)
       }
-      if !relatedVenues.isEmpty {
-        Section(
-          header: Text(
-            "Related Venues", bundle: .module,
-            comment: "Title of the Related Venues Section for VenueDetail.")
-        ) {
-          ForEach(relatedVenues) { relatedVenue in
-            NavigationLink(relatedVenue.name, value: relatedVenue)
-          }
-        }
-      }
       if !yearsOfShows.isEmpty {
         Section(
           header: Text(
@@ -67,6 +56,17 @@ struct VenueDetail: View {
         ) {
           ForEach(artists) { artist in
             NavigationLink(artist.name, value: artist)
+          }
+        }
+      }
+      if !relatedVenues.isEmpty {
+        Section(
+          header: Text(
+            "Related Venues", bundle: .module,
+            comment: "Title of the Related Venues Section for VenueDetail.")
+        ) {
+          ForEach(relatedVenues) { relatedVenue in
+            NavigationLink(relatedVenue.name, value: relatedVenue)
           }
         }
       }
