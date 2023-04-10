@@ -58,17 +58,15 @@ struct ShowDetail: View {
   }
 
   var body: some View {
-    VStack(alignment: .leading) {
-      List {
-        lineupElement
-        dateElement
-        commentElement
-      }
-      #if os(iOS)
-        .listStyle(.grouped)
-      #endif
-      .navigationTitle(venueName)
+    List {
+      lineupElement
+      dateElement
+      commentElement
     }
+    #if os(iOS)
+      .listStyle(.grouped)
+    #endif
+    .navigationTitle(venueName)
   }
 }
 
