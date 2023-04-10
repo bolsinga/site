@@ -27,32 +27,42 @@ struct ShowDetail: View {
     }
   }
 
+  @ViewBuilder private var lineupElement: some View {
+    Section(
+      header: Text(
+        "Lineup", bundle: .module,
+        comment: "Title of the Lineup for ShowDetail.")
+    ) {
+      ForEach(artists) { artist in
+        NavigationLink(artist.name, value: artist)
+      }
+    }
+  }
+
+  @ViewBuilder private var dateElement: some View {
+    LabeledContent(
+      String(
+        localized: "Date", bundle: .module, comment: "Title of the data section of ShowDetail"),
+      value: show.date.formatted(.compact))
+  }
+
+  @ViewBuilder private var commentElement: some View {
+    if let comment = show.comment {
+      Section(
+        header: Text(
+          "Comment", bundle: .module, comment: "Title of the comment section of ShowDetail")
+      ) {
+        Text(comment.asAttributedString)
+      }
+    }
+  }
+
   var body: some View {
     VStack(alignment: .leading) {
       List {
-        Section(
-          header: Text(
-            "Lineup", bundle: .module,
-            comment: "Title of the Lineup for ShowDetail.")
-        ) {
-          ForEach(artists) { artist in
-            NavigationLink(artist.name, value: artist)
-          }
-        }
-
-        LabeledContent(
-          String(
-            localized: "Date", bundle: .module, comment: "Title of the data section of ShowDetail"),
-          value: show.date.formatted(.compact))
-
-        if let comment = show.comment {
-          Section(
-            header: Text(
-              "Comment", bundle: .module, comment: "Title of the comment section of ShowDetail")
-          ) {
-            Text(comment.asAttributedString)
-          }
-        }
+        lineupElement
+        dateElement
+        commentElement
       }
       #if os(iOS)
         .listStyle(.grouped)

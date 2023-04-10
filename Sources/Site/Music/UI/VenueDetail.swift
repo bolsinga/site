@@ -28,48 +28,64 @@ struct VenueDetail: View {
     music.artistsForVenue(venue).sorted(by: libraryCompare(lhs:rhs:))
   }
 
-  var body: some View {
-    List {
+  @ViewBuilder private var locationElement: some View {
+    Section(
+      header: Text(
+        "Location", bundle: .module,
+        comment: "Title of the Location / Address Section for VenueDetail.")
+    ) {
+      AddressView(location: venue.location)
+    }
+  }
+
+  @ViewBuilder private var showsElement: some View {
+    if !yearsOfShows.isEmpty {
       Section(
         header: Text(
-          "Location", bundle: .module,
-          comment: "Title of the Location / Address Section for VenueDetail.")
+          "\(shows.count) Show(s)", bundle: .module,
+          comment: "Title of the Shows by Year Section for VenueDetail.")
       ) {
-        AddressView(location: venue.location)
-      }
-      if !yearsOfShows.isEmpty {
-        Section(
-          header: Text(
-            "\(shows.count) Show(s)", bundle: .module,
-            comment: "Title of the Shows by Year Section for VenueDetail.")
-        ) {
-          ForEach(yearsOfShows, id: \.self) { year in
-            Text(String(year))
-          }
+        ForEach(yearsOfShows, id: \.self) { year in
+          Text(String(year))
         }
       }
-      if !artists.isEmpty {
-        Section(
-          header: Text(
-            "\(artists.count) Artist(s)", bundle: .module,
-            comment: "Title of the Artists Section for VenueDetail.")
-        ) {
-          ForEach(artists) { artist in
-            NavigationLink(artist.name, value: artist)
-          }
+    }
+  }
+
+  @ViewBuilder private var artistsElement: some View {
+    if !artists.isEmpty {
+      Section(
+        header: Text(
+          "\(artists.count) Artist(s)", bundle: .module,
+          comment: "Title of the Artists Section for VenueDetail.")
+      ) {
+        ForEach(artists) { artist in
+          NavigationLink(artist.name, value: artist)
         }
       }
-      if !relatedVenues.isEmpty {
-        Section(
-          header: Text(
-            "Related Venues", bundle: .module,
-            comment: "Title of the Related Venues Section for VenueDetail.")
-        ) {
-          ForEach(relatedVenues) { relatedVenue in
-            NavigationLink(relatedVenue.name, value: relatedVenue)
-          }
+    }
+  }
+
+  @ViewBuilder private var relatedsElement: some View {
+    if !relatedVenues.isEmpty {
+      Section(
+        header: Text(
+          "Related Venues", bundle: .module,
+          comment: "Title of the Related Venues Section for VenueDetail.")
+      ) {
+        ForEach(relatedVenues) { relatedVenue in
+          NavigationLink(relatedVenue.name, value: relatedVenue)
         }
       }
+    }
+  }
+
+  var body: some View {
+    List {
+      locationElement
+      showsElement
+      artistsElement
+      relatedsElement
     }
     #if os(iOS)
       .listStyle(.grouped)
