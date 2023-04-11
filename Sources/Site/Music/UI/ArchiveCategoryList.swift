@@ -20,11 +20,11 @@ public struct ArchiveCategoryList: View {
   @ViewBuilder private func archiveCount(_ archiveCategory: ArchiveCategory) -> some View {
     switch archiveCategory {
     case .shows:
-      Text("\(shows.count)")
+      Text(shows.count.formatted(.number))
     case .venues:
-      Text("\(venues.count)")
+      Text(venues.count.formatted(.number))
     case .artists:
-      Text("\(artists.count)")
+      Text(artists.count.formatted(.number))
     }
   }
 
