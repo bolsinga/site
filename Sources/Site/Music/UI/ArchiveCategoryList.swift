@@ -11,6 +11,9 @@ public struct ArchiveCategoryList: View {
   @Environment(\.music) private var music: Music
 
   @State private var navigationPath: NavigationPath = .init()
+  @State private var shows: [Show] = []
+  @State private var venues: [Venue] = []
+  @State private var artists: [Artist] = []
 
   public init() {}
 
@@ -24,14 +27,24 @@ public struct ArchiveCategoryList: View {
       .navigationDestination(for: ArchiveCategory.self) { archiveCategory in
         switch archiveCategory {
         case .shows:
-          ShowYearList(shows: music.shows.sorted(by: music.showCompare(lhs:rhs:)))
+          ShowYearList(shows: shows)
         case .venues:
-          VenueList(venues: music.venues.sorted(by: libraryCompare(lhs:rhs:)))
+          VenueList(venues: venues)
         case .artists:
-          ArtistList(artists: music.artistsWithShows().sorted(by: libraryCompare(lhs:rhs:)))
+          ArtistList(artists: artists)
         }
       }
       .musicDestinations()
+    }.task {
+      async let shows = music.shows.sorted(by: music.showCompare(lhs:rhs:))
+      async let venues = music.venues.sorted(by: libraryCompare(lhs:rhs:))
+      async let artists = music.artistsWithShows().sorted(by: libraryCompare(lhs:rhs:))
+
+      let (s, v, a) = await (shows, venues, artists)
+
+      self.shows = s
+      self.venues = v
+      self.artists = a
     }
   }
 }
