@@ -2,7 +2,7 @@
 "%@ Shows" = "%@ Shows";
 
 /* Title for the Artist Detail
-Title Of the Artist List Tab */
+ArchiveCategory Artists */
 "Artists" = "Artists";
 
 /* Title of the comment section of ShowDetail */
@@ -36,11 +36,11 @@ Title Of the Artist List Tab */
 "Show Years" = "Show Years";
 
 /* Title for the ShowList
-Title Of the Show List Tab */
+ArchiveCategory Shows */
 "Shows" = "Shows";
 
 /* Title for the Venue Detail
-Title Of the Venue List Tab */
+ArchiveCategory Venues */
 "Venues" = "Venues";
 
 /* String for when a Show.PartialDate is unknown, and only the year is being shown. */
