@@ -19,30 +19,17 @@ public struct NavigateTab: View {
         ShowYearList(shows: music.shows.sorted(by: music.showCompare(lhs:rhs:)))
           .musicDestinations()
       }
-      .tabItem {
-        Label(
-          String(localized: "Shows", bundle: .module, comment: "Title Of the Show List Tab"),
-          systemImage: "person.and.background.dotted")
-      }
+      .tabItem { ArchiveCategory.shows.label }
       NavigationStack {
         VenueList(venues: music.venues.sorted(by: libraryCompare(lhs:rhs:)))
           .musicDestinations()
       }
-      .tabItem {
-        Label(
-          String(localized: "Venues", bundle: .module, comment: "Title Of the Venue List Tab"),
-          systemImage: "music.note.house")
-      }
+      .tabItem { ArchiveCategory.venues.label }
       NavigationStack {
         ArtistList(artists: music.artistsWithShows().sorted(by: libraryCompare(lhs:rhs:)))
           .musicDestinations()
       }
-      .tabItem {
-        Label(
-          String(
-            localized: "Artists", bundle: .module, comment: "Title Of the Artist List Tab"),
-          systemImage: "music.mic")
-      }
+      .tabItem { ArchiveCategory.artists.label }
     }
   }
 }
