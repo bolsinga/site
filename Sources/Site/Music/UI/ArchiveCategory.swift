@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-enum ArchiveCategory {
+enum ArchiveCategory: CaseIterable {
   case shows
   case venues
   case artists
