@@ -50,6 +50,10 @@ public struct ArchiveCategoryList: View {
         }
       }
       .musicDestinations()
+      #if os(iOS)
+        .navigationBarTitleDisplayMode(.large)
+      #endif
+      .navigationTitle(Text("Archives", bundle: .module, comment: "Title for the ArchivesList."))
     }.task {
       async let shows = music.shows.sorted(by: music.showCompare(lhs:rhs:))
       async let venues = music.venues.sorted(by: libraryCompare(lhs:rhs:))

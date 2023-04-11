@@ -1,6 +1,9 @@
 /* Title for the ShowList when there is a year */
 "%@ Shows" = "%@ Shows";
 
+/* Title for the ArchivesList. */
+"Archives" = "Archives";
+
 /* Title for the Artist Detail
 ArchiveCategory Artists */
 "Artists" = "Artists";
