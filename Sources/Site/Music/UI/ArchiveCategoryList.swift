@@ -17,11 +17,26 @@ public struct ArchiveCategoryList: View {
 
   public init() {}
 
+  @ViewBuilder private func archiveCount(_ archiveCategory: ArchiveCategory) -> some View {
+    switch archiveCategory {
+    case .shows:
+      Text("\(shows.count)")
+    case .venues:
+      Text("\(venues.count)")
+    case .artists:
+      Text("\(artists.count)")
+    }
+  }
+
   public var body: some View {
     NavigationStack(path: $navigationPath) {
       List(ArchiveCategory.allCases, id: \.self) { archiveCategory in
         NavigationLink(value: archiveCategory) {
-          archiveCategory.label
+          LabeledContent {
+            archiveCount(archiveCategory)
+          } label: {
+            archiveCategory.label
+          }
         }
       }
       .navigationDestination(for: ArchiveCategory.self) { archiveCategory in
