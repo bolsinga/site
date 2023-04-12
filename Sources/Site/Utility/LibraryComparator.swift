@@ -60,7 +60,7 @@ internal func removeCommonInitialPunctuation(_ string: String) -> String {
   return result
 }
 
-public func libraryCompare(lhs: String, rhs: String) -> Bool {
+internal func libraryCompare(lhs: String, rhs: String) -> Bool {
   let lhSort = removeCommonInitialPunctuation(lhs)
   let rhSort = removeCommonInitialPunctuation(rhs)
 
