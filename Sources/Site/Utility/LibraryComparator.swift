@@ -8,16 +8,8 @@
 import Foundation
 import RegexBuilder
 
-public protocol LibraryComparable {
-  var sortname: String? { get }
-  var name: String { get }
-}
-
 public func libraryCompare(lhs: any LibraryComparable, rhs: any LibraryComparable) -> Bool {
-  let lhSort = lhs.sortname ?? lhs.name
-  let rhSort = rhs.sortname ?? rhs.name
-
-  return libraryCompare(lhs: lhSort, rhs: rhSort)
+  return libraryCompare(lhs: lhs.librarySortToken, rhs: rhs.librarySortToken)
 }
 
 private func chompPrefix(_ string: String) -> String {
