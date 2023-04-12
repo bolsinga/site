@@ -12,7 +12,7 @@ public func libraryCompare(lhs: any LibraryComparable, rhs: any LibraryComparabl
   return libraryCompare(lhs: lhs.librarySortToken, rhs: rhs.librarySortToken)
 }
 
-private func chompPrefix(_ string: String) -> String {
+private func removeCommonInitialWords(_ string: String) -> String {
   let regex = Regex {
     Optionally {
       ChoiceOf {
@@ -30,8 +30,8 @@ private func chompPrefix(_ string: String) -> String {
   return String(result)
 }
 
-internal func chomp(_ string: String) -> String {
-  var result = chompPrefix(string)
+internal func removeCommonInitialPunctuation(_ string: String) -> String {
+  var result = removeCommonInitialWords(string)
 
   let regex = Regex {
     Optionally {
@@ -61,8 +61,8 @@ internal func chomp(_ string: String) -> String {
 }
 
 public func libraryCompare(lhs: String, rhs: String) -> Bool {
-  let lhSort = chomp(lhs)
-  let rhSort = chomp(rhs)
+  let lhSort = removeCommonInitialPunctuation(lhs)
+  let rhSort = removeCommonInitialPunctuation(rhs)
 
   var options = String.CompareOptions()
   options.insert(.caseInsensitive)

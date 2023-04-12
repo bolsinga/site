@@ -57,50 +57,51 @@ final class LibraryComparatorTests: XCTestCase {
   }
 
   func testAPrefixChomp() throws {
-    XCTAssertEqual(chomp("A Cord Down"), "Cord Down")
-    XCTAssertEqual(chomp("A Cord"), "Cord")
+    XCTAssertEqual(removeCommonInitialPunctuation("A Cord Down"), "Cord Down")
+    XCTAssertEqual(removeCommonInitialPunctuation("A Cord"), "Cord")
   }
 
   func testAnPrefixChomp() throws {
-    XCTAssertEqual(chomp("An Other Word"), "Other Word")
-    XCTAssertEqual(chomp("An Other"), "Other")
+    XCTAssertEqual(removeCommonInitialPunctuation("An Other Word"), "Other Word")
+    XCTAssertEqual(removeCommonInitialPunctuation("An Other"), "Other")
   }
 
   func testThePrefixChomp() throws {
-    XCTAssertEqual(chomp("The White Album"), "White Album")
-    XCTAssertEqual(chomp("The White"), "White")
+    XCTAssertEqual(removeCommonInitialPunctuation("The White Album"), "White Album")
+    XCTAssertEqual(removeCommonInitialPunctuation("The White"), "White")
   }
 
   func testPrefixLowercaseTwoWords() throws {
-    XCTAssertEqual(chomp("the White"), "White")
+    XCTAssertEqual(removeCommonInitialPunctuation("the White"), "White")
   }
 
   func testSmogChomp() throws {
-    XCTAssertEqual(chomp("(Smog)"), "Smog")
+    XCTAssertEqual(removeCommonInitialPunctuation("(Smog)"), "Smog")
   }
 
   func testMultipleSmogChomp() throws {
-    XCTAssertEqual(chomp("(Smog Haze)"), "Smog Haze")
+    XCTAssertEqual(removeCommonInitialPunctuation("(Smog Haze)"), "Smog Haze")
   }
 
   func testTrailOfDeadChomp() throws {
     XCTAssertEqual(
-      chomp("...And You Will Know Us By The Trail Of Dead"),
+      removeCommonInitialPunctuation("...And You Will Know Us By The Trail Of Dead"),
       "And You Will Know Us By The Trail Of Dead")
   }
 
   func testHardDaysChomp() throws {
-    XCTAssertEqual(chomp("A Hard Day's Night"), "Hard Day's Night")
+    XCTAssertEqual(removeCommonInitialPunctuation("A Hard Day's Night"), "Hard Day's Night")
   }
 
   func testOldEnoughChomp() throws {
     XCTAssertEqual(
-      chomp("Old Enough To Know Better - 15 Years Of Merge Records (Disc 1)"),
+      removeCommonInitialPunctuation(
+        "Old Enough To Know Better - 15 Years Of Merge Records (Disc 1)"),
       "Old Enough To Know Better - 15 Years Of Merge Records (Disc 1)")
   }
 
   func testQuotedChomp() throws {
-    XCTAssertEqual(chomp("\"Song Title\""), "Song Title")
-    XCTAssertEqual(chomp("\"Longer Song Title\""), "Longer Song Title")
+    XCTAssertEqual(removeCommonInitialPunctuation("\"Song Title\""), "Song Title")
+    XCTAssertEqual(removeCommonInitialPunctuation("\"Longer Song Title\""), "Longer Song Title")
   }
 }
