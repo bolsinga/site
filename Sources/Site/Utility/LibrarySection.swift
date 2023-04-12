@@ -43,7 +43,7 @@ func librarySection(_ item: any LibraryComparable) -> LibrarySection {
 }
 
 internal func librarySection(_ string: String) -> LibrarySection {
-  let pfx = removeCommonInitialPunctuation(string).prefix(1)
+  let pfx = string.removeCommonInitialPunctuation.prefix(1)
   if let first = pfx.first {
     if first.isNumber {
       return .numeric
