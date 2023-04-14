@@ -1,5 +1,5 @@
 //
-//  Music+Description.swift
+//  Vault+Description.swift
 //
 //
 //  Created by Greg Bolsinga on 2/16/23.
@@ -7,7 +7,7 @@
 
 import Site
 
-extension Music {
+extension Vault {
   public func description(for show: Show) -> String {
     var parts: [String] = []
     parts.append(show.id)

@@ -1,5 +1,5 @@
 //
-//  Music+Lookup.swift
+//  Vault+Lookup.swift
 //
 //
 //  Created by Greg Bolsinga on 2/16/23.
@@ -7,11 +7,15 @@
 
 import Foundation
 
-extension Music {
+extension Vault {
   enum LookupError: Error {
     case missingVenue(Show)
     case missingArtist(Show, String)
     case missingAlbum(Artist, String)
+  }
+
+  private var shows: [Show] {
+    music.shows
   }
 
   public func venueForShow(_ show: Show) throws -> Venue {

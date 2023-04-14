@@ -53,6 +53,7 @@ struct Program: AsyncParsableCommand {
     var musicLoadingState: LoadingState<Music> = .idle
     await musicLoadingState.load(url: rootURL.appending(path: "music.json"))
     if let music = musicLoadingState.value {
+      let vault = Vault(music: music)
       print("Albums: \(music.albums.count)")
       print("Artists: \(music.artists.count)")
       print("Relations: \(music.relations.count)")
@@ -60,30 +61,30 @@ struct Program: AsyncParsableCommand {
       print("Songs: \(music.songs.count)")
       print("Venues: \(music.venues.count)")
 
-      for show in music.shows.sorted(by: music.showCompare(lhs:rhs:)).reversed() {
-        print(music.description(for: show))
+      for show in music.shows.sorted(by: vault.showCompare(lhs:rhs:)).reversed() {
+        print(vault.description(for: show))
       }
 
-      for album in music.albums.sorted(by: music.albumCompare(lhs:rhs:)) {
-        print(music.description(for: album))
+      for album in music.albums.sorted(by: vault.albumCompare(lhs:rhs:)) {
+        print(vault.description(for: album))
       }
 
       for artist in music.artists.sorted(by: libraryCompare(lhs:rhs:)) {
-        print(music.description(for: artist))
+        print(vault.description(for: artist))
       }
 
       for venue in music.venues.sorted(by: libraryCompare(lhs:rhs:)) {
-        print(music.description(for: venue))
+        print(vault.description(for: venue))
       }
 
       for location in music.venues.map({ $0.location }).sorted(by: <) {
-        print(music.description(for: location))
+        print(vault.description(for: location))
       }
 
       for artist in music.artists.sorted(by: libraryCompare(lhs:rhs:)) {
-        let shows = music.showsForArtist(artist).sorted(by: music.showCompare(lhs:rhs:))
+        let shows = vault.showsForArtist(artist).sorted(by: vault.showCompare(lhs:rhs:))
         if !shows.isEmpty {
-          print(music.description(for: artist, shows: shows))
+          print(vault.description(for: artist, shows: shows))
         }
       }
 
