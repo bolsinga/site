@@ -18,10 +18,11 @@ final class ShowComparatorTests: XCTestCase {
   let artist1 = Artist(id: "ar0", name: "A Artist")
   let artist2 = Artist(id: "ar1", name: "B Artist")
 
-  func createMusic(artists: [Artist], shows: [Show], venues: [Venue]) -> Music {
-    Music(
-      albums: [], artists: artists, relations: [], shows: shows, songs: [], timestamp: Date(),
-      venues: venues)
+  func createVault(artists: [Artist], shows: [Show], venues: [Venue]) -> Vault {
+    Vault(
+      music: Music(
+        albums: [], artists: artists, relations: [], shows: shows, songs: [], timestamp: Date(),
+        venues: venues))
   }
 
   func testDifferentDates() throws {
@@ -30,59 +31,59 @@ final class ShowComparatorTests: XCTestCase {
     let show1 = Show(artists: [artist1.id], date: date, id: "sh0", venue: venue1.id)
     let show2 = Show(artists: [artist2.id], date: dateLater, id: "sh1", venue: venue2.id)
 
-    let music = createMusic(
+    let vault = createVault(
       artists: [artist1, artist2], shows: [show1, show2], venues: [venue1, venue2])
 
     XCTAssertNotEqual(show1, show2)
-    XCTAssertTrue(music.showCompare(lhs: show1, rhs: show2))
-    XCTAssertFalse(music.showCompare(lhs: show2, rhs: show1))
+    XCTAssertTrue(vault.showCompare(lhs: show1, rhs: show2))
+    XCTAssertFalse(vault.showCompare(lhs: show2, rhs: show1))
   }
 
   func testSameDates_differentVenues() throws {
     let show1 = Show(artists: [artist1.id], date: date, id: "sh0", venue: venue1.id)
     let show2 = Show(artists: [artist2.id], date: date, id: "sh1", venue: venue2.id)
 
-    let music = createMusic(
+    let vault = createVault(
       artists: [artist1, artist2], shows: [show1, show2], venues: [venue1, venue2])
 
     XCTAssertNotEqual(show1, show2)
-    XCTAssertFalse(music.showCompare(lhs: show1, rhs: show2))
-    XCTAssertTrue(music.showCompare(lhs: show2, rhs: show1))
+    XCTAssertFalse(vault.showCompare(lhs: show1, rhs: show2))
+    XCTAssertTrue(vault.showCompare(lhs: show2, rhs: show1))
   }
 
   func testSameDates_sameVenues_differentArtists() throws {
     let show1 = Show(artists: [artist1.id], date: date, id: "sh0", venue: venue1.id)
     let show2 = Show(artists: [artist2.id], date: date, id: "sh1", venue: venue1.id)
 
-    let music = createMusic(
+    let vault = createVault(
       artists: [artist1, artist2], shows: [show1, show2], venues: [venue1, venue2])
 
     XCTAssertNotEqual(show1, show2)
-    XCTAssertTrue(music.showCompare(lhs: show1, rhs: show2))
-    XCTAssertFalse(music.showCompare(lhs: show2, rhs: show1))
+    XCTAssertTrue(vault.showCompare(lhs: show1, rhs: show2))
+    XCTAssertFalse(vault.showCompare(lhs: show2, rhs: show1))
   }
 
   func testSameDates_sameVenues_sameArtists() throws {
     let show1 = Show(artists: [artist1.id], date: date, id: "sh0", venue: venue1.id)
     let show2 = Show(artists: [artist1.id], date: date, id: "sh1", venue: venue1.id)
 
-    let music = createMusic(
+    let vault = createVault(
       artists: [artist1, artist2], shows: [show1, show2], venues: [venue1, venue2])
 
     XCTAssertNotEqual(show1, show2)
-    XCTAssertTrue(music.showCompare(lhs: show1, rhs: show2))
-    XCTAssertFalse(music.showCompare(lhs: show2, rhs: show1))
+    XCTAssertTrue(vault.showCompare(lhs: show1, rhs: show2))
+    XCTAssertFalse(vault.showCompare(lhs: show2, rhs: show1))
   }
 
   func testEdgeCase() throws {
     let show1 = Show(artists: [artist1.id], date: date, id: "sh0", venue: venue1.id)
     let show2 = show1
 
-    let music = createMusic(
+    let vault = createVault(
       artists: [artist1, artist2], shows: [show1, show2], venues: [venue1, venue2])
 
     XCTAssertEqual(show1, show2)
-    XCTAssertFalse(music.showCompare(lhs: show1, rhs: show2))
-    XCTAssertFalse(music.showCompare(lhs: show2, rhs: show1))
+    XCTAssertFalse(vault.showCompare(lhs: show1, rhs: show2))
+    XCTAssertFalse(vault.showCompare(lhs: show2, rhs: show1))
   }
 }

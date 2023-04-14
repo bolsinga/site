@@ -19,32 +19,33 @@ final class AlbumComparatorTests: XCTestCase {
   let artist1 = Artist(id: "ar0", name: "A Artist")
   let artist2 = Artist(id: "ar1", name: "B Artist")
 
-  func createMusic(albums: [Album], artists: [Artist]) -> Music {
-    Music(
-      albums: albums, artists: artists, relations: [], shows: [], songs: [], timestamp: Date(),
-      venues: [])
+  func createVault(albums: [Album], artists: [Artist]) -> Vault {
+    Vault(
+      music: Music(
+        albums: albums, artists: artists, relations: [], shows: [], songs: [], timestamp: Date(),
+        venues: []))
   }
 
   func testUnknownRelease_UnknownRelease() throws {
     let album1 = Album(id: "a0", performer: artist1.id, songs: [], title: aTitle)
     let album2 = Album(id: "a1", performer: artist2.id, songs: [], title: bTitle)
 
-    let music = createMusic(albums: [album1, album2], artists: [artist1, artist2])
+    let vault = createVault(albums: [album1, album2], artists: [artist1, artist2])
 
     XCTAssertNotEqual(album1, album2)
-    XCTAssertTrue(music.albumCompare(lhs: album1, rhs: album2))
-    XCTAssertFalse(music.albumCompare(lhs: album2, rhs: album1))
+    XCTAssertTrue(vault.albumCompare(lhs: album1, rhs: album2))
+    XCTAssertFalse(vault.albumCompare(lhs: album2, rhs: album1))
   }
 
   func testUnknownRelease_fullDate() throws {
     let album1 = Album(id: "a0", performer: artist1.id, songs: [], title: aTitle)
     let album2 = Album(id: "a1", performer: artist2.id, release: date, songs: [], title: bTitle)
 
-    let music = createMusic(albums: [album1, album2], artists: [artist1, artist2])
+    let vault = createVault(albums: [album1, album2], artists: [artist1, artist2])
 
     XCTAssertNotEqual(album1, album2)
-    XCTAssertTrue(music.albumCompare(lhs: album1, rhs: album2))
-    XCTAssertFalse(music.albumCompare(lhs: album2, rhs: album1))
+    XCTAssertTrue(vault.albumCompare(lhs: album1, rhs: album2))
+    XCTAssertFalse(vault.albumCompare(lhs: album2, rhs: album1))
   }
 
   func testFullDate_fullDate() throws {
@@ -53,76 +54,76 @@ final class AlbumComparatorTests: XCTestCase {
       title: aTitle)
     let album2 = Album(id: "a1", performer: artist2.id, release: date, songs: [], title: bTitle)
 
-    let music = createMusic(albums: [album1, album2], artists: [artist1, artist2])
+    let vault = createVault(albums: [album1, album2], artists: [artist1, artist2])
 
     XCTAssertNotEqual(album1, album2)
-    XCTAssertTrue(music.albumCompare(lhs: album1, rhs: album2))
-    XCTAssertFalse(music.albumCompare(lhs: album2, rhs: album1))
+    XCTAssertTrue(vault.albumCompare(lhs: album1, rhs: album2))
+    XCTAssertFalse(vault.albumCompare(lhs: album2, rhs: album1))
   }
 
   func testSameDates_knownArtists() throws {
     let album1 = Album(id: "a0", performer: artist1.id, release: date, songs: [], title: aTitle)
     let album2 = Album(id: "a1", performer: artist2.id, release: date, songs: [], title: bTitle)
 
-    let music = createMusic(albums: [album1, album2], artists: [artist1, artist2])
+    let vault = createVault(albums: [album1, album2], artists: [artist1, artist2])
 
     XCTAssertNotEqual(album1, album2)
-    XCTAssertTrue(music.albumCompare(lhs: album1, rhs: album2))
-    XCTAssertFalse(music.albumCompare(lhs: album2, rhs: album1))
+    XCTAssertTrue(vault.albumCompare(lhs: album1, rhs: album2))
+    XCTAssertFalse(vault.albumCompare(lhs: album2, rhs: album1))
   }
 
   func testSameDates_oneUnknownArtists() throws {
     let album1 = Album(id: "a0", performer: artist1.id, release: date, songs: [], title: aTitle)
     let album2 = Album(id: "a1", release: date, songs: [], title: bTitle)
 
-    let music = createMusic(albums: [album1, album2], artists: [artist1])
+    let vault = createVault(albums: [album1, album2], artists: [artist1])
 
     XCTAssertNotEqual(album1, album2)
-    XCTAssertFalse(music.albumCompare(lhs: album1, rhs: album2))
-    XCTAssertTrue(music.albumCompare(lhs: album2, rhs: album1))
+    XCTAssertFalse(vault.albumCompare(lhs: album1, rhs: album2))
+    XCTAssertTrue(vault.albumCompare(lhs: album2, rhs: album1))
   }
 
   func testSameDates_twoUnknownArtists() throws {
     let album1 = Album(id: "a0", release: date, songs: [], title: aTitle)
     let album2 = Album(id: "a1", release: date, songs: [], title: bTitle)
 
-    let music = createMusic(albums: [album1, album2], artists: [])
+    let vault = createVault(albums: [album1, album2], artists: [])
 
     XCTAssertNotEqual(album1, album2)
-    XCTAssertTrue(music.albumCompare(lhs: album1, rhs: album2))
-    XCTAssertFalse(music.albumCompare(lhs: album2, rhs: album1))
+    XCTAssertTrue(vault.albumCompare(lhs: album1, rhs: album2))
+    XCTAssertFalse(vault.albumCompare(lhs: album2, rhs: album1))
   }
 
   func testSameDates_sameArtists() throws {
     let album1 = Album(id: "a0", performer: artist1.id, release: date, songs: [], title: aTitle)
     let album2 = Album(id: "a1", performer: artist1.id, release: date, songs: [], title: bTitle)
 
-    let music = createMusic(albums: [album1, album2], artists: [artist1])
+    let vault = createVault(albums: [album1, album2], artists: [artist1])
 
     XCTAssertNotEqual(album1, album2)
-    XCTAssertTrue(music.albumCompare(lhs: album1, rhs: album2))
-    XCTAssertFalse(music.albumCompare(lhs: album2, rhs: album1))
+    XCTAssertTrue(vault.albumCompare(lhs: album1, rhs: album2))
+    XCTAssertFalse(vault.albumCompare(lhs: album2, rhs: album1))
   }
 
   func testSameDates_sameArtists_sameTitle() throws {
     let album1 = Album(id: "a0", performer: artist1.id, release: date, songs: [], title: aTitle)
     let album2 = Album(id: "a1", performer: artist1.id, release: date, songs: [], title: aTitle)
 
-    let music = createMusic(albums: [album1, album2], artists: [artist1])
+    let vault = createVault(albums: [album1, album2], artists: [artist1])
 
     XCTAssertNotEqual(album1, album2)
-    XCTAssertTrue(music.albumCompare(lhs: album1, rhs: album2))
-    XCTAssertFalse(music.albumCompare(lhs: album2, rhs: album1))
+    XCTAssertTrue(vault.albumCompare(lhs: album1, rhs: album2))
+    XCTAssertFalse(vault.albumCompare(lhs: album2, rhs: album1))
   }
 
   func testEquality() throws {
     let album1 = Album(id: "a0", performer: artist1.id, release: date, songs: [], title: aTitle)
     let album2 = album1
 
-    let music = createMusic(albums: [album1, album2], artists: [artist1])
+    let vault = createVault(albums: [album1, album2], artists: [artist1])
 
     XCTAssertEqual(album1, album2)
-    XCTAssertFalse(music.albumCompare(lhs: album1, rhs: album2))
-    XCTAssertFalse(music.albumCompare(lhs: album2, rhs: album1))
+    XCTAssertFalse(vault.albumCompare(lhs: album1, rhs: album2))
+    XCTAssertFalse(vault.albumCompare(lhs: album2, rhs: album1))
   }
 }
