@@ -81,17 +81,19 @@ struct LibraryComparableList_Previews: PreviewProvider {
       timestamp: Date.now,
       venues: [venue])
 
+    let vault = Vault(music: music)
+
     NavigationStack {
       LibraryComparableList(items: music.artists) { "\(music.showsForArtist($0).count) Shows" }
         .navigationTitle("Artists")
-        .environment(\.music, music)
+        .environment(\.vault, vault)
         .musicDestinations()
     }
 
     NavigationStack {
       LibraryComparableList(items: music.venues) { "\(music.showsForVenue($0).count) Shows" }
         .navigationTitle("Venues")
-        .environment(\.music, music)
+        .environment(\.vault, vault)
         .musicDestinations()
     }
   }

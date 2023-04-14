@@ -8,7 +8,11 @@
 import SwiftUI
 
 public struct NavigateTab: View {
-  @Environment(\.music) private var music: Music
+  @Environment(\.vault) private var vault: Vault
+
+  private var music: Music {
+    vault.music
+  }
 
   public init() {
   }

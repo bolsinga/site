@@ -8,8 +8,12 @@
 import SwiftUI
 
 struct ShowBlurb: View {
-  @Environment(\.music) var music: Music
+  @Environment(\.vault) private var vault: Vault
   let show: Show
+
+  private var music: Music {
+    vault.music
+  }
 
   private var venue: Venue? {
     do {
@@ -65,13 +69,15 @@ struct ShowBlurbView_Previews: PreviewProvider {
       timestamp: Date.now,
       venues: [venue])
 
+    let vault = Vault(music: music)
+
     ShowBlurb(show: show1)
-      .environment(\.music, music)
+      .environment(\.vault, vault)
 
     ShowBlurb(show: show2)
-      .environment(\.music, music)
+      .environment(\.vault, vault)
 
     ShowBlurb(show: show3)
-      .environment(\.music, music)
+      .environment(\.vault, vault)
   }
 }

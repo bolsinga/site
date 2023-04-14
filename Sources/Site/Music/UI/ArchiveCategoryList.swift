@@ -8,7 +8,7 @@
 import SwiftUI
 
 public struct ArchiveCategoryList: View {
-  @Environment(\.music) private var music: Music
+  @Environment(\.vault) private var vault: Vault
 
   @State private var navigationPath: NavigationPath = .init()
   @State private var shows: [Show] = []
@@ -16,6 +16,10 @@ public struct ArchiveCategoryList: View {
   @State private var artists: [Artist] = []
 
   public init() {}
+
+  private var music: Music {
+    vault.music
+  }
 
   @ViewBuilder private func archiveCount(_ archiveCategory: ArchiveCategory) -> some View {
     switch archiveCategory {

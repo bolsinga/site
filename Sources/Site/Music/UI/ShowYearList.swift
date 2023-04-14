@@ -8,9 +8,13 @@
 import SwiftUI
 
 struct ShowYearList: View {
-  @Environment(\.music) private var music: Music
+  @Environment(\.vault) private var vault: Vault
 
   let shows: [Show]
+
+  private var music: Music {
+    vault.music
+  }
 
   private var yearPartialDates: [PartialDate] {
     return Array(
@@ -69,9 +73,11 @@ struct ShowYearList_Previews: PreviewProvider {
       timestamp: Date.now,
       venues: [venue])
 
+    let vault = Vault(music: music)
+
     NavigationStack {
       ShowYearList(shows: music.shows)
-        .environment(\.music, music)
+        .environment(\.vault, vault)
         .musicDestinations()
     }
   }

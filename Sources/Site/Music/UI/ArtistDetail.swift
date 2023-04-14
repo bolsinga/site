@@ -8,8 +8,12 @@
 import SwiftUI
 
 struct ArtistDetail: View {
-  @Environment(\.music) var music: Music
+  @Environment(\.vault) private var vault: Vault
   let artist: Artist
+
+  private var music: Music {
+    vault.music
+  }
 
   private var computedShows: [Show] {
     return music.showsForArtist(artist).sorted(by: music.showCompare(lhs:rhs:))
@@ -96,15 +100,17 @@ struct ArtistDetail_Previews: PreviewProvider {
       timestamp: Date.now,
       venues: [venue])
 
+    let vault = Vault(music: music)
+
     NavigationStack {
       ArtistDetail(artist: artist1)
-        .environment(\.music, music)
+        .environment(\.vault, vault)
         .musicDestinations()
     }
 
     NavigationStack {
       ArtistDetail(artist: artist2)
-        .environment(\.music, music)
+        .environment(\.vault, vault)
         .musicDestinations()
     }
   }
