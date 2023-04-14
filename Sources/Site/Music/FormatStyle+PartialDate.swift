@@ -8,8 +8,8 @@
 import Foundation
 
 extension PartialDate {
-  struct FormatStyle: Codable, Equatable, Hashable {
-    enum Style: Codable, Equatable, Hashable {
+  public struct FormatStyle: Codable, Equatable, Hashable {
+    public enum Style: Codable, Equatable, Hashable {
       case compact  // 03/03/2023 - Date Unknown
       case yearOnly  // 2023 - Year Unknown
     }
@@ -27,7 +27,7 @@ extension PartialDate {
 }
 
 extension PartialDate.FormatStyle: Foundation.FormatStyle {
-  func format(_ value: PartialDate) -> String {
+  public func format(_ value: PartialDate) -> String {
     if !value.isUnknown, let date = value.date {
       var fmt = Date.FormatStyle.dateTime
       switch style {
@@ -64,19 +64,19 @@ extension PartialDate.FormatStyle: Foundation.FormatStyle {
 }
 
 extension PartialDate {
-  func formatted() -> String {
+  public func formatted() -> String {
     Self.FormatStyle().format(self)
   }
 
-  func formatted<F: Foundation.FormatStyle>(_ style: F) -> F.FormatOutput
+  public func formatted<F: Foundation.FormatStyle>(_ style: F) -> F.FormatOutput
   where F.FormatInput == PartialDate {
     style.format(self)
   }
 }
 
 extension FormatStyle where Self == PartialDate.FormatStyle {
-  static var compact: Self { .init(.compact) }
-  static var yearOnly: Self { .init(.yearOnly) }
+  public static var compact: Self { .init(.compact) }
+  public static var yearOnly: Self { .init(.yearOnly) }
 
   static func partialDate(style: PartialDate.FormatStyle.Style = .compact) -> Self {
     .init(style)
