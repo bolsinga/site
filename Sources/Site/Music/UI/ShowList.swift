@@ -65,9 +65,11 @@ struct ShowList_Previews: PreviewProvider {
       timestamp: Date.now,
       venues: [venue])
 
+    let vault = Vault(music: music)
+
     NavigationStack {
       ShowList(shows: music.shows)
-        .environment(\.music, music)
+        .environment(\.vault, vault)
         .musicDestinations()
     }
   }

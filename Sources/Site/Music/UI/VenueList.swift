@@ -8,8 +8,12 @@
 import SwiftUI
 
 struct VenueList: View {
-  @Environment(\.music) private var music: Music
+  @Environment(\.vault) private var vault: Vault
   let venues: [Venue]
+
+  private var music: Music {
+    vault.music
+  }
 
   var body: some View {
     LibraryComparableList(items: venues) {
@@ -54,9 +58,11 @@ struct VenueList_Previews: PreviewProvider {
       timestamp: Date.now,
       venues: [venue])
 
+    let vault = Vault(music: music)
+
     NavigationStack {
       VenueList(venues: music.venues)
-        .environment(\.music, music)
+        .environment(\.vault, vault)
         .musicDestinations()
     }
   }

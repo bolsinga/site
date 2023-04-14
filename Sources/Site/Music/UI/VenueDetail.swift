@@ -8,9 +8,13 @@
 import SwiftUI
 
 struct VenueDetail: View {
-  @Environment(\.music) var music: Music
+  @Environment(\.vault) private var vault: Vault
 
   let venue: Venue
+
+  private var music: Music {
+    vault.music
+  }
 
   private var computedRelatedVenues: [Venue] {
     music.related(venue).sorted(by: libraryCompare(lhs:rhs:))
@@ -129,9 +133,11 @@ struct VenueDetail_Previews: PreviewProvider {
       timestamp: Date.now,
       venues: [venue])
 
+    let vault = Vault(music: music)
+
     NavigationStack {
       VenueDetail(venue: venue)
-        .environment(\.music, music)
+        .environment(\.vault, vault)
         .musicDestinations()
     }
   }
