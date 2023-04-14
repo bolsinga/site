@@ -20,7 +20,7 @@ public struct NavigateTab: View {
   public var body: some View {
     TabView {
       NavigationStack {
-        ShowYearList(shows: music.shows.sorted(by: music.showCompare(lhs:rhs:)))
+        ShowYearList(shows: music.shows.sorted(by: vault.showCompare(lhs:rhs:)))
           .musicDestinations()
       }
       .tabItem { ArchiveCategory.shows.label }
@@ -30,7 +30,7 @@ public struct NavigateTab: View {
       }
       .tabItem { ArchiveCategory.venues.label }
       NavigationStack {
-        ArtistList(artists: music.artistsWithShows().sorted(by: libraryCompare(lhs:rhs:)))
+        ArtistList(artists: vault.artistsWithShows().sorted(by: libraryCompare(lhs:rhs:)))
           .musicDestinations()
       }
       .tabItem { ArchiveCategory.artists.label }

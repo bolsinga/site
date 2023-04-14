@@ -18,7 +18,7 @@ struct VenueList: View {
   var body: some View {
     LibraryComparableList(items: venues) {
       String(
-        localized: "\(music.showsForVenue($0).count) Show(s)", bundle: .module,
+        localized: "\(vault.showsForVenue($0).count) Show(s)", bundle: .module,
         comment: "Value for the Venue # of Shows.")
     }
     .navigationTitle(Text("Venues", bundle: .module, comment: "Title for the Venue Detail"))

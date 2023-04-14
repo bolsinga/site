@@ -1,5 +1,5 @@
 //
-//  Music+Comparator.swift
+//  Vault+Comparator.swift
 //
 //
 //  Created by Greg Bolsinga on 2/24/23.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension Music {
+extension Vault {
   internal func artistAndTitleCompare(lhs: Album, rhs: Album) -> Bool {
     let lhArtist = self.artistForAlbum(lhs)
     let rhArtist = self.artistForAlbum(rhs)

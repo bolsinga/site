@@ -29,14 +29,14 @@ struct ShowYearList: View {
           yearPartialDate.formatted(.yearOnly),
           value: String(
             localized:
-              "\(music.showsForYear(yearPartialDate).count) Show(s)", bundle: .module,
+              "\(vault.showsForYear(yearPartialDate).count) Show(s)", bundle: .module,
             comment: "Value for the ShowYearList Shows per year."))
       }
     }
     .listStyle(.plain)
     .navigationTitle(Text("Show Years", bundle: .module, comment: "Title for the ShowYearList."))
     .navigationDestination(for: PartialDate.self) {
-      ShowList(shows: music.showsForYear($0), yearPartialDate: $0)
+      ShowList(shows: vault.showsForYear($0), yearPartialDate: $0)
     }
   }
 }

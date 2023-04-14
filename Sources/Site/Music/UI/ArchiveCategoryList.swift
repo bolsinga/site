@@ -59,9 +59,9 @@ public struct ArchiveCategoryList: View {
       #endif
       .navigationTitle(Text("Archives", bundle: .module, comment: "Title for the ArchivesList."))
     }.task {
-      async let shows = music.shows.sorted(by: music.showCompare(lhs:rhs:))
+      async let shows = music.shows.sorted(by: vault.showCompare(lhs:rhs:))
       async let venues = music.venues.sorted(by: libraryCompare(lhs:rhs:))
-      async let artists = music.artistsWithShows().sorted(by: libraryCompare(lhs:rhs:))
+      async let artists = vault.artistsWithShows().sorted(by: libraryCompare(lhs:rhs:))
 
       let (s, v, a) = await (shows, venues, artists)
 
