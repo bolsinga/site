@@ -15,14 +15,14 @@ extension Vault {
 
     var artistList = "[Unknown Artists]"
     do {
-      artistList = try self.artistsForShow(show).map { $0.name }.joined(separator: ", ")
+      artistList = try self.lookup.artistsForShow(show).map { $0.name }.joined(separator: ", ")
     } catch {
     }
     parts.append(artistList)
 
     var venueName = "[Unknown Venue]"
     do {
-      venueName = try self.venueForShow(show).name
+      venueName = try self.lookup.venueForShow(show).name
     } catch {}
     parts.append(venueName)
 
@@ -45,7 +45,7 @@ extension Vault {
       parts.append("[Compilation]")
     }
 
-    if let artist = self.artistForAlbum(album) {
+    if let artist = self.lookup.artistForAlbum(album) {
       parts.append(artist.name)
     }
     parts.append(album.title)
@@ -63,7 +63,8 @@ extension Vault {
     }
 
     do {
-      let albumList = try self.albumsForArtist(artist).map { $0.title }.joined(separator: ", ")
+      let albumList = try self.lookup.albumsForArtist(artist).map { $0.title }.joined(
+        separator: ", ")
       if !albumList.isEmpty {
         parts.append("[\(albumList)]")
       }

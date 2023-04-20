@@ -1,5 +1,5 @@
 //
-//  Vault+Lookup.swift
+//  Lookup.swift
 //
 //
 //  Created by Greg Bolsinga on 2/16/23.
@@ -7,7 +7,31 @@
 
 import Foundation
 
-extension Vault {
+private func createLookup<T: Identifiable>(_ sequence: [T]) -> [T.ID: T] {
+  sequence.reduce(into: [:]) { $0[$1.id] = $1 }
+}
+
+public struct Lookup {
+  let music: Music
+
+  let albumMap: [Album.ID: Album]
+  let artistMap: [Artist.ID: Artist]
+  let relationMap: [Relation.ID: Relation]
+  let showMap: [Show.ID: Show]
+  let songMap: [Song.ID: Song]
+  let venueMap: [Venue.ID: Venue]
+
+  public init(music: Music) {
+    self.music = music
+
+    albumMap = createLookup(music.albums)
+    artistMap = createLookup(music.artists)
+    relationMap = createLookup(music.relations)
+    showMap = createLookup(music.shows)
+    songMap = createLookup(music.songs)
+    venueMap = createLookup(music.venues)
+  }
+
   enum LookupError: Error {
     case missingVenue(Show)
     case missingArtist(Show, String)

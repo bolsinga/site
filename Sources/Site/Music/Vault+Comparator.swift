@@ -9,8 +9,8 @@ import Foundation
 
 extension Vault {
   internal func artistAndTitleCompare(lhs: Album, rhs: Album) -> Bool {
-    let lhArtist = self.artistForAlbum(lhs)
-    let rhArtist = self.artistForAlbum(rhs)
+    let lhArtist = self.lookup.artistForAlbum(lhs)
+    let rhArtist = self.lookup.artistForAlbum(rhs)
 
     if let lhArtist, let rhArtist {
       // Both have artists.
@@ -60,10 +60,12 @@ extension Vault {
 
   public func showCompare(lhs: Show, rhs: Show) -> Bool {
     if lhs.date == rhs.date {
-      if let lhVenue = try? self.venueForShow(lhs), let rhVenue = try? self.venueForShow(rhs) {
+      if let lhVenue = try? self.lookup.venueForShow(lhs),
+        let rhVenue = try? self.lookup.venueForShow(rhs)
+      {
         if lhVenue == rhVenue {
-          if let lhArtists = try? self.artistsForShow(lhs),
-            let rhArtists = try? self.artistsForShow(rhs)
+          if let lhArtists = try? self.lookup.artistsForShow(lhs),
+            let rhArtists = try? self.lookup.artistsForShow(rhs)
           {
             if let lhHeadliner = lhArtists.first, let rhHeadliner = rhArtists.first {
               if lhHeadliner == rhHeadliner {
