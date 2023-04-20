@@ -11,7 +11,7 @@ private func createLookup<T: Identifiable>(_ sequence: [T]) -> [T.ID: T] {
   sequence.reduce(into: [:]) { $0[$1.id] = $1 }
 }
 
-struct Lookup {
+public struct Lookup {
   let music: Music
 
   let albumMap: [Album.ID: Album]

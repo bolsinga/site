@@ -9,12 +9,10 @@ import Foundation
 
 public struct Vault {
   public let music: Music
-  let lookup: Lookup
+  public let lookup: Lookup
 
   public init(music: Music) {
     self.music = music
-
     self.lookup = Lookup(music: music)
-
   }
 }
