@@ -17,7 +17,7 @@ struct ShowBlurb: View {
 
   private var venue: Venue? {
     do {
-      return try vault.venueForShow(show)
+      return try vault.lookup.venueForShow(show)
     } catch {
       return nil
     }

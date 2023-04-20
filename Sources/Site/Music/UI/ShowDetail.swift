@@ -17,7 +17,7 @@ struct ShowDetail: View {
 
   private var artists: [Artist] {
     do {
-      return try vault.artistsForShow(show)
+      return try vault.lookup.artistsForShow(show)
     } catch {
       return []
     }
@@ -25,7 +25,7 @@ struct ShowDetail: View {
 
   private var venueName: String {
     do {
-      return try vault.venueForShow(show).name
+      return try vault.lookup.venueForShow(show).name
     } catch {
       return ""
     }

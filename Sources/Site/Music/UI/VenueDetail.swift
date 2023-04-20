@@ -21,7 +21,7 @@ struct VenueDetail: View {
   }
 
   private var shows: [Show] {
-    vault.showsForVenue(venue)
+    vault.lookup.showsForVenue(venue)
   }
 
   private var computedYearsOfShows: [Int] {
@@ -29,7 +29,7 @@ struct VenueDetail: View {
   }
 
   private var computedArtists: [Artist] {
-    vault.artistsForVenue(venue).sorted(by: libraryCompare(lhs:rhs:))
+    vault.lookup.artistsForVenue(venue).sorted(by: libraryCompare(lhs:rhs:))
   }
 
   @ViewBuilder private var locationElement: some View {

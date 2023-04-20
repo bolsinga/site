@@ -30,7 +30,7 @@ public struct NavigateTab: View {
       }
       .tabItem { ArchiveCategory.venues.label }
       NavigationStack {
-        ArtistList(artists: vault.artistsWithShows().sorted(by: libraryCompare(lhs:rhs:)))
+        ArtistList(artists: vault.lookup.artistsWithShows().sorted(by: libraryCompare(lhs:rhs:)))
           .musicDestinations()
       }
       .tabItem { ArchiveCategory.artists.label }
