@@ -7,32 +7,28 @@
 
 import Foundation
 
+private func createLookup<T : Identifiable>(_ sequence: [T]) -> [T.ID: T] {
+  sequence.reduce(into: [:]) { $0[$1.id] = $1 }
+}
+
 public struct Vault {
   public let music: Music
 
-  internal var albumMap: [String: Album] = [:]
-  internal var artistMap: [String: Artist] = [:]
-  internal var relationMap: [String: Relation] = [:]
-  internal var showMap: [String: Show] = [:]
-  internal var songMap: [String: Song] = [:]
-  internal var venueMap: [String: Venue] = [:]
-
-  private func buildMap<T>(_ sequence: [T]) -> [T.ID: T] where T: Identifiable {
-    var map: [T.ID: T] = [:]
-    for item in sequence {
-      map[item.id] = item
-    }
-    return map
-  }
+  internal var albumMap: [Album.ID: Album] = [:]
+  internal var artistMap: [Artist.ID: Artist] = [:]
+  internal var relationMap: [Relation.ID: Relation] = [:]
+  internal var showMap: [Show.ID: Show] = [:]
+  internal var songMap: [Song.ID: Song] = [:]
+  internal var venueMap: [Venue.ID: Venue] = [:]
 
   public init(music: Music) {
     self.music = music
 
-    self.albumMap = buildMap(music.albums)
-    self.artistMap = buildMap(music.artists)
-    self.relationMap = buildMap(music.relations)
-    self.showMap = buildMap(music.shows)
-    self.songMap = buildMap(music.songs)
-    self.venueMap = buildMap(music.venues)
+    self.albumMap = createLookup(music.albums)
+    self.artistMap = createLookup(music.artists)
+    self.relationMap = createLookup(music.relations)
+    self.showMap = createLookup(music.shows)
+    self.songMap = createLookup(music.songs)
+    self.venueMap = createLookup(music.venues)
   }
 }
