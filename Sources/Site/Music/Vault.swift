@@ -17,30 +17,22 @@ public struct Vault {
   internal var songMap: [String: Song] = [:]
   internal var venueMap: [String: Venue] = [:]
 
+  private func buildMap<T>(_ sequence: [T]) -> [T.ID: T] where T: Identifiable {
+    var map: [T.ID: T] = [:]
+    for item in sequence {
+      map[item.id] = item
+    }
+    return map
+  }
+
   public init(music: Music) {
     self.music = music
 
-    populateMaps()
-  }
-
-  private mutating func populateMaps() {
-    for album in music.albums {
-      albumMap[album.id] = album
-    }
-    for artist in music.artists {
-      artistMap[artist.id] = artist
-    }
-    for relation in music.relations {
-      relationMap[relation.id] = relation
-    }
-    for show in music.shows {
-      showMap[show.id] = show
-    }
-    for song in music.songs {
-      songMap[song.id] = song
-    }
-    for venue in music.venues {
-      venueMap[venue.id] = venue
-    }
+    self.albumMap = buildMap(music.albums)
+    self.artistMap = buildMap(music.artists)
+    self.relationMap = buildMap(music.relations)
+    self.showMap = buildMap(music.shows)
+    self.songMap = buildMap(music.songs)
+    self.venueMap = buildMap(music.venues)
   }
 }
