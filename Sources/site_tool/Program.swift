@@ -69,8 +69,9 @@ struct Program: AsyncParsableCommand {
         print(vault.description(for: album))
       }
 
+      let albumMap: [Album.ID: Album] = music.albums.reduce(into: [:]) { $0[$1.id] = $1 }
       for artist in music.artists.sorted(by: libraryCompare(lhs:rhs:)) {
-        print(vault.description(for: artist))
+        print(vault.description(for: artist, albumMap: albumMap))
       }
 
       for venue in music.venues.sorted(by: libraryCompare(lhs:rhs:)) {

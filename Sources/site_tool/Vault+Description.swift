@@ -53,7 +53,22 @@ extension Vault {
     return parts.joined(separator: ": ")
   }
 
-  public func description(for artist: Artist) -> String {
+  enum LookupError: Error {
+    case missingAlbum(Artist, String)
+  }
+
+  private func albumsForArtist(_ artist: Artist, albumMap: [Album.ID: Album]) throws -> [Album] {
+    var artistAlbums = [Album]()
+    for id in artist.albums ?? [] {
+      guard let album = albumMap[id] else {
+        throw LookupError.missingAlbum(artist, id)
+      }
+      artistAlbums.append(album)
+    }
+    return artistAlbums
+  }
+
+  public func description(for artist: Artist, albumMap: [Album.ID: Album]) -> String {
     var parts: [String] = []
     parts.append(artist.id)
     parts.append(artist.name)
@@ -63,7 +78,7 @@ extension Vault {
     }
 
     do {
-      let albumList = try self.lookup.albumsForArtist(artist).map { $0.title }.joined(
+      let albumList = try self.albumsForArtist(artist, albumMap: albumMap).map { $0.title }.joined(
         separator: ", ")
       if !albumList.isEmpty {
         parts.append("[\(albumList)]")
