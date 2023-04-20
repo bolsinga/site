@@ -22,14 +22,56 @@ public struct Lookup {
   let venueMap: [Venue.ID: Venue]
 
   public init(music: Music) {
-    self.music = music
+    // non-parallel, used for Previews, tests
+    self.init(
+      music: music,
+      albumMap: createLookup(music.albums),
+      artistMap: createLookup(music.artists),
+      relationMap: createLookup(music.relations),
+      showMap: createLookup(music.shows),
+      songMap: createLookup(music.songs),
+      venueMap: createLookup(music.venues))
+  }
 
-    albumMap = createLookup(music.albums)
-    artistMap = createLookup(music.artists)
-    relationMap = createLookup(music.relations)
-    showMap = createLookup(music.shows)
-    songMap = createLookup(music.songs)
-    venueMap = createLookup(music.venues)
+  internal init(
+    music: Music,
+    albumMap: [Album.ID: Album],
+    artistMap: [Artist.ID: Artist],
+    relationMap: [Relation.ID: Relation],
+    showMap: [Show.ID: Show],
+    songMap: [Song.ID: Song],
+    venueMap: [Venue.ID: Venue]
+  ) {
+    self.music = music
+    self.albumMap = albumMap
+    self.artistMap = artistMap
+    self.relationMap = relationMap
+    self.showMap = showMap
+    self.songMap = songMap
+    self.venueMap = venueMap
+  }
+
+  public static func create(music: Music) async -> Lookup {
+    // parallel
+    async let albumLookup = createLookup(music.albums)
+    async let artistLookup = createLookup(music.artists)
+    async let relationLookup = createLookup(music.relations)
+    async let showLookup = createLookup(music.shows)
+    async let songLookup = createLookup(music.songs)
+    async let venueLookup = createLookup(music.venues)
+
+    let (albumMap, artistMap, relationMap, showMap, songMap, venueMap) = await (
+      albumLookup, artistLookup, relationLookup, showLookup, songLookup, venueLookup
+    )
+
+    return Lookup(
+      music: music,
+      albumMap: albumMap,
+      artistMap: artistMap,
+      relationMap: relationMap,
+      showMap: showMap,
+      songMap: songMap,
+      venueMap: venueMap)
   }
 
   enum LookupError: Error {

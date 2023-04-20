@@ -12,7 +12,18 @@ public struct Vault {
   public let lookup: Lookup
 
   public init(music: Music) {
+    // non-parallel, used for previews, tests
+    self.init(music: music, lookup: Lookup(music: music))
+  }
+
+  internal init(music: Music, lookup: Lookup) {
     self.music = music
-    self.lookup = Lookup(music: music)
+    self.lookup = lookup
+  }
+
+  public static func create(music: Music) async -> Vault {
+    // parallel
+    let lookup = await Lookup.create(music: music)
+    return Vault(music: music, lookup: lookup)
   }
 }
