@@ -7,7 +7,7 @@
 
 import Foundation
 
-private func createLookup<T : Identifiable>(_ sequence: [T]) -> [T.ID: T] {
+private func createLookup<T: Identifiable>(_ sequence: [T]) -> [T.ID: T] {
   sequence.reduce(into: [:]) { $0[$1.id] = $1 }
 }
 
