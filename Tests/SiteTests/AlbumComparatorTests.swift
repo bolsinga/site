@@ -33,8 +33,8 @@ final class AlbumComparatorTests: XCTestCase {
     let vault = createVault(albums: [album1, album2], artists: [artist1, artist2])
 
     XCTAssertNotEqual(album1, album2)
-    XCTAssertTrue(vault.albumCompare(lhs: album1, rhs: album2))
-    XCTAssertFalse(vault.albumCompare(lhs: album2, rhs: album1))
+    XCTAssertTrue(vault.lookup.albumCompare(lhs: album1, rhs: album2))
+    XCTAssertFalse(vault.lookup.albumCompare(lhs: album2, rhs: album1))
   }
 
   func testUnknownRelease_fullDate() throws {
@@ -44,8 +44,8 @@ final class AlbumComparatorTests: XCTestCase {
     let vault = createVault(albums: [album1, album2], artists: [artist1, artist2])
 
     XCTAssertNotEqual(album1, album2)
-    XCTAssertTrue(vault.albumCompare(lhs: album1, rhs: album2))
-    XCTAssertFalse(vault.albumCompare(lhs: album2, rhs: album1))
+    XCTAssertTrue(vault.lookup.albumCompare(lhs: album1, rhs: album2))
+    XCTAssertFalse(vault.lookup.albumCompare(lhs: album2, rhs: album1))
   }
 
   func testFullDate_fullDate() throws {
@@ -57,8 +57,8 @@ final class AlbumComparatorTests: XCTestCase {
     let vault = createVault(albums: [album1, album2], artists: [artist1, artist2])
 
     XCTAssertNotEqual(album1, album2)
-    XCTAssertTrue(vault.albumCompare(lhs: album1, rhs: album2))
-    XCTAssertFalse(vault.albumCompare(lhs: album2, rhs: album1))
+    XCTAssertTrue(vault.lookup.albumCompare(lhs: album1, rhs: album2))
+    XCTAssertFalse(vault.lookup.albumCompare(lhs: album2, rhs: album1))
   }
 
   func testSameDates_knownArtists() throws {
@@ -68,8 +68,8 @@ final class AlbumComparatorTests: XCTestCase {
     let vault = createVault(albums: [album1, album2], artists: [artist1, artist2])
 
     XCTAssertNotEqual(album1, album2)
-    XCTAssertTrue(vault.albumCompare(lhs: album1, rhs: album2))
-    XCTAssertFalse(vault.albumCompare(lhs: album2, rhs: album1))
+    XCTAssertTrue(vault.lookup.albumCompare(lhs: album1, rhs: album2))
+    XCTAssertFalse(vault.lookup.albumCompare(lhs: album2, rhs: album1))
   }
 
   func testSameDates_oneUnknownArtists() throws {
@@ -79,8 +79,8 @@ final class AlbumComparatorTests: XCTestCase {
     let vault = createVault(albums: [album1, album2], artists: [artist1])
 
     XCTAssertNotEqual(album1, album2)
-    XCTAssertFalse(vault.albumCompare(lhs: album1, rhs: album2))
-    XCTAssertTrue(vault.albumCompare(lhs: album2, rhs: album1))
+    XCTAssertFalse(vault.lookup.albumCompare(lhs: album1, rhs: album2))
+    XCTAssertTrue(vault.lookup.albumCompare(lhs: album2, rhs: album1))
   }
 
   func testSameDates_twoUnknownArtists() throws {
@@ -90,8 +90,8 @@ final class AlbumComparatorTests: XCTestCase {
     let vault = createVault(albums: [album1, album2], artists: [])
 
     XCTAssertNotEqual(album1, album2)
-    XCTAssertTrue(vault.albumCompare(lhs: album1, rhs: album2))
-    XCTAssertFalse(vault.albumCompare(lhs: album2, rhs: album1))
+    XCTAssertTrue(vault.lookup.albumCompare(lhs: album1, rhs: album2))
+    XCTAssertFalse(vault.lookup.albumCompare(lhs: album2, rhs: album1))
   }
 
   func testSameDates_sameArtists() throws {
@@ -101,8 +101,8 @@ final class AlbumComparatorTests: XCTestCase {
     let vault = createVault(albums: [album1, album2], artists: [artist1])
 
     XCTAssertNotEqual(album1, album2)
-    XCTAssertTrue(vault.albumCompare(lhs: album1, rhs: album2))
-    XCTAssertFalse(vault.albumCompare(lhs: album2, rhs: album1))
+    XCTAssertTrue(vault.lookup.albumCompare(lhs: album1, rhs: album2))
+    XCTAssertFalse(vault.lookup.albumCompare(lhs: album2, rhs: album1))
   }
 
   func testSameDates_sameArtists_sameTitle() throws {
@@ -112,8 +112,8 @@ final class AlbumComparatorTests: XCTestCase {
     let vault = createVault(albums: [album1, album2], artists: [artist1])
 
     XCTAssertNotEqual(album1, album2)
-    XCTAssertTrue(vault.albumCompare(lhs: album1, rhs: album2))
-    XCTAssertFalse(vault.albumCompare(lhs: album2, rhs: album1))
+    XCTAssertTrue(vault.lookup.albumCompare(lhs: album1, rhs: album2))
+    XCTAssertFalse(vault.lookup.albumCompare(lhs: album2, rhs: album1))
   }
 
   func testEquality() throws {
@@ -123,7 +123,7 @@ final class AlbumComparatorTests: XCTestCase {
     let vault = createVault(albums: [album1, album2], artists: [artist1])
 
     XCTAssertEqual(album1, album2)
-    XCTAssertFalse(vault.albumCompare(lhs: album1, rhs: album2))
-    XCTAssertFalse(vault.albumCompare(lhs: album2, rhs: album1))
+    XCTAssertFalse(vault.lookup.albumCompare(lhs: album1, rhs: album2))
+    XCTAssertFalse(vault.lookup.albumCompare(lhs: album2, rhs: album1))
   }
 }
