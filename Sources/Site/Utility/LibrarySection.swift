@@ -39,7 +39,7 @@ extension LibrarySection: Comparable {
 }
 
 func librarySection(_ item: any LibraryComparable) -> LibrarySection {
-  return librarySection(item.librarySortToken)
+  return librarySection(item.librarySortString)
 }
 
 internal func librarySection(_ string: String) -> LibrarySection {

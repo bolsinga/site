@@ -13,7 +13,11 @@ public protocol LibraryComparable {
 }
 
 extension LibraryComparable {
-  var librarySortToken: String {
+  var librarySortString: String {
     sortname ?? name
+  }
+
+  var librarySortToken: String {
+    librarySortString.removeCommonInitialPunctuation
   }
 }
