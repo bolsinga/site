@@ -20,7 +20,7 @@ public struct NavigateTab: View {
   public var body: some View {
     TabView {
       NavigationStack {
-        ShowYearList(shows: music.shows.sorted(by: vault.showCompare(lhs:rhs:)))
+        ShowYearList(shows: music.shows.sorted(by: vault.lookup.showCompare(lhs:rhs:)))
           .musicDestinations()
       }
       .tabItem { ArchiveCategory.shows.label }
