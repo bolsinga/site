@@ -14,70 +14,49 @@ private func createLookup<T: Identifiable>(_ sequence: [T]) -> [T.ID: T] {
 public struct Lookup {
   let music: Music
 
-  let albumMap: [Album.ID: Album]
   let artistMap: [Artist.ID: Artist]
-  let relationMap: [Relation.ID: Relation]
   let showMap: [Show.ID: Show]
-  let songMap: [Song.ID: Song]
   let venueMap: [Venue.ID: Venue]
 
   public init(music: Music) {
     // non-parallel, used for Previews, tests
     self.init(
       music: music,
-      albumMap: createLookup(music.albums),
       artistMap: createLookup(music.artists),
-      relationMap: createLookup(music.relations),
       showMap: createLookup(music.shows),
-      songMap: createLookup(music.songs),
       venueMap: createLookup(music.venues))
   }
 
   internal init(
     music: Music,
-    albumMap: [Album.ID: Album],
     artistMap: [Artist.ID: Artist],
-    relationMap: [Relation.ID: Relation],
     showMap: [Show.ID: Show],
-    songMap: [Song.ID: Song],
     venueMap: [Venue.ID: Venue]
   ) {
     self.music = music
-    self.albumMap = albumMap
     self.artistMap = artistMap
-    self.relationMap = relationMap
     self.showMap = showMap
-    self.songMap = songMap
     self.venueMap = venueMap
   }
 
   public static func create(music: Music) async -> Lookup {
     // parallel
-    async let albumLookup = createLookup(music.albums)
     async let artistLookup = createLookup(music.artists)
-    async let relationLookup = createLookup(music.relations)
     async let showLookup = createLookup(music.shows)
-    async let songLookup = createLookup(music.songs)
     async let venueLookup = createLookup(music.venues)
 
-    let (albumMap, artistMap, relationMap, showMap, songMap, venueMap) = await (
-      albumLookup, artistLookup, relationLookup, showLookup, songLookup, venueLookup
-    )
+    let (artistMap, showMap, venueMap) = await (artistLookup, showLookup, venueLookup)
 
     return Lookup(
       music: music,
-      albumMap: albumMap,
       artistMap: artistMap,
-      relationMap: relationMap,
       showMap: showMap,
-      songMap: songMap,
       venueMap: venueMap)
   }
 
   enum LookupError: Error {
     case missingVenue(Show)
     case missingArtist(Show, String)
-    case missingAlbum(Artist, String)
   }
 
   private var shows: [Show] {
@@ -107,17 +86,6 @@ public struct Lookup {
       return artistMap[id]
     }
     return nil
-  }
-
-  public func albumsForArtist(_ artist: Artist) throws -> [Album] {
-    var artistAlbums = [Album]()
-    for id in artist.albums ?? [] {
-      guard let album = albumMap[id] else {
-        throw LookupError.missingAlbum(artist, id)
-      }
-      artistAlbums.append(album)
-    }
-    return artistAlbums
   }
 
   public func showsForArtist(_ artist: Artist) -> [Show] {
