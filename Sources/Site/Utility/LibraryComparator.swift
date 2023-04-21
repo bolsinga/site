@@ -11,7 +11,7 @@ public func libraryCompare(lhs: any LibraryComparable, rhs: any LibraryComparabl
   return libraryCompare(lhs: lhs.librarySortToken, rhs: rhs.librarySortToken)
 }
 
-internal func libraryCompare(lhs: String, rhs: String) -> Bool {
+public func libraryCompare(lhs: String, rhs: String) -> Bool {
   let lhSort = lhs.removeCommonInitialPunctuation
   let rhSort = rhs.removeCommonInitialPunctuation
 
