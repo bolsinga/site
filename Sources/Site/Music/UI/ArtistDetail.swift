@@ -16,11 +16,13 @@ struct ArtistDetail: View {
   }
 
   private var computedShows: [Show] {
-    return vault.lookup.showsForArtist(artist).sorted(by: vault.lookup.showCompare(lhs:rhs:))
+    return vault.lookup.showsForArtist(artist).sorted {
+      vault.comparator.showCompare(lhs: $0, rhs: $1, lookup: vault.lookup)
+    }
   }
 
   private var computedRelatedArtists: [Artist] {
-    music.related(artist).sorted(by: libraryCompare(lhs:rhs:))
+    music.related(artist).sorted(by: vault.comparator.libraryCompare(lhs:rhs:))
   }
 
   @ViewBuilder private var showsElement: some View {

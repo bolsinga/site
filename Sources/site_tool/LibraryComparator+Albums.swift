@@ -1,5 +1,5 @@
 //
-//  Lookup+Album.swift
+//  LibraryComparator+Albums.swift
 //
 //
 //  Created by Greg Bolsinga on 4/21/23.
@@ -7,10 +7,10 @@
 
 import Site
 
-extension Lookup {
-  internal func artistAndTitleCompare(lhs: Album, rhs: Album) -> Bool {
-    let lhArtist = self.artistForAlbum(lhs)
-    let rhArtist = self.artistForAlbum(rhs)
+extension LibraryComparator {
+  internal func artistAndTitleCompare(lhs: Album, rhs: Album, lookup: Lookup) -> Bool {
+    let lhArtist = lookup.artistForAlbum(lhs)
+    let rhArtist = lookup.artistForAlbum(rhs)
 
     if let lhArtist, let rhArtist {
       // Both have artists.
@@ -35,7 +35,7 @@ extension Lookup {
     return lhArtist == nil
   }
 
-  public func albumCompare(lhs: Album, rhs: Album) -> Bool {
+  public func albumCompare(lhs: Album, rhs: Album, lookup: Lookup) -> Bool {
     let lhRelease = lhs.release
     let rhRelease = rhs.release
 
@@ -43,7 +43,7 @@ extension Lookup {
       // Both have dates.
       if lhRelease == rhRelease {
         // Dates are equal, so compare just by artist and title.
-        return artistAndTitleCompare(lhs: lhs, rhs: rhs)
+        return artistAndTitleCompare(lhs: lhs, rhs: rhs, lookup: lookup)
       }
       // Compare by dates.
       return lhRelease < rhRelease
@@ -51,7 +51,7 @@ extension Lookup {
 
     if lhRelease == nil, rhRelease == nil {
       // Both do not have dates, so compare just by artist and title.
-      return artistAndTitleCompare(lhs: lhs, rhs: rhs)
+      return artistAndTitleCompare(lhs: lhs, rhs: rhs, lookup: lookup)
     }
 
     // Now lhs or rhs is nil. If lhs is nil it sorts before the non nil rhs

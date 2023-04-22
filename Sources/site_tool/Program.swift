@@ -61,20 +61,26 @@ struct Program: AsyncParsableCommand {
       print("Songs: \(music.songs.count)")
       print("Venues: \(music.venues.count)")
 
-      for show in music.shows.sorted(by: vault.lookup.showCompare(lhs:rhs:)).reversed() {
+      let sortedShows = music.shows.sorted {
+        vault.comparator.showCompare(lhs: $0, rhs: $1, lookup: vault.lookup)
+      }
+      for show in sortedShows.reversed() {
         print(vault.description(for: show))
       }
 
-      for album in music.albums.sorted(by: vault.lookup.albumCompare(lhs:rhs:)) {
+      let sortedAlbums = music.albums.sorted {
+        vault.comparator.albumCompare(lhs: $0, rhs: $1, lookup: vault.lookup)
+      }
+      for album in sortedAlbums {
         print(vault.description(for: album))
       }
 
       let albumMap: [Album.ID: Album] = music.albums.reduce(into: [:]) { $0[$1.id] = $1 }
-      for artist in music.artists.sorted(by: libraryCompare(lhs:rhs:)) {
+      for artist in music.artists.sorted(by: vault.comparator.libraryCompare(lhs:rhs:)) {
         print(vault.description(for: artist, albumMap: albumMap))
       }
 
-      for venue in music.venues.sorted(by: libraryCompare(lhs:rhs:)) {
+      for venue in music.venues.sorted(by: vault.comparator.libraryCompare(lhs:rhs:)) {
         print(vault.description(for: venue))
       }
 
@@ -82,9 +88,10 @@ struct Program: AsyncParsableCommand {
         print(vault.description(for: location))
       }
 
-      for artist in music.artists.sorted(by: libraryCompare(lhs:rhs:)) {
-        let shows = vault.lookup.showsForArtist(artist).sorted(
-          by: vault.lookup.showCompare(lhs:rhs:))
+      for artist in music.artists.sorted(by: vault.comparator.libraryCompare(lhs:rhs:)) {
+        let shows = vault.lookup.showsForArtist(artist).sorted {
+          vault.comparator.showCompare(lhs: $0, rhs: $1, lookup: vault.lookup)
+        }
         if !shows.isEmpty {
           print(vault.description(for: artist, shows: shows))
         }

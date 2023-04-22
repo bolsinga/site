@@ -35,8 +35,8 @@ final class ShowComparatorTests: XCTestCase {
       artists: [artist1, artist2], shows: [show1, show2], venues: [venue1, venue2])
 
     XCTAssertNotEqual(show1, show2)
-    XCTAssertTrue(vault.lookup.showCompare(lhs: show1, rhs: show2))
-    XCTAssertFalse(vault.lookup.showCompare(lhs: show2, rhs: show1))
+    XCTAssertTrue(vault.comparator.showCompare(lhs: show1, rhs: show2, lookup: vault.lookup))
+    XCTAssertFalse(vault.comparator.showCompare(lhs: show2, rhs: show1, lookup: vault.lookup))
   }
 
   func testSameDates_differentVenues() throws {
@@ -47,8 +47,8 @@ final class ShowComparatorTests: XCTestCase {
       artists: [artist1, artist2], shows: [show1, show2], venues: [venue1, venue2])
 
     XCTAssertNotEqual(show1, show2)
-    XCTAssertFalse(vault.lookup.showCompare(lhs: show1, rhs: show2))
-    XCTAssertTrue(vault.lookup.showCompare(lhs: show2, rhs: show1))
+    XCTAssertFalse(vault.comparator.showCompare(lhs: show1, rhs: show2, lookup: vault.lookup))
+    XCTAssertTrue(vault.comparator.showCompare(lhs: show2, rhs: show1, lookup: vault.lookup))
   }
 
   func testSameDates_sameVenues_differentArtists() throws {
@@ -59,8 +59,8 @@ final class ShowComparatorTests: XCTestCase {
       artists: [artist1, artist2], shows: [show1, show2], venues: [venue1, venue2])
 
     XCTAssertNotEqual(show1, show2)
-    XCTAssertTrue(vault.lookup.showCompare(lhs: show1, rhs: show2))
-    XCTAssertFalse(vault.lookup.showCompare(lhs: show2, rhs: show1))
+    XCTAssertTrue(vault.comparator.showCompare(lhs: show1, rhs: show2, lookup: vault.lookup))
+    XCTAssertFalse(vault.comparator.showCompare(lhs: show2, rhs: show1, lookup: vault.lookup))
   }
 
   func testSameDates_sameVenues_sameArtists() throws {
@@ -71,8 +71,8 @@ final class ShowComparatorTests: XCTestCase {
       artists: [artist1, artist2], shows: [show1, show2], venues: [venue1, venue2])
 
     XCTAssertNotEqual(show1, show2)
-    XCTAssertTrue(vault.lookup.showCompare(lhs: show1, rhs: show2))
-    XCTAssertFalse(vault.lookup.showCompare(lhs: show2, rhs: show1))
+    XCTAssertTrue(vault.comparator.showCompare(lhs: show1, rhs: show2, lookup: vault.lookup))
+    XCTAssertFalse(vault.comparator.showCompare(lhs: show2, rhs: show1, lookup: vault.lookup))
   }
 
   func testEdgeCase() throws {
@@ -83,7 +83,7 @@ final class ShowComparatorTests: XCTestCase {
       artists: [artist1, artist2], shows: [show1, show2], venues: [venue1, venue2])
 
     XCTAssertEqual(show1, show2)
-    XCTAssertFalse(vault.lookup.showCompare(lhs: show1, rhs: show2))
-    XCTAssertFalse(vault.lookup.showCompare(lhs: show2, rhs: show1))
+    XCTAssertFalse(vault.comparator.showCompare(lhs: show1, rhs: show2, lookup: vault.lookup))
+    XCTAssertFalse(vault.comparator.showCompare(lhs: show2, rhs: show1, lookup: vault.lookup))
   }
 }
