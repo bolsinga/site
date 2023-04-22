@@ -8,16 +8,18 @@
 import Foundation
 
 public func libraryCompare(lhs: any LibraryComparable, rhs: any LibraryComparable) -> Bool {
-  return libraryCompare(lhs: lhs.librarySortToken, rhs: rhs.librarySortToken)
+  return libraryCompareTokens(lhs: lhs.librarySortToken, rhs: rhs.librarySortToken)
 }
 
 public func libraryCompare(lhs: String, rhs: String) -> Bool {
-  let lhSort = lhs.removeCommonInitialPunctuation
-  let rhSort = rhs.removeCommonInitialPunctuation
+  return libraryCompareTokens(
+    lhs: lhs.removeCommonInitialPunctuation, rhs: rhs.removeCommonInitialPunctuation)
+}
 
+private func libraryCompareTokens(lhs: String, rhs: String) -> Bool {
   var options = String.CompareOptions()
   options.insert(.caseInsensitive)
   options.insert(.diacriticInsensitive)
 
-  return lhSort.compare(rhSort, options: options) == ComparisonResult.orderedAscending
+  return lhs.compare(rhs, options: options) == ComparisonResult.orderedAscending
 }
