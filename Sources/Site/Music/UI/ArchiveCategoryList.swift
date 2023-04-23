@@ -63,11 +63,9 @@ public struct ArchiveCategoryList: View {
       async let venues = music.venues.sorted(by: libraryCompare(lhs:rhs:))
       async let artists = vault.lookup.artistsWithShows().sorted(by: libraryCompare(lhs:rhs:))
 
-      let (s, v, a) = await (shows, venues, artists)
-
-      self.shows = s
-      self.venues = v
-      self.artists = a
+      self.shows = await shows
+      self.venues = await venues
+      self.artists = await artists
     }
     .environment(\.vault, vault)
   }
