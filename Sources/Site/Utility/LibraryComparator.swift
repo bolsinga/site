@@ -8,8 +8,17 @@
 import Foundation
 
 public struct LibraryComparator {
-  public func libraryCompare(lhs: any LibraryComparable, rhs: any LibraryComparable) -> Bool {
-    return libraryCompareTokens(lhs: lhs.librarySortToken, rhs: rhs.librarySortToken)
+
+  let tokenMap: [String: String]
+
+  public init(tokenMap: [String: String] = [:]) {
+    self.tokenMap = tokenMap
+  }
+
+  public func libraryCompare<T>(lhs: T, rhs: T) -> Bool where T: LibraryComparable, T.ID == String {
+    let lhToken = tokenMap[lhs.id] ?? lhs.librarySortToken
+    let rhToken = tokenMap[rhs.id] ?? rhs.librarySortToken
+    return libraryCompareTokens(lhs: lhToken, rhs: rhToken)
   }
 
   public func libraryCompare(lhs: String, rhs: String) -> Bool {
