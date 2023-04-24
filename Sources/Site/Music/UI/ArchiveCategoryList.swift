@@ -8,14 +8,14 @@
 import SwiftUI
 
 public struct ArchiveCategoryList: View {
-  @Environment(\.vault) private var vault: Vault
+  let vault: Vault
 
   @State private var navigationPath: NavigationPath = .init()
   @State private var shows: [Show] = []
   @State private var venues: [Venue] = []
   @State private var artists: [Artist] = []
 
-  public init() {}
+  public init(vault: Vault) { self.vault = vault }
 
   private var music: Music {
     vault.music
@@ -69,11 +69,17 @@ public struct ArchiveCategoryList: View {
       self.venues = v
       self.artists = a
     }
+    .environment(\.vault, vault)
   }
 }
 
 struct ArchiveCategoryList_Previews: PreviewProvider {
   static var previews: some View {
-    ArchiveCategoryList()
+    let vault = Vault(
+      music: Music(
+        albums: [], artists: [], relations: [], shows: [], songs: [], timestamp: Date.now,
+        venues: []))
+
+    ArchiveCategoryList(vault: vault)
   }
 }
