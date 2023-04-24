@@ -7,7 +7,7 @@
 
 import Foundation
 
-public protocol LibraryComparable {
+public protocol LibraryComparable: Identifiable {
   var sortname: String? { get }
   var name: String { get }
 }
