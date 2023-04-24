@@ -10,6 +10,7 @@ import Foundation
 public struct Vault {
   public let music: Music
   public let lookup: Lookup
+  public let comparator = LibraryComparator()
 
   public init(music: Music) {
     // non-parallel, used for previews, tests

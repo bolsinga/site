@@ -1,5 +1,5 @@
 //
-//  Lookup+Comparator.swift
+//  LibraryComparator+Shows.swift
 //
 //
 //  Created by Greg Bolsinga on 2/24/23.
@@ -7,15 +7,15 @@
 
 import Foundation
 
-extension Lookup {
-  public func showCompare(lhs: Show, rhs: Show) -> Bool {
+extension LibraryComparator {
+  public func showCompare(lhs: Show, rhs: Show, lookup: Lookup) -> Bool {
     if lhs.date == rhs.date {
-      if let lhVenue = try? self.venueForShow(lhs),
-        let rhVenue = try? self.venueForShow(rhs)
+      if let lhVenue = try? lookup.venueForShow(lhs),
+        let rhVenue = try? lookup.venueForShow(rhs)
       {
         if lhVenue == rhVenue {
-          if let lhArtists = try? self.artistsForShow(lhs),
-            let rhArtists = try? self.artistsForShow(rhs)
+          if let lhArtists = try? lookup.artistsForShow(lhs),
+            let rhArtists = try? lookup.artistsForShow(rhs)
           {
             if let lhHeadliner = lhArtists.first, let rhHeadliner = rhArtists.first {
               if lhHeadliner == rhHeadliner {

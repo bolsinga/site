@@ -10,50 +10,52 @@ import XCTest
 @testable import Site
 
 final class LibraryComparatorTests: XCTestCase {
+  let comparator = LibraryComparator()
+
   func testStringBasic() throws {
-    XCTAssertTrue(libraryCompare(lhs: "A", rhs: "B"))
-    XCTAssertFalse(libraryCompare(lhs: "B", rhs: "A"))
+    XCTAssertTrue(comparator.libraryCompare(lhs: "A", rhs: "B"))
+    XCTAssertFalse(comparator.libraryCompare(lhs: "B", rhs: "A"))
   }
 
   func testStringThePrefix() throws {
-    XCTAssertTrue(libraryCompare(lhs: "The White Album", rhs: "White Denim"))
-    XCTAssertFalse(libraryCompare(lhs: "White Denim", rhs: "The White Album"))
+    XCTAssertTrue(comparator.libraryCompare(lhs: "The White Album", rhs: "White Denim"))
+    XCTAssertFalse(comparator.libraryCompare(lhs: "White Denim", rhs: "The White Album"))
   }
 
   func testStringAPrefix() throws {
     // These should compare as false, since removing the prefix matches the other word.
-    XCTAssertFalse(libraryCompare(lhs: "A Cord", rhs: "Cord"))
-    XCTAssertFalse(libraryCompare(lhs: "Cord", rhs: "A Cord"))
+    XCTAssertFalse(comparator.libraryCompare(lhs: "A Cord", rhs: "Cord"))
+    XCTAssertFalse(comparator.libraryCompare(lhs: "Cord", rhs: "A Cord"))
   }
 
   func testStringAnPrefix() throws {
     // These should compare as false, since removing the prefix matches the other word.
-    XCTAssertFalse(libraryCompare(lhs: "An Other", rhs: "Other"))
-    XCTAssertFalse(libraryCompare(lhs: "Other", rhs: "An Other"))
+    XCTAssertFalse(comparator.libraryCompare(lhs: "An Other", rhs: "Other"))
+    XCTAssertFalse(comparator.libraryCompare(lhs: "Other", rhs: "An Other"))
   }
 
   func testPrefixThreeWords() throws {
     // These should compare as false, since removing the prefix matches the other words.
-    XCTAssertFalse(libraryCompare(lhs: "An Other Test", rhs: "Other Test"))
-    XCTAssertFalse(libraryCompare(lhs: "Other Test", rhs: "An Other Test"))
+    XCTAssertFalse(comparator.libraryCompare(lhs: "An Other Test", rhs: "Other Test"))
+    XCTAssertFalse(comparator.libraryCompare(lhs: "Other Test", rhs: "An Other Test"))
   }
 
   func testStringPartialPrefix() throws {
-    XCTAssertTrue(libraryCompare(lhs: "These", rhs: "They Might"))
-    XCTAssertFalse(libraryCompare(lhs: "They Might", rhs: "These"))
+    XCTAssertTrue(comparator.libraryCompare(lhs: "These", rhs: "They Might"))
+    XCTAssertFalse(comparator.libraryCompare(lhs: "They Might", rhs: "These"))
 
-    XCTAssertTrue(libraryCompare(lhs: "Them", rhs: "They Might"))
-    XCTAssertFalse(libraryCompare(lhs: "They Might", rhs: "Them"))
+    XCTAssertTrue(comparator.libraryCompare(lhs: "Them", rhs: "They Might"))
+    XCTAssertFalse(comparator.libraryCompare(lhs: "They Might", rhs: "Them"))
   }
 
   func testStringSmog() throws {
-    XCTAssertFalse(libraryCompare(lhs: "Smog", rhs: "(Smog)"))
-    XCTAssertFalse(libraryCompare(lhs: "(Smog)", rhs: "Smog"))
+    XCTAssertFalse(comparator.libraryCompare(lhs: "Smog", rhs: "(Smog)"))
+    XCTAssertFalse(comparator.libraryCompare(lhs: "(Smog)", rhs: "Smog"))
   }
 
   func testStringQuotation() throws {
-    XCTAssertFalse(libraryCompare(lhs: "\"Song Title\"", rhs: "Song Title"))
-    XCTAssertFalse(libraryCompare(lhs: "Song Title", rhs: "\"Song Title\""))
+    XCTAssertFalse(comparator.libraryCompare(lhs: "\"Song Title\"", rhs: "Song Title"))
+    XCTAssertFalse(comparator.libraryCompare(lhs: "Song Title", rhs: "\"Song Title\""))
   }
 
   func testAPrefixChomp() throws {

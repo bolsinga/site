@@ -17,7 +17,7 @@ struct VenueDetail: View {
   }
 
   private var computedRelatedVenues: [Venue] {
-    music.related(venue).sorted(by: libraryCompare(lhs:rhs:))
+    music.related(venue).sorted(by: vault.comparator.libraryCompare(lhs:rhs:))
   }
 
   private var shows: [Show] {
@@ -29,7 +29,7 @@ struct VenueDetail: View {
   }
 
   private var computedArtists: [Artist] {
-    vault.lookup.artistsForVenue(venue).sorted(by: libraryCompare(lhs:rhs:))
+    vault.lookup.artistsForVenue(venue).sorted(by: vault.comparator.libraryCompare(lhs:rhs:))
   }
 
   @ViewBuilder private var locationElement: some View {
