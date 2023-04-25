@@ -8,7 +8,13 @@
 import Foundation
 
 struct LibrarySectioner {
-  func librarySection(_ item: any LibraryComparable) -> LibrarySection {
-    item.librarySortString.librarySection
+  let sectionMap: [String: LibrarySection]
+
+  public init(sectionMap: [String: LibrarySection] = [:]) {
+    self.sectionMap = sectionMap
+  }
+
+  func librarySection<T>(_ item: T) -> LibrarySection where T: LibraryComparable, T.ID == String {
+    sectionMap[item.id] ?? item.librarySortString.librarySection
   }
 }
