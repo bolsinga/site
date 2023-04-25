@@ -9,8 +9,7 @@ import Foundation
 
 extension Vault {
   public static func load(url: URL) async throws -> Vault {
-    let (data, _) = try await URLSession.shared.data(from: url)
-    let music: Music = try data.fromJSON()
+    let music = try await Music.load(url: url)
     return await Vault.create(music: music)
   }
 }
