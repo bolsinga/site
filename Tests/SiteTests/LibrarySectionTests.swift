@@ -11,11 +11,12 @@ import XCTest
 
 final class LibrarySectionTests: XCTestCase {
   func testLibrarySection() throws {
-    XCTAssertEqual(librarySection("The Chapel"), .alphabetic("C"))
+    let sectioner = LibrarySectioner()
+    XCTAssertEqual(sectioner.librarySection("The Chapel"), .alphabetic("C"))
 
-    XCTAssertEqual(librarySection("33 Degrees"), .numeric)
+    XCTAssertEqual(sectioner.librarySection("33 Degrees"), .numeric)
 
-    XCTAssertEqual(librarySection("!!!"), .punctuation)
+    XCTAssertEqual(sectioner.librarySection("!!!"), .punctuation)
   }
 
   func testComparable() throws {
