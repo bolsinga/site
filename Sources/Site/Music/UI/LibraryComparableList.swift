@@ -10,6 +10,7 @@ import SwiftUI
 struct LibraryComparableList<T>: View where T: LibraryComparable, T: Identifiable, T: Hashable {
   let items: [T]
   let contentValue: (T) -> String
+  let sectioner = LibrarySectioner()
 
   @State private var searchString: String = ""
 
@@ -20,7 +21,7 @@ struct LibraryComparableList<T>: View where T: LibraryComparable, T: Identifiabl
 
   private var sectionMap: [LibrarySection: [T]] {
     filteredItems.reduce(into: [LibrarySection: [T]]()) {
-      let section = librarySection($1)
+      let section = sectioner.librarySection($1)
       var arr = ($0[section] ?? [])
       arr.append($1)
       $0[section] = arr
