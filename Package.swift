@@ -15,10 +15,9 @@ let package = Package(
   ],
   dependencies: [
     .package(url: "https://github.com/apple/swift-argument-parser", from: "1.2.2"),
-    .package(url: "https://github.com/bolsinga/LoadingState", branch: "main"),
   ],
   targets: [
-    .target(name: "Site", dependencies: [.product(name: "LoadingState", package: "LoadingState")]),
+    .target(name: "Site"),
     .testTarget(name: "SiteTests", dependencies: ["Site"]),
     .executableTarget(
       name: "site_tool",
