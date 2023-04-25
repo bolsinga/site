@@ -16,7 +16,7 @@ struct VenueList: View {
   }
 
   var body: some View {
-    LibraryComparableList(items: venues) {
+    LibraryComparableList(items: venues, sectioner: vault.sectioner) {
       String(
         localized: "\(vault.lookup.showsForVenue($0).count) Show(s)", bundle: .module,
         comment: "Value for the Venue # of Shows.")
