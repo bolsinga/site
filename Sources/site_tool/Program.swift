@@ -7,7 +7,6 @@
 
 import ArgumentParser
 import Foundation
-import LoadingState
 import Site
 
 @main
@@ -42,62 +41,57 @@ struct Program: AsyncParsableCommand {
   var jsonDirectoryURL: URL? = nil
 
   func run() async throws {
-    var diaryLoadingState: LoadingState<Diary> = .idle
-    await diaryLoadingState.load(url: rootURL.appending(path: "diary.json"))
-    if let diary = diaryLoadingState.value {
-      print("\(diary.title) has \(diary.entries.count) entries.")
+    let diary = try await Diary.load(url: rootURL.appending(path: "diary.json"))
+    print("\(diary.title) has \(diary.entries.count) entries.")
 
-      try jsonDirectoryURL?.appending(path: "diary.json").writeJSON(diary)
+    try jsonDirectoryURL?.appending(path: "diary.json").writeJSON(diary)
+
+    let vault = try await Vault.load(url: rootURL.appending(path: "music.json"))
+    let music = vault.music
+
+    print("Albums: \(music.albums.count)")
+    print("Artists: \(music.artists.count)")
+    print("Relations: \(music.relations.count)")
+    print("Shows: \(music.shows.count)")
+    print("Songs: \(music.songs.count)")
+    print("Venues: \(music.venues.count)")
+
+    let sortedShows = music.shows.sorted {
+      vault.comparator.showCompare(lhs: $0, rhs: $1, lookup: vault.lookup)
+    }
+    for show in sortedShows.reversed() {
+      print(vault.description(for: show))
     }
 
-    var musicLoadingState: LoadingState<Music> = .idle
-    await musicLoadingState.load(url: rootURL.appending(path: "music.json"))
-    if let music = musicLoadingState.value {
-      let vault = Vault(music: music)
-      print("Albums: \(music.albums.count)")
-      print("Artists: \(music.artists.count)")
-      print("Relations: \(music.relations.count)")
-      print("Shows: \(music.shows.count)")
-      print("Songs: \(music.songs.count)")
-      print("Venues: \(music.venues.count)")
+    let sortedAlbums = music.albums.sorted {
+      vault.comparator.albumCompare(lhs: $0, rhs: $1, lookup: vault.lookup)
+    }
+    for album in sortedAlbums {
+      print(vault.description(for: album))
+    }
 
-      let sortedShows = music.shows.sorted {
+    let albumMap: [Album.ID: Album] = music.albums.reduce(into: [:]) { $0[$1.id] = $1 }
+    for artist in music.artists.sorted(by: vault.comparator.libraryCompare(lhs:rhs:)) {
+      print(vault.description(for: artist, albumMap: albumMap))
+    }
+
+    for venue in music.venues.sorted(by: vault.comparator.libraryCompare(lhs:rhs:)) {
+      print(vault.description(for: venue))
+    }
+
+    for location in music.venues.map({ $0.location }).sorted(by: <) {
+      print(vault.description(for: location))
+    }
+
+    for artist in music.artists.sorted(by: vault.comparator.libraryCompare(lhs:rhs:)) {
+      let shows = vault.lookup.showsForArtist(artist).sorted {
         vault.comparator.showCompare(lhs: $0, rhs: $1, lookup: vault.lookup)
       }
-      for show in sortedShows.reversed() {
-        print(vault.description(for: show))
+      if !shows.isEmpty {
+        print(vault.description(for: artist, shows: shows))
       }
-
-      let sortedAlbums = music.albums.sorted {
-        vault.comparator.albumCompare(lhs: $0, rhs: $1, lookup: vault.lookup)
-      }
-      for album in sortedAlbums {
-        print(vault.description(for: album))
-      }
-
-      let albumMap: [Album.ID: Album] = music.albums.reduce(into: [:]) { $0[$1.id] = $1 }
-      for artist in music.artists.sorted(by: vault.comparator.libraryCompare(lhs:rhs:)) {
-        print(vault.description(for: artist, albumMap: albumMap))
-      }
-
-      for venue in music.venues.sorted(by: vault.comparator.libraryCompare(lhs:rhs:)) {
-        print(vault.description(for: venue))
-      }
-
-      for location in music.venues.map({ $0.location }).sorted(by: <) {
-        print(vault.description(for: location))
-      }
-
-      for artist in music.artists.sorted(by: vault.comparator.libraryCompare(lhs:rhs:)) {
-        let shows = vault.lookup.showsForArtist(artist).sorted {
-          vault.comparator.showCompare(lhs: $0, rhs: $1, lookup: vault.lookup)
-        }
-        if !shows.isEmpty {
-          print(vault.description(for: artist, shows: shows))
-        }
-      }
-
-      try jsonDirectoryURL?.appending(path: "music.json").writeJSON(music)
     }
+
+    try jsonDirectoryURL?.appending(path: "music.json").writeJSON(music)
   }
 }
