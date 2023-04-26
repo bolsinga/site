@@ -109,4 +109,14 @@ public struct Lookup {
   public func artistsWithShows() -> [Artist] {
     return Set(shows.reduce(into: []) { $0 += $1.artists }).compactMap { artistMap[$0] }
   }
+
+  public func showsOnDate(_ date: Date) -> [Show] {
+    return shows.filter { !$0.date.isUnknown }
+      .filter { $0.date.day != nil }
+      .filter { $0.date.month != nil }
+      .filter {
+        Calendar.autoupdatingCurrent.date(
+          date, matchesComponents: DateComponents(month: $0.date.month!, day: $0.date.day!))
+      }
+  }
 }

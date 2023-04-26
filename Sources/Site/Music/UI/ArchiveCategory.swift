@@ -8,12 +8,15 @@
 import SwiftUI
 
 enum ArchiveCategory: CaseIterable {
+  case today
   case shows
   case venues
   case artists
 
   var localizedString: String {
     switch self {
+    case .today:
+      return String(localized: "Today", bundle: .module, comment: "ArchiveCategory Today")
     case .shows:
       return String(localized: "Shows", bundle: .module, comment: "ArchiveCategory Shows")
     case .venues:
@@ -25,6 +28,8 @@ enum ArchiveCategory: CaseIterable {
 
   @ViewBuilder var label: some View {
     switch self {
+    case .today:
+      Label(self.localizedString, systemImage: "calendar.circle")
     case .shows:
       Label(self.localizedString, systemImage: "person.and.background.dotted")
     case .venues:

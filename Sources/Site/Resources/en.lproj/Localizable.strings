@@ -42,6 +42,12 @@ ArchiveCategory Artists */
 ArchiveCategory Shows */
 "Shows" = "Shows";
 
+/* On This Day */
+"On This Day" = "On This Day";
+
+/* ArchiveCategory Today */
+"Today" = "Today";
+
 /* Title for the Venue Detail
 ArchiveCategory Venues */
 "Venues" = "Venues";
