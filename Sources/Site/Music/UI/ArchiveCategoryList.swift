@@ -14,6 +14,7 @@ public struct ArchiveCategoryList: View {
   @State private var shows: [Show] = []
   @State private var venues: [Venue] = []
   @State private var artists: [Artist] = []
+  @State private var todayShows: [Show] = []
 
   public init(vault: Vault) { self.vault = vault }
 
@@ -23,6 +24,8 @@ public struct ArchiveCategoryList: View {
 
   @ViewBuilder private func archiveCount(_ archiveCategory: ArchiveCategory) -> some View {
     switch archiveCategory {
+    case .today:
+      Text(todayShows.count.formatted(.number))
     case .shows:
       Text(shows.count.formatted(.number))
     case .venues:
@@ -45,6 +48,8 @@ public struct ArchiveCategoryList: View {
       }
       .navigationDestination(for: ArchiveCategory.self) { archiveCategory in
         switch archiveCategory {
+        case .today:
+          TodayList(shows: todayShows)
         case .shows:
           ShowYearList(shows: shows)
         case .venues:
@@ -65,10 +70,12 @@ public struct ArchiveCategoryList: View {
       async let venues = music.venues.sorted(by: vault.comparator.libraryCompare(lhs:rhs:))
       async let artists = vault.lookup.artistsWithShows().sorted(
         by: vault.comparator.libraryCompare(lhs:rhs:))
+      async let todayShows = vault.lookup.showsOnDate(Date.now)
 
       self.shows = await shows
       self.venues = await venues
       self.artists = await artists
+      self.todayShows = await todayShows
     }
     .environment(\.vault, vault)
   }
