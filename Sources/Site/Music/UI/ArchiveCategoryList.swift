@@ -70,7 +70,9 @@ public struct ArchiveCategoryList: View {
       async let venues = music.venues.sorted(by: vault.comparator.libraryCompare(lhs:rhs:))
       async let artists = vault.lookup.artistsWithShows().sorted(
         by: vault.comparator.libraryCompare(lhs:rhs:))
-      async let todayShows = vault.lookup.showsOnDate(Date.now)
+      async let todayShows = vault.lookup.showsOnDate(Date.now).sorted {
+        vault.comparator.showCompare(lhs: $0, rhs: $1, lookup: vault.lookup)
+      }
 
       self.shows = await shows
       self.venues = await venues
