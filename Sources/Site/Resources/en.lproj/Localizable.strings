@@ -11,6 +11,9 @@ ArchiveCategory Artists */
 /* Title of the comment section of ShowDetail */
 "Comment" = "Comment";
 
+/* Label in the chart for the Count in WeekdayChart. */
+"Count" = "Count";
+
 /* Title of the data section of ShowDetail */
 "Date" = "Date";
 
@@ -25,6 +28,9 @@ ArchiveCategory Artists */
 
 /* String used to describe LibrarySection.numeric. */
 "Numeric" = "Numeric";
+
+/* On This Day */
+"On This Day" = "On This Day";
 
 /* String used to describe LibrarySection.punctuation. */
 "Punctuation" = "Punctuation";
@@ -42,8 +48,11 @@ ArchiveCategory Artists */
 ArchiveCategory Shows */
 "Shows" = "Shows";
 
-/* On This Day */
-"On This Day" = "On This Day";
+/* Title of the WeekdayChart */
+"Shows by Day of Week" = "Shows by Day of Week";
+
+/* ArchiveCategory Stats */
+"Stats" = "Stats";
 
 /* ArchiveCategory Today */
 "Today" = "Today";
@@ -51,6 +60,9 @@ ArchiveCategory Shows */
 /* Title for the Venue Detail
 ArchiveCategory Venues */
 "Venues" = "Venues";
+
+/* Label in the chart for the Weekday in WeekdayChart. */
+"Weekday" = "Weekday";
 
 /* String for when a Show.PartialDate is unknown, and only the year is being shown. */
 "Year Unknown" = "Year Unknown";
