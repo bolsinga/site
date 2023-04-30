@@ -9,11 +9,11 @@ import Charts
 import SwiftUI
 
 struct MonthChart: View {
-  @Environment(\.vault) private var vault: Vault
+  let shows: [Show]
 
   private var computeMonthShowCounts: [Int: (String, Int)] {  // month as int: (month as string, count of shows for that month)
     let format = Date.FormatStyle.dateTime.month(.abbreviated)
-    return vault.music.shows.filter { !$0.date.isUnknown }.reduce(into: [Int: (String, Int)]()) {
+    return shows.filter { !$0.date.isUnknown }.reduce(into: [Int: (String, Int)]()) {
       if let date = $1.date.date {
         let month = Calendar.autoupdatingCurrent.component(.month, from: date)
         let pair = $0[month] ?? (format.format(date), 0)
@@ -49,6 +49,6 @@ struct MonthChart: View {
 
 struct MonthChart_Previews: PreviewProvider {
   static var previews: some View {
-    MonthChart()
+    MonthChart(shows: [])
   }
 }

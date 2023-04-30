@@ -9,11 +9,11 @@ import Charts
 import SwiftUI
 
 struct WeekdayChart: View {
-  @Environment(\.vault) private var vault: Vault
+  let shows: [Show]
 
   private var computeWeekdayShowCounts: [Int: (String, Int)] {  // weekday as int: (weekday as string, count of shows on that weekday)
     let format = Date.FormatStyle.dateTime.weekday(.abbreviated)
-    return vault.music.shows.filter { !$0.date.isUnknown }.reduce(into: [Int: (String, Int)]()) {
+    return shows.filter { !$0.date.isUnknown }.reduce(into: [Int: (String, Int)]()) {
       if let date = $1.date.date {
         let weekday = Calendar.autoupdatingCurrent.component(.weekday, from: date)
         let pair = $0[weekday] ?? (format.format(date), 0)
@@ -49,6 +49,6 @@ struct WeekdayChart: View {
 
 struct WeekdayChart_Previews: PreviewProvider {
   static var previews: some View {
-    WeekdayChart()
+    WeekdayChart(shows: [])
   }
 }
