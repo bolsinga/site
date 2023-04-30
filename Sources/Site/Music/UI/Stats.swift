@@ -8,11 +8,13 @@
 import SwiftUI
 
 struct Stats: View {
+  let shows: [Show]
+
   var body: some View {
     ScrollView {
       VStack {
-        WeekdayChart()
-        MonthChart()
+        WeekdayChart(shows: shows)
+        MonthChart(shows: shows)
       }
     }
   }
@@ -20,6 +22,6 @@ struct Stats: View {
 
 struct Stats_Previews: PreviewProvider {
   static var previews: some View {
-    Stats()
+    Stats(shows: [])
   }
 }
