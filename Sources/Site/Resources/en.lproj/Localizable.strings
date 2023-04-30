@@ -11,7 +11,8 @@ ArchiveCategory Artists */
 /* Title of the comment section of ShowDetail */
 "Comment" = "Comment";
 
-/* Label in the chart for the Count in WeekdayChart. */
+/* Label in the chart for the Count in WeekdayChart.
+Label in the chart for the Count in MonthChart. */
 "Count" = "Count";
 
 /* Title of the data section of ShowDetail */
@@ -25,6 +26,9 @@ ArchiveCategory Artists */
 
 /* Title of the Location / Address Section for VenueDetail. */
 "Location" = "Location";
+
+/* Label in the chart for the Month in MonthChart. */
+"Month" = "Month";
 
 /* String used to describe LibrarySection.numeric. */
 "Numeric" = "Numeric";
@@ -50,6 +54,9 @@ ArchiveCategory Shows */
 
 /* Title of the WeekdayChart */
 "Shows by Day of Week" = "Shows by Day of Week";
+
+/* Title of the MonthChart */
+"Shows by Month" = "Shows by Month";
 
 /* ArchiveCategory Stats */
 "Stats" = "Stats";

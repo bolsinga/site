@@ -12,6 +12,7 @@ struct Stats: View {
     ScrollView {
       VStack {
         WeekdayChart()
+        MonthChart()
       }
     }
   }
