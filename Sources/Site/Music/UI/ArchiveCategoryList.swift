@@ -26,6 +26,8 @@ public struct ArchiveCategoryList: View {
     switch archiveCategory {
     case .today:
       Text(todayShows.count.formatted(.number))
+    case .stats:
+      EmptyView()
     case .shows:
       Text(shows.count.formatted(.number))
     case .venues:
@@ -50,6 +52,8 @@ public struct ArchiveCategoryList: View {
         switch archiveCategory {
         case .today:
           TodayList(shows: todayShows)
+        case .stats:
+          Stats()
         case .shows:
           ShowYearList(shows: shows)
         case .venues:
