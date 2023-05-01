@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct Stats: View {
+  @Environment(\.vault) private var vault: Vault
+
   let shows: [Show]
 
   var body: some View {
@@ -17,6 +19,10 @@ struct Stats: View {
         { $0.date.year != nil }.compactMap { $0.date.date }
         WeekdayChart(dates: knownDates)
         MonthChart(dates: knownDates)
+        StateChart(
+          locations: shows.compactMap {
+            do { return try vault.lookup.venueForShow($0).location } catch { return nil }
+          })
       }
     }
   }
