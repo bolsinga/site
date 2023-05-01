@@ -51,7 +51,9 @@ struct MonthChart: View {
             comment: "Label in the chart for the Count in MonthChart."), item.value.1)
       )
       .annotation(position: .top) {
-        Text(item.value.1.formatted(.number))
+        if item.value.1 > 0 {
+          Text(item.value.1.formatted(.number))
+        }
       }
     }
     .frame(minHeight: 200)
