@@ -13,7 +13,8 @@ struct Stats: View {
   var body: some View {
     ScrollView {
       VStack {
-        let knownDates = shows.filter { !$0.date.isUnknown }.compactMap { $0.date.date }
+        let knownDates = shows.filter { $0.date.day != nil }.filter { $0.date.month != nil }.filter
+        { $0.date.year != nil }.compactMap { $0.date.date }
         WeekdayChart(dates: knownDates)
         MonthChart(dates: knownDates)
       }
