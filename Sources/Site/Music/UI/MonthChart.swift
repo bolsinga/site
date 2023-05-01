@@ -10,11 +10,23 @@ import SwiftUI
 
 private let MonthChartFormat = Date.FormatStyle.dateTime.month(.abbreviated)
 
+// month as int: month as formatted localized string
+private var MonthAbbreviations: [Int: (String, Int)] {
+  var result = [Int: (String, Int)]()
+  for month in 1...12 {
+    guard
+      let date = DateComponents(calendar: Calendar.current, year: 2023, month: month, day: 1).date
+    else { fatalError("need to be able to get abbreviated months") }
+    result[month] = (MonthChartFormat.format(date), 0)
+  }
+  return result
+}
+
 struct MonthChart: View {
   let dates: [Date]
 
   private var computeMonthCounts: [Int: (String, Int)] {  // month as int: (month as string, count for that month)
-    return dates.reduce(into: [Int: (String, Int)]()) {
+    return dates.reduce(into: MonthAbbreviations) {
       let month = Calendar.autoupdatingCurrent.component(.month, from: $1)
       let pair = $0[month] ?? (MonthChartFormat.format($1), 0)
       $0[month] = (pair.0, pair.1 + 1)
