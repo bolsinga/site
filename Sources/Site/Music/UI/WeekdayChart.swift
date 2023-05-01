@@ -58,7 +58,6 @@ struct WeekdayChart: View {
       .annotation(position: .top) {
         Text(item.value.1.formatted(.number))
       }
-      .cornerRadius(10)
     }
     .frame(minHeight: 200)
     Text("Shows by Day of Week", bundle: .module, comment: "Title of the WeekdayChart")
