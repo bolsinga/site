@@ -9,22 +9,20 @@ import Charts
 import SwiftUI
 
 struct WeekdayChart: View {
-  let shows: [Show]
+  let dates: [Date]
 
-  private var computeWeekdayShowCounts: [Int: (String, Int)] {  // weekday as int: (weekday as string, count of shows on that weekday)
+  private var computeWeekdayCounts: [Int: (String, Int)] {  // weekday as int: (weekday as string, count of that weekday)
     let format = Date.FormatStyle.dateTime.weekday(.abbreviated)
-    return shows.filter { !$0.date.isUnknown }.reduce(into: [Int: (String, Int)]()) {
-      if let date = $1.date.date {
-        let weekday = Calendar.autoupdatingCurrent.component(.weekday, from: date)
-        let pair = $0[weekday] ?? (format.format(date), 0)
+    return dates.reduce(into: [Int: (String, Int)]()) {
+        let weekday = Calendar.autoupdatingCurrent.component(.weekday, from: $1)
+        let pair = $0[weekday] ?? (format.format($1), 0)
         $0[weekday] = (pair.0, pair.1 + 1)
-      }
     }
   }
 
   var body: some View {
-    let weekdayShowCounts = computeWeekdayShowCounts.sorted { $0.key < $1.key }  // array of dictionary elements
-    Chart(weekdayShowCounts, id: \.key) { item in
+    let weekdayCounts = computeWeekdayCounts.sorted { $0.key < $1.key }  // array of dictionary elements
+    Chart(weekdayCounts, id: \.key) { item in
       BarMark(
         x: .value(
           Text(
@@ -49,6 +47,6 @@ struct WeekdayChart: View {
 
 struct WeekdayChart_Previews: PreviewProvider {
   static var previews: some View {
-    WeekdayChart(shows: [])
+    WeekdayChart(dates: [])
   }
 }
