@@ -8,15 +8,16 @@
 import Charts
 import SwiftUI
 
+private let WeekdayChartFormat = Date.FormatStyle.dateTime.weekday(.abbreviated)
+
 struct WeekdayChart: View {
   let dates: [Date]
 
   private var computeWeekdayCounts: [Int: (String, Int)] {  // weekday as int: (weekday as string, count of that weekday)
-    let format = Date.FormatStyle.dateTime.weekday(.abbreviated)
     return dates.reduce(into: [Int: (String, Int)]()) {
-        let weekday = Calendar.autoupdatingCurrent.component(.weekday, from: $1)
-        let pair = $0[weekday] ?? (format.format($1), 0)
-        $0[weekday] = (pair.0, pair.1 + 1)
+      let weekday = Calendar.autoupdatingCurrent.component(.weekday, from: $1)
+      let pair = $0[weekday] ?? (WeekdayChartFormat.format($1), 0)
+      $0[weekday] = (pair.0, pair.1 + 1)
     }
   }
 

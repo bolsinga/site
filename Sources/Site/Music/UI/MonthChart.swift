@@ -8,14 +8,15 @@
 import Charts
 import SwiftUI
 
+private let MonthChartFormat = Date.FormatStyle.dateTime.month(.abbreviated)
+
 struct MonthChart: View {
   let dates: [Date]
 
   private var computeMonthCounts: [Int: (String, Int)] {  // month as int: (month as string, count for that month)
-    let format = Date.FormatStyle.dateTime.month(.abbreviated)
     return dates.reduce(into: [Int: (String, Int)]()) {
       let month = Calendar.autoupdatingCurrent.component(.month, from: $1)
-      let pair = $0[month] ?? (format.format($1), 0)
+      let pair = $0[month] ?? (MonthChartFormat.format($1), 0)
       $0[month] = (pair.0, pair.1 + 1)
     }
   }
