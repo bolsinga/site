@@ -11,7 +11,7 @@ import SwiftUI
 private let MonthChartFormat = Date.FormatStyle.dateTime.month(.abbreviated)
 
 // month as int: month as formatted localized string
-private var MonthAbbreviations: [Int: (String, Int)] {
+private var MonthAbbreviationsGetter: [Int: (String, Int)] {
   var result = [Int: (String, Int)]()
   for month in 1...12 {
     guard
@@ -21,6 +21,8 @@ private var MonthAbbreviations: [Int: (String, Int)] {
   }
   return result
 }
+
+private let MonthAbbreviations = MonthAbbreviationsGetter
 
 struct MonthChart: View {
   let dates: [Date]
