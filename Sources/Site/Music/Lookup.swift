@@ -111,12 +111,9 @@ public struct Lookup {
   }
 
   public func showsOnDate(_ date: Date) -> [Show] {
-    return shows.filter { !$0.date.isUnknown }
-      .filter { $0.date.day != nil }
-      .filter { $0.date.month != nil }
-      .filter {
-        Calendar.autoupdatingCurrent.date(
-          date, matchesComponents: DateComponents(month: $0.date.month!, day: $0.date.day!))
-      }
+    return shows.filter { $0.date.day != nil }.filter { $0.date.month != nil }.filter {
+      Calendar.autoupdatingCurrent.date(
+        date, matchesComponents: DateComponents(month: $0.date.month!, day: $0.date.day!))
+    }
   }
 }
