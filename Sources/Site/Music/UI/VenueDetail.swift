@@ -9,6 +9,7 @@ import SwiftUI
 
 struct VenueDetail: View {
   @Environment(\.vault) private var vault: Vault
+  @Environment(\.statsThreshold) private var statsThreshold: Int
 
   let venue: Venue
 
@@ -56,6 +57,9 @@ struct VenueDetail: View {
       ) {
         ForEach(yearsOfShows, id: \.self) { year in
           Text(String(year))
+        }
+        if shows.count > statsThreshold {
+          Stats(shows: shows)
         }
       }
     }
