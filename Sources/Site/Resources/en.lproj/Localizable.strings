@@ -12,7 +12,8 @@ ArchiveCategory Artists */
 "Comment" = "Comment";
 
 /* Label in the chart for the Count in WeekdayChart.
-Label in the chart for the Count in MonthChart. */
+Label in the chart for the Count in MonthChart.
+Label in the chart for the Count in StateChart. */
 "Count" = "Count";
 
 /* Title of the data section of ShowDetail */
@@ -57,6 +58,12 @@ ArchiveCategory Shows */
 
 /* Title of the MonthChart */
 "Shows by Month" = "Shows by Month";
+
+/* Title of the StateChart */
+"Shows by State" = "Shows by State";
+
+/* Label in the chart for the State in StateChart. */
+"State" = "State";
 
 /* ArchiveCategory Stats */
 "Stats" = "Stats";
