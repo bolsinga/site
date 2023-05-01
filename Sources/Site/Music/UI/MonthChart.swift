@@ -53,7 +53,6 @@ struct MonthChart: View {
       .annotation(position: .top) {
         Text(item.value.1.formatted(.number))
       }
-      .cornerRadius(10)
     }
     .frame(minHeight: 200)
     Text("Shows by Month", bundle: .module, comment: "Title of the MonthChart")
