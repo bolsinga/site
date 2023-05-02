@@ -53,6 +53,7 @@ struct MonthChart: View {
       .annotation(position: .top) {
         if item.value.1 > 0 {
           Text(item.value.1.formatted(.number))
+            .font(.caption2)
         }
       }
     }

@@ -28,6 +28,7 @@ struct StateChart: View {
       .annotation(position: .top) {
         if item.value > 0 {
           Text(item.value.formatted(.number))
+            .font(.caption2)
         }
       }
     }
