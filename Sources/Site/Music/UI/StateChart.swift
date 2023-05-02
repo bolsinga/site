@@ -9,18 +9,10 @@ import Charts
 import SwiftUI
 
 struct StateChart: View {
-  let locations: [Location]
-
-  private var computeStateCounts: [String: Int] {  // State abbreviation : count
-    return locations.reduce(into: [String: Int]()) {
-      let count = $0[$1.state] ?? 0
-      $0[$1.state] = count + 1
-    }
-  }
+  let counts: [String: Int]
 
   var body: some View {
-    let counts = computeStateCounts.sorted { $0.value < $1.value }  // array of dictionary elements
-    Chart(counts, id: \.key) { item in
+    Chart(counts.sorted { $0.value < $1.value }, id: \.key) { item in
       BarMark(
         x: .value(
           Text(
@@ -46,6 +38,6 @@ struct StateChart: View {
 
 struct StateChart_Previews: PreviewProvider {
   static var previews: some View {
-    StateChart(locations: [])
+    StateChart(counts: [:])
   }
 }
