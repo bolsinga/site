@@ -59,6 +59,7 @@ struct MonthChart: View {
     }
     .frame(minHeight: 200)
     Text("Shows by Month", bundle: .module, comment: "Title of the MonthChart")
+      .font(.caption)
   }
 }
 

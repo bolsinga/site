@@ -64,6 +64,7 @@ struct WeekdayChart: View {
     }
     .frame(minHeight: 200)
     Text("Shows by Day of Week", bundle: .module, comment: "Title of the WeekdayChart")
+      .font(.caption)
   }
 }
 
