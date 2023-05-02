@@ -42,6 +42,10 @@ struct VenueDetail: View {
     }
   }
 
+  @ViewBuilder private var mapElement: some View {
+    LocationMap(location: venue.location)
+  }
+
   @ViewBuilder private var showsElement: some View {
     let yearsOfShows = computedYearsOfShows
     if !yearsOfShows.isEmpty {
@@ -90,6 +94,7 @@ struct VenueDetail: View {
   var body: some View {
     List {
       locationElement
+      mapElement
       showsElement
       artistsElement
       relatedsElement
