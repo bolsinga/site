@@ -12,6 +12,7 @@ public struct Vault {
   public let lookup: Lookup
   public let comparator: LibraryComparator
   internal let sectioner: LibrarySectioner
+  internal let atlas = Atlas()
 
   public init(music: Music) {
     // non-parallel, used for previews, tests
