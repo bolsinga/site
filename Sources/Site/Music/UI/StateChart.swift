@@ -34,6 +34,7 @@ struct StateChart: View {
     }
     .frame(minHeight: 200)
     Text("Shows by State", bundle: .module, comment: "Title of the StateChart")
+      .font(.caption)
   }
 }
 
