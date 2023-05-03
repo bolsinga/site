@@ -9,6 +9,8 @@ import SwiftUI
 
 struct ArtistDetail: View {
   @Environment(\.vault) private var vault: Vault
+  @Environment(\.statsThreshold) private var statsThreshold: Int
+
   let artist: Artist
 
   private var music: Music {
@@ -37,6 +39,9 @@ struct ArtistDetail: View {
           NavigationLink(value: show) {
             ShowBlurb(show: show)
           }
+        }
+        if shows.count > statsThreshold {
+          Stats(shows: shows)
         }
       }
     }
