@@ -50,7 +50,13 @@ public struct Vault {
       timestamp: music.timestamp,
       venues: sortedVenues)
 
-    return Vault(
+    let v = Vault(
       music: sortedMusic, lookup: lookup, comparator: comparator, sectioner: await sectioner)
+
+//    Task {
+//      await v.atlas.geocode(batch: v.music.venues.map { $0.location })
+//    }
+
+    return v
   }
 }
