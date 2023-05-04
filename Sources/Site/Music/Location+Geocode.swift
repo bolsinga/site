@@ -6,8 +6,8 @@
 //
 
 import Contacts
+import CoreLocation
 import Foundation
-import MapKit
 
 extension CNPostalAddress {
   private enum GeocodeError: Error {
@@ -20,18 +20,10 @@ extension CNPostalAddress {
     }
     return placemark
   }
-
-  func geocode() async throws -> MKMapItem {
-    MKMapItem(placemark: MKPlacemark(placemark: try await geocode()))
-  }
 }
 
 extension Location {
   public func geocode() async throws -> CLPlacemark {
-    try await postalAddress.geocode()
-  }
-
-  public func geocode() async throws -> MKMapItem {
     try await postalAddress.geocode()
   }
 }
