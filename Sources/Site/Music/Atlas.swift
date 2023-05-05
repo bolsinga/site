@@ -20,8 +20,4 @@ actor Atlas {
     cache[location] = result
     return result
   }
-
-  public func geocode(_ location: Location) async throws -> MKMapItem {
-    MKMapItem(placemark: MKPlacemark(placemark: try await geocode(location)))
-  }
 }
