@@ -16,8 +16,6 @@ public struct ArchiveCategoryList: View {
   @State private var artists: [Artist] = []
   @State private var todayShows: [Show] = []
 
-  public init(vault: Vault) { self.vault = vault }
-
   private var music: Music {
     vault.music
   }
