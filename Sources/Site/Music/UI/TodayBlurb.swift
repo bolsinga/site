@@ -1,25 +1,61 @@
 //
-//  TodayList.swift
+//  TodayBlurb.swift
 //
 //
-//  Created by Greg Bolsinga on 4/26/23.
+//  Created by Greg Bolsinga on 5/11/23.
 //
 
 import SwiftUI
 
-struct TodayList: View {
-  let shows: [Show]
+struct TodayBlurb: View {
+  @Environment(\.vault) private var vault: Vault
+
+  let show: Show
+
+  private var artists: [Artist] {
+    do {
+      return try vault.lookup.artistsForShow(show)
+    } catch {
+      return []
+    }
+  }
+
+  private var venue: Venue? {
+    do {
+      return try vault.lookup.venueForShow(show)
+    } catch {
+      return nil
+    }
+  }
+
+  @ViewBuilder private var artistsView: some View {
+    VStack(alignment: .leading) {
+      ForEach(artists) { artist in
+        Text(artist.name).font(.headline)
+      }
+    }
+  }
+
+  @ViewBuilder private var detailsView: some View {
+    VStack(alignment: .trailing) {
+      if let venue {
+        Text(venue.name)
+      }
+      Text(show.date.formatted(.compact))
+    }
+    .font(.footnote)
+  }
 
   var body: some View {
-    List(shows) { show in
-      NavigationLink(value: show) { TodayBlurb(show: show) }
+    HStack {
+      artistsView
+      Spacer()
+      detailsView
     }
-    .listStyle(.plain)
-    .navigationTitle(Text("On This Day", bundle: .module, comment: "On This Day"))
   }
 }
 
-struct TodayList_Previews: PreviewProvider {
+struct TodayBlurb_Previews: PreviewProvider {
   static var previews: some View {
     let artist1 = Artist(id: "ar0", name: "Artist With Longer Name")
     let artist2 = Artist(id: "ar1", name: "Artist 2")
@@ -53,10 +89,13 @@ struct TodayList_Previews: PreviewProvider {
 
     let vault = Vault(music: music)
 
-    NavigationStack {
-      TodayList(shows: music.shows)
-        .environment(\.vault, vault)
-        .musicDestinations()
-    }
+    TodayBlurb(show: show1)
+      .environment(\.vault, vault)
+
+    TodayBlurb(show: show2)
+      .environment(\.vault, vault)
+
+    TodayBlurb(show: show3)
+      .environment(\.vault, vault)
   }
 }
