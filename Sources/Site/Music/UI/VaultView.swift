@@ -17,21 +17,28 @@ public struct VaultView: View {
     self.url = url
   }
 
+  private func refresh() async {
+    do {
+      vault = try await Vault.load(url: url)
+    } catch {
+      self.error = error
+    }
+  }
+
   public var body: some View {
     Group {
       if let vault {
         ArchiveCategoryList(vault: vault)
+          .refreshable {
+            await refresh()
+          }
       } else if let error {
         Text(error.localizedDescription)
       } else {
         ProgressView()
       }
     }.task {
-      do {
-        vault = try await Vault.load(url: url)
-      } catch {
-        self.error = error
-      }
+      await refresh()
     }
   }
 }
