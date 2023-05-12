@@ -46,17 +46,31 @@ struct VenueDetail: View {
     }
   }
 
-  @ViewBuilder private var showsElement: some View {
+  @ViewBuilder private var statsElement: some View {
     let yearsOfShows = computedYearsOfShows
-    if !yearsOfShows.isEmpty {
+    let artists = computedArtists
+
+    if shows.count > 1 || yearsOfShows.count > 1 || artists.count > 1 {
       Section(
         header: Text(
-          "\(shows.count) Show(s)", bundle: .module,
-          comment: "Title of the Shows by Year Section for VenueDetail.")
+          "Stats", bundle: .module, comment: "Title of the stats section for VenueDetail")
       ) {
-        ForEach(yearsOfShows, id: \.self) { year in
-          Text(year.formatted(.yearOnly))
+        if shows.count > 1 {
+          Text("\(shows.count) Show(s)", bundle: .module, comment: "Shows Count for VenueDetail.")
         }
+
+        if yearsOfShows.count > 1 {
+          Text(
+            "\(yearsOfShows.count) Years(s)", bundle: .module,
+            comment: "Years Count for VenueDetail.")
+        }
+
+        if artists.count > 1 {
+          Text(
+            "\(artists.count) Artist(s)", bundle: .module, comment: "Artists Count for VenueDetail."
+          )
+        }
+
         if shows.count > statsThreshold {
           Stats(shows: shows)
         }
@@ -64,18 +78,9 @@ struct VenueDetail: View {
     }
   }
 
-  @ViewBuilder private var artistsElement: some View {
-    let artists = computedArtists
-    if !artists.isEmpty {
-      Section(
-        header: Text(
-          "\(artists.count) Artist(s)", bundle: .module,
-          comment: "Title of the Artists Section for VenueDetail.")
-      ) {
-        ForEach(artists) { artist in
-          NavigationLink(artist.name, value: artist)
-        }
-      }
+  @ViewBuilder private var showsElement: some View {
+    ForEach(shows) { show in
+      NavigationLink(value: show) { VenueBlurb(show: show) }
     }
   }
 
@@ -97,8 +102,8 @@ struct VenueDetail: View {
   var body: some View {
     List {
       locationElement
+      statsElement
       showsElement
-      artistsElement
       relatedsElement
     }
     #if os(iOS)

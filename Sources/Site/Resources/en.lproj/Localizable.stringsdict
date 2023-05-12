@@ -38,5 +38,23 @@
 			<string>%lld Artists</string>
 		</dict>
 	</dict>
+	<key>%lld Years(s)</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@Years@</string>
+		<key>Years</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>lld</string>
+			<key>zero</key>
+			<string>No Years</string>
+			<key>one</key>
+			<string>%lld Year</string>
+			<key>other</key>
+			<string>%lld Years</string>
+		</dict>
+	</dict>
 </dict>
 </plist>

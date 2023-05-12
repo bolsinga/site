@@ -65,7 +65,8 @@ ArchiveCategory Shows */
 /* Label in the chart for the State in StateChart. */
 "State" = "State";
 
-/* ArchiveCategory Stats */
+/* Title of the stats section for VenueDetail
+ArchiveCategory Stats */
 "Stats" = "Stats";
 
 /* ArchiveCategory Today */
