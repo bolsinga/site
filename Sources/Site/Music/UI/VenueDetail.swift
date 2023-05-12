@@ -42,11 +42,8 @@ struct VenueDetail: View {
         comment: "Title of the Location / Address Section for VenueDetail.")
     ) {
       AddressView(location: venue.location)
+      LocationMap(location: venue.location)
     }
-  }
-
-  @ViewBuilder private var mapElement: some View {
-    LocationMap(location: venue.location)
   }
 
   @ViewBuilder private var showsElement: some View {
@@ -100,7 +97,6 @@ struct VenueDetail: View {
   var body: some View {
     List {
       locationElement
-      mapElement
       showsElement
       artistsElement
       relatedsElement
