@@ -38,7 +38,7 @@
 			<string>%lld Artists</string>
 		</dict>
 	</dict>
-	<key>%lld Years(s)</key>
+	<key>%lld Year(s)</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@Years@</string>

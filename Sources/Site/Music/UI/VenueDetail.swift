@@ -61,7 +61,7 @@ struct VenueDetail: View {
 
         if yearsOfShows.count > 1 {
           Text(
-            "\(yearsOfShows.count) Years(s)", bundle: .module,
+            "\(yearsOfShows.count) Year(s)", bundle: .module,
             comment: "Years Count for VenueDetail.")
         }
 
