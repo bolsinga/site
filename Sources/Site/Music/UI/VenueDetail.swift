@@ -25,8 +25,10 @@ struct VenueDetail: View {
     vault.lookup.showsForVenue(venue)
   }
 
-  private var computedYearsOfShows: [Int] {
-    return Array(Set(shows.map { $0.date.normalizedYear })).sorted(by: <)
+  private var computedYearsOfShows: [PartialDate] {
+    return Array(
+      Set(shows.map { $0.date.year != nil ? PartialDate(year: $0.date.year!) : PartialDate() })
+    ).sorted(by: <)
   }
 
   private var computedArtists: [Artist] {
@@ -56,7 +58,7 @@ struct VenueDetail: View {
           comment: "Title of the Shows by Year Section for VenueDetail.")
       ) {
         ForEach(yearsOfShows, id: \.self) { year in
-          Text(String(year))
+          Text(year.formatted(.yearOnly))
         }
         if shows.count > statsThreshold {
           Stats(shows: shows)
