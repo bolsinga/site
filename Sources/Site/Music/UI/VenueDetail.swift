@@ -79,8 +79,12 @@ struct VenueDetail: View {
   }
 
   @ViewBuilder private var showsElement: some View {
-    ForEach(shows) { show in
-      NavigationLink(value: show) { VenueBlurb(show: show) }
+    Section(
+      header: Text("Shows", bundle: .module, comment: "Title of the Shows section of VenueDetail")
+    ) {
+      ForEach(shows) { show in
+        NavigationLink(value: show) { VenueBlurb(show: show) }
+      }
     }
   }
 

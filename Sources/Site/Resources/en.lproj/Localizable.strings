@@ -50,6 +50,7 @@ Label in the chart for the Count in StateChart. */
 "Show Years" = "Show Years";
 
 /* Title for the ShowList
+Title of the Shows section of VenueDetail
 ArchiveCategory Shows */
 "Shows" = "Shows";
 
