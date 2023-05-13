@@ -23,8 +23,53 @@ struct ArtistDetail: View {
     }
   }
 
+  private func computedYearsOfShows(_ shows: [Show]) -> [PartialDate] {
+    return Array(
+      Set(shows.map { $0.date.year != nil ? PartialDate(year: $0.date.year!) : PartialDate() })
+    ).sorted(by: <)
+  }
+
+  private func computedVenuesOfShows(_ shows: [Show]) -> [Venue] {
+    Array(
+      Set(shows.compactMap { do { return try vault.lookup.venueForShow($0) } catch { return nil } })
+    )
+  }
+
   private var computedRelatedArtists: [Artist] {
     music.related(artist).sorted(by: vault.comparator.libraryCompare(lhs:rhs:))
+  }
+
+  @ViewBuilder private var statsElement: some View {
+    let shows = computedShows
+    let yearsOfShows = computedYearsOfShows(shows)
+    let venues = computedVenuesOfShows(shows)
+
+    if shows.count > 1 || yearsOfShows.count > 1 || venues.count > 1 {
+      Section(
+        header: Text(
+          "Stats", bundle: .module, comment: "Title of the stats section for ArtistDetail")
+      ) {
+        if shows.count > 1 {
+          Text("\(shows.count) Show(s)", bundle: .module, comment: "Shows Count for ArtistDetail.")
+        }
+
+        if yearsOfShows.count > 1 {
+          Text(
+            "\(yearsOfShows.count) Year(s)", bundle: .module,
+            comment: "Years Count for ArtistDetail.")
+        }
+
+        if venues.count > 1 {
+          Text(
+            "\(venues.count) Venue(s)", bundle: .module, comment: "Venues Count for ArtistDetail."
+          )
+        }
+
+        if shows.count > statsThreshold {
+          Stats(shows: shows)
+        }
+      }
+    }
   }
 
   @ViewBuilder private var showsElement: some View {
@@ -32,16 +77,12 @@ struct ArtistDetail: View {
     if !shows.isEmpty {
       Section(
         header: Text(
-          "\(shows.count) Show(s)", bundle: .module,
-          comment: "Title of the Shows Section for ArtistDetail.")
+          "Shows", bundle: .module, comment: "Title of the Shows section of ArtistDetail")
       ) {
         ForEach(shows) { show in
           NavigationLink(value: show) {
             ShowBlurb(show: show)
           }
-        }
-        if shows.count > statsThreshold {
-          Stats(shows: shows)
         }
       }
     }
@@ -64,6 +105,7 @@ struct ArtistDetail: View {
 
   var body: some View {
     List {
+      statsElement
       showsElement
       relatedsElement
     }
