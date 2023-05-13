@@ -41,7 +41,9 @@ struct TodayBlurb: View {
       if let venue {
         Text(venue.name)
       }
-      Text(show.date.formatted(.compact))
+      if let date = show.date.date {
+        Text(date.formatted(.relative(presentation: .numeric)))
+      }
     }
     .font(.footnote)
   }
