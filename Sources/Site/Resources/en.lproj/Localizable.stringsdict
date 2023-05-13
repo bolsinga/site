@@ -56,5 +56,23 @@
 			<string>%lld Years</string>
 		</dict>
 	</dict>
+	<key>%lld Venue(s)</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@Venues@</string>
+		<key>Venues</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>lld</string>
+			<key>zero</key>
+			<string>No Venue</string>
+			<key>one</key>
+			<string>%lld Venue</string>
+			<key>other</key>
+			<string>%lld Venues</string>
+		</dict>
+	</dict>
 </dict>
 </plist>
