@@ -117,4 +117,20 @@ final class PartialDateTests: XCTestCase {
     XCTAssertEqual(date2.formatted(.yearOnly), "1997")
     XCTAssertEqual(unknownDate.formatted(.yearOnly), "Year Unknown")
   }
+
+  func testSpans() throws {
+    let date1 = PartialDate(year: 1995, month: 12, day: 31)
+    let date2 = PartialDate(year: 1997)
+    let unknownDate = PartialDate()
+
+    XCTAssertEqual([date1, date2].yearSpan(), 3)
+    XCTAssertEqual([date1, date1].yearSpan(), 1)
+    XCTAssertEqual([date2, date2].yearSpan(), 1)
+    XCTAssertEqual([unknownDate].yearSpan(), 1)
+    XCTAssertEqual([unknownDate, unknownDate].yearSpan(), 1)
+    XCTAssertEqual([unknownDate, date1].yearSpan(), 1)
+    XCTAssertEqual([unknownDate, date1, date2].yearSpan(), 3)
+
+    XCTAssertEqual([PartialDate]().yearSpan(), 0)
+  }
 }

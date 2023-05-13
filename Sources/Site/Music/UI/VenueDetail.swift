@@ -50,7 +50,9 @@ struct VenueDetail: View {
     let yearsOfShows = computedYearsOfShows
     let artists = computedArtists
 
-    if shows.count > 1 || yearsOfShows.count > 1 || artists.count > 1 {
+    let yearSpan = yearsOfShows.yearSpan()
+
+    if shows.count > 1 || yearSpan > 1 || artists.count > 1 {
       Section(
         header: Text(
           "Stats", bundle: .module, comment: "Title of the stats section for VenueDetail")
@@ -59,9 +61,9 @@ struct VenueDetail: View {
           Text("\(shows.count) Show(s)", bundle: .module, comment: "Shows Count for VenueDetail.")
         }
 
-        if yearsOfShows.count > 1 {
+        if yearSpan > 1 {
           Text(
-            "\(yearsOfShows.count) Year(s)", bundle: .module,
+            "\(yearSpan) Year(s)", bundle: .module,
             comment: "Years Count for VenueDetail.")
         }
 
