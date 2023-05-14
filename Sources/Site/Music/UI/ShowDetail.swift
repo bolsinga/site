@@ -11,10 +11,6 @@ struct ShowDetail: View {
   @Environment(\.vault) private var vault: Vault
   let show: Show
 
-  private var music: Music {
-    vault.music
-  }
-
   private var artists: [Artist] {
     do {
       return try vault.lookup.artistsForShow(show)

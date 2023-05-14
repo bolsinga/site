@@ -12,10 +12,6 @@ struct ShowYearList: View {
 
   let shows: [Show]
 
-  private var music: Music {
-    vault.music
-  }
-
   private var yearPartialDates: [PartialDate] {
     return Array(
       Set(shows.map { $0.date.year != nil ? PartialDate(year: $0.date.year!) : PartialDate() })
