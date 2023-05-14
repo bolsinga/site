@@ -14,5 +14,6 @@ struct ArchiveStats: View {
     ScrollView {
       Stats(shows: shows)
     }
+    .navigationTitle(Text(ArchiveCategory.stats.localizedString))
   }
 }
