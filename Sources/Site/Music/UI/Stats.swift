@@ -22,16 +22,16 @@ struct Stats: View {
   }
 
   var body: some View {
-    ScrollView {
-      VStack {
-        let knownDates = shows.filter { $0.date.day != nil }.filter { $0.date.month != nil }.filter
-        { $0.date.year != nil }.compactMap { $0.date.date }
-        WeekdayChart(dates: knownDates)
-        MonthChart(dates: knownDates)
-        let stateCounts = computedStateCounts
-        if stateCounts.keys.count > 1 {
-          StateChart(counts: stateCounts)
-        }
+    VStack {
+      let knownDates = shows.filter { $0.date.day != nil }
+        .filter { $0.date.month != nil }
+        .filter { $0.date.year != nil }
+        .compactMap { $0.date.date }
+      WeekdayChart(dates: knownDates)
+      MonthChart(dates: knownDates)
+      let stateCounts = computedStateCounts
+      if stateCounts.keys.count > 1 {
+        StateChart(counts: stateCounts)
       }
     }
   }
