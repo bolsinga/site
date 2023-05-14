@@ -11,10 +11,6 @@ struct VenueList: View {
   @Environment(\.vault) private var vault: Vault
   let venues: [Venue]
 
-  private var music: Music {
-    vault.music
-  }
-
   var body: some View {
     LibraryComparableList(items: venues, sectioner: vault.sectioner) {
       String(

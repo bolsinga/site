@@ -11,10 +11,6 @@ struct ShowBlurb: View {
   @Environment(\.vault) private var vault: Vault
   let show: Show
 
-  private var music: Music {
-    vault.music
-  }
-
   private var venue: Venue? {
     do {
       return try vault.lookup.venueForShow(show)
