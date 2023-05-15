@@ -10,6 +10,12 @@ import SwiftUI
 struct ShowBlurb: View {
   @Environment(\.vault) private var vault: Vault
   let show: Show
+  let showYear: Bool
+
+  internal init(show: Show, showYear: Bool = true) {
+    self.show = show
+    self.showYear = showYear
+  }
 
   private var venue: Venue? {
     do {
@@ -28,7 +34,7 @@ struct ShowBlurb: View {
       if let venue {
         Text(venue.name)
       }
-      Text(show.date.formatted(.compact))
+      Text(show.date.formatted(showYear ? .compact : .noYear))
     }
   }
 }
@@ -70,7 +76,7 @@ struct ShowBlurbView_Previews: PreviewProvider {
     ShowBlurb(show: show1)
       .environment(\.vault, vault)
 
-    ShowBlurb(show: show2)
+    ShowBlurb(show: show2, showYear: false)
       .environment(\.vault, vault)
 
     ShowBlurb(show: show3)
