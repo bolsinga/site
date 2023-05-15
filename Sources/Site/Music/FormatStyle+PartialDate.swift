@@ -11,6 +11,7 @@ extension PartialDate {
   public struct FormatStyle: Codable, Equatable, Hashable {
     public enum Style: Codable, Equatable, Hashable {
       case compact  // 03/03/2023 - Date Unknown
+      case noYear  // March 3
       case yearOnly  // 2023 - Year Unknown
     }
 
@@ -40,6 +41,16 @@ extension PartialDate.FormatStyle: Foundation.FormatStyle {
         }
         if value.day != nil {
           fmt = fmt.day()
+        }
+      case .noYear:
+        if value.month != nil {
+          fmt = fmt.month(.wide)
+        }
+        if value.day != nil {
+          fmt = fmt.day()
+        }
+        if value.month == nil && value.day == nil {
+          fmt = fmt.year()  // Still show year if other parts are unknown.
         }
       case .yearOnly:
         if value.year != nil {
@@ -76,6 +87,7 @@ extension PartialDate {
 
 extension FormatStyle where Self == PartialDate.FormatStyle {
   public static var compact: Self { .init(.compact) }
+  public static var noYear: Self { .init(.noYear) }
   public static var yearOnly: Self { .init(.yearOnly) }
 
   static func partialDate(style: PartialDate.FormatStyle.Style = .compact) -> Self {
