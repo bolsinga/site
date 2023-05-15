@@ -34,8 +34,8 @@ Label in the chart for the Count in StateChart. */
 /* String used to describe LibrarySection.numeric. */
 "Numeric" = "Numeric";
 
-/* On This Day */
-"On This Day" = "On This Day";
+/* On This Day: - placeholder is date */
+"On This Day: %@" = "On This Day: %@";
 
 /* String used to describe LibrarySection.punctuation. */
 "Punctuation" = "Punctuation";
