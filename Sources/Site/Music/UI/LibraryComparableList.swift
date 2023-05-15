@@ -42,9 +42,6 @@ where T: LibraryComparable, T: Identifiable, T: Hashable, T.ID == String {
         }
       }
     }
-    #if os(iOS)
-      .sectionIndex(sectionMap.keys.sorted())
-    #endif
     .listStyle(.plain)
     .searchable(text: $searchString)
   }
