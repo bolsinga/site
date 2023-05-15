@@ -7,17 +7,37 @@
 
 import SwiftUI
 
+extension Date {
+  var midnightTonight: Date {
+    let midnight = Calendar.autoupdatingCurrent.date(
+      bySetting: Calendar.Component.hour, value: 0, of: self)
+    guard let midnight else { return self }
+    return midnight
+  }
+}
+
+extension Timer {
+  static func publishAtMidnight(from date: Date) -> TimerPublisher {
+    let timer = Timer.publish(
+      every: date.midnightTonight.timeIntervalSince(date), on: .main, in: .default)
+    return timer
+  }
+}
+
 public struct ArchiveCategoryList: View {
   let vault: Vault
 
   @State private var navigationPath: NavigationPath = .init()
+  @State private var date = Date.now
 
   private var music: Music {
     vault.music
   }
 
   public var body: some View {
-    let todayShows = vault.lookup.showsOnDate(Date.now).sorted {
+    let timer = Timer.publishAtMidnight(from: date).autoconnect()
+
+    let todayShows = vault.lookup.showsOnDate(date).sorted {
       vault.comparator.showCompare(lhs: $0, rhs: $1, lookup: vault.lookup)
     }
 
@@ -61,6 +81,9 @@ public struct ArchiveCategoryList: View {
         .navigationBarTitleDisplayMode(.large)
       #endif
       .navigationTitle(Text("Archives", bundle: .module, comment: "Title for the ArchivesList."))
+    }
+    .onReceive(timer) { date in
+      self.date = date
     }
     .environment(\.vault, vault)
   }
