@@ -15,7 +15,10 @@ struct TodayList: View {
       NavigationLink(value: show) { TodayBlurb(show: show) }
     }
     .listStyle(.plain)
-    .navigationTitle(Text("On This Day", bundle: .module, comment: "On This Day"))
+    .navigationTitle(
+      Text(
+        "On This Day: \(Date.now.formatted(.dateTime.month(.defaultDigits).day()))",
+        bundle: .module, comment: "On This Day: - placeholder is date"))
   }
 }
 
