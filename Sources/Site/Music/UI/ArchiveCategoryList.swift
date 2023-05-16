@@ -7,23 +7,6 @@
 
 import SwiftUI
 
-extension Date {
-  var midnightTonight: Date {
-    let midnight = Calendar.autoupdatingCurrent.date(
-      bySetting: Calendar.Component.hour, value: 0, of: self)
-    guard let midnight else { return self }
-    return midnight
-  }
-}
-
-extension Timer {
-  static func publishAtMidnight(from date: Date) -> TimerPublisher {
-    let timer = Timer.publish(
-      every: date.midnightTonight.timeIntervalSince(date), on: .main, in: .default)
-    return timer
-  }
-}
-
 public struct ArchiveCategoryList: View {
   let vault: Vault
 
@@ -35,7 +18,8 @@ public struct ArchiveCategoryList: View {
   }
 
   public var body: some View {
-    let timer = Timer.publishAtMidnight(from: date).autoconnect()
+    let timer = Timer.publish(every: date.timeIntervalUntilMidnight, on: .main, in: .default)
+      .autoconnect()
 
     let todayShows = vault.lookup.showsOnDate(date).sorted {
       vault.comparator.showCompare(lhs: $0, rhs: $1, lookup: vault.lookup)
