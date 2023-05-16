@@ -5,25 +5,24 @@
 //  Created by Greg Bolsinga on 4/10/23.
 //
 
+import Combine
 import SwiftUI
 
 public struct ArchiveCategoryList: View {
   let vault: Vault
 
   @State private var navigationPath: NavigationPath = .init()
-  @State private var date = Date.now
+  @State private var todayShows: [Show] = []
 
   private var music: Music {
     vault.music
   }
 
   public var body: some View {
-    let timer = Timer.publish(every: date.timeIntervalUntilMidnight, on: .main, in: .default)
-      .autoconnect()
-
-    let todayShows = vault.lookup.showsOnDate(date).sorted {
-      vault.comparator.showCompare(lhs: $0, rhs: $1, lookup: vault.lookup)
-    }
+    let now = Date.now
+    let timer = Deferred { Just(now) }  // This will send/received Date.now when connected.
+      .append(
+        Timer.publish(every: now.timeIntervalUntilMidnight, on: .main, in: .default).autoconnect())
 
     NavigationStack(path: $navigationPath) {
       List(ArchiveCategory.allCases, id: \.self) { archiveCategory in
@@ -32,6 +31,7 @@ public struct ArchiveCategoryList: View {
             switch archiveCategory {
             case .today:
               Text(todayShows.count.formatted(.number))
+              .animation(.easeInOut)
             case .stats:
               EmptyView()
             case .shows:
@@ -67,7 +67,13 @@ public struct ArchiveCategoryList: View {
       .navigationTitle(Text("Archives", bundle: .module, comment: "Title for the ArchivesList."))
     }
     .onReceive(timer) { date in
-      self.date = date
+      // This Task / @MainActor seems to accomplish a similar DispatchQueue.main.async feel.
+      // Still not clear to me why this is necessary in SwiftUI.
+      Task { @MainActor in
+        self.todayShows = vault.lookup.showsOnDate(date).sorted {
+          vault.comparator.showCompare(lhs: $0, rhs: $1, lookup: vault.lookup)
+        }
+      }
     }
     .environment(\.vault, vault)
   }
