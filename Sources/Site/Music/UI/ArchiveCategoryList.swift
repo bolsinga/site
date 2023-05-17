@@ -61,7 +61,7 @@ public struct ArchiveCategoryList: View {
       #endif
       .navigationTitle(Text("Archives", bundle: .module, comment: "Title for the ArchivesList."))
     }
-    .determinateTimer { date in
+    .determinateTimer(trigger: .atMidnight) { date in
       self.todayShows = vault.lookup.showsOnDate(date).sorted {
         vault.comparator.showCompare(lhs: $0, rhs: $1, lookup: vault.lookup)
       }
