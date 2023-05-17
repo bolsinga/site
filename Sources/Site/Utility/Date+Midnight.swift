@@ -14,8 +14,4 @@ extension Date {
     guard let midnight else { return self }
     return midnight
   }
-
-  var timeIntervalUntilMidnight: TimeInterval {
-    self.midnightTonight.timeIntervalSince(self)
-  }
 }
