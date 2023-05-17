@@ -27,6 +27,8 @@ struct DeterminateTimerModifier: ViewModifier {
     case atMidnight
   }
 
+  @State var startDate: Date = Date.now
+
   let triggerDate: Date
   let action: (Timer.TimerPublisher.Output) -> Void
 
@@ -51,12 +53,11 @@ struct DeterminateTimerModifier: ViewModifier {
   }
 
   func body(content: Content) -> some View {
-    let now = Date.now
-    let timer = Timer.publish(every: triggerDate.timeIntervalSince(now), on: .main, in: .default)
-      .autoconnect()
+    let timer = Timer.publish(every: triggerDate.timeIntervalSince(startDate), on: .main, in: .default).autoconnect()
+
     content
       .onAppear {
-        mainDeferredAction(date: now)
+        mainDeferredAction(date: startDate)
       }
       .onReceive(timer) { date in
         mainDeferredAction(date: date)
