@@ -8,14 +8,29 @@
 import Combine
 import SwiftUI
 
+extension Date {
+  fileprivate func timeInterval(until trigger: DeterminateTimerModifier.Trigger) -> TimeInterval {
+    switch trigger {
+    case .atMidnight:
+      return self.timeIntervalUntilMidnight
+    }
+  }
+}
+
 struct DeterminateTimerModifier: ViewModifier {
+  enum Trigger {
+    case atMidnight
+  }
+
+  let trigger: Trigger
   let action: (Timer.TimerPublisher.Output) -> Void
 
   func body(content: Content) -> some View {
     let now = Date.now
     let timer = Deferred { Just(now) }  // This will send/received Date.now when connected.
       .append(
-        Timer.publish(every: now.timeIntervalUntilMidnight, on: .main, in: .default).autoconnect())
+        Timer.publish(every: now.timeInterval(until: trigger), on: .main, in: .default)
+          .autoconnect())
 
     content
       .onReceive(timer) { date in
@@ -29,7 +44,10 @@ struct DeterminateTimerModifier: ViewModifier {
 }
 
 extension View {
-  func determinateTimer(action: @escaping (Timer.TimerPublisher.Output) -> Void) -> some View {
-    modifier(DeterminateTimerModifier(action: action))
+  func determinateTimer(
+    trigger: DeterminateTimerModifier.Trigger,
+    action: @escaping (Timer.TimerPublisher.Output) -> Void
+  ) -> some View {
+    modifier(DeterminateTimerModifier(trigger: trigger, action: action))
   }
 }
