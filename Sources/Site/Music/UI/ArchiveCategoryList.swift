@@ -19,11 +19,6 @@ public struct ArchiveCategoryList: View {
   }
 
   public var body: some View {
-    let now = Date.now
-    let timer = Deferred { Just(now) }  // This will send/received Date.now when connected.
-      .append(
-        Timer.publish(every: now.timeIntervalUntilMidnight, on: .main, in: .default).autoconnect())
-
     NavigationStack(path: $navigationPath) {
       List(ArchiveCategory.allCases, id: \.self) { archiveCategory in
         NavigationLink(value: archiveCategory) {
@@ -66,13 +61,9 @@ public struct ArchiveCategoryList: View {
       #endif
       .navigationTitle(Text("Archives", bundle: .module, comment: "Title for the ArchivesList."))
     }
-    .onReceive(timer) { date in
-      // This Task / @MainActor seems to accomplish a similar DispatchQueue.main.async feel.
-      // Still not clear to me why this is necessary in SwiftUI.
-      Task { @MainActor in
-        self.todayShows = vault.lookup.showsOnDate(date).sorted {
-          vault.comparator.showCompare(lhs: $0, rhs: $1, lookup: vault.lookup)
-        }
+    .determinateTimer { date in
+      self.todayShows = vault.lookup.showsOnDate(date).sorted {
+        vault.comparator.showCompare(lhs: $0, rhs: $1, lookup: vault.lookup)
       }
     }
     .environment(\.vault, vault)
