@@ -11,6 +11,8 @@ import SwiftUI
 extension Date {
   fileprivate func timeInterval(until trigger: DeterminateTimerModifier.Trigger) -> TimeInterval {
     switch trigger {
+    case .inFiveSeconds:
+      return 5
     case .atMidnight:
       return self.timeIntervalUntilMidnight
     }
@@ -19,6 +21,7 @@ extension Date {
 
 struct DeterminateTimerModifier: ViewModifier {
   enum Trigger {
+    case inFiveSeconds
     case atMidnight
   }
 
