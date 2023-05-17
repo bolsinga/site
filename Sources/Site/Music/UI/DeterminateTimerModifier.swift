@@ -28,20 +28,24 @@ struct DeterminateTimerModifier: ViewModifier {
   let trigger: Trigger
   let action: (Timer.TimerPublisher.Output) -> Void
 
+  func mainDeferredAction(date: Date) {
+    // This Task / @MainActor seems to accomplish a similar DispatchQueue.main.async feel.
+    // Still not clear to me why this is necessary in SwiftUI.
+    Task { @MainActor in
+      action(date)
+    }
+  }
+
   func body(content: Content) -> some View {
     let now = Date.now
-    let timer = Deferred { Just(now) }  // This will send/received Date.now when connected.
-      .append(
-        Timer.publish(every: now.timeInterval(until: trigger), on: .main, in: .default)
-          .autoconnect())
-
+    let timer = Timer.publish(every: now.timeInterval(until: trigger), on: .main, in: .default)
+      .autoconnect()
     content
+      .onAppear {
+        mainDeferredAction(date: now)
+      }
       .onReceive(timer) { date in
-        // This Task / @MainActor seems to accomplish a similar DispatchQueue.main.async feel.
-        // Still not clear to me why this is necessary in SwiftUI.
-        Task { @MainActor in
-          action(date)
-        }
+        mainDeferredAction(date: date)
       }
   }
 }
