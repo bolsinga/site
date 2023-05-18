@@ -10,12 +10,6 @@ import SwiftUI
 struct ArtistBlurb: View {
   @Environment(\.vault) private var vault: Vault
   let show: Show
-  let showYear: Bool
-
-  internal init(show: Show, showYear: Bool = true) {
-    self.show = show
-    self.showYear = showYear
-  }
 
   private var venue: Venue? {
     do {
@@ -34,7 +28,7 @@ struct ArtistBlurb: View {
       if let venue {
         Text(venue.name)
       }
-      Text(show.date.formatted(showYear ? .compact : .noYear))
+      Text(show.date.formatted(.compact))
     }
   }
 }
@@ -76,7 +70,7 @@ struct ArtistBlurbView_Previews: PreviewProvider {
     ArtistBlurb(show: show1)
       .environment(\.vault, vault)
 
-    ArtistBlurb(show: show2, showYear: false)
+    ArtistBlurb(show: show2)
       .environment(\.vault, vault)
 
     ArtistBlurb(show: show3)
