@@ -1,5 +1,5 @@
 //
-//  ShowBlurb.swift
+//  ArtistBlurb.swift
 //
 //
 //  Created by Greg Bolsinga on 2/28/23.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ShowBlurb: View {
+struct ArtistBlurb: View {
   @Environment(\.vault) private var vault: Vault
   let show: Show
   let showYear: Bool
@@ -29,7 +29,7 @@ struct ShowBlurb: View {
     LabeledContent {
       Text(
         "\(show.artists.count) Artist(s)", bundle: .module,
-        comment: "Content of the LabeledContent in a ShowBlurb.")
+        comment: "Content of the LabeledContent in a ArtistBlurb.")
     } label: {
       if let venue {
         Text(venue.name)
@@ -39,7 +39,7 @@ struct ShowBlurb: View {
   }
 }
 
-struct ShowBlurbView_Previews: PreviewProvider {
+struct ArtistBlurbView_Previews: PreviewProvider {
   static var previews: some View {
     let artist1 = Artist(id: "ar0", name: "Artist With Longer Name")
     let artist2 = Artist(id: "ar1", name: "Artist 2")
@@ -73,13 +73,13 @@ struct ShowBlurbView_Previews: PreviewProvider {
 
     let vault = Vault(music: music)
 
-    ShowBlurb(show: show1)
+    ArtistBlurb(show: show1)
       .environment(\.vault, vault)
 
-    ShowBlurb(show: show2, showYear: false)
+    ArtistBlurb(show: show2, showYear: false)
       .environment(\.vault, vault)
 
-    ShowBlurb(show: show3)
+    ArtistBlurb(show: show3)
       .environment(\.vault, vault)
   }
 }

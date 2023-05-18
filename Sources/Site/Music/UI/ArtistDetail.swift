@@ -83,7 +83,7 @@ struct ArtistDetail: View {
       ) {
         ForEach(shows) { show in
           NavigationLink(value: show) {
-            ShowBlurb(show: show)
+            ArtistBlurb(show: show)
           }
         }
       }
