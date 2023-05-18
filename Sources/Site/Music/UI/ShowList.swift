@@ -26,7 +26,7 @@ struct ShowList: View {
 
   var body: some View {
     List(shows) { show in
-      NavigationLink(value: show) { ShowBlurb(show: show, showYear: false) }
+      NavigationLink(value: show) { ArtistBlurb(show: show, showYear: false) }
     }
     .listStyle(.plain)
     .navigationTitle(Text(title))
