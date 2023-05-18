@@ -30,25 +30,25 @@ struct DeterminateTimerModifier: ViewModifier {
   @State var startDate: Date = Date.now
 
   let triggerDate: Date
-  let action: (Timer.TimerPublisher.Output) -> Void
+  let action: () -> Void
 
-  internal init(triggerDate: Date, action: @escaping (Timer.TimerPublisher.Output) -> Void) {
+  internal init(triggerDate: Date, action: @escaping () -> Void) {
     self.triggerDate = triggerDate
     self.action = action
   }
 
   public init(
     trigger: DeterminateTimerModifier.Trigger,
-    action: @escaping (Timer.TimerPublisher.Output) -> Void
+    action: @escaping () -> Void
   ) {
     self.init(triggerDate: Date.now.date(at: trigger), action: action)
   }
 
-  func mainDeferredAction(date: Date) {
+  func mainDeferredAction() {
     // This Task / @MainActor seems to accomplish a similar DispatchQueue.main.async feel.
     // Still not clear to me why this is necessary in SwiftUI.
     Task { @MainActor in
-      action(date)
+      action()
     }
   }
 
@@ -59,10 +59,10 @@ struct DeterminateTimerModifier: ViewModifier {
 
     content
       .onAppear {
-        mainDeferredAction(date: startDate)
+        mainDeferredAction()
       }
-      .onReceive(timer) { date in
-        mainDeferredAction(date: date)
+      .onReceive(timer) { _ in
+        mainDeferredAction()
       }
   }
 }
@@ -70,7 +70,7 @@ struct DeterminateTimerModifier: ViewModifier {
 extension View {
   func determinateTimer(
     trigger: DeterminateTimerModifier.Trigger,
-    action: @escaping (Timer.TimerPublisher.Output) -> Void
+    action: @escaping () -> Void
   ) -> some View {
     modifier(DeterminateTimerModifier(trigger: trigger, action: action))
   }
