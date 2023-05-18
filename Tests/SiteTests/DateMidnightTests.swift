@@ -20,7 +20,5 @@ final class DateMidnightTests: XCTestCase {
     XCTAssertLessThan(nowDate.timeIntervalSinceNow, nextHourDate.timeIntervalSinceNow)
 
     XCTAssertEqual(nowDate.midnightTonight, nextHourDate.midnightTonight)
-
-    XCTAssertGreaterThan(nowDate.timeIntervalUntilMidnight, 0)
   }
 }

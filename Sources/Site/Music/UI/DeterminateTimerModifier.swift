@@ -9,12 +9,14 @@ import Combine
 import SwiftUI
 
 extension Date {
-  fileprivate func timeInterval(until trigger: DeterminateTimerModifier.Trigger) -> TimeInterval {
+  fileprivate func date(at trigger: DeterminateTimerModifier.Trigger) -> Date {
     switch trigger {
     case .inFiveSeconds:
-      return 5
+      let date = Calendar.autoupdatingCurrent.date(byAdding: .second, value: 5, to: self)
+      guard let date else { return self }
+      return date
     case .atMidnight:
-      return self.timeIntervalUntilMidnight
+      return self.midnightTonight
     }
   }
 }
@@ -25,8 +27,20 @@ struct DeterminateTimerModifier: ViewModifier {
     case atMidnight
   }
 
-  let trigger: Trigger
+  let triggerDate: Date
   let action: (Timer.TimerPublisher.Output) -> Void
+
+  internal init(triggerDate: Date, action: @escaping (Timer.TimerPublisher.Output) -> Void) {
+    self.triggerDate = triggerDate
+    self.action = action
+  }
+
+  public init(
+    trigger: DeterminateTimerModifier.Trigger,
+    action: @escaping (Timer.TimerPublisher.Output) -> Void
+  ) {
+    self.init(triggerDate: Date.now.date(at: trigger), action: action)
+  }
 
   func mainDeferredAction(date: Date) {
     // This Task / @MainActor seems to accomplish a similar DispatchQueue.main.async feel.
@@ -38,7 +52,7 @@ struct DeterminateTimerModifier: ViewModifier {
 
   func body(content: Content) -> some View {
     let now = Date.now
-    let timer = Timer.publish(every: now.timeInterval(until: trigger), on: .main, in: .default)
+    let timer = Timer.publish(every: triggerDate.timeIntervalSince(now), on: .main, in: .default)
       .autoconnect()
     content
       .onAppear {
