@@ -53,7 +53,9 @@ struct DeterminateTimerModifier: ViewModifier {
   }
 
   func body(content: Content) -> some View {
-    let timer = Timer.publish(every: triggerDate.timeIntervalSince(startDate), on: .main, in: .default).autoconnect()
+    let timer = Timer.publish(
+      every: triggerDate.timeIntervalSince(startDate), on: .main, in: .default
+    ).autoconnect()
 
     content
       .onAppear {
