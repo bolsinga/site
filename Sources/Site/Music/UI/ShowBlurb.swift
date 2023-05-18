@@ -1,39 +1,60 @@
 //
-//  ShowList.swift
+//  ShowBlurb.swift
 //
 //
-//  Created by Greg Bolsinga on 3/26/23.
+//  Created by Greg Bolsinga on 5/18/23.
 //
 
 import SwiftUI
 
-struct ShowList: View {
-  let shows: [Show]
-  var yearPartialDate: PartialDate?
+struct ShowBlurb: View {
+  @Environment(\.vault) private var vault: Vault
+  let show: Show
 
-  private var title: String {
-    if let yearPartialDate {
-      return String(
-        localized: "\(yearPartialDate.formatted(.yearOnly)) Shows",
-        bundle: .module,
-        comment: "Title for the ShowList when there is a year")
+  private var artists: [Artist] {
+    do {
+      return try vault.lookup.artistsForShow(show)
+    } catch {
+      return []
     }
-    return String(
-      localized: "Shows",
-      bundle: .module,
-      comment: "Title for the ShowList")
+  }
+
+  private var venue: Venue? {
+    do {
+      return try vault.lookup.venueForShow(show)
+    } catch {
+      return nil
+    }
+  }
+
+  @ViewBuilder private var artistsView: some View {
+    VStack(alignment: .leading) {
+      ForEach(artists) { artist in
+        Text(artist.name).font(.headline)
+      }
+    }
+  }
+
+  @ViewBuilder private var detailsView: some View {
+    VStack(alignment: .trailing) {
+      if let venue {
+        Text(venue.name)
+      }
+      Text(show.date.formatted(.noYear))
+    }
+    .font(.footnote)
   }
 
   var body: some View {
-    List(shows) { show in
-      NavigationLink(value: show) { ShowBlurb(show: show) }
+    HStack {
+      artistsView
+      Spacer()
+      detailsView
     }
-    .listStyle(.plain)
-    .navigationTitle(Text(title))
   }
 }
 
-struct ShowList_Previews: PreviewProvider {
+struct ShowBlurbView_Previews: PreviewProvider {
   static var previews: some View {
     let artist1 = Artist(id: "ar0", name: "Artist With Longer Name")
     let artist2 = Artist(id: "ar1", name: "Artist 2")
@@ -67,10 +88,13 @@ struct ShowList_Previews: PreviewProvider {
 
     let vault = Vault(music: music)
 
-    NavigationStack {
-      ShowList(shows: music.shows)
-        .environment(\.vault, vault)
-        .musicDestinations()
-    }
+    ShowBlurb(show: show1)
+      .environment(\.vault, vault)
+
+    ShowBlurb(show: show2)
+      .environment(\.vault, vault)
+
+    ShowBlurb(show: show3)
+      .environment(\.vault, vault)
   }
 }
