@@ -10,7 +10,7 @@ import Foundation
 import MapKit
 
 actor Atlas {
-  var cache: [Location: CLPlacemark] = [:]
+  internal var cache: [Location: CLPlacemark] = [:]
 
   public func geocode(_ location: Location) async throws -> CLPlacemark {
     if let result = cache[location] {
