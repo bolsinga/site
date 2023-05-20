@@ -7,17 +7,25 @@
 
 import CoreLocation
 import Foundation
-import MapKit
 
 actor Atlas {
-  internal var cache: [Location: CLPlacemark] = [:]
+  private var cache: [Location: CLPlacemark] = [:]
 
   public func geocode(_ location: Location) async throws -> CLPlacemark {
-    if let result = cache[location] {
+    if let result = self[location] {
       return result
     }
     let result: CLPlacemark = try await location.geocode()
-    cache[location] = result
+    self[location] = result
     return result
+  }
+
+  subscript(index: Location) -> CLPlacemark? {
+    get {
+      cache[index]
+    }
+    set(newValue) {
+      cache[index] = newValue
+    }
   }
 }

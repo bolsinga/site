@@ -34,7 +34,7 @@ extension NSError {
 
 extension Atlas {
   public func geocode(batch locations: [Location]) async {
-    let uncachedLocations = locations.filter { cache[$0] == nil }
+    let uncachedLocations = locations.filter { self[$0] == nil }
 
     do {
       let batchesOfLocations = uncachedLocations.batched(into: Constants.maxRequests)
