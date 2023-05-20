@@ -67,6 +67,11 @@ public struct ArchiveCategoryList: View {
       }
     }
     .environment(\.vault, vault)
+    //    .task {
+    //      for await (location, placemark) in await vault.atlas.geocodedLocations {
+    //        print("geocoded: \(location) to \(placemark)")
+    //      }
+    //    }
   }
 }
 
