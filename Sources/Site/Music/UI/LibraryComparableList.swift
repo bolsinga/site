@@ -11,6 +11,7 @@ struct LibraryComparableList<T>: View
 where T: LibraryComparable, T: Identifiable, T: Hashable, T.ID == String {
   let items: [T]
   let sectioner: LibrarySectioner
+  let searchPrompt: String
   let contentValue: (T) -> String
 
   @State private var searchString: String = ""
@@ -43,7 +44,7 @@ where T: LibraryComparable, T: Identifiable, T: Hashable, T.ID == String {
       }
     }
     .listStyle(.plain)
-    .searchable(text: $searchString)
+    .searchable(text: $searchString, prompt: searchPrompt)
   }
 }
 
@@ -83,7 +84,9 @@ struct LibraryComparableList_Previews: PreviewProvider {
     let vault = Vault(music: music)
 
     NavigationStack {
-      LibraryComparableList(items: music.artists, sectioner: vault.sectioner) {
+      LibraryComparableList(
+        items: music.artists, sectioner: vault.sectioner, searchPrompt: "Artist Names"
+      ) {
         "\(vault.lookup.showsForArtist($0).count) Shows"
       }
       .navigationTitle("Artists")
@@ -92,7 +95,9 @@ struct LibraryComparableList_Previews: PreviewProvider {
     }
 
     NavigationStack {
-      LibraryComparableList(items: music.venues, sectioner: vault.sectioner) {
+      LibraryComparableList(
+        items: music.venues, sectioner: vault.sectioner, searchPrompt: "Venue Names"
+      ) {
         "\(vault.lookup.showsForVenue($0).count) Shows"
       }
       .navigationTitle("Venues")

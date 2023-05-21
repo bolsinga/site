@@ -12,7 +12,11 @@ struct ArtistList: View {
   let artists: [Artist]
 
   var body: some View {
-    LibraryComparableList(items: artists, sectioner: vault.sectioner) {
+    LibraryComparableList(
+      items: artists, sectioner: vault.sectioner,
+      searchPrompt: String(
+        localized: "Artist Names", bundle: .module, comment: "ArtistList searchPrompt")
+    ) {
       String(
         localized: "\(vault.lookup.showsForArtist($0).count) Show(s)", bundle: .module,
         comment: "Value for the Artist # of Shows.")
