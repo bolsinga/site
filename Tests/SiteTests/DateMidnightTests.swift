@@ -14,7 +14,11 @@ final class DateMidnightTests: XCTestCase {
     let nowDate = Date.now
     let nowHour = Calendar.autoupdatingCurrent.component(.hour, from: nowDate)
     let nextHourDate = Calendar.autoupdatingCurrent.date(
-      bySetting: .hour, value: nowHour + 1, of: nowDate)!
+      bySetting: .hour, value: nowHour + 1, of: nowDate)
+
+    XCTAssertNotNil(nextHourDate)
+
+    guard let nextHourDate else { return }
 
     XCTAssertNotEqual(nowDate.timeIntervalSinceNow, nextHourDate.timeIntervalSinceNow)
     XCTAssertLessThan(nowDate.timeIntervalSinceNow, nextHourDate.timeIntervalSinceNow)
