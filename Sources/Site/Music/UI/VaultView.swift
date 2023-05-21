@@ -28,7 +28,7 @@ public struct VaultView: View {
   public var body: some View {
     Group {
       if let vault {
-        ArchiveCategoryList(vault: vault)
+        ArchiveCategoryStack(vault: vault)
           .refreshable {
             await refresh()
           }
