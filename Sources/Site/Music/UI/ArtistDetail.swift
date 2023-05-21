@@ -68,7 +68,9 @@ struct ArtistDetail: View {
         }
 
         if shows.count > statsThreshold {
-          Stats(shows: shows)
+          NavigationLink(ArchiveCategory.stats.localizedString) {
+            StatsList(shows: shows)
+          }
         }
       }
     }

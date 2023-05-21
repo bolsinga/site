@@ -58,8 +58,6 @@ struct MonthChart: View {
       }
     }
     .frame(minHeight: 200)
-    Text(StatsCategory.month.localizedString)
-      .font(.caption)
   }
 }
 
