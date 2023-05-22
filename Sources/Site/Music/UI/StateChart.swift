@@ -33,8 +33,6 @@ struct StateChart: View {
       }
     }
     .frame(minHeight: 200)
-    Text(StatsCategory.state.localizedString)
-      .font(.caption)
   }
 }
 

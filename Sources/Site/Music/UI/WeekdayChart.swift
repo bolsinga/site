@@ -63,8 +63,6 @@ struct WeekdayChart: View {
       }
     }
     .frame(minHeight: 200)
-    Text(StatsCategory.weekday.localizedString)
-      .font(.caption)
   }
 }
 
