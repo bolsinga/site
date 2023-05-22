@@ -116,4 +116,13 @@ public struct Lookup {
         date, matchesComponents: DateComponents(month: $0.date.month!, day: $0.date.day!))
     }
   }
+
+  public var stateCounts: [String: Int] {
+    shows.compactMap {
+      do { return try self.venueForShow($0).location } catch { return nil }
+    }.map { $0.state }.reduce(into: [String: Int]()) {
+      let count = $0[$1] ?? 0
+      $0[$1] = count + 1
+    }
+  }
 }
