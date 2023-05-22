@@ -15,23 +15,33 @@ public struct Lookup {
   let artistMap: [Artist.ID: Artist]
   let showMap: [Show.ID: Show]
   let venueMap: [Venue.ID: Venue]
+  let artistRankings: Music.ArtistRankings
+  let artistRankingMap: Music.ArtistRankingMap
 
   public init(music: Music) {
     // non-parallel, used for Previews, tests
+    let artistRanks = music.artistRankings
+
     self.init(
       artistMap: createLookup(music.artists),
       showMap: createLookup(music.shows),
-      venueMap: createLookup(music.venues))
+      venueMap: createLookup(music.venues),
+      artistRankings: artistRanks.0,
+      artistRankingMap: artistRanks.1)
   }
 
   internal init(
     artistMap: [Artist.ID: Artist],
     showMap: [Show.ID: Show],
-    venueMap: [Venue.ID: Venue]
+    venueMap: [Venue.ID: Venue],
+    artistRankings: Music.ArtistRankings,
+    artistRankingMap: Music.ArtistRankingMap
   ) {
     self.artistMap = artistMap
     self.showMap = showMap
     self.venueMap = venueMap
+    self.artistRankings = artistRankings
+    self.artistRankingMap = artistRankingMap
   }
 
   public static func create(music: Music) async -> Lookup {
@@ -39,13 +49,18 @@ public struct Lookup {
     async let artistLookup = createLookup(music.artists)
     async let showLookup = createLookup(music.shows)
     async let venueLookup = createLookup(music.venues)
+    async let artistRanks = music.artistRankings
 
-    let (artistMap, showMap, venueMap) = await (artistLookup, showLookup, venueLookup)
+    let (artistMap, showMap, venueMap, artistRankings) = await (
+      artistLookup, showLookup, venueLookup, artistRanks
+    )
 
     return Lookup(
       artistMap: artistMap,
       showMap: showMap,
-      venueMap: venueMap)
+      venueMap: venueMap,
+      artistRankings: artistRankings.0,
+      artistRankingMap: artistRankings.1)
   }
 
   enum LookupError: Error {

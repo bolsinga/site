@@ -19,10 +19,12 @@ struct StatsGrouping: View {
 
   let shows: [Show]
   let kind: Kind
+  let computeShowsRank: (() -> Int)?
 
-  internal init(shows: [Show], kind: Kind) {
+  internal init(shows: [Show], kind: StatsGrouping.Kind, computeShowsRank: (() -> Int)? = nil) {
     self.shows = shows
     self.kind = kind
+    self.computeShowsRank = computeShowsRank
   }
 
   private var computedStateCounts: [String: Int] {
@@ -59,6 +61,24 @@ struct StatsGrouping: View {
     }
   }
 
+  @ViewBuilder var showCount: some View {
+    Text("\(shows.count) Show(s)", bundle: .module, comment: "Shows Count for StatsGrouping.")
+  }
+
+  @ViewBuilder var showsElement: some View {
+    if let computeShowsRank {
+      HStack {
+        showCount
+        Spacer()
+        Text(
+          "Rank: \(computeShowsRank())", bundle: .module,
+          comment: "Ranking String for StatsGrouping show count")
+      }
+    } else {
+      showCount
+    }
+  }
+
   var body: some View {
     let knownShowDates = shows.filter { $0.date.day != nil }
       .filter { $0.date.month != nil }
@@ -90,7 +110,7 @@ struct StatsGrouping: View {
       Group {
         switch category {
         case .shows:
-          Text("\(shows.count) Show(s)", bundle: .module, comment: "Shows Count for StatsGrouping.")
+          showsElement
         case .years:
           Text("\(yearSpan) Year(s)", bundle: .module, comment: "Years Span for StatsGrouping.")
         case .venues:

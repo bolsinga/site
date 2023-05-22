@@ -30,7 +30,9 @@ struct ArtistDetail: View {
     let shows = computedShows
     if !shows.isEmpty {
       Section(header: Text(ArchiveCategory.stats.localizedString)) {
-        StatsGrouping(shows: shows, kind: .artist)
+        StatsGrouping(
+          shows: shows, kind: .artist,
+          computeShowsRank: { vault.lookup.artistRankingMap[artist]?.0 ?? 0 })
       }
     }
   }
