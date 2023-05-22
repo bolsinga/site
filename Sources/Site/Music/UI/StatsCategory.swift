@@ -16,13 +16,13 @@ enum StatsCategory: CaseIterable {
     switch self {
     case .weekday:
       return String(
-        localized: "Shows by Day of Week", bundle: .module, comment: "Title of the WeekdayChart")
+        localized: "Weekdays", bundle: .module, comment: "Title of the WeekdayChart")
     case .month:
       return String(
-        localized: "Shows by Month", bundle: .module, comment: "Title of the MonthChart")
+        localized: "Months", bundle: .module, comment: "Title of the MonthChart")
     case .state:
       return String(
-        localized: "Shows by State", bundle: .module, comment: "Title of the StateChart")
+        localized: "States", bundle: .module, comment: "Title of the StateChart")
     }
   }
 }
