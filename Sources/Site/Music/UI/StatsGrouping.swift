@@ -51,8 +51,7 @@ struct StatsGrouping: View {
     case .artist:
       return []
     case .all, .venue:
-      return Set(venues.flatMap { vault.lookup.artistsForVenue($0) }).sorted(
-        by: vault.comparator.libraryCompare(lhs:rhs:))
+      return Array(Set(venues.flatMap { vault.lookup.artistsForVenue($0) }))
     }
   }
 
