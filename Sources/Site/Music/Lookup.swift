@@ -96,12 +96,6 @@ public struct Lookup {
     shows.filter { $0.venue == venue.id }
   }
 
-  public func artistsForVenue(_ venue: Venue) -> [Artist] {
-    return Set(showsForVenue(venue).reduce(into: []) { $0 += $1.artists }).compactMap {
-      artistMap[$0]
-    }
-  }
-
   public func showsForYear(_ year: PartialDate) -> [Show] {
     shows.filter { $0.date.normalizedYear == year.normalizedYear }
   }
