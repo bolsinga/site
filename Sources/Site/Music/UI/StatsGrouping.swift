@@ -108,6 +108,5 @@ struct StatsGrouping: View {
         }
       }
     }
-    .navigationTitle(Text(ArchiveCategory.stats.localizedString))
   }
 }
