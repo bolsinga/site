@@ -40,13 +40,13 @@ struct DeterminateTimerModifier: ViewModifier {
       .onAppear {
         mainDeferredAction()
       }.task {
-        repeat {
-          do {
+        do {
+          repeat {
             try await Task.sleep(
               until: .now + .seconds(Date.now.timeInterval(until: trigger)), clock: .continuous)
             mainDeferredAction()
-          } catch {}
-        } while true
+          } while true
+        } catch {}
       }
   }
 }
