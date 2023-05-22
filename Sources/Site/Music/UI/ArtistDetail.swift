@@ -30,7 +30,7 @@ struct ArtistDetail: View {
     let shows = computedShows
     if !shows.isEmpty {
       Section(header: Text(ArchiveCategory.stats.localizedString)) {
-        StatsGrouping(shows: shows, displayArtistCountInformation: false)
+        StatsGrouping(shows: shows, kind: .artist)
       }
     }
   }

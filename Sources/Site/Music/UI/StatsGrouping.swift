@@ -8,15 +8,21 @@
 import SwiftUI
 
 struct StatsGrouping: View {
+  enum Kind {
+    case all
+    case artist
+    case venue
+  }
+
   @Environment(\.vault) private var vault: Vault
   @Environment(\.statsThreshold) private var statsThreshold: Int
 
   let shows: [Show]
-  let displayArtistCountInformation: Bool
+  let kind: Kind
 
-  internal init(shows: [Show], displayArtistCountInformation: Bool = true) {
+  internal init(shows: [Show], kind: Kind) {
     self.shows = shows
-    self.displayArtistCountInformation = displayArtistCountInformation
+    self.kind = kind
   }
 
   private var computedStateCounts: [String: Int] {
@@ -41,9 +47,13 @@ struct StatsGrouping: View {
   }
 
   private func computeArtists(for venues: [Venue]) -> [Artist] {
-    guard displayArtistCountInformation else { return [] }
-    return Set(venues.flatMap { vault.lookup.artistsForVenue($0) }).sorted(
-      by: vault.comparator.libraryCompare(lhs:rhs:))
+    switch kind {
+    case .artist:
+      return []
+    case .all, .venue:
+      return Set(venues.flatMap { vault.lookup.artistsForVenue($0) }).sorted(
+        by: vault.comparator.libraryCompare(lhs:rhs:))
+    }
   }
 
   var body: some View {

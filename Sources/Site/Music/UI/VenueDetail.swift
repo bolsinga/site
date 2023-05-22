@@ -39,7 +39,7 @@ struct VenueDetail: View {
     let shows = shows
     if shows.count > 1 {
       Section(header: Text(ArchiveCategory.stats.localizedString)) {
-        StatsGrouping(shows: shows)
+        StatsGrouping(shows: shows, kind: .venue)
       }
     }
   }
