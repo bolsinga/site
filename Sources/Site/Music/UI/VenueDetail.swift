@@ -21,7 +21,7 @@ struct VenueDetail: View {
   }
 
   private var shows: [Show] {
-    vault.lookup.showsForVenue(venue)
+    music.showsForVenue(venue)
   }
 
   @ViewBuilder private var locationElement: some View {

@@ -12,8 +12,6 @@ private func createLookup<T: Identifiable>(_ sequence: [T]) -> [T.ID: T] {
 }
 
 public struct Lookup {
-  let music: Music
-
   let artistMap: [Artist.ID: Artist]
   let showMap: [Show.ID: Show]
   let venueMap: [Venue.ID: Venue]
@@ -21,19 +19,16 @@ public struct Lookup {
   public init(music: Music) {
     // non-parallel, used for Previews, tests
     self.init(
-      music: music,
       artistMap: createLookup(music.artists),
       showMap: createLookup(music.shows),
       venueMap: createLookup(music.venues))
   }
 
   internal init(
-    music: Music,
     artistMap: [Artist.ID: Artist],
     showMap: [Show.ID: Show],
     venueMap: [Venue.ID: Venue]
   ) {
-    self.music = music
     self.artistMap = artistMap
     self.showMap = showMap
     self.venueMap = venueMap
@@ -48,7 +43,6 @@ public struct Lookup {
     let (artistMap, showMap, venueMap) = await (artistLookup, showLookup, venueLookup)
 
     return Lookup(
-      music: music,
       artistMap: artistMap,
       showMap: showMap,
       venueMap: venueMap)
@@ -57,10 +51,6 @@ public struct Lookup {
   enum LookupError: Error {
     case missingVenue(Show)
     case missingArtist(Show, String)
-  }
-
-  private var shows: [Show] {
-    music.shows
   }
 
   public func venueForShow(_ show: Show) throws -> Venue {
@@ -88,26 +78,7 @@ public struct Lookup {
     return nil
   }
 
-  public func showsForArtist(_ artist: Artist) -> [Show] {
-    shows.filter { $0.artists.contains(artist.id) }
-  }
-
-  public func showsForVenue(_ venue: Venue) -> [Show] {
-    shows.filter { $0.venue == venue.id }
-  }
-
-  public func showsForYear(_ year: PartialDate) -> [Show] {
-    shows.filter { $0.date.normalizedYear == year.normalizedYear }
-  }
-
-  public func artistsWithShows() -> [Artist] {
+  public func artistsWithShows(_ shows: [Show]) -> [Artist] {
     return Set(shows.reduce(into: []) { $0 += $1.artists }).compactMap { artistMap[$0] }
-  }
-
-  public func showsOnDate(_ date: Date) -> [Show] {
-    return shows.filter { $0.date.day != nil }.filter { $0.date.month != nil }.filter {
-      Calendar.autoupdatingCurrent.date(
-        date, matchesComponents: DateComponents(month: $0.date.month!, day: $0.date.day!))
-    }
   }
 }
