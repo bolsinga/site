@@ -46,12 +46,16 @@ struct StatsGrouping: View {
     )
   }
 
-  private func computeArtists(for venues: [Venue]) -> [Artist] {
+  private var computeArtists: [Artist] {
     switch kind {
     case .artist:
       return []
     case .all, .venue:
-      return Array(Set(venues.flatMap { vault.lookup.artistsForVenue($0) }))
+      return Array(
+        Set(
+          shows.flatMap {
+            do { return try vault.lookup.artistsForShow($0) } catch { return [Artist]() }
+          }))
     }
   }
 
@@ -66,7 +70,7 @@ struct StatsGrouping: View {
     let venues = computedVenuesOfShows
     let showVenues = venues.count > 1
 
-    let artists = computeArtists(for: venues)
+    let artists = computeArtists
     let showArtists = artists.count > 1
 
     let stateCounts = computedStateCounts
