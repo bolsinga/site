@@ -8,21 +8,11 @@
 import Foundation
 
 enum StatsCategory: CaseIterable {
+  case shows
+  case years
+  case venues
+  case artists
   case weekday
   case month
   case state
-
-  var localizedString: String {
-    switch self {
-    case .weekday:
-      return String(
-        localized: "Weekdays", bundle: .module, comment: "Title of the WeekdayChart")
-    case .month:
-      return String(
-        localized: "Months", bundle: .module, comment: "Title of the MonthChart")
-    case .state:
-      return String(
-        localized: "States", bundle: .module, comment: "Title of the StateChart")
-    }
-  }
 }

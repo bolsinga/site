@@ -9,7 +9,6 @@ import SwiftUI
 
 struct ArtistDetail: View {
   @Environment(\.vault) private var vault: Vault
-  @Environment(\.statsThreshold) private var statsThreshold: Int
 
   let artist: Artist
 
@@ -23,55 +22,15 @@ struct ArtistDetail: View {
     }
   }
 
-  private func computedYearsOfShows(_ shows: [Show]) -> [PartialDate] {
-    return Array(
-      Set(shows.map { $0.date.year != nil ? PartialDate(year: $0.date.year!) : PartialDate() })
-    ).sorted(by: <)
-  }
-
-  private func computedVenuesOfShows(_ shows: [Show]) -> [Venue] {
-    Array(
-      Set(shows.compactMap { do { return try vault.lookup.venueForShow($0) } catch { return nil } })
-    )
-  }
-
   private var computedRelatedArtists: [Artist] {
     music.related(artist).sorted(by: vault.comparator.libraryCompare(lhs:rhs:))
   }
 
   @ViewBuilder private var statsElement: some View {
     let shows = computedShows
-    let yearsOfShows = computedYearsOfShows(shows)
-    let venues = computedVenuesOfShows(shows)
-
-    let yearSpan = yearsOfShows.yearSpan()
-
-    if shows.count > 1 || yearSpan > 1 || venues.count > 1 {
-      Section(
-        header: Text(
-          "Stats", bundle: .module, comment: "Title of the stats section for ArtistDetail")
-      ) {
-        if shows.count > 1 {
-          Text("\(shows.count) Show(s)", bundle: .module, comment: "Shows Count for ArtistDetail.")
-        }
-
-        if yearSpan > 1 {
-          Text(
-            "\(yearSpan) Year(s)", bundle: .module,
-            comment: "Years Count for ArtistDetail.")
-        }
-
-        if venues.count > 1 {
-          Text(
-            "\(venues.count) Venue(s)", bundle: .module, comment: "Venues Count for ArtistDetail."
-          )
-        }
-
-        if shows.count > statsThreshold {
-          NavigationLink(ArchiveCategory.stats.localizedString) {
-            StatsList(shows: shows)
-          }
-        }
+    if !shows.isEmpty {
+      Section(header: Text(ArchiveCategory.stats.localizedString)) {
+        StatsGrouping(shows: shows, displayArtistCountInformation: false)
       }
     }
   }

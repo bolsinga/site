@@ -9,7 +9,6 @@ import SwiftUI
 
 struct VenueDetail: View {
   @Environment(\.vault) private var vault: Vault
-  @Environment(\.statsThreshold) private var statsThreshold: Int
 
   let venue: Venue
 
@@ -25,16 +24,6 @@ struct VenueDetail: View {
     vault.lookup.showsForVenue(venue)
   }
 
-  private var computedYearsOfShows: [PartialDate] {
-    return Array(
-      Set(shows.map { $0.date.year != nil ? PartialDate(year: $0.date.year!) : PartialDate() })
-    ).sorted(by: <)
-  }
-
-  private var computedArtists: [Artist] {
-    vault.lookup.artistsForVenue(venue).sorted(by: vault.comparator.libraryCompare(lhs:rhs:))
-  }
-
   @ViewBuilder private var locationElement: some View {
     Section(
       header: Text(
@@ -47,37 +36,10 @@ struct VenueDetail: View {
   }
 
   @ViewBuilder private var statsElement: some View {
-    let yearsOfShows = computedYearsOfShows
-    let artists = computedArtists
-
-    let yearSpan = yearsOfShows.yearSpan()
-
-    if shows.count > 1 || yearSpan > 1 || artists.count > 1 {
-      Section(
-        header: Text(
-          "Stats", bundle: .module, comment: "Title of the stats section for VenueDetail")
-      ) {
-        if shows.count > 1 {
-          Text("\(shows.count) Show(s)", bundle: .module, comment: "Shows Count for VenueDetail.")
-        }
-
-        if yearSpan > 1 {
-          Text(
-            "\(yearSpan) Year(s)", bundle: .module,
-            comment: "Years Count for VenueDetail.")
-        }
-
-        if artists.count > 1 {
-          Text(
-            "\(artists.count) Artist(s)", bundle: .module, comment: "Artists Count for VenueDetail."
-          )
-        }
-
-        if shows.count > statsThreshold {
-          NavigationLink(ArchiveCategory.stats.localizedString) {
-            StatsList(shows: shows)
-          }
-        }
+    let shows = shows
+    if shows.count > 1 {
+      Section(header: Text(ArchiveCategory.stats.localizedString)) {
+        StatsGrouping(shows: shows)
       }
     }
   }
