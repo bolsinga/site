@@ -31,24 +31,28 @@ public struct Vault {
   }
 
   public static func create(music: Music) async -> Vault {
-    let lookup = await Lookup.create(music: music)
-    let comparator = await LibraryComparator.create(music: music)
+    async let asyncLookup = await Lookup.create(music: music)
+    async let asyncComparator = await LibraryComparator.create(music: music)
     async let sectioner = await LibrarySectioner.create(music: music)
 
-    let sortedArtists = lookup.artistsWithShows().sorted(by: comparator.libraryCompare(lhs:rhs:))
-    let sortedShows = music.shows.sorted {
+    let lookup = await asyncLookup
+    let comparator = await asyncComparator
+
+    async let sortedArtists = lookup.artistsWithShows().sorted(
+      by: comparator.libraryCompare(lhs:rhs:))
+    async let sortedShows = music.shows.sorted {
       comparator.showCompare(lhs: $0, rhs: $1, lookup: lookup)
     }
-    let sortedVenues = music.venues.sorted(by: comparator.libraryCompare(lhs:rhs:))
+    async let sortedVenues = music.venues.sorted(by: comparator.libraryCompare(lhs:rhs:))
 
     let sortedMusic = Music(
       albums: music.albums,
-      artists: sortedArtists,
+      artists: await sortedArtists,
       relations: music.relations,
-      shows: sortedShows,
+      shows: await sortedShows,
       songs: music.songs,
       timestamp: music.timestamp,
-      venues: sortedVenues)
+      venues: await sortedVenues)
 
     let v = Vault(
       music: sortedMusic, lookup: lookup, comparator: comparator, sectioner: await sectioner)
