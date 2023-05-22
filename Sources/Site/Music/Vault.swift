@@ -38,7 +38,7 @@ public struct Vault {
     let lookup = await asyncLookup
     let comparator = await asyncComparator
 
-    async let sortedArtists = lookup.artistsWithShows().sorted(
+    async let sortedArtists = lookup.artistsWithShows(music.shows).sorted(
       by: comparator.libraryCompare(lhs:rhs:))
     async let sortedShows = music.shows.sorted {
       comparator.showCompare(lhs: $0, rhs: $1, lookup: lookup)

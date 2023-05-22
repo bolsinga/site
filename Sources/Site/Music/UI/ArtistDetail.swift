@@ -17,7 +17,7 @@ struct ArtistDetail: View {
   }
 
   private var computedShows: [Show] {
-    return vault.lookup.showsForArtist(artist).sorted {
+    return music.showsForArtist(artist).sorted {
       vault.comparator.showCompare(lhs: $0, rhs: $1, lookup: vault.lookup)
     }
   }

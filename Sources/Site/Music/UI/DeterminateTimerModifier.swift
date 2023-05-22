@@ -36,16 +36,20 @@ struct DeterminateTimerModifier: ViewModifier {
   }
 
   func body(content: Content) -> some View {
+    let _ = Self._printChanges()
     content
       .onAppear {
         mainDeferredAction()
       }.task {
         repeat {
           do {
+            print("here")
             try await Task.sleep(
               until: .now + .seconds(Date.now.timeInterval(until: trigger)), clock: .continuous)
             mainDeferredAction()
-          } catch {}
+          } catch {
+            print("error: \(error)")
+          }
         } while true
       }
   }

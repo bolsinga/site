@@ -87,7 +87,7 @@ struct LibraryComparableList_Previews: PreviewProvider {
       LibraryComparableList(
         items: music.artists, sectioner: vault.sectioner, searchPrompt: "Artist Names"
       ) {
-        "\(vault.lookup.showsForArtist($0).count) Shows"
+        "\(vault.music.showsForArtist($0).count) Shows"
       }
       .navigationTitle("Artists")
       .environment(\.vault, vault)
@@ -98,7 +98,7 @@ struct LibraryComparableList_Previews: PreviewProvider {
       LibraryComparableList(
         items: music.venues, sectioner: vault.sectioner, searchPrompt: "Venue Names"
       ) {
-        "\(vault.lookup.showsForVenue($0).count) Shows"
+        "\(vault.music.showsForVenue($0).count) Shows"
       }
       .navigationTitle("Venues")
       .environment(\.vault, vault)
