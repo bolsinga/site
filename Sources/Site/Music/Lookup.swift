@@ -125,4 +125,11 @@ public struct Lookup {
       $0[$1] = count + 1
     }
   }
+
+  public var knownShowDates: [Date] {
+    shows.filter { $0.date.day != nil }
+      .filter { $0.date.month != nil }
+      .filter { $0.date.year != nil }
+      .compactMap { $0.date.date }
+  }
 }

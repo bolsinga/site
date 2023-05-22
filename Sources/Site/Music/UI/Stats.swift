@@ -14,12 +14,9 @@ struct Stats: View {
 
   var body: some View {
     VStack {
-      let knownDates = shows.filter { $0.date.day != nil }
-        .filter { $0.date.month != nil }
-        .filter { $0.date.year != nil }
-        .compactMap { $0.date.date }
-      WeekdayChart(dates: knownDates)
-      MonthChart(dates: knownDates)
+      let knownShowDates = vault.lookup.knownShowDates
+      WeekdayChart(dates: knownShowDates)
+      MonthChart(dates: knownShowDates)
       let stateCounts = vault.lookup.stateCounts
       if stateCounts.keys.count > 1 {
         StateChart(counts: stateCounts)
