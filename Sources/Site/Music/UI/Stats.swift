@@ -12,6 +12,15 @@ struct Stats: View {
 
   let shows: [Show]
 
+  private var computedStateCounts: [String: Int] {
+    shows.compactMap {
+      do { return try vault.lookup.venueForShow($0).location } catch { return nil }
+    }.map { $0.state }.reduce(into: [String: Int]()) {
+      let count = $0[$1] ?? 0
+      $0[$1] = count + 1
+    }
+  }
+
   var body: some View {
     VStack {
       let knownDates = shows.filter { $0.date.day != nil }
@@ -20,7 +29,7 @@ struct Stats: View {
         .compactMap { $0.date.date }
       WeekdayChart(dates: knownDates)
       MonthChart(dates: knownDates)
-      let stateCounts = vault.lookup.stateCounts
+      let stateCounts = computedStateCounts
       if stateCounts.keys.count > 1 {
         StateChart(counts: stateCounts)
       }
