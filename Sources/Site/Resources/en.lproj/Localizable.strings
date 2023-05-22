@@ -34,6 +34,9 @@ Label in the chart for the Count in StateChart. */
 /* Label in the chart for the Month in MonthChart. */
 "Month" = "Month";
 
+/* Title of the MonthChart */
+"Months" = "Months";
+
 /* String used to describe LibrarySection.numeric. */
 "Numeric" = "Numeric";
 
@@ -58,17 +61,11 @@ Title of the Shows section of VenueDetail
 ArchiveCategory Shows */
 "Shows" = "Shows";
 
-/* Title of the WeekdayChart */
-"Shows by Day of Week" = "Shows by Day of Week";
-
-/* Title of the MonthChart */
-"Shows by Month" = "Shows by Month";
-
-/* Title of the StateChart */
-"Shows by State" = "Shows by State";
-
 /* Label in the chart for the State in StateChart. */
 "State" = "State";
+
+/* Title of the StateChart */
+"States" = "States";
 
 /* Title of the stats section for ArtistDetail
 Title of the stats section for VenueDetail
@@ -87,6 +84,9 @@ ArchiveCategory Venues */
 
 /* Label in the chart for the Weekday in WeekdayChart. */
 "Weekday" = "Weekday";
+
+/* Title of the WeekdayChart */
+"Weekdays" = "Weekdays";
 
 /* String for when a Show.PartialDate is unknown, and only the year is being shown. */
 "Year Unknown" = "Year Unknown";
