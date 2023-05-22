@@ -34,13 +34,13 @@ struct StatsGrouping: View {
     }
   }
 
-  private func computedYearsOfShows() -> [PartialDate] {
+  private var computedYearsOfShows: [PartialDate] {
     return Array(
       Set(shows.map { $0.date.year != nil ? PartialDate(year: $0.date.year!) : PartialDate() })
     ).sorted(by: <)
   }
 
-  private func computedVenuesOfShows() -> [Venue] {
+  private var computedVenuesOfShows: [Venue] {
     Array(
       Set(shows.compactMap { do { return try vault.lookup.venueForShow($0) } catch { return nil } })
     )
@@ -61,9 +61,9 @@ struct StatsGrouping: View {
       .filter { $0.date.year != nil }
       .compactMap { $0.date.date }
 
-    let yearSpan = computedYearsOfShows().yearSpan()
+    let yearSpan = computedYearsOfShows.yearSpan()
 
-    let venues = computedVenuesOfShows()
+    let venues = computedVenuesOfShows
     let showVenues = venues.count > 1
 
     let artists = computeArtists(for: venues)
