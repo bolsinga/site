@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-struct LibraryComparableList<T>: View
+struct LibraryComparableList<T, Content: View>: View
 where T: LibraryComparable, T: Identifiable, T: Hashable, T.ID == String {
   let items: [T]
   let sectioner: LibrarySectioner
   let searchPrompt: String
-  let contentValue: (T) -> String
+  @ViewBuilder let contentView: (T) -> Content
 
   @State private var searchString: String = ""
 
@@ -37,7 +37,11 @@ where T: LibraryComparable, T: Identifiable, T: Hashable, T.ID == String {
         Section {
           ForEach(sectionMap[section] ?? []) { item in
             NavigationLink(value: item) {
-              LabeledContent(item.name, value: contentValue(item))
+              LabeledContent {
+                contentView(item)
+              } label: {
+                Text(item.name)
+              }
             }
           }
         } header: {
@@ -89,7 +93,7 @@ struct LibraryComparableList_Previews: PreviewProvider {
       LibraryComparableList(
         items: music.artists, sectioner: vault.sectioner, searchPrompt: "Artist Names"
       ) {
-        "\(vault.music.showsForArtist($0).count) Shows"
+        Text(vault.music.showsForArtist($0).count.formatted(.number))
       }
       .navigationTitle("Artists")
       .environment(\.vault, vault)
@@ -99,9 +103,7 @@ struct LibraryComparableList_Previews: PreviewProvider {
     NavigationStack {
       LibraryComparableList(
         items: music.venues, sectioner: vault.sectioner, searchPrompt: "Venue Names"
-      ) {
-        "\(vault.music.showsForVenue($0).count) Shows"
-      }
+      ) { _ in }
       .navigationTitle("Venues")
       .environment(\.vault, vault)
       .musicDestinations()
