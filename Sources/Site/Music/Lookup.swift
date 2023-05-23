@@ -15,8 +15,8 @@ public struct Lookup {
   let artistMap: [Artist.ID: Artist]
   let showMap: [Show.ID: Show]
   let venueMap: [Venue.ID: Venue]
-  let artistRankings: Music.ArtistRankings
-  let artistRankingMap: Music.ArtistRankingMap
+  let artistRankings: Music.ItemRankings
+  let artistRankingMap: Music.ItemRankingMap
 
   public init(music: Music) {
     // non-parallel, used for Previews, tests
@@ -34,8 +34,8 @@ public struct Lookup {
     artistMap: [Artist.ID: Artist],
     showMap: [Show.ID: Show],
     venueMap: [Venue.ID: Venue],
-    artistRankings: Music.ArtistRankings,
-    artistRankingMap: Music.ArtistRankingMap
+    artistRankings: Music.ItemRankings,
+    artistRankingMap: Music.ItemRankingMap
   ) {
     self.artistMap = artistMap
     self.showMap = showMap
