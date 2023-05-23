@@ -12,16 +12,17 @@ struct VenueList: View {
   let venues: [Venue]
 
   var body: some View {
+    let helper = LibraryComparableListHelper(sectioner: vault.sectioner) { (venue: Venue) in
+      Text(
+        "\(vault.lookup.venueRank(venue: venue).count) Show(s)", bundle: .module,
+        comment: "Value for the Venue # of Shows.")
+    }
     LibraryComparableList(
       items: venues,
       searchPrompt: String(
         localized: "Venue Names", bundle: .module, comment: "VenueList searchPrompt"),
-      sectioner: vault.sectioner
-    ) {
-      Text(
-        "\(vault.lookup.venueRank(venue: $0).count) Show(s)", bundle: .module,
-        comment: "Value for the Venue # of Shows.")
-    }
+      helper: helper
+    )
     .navigationTitle(Text("Venues", bundle: .module, comment: "Title for the Venue Detail"))
   }
 }
