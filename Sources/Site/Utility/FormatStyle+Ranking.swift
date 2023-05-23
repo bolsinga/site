@@ -11,6 +11,7 @@ extension Ranking {
   struct FormatStyle: Codable, Equatable, Hashable {
     enum Style: Codable, Equatable, Hashable {
       case rankOnly
+      case rankAndCount
     }
 
     let style: Style
@@ -32,6 +33,11 @@ extension Ranking.FormatStyle: Foundation.FormatStyle {
       return String(
         localized: "Ranking: \(value.rank.formatted(.number))", bundle: .module,
         comment: "Ranking.FormatStyle.rankOnly")
+    case .rankAndCount:
+      return String(
+        localized:
+          "Ranking: \(value.rank.formatted(.number)) Count: \(value.count.formatted(.number))",
+        bundle: .module, comment: "Ranking.FormatStyle.rankAndCount")
     }
   }
 }
@@ -49,6 +55,7 @@ extension Ranking {
 
 extension FormatStyle where Self == Ranking.FormatStyle {
   static var rankOnly: Self { .init(.rankOnly) }
+  static var rankAndCount: Self { .init(.rankAndCount) }
 
   static func librarySection(style: Ranking.FormatStyle.Style = .rankOnly) -> Self {
     .init(style)

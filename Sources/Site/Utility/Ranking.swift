@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Ranking {
+struct Ranking: Hashable {
   let rank: Int  // 1...n
   let count: Int
 
