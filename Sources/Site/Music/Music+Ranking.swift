@@ -8,19 +8,18 @@
 import Foundation
 
 extension Music {
-  typealias ArtistsShowCount = ([Artist], Int)  // Int is the showCount. All the Artists in this array have the same show count.
+  typealias ArtistsShowCount = ([Artist.ID], Int)  // Int is the showCount. All the Artists in this array have the same show count.
   typealias ArtistRankings = [ArtistsShowCount]  // From least to most.
-  typealias Rank = (Int, Int)  // Ranking is 1...n and showCount
-  typealias ArtistRankingMap = [Artist: Rank]  // Lookup an Artists Rank
+  typealias Rank = (rank: Int, count: Int)  // Ranking is 1...n and showCount
+  typealias ArtistRankingMap = [Artist.ID: Rank]  // Lookup an Artists Rank
 
   var artistRankings: (ArtistRankings, ArtistRankingMap) {
-    // NOTE: This one here can become [(ID, Int)] and then the rest will work for venues and other counts (such as year spans?)
-    let artistShowCounts: [(Artist, Int)] = self.artists.reduce(into: [:]) {
-      $0[$1] = self.showsForArtist($1).count
+    let artistShowCounts: [(Artist.ID, Int)] = self.artists.reduce(into: [:]) {
+      $0[$1.id] = self.showsForArtist($1).count
     }.map { $0 }
 
     // ShowCount: [Artist]
-    let artistRanks: [Int: [Artist]] = Dictionary(grouping: artistShowCounts) { $0.1 }
+    let artistRanks: [Int: [Artist.ID]] = Dictionary(grouping: artistShowCounts) { $0.1 }
       .reduce(into: [:]) {
         var arr = $0[$1.key] ?? []
         arr.append(contentsOf: $1.value.map { $0.0 })
