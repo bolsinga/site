@@ -16,7 +16,7 @@ struct VenueList: View {
       items: venues,
       searchPrompt: String(
         localized: "Venue Names", bundle: .module, comment: "VenueList searchPrompt"),
-      sectioner: vault.rankSectioner
+      sectioner: vault.sectioner
     ) {
       Text(
         "\(vault.lookup.venueRank(venue: $0).count) Show(s)", bundle: .module,
