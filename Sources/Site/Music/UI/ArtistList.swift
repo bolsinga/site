@@ -17,8 +17,8 @@ struct ArtistList: View {
       searchPrompt: String(
         localized: "Artist Names", bundle: .module, comment: "ArtistList searchPrompt")
     ) {
-      String(
-        localized: "\(vault.music.showsForArtist($0).count) Show(s)", bundle: .module,
+      Text(
+        "\(vault.music.showsForArtist($0).count) Show(s)", bundle: .module,
         comment: "Value for the Artist # of Shows.")
     }
     .navigationTitle(Text("Artists", bundle: .module, comment: "Title for the Artist Detail"))
