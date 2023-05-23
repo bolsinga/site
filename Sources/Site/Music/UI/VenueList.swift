@@ -18,7 +18,7 @@ struct VenueList: View {
         localized: "Venue Names", bundle: .module, comment: "VenueList searchPrompt")
     ) {
       Text(
-        "\(vault.music.showsForVenue($0).count) Show(s)", bundle: .module,
+        "\(vault.lookup.venueRank(venue: $0).count) Show(s)", bundle: .module,
         comment: "Value for the Venue # of Shows.")
     }
     .navigationTitle(Text("Venues", bundle: .module, comment: "Title for the Venue Detail"))
