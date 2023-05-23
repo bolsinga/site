@@ -13,9 +13,10 @@ struct VenueList: View {
 
   var body: some View {
     LibraryComparableList(
-      items: venues, sectioner: vault.sectioner,
+      items: venues,
       searchPrompt: String(
-        localized: "Venue Names", bundle: .module, comment: "VenueList searchPrompt")
+        localized: "Venue Names", bundle: .module, comment: "VenueList searchPrompt"),
+      sectioner: vault.rankSectioner
     ) {
       Text(
         "\(vault.lookup.venueRank(venue: $0).count) Show(s)", bundle: .module,
