@@ -46,7 +46,7 @@ Label in the chart for the Count in StateChart. */
 /* String used to describe LibrarySection.punctuation. */
 "Punctuation" = "Punctuation";
 
-/* Ranking String for StatsGrouping show count */
+/* Ranking.FormatStyle.rankOnly */
 "Rank: %lld" = "Rank: %lld";
 
 /* Title of the Related Artists Section for ArtistDetail. */

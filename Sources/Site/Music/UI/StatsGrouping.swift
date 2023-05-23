@@ -70,9 +70,7 @@ struct StatsGrouping: View {
       HStack {
         showCount
         Spacer()
-        Text(
-          "Rank: \(computeShowsRank().rank)", bundle: .module,
-          comment: "Ranking String for StatsGrouping show count")
+        Text(computeShowsRank().formatted(.rankOnly))
       }
     } else {
       showCount
