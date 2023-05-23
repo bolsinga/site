@@ -8,15 +8,6 @@
 import Foundation
 
 extension Music {
-  struct Ranking {
-    let rank: Int  // 1...n
-    let count: Int
-
-    static var empty: Ranking {
-      Ranking(rank: 0, count: 0)
-    }
-  }
-
   typealias ItemCount = ([String], Int)  // Int is the count. All the items in this array have the same count.
   typealias ItemRankings = [ItemCount]  // From least to most.
   typealias ItemRankingMap = [String: Ranking]  // Lookup an items Ranking
