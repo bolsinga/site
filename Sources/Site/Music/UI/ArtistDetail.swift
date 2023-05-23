@@ -32,7 +32,7 @@ struct ArtistDetail: View {
       Section(header: Text(ArchiveCategory.stats.localizedString)) {
         StatsGrouping(
           shows: shows, kind: .artist,
-          computeShowsRank: { vault.lookup.showRank(artist: artist).rank })
+          computeShowsRank: { vault.lookup.showRank(artist: artist) })
       }
     }
   }
