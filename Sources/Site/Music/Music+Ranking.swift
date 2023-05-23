@@ -8,10 +8,18 @@
 import Foundation
 
 extension Music {
+  struct Ranking {
+    let rank: Int  // 1...n
+    let count: Int
+
+    static var empty: Ranking {
+      Ranking(rank: 0, count: 0)
+    }
+  }
+
   typealias ItemCount = ([String], Int)  // Int is the count. All the items in this array have the same count.
   typealias ItemRankings = [ItemCount]  // From least to most.
-  typealias Rank = (rank: Int, count: Int)  // Ranking is 1...n and count
-  typealias ItemRankingMap = [String: Rank]  // Lookup an items Rank
+  typealias ItemRankingMap = [String: Ranking]  // Lookup an items Ranking
 
   var artistRankings: (ItemRankings, ItemRankingMap) {
     let artistShowCounts: [(Artist.ID, Int)] = self.artists.reduce(into: [:]) {
@@ -29,7 +37,7 @@ extension Music {
     return computeRankings(items: venuesShowCount)
   }
 
-  internal func computeRankings<T>(items: [(T, Int)]) -> ([([T], Int)], [T: Rank]) {
+  internal func computeRankings<T>(items: [(T, Int)]) -> ([([T], Int)], [T: Ranking]) {
     let itemRanks: [Int: [T]] = Dictionary(grouping: items) { $0.1 }
       .reduce(into: [:]) {
         var arr = $0[$1.key] ?? []
@@ -42,11 +50,11 @@ extension Music {
       .reduce(into: []) { $0.append(($1.value, $1.key)) }
 
     var rank = 1
-    // T : Ordinal Rank (1, 2, 3 etc)
-    let itemRankMap: [T: Rank] = itemsOrdered.reversed().reduce(into: [:]) {
+    // T : Ordinal rank (1, 2, 3 etc)
+    let itemRankMap: [T: Ranking] = itemsOrdered.reversed().reduce(into: [:]) {
       dictionary, itemRankings in
       itemRankings.0.forEach { item in
-        dictionary[item] = Rank(rank, itemRankings.1)
+        dictionary[item] = Ranking(rank: rank, count: itemRankings.1)
       }
       rank += 1
     }
