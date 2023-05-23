@@ -19,9 +19,9 @@ struct StatsGrouping: View {
 
   let shows: [Show]
   let kind: Kind
-  let computeShowsRank: (() -> Int)?
+  let computeShowsRank: (() -> Ranking)?
 
-  internal init(shows: [Show], kind: StatsGrouping.Kind, computeShowsRank: (() -> Int)? = nil) {
+  internal init(shows: [Show], kind: StatsGrouping.Kind, computeShowsRank: (() -> Ranking)? = nil) {
     self.shows = shows
     self.kind = kind
     self.computeShowsRank = computeShowsRank
@@ -71,7 +71,7 @@ struct StatsGrouping: View {
         showCount
         Spacer()
         Text(
-          "Rank: \(computeShowsRank())", bundle: .module,
+          "Rank: \(computeShowsRank().rank)", bundle: .module,
           comment: "Ranking String for StatsGrouping show count")
       }
     } else {
