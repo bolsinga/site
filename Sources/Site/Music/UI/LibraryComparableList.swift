@@ -34,12 +34,14 @@ where T: LibraryComparable, T: Identifiable, T: Hashable, T.ID == String {
     let sectionMap = sectionMap
     List {
       ForEach(sectionMap.keys.sorted(), id: \.self) { section in
-        Section(section.formatted(.long)) {
+        Section {
           ForEach(sectionMap[section] ?? []) { item in
             NavigationLink(value: item) {
               LabeledContent(item.name, value: contentValue(item))
             }
           }
+        } header: {
+          section.representingView
         }
       }
     }
