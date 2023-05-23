@@ -109,11 +109,11 @@ public struct Lookup {
     return Set(shows.reduce(into: []) { $0 += $1.artists }).compactMap { artistMap[$0] }
   }
 
-  func showRank(artist: Artist) -> Music.Rank {
-    artistRankingMap[artist.id] ?? (0, 0)
+  func showRank(artist: Artist) -> Music.Ranking {
+    artistRankingMap[artist.id] ?? Music.Ranking.empty
   }
 
-  func venueRank(venue: Venue) -> Music.Rank {
-    venueRankingMap[venue.id] ?? (0, 0)
+  func venueRank(venue: Venue) -> Music.Ranking {
+    venueRankingMap[venue.id] ?? Music.Ranking.empty
   }
 }
