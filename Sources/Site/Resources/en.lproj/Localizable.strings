@@ -49,6 +49,9 @@ Label in the chart for the Count in StateChart. */
 /* Ranking.FormatStyle.rankOnly */
 "Ranking: %@" = "Ranking: %@";
 
+/* Ranking.FormatStyle.rankAndCount */
+"Ranking: %@ Count: %@" = "Ranking: %@ Count: %@";
+
 /* Title of the Related Artists Section for ArtistDetail. */
 "Related Artists" = "Related Artists";
 
