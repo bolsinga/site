@@ -30,7 +30,8 @@ extension Ranking.FormatStyle: Foundation.FormatStyle {
     switch style {
     case .rankOnly:
       return String(
-        localized: "Ranking: \(value.rank.formatted(.number))", bundle: .module, comment: "Ranking.FormatStyle.rankOnly")
+        localized: "Ranking: \(value.rank.formatted(.number))", bundle: .module,
+        comment: "Ranking.FormatStyle.rankOnly")
     }
   }
 }
