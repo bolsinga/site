@@ -19,11 +19,17 @@ public struct Lookup {
   let artistRankingMap: Music.ItemRankingMap
   let venueRankings: Music.ItemRankings
   let venueRankingMap: Music.ItemRankingMap
+  let artistShowSpanRankings: Music.ItemRankings
+  let artistShowSpanRankingMap: Music.ItemRankingMap
+  let venueShowSpanRankings: Music.ItemRankings
+  let venueShowSpanRankingMap: Music.ItemRankingMap
 
   public init(music: Music) {
     // non-parallel, used for Previews, tests
     let artistRanks = music.artistRankings
     let venueRanks = music.venueRankings
+    let artistSpanRanks = music.artistSpanRankings
+    let venueSpanRanks = music.venueSpanRankings
 
     self.init(
       artistMap: createLookup(music.artists),
@@ -32,7 +38,11 @@ public struct Lookup {
       artistRankings: artistRanks.0,
       artistRankingMap: artistRanks.1,
       venueRankings: venueRanks.0,
-      venueRankingMap: venueRanks.1)
+      venueRankingMap: venueRanks.1,
+      artistShowSpanRankings: artistSpanRanks.0,
+      artistShowSpanRankingMap: artistSpanRanks.1,
+      venueShowSpanRankings: venueSpanRanks.0,
+      venueShowSpanRankingMap: venueSpanRanks.1)
   }
 
   internal init(
@@ -42,7 +52,11 @@ public struct Lookup {
     artistRankings: Music.ItemRankings,
     artistRankingMap: Music.ItemRankingMap,
     venueRankings: Music.ItemRankings,
-    venueRankingMap: Music.ItemRankingMap
+    venueRankingMap: Music.ItemRankingMap,
+    artistShowSpanRankings: Music.ItemRankings,
+    artistShowSpanRankingMap: Music.ItemRankingMap,
+    venueShowSpanRankings: Music.ItemRankings,
+    venueShowSpanRankingMap: Music.ItemRankingMap
   ) {
     self.artistMap = artistMap
     self.showMap = showMap
@@ -51,6 +65,10 @@ public struct Lookup {
     self.artistRankingMap = artistRankingMap
     self.venueRankings = venueRankings
     self.venueRankingMap = venueRankingMap
+    self.artistShowSpanRankings = artistShowSpanRankings
+    self.artistShowSpanRankingMap = artistShowSpanRankingMap
+    self.venueShowSpanRankings = venueShowSpanRankings
+    self.venueShowSpanRankingMap = venueShowSpanRankingMap
   }
 
   public static func create(music: Music) async -> Lookup {
@@ -60,9 +78,15 @@ public struct Lookup {
     async let venueLookup = createLookup(music.venues)
     async let artistRanks = music.artistRankings
     async let venueRanks = music.venueRankings
+    async let artistSpanRanks = music.artistSpanRankings
+    async let venueSpanRanks = music.venueSpanRankings
 
-    let (artistMap, showMap, venueMap, artistRankings, venueRankings) = await (
-      artistLookup, showLookup, venueLookup, artistRanks, venueRanks
+    let (
+      artistMap, showMap, venueMap, artistRankings, venueRankings, artistSpanRankings,
+      venueSpanRankings
+    ) = await (
+      artistLookup, showLookup, venueLookup, artistRanks, venueRanks, artistSpanRanks,
+      venueSpanRanks
     )
 
     return Lookup(
@@ -72,7 +96,11 @@ public struct Lookup {
       artistRankings: artistRankings.0,
       artistRankingMap: artistRankings.1,
       venueRankings: venueRankings.0,
-      venueRankingMap: venueRankings.1)
+      venueRankingMap: venueRankings.1,
+      artistShowSpanRankings: artistSpanRankings.0,
+      artistShowSpanRankingMap: artistSpanRankings.1,
+      venueShowSpanRankings: venueSpanRankings.0,
+      venueShowSpanRankingMap: venueSpanRankings.1)
   }
 
   enum LookupError: Error {
@@ -115,5 +143,13 @@ public struct Lookup {
 
   func venueRank(venue: Venue) -> Ranking {
     venueRankingMap[venue.id] ?? Ranking.empty
+  }
+
+  func spanRank(artist: Artist) -> Ranking {
+    artistShowSpanRankingMap[artist.id] ?? Ranking.empty
+  }
+
+  func spanRank(venue: Venue) -> Ranking {
+    venueShowSpanRankingMap[venue.id] ?? Ranking.empty
   }
 }
