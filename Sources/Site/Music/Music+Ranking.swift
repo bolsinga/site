@@ -8,8 +8,8 @@
 import Foundation
 
 extension Music {
-  typealias ItemCount = ([String], Int)  // Int is the count. All the items in this array have the same count.
-  typealias ItemRankings = [ItemCount]  // From least to most.
+  typealias ItemValue = ([String], Int)  // Int is the value. All the items in this array have the same value.
+  typealias ItemRankings = [ItemValue]  // From least to most.
   typealias ItemRankingMap = [String: Ranking]  // Lookup an items Ranking
 
   var artistRankings: (ItemRankings, ItemRankingMap) {
@@ -26,6 +26,28 @@ extension Music {
     }.map { $0 }
 
     return computeRankings(items: venuesShowCount)
+  }
+
+  private func computedYears(shows: [Show]) -> [PartialDate] {
+    return Array(
+      Set(shows.map { $0.date.year != nil ? PartialDate(year: $0.date.year!) : PartialDate() })
+    ).sorted(by: <)
+  }
+
+  var artistSpanRankings: (ItemRankings, ItemRankingMap) {
+    let artistShowSpans: [(Artist.ID, Int)] = self.artists.reduce(into: [:]) {
+      $0[$1.id] = computedYears(shows: self.showsForArtist($1)).yearSpan()
+    }.map { $0 }
+
+    return computeRankings(items: artistShowSpans)
+  }
+
+  var venueSpanRankings: (ItemRankings, ItemRankingMap) {
+    let venueShowSpans: [(Venue.ID, Int)] = self.venues.reduce(into: [:]) {
+      $0[$1.id] = computedYears(shows: self.showsForVenue($1)).yearSpan()
+    }.map { $0 }
+
+    return computeRankings(items: venueShowSpans)
   }
 
   internal func computeRankings<T>(items: [(T, Int)]) -> ([([T], Int)], [T: Ranking]) {

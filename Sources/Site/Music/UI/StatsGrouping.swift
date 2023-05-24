@@ -19,11 +19,16 @@ struct StatsGrouping: View {
 
   let shows: [Show]
   let kind: Kind
+  let yearsSpanRanking: Ranking?
   let computeShowsRank: (() -> Ranking)?
 
-  internal init(shows: [Show], kind: StatsGrouping.Kind, computeShowsRank: (() -> Ranking)? = nil) {
+  internal init(
+    shows: [Show], kind: StatsGrouping.Kind, yearsSpanRanking: Ranking? = nil,
+    computeShowsRank: (() -> Ranking)? = nil
+  ) {
     self.shows = shows
     self.kind = kind
+    self.yearsSpanRanking = yearsSpanRanking
     self.computeShowsRank = computeShowsRank
   }
 
@@ -36,10 +41,16 @@ struct StatsGrouping: View {
     }
   }
 
-  private var computedYearsOfShows: [PartialDate] {
-    return Array(
-      Set(shows.map { $0.date.year != nil ? PartialDate(year: $0.date.year!) : PartialDate() })
-    ).sorted(by: <)
+  @ViewBuilder var yearsElement: some View {
+    if let yearsSpanRanking {
+      HStack {
+        Text(
+          "\(yearsSpanRanking.count) Year(s)", bundle: .module,
+          comment: "Years Span for StatsGrouping.")
+        Spacer()
+        Text(yearsSpanRanking.formatted(.rankOnly))
+      }
+    }
   }
 
   private var computedVenuesOfShows: [Venue] {
@@ -83,8 +94,6 @@ struct StatsGrouping: View {
       .filter { $0.date.year != nil }
       .compactMap { $0.date.date }
 
-    let yearSpan = computedYearsOfShows.yearSpan()
-
     let venues = computedVenuesOfShows
     let showVenues = venues.count > 1
 
@@ -97,7 +106,7 @@ struct StatsGrouping: View {
     let showWeekdayOrMonthChart = shows.count > statsThreshold
 
     let statsCategoryCases = StatsCategory.allCases
-      .filter { $0 == .years ? yearSpan > 1 : true }
+      .filter { $0 == .years ? (yearsSpanRanking?.count ?? 0) > 1 : true }
       .filter { $0 == .venues ? showVenues : true }
       .filter { $0 == .artists ? showArtists : true }
       .filter { $0 == .weekday ? showWeekdayOrMonthChart : true }
@@ -110,7 +119,7 @@ struct StatsGrouping: View {
         case .shows:
           showsElement
         case .years:
-          Text("\(yearSpan) Year(s)", bundle: .module, comment: "Years Span for StatsGrouping.")
+          yearsElement
         case .venues:
           Text(
             "\(venues.count) Venue(s)", bundle: .module, comment: "Venues Count for StatsGrouping.")
