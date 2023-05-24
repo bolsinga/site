@@ -7,15 +7,19 @@
 
 import SwiftUI
 
-struct LibraryComparableList<T, Content: View>: View
-where T: LibraryComparable, T: Identifiable, T: Hashable, T.ID == String {
+struct LibraryComparableListHelper<T, Content: View> {
   typealias ContentBuilder = (T) -> Content
-
-  let items: [T]
-  let searchPrompt: String
 
   let sectioner: LibrarySectioner
   @ViewBuilder let contentView: ContentBuilder
+}
+
+struct LibraryComparableList<T, Content: View>: View
+where T: LibraryComparable, T: Identifiable, T: Hashable, T.ID == String {
+
+  let items: [T]
+  let searchPrompt: String
+  let helper: LibraryComparableListHelper<T, Content>
 
   @State private var searchString: String = ""
 
@@ -26,7 +30,7 @@ where T: LibraryComparable, T: Identifiable, T: Hashable, T.ID == String {
 
   private var sectionMap: [LibrarySection: [T]] {
     filteredItems.reduce(into: [LibrarySection: [T]]()) {
-      let section = sectioner.librarySection($1)
+      let section = helper.sectioner.librarySection($1)
       var arr = ($0[section] ?? [])
       arr.append($1)
       $0[section] = arr
@@ -41,7 +45,7 @@ where T: LibraryComparable, T: Identifiable, T: Hashable, T.ID == String {
           ForEach(sectionMap[section] ?? []) { item in
             NavigationLink(value: item) {
               LabeledContent {
-                contentView(item)
+                helper.contentView(item)
               } label: {
                 Text(item.name)
               }
@@ -96,10 +100,10 @@ struct LibraryComparableList_Previews: PreviewProvider {
       LibraryComparableList(
         items: music.artists,
         searchPrompt: "Artist Names",
-        sectioner: vault.sectioner
-      ) {
-        Text(vault.music.showsForArtist($0).count.formatted(.number))
-      }
+        helper: LibraryComparableListHelper(sectioner: vault.sectioner) { (artist: Artist) in
+          Text(vault.music.showsForArtist(artist).count.formatted(.number))
+        }
+      )
       .navigationTitle("Artists")
       .environment(\.vault, vault)
       .musicDestinations()
@@ -109,8 +113,9 @@ struct LibraryComparableList_Previews: PreviewProvider {
       LibraryComparableList(
         items: music.venues,
         searchPrompt: "Venue Names",
-        sectioner: vault.sectioner
-      ) { _ in }
+        helper: LibraryComparableListHelper(sectioner: vault.sectioner) { _ in
+        }
+      )
       .navigationTitle("Venues")
       .environment(\.vault, vault)
       .musicDestinations()
