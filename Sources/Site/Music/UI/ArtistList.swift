@@ -12,17 +12,16 @@ struct ArtistList: View {
   let artists: [Artist]
 
   var body: some View {
-    let helper = LibraryComparableListHelper(sectioner: vault.sectioner) { (artist: Artist) in
-      Text(
-        "\(vault.lookup.showRank(artist: artist).count) Show(s)", bundle: .module,
-        comment: "Value for the Artist # of Shows.")
-    }
-
     LibraryComparableList(
       items: artists,
       searchPrompt: String(
         localized: "Artist Names", bundle: .module, comment: "ArtistList searchPrompt"),
-      helper: helper
+      sectioner: vault.sectioner,
+      itemContentView: { (artist: Artist) in
+        Text(
+          "\(vault.lookup.showRank(artist: artist).count) Show(s)", bundle: .module,
+          comment: "Value for the Artist # of Shows.")
+      }
     )
     .navigationTitle(Text("Artists", bundle: .module, comment: "Title for the Artist Detail"))
   }
