@@ -7,6 +7,9 @@
 /* Title for the ShowList when there is a year */
 "%@ Shows" = "%@ Shows";
 
+/* LibrarySectionAlgorithm.alphabetical */
+"Alphabetical" = "Alphabetical";
+
 /* Title for the ArchivesList. */
 "Archives" = "Archives";
 
@@ -57,6 +60,12 @@ Label in the chart for the Count in StateChart. */
 
 /* Title of the Related Venues Section for VenueDetail. */
 "Related Venues" = "Related Venues";
+
+/* LibrarySectionAlgorithm.showCount */
+"Show Count" = "Show Count";
+
+/* LibrarySectionAlgorithm.showYearRange */
+"Show Year Range" = "Show Year Range";
 
 /* Title for the ShowYearList. */
 "Show Years" = "Show Years";
