@@ -21,8 +21,8 @@ struct ArtistList: View {
       itemContentView: {
         algorithm.itemContentView(vault.lookup.showRank(artist: $0).count)
       },
-      headerView: { section in
-        section.representingView
+      headerView: {
+        algorithm.headerView($0)
       }
     )
     .navigationTitle(Text("Artists", bundle: .module, comment: "Title for the Artist Detail"))

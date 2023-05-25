@@ -99,8 +99,8 @@ struct LibraryComparableList_Previews: PreviewProvider {
         itemContentView: { (artist: Artist) in
           Text(vault.music.showsForArtist(artist).count.formatted(.number))
         },
-        headerView: { section in
-          section.representingView
+        headerView: {
+          $0.representingView
         }
       )
       .navigationTitle("Artists")
@@ -115,8 +115,8 @@ struct LibraryComparableList_Previews: PreviewProvider {
         sectioner: vault.sectioner,
         itemContentView: { _ in
         },
-        headerView: { section in
-          section.representingView
+        headerView: {
+          $0.representingView
         }
       )
       .navigationTitle("Venues")
