@@ -51,7 +51,7 @@ struct VenueDetail: View {
       header: Text("Shows", bundle: .module, comment: "Title of the Shows section of VenueDetail")
     ) {
       ForEach(shows) { show in
-        NavigationLink(value: show) { VenueBlurb(show: show) }
+        NavigationLink(archivable: show) { VenueBlurb(show: show) }
       }
     }
   }
@@ -65,7 +65,7 @@ struct VenueDetail: View {
           comment: "Title of the Related Venues Section for VenueDetail.")
       ) {
         ForEach(relatedVenues) { relatedVenue in
-          NavigationLink(relatedVenue.name, value: relatedVenue)
+          NavigationLink(relatedVenue.name, archivable: relatedVenue)
         }
       }
     }
@@ -91,7 +91,7 @@ struct VenueDetail_Previews: PreviewProvider {
     NavigationStack {
       VenueDetail(venue: vault.music.venues[0])
         .environment(\.vault, vault)
-        .musicDestinations()
+        .archiveDestinations()
     }
   }
 }

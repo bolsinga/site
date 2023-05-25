@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct LibraryComparableList<T>: View
-where T: LibraryComparable, T: Identifiable, T: Hashable, T.ID == String {
+where T: LibraryComparable, T: Identifiable, T: Hashable, T.ID == String, T: Archivable {
   @Environment(\.vault) private var vault: Vault
 
   let items: [T]
@@ -38,7 +38,7 @@ where T: LibraryComparable, T: Identifiable, T: Hashable, T.ID == String {
       ForEach(sectionMap.keys.sorted(), id: \.self) { section in
         Section {
           ForEach(sectionMap[section] ?? []) { item in
-            NavigationLink(value: item) {
+            NavigationLink(archivable: item) {
               LabeledContent {
                 algorithm.itemContentView(itemContentValue(item))
               } label: {
@@ -83,7 +83,7 @@ struct LibraryComparableList_Previews: PreviewProvider {
       )
       .navigationTitle("Artists")
       .environment(\.vault, vault)
-      .musicDestinations()
+      .archiveDestinations()
     }
 
     NavigationStack {
@@ -96,7 +96,7 @@ struct LibraryComparableList_Previews: PreviewProvider {
       )
       .navigationTitle("Venues")
       .environment(\.vault, vault)
-      .musicDestinations()
+      .archiveDestinations()
     }
   }
 }

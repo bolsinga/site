@@ -12,7 +12,7 @@ struct TodayList: View {
 
   var body: some View {
     List(shows) { show in
-      NavigationLink(value: show) { TodayBlurb(show: show) }
+      NavigationLink(archivable: show) { TodayBlurb(show: show) }
     }
     .listStyle(.plain)
     .navigationTitle(
@@ -29,7 +29,7 @@ struct TodayList_Previews: PreviewProvider {
     NavigationStack {
       TodayList(shows: vault.music.shows)
         .environment(\.vault, vault)
-        .musicDestinations()
+        .archiveDestinations()
     }
   }
 }

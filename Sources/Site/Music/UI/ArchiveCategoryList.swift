@@ -56,7 +56,7 @@ public struct ArchiveCategoryList: View {
         ArtistList(artists: music.artists, algorithm: $artistListAlgorithm)
       }
     }
-    .musicDestinations()
+    .archiveDestinations()
     #if os(iOS)
       .navigationBarTitleDisplayMode(.large)
     #endif

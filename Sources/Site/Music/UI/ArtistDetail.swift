@@ -45,7 +45,7 @@ struct ArtistDetail: View {
           "Shows", bundle: .module, comment: "Title of the Shows section of ArtistDetail")
       ) {
         ForEach(shows) { show in
-          NavigationLink(value: show) {
+          NavigationLink(archivable: show) {
             ArtistBlurb(show: show)
           }
         }
@@ -62,7 +62,7 @@ struct ArtistDetail: View {
           comment: "Title of the Related Artists Section for ArtistDetail.")
       ) {
         ForEach(relatedArtists) { relatedArtist in
-          NavigationLink(relatedArtist.name, value: relatedArtist)
+          NavigationLink(relatedArtist.name, archivable: relatedArtist)
         }
       }
     }
@@ -88,13 +88,13 @@ struct ArtistDetail_Previews: PreviewProvider {
     NavigationStack {
       ArtistDetail(artist: vault.music.artists[0])
         .environment(\.vault, vault)
-        .musicDestinations()
+        .archiveDestinations()
     }
 
     NavigationStack {
       ArtistDetail(artist: vault.music.artists[1])
         .environment(\.vault, vault)
-        .musicDestinations()
+        .archiveDestinations()
     }
   }
 }

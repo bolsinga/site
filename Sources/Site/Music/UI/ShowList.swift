@@ -26,7 +26,7 @@ struct ShowList: View {
 
   var body: some View {
     List(shows) { show in
-      NavigationLink(value: show) { ShowBlurb(show: show) }
+      NavigationLink(archivable: show) { ShowBlurb(show: show) }
     }
     .listStyle(.plain)
     .navigationTitle(Text(title))
@@ -40,7 +40,7 @@ struct ShowList_Previews: PreviewProvider {
     NavigationStack {
       ShowList(shows: vault.music.shows)
         .environment(\.vault, vault)
-        .musicDestinations()
+        .archiveDestinations()
     }
   }
 }
