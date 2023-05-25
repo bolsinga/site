@@ -1,3 +1,9 @@
+/* Ranking.FormatStyle.rankOnly */
+"#%@" = "#%@";
+
+/* Ranking.FormatStyle.rankAndCount */
+"#%@ Count: %@" = "#%@ Count: %@";
+
 /* Title for the ShowList when there is a year */
 "%@ Shows" = "%@ Shows";
 
@@ -45,12 +51,6 @@ Label in the chart for the Count in StateChart. */
 
 /* String used to describe LibrarySection.punctuation. */
 "Punctuation" = "Punctuation";
-
-/* Ranking.FormatStyle.rankOnly */
-"Ranking: %@" = "Ranking: %@";
-
-/* Ranking.FormatStyle.rankAndCount */
-"Ranking: %@ Count: %@" = "Ranking: %@ Count: %@";
 
 /* Title of the Related Artists Section for ArtistDetail. */
 "Related Artists" = "Related Artists";
