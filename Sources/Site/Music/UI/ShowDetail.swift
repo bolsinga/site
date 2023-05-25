@@ -40,10 +40,19 @@ struct ShowDetail: View {
   }
 
   @ViewBuilder private var dateElement: some View {
-    LabeledContent(
-      String(
-        localized: "Date", bundle: .module, comment: "Title of the data section of ShowDetail"),
-      value: show.date.formatted(.compact))
+    Section(
+      header: Text("Date", bundle: .module, comment: "Title of the date section of ShowDetail")
+    ) {
+      if let date = show.date.date {
+        LabeledContent {
+          Text(date.formatted(.relative(presentation: .numeric)))
+        } label: {
+          Text(show.date.formatted(.compact))
+        }
+      } else {
+        Text(show.date.formatted(.compact))
+      }
+    }
   }
 
   @ViewBuilder private var commentElement: some View {
