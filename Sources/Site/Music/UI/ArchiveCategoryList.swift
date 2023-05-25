@@ -12,6 +12,8 @@ public struct ArchiveCategoryList: View {
   @Environment(\.vault) private var vault: Vault
 
   @State private var todayShows: [Show] = []
+  @State private var venueListAlgorithm: LibrarySectionAlgorithm = .alphabetical
+  @State private var artistListAlgorithm: LibrarySectionAlgorithm = .alphabetical
 
   private var music: Music {
     vault.music
@@ -49,9 +51,9 @@ public struct ArchiveCategoryList: View {
       case .shows:
         ShowYearList(shows: music.shows)
       case .venues:
-        VenueList(venues: music.venues)
+        VenueList(venues: music.venues, algorithm: $venueListAlgorithm)
       case .artists:
-        ArtistList(artists: music.artists)
+        ArtistList(artists: music.artists, algorithm: $artistListAlgorithm)
       }
     }
     .musicDestinations()

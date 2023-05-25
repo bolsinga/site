@@ -76,6 +76,9 @@ Title of the Shows section of VenueDetail
 ArchiveCategory Shows */
 "Shows" = "Shows";
 
+/* Shown to change the sort order of the LibraryComparableList. */
+"Sort Order" = "Sort Order";
+
 /* Label in the chart for the State in StateChart. */
 "State" = "State";
 

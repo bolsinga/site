@@ -11,6 +11,8 @@ struct ArtistList: View {
   @Environment(\.vault) private var vault: Vault
   let artists: [Artist]
 
+  @Binding var algorithm: LibrarySectionAlgorithm
+
   var body: some View {
     LibraryComparableList(
       items: artists,
@@ -18,7 +20,7 @@ struct ArtistList: View {
         localized: "Artist Names", bundle: .module, comment: "ArtistList searchPrompt"),
       itemContentValue: {
         vault.lookup.showRank(artist: $0).count
-      }
+      }, algorithm: $algorithm
     )
     .navigationTitle(Text("Artists", bundle: .module, comment: "Title for the Artist Detail"))
   }
@@ -60,7 +62,7 @@ struct ArtistList_Previews: PreviewProvider {
     let vault = Vault(music: music)
 
     NavigationStack {
-      ArtistList(artists: music.artists)
+      ArtistList(artists: music.artists, algorithm: .constant(.alphabetical))
         .environment(\.vault, vault)
         .musicDestinations()
     }
