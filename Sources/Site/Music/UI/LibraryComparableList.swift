@@ -7,13 +7,13 @@
 
 import SwiftUI
 
-struct LibraryComparableList<T, ItemContent: View>: View
+struct LibraryComparableList<T>: View
 where T: LibraryComparable, T: Identifiable, T: Hashable, T.ID == String {
   @Environment(\.vault) private var vault: Vault
 
   let items: [T]
   let searchPrompt: String
-  @ViewBuilder let itemContentView: (T) -> ItemContent
+  let itemContentValue: (T) -> Int
 
   @State private var searchString: String = ""
   let algorithm = LibrarySectionAlgorithm.alphabetical
@@ -40,7 +40,7 @@ where T: LibraryComparable, T: Identifiable, T: Hashable, T.ID == String {
           ForEach(sectionMap[section] ?? []) { item in
             NavigationLink(value: item) {
               LabeledContent {
-                itemContentView(item)
+                algorithm.itemContentView(itemContentValue(item))
               } label: {
                 Text(item.name)
               }
@@ -95,8 +95,8 @@ struct LibraryComparableList_Previews: PreviewProvider {
       LibraryComparableList(
         items: music.artists,
         searchPrompt: "Artist Names",
-        itemContentView: {
-          Text(vault.music.showsForArtist($0).count.formatted(.number))
+        itemContentValue: {
+          vault.music.showsForArtist($0).count
         }
       )
       .navigationTitle("Artists")
@@ -108,7 +108,8 @@ struct LibraryComparableList_Previews: PreviewProvider {
       LibraryComparableList(
         items: music.venues,
         searchPrompt: "Venue Names",
-        itemContentView: { _ in
+        itemContentValue: { _ in
+          0
         }
       )
       .navigationTitle("Venues")
