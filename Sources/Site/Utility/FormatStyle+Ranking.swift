@@ -31,12 +31,12 @@ extension Ranking.FormatStyle: Foundation.FormatStyle {
     switch style {
     case .rankOnly:
       return String(
-        localized: "Ranking: \(value.rank.formatted(.number))", bundle: .module,
+        localized: "#\(value.rank.formatted(.number))", bundle: .module,
         comment: "Ranking.FormatStyle.rankOnly")
     case .rankAndCount:
       return String(
         localized:
-          "Ranking: \(value.rank.formatted(.number)) Count: \(value.count.formatted(.number))",
+          "#\(value.rank.formatted(.number)) Count: \(value.count.formatted(.number))",
         bundle: .module, comment: "Ranking.FormatStyle.rankAndCount")
     }
   }
