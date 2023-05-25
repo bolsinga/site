@@ -21,6 +21,8 @@ struct VenueList: View {
         Text(
           "\(vault.lookup.venueRank(venue: venue).count) Show(s)", bundle: .module,
           comment: "Value for the Venue # of Shows.")
+      }, headerView: { section in
+        section.representingView
       }
     )
     .navigationTitle(Text("Venues", bundle: .module, comment: "Title for the Venue Detail"))
