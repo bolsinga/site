@@ -9,13 +9,14 @@ import SwiftUI
 
 struct LibraryComparableList<T, ItemContent: View>: View
 where T: LibraryComparable, T: Identifiable, T: Hashable, T.ID == String {
+  @Environment(\.vault) private var vault: Vault
 
   let items: [T]
   let searchPrompt: String
-  let sectioner: LibrarySectioner
   @ViewBuilder let itemContentView: (T) -> ItemContent
 
   @State private var searchString: String = ""
+  let algorithm = LibrarySectionAlgorithm.alphabetical
 
   private var filteredItems: [T] {
     guard !searchString.isEmpty else { return items }
@@ -24,7 +25,7 @@ where T: LibraryComparable, T: Identifiable, T: Hashable, T.ID == String {
 
   private var sectionMap: [LibrarySection: [T]] {
     filteredItems.reduce(into: [LibrarySection: [T]]()) {
-      let section = sectioner.librarySection($1)
+      let section = vault.sectioner(for: algorithm).librarySection($1)
       var arr = ($0[section] ?? [])
       arr.append($1)
       $0[section] = arr
@@ -32,7 +33,6 @@ where T: LibraryComparable, T: Identifiable, T: Hashable, T.ID == String {
   }
 
   var body: some View {
-    let algorithm = LibrarySectionAlgorithm.alphabetical
     let sectionMap = sectionMap
     List {
       ForEach(sectionMap.keys.sorted(), id: \.self) { section in
@@ -95,7 +95,6 @@ struct LibraryComparableList_Previews: PreviewProvider {
       LibraryComparableList(
         items: music.artists,
         searchPrompt: "Artist Names",
-        sectioner: vault.sectioner,
         itemContentView: {
           Text(vault.music.showsForArtist($0).count.formatted(.number))
         }
@@ -109,7 +108,6 @@ struct LibraryComparableList_Previews: PreviewProvider {
       LibraryComparableList(
         items: music.venues,
         searchPrompt: "Venue Names",
-        sectioner: vault.sectioner,
         itemContentView: { _ in
         }
       )

@@ -17,7 +17,6 @@ struct VenueList: View {
       items: venues,
       searchPrompt: String(
         localized: "Venue Names", bundle: .module, comment: "VenueList searchPrompt"),
-      sectioner: vault.sectioner(for: algorithm),
       itemContentView: {
         algorithm.itemContentView(vault.lookup.venueRank(venue: $0).count)
       }

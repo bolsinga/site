@@ -17,7 +17,6 @@ struct ArtistList: View {
       items: artists,
       searchPrompt: String(
         localized: "Artist Names", bundle: .module, comment: "ArtistList searchPrompt"),
-      sectioner: vault.sectioner(for: algorithm),
       itemContentView: {
         algorithm.itemContentView(vault.lookup.showRank(artist: $0).count)
       }
