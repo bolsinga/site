@@ -20,9 +20,6 @@ struct VenueList: View {
       sectioner: vault.sectioner(for: algorithm),
       itemContentView: {
         algorithm.itemContentView(vault.lookup.venueRank(venue: $0).count)
-      },
-      headerView: {
-        algorithm.headerView($0)
       }
     )
     .navigationTitle(Text("Venues", bundle: .module, comment: "Title for the Venue Detail"))
