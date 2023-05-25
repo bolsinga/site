@@ -26,14 +26,14 @@ extension LibrarySectionAlgorithm {
       case .alphabetic(_), .numeric, .punctuation:
         EmptyView()
       case .ranking(let ranking):
-        Text(ranking.formatted(.rankAndCount))
+        ranking.showsCountView
       }
     case .showYearRange:
       switch section {
       case .alphabetic(_), .numeric, .punctuation:
         EmptyView()
       case .ranking(let ranking):
-        Text(ranking.formatted(.rankAndCount))
+        ranking.yearsCountView
       }
     }
   }
