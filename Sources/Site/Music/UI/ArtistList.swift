@@ -12,13 +12,12 @@ struct ArtistList: View {
   let artists: [Artist]
 
   var body: some View {
-    let algorithm = LibrarySectionAlgorithm.alphabetical
     LibraryComparableList(
       items: artists,
       searchPrompt: String(
         localized: "Artist Names", bundle: .module, comment: "ArtistList searchPrompt"),
-      itemContentView: {
-        algorithm.itemContentView(vault.lookup.showRank(artist: $0).count)
+      itemContentValue: {
+        vault.lookup.showRank(artist: $0).count
       }
     )
     .navigationTitle(Text("Artists", bundle: .module, comment: "Title for the Artist Detail"))

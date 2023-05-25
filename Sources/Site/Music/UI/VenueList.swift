@@ -12,13 +12,12 @@ struct VenueList: View {
   let venues: [Venue]
 
   var body: some View {
-    let algorithm = LibrarySectionAlgorithm.alphabetical
     LibraryComparableList(
       items: venues,
       searchPrompt: String(
         localized: "Venue Names", bundle: .module, comment: "VenueList searchPrompt"),
-      itemContentView: {
-        algorithm.itemContentView(vault.lookup.venueRank(venue: $0).count)
+      itemContentValue: {
+        vault.lookup.venueRank(venue: $0).count
       }
     )
     .navigationTitle(Text("Venues", bundle: .module, comment: "Title for the Venue Detail"))
