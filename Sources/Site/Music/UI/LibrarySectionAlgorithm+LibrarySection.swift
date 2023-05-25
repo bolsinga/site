@@ -16,4 +16,25 @@ extension LibrarySectionAlgorithm {
       EmptyView()
     }
   }
+
+  @ViewBuilder func headerView(_ section: LibrarySection) -> some View {
+    switch self {
+    case .alphabetical:
+      section.representingView
+    case .showCount:
+      switch section {
+      case .alphabetic(_), .numeric, .punctuation:
+        EmptyView()
+      case .ranking(let ranking):
+        Text(ranking.formatted(.rankAndCount))
+      }
+    case .showYearRange:
+      switch section {
+      case .alphabetic(_), .numeric, .punctuation:
+        EmptyView()
+      case .ranking(let ranking):
+        Text(ranking.formatted(.rankAndCount))
+      }
+    }
+  }
 }
