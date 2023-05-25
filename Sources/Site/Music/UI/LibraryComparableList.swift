@@ -16,7 +16,7 @@ where T: LibraryComparable, T: Identifiable, T: Hashable, T.ID == String {
   let itemContentValue: (T) -> Int
 
   @State private var searchString: String = ""
-  let algorithm = LibrarySectionAlgorithm.alphabetical
+  @Binding var algorithm: LibrarySectionAlgorithm
 
   private var filteredItems: [T] {
     guard !searchString.isEmpty else { return items }
@@ -53,6 +53,19 @@ where T: LibraryComparable, T: Identifiable, T: Hashable, T.ID == String {
     }
     .listStyle(.plain)
     .searchable(text: $searchString, prompt: searchPrompt)
+    .toolbar {
+      ToolbarItem(placement: .primaryAction) {
+        Picker(selection: $algorithm) {
+          ForEach(LibrarySectionAlgorithm.allCases, id: \.self) { category in
+            Text(category.localizedString).tag(category)
+          }
+        } label: {
+          Text(
+            "Sort Order", bundle: .module,
+            comment: "Shown to change the sort order of the LibraryComparableList.")
+        }
+      }
+    }
   }
 }
 
@@ -97,7 +110,7 @@ struct LibraryComparableList_Previews: PreviewProvider {
         searchPrompt: "Artist Names",
         itemContentValue: {
           vault.music.showsForArtist($0).count
-        }
+        }, algorithm: .constant(.alphabetical)
       )
       .navigationTitle("Artists")
       .environment(\.vault, vault)
@@ -110,7 +123,7 @@ struct LibraryComparableList_Previews: PreviewProvider {
         searchPrompt: "Venue Names",
         itemContentValue: { _ in
           0
-        }
+        }, algorithm: .constant(.alphabetical)
       )
       .navigationTitle("Venues")
       .environment(\.vault, vault)
