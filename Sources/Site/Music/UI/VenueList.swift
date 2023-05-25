@@ -12,11 +12,12 @@ struct VenueList: View {
   let venues: [Venue]
 
   var body: some View {
+    let algorithm = LibrarySectionAlgorithm.alphabetical
     LibraryComparableList(
       items: venues,
       searchPrompt: String(
         localized: "Venue Names", bundle: .module, comment: "VenueList searchPrompt"),
-      sectioner: vault.sectioner,
+      sectioner: vault.sectioner(for: algorithm),
       itemContentView: { (venue: Venue) in
         Text(
           "\(vault.lookup.venueRank(venue: venue).count) Show(s)", bundle: .module,
