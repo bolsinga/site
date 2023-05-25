@@ -18,10 +18,8 @@ struct ArtistList: View {
       searchPrompt: String(
         localized: "Artist Names", bundle: .module, comment: "ArtistList searchPrompt"),
       sectioner: vault.sectioner(for: algorithm),
-      itemContentView: { (artist: Artist) in
-        Text(
-          "\(vault.lookup.showRank(artist: artist).count) Show(s)", bundle: .module,
-          comment: "Value for the Artist # of Shows.")
+      itemContentView: {
+        algorithm.itemContentView(vault.lookup.showRank(artist: $0).count)
       },
       headerView: { section in
         section.representingView

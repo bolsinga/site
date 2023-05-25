@@ -18,10 +18,8 @@ struct VenueList: View {
       searchPrompt: String(
         localized: "Venue Names", bundle: .module, comment: "VenueList searchPrompt"),
       sectioner: vault.sectioner(for: algorithm),
-      itemContentView: { (venue: Venue) in
-        Text(
-          "\(vault.lookup.venueRank(venue: venue).count) Show(s)", bundle: .module,
-          comment: "Value for the Venue # of Shows.")
+      itemContentView: {
+        algorithm.itemContentView(vault.lookup.venueRank(venue: $0).count)
       },
       headerView: { section in
         section.representingView
