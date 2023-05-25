@@ -7,19 +7,13 @@
 
 import SwiftUI
 
-struct LibraryComparableListHelper<T, Content: View> {
-  typealias ContentBuilder = (T) -> Content
-
-  let sectioner: LibrarySectioner
-  @ViewBuilder let contentView: ContentBuilder
-}
-
 struct LibraryComparableList<T, Content: View>: View
 where T: LibraryComparable, T: Identifiable, T: Hashable, T.ID == String {
 
   let items: [T]
   let searchPrompt: String
-  let helper: LibraryComparableListHelper<T, Content>
+  let sectioner: LibrarySectioner
+  @ViewBuilder let itemContentView: (T) -> Content
 
   @State private var searchString: String = ""
 
@@ -30,7 +24,7 @@ where T: LibraryComparable, T: Identifiable, T: Hashable, T.ID == String {
 
   private var sectionMap: [LibrarySection: [T]] {
     filteredItems.reduce(into: [LibrarySection: [T]]()) {
-      let section = helper.sectioner.librarySection($1)
+      let section = sectioner.librarySection($1)
       var arr = ($0[section] ?? [])
       arr.append($1)
       $0[section] = arr
@@ -45,7 +39,7 @@ where T: LibraryComparable, T: Identifiable, T: Hashable, T.ID == String {
           ForEach(sectionMap[section] ?? []) { item in
             NavigationLink(value: item) {
               LabeledContent {
-                helper.contentView(item)
+                itemContentView(item)
               } label: {
                 Text(item.name)
               }
@@ -100,7 +94,8 @@ struct LibraryComparableList_Previews: PreviewProvider {
       LibraryComparableList(
         items: music.artists,
         searchPrompt: "Artist Names",
-        helper: LibraryComparableListHelper(sectioner: vault.sectioner) { (artist: Artist) in
+        sectioner: vault.sectioner,
+        itemContentView: { (artist: Artist) in
           Text(vault.music.showsForArtist(artist).count.formatted(.number))
         }
       )
@@ -113,7 +108,8 @@ struct LibraryComparableList_Previews: PreviewProvider {
       LibraryComparableList(
         items: music.venues,
         searchPrompt: "Venue Names",
-        helper: LibraryComparableListHelper(sectioner: vault.sectioner) { _ in
+        sectioner: vault.sectioner,
+        itemContentView: { _ in
         }
       )
       .navigationTitle("Venues")
