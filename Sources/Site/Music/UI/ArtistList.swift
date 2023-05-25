@@ -21,7 +21,8 @@ struct ArtistList: View {
         Text(
           "\(vault.lookup.showRank(artist: artist).count) Show(s)", bundle: .module,
           comment: "Value for the Artist # of Shows.")
-      }, headerView: { section in
+      },
+      headerView: { section in
         section.representingView
       }
     )

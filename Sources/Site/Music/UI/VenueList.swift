@@ -21,7 +21,8 @@ struct VenueList: View {
         Text(
           "\(vault.lookup.venueRank(venue: venue).count) Show(s)", bundle: .module,
           comment: "Value for the Venue # of Shows.")
-      }, headerView: { section in
+      },
+      headerView: { section in
         section.representingView
       }
     )

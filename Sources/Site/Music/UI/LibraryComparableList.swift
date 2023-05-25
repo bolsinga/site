@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct LibraryComparableList<T, ItemContent: View, SectionContent : View>: View
+struct LibraryComparableList<T, ItemContent: View, SectionContent: View>: View
 where T: LibraryComparable, T: Identifiable, T: Hashable, T.ID == String {
 
   let items: [T]
