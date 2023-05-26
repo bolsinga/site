@@ -127,10 +127,14 @@ final class PartialDateTests: XCTestCase {
     let date2 = PartialDate(year: 1997)
     let unknownDate = PartialDate()
 
+    XCTAssertEqual([date1].yearSpan(), 1)
+    XCTAssertEqual([date2].yearSpan(), 1)
+    XCTAssertEqual([unknownDate].yearSpan(), 1)
+
     XCTAssertEqual([date1, date2].yearSpan(), 3)
     XCTAssertEqual([date1, date1].yearSpan(), 1)
     XCTAssertEqual([date2, date2].yearSpan(), 1)
-    XCTAssertEqual([unknownDate].yearSpan(), 1)
+
     XCTAssertEqual([unknownDate, unknownDate].yearSpan(), 1)
     XCTAssertEqual([unknownDate, date1].yearSpan(), 1)
     XCTAssertEqual([unknownDate, date1, date2].yearSpan(), 3)
