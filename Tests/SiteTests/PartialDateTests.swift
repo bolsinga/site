@@ -126,19 +126,23 @@ final class PartialDateTests: XCTestCase {
     let date1 = PartialDate(year: 1995, month: 12, day: 31)
     let date2 = PartialDate(year: 1997)
     let unknownDate = PartialDate()
+    let unwoundDate = PartialDate(year: 1995, month: 4, day: 1)
+    let unwoundDate28YearsAgo = PartialDate(year: 2023, month: 5, day: 26)
 
-    XCTAssertEqual([date1].yearSpan(), 1)
-    XCTAssertEqual([date2].yearSpan(), 1)
-    XCTAssertEqual([unknownDate].yearSpan(), 1)
+    XCTAssertEqual([date1].yearSpan, 1)
+    XCTAssertEqual([date2].yearSpan, 1)
+    XCTAssertEqual([unknownDate].yearSpan, 1)
 
-    XCTAssertEqual([date1, date2].yearSpan(), 3)
-    XCTAssertEqual([date1, date1].yearSpan(), 1)
-    XCTAssertEqual([date2, date2].yearSpan(), 1)
+    XCTAssertEqual([date1, date2].yearSpan, 1)
+    XCTAssertEqual([date1, date1].yearSpan, 1)
+    XCTAssertEqual([date2, date2].yearSpan, 1)
 
-    XCTAssertEqual([unknownDate, unknownDate].yearSpan(), 1)
-    XCTAssertEqual([unknownDate, date1].yearSpan(), 1)
-    XCTAssertEqual([unknownDate, date1, date2].yearSpan(), 3)
+    XCTAssertEqual([unknownDate, unknownDate].yearSpan, 1)
+    XCTAssertEqual([unknownDate, date1].yearSpan, 1)
+    XCTAssertEqual([unknownDate, date1, date2].yearSpan, 1)
 
-    XCTAssertEqual([PartialDate]().yearSpan(), 0)
+    XCTAssertEqual([PartialDate]().yearSpan, 0)
+
+    XCTAssertEqual([unwoundDate, unwoundDate28YearsAgo].yearSpan, 28)
   }
 }

@@ -36,7 +36,7 @@ extension Music {
 
   var artistSpanRankings: (ItemRankings, ItemRankingMap) {
     let artistShowSpans: [(Artist.ID, Int)] = self.artists.reduce(into: [:]) {
-      $0[$1.id] = computedYears(shows: self.showsForArtist($1)).yearSpan()
+      $0[$1.id] = computedYears(shows: self.showsForArtist($1)).yearSpan
     }.map { $0 }
 
     return computeRankings(items: artistShowSpans)
@@ -44,7 +44,7 @@ extension Music {
 
   var venueSpanRankings: (ItemRankings, ItemRankingMap) {
     let venueShowSpans: [(Venue.ID, Int)] = self.venues.reduce(into: [:]) {
-      $0[$1.id] = computedYears(shows: self.showsForVenue($1)).yearSpan()
+      $0[$1.id] = computedYears(shows: self.showsForVenue($1)).yearSpan
     }.map { $0 }
 
     return computeRankings(items: venueShowSpans)
