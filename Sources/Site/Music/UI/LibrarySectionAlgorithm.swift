@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum LibrarySectionAlgorithm: CaseIterable {
+enum LibrarySectionAlgorithm: Int, CaseIterable {
   case alphabetical
   case showCount
   case showYearRange

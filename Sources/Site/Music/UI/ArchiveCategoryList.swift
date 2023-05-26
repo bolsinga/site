@@ -12,8 +12,9 @@ public struct ArchiveCategoryList: View {
   @Environment(\.vault) private var vault: Vault
 
   @State private var todayShows: [Show] = []
-  @State private var venueListAlgorithm: LibrarySectionAlgorithm = .alphabetical
-  @State private var artistListAlgorithm: LibrarySectionAlgorithm = .alphabetical
+  @SceneStorage("venue.sort") private var venueListAlgorithm = LibrarySectionAlgorithm.alphabetical
+  @SceneStorage("artist.sort") private var artistListAlgorithm = LibrarySectionAlgorithm
+    .alphabetical
 
   private var music: Music {
     vault.music
