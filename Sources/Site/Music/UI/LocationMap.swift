@@ -52,9 +52,3 @@ struct LocationMap: View {
     }
   }
 }
-
-struct LocationMap_Previews: PreviewProvider {
-  static var previews: some View {
-    LocationMap(location: Location(city: "Chicago", state: "IL"))
-  }
-}

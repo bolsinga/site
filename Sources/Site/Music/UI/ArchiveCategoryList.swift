@@ -73,15 +73,3 @@ public struct ArchiveCategoryList: View {
     //    }
   }
 }
-
-struct ArchiveCategoryList_Previews: PreviewProvider {
-  static var previews: some View {
-    let vault = Vault(
-      music: Music(
-        albums: [], artists: [], relations: [], shows: [], songs: [], timestamp: Date.now,
-        venues: []))
-
-    ArchiveCategoryList()
-      .environment(\.vault, vault)
-  }
-}

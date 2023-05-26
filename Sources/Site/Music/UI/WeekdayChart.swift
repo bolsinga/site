@@ -65,9 +65,3 @@ struct WeekdayChart: View {
     .frame(minHeight: 200)
   }
 }
-
-struct WeekdayChart_Previews: PreviewProvider {
-  static var previews: some View {
-    WeekdayChart(dates: [])
-  }
-}

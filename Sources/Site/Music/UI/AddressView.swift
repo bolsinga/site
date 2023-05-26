@@ -24,12 +24,9 @@ struct AddressView: View {
 
 struct AddressView_Previews: PreviewProvider {
   static var previews: some View {
-    let location = Location(
-      city: "San Francisco",
-      web: URL(string: "http://www.amoeba.com"),
-      street: "1855 Haight St.",
-      state: "CA")
-    AddressView(location: location)
+    let vault = Vault.previewData
+
+    AddressView(location: vault.music.venues[0].location)
 
     let locationWithoutOptionals = Location(city: "Charleston", state: "IL")
     AddressView(location: locationWithoutOptionals)

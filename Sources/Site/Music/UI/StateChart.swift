@@ -35,9 +35,3 @@ struct StateChart: View {
     .frame(minHeight: 200)
   }
 }
-
-struct StateChart_Previews: PreviewProvider {
-  static var previews: some View {
-    StateChart(counts: [:])
-  }
-}
