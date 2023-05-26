@@ -61,7 +61,7 @@ public struct ArchiveCategoryList: View {
       .navigationBarTitleDisplayMode(.large)
     #endif
     .navigationTitle(Text("Archives", bundle: .module, comment: "Title for the ArchivesList."))
-    .determinateTimer(trigger: .atMidnight) {
+    .onDayChanged {
       self.todayShows = vault.music.showsOnDate(Date.now).sorted {
         vault.comparator.showCompare(lhs: $0, rhs: $1, lookup: vault.lookup)
       }
