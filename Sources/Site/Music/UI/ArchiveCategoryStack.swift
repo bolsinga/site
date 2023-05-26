@@ -19,14 +19,3 @@ struct ArchiveCategoryStack: View {
     .environment(\.vault, vault)
   }
 }
-
-struct ArchiveCategoryStack_Previews: PreviewProvider {
-  static var previews: some View {
-    let vault = Vault(
-      music: Music(
-        albums: [], artists: [], relations: [], shows: [], songs: [], timestamp: Date.now,
-        venues: []))
-
-    ArchiveCategoryStack(vault: vault)
-  }
-}

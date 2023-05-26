@@ -60,9 +60,3 @@ struct MonthChart: View {
     .frame(minHeight: 200)
   }
 }
-
-struct MonthChart_Previews: PreviewProvider {
-  static var previews: some View {
-    MonthChart(dates: [])
-  }
-}
