@@ -28,15 +28,9 @@ extension Music {
     return computeRankings(items: venuesShowCount)
   }
 
-  private func computedYears(shows: [Show]) -> [PartialDate] {
-    return Array(
-      Set(shows.map { $0.date.year != nil ? PartialDate(year: $0.date.year!) : PartialDate() })
-    ).sorted(by: <)
-  }
-
   var artistSpanRankings: (ItemRankings, ItemRankingMap) {
     let artistShowSpans: [(Artist.ID, Int)] = self.artists.reduce(into: [:]) {
-      $0[$1.id] = computedYears(shows: self.showsForArtist($1)).yearSpan
+      $0[$1.id] = self.showsForArtist($1).map { $0.date }.yearSpan
     }.map { $0 }
 
     return computeRankings(items: artistShowSpans)
@@ -44,7 +38,7 @@ extension Music {
 
   var venueSpanRankings: (ItemRankings, ItemRankingMap) {
     let venueShowSpans: [(Venue.ID, Int)] = self.venues.reduce(into: [:]) {
-      $0[$1.id] = computedYears(shows: self.showsForVenue($1)).yearSpan
+      $0[$1.id] = self.showsForVenue($1).map { $0.date }.yearSpan
     }.map { $0 }
 
     return computeRankings(items: venueShowSpans)
