@@ -7,6 +7,12 @@
 /* Title for the ShowList when there is a year */
 "%@ Shows" = "%@ Shows";
 
+/* Decade.decade format string where the format is a two digit year. */
+"%@’s" = "%@’s";
+
+/* Decade.decade format string where the format is a full digits year. */
+"%@s" = "%@s";
+
 /* LibrarySectionAlgorithm.alphabetical */
 "Alphabetical" = "Alphabetical";
 
@@ -28,11 +34,14 @@ Label in the chart for the Count in MonthChart.
 Label in the chart for the Count in StateChart. */
 "Count" = "Count";
 
-/* Title of the data section of ShowDetail */
+/* Title of the date section of ShowDetail */
 "Date" = "Date";
 
 /* String for when a Show.PartialDate is unknown. */
 "Date Unknown" = "Date Unknown";
+
+/* String for when a Decade is unknown. */
+"Decade Unknown" = "Decade Unknown";
 
 /* Title of the Lineup for ShowDetail. */
 "Lineup" = "Lineup";
