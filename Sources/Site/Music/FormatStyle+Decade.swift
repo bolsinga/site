@@ -10,7 +10,7 @@ import Foundation
 extension Decade {
   public struct FormatStyle: Codable, Equatable, Hashable {
     public enum Style: Codable, Equatable, Hashable {
-      case twoDigits  // 80s
+      case twoDigits  // 80’s
       case defaultDigits  // 1980s
     }
 
