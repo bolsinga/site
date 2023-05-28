@@ -20,9 +20,8 @@ struct DayChangedModifer: ViewModifier {
 
   func body(content: Content) -> some View {
     content
-      .onAppear {
+      .task {
         mainDeferredAction()
-      }.task {
         for await _ in NotificationCenter.default.notifications(named: .NSCalendarDayChanged) {
           mainDeferredAction()
         }
