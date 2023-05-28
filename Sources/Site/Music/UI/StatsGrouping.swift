@@ -134,8 +134,15 @@ struct StatsGrouping: View {
           let name = String(localized: "Months", bundle: .module, comment: "Months Stats")
           NavigationLink(name) { MonthChart(dates: knownShowDates).navigationTitle(name) }
         case .state:
-          let name = String(localized: "States", bundle: .module, comment: "States Stats")
-          NavigationLink(name) { StateChart(counts: stateCounts).navigationTitle(name) }
+          NavigationLink {
+            StateChart(counts: stateCounts)
+          } label: {
+            LabeledContent {
+              Text(stateCounts.keys.count.formatted())
+            } label: {
+              Text("States", bundle: .module, comment: "States Stats")
+            }
+          }
         }
       }
     }
