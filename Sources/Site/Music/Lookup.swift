@@ -15,13 +15,9 @@ public struct Lookup {
   let artistMap: [Artist.ID: Artist]
   let showMap: [Show.ID: Show]
   let venueMap: [Venue.ID: Venue]
-  let artistRankings: Music.ItemRankings
   let artistRankingMap: Music.ItemRankingMap
-  let venueRankings: Music.ItemRankings
   let venueRankingMap: Music.ItemRankingMap
-  let artistShowSpanRankings: Music.ItemRankings
   let artistShowSpanRankingMap: Music.ItemRankingMap
-  let venueShowSpanRankings: Music.ItemRankings
   let venueShowSpanRankingMap: Music.ItemRankingMap
 
   public init(music: Music) {
@@ -35,39 +31,27 @@ public struct Lookup {
       artistMap: createLookup(music.artists),
       showMap: createLookup(music.shows),
       venueMap: createLookup(music.venues),
-      artistRankings: artistRanks.0,
-      artistRankingMap: artistRanks.1,
-      venueRankings: venueRanks.0,
-      venueRankingMap: venueRanks.1,
-      artistShowSpanRankings: artistSpanRanks.0,
-      artistShowSpanRankingMap: artistSpanRanks.1,
-      venueShowSpanRankings: venueSpanRanks.0,
-      venueShowSpanRankingMap: venueSpanRanks.1)
+      artistRankingMap: artistRanks,
+      venueRankingMap: venueRanks,
+      artistShowSpanRankingMap: artistSpanRanks,
+      venueShowSpanRankingMap: venueSpanRanks)
   }
 
   internal init(
     artistMap: [Artist.ID: Artist],
     showMap: [Show.ID: Show],
     venueMap: [Venue.ID: Venue],
-    artistRankings: Music.ItemRankings,
     artistRankingMap: Music.ItemRankingMap,
-    venueRankings: Music.ItemRankings,
     venueRankingMap: Music.ItemRankingMap,
-    artistShowSpanRankings: Music.ItemRankings,
     artistShowSpanRankingMap: Music.ItemRankingMap,
-    venueShowSpanRankings: Music.ItemRankings,
     venueShowSpanRankingMap: Music.ItemRankingMap
   ) {
     self.artistMap = artistMap
     self.showMap = showMap
     self.venueMap = venueMap
-    self.artistRankings = artistRankings
     self.artistRankingMap = artistRankingMap
-    self.venueRankings = venueRankings
     self.venueRankingMap = venueRankingMap
-    self.artistShowSpanRankings = artistShowSpanRankings
     self.artistShowSpanRankingMap = artistShowSpanRankingMap
-    self.venueShowSpanRankings = venueShowSpanRankings
     self.venueShowSpanRankingMap = venueShowSpanRankingMap
   }
 
@@ -93,14 +77,10 @@ public struct Lookup {
       artistMap: artistMap,
       showMap: showMap,
       venueMap: venueMap,
-      artistRankings: artistRankings.0,
-      artistRankingMap: artistRankings.1,
-      venueRankings: venueRankings.0,
-      venueRankingMap: venueRankings.1,
-      artistShowSpanRankings: artistSpanRankings.0,
-      artistShowSpanRankingMap: artistSpanRankings.1,
-      venueShowSpanRankings: venueSpanRankings.0,
-      venueShowSpanRankingMap: venueSpanRankings.1)
+      artistRankingMap: artistRankings,
+      venueRankingMap: venueRankings,
+      artistShowSpanRankingMap: artistSpanRankings,
+      venueShowSpanRankingMap: venueSpanRankings)
   }
 
   enum LookupError: Error {

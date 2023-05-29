@@ -43,7 +43,7 @@ struct ShowDetail: View {
     Section(
       header: Text("Date", bundle: .module, comment: "Title of the date section of ShowDetail")
     ) {
-      if let date = show.date.date {
+      if !show.date.isUnknown, let date = show.date.date {
         LabeledContent {
           Text(date.formatted(.relative(presentation: .numeric)))
         } label: {

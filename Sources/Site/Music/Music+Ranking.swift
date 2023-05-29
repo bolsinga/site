@@ -12,7 +12,7 @@ extension Music {
   typealias ItemRankings = [ItemValue]  // From least to most.
   typealias ItemRankingMap = [String: Ranking]  // Lookup an items Ranking
 
-  var artistRankings: (ItemRankings, ItemRankingMap) {
+  var artistRankings: ItemRankingMap {
     let artistShowCounts: [(Artist.ID, Int)] = self.artists.reduce(into: [:]) {
       $0[$1.id] = self.showsForArtist($1).count
     }.map { $0 }
@@ -20,7 +20,7 @@ extension Music {
     return computeRankings(items: artistShowCounts)
   }
 
-  var venueRankings: (ItemRankings, ItemRankingMap) {
+  var venueRankings: ItemRankingMap {
     let venuesShowCount: [(Venue.ID, Int)] = self.venues.reduce(into: [:]) {
       $0[$1.id] = self.showsForVenue($1).count
     }.map { $0 }
@@ -28,29 +28,23 @@ extension Music {
     return computeRankings(items: venuesShowCount)
   }
 
-  private func computedYears(shows: [Show]) -> [PartialDate] {
-    return Array(
-      Set(shows.map { $0.date.year != nil ? PartialDate(year: $0.date.year!) : PartialDate() })
-    ).sorted(by: <)
-  }
-
-  var artistSpanRankings: (ItemRankings, ItemRankingMap) {
+  var artistSpanRankings: ItemRankingMap {
     let artistShowSpans: [(Artist.ID, Int)] = self.artists.reduce(into: [:]) {
-      $0[$1.id] = computedYears(shows: self.showsForArtist($1)).yearSpan()
+      $0[$1.id] = self.showsForArtist($1).map { $0.date }.yearSpan
     }.map { $0 }
 
     return computeRankings(items: artistShowSpans)
   }
 
-  var venueSpanRankings: (ItemRankings, ItemRankingMap) {
+  var venueSpanRankings: ItemRankingMap {
     let venueShowSpans: [(Venue.ID, Int)] = self.venues.reduce(into: [:]) {
-      $0[$1.id] = computedYears(shows: self.showsForVenue($1)).yearSpan()
+      $0[$1.id] = self.showsForVenue($1).map { $0.date }.yearSpan
     }.map { $0 }
 
     return computeRankings(items: venueShowSpans)
   }
 
-  internal func computeRankings<T>(items: [(T, Int)]) -> ([([T], Int)], [T: Ranking]) {
+  internal func computeRankings<T>(items: [(T, Int)]) -> [T: Ranking] {
     let itemRanks: [Int: [T]] = Dictionary(grouping: items) { $0.1 }
       .reduce(into: [:]) {
         var arr = $0[$1.key] ?? []
@@ -71,6 +65,6 @@ extension Music {
       }
       rank += 1
     }
-    return (itemsOrdered, itemRankMap)
+    return itemRankMap
   }
 }
