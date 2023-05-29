@@ -55,6 +55,9 @@ Label in the chart for the Count in StateChart. */
 /* Months Stats */
 "Months" = "Months";
 
+/* Text shown when there are no shows today. */
+"No Shows On This Day" = "No Shows On This Day";
+
 /* String used to describe LibrarySection.numeric. */
 "Numeric" = "Numeric";
 
