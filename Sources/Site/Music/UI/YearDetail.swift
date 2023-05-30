@@ -33,7 +33,7 @@ struct YearDetail: View {
   }
 }
 
-struct ShowList_Previews: PreviewProvider {
+struct YearDetail_Previews: PreviewProvider {
   static var previews: some View {
     let vault = Vault.previewData
 
