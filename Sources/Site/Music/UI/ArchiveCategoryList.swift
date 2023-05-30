@@ -47,7 +47,7 @@ public struct ArchiveCategoryList: View {
       case .today:
         TodayList(shows: todayShows)
       case .stats:
-        List { StatsGrouping(shows: music.shows, kind: .all) }
+        List { StatsGrouping(shows: music.shows) }
         .navigationTitle(Text(archiveCategory.localizedString))
       case .shows:
         ShowYearList(shows: music.shows)
