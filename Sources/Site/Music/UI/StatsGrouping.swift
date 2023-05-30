@@ -8,26 +8,22 @@
 import SwiftUI
 
 struct StatsGrouping: View {
-  enum Kind {
-    case all
-    case artist
-    case venue
-  }
-
   @Environment(\.vault) private var vault: Vault
   @Environment(\.statsThreshold) private var statsThreshold: Int
 
   let shows: [Show]
-  let kind: Kind
+  let shouldCalculateArtistCount: Bool
   let yearsSpanRanking: Ranking?
   let computeShowsRank: (() -> Ranking)?
 
   internal init(
-    shows: [Show], kind: StatsGrouping.Kind, yearsSpanRanking: Ranking? = nil,
+    shows: [Show],
+    shouldCalculateArtistCount: Bool = true,
+    yearsSpanRanking: Ranking? = nil,
     computeShowsRank: (() -> Ranking)? = nil
   ) {
     self.shows = shows
-    self.kind = kind
+    self.shouldCalculateArtistCount = shouldCalculateArtistCount
     self.yearsSpanRanking = yearsSpanRanking
     self.computeShowsRank = computeShowsRank
   }
@@ -59,16 +55,11 @@ struct StatsGrouping: View {
   }
 
   private var computeArtistCount: Int {
-    switch kind {
-    case .artist:
-      return 0
-    case .all, .venue:
-      return Set(
-        shows.flatMap {
-          do { return try vault.lookup.artistsForShow($0) } catch { return [Artist]() }
-        }
-      ).count
-    }
+    Set(
+      shows.flatMap {
+        do { return try vault.lookup.artistsForShow($0) } catch { return [Artist]() }
+      }
+    ).count
   }
 
   @ViewBuilder var showCount: some View {
@@ -96,7 +87,7 @@ struct StatsGrouping: View {
     let venuesCount = computeVenuesCount
     let showVenues = venuesCount > 1
 
-    let artistsCount = computeArtistCount
+    let artistsCount = shouldCalculateArtistCount ? computeArtistCount : 0
     let showArtists = artistsCount > 1
 
     let stateCounts = computedStateCounts

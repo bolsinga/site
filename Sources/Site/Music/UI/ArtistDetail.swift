@@ -31,7 +31,8 @@ struct ArtistDetail: View {
     if !shows.isEmpty {
       Section(header: Text(ArchiveCategory.stats.localizedString)) {
         StatsGrouping(
-          shows: shows, kind: .artist, yearsSpanRanking: vault.lookup.spanRank(artist: artist),
+          shows: shows, shouldCalculateArtistCount: false,
+          yearsSpanRanking: vault.lookup.spanRank(artist: artist),
           computeShowsRank: { vault.lookup.showRank(artist: artist) })
       }
     }
