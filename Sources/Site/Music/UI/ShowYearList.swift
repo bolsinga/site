@@ -43,7 +43,7 @@ struct ShowYearList: View {
     .listStyle(.plain)
     .navigationTitle(Text("Show Years", bundle: .module, comment: "Title for the ShowYearList."))
     .navigationDestination(for: PartialDate.self) {
-      ShowList(shows: decadesMap[$0.decade]?[$0] ?? [], yearPartialDate: $0)
+      YearDetail(shows: decadesMap[$0.decade]?[$0] ?? [], yearPartialDate: $0)
     }.task {
       let decadeShowMap: [Decade: [Show]] = shows.reduce(into: [:]) {
         let decade = $1.date.decade

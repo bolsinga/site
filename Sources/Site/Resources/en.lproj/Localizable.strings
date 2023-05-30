@@ -4,7 +4,7 @@
 /* Ranking.FormatStyle.rankAndCount */
 "#%@ Count: %@" = "#%@ Count: %@";
 
-/* Title for the ShowList when there is a year */
+/* Title for the YearDetail when there is a year */
 "%@ Shows" = "%@ Shows";
 
 /* Decade.decade format string where the format is a two digit year. */
@@ -82,7 +82,7 @@ Label in the chart for the Count in StateChart. */
 /* Title for the ShowYearList. */
 "Show Years" = "Show Years";
 
-/* Title for the ShowList
+/* Title for the YearDetail
 Title of the Shows section of ArtistDetail
 Title of the Shows section of VenueDetail
 ArchiveCategory Shows */

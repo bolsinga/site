@@ -1,5 +1,5 @@
 //
-//  ShowList.swift
+//  YearDetail.swift
 //
 //
 //  Created by Greg Bolsinga on 3/26/23.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ShowList: View {
+struct YearDetail: View {
   let shows: [Show]
   var yearPartialDate: PartialDate?
 
@@ -16,12 +16,12 @@ struct ShowList: View {
       return String(
         localized: "\(yearPartialDate.formatted(.yearOnly)) Shows",
         bundle: .module,
-        comment: "Title for the ShowList when there is a year")
+        comment: "Title for the YearDetail when there is a year")
     }
     return String(
       localized: "Shows",
       bundle: .module,
-      comment: "Title for the ShowList")
+      comment: "Title for the YearDetail")
   }
 
   var body: some View {
@@ -38,7 +38,7 @@ struct ShowList_Previews: PreviewProvider {
     let vault = Vault.previewData
 
     NavigationStack {
-      ShowList(shows: vault.music.shows)
+      YearDetail(shows: vault.music.shows)
         .environment(\.vault, vault)
         .musicDestinations()
     }
