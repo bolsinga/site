@@ -59,16 +59,16 @@ struct StatsGrouping: View {
     )
   }
 
-  private var computeArtists: [Artist] {
+  private var computeArtistCount: Int {
     switch kind {
     case .artist:
-      return []
+      return 0
     case .all, .venue:
-      return Array(
-        Set(
-          shows.flatMap {
-            do { return try vault.lookup.artistsForShow($0) } catch { return [Artist]() }
-          }))
+      return Set(
+        shows.flatMap {
+          do { return try vault.lookup.artistsForShow($0) } catch { return [Artist]() }
+        }
+      ).count
     }
   }
 
@@ -97,8 +97,8 @@ struct StatsGrouping: View {
     let venues = computedVenuesOfShows
     let showVenues = venues.count > 1
 
-    let artists = computeArtists
-    let showArtists = artists.count > 1
+    let artistsCount = computeArtistCount
+    let showArtists = artistsCount > 1
 
     let stateCounts = computedStateCounts
     let showState = stateCounts.keys.count > 1
@@ -125,7 +125,7 @@ struct StatsGrouping: View {
             "\(venues.count) Venue(s)", bundle: .module, comment: "Venues Count for StatsGrouping.")
         case .artists:
           Text(
-            "\(artists.count) Artist(s)", bundle: .module,
+            "\(artistsCount) Artist(s)", bundle: .module,
             comment: "Artists Count for StatsGrouping.")
         case .weekday:
           let name = String(localized: "Weekdays", bundle: .module, comment: "Weekdays Stats")
