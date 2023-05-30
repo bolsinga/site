@@ -10,6 +10,7 @@ import SwiftUI
 struct ArchiveSearchModifier: ViewModifier {
   let searchPrompt: String
 
+  @Binding var scope: ArchiveSearchScope
   @Binding var searchString: String
   let contentsEmpty: Bool
 
@@ -21,15 +22,24 @@ struct ArchiveSearchModifier: ViewModifier {
           ContentUnavailableView.search(text: searchString)
         }
       }
+      .searchScopes($scope) {
+        ForEach(ArchiveSearchScope.allCases, id: \.self) {
+          Text($0.localizedString).tag($0)
+        }
+      }
   }
 }
 
 extension View {
-  func archiveSearchable(searchPrompt: String, searchString: Binding<String>, contentsEmpty: Bool)
+  func archiveSearchable(
+    searchPrompt: String, scope: Binding<ArchiveSearchScope>, searchString: Binding<String>,
+    contentsEmpty: Bool
+  )
     -> some View
   {
     modifier(
       ArchiveSearchModifier(
-        searchPrompt: searchPrompt, searchString: searchString, contentsEmpty: contentsEmpty))
+        searchPrompt: searchPrompt, scope: scope, searchString: searchString,
+        contentsEmpty: contentsEmpty))
   }
 }

@@ -146,6 +146,12 @@
     "Archives" : {
 
     },
+    "Artist" : {
+      "comment" : "ArchiveSearchScope.artist"
+    },
+    "Artist and Venue Names" : {
+
+    },
     "Artist Names" : {
 
     },
@@ -322,6 +328,9 @@
     },
     "Unable to load data." : {
 
+    },
+    "Venue" : {
+      "comment" : "ArchiveSearchScope.venue"
     },
     "Venue Names" : {
 

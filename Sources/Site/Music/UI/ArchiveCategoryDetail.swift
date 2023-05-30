@@ -18,8 +18,8 @@ struct ArchiveCategoryDetail: View {
 
   private var vault: Vault { model.vault }
 
-  @State var artistSearchString: String = ""
-  @State var venueSearchString: String = ""
+  @State var searchString: String = ""
+  @State var archiveSearchScope: ArchiveSearchScope = .artist
 
   @MainActor
   @ViewBuilder private var stackElement: some View {
@@ -40,20 +40,24 @@ struct ArchiveCategoryDetail: View {
           let venueDigests = model.filteredVenueDigests(nearbyModel)
           VenueList(
             venueDigests: venueDigests, sectioner: vault.sectioner, sort: $venueSort,
-            searchString: $venueSearchString
+            searchString: $searchString, searchScope: $archiveSearchScope
           )
           .locationFilter(nearbyModel, filteredDataIsEmpty: venueDigests.isEmpty)
         case .artists:
           let artistDigests = model.filteredArtistDigests(nearbyModel)
           ArtistList(
             artistDigests: artistDigests, sectioner: vault.sectioner, sort: $artistSort,
-            searchString: $artistSearchString
+            searchString: $searchString, searchScope: $archiveSearchScope
           )
           .locationFilter(nearbyModel, filteredDataIsEmpty: artistDigests.isEmpty)
         }
       }
       .shareCategory(category, url: url)
       .archiveCategoryUserActivity(category, url: url, isActive: isCategoryActive)
+      .archiveSearchable(
+        searchPrompt: String(localized: "Artist and Venue Names", bundle: .module),
+        scope: $archiveSearchScope, searchString: $searchString, contentsEmpty: false
+      )
     } else {
       Text("Select An Item", bundle: .module)
     }
