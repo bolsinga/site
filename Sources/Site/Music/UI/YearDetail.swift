@@ -13,10 +13,7 @@ struct YearDetail: View {
 
   private var title: String {
     if let yearPartialDate {
-      return String(
-        localized: "\(yearPartialDate.formatted(.yearOnly)) Shows",
-        bundle: .module,
-        comment: "Title for the YearDetail when there is a year")
+      return yearPartialDate.formatted(.yearOnly)
     }
     return String(
       localized: "Shows",
@@ -24,11 +21,35 @@ struct YearDetail: View {
       comment: "Title for the YearDetail")
   }
 
-  var body: some View {
-    List(shows) { show in
-      NavigationLink(value: show) { ShowBlurb(show: show) }
+  @ViewBuilder private var statsElement: some View {
+    if !shows.isEmpty {
+      Section(header: Text(ArchiveCategory.stats.localizedString)) {
+        StatsGrouping(shows: shows)
+      }
     }
-    .listStyle(.plain)
+  }
+
+  @ViewBuilder private var showsElement: some View {
+    if !shows.isEmpty {
+      Section(
+        header: Text(
+          "Shows", bundle: .module, comment: "Title of the Shows section of YearDetail")
+      ) {
+        ForEach(shows) { show in
+          NavigationLink(value: show) { ShowBlurb(show: show) }
+        }
+      }
+    }
+  }
+
+  var body: some View {
+    List {
+      statsElement
+      showsElement
+    }
+    #if os(iOS)
+      .listStyle(.grouped)
+    #endif
     .navigationTitle(Text(title))
   }
 }

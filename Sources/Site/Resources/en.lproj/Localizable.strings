@@ -4,9 +4,6 @@
 /* Ranking.FormatStyle.rankAndCount */
 "#%@ Count: %@" = "#%@ Count: %@";
 
-/* Title for the YearDetail when there is a year */
-"%@ Shows" = "%@ Shows";
-
 /* Decade.decade format string where the format is a two digit year. */
 "%@’s" = "%@’s";
 
