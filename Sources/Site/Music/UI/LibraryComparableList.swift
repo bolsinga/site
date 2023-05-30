@@ -12,10 +12,9 @@ where T: LibraryComparable, T: Identifiable, T: Hashable, T.ID == String {
   @Environment(\.vault) private var vault: Vault
 
   let items: [T]
-  let searchPrompt: String
   let itemContentValue: (T) -> Int
 
-  @State private var searchString: String = ""
+  @Binding var searchString: String
   @Binding var algorithm: LibrarySectionAlgorithm
 
   private var filteredItems: [T] {
@@ -52,7 +51,6 @@ where T: LibraryComparable, T: Identifiable, T: Hashable, T.ID == String {
       }
     }
     .listStyle(.plain)
-    .searchable(text: $searchString, prompt: searchPrompt)
     .toolbar {
       ToolbarItem(placement: .primaryAction) {
         Picker(selection: $algorithm) {
@@ -75,11 +73,8 @@ struct LibraryComparableList_Previews: PreviewProvider {
 
     NavigationStack {
       LibraryComparableList(
-        items: vault.music.artists,
-        searchPrompt: "Artist Names",
-        itemContentValue: {
-          vault.music.showsForArtist($0).count
-        }, algorithm: .constant(.alphabetical)
+        items: vault.music.artists, itemContentValue: { vault.music.showsForArtist($0).count },
+        searchString: .constant(""), algorithm: .constant(.alphabetical)
       )
       .navigationTitle("Artists")
       .environment(\.vault, vault)
@@ -88,11 +83,8 @@ struct LibraryComparableList_Previews: PreviewProvider {
 
     NavigationStack {
       LibraryComparableList(
-        items: vault.music.venues,
-        searchPrompt: "Venue Names",
-        itemContentValue: { _ in
-          0
-        }, algorithm: .constant(.alphabetical)
+        items: vault.music.venues, itemContentValue: { _ in 0 }, searchString: .constant(""),
+        algorithm: .constant(.alphabetical)
       )
       .navigationTitle("Venues")
       .environment(\.vault, vault)

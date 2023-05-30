@@ -13,16 +13,18 @@ struct ArtistList: View {
 
   @Binding var algorithm: LibrarySectionAlgorithm
 
+  @State private var searchString: String = ""
+
   var body: some View {
     LibraryComparableList(
-      items: artists,
-      searchPrompt: String(
-        localized: "Artist Names", bundle: .module, comment: "ArtistList searchPrompt"),
-      itemContentValue: {
-        vault.lookup.showRank(artist: $0).count
-      }, algorithm: $algorithm
+      items: artists, itemContentValue: { vault.lookup.showRank(artist: $0).count },
+      searchString: $searchString, algorithm: $algorithm
     )
     .navigationTitle(Text("Artists", bundle: .module, comment: "Title for the Artist Detail"))
+    .libraryComparableSearchable(
+      searchPrompt: String(
+        localized: "Artist Names", bundle: .module, comment: "ArtistList searchPrompt"),
+      searchString: $searchString)
   }
 }
 
