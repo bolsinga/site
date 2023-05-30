@@ -7,9 +7,24 @@
 
 import Foundation
 
-public enum Decade: Equatable {
+public enum Decade: Equatable, Hashable {
   case decade(Int)
   case unknown
+}
+
+extension Decade: Comparable {
+  public static func < (lhs: Decade, rhs: Decade) -> Bool {
+    switch (lhs, rhs) {
+    case (.decade(let lh), .decade(let rh)):
+      return lh < rh
+    case (.unknown, .unknown):
+      return false
+    case (.unknown, .decade(_)):
+      return false
+    case (.decade(_), .unknown):
+      return true
+    }
+  }
 }
 
 extension Int {

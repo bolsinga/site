@@ -16,10 +16,6 @@ extension Music {
     shows.filter { $0.venue == venue.id }
   }
 
-  public func showsForYear(_ year: PartialDate) -> [Show] {
-    shows.filter { $0.date.normalizedYear == year.normalizedYear }
-  }
-
   public func showsOnDate(_ date: Date) -> [Show] {
     return shows.filter { $0.date.day != nil }.filter { $0.date.month != nil }.filter {
       Calendar.autoupdatingCurrent.date(
