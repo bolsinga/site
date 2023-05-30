@@ -13,16 +13,18 @@ struct VenueList: View {
 
   @Binding var algorithm: LibrarySectionAlgorithm
 
+  @State private var searchString: String = ""
+
   var body: some View {
     LibraryComparableList(
-      items: venues,
-      searchPrompt: String(
-        localized: "Venue Names", bundle: .module, comment: "VenueList searchPrompt"),
-      itemContentValue: {
-        vault.lookup.venueRank(venue: $0).count
-      }, algorithm: $algorithm
+      items: venues, itemContentValue: { vault.lookup.venueRank(venue: $0).count },
+      searchString: $searchString, algorithm: $algorithm
     )
     .navigationTitle(Text("Venues", bundle: .module, comment: "Title for the Venue Detail"))
+    .libraryComparableSearchable(
+      searchPrompt: String(
+        localized: "Venue Names", bundle: .module, comment: "VenueList searchPrompt"),
+      searchString: $searchString)
   }
 }
 
