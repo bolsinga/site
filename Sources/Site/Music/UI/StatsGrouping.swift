@@ -53,10 +53,9 @@ struct StatsGrouping: View {
     }
   }
 
-  private var computedVenuesOfShows: [Venue] {
-    Array(
-      Set(shows.compactMap { do { return try vault.lookup.venueForShow($0) } catch { return nil } })
-    )
+  private var computeVenuesCount: Int {
+    Set(shows.compactMap { do { return try vault.lookup.venueForShow($0) } catch { return nil } })
+      .count
   }
 
   private var computeArtistCount: Int {
@@ -94,8 +93,8 @@ struct StatsGrouping: View {
       .filter { $0.date.year != nil }
       .compactMap { $0.date.date }
 
-    let venues = computedVenuesOfShows
-    let showVenues = venues.count > 1
+    let venuesCount = computeVenuesCount
+    let showVenues = venuesCount > 1
 
     let artistsCount = computeArtistCount
     let showArtists = artistsCount > 1
@@ -122,7 +121,7 @@ struct StatsGrouping: View {
           yearsElement
         case .venues:
           Text(
-            "\(venues.count) Venue(s)", bundle: .module, comment: "Venues Count for StatsGrouping.")
+            "\(venuesCount) Venue(s)", bundle: .module, comment: "Venues Count for StatsGrouping.")
         case .artists:
           Text(
             "\(artistsCount) Artist(s)", bundle: .module,
