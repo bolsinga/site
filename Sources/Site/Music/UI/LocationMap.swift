@@ -53,3 +53,14 @@ struct LocationMap: View {
     }
   }
 }
+
+struct LocationMap_Previews: PreviewProvider {
+  static var previews: some View {
+    let vault = Vault.previewData
+
+    NavigationStack {
+      LocationMap(location: vault.music.venues[0].location)
+        .environment(\.vault, vault)
+    }
+  }
+}
