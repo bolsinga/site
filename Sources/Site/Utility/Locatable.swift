@@ -29,3 +29,16 @@ extension Locatable {
       dx: -mapPointOffset, dy: -mapPointOffset)
   }
 }
+
+extension Sequence where Element: Locatable {
+  var rect: MKMapRect {
+    var union = MKMapRect.null
+    self.forEach { union = union.union($0.rect) }
+    return union
+  }
+
+  var paddedRect: MKMapRect {
+    let locatableRect = self.rect
+    return locatableRect.insetBy(dx: -locatableRect.width / 10.0, dy: -locatableRect.height / 10.0)
+  }
+}
