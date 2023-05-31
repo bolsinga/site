@@ -8,7 +8,7 @@
 import CoreLocation
 import MapKit
 
-protocol Locatable {
+protocol Locatable: Identifiable {
   var center: CLLocationCoordinate2D { get }
   var radius: CLLocationDistance { get }
 }
