@@ -45,7 +45,6 @@ struct LocationMap: View {
         .onTapGesture {
           MKMapItem(placemark: MKPlacemark(placemark: placemark)).openInMaps()
         }
-        .frame(minHeight: 300)
       }
     }.task {
       do { placemark = try await vault.atlas.geocode(location) } catch {}
