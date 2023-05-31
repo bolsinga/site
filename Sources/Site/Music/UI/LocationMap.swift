@@ -22,10 +22,10 @@ struct LocationMap: View {
     ZStack {
       if let placemark {
         Map(
-          coordinateRegion: .constant(placemark.coordinateRegion),
+          coordinateRegion: .constant(placemark.region),
           interactionModes: MapInteractionModes(), annotationItems: [placemark]
         ) { placemark in
-          MapMarker(coordinate: placemark.coordinate)
+          MapMarker(coordinate: placemark.center)
         }
         .onTapGesture {
           MKMapItem(placemark: MKPlacemark(placemark: placemark)).openInMaps()
