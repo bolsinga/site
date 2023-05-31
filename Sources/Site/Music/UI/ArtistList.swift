@@ -24,7 +24,9 @@ struct ArtistList: View {
     .libraryComparableSearchable(
       searchPrompt: String(
         localized: "Artist Names", bundle: .module, comment: "ArtistList searchPrompt"),
-      searchString: $searchString)
+      searchString: $searchString
+    )
+    .sortable(algorithm: $algorithm)
   }
 }
 

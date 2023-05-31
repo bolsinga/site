@@ -24,7 +24,9 @@ struct VenueList: View {
     .libraryComparableSearchable(
       searchPrompt: String(
         localized: "Venue Names", bundle: .module, comment: "VenueList searchPrompt"),
-      searchString: $searchString)
+      searchString: $searchString
+    )
+    .sortable(algorithm: $algorithm)
   }
 }
 
