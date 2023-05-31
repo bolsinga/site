@@ -10,9 +10,6 @@
 /* Decade.decade format string where the format is a full digits year. */
 "%@s" = "%@s";
 
-/* LibrarySectionAlgorithm.alphabetical */
-"Alphabetical" = "Alphabetical";
-
 /* Title for the ArchivesList. */
 "Archives" = "Archives";
 
@@ -70,12 +67,6 @@ Label in the chart for the Count in StateChart. */
 /* Title of the Related Venues Section for VenueDetail. */
 "Related Venues" = "Related Venues";
 
-/* LibrarySectionAlgorithm.showCount */
-"Show Count" = "Show Count";
-
-/* LibrarySectionAlgorithm.showYearRange */
-"Show Year Range" = "Show Year Range";
-
 /* Title for the ShowYearList. */
 "Show Years" = "Show Years";
 
@@ -86,7 +77,16 @@ ArchiveCategory Shows */
 "Shows" = "Shows";
 
 /* Shown to change the sort order of the LibraryComparableList. */
-"Sort Order" = "Sort Order";
+"Sort" = "Sort";
+
+/* LibrarySectionAlgorithm.alphabetical */
+"Sort Alphabetically" = "Sort Alphabetically";
+
+/* LibrarySectionAlgorithm.showCount */
+"Sort By Show Count" = "Sort By Show Count";
+
+/* LibrarySectionAlgorithm.showYearRange */
+"Sort By Year Range" = "Sort By Year Range";
 
 /* Label in the chart for the State in StateChart. */
 "State" = "State";

@@ -53,14 +53,23 @@ where T: LibraryComparable, T: Identifiable, T: Hashable, T.ID == String {
     .listStyle(.plain)
     .toolbar {
       ToolbarItem(placement: .primaryAction) {
-        Picker(selection: $algorithm) {
-          ForEach(LibrarySectionAlgorithm.allCases, id: \.self) { category in
-            Text(category.localizedString).tag(category)
+        let sortText = Text(
+          "Sort", bundle: .module,
+          comment: "Shown to change the sort order of the LibraryComparableList.")
+        Menu {
+          Picker(selection: $algorithm) {
+            ForEach(LibrarySectionAlgorithm.allCases, id: \.self) { category in
+              Text(category.localizedString).tag(category)
+            }
+          } label: {
+            sortText
           }
         } label: {
-          Text(
-            "Sort Order", bundle: .module,
-            comment: "Shown to change the sort order of the LibraryComparableList.")
+          Label {
+            sortText
+          } icon: {
+            Image(systemName: "line.3.horizontal.decrease.circle")
+          }
         }
       }
     }
