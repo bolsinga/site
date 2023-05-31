@@ -32,6 +32,7 @@ struct VenueDetail: View {
     ) {
       AddressView(location: venue.location)
       LocationMap(location: venue.location)
+        .frame(minHeight: 300)
     }
   }
 
