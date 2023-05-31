@@ -14,11 +14,13 @@ extension CLPlacemark {
     self.location?.coordinate ?? kCLLocationCoordinate2DInvalid
   }
 
+  internal var radius: CLLocationDistance {
+    guard let circularRegion = self.region as? CLCircularRegion else { return 100.0 }  // meters
+    return circularRegion.radius
+  }
+
   internal var coordinateRegion: MKCoordinateRegion {
-    var radius = 100.0  // meters
-    if let circularRegion = self.region as? CLCircularRegion {
-      radius = circularRegion.radius
-    }
+    let radius = radius
     return MKCoordinateRegion(
       center: self.coordinate, latitudinalMeters: radius, longitudinalMeters: radius)
   }
