@@ -13,7 +13,7 @@ struct LocatableMap<T: Locatable>: View {
 
   var body: some View {
     Map(
-      coordinateRegion: .constant(location.region),
+      mapRect: .constant(location.rect),
       interactionModes: MapInteractionModes(),
       annotationItems: [location]
     ) { item in
