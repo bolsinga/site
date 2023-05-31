@@ -21,7 +21,7 @@ struct LocationMap: View {
   var body: some View {
     ZStack {
       if let placemark {
-        LocatableMap(location: placemark)
+        LocatableMap(locations: [placemark])
           .onTapGesture {
             MKMapItem(placemark: MKPlacemark(placemark: placemark)).openInMaps()
           }
