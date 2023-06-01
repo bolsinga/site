@@ -15,17 +15,20 @@ struct StatsGrouping: View {
   let shouldCalculateArtistCount: Bool
   let yearsSpanRanking: Ranking?
   let computeShowsRank: (() -> Ranking)?
+  let computeArtistVenuesRank: (() -> Ranking)?
 
   internal init(
     shows: [Show],
     shouldCalculateArtistCount: Bool = true,
     yearsSpanRanking: Ranking? = nil,
-    computeShowsRank: (() -> Ranking)? = nil
+    computeShowsRank: (() -> Ranking)? = nil,
+    computeArtistVenuesRank: (() -> Ranking)? = nil
   ) {
     self.shows = shows
     self.shouldCalculateArtistCount = shouldCalculateArtistCount
     self.yearsSpanRanking = yearsSpanRanking
     self.computeShowsRank = computeShowsRank
+    self.computeArtistVenuesRank = computeArtistVenuesRank
   }
 
   private var computedStateCounts: [String: Int] {
@@ -49,9 +52,10 @@ struct StatsGrouping: View {
     }
   }
 
-  private var computeVenuesCount: Int {
-    Set(shows.compactMap { do { return try vault.lookup.venueForShow($0) } catch { return nil } })
-      .count
+  private var computeVenues: [Venue] {
+    Array(
+      Set(shows.compactMap { do { return try vault.lookup.venueForShow($0) } catch { return nil } })
+    )
   }
 
   private var computeArtistCount: Int {
@@ -78,13 +82,30 @@ struct StatsGrouping: View {
     }
   }
 
+  @ViewBuilder func count(venues: [Venue]) -> some View {
+    Text("\(venues.count) Venue(s)", bundle: .module, comment: "Venues Count for StatsGrouping.")
+  }
+
+  @ViewBuilder func element(for venues: [Venue]) -> some View {
+    if let computeArtistVenuesRank {
+      HStack {
+        count(venues: venues)
+        Spacer()
+        Text(computeArtistVenuesRank().formatted(.rankOnly))
+      }
+    } else {
+      count(venues: venues)
+    }
+  }
+
   var body: some View {
     let knownShowDates = shows.filter { $0.date.day != nil }
       .filter { $0.date.month != nil }
       .filter { $0.date.year != nil }
       .compactMap { $0.date.date }
 
-    let venuesCount = computeVenuesCount
+    let venues = computeVenues
+    let venuesCount = venues.count
     let showVenues = venuesCount > 1
 
     let artistsCount = shouldCalculateArtistCount ? computeArtistCount : 0
@@ -111,8 +132,7 @@ struct StatsGrouping: View {
         case .years:
           yearsElement
         case .venues:
-          Text(
-            "\(venuesCount) Venue(s)", bundle: .module, comment: "Venues Count for StatsGrouping.")
+          element(for: venues)
         case .artists:
           Text(
             "\(artistsCount) Artist(s)", bundle: .module,

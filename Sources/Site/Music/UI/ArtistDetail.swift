@@ -33,7 +33,8 @@ struct ArtistDetail: View {
         StatsGrouping(
           shows: shows, shouldCalculateArtistCount: false,
           yearsSpanRanking: vault.lookup.spanRank(artist: artist),
-          computeShowsRank: { vault.lookup.showRank(artist: artist) })
+          computeShowsRank: { vault.lookup.showRank(artist: artist) },
+          computeArtistVenuesRank: { vault.lookup.artistVenueRank(artist: artist) })
       }
     }
   }

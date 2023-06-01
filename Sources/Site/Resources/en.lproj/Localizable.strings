@@ -85,6 +85,9 @@ ArchiveCategory Shows */
 /* LibrarySectionAlgorithm.showCount */
 "Sort By Show Count" = "Sort By Show Count";
 
+/* LibrarySectionAlgorithm.artistVenueRank */
+"Sort By Venue Count" = "Sort By Venue Count";
+
 /* LibrarySectionAlgorithm.showYearRange */
 "Sort By Year Range" = "Sort By Year Range";
 
