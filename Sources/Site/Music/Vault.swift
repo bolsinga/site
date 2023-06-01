@@ -80,7 +80,16 @@ public struct Vault {
       venueArtistRankSectioner: await venueArtistRankSectioner)
 
     //    Task {
-    //      await v.atlas.geocode(batch: v.music.venues.map { $0.location })
+    //      do {
+    //        for try await (location, placemark) in BatchGeocode(
+    //          atlas: v.atlas, locations: v.music.venues.map { $0.location })
+    //        {
+    //          print("geocoded: \(location) to \(placemark)")
+    //        }
+    //      } catch {
+    //        print("batch error: \(error)")
+    //      }
+    //      print("Batch Geocoding Completed.")
     //    }
 
     return v
