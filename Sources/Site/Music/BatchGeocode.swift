@@ -10,7 +10,7 @@ import Foundation
 
 private enum Constants {
   static let maxRequests = 50
-  static let timeUntilReset = 60
+  static let timeUntilReset = Duration.seconds(60)
 }
 
 struct BatchGeocode: AsyncSequence {
@@ -34,7 +34,7 @@ struct BatchGeocode: AsyncSequence {
       if index != 0, index % Constants.maxRequests == 0 {
         // hit max requests, wait for throttle time.
         try await Task.sleep(
-          until: batchStartTime + .seconds(Constants.timeUntilReset), clock: ContinuousClock())
+          until: batchStartTime + Constants.timeUntilReset, clock: .continuous)
         batchStartTime = .now
       }
 
@@ -49,7 +49,7 @@ struct BatchGeocode: AsyncSequence {
           if error.code == CLError.network.rawValue, error.domain == kCLErrorDomain {
             // throttling error. wait for throttle time.
             try await Task.sleep(
-              until: .now + .seconds(Constants.timeUntilReset), clock: .continuous)
+              until: .now + Constants.timeUntilReset, clock: .continuous)
             batchStartTime = .now
           }
         } catch {
