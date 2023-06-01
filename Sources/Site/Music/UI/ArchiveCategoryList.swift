@@ -67,10 +67,5 @@ public struct ArchiveCategoryList: View {
         vault.comparator.showCompare(lhs: $0, rhs: $1, lookup: vault.lookup)
       }
     }
-    //    .task {
-    //      for await (location, placemark) in await vault.atlas.geocodedLocations {
-    //        print("geocoded: \(location) to \(placemark)")
-    //      }
-    //    }
   }
 }
