@@ -31,4 +31,12 @@ extension Ranking {
       Text("\(self.count) Venue(s)", bundle: .module, comment: "ranked artist venues.")
     }
   }
+
+  @ViewBuilder var artistsCountView: some View {
+    HStack {
+      Text(self.formatted(.rankOnly))
+      Spacer()
+      Text("\(self.count) Artist(s)", bundle: .module, comment: "ranked venue artists.")
+    }
+  }
 }

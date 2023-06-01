@@ -12,7 +12,7 @@ extension LibrarySectionAlgorithm {
     switch self {
     case .alphabetical, .showYearRange:
       Text("\(count) Show(s)", bundle: .module, comment: "Value for the Artist # of Shows.")
-    case .showCount, .artistVenueRank:
+    case .showCount, .artistVenueRank, .venueArtistRank:
       EmptyView()
     }
   }
@@ -41,6 +41,13 @@ extension LibrarySectionAlgorithm {
         EmptyView()
       case .ranking(let ranking):
         ranking.venuesCountView
+      }
+    case .venueArtistRank:
+      switch section {
+      case .alphabetic(_), .numeric, .punctuation:
+        EmptyView()
+      case .ranking(let ranking):
+        ranking.artistsCountView
       }
     }
   }

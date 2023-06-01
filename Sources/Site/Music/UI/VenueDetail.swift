@@ -42,7 +42,8 @@ struct VenueDetail: View {
       Section(header: Text(ArchiveCategory.stats.localizedString)) {
         StatsGrouping(
           shows: shows, yearsSpanRanking: vault.lookup.spanRank(venue: venue),
-          computeShowsRank: { vault.lookup.venueRank(venue: venue) })
+          computeShowsRank: { vault.lookup.venueRank(venue: venue) },
+          computeVenueArtistsRank: { vault.lookup.venueArtistRank(venue: venue) })
       }
     }
   }

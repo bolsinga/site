@@ -26,7 +26,7 @@ struct ArtistList: View {
         localized: "Artist Names", bundle: .module, comment: "ArtistList searchPrompt"),
       searchString: $searchString
     )
-    .sortable(algorithm: $algorithm)
+    .sortable(algorithm: $algorithm, disallowedAlgorithms: [.venueArtistRank])
   }
 }
 
