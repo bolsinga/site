@@ -10,6 +10,8 @@ import SwiftUI
 struct LibraryComparableSortModifier: ViewModifier {
   @Binding var algorithm: LibrarySectionAlgorithm
 
+  let disallowedAlgorithms: Set<LibrarySectionAlgorithm>
+
   func body(content: Content) -> some View {
     content
       .toolbar {
@@ -19,7 +21,10 @@ struct LibraryComparableSortModifier: ViewModifier {
             comment: "Shown to change the sort order of the LibraryComparableList.")
           Menu {
             Picker(selection: $algorithm) {
-              ForEach(LibrarySectionAlgorithm.allCases, id: \.self) { category in
+              let algorithms = LibrarySectionAlgorithm.allCases.filter {
+                !disallowedAlgorithms.contains($0)
+              }
+              ForEach(algorithms, id: \.self) { category in
                 Text(category.localizedString).tag(category)
               }
             } label: {
@@ -38,7 +43,12 @@ struct LibraryComparableSortModifier: ViewModifier {
 }
 
 extension View {
-  func sortable(algorithm: Binding<LibrarySectionAlgorithm>) -> some View {
-    modifier(LibraryComparableSortModifier(algorithm: algorithm))
+  func sortable(
+    algorithm: Binding<LibrarySectionAlgorithm>,
+    disallowedAlgorithms: Set<LibrarySectionAlgorithm> = []
+  ) -> some View {
+    modifier(
+      LibraryComparableSortModifier(
+        algorithm: algorithm, disallowedAlgorithms: disallowedAlgorithms))
   }
 }
