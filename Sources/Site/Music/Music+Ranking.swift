@@ -52,6 +52,14 @@ extension Music {
     return computeRankings(items: artistVenueCounts)
   }
 
+  var venueArtistRankings: ItemRankingMap {
+    let venueArtistCounts: [(Venue.ID, Int)] = self.venues.reduce(into: [:]) {
+      $0[$1.id] = Set(self.showsForVenue($1).flatMap { $0.artists }).count
+    }.map { $0 }
+
+    return computeRankings(items: venueArtistCounts)
+  }
+
   internal func computeRankings<T>(items: [(T, Int)]) -> [T: Ranking] {
     let itemRanks: [Int: [T]] = Dictionary(grouping: items) { $0.1 }
       .reduce(into: [:]) {

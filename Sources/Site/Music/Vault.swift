@@ -15,6 +15,7 @@ public struct Vault {
   internal let rankSectioner: LibrarySectioner
   internal let showSpanSectioner: LibrarySectioner
   internal let artistVenueRankSectioner: LibrarySectioner
+  internal let venueArtistRankSectioner: LibrarySectioner
   internal let atlas = Atlas()
 
   public init(music: Music) {
@@ -22,13 +23,14 @@ public struct Vault {
     self.init(
       music: music, lookup: Lookup(music: music), comparator: LibraryComparator(),
       sectioner: LibrarySectioner(), rankSectioner: LibrarySectioner(),
-      showSpanSectioner: LibrarySectioner(), artistVenueRankSectioner: LibrarySectioner())
+      showSpanSectioner: LibrarySectioner(), artistVenueRankSectioner: LibrarySectioner(),
+      venueArtistRankSectioner: LibrarySectioner())
   }
 
   internal init(
     music: Music, lookup: Lookup, comparator: LibraryComparator, sectioner: LibrarySectioner,
     rankSectioner: LibrarySectioner, showSpanSectioner: LibrarySectioner,
-    artistVenueRankSectioner: LibrarySectioner
+    artistVenueRankSectioner: LibrarySectioner, venueArtistRankSectioner: LibrarySectioner
   ) {
     self.music = music
     self.lookup = lookup
@@ -37,6 +39,7 @@ public struct Vault {
     self.rankSectioner = rankSectioner
     self.showSpanSectioner = showSpanSectioner
     self.artistVenueRankSectioner = artistVenueRankSectioner
+    self.venueArtistRankSectioner = venueArtistRankSectioner
   }
 
   public static func create(music: Music) async -> Vault {
@@ -50,6 +53,8 @@ public struct Vault {
     async let rankSectioner = await LibrarySectioner.createRankSectioner(lookup: lookup)
     async let showSpanSectioner = await LibrarySectioner.createShowSpanSectioner(lookup: lookup)
     async let artistVenueRankSectioner = await LibrarySectioner.createArtistVenueRankSectioner(
+      lookup: lookup)
+    async let venueArtistRankSectioner = await LibrarySectioner.createVenueArtistRankSectioner(
       lookup: lookup)
 
     async let sortedArtists = lookup.artistsWithShows(music.shows).sorted(
@@ -71,7 +76,8 @@ public struct Vault {
     let v = Vault(
       music: sortedMusic, lookup: lookup, comparator: comparator, sectioner: await sectioner,
       rankSectioner: await rankSectioner, showSpanSectioner: await showSpanSectioner,
-      artistVenueRankSectioner: await artistVenueRankSectioner)
+      artistVenueRankSectioner: await artistVenueRankSectioner,
+      venueArtistRankSectioner: await venueArtistRankSectioner)
 
     //    Task {
     //      await v.atlas.geocode(batch: v.music.venues.map { $0.location })

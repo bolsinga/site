@@ -12,6 +12,7 @@ enum LibrarySectionAlgorithm: Int, CaseIterable {
   case showCount
   case showYearRange
   case artistVenueRank
+  case venueArtistRank
 
   var localizedString: String {
     switch self {
@@ -31,6 +32,10 @@ enum LibrarySectionAlgorithm: Int, CaseIterable {
       return String(
         localized: "Sort By Venue Count", bundle: .module,
         comment: "LibrarySectionAlgorithm.artistVenueRank")
+    case .venueArtistRank:
+      return String(
+        localized: "Sort By Artist Count", bundle: .module,
+        comment: "LibrarySectionAlgorithm.venueArtistRank")
     }
   }
 }

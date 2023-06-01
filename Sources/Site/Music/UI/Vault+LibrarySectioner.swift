@@ -18,6 +18,8 @@ extension Vault {
       return showSpanSectioner
     case .artistVenueRank:
       return artistVenueRankSectioner
+    case .venueArtistRank:
+      return venueArtistRankSectioner
     }
   }
 }

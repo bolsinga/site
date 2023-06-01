@@ -16,19 +16,22 @@ struct StatsGrouping: View {
   let yearsSpanRanking: Ranking?
   let computeShowsRank: (() -> Ranking)?
   let computeArtistVenuesRank: (() -> Ranking)?
+  let computeVenueArtistsRank: (() -> Ranking)?
 
   internal init(
     shows: [Show],
     shouldCalculateArtistCount: Bool = true,
     yearsSpanRanking: Ranking? = nil,
     computeShowsRank: (() -> Ranking)? = nil,
-    computeArtistVenuesRank: (() -> Ranking)? = nil
+    computeArtistVenuesRank: (() -> Ranking)? = nil,
+    computeVenueArtistsRank: (() -> Ranking)? = nil
   ) {
     self.shows = shows
     self.shouldCalculateArtistCount = shouldCalculateArtistCount
     self.yearsSpanRanking = yearsSpanRanking
     self.computeShowsRank = computeShowsRank
     self.computeArtistVenuesRank = computeArtistVenuesRank
+    self.computeVenueArtistsRank = computeVenueArtistsRank
   }
 
   private var computedStateCounts: [String: Int] {
@@ -58,12 +61,12 @@ struct StatsGrouping: View {
     )
   }
 
-  private var computeArtistCount: Int {
-    Set(
-      shows.flatMap {
-        do { return try vault.lookup.artistsForShow($0) } catch { return [Artist]() }
-      }
-    ).count
+  private var computeArtists: [Artist] {
+    Array(
+      Set(
+        shows.flatMap {
+          do { return try vault.lookup.artistsForShow($0) } catch { return [Artist]() }
+        }))
   }
 
   @ViewBuilder var showCount: some View {
@@ -98,6 +101,22 @@ struct StatsGrouping: View {
     }
   }
 
+  @ViewBuilder func count(artists: [Artist]) -> some View {
+    Text("\(artists.count) Artist(s)", bundle: .module, comment: "Artists Count for StatsGrouping.")
+  }
+
+  @ViewBuilder func element(for artists: [Artist]) -> some View {
+    if let computeVenueArtistsRank {
+      HStack {
+        count(artists: artists)
+        Spacer()
+        Text(computeVenueArtistsRank().formatted(.rankOnly))
+      }
+    } else {
+      count(artists: artists)
+    }
+  }
+
   var body: some View {
     let knownShowDates = shows.filter { $0.date.day != nil }
       .filter { $0.date.month != nil }
@@ -108,7 +127,8 @@ struct StatsGrouping: View {
     let venuesCount = venues.count
     let showVenues = venuesCount > 1
 
-    let artistsCount = shouldCalculateArtistCount ? computeArtistCount : 0
+    let artists = shouldCalculateArtistCount ? computeArtists : []
+    let artistsCount = artists.count
     let showArtists = artistsCount > 1
 
     let stateCounts = computedStateCounts
@@ -134,9 +154,7 @@ struct StatsGrouping: View {
         case .venues:
           element(for: venues)
         case .artists:
-          Text(
-            "\(artistsCount) Artist(s)", bundle: .module,
-            comment: "Artists Count for StatsGrouping.")
+          element(for: artists)
         case .weekday:
           let name = String(localized: "Weekdays", bundle: .module, comment: "Weekdays Stats")
           NavigationLink(name) { WeekdayChart(dates: knownShowDates).navigationTitle(name) }

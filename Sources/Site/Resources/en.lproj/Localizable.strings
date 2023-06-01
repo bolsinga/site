@@ -82,6 +82,9 @@ ArchiveCategory Shows */
 /* LibrarySectionAlgorithm.alphabetical */
 "Sort Alphabetically" = "Sort Alphabetically";
 
+/* LibrarySectionAlgorithm.venueArtistRank */
+"Sort By Artist Count" = "Sort By Artist Count";
+
 /* LibrarySectionAlgorithm.showCount */
 "Sort By Show Count" = "Sort By Show Count";
 
