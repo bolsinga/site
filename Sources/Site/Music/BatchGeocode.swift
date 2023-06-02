@@ -24,19 +24,24 @@ struct BatchGeocode: AsyncSequence {
     let locations: [Location]
 
     var index: Int = 0
-    var batchStartTime: ContinuousClock.Instant = .now
+    var lastWaitingIndex: Int = 0
+    var waitUntil: ContinuousClock.Instant = .now + Constants.timeUntilReset
+
+    private mutating func idleAndReset() async throws {
+      try await ContinuousClock().sleep(until: waitUntil)
+      waitUntil = .now + Constants.timeUntilReset
+      lastWaitingIndex = index
+    }
 
     mutating func next() async throws -> Element? {
       guard !Task.isCancelled else { return nil }
 
       guard index < locations.count else { return nil }
 
-      let clock = ContinuousClock.continuous
-
-      if index != 0, index % Constants.maxRequests == 0 {
-        // hit max requests, wait for throttle time.
-        try await clock.sleep(until: batchStartTime + Constants.timeUntilReset)
-        batchStartTime = .now
+      let requestIndex = abs(index - lastWaitingIndex)
+      if requestIndex != 0, requestIndex % Constants.maxRequests == 0 {
+        // hit max requests
+        try await idleAndReset()
       }
 
       var retry: Bool = true
@@ -48,9 +53,8 @@ struct BatchGeocode: AsyncSequence {
           return (location, placemark)
         } catch let error as NSError {
           if error.code == CLError.network.rawValue, error.domain == kCLErrorDomain {
-            // throttling error. wait for throttle time.
-            try await clock.sleep(until: .now + Constants.timeUntilReset)
-            batchStartTime = .now
+            // throttling error
+            try await idleAndReset()
           }
         } catch {
           retry = false
