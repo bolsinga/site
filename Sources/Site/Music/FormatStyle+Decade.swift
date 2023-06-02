@@ -69,7 +69,7 @@ extension FormatStyle where Self == Decade.FormatStyle {
   public static var twoDigits: Self { .init(.twoDigits) }
   public static var defaultDigits: Self { .init(.defaultDigits) }
 
-  static func partialDate(style: Decade.FormatStyle.Style = .defaultDigits) -> Self {
+  static func decade(style: Decade.FormatStyle.Style = .defaultDigits) -> Self {
     .init(style)
   }
 }
