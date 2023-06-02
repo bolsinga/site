@@ -31,10 +31,11 @@ struct BatchGeocode: AsyncSequence {
 
       guard index < locations.count else { return nil }
 
+      let clock = ContinuousClock.continuous
+
       if index != 0, index % Constants.maxRequests == 0 {
         // hit max requests, wait for throttle time.
-        try await Task.sleep(
-          until: batchStartTime + Constants.timeUntilReset, clock: .continuous)
+        try await clock.sleep(until: batchStartTime + Constants.timeUntilReset)
         batchStartTime = .now
       }
 
@@ -48,8 +49,7 @@ struct BatchGeocode: AsyncSequence {
         } catch let error as NSError {
           if error.code == CLError.network.rawValue, error.domain == kCLErrorDomain {
             // throttling error. wait for throttle time.
-            try await Task.sleep(
-              until: .now + Constants.timeUntilReset, clock: .continuous)
+            try await clock.sleep(until: .now + Constants.timeUntilReset)
             batchStartTime = .now
           }
         } catch {
