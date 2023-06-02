@@ -26,7 +26,7 @@ struct LocationMap: View {
             MKMapItem(placemark: MKPlacemark(placemark: placemark)).openInMaps()
           }
       }
-    }.task {
+    }.task(id: location) {
       do { placemark = try await vault.atlas.geocode(location) } catch {}
     }
   }
