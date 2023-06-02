@@ -17,7 +17,7 @@ struct ArtistList: View {
 
   var body: some View {
     LibraryComparableList(
-      items: artists, itemContentValue: { vault.lookup.showRank(artist: $0).count },
+      items: artists, itemContentValue: { vault.lookup.showRank(artist: $0).value },
       searchString: $searchString, algorithm: $algorithm
     )
     .navigationTitle(Text("Artists", bundle: .module, comment: "Title for the Artist Detail"))

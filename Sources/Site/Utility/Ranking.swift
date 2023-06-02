@@ -9,9 +9,9 @@ import Foundation
 
 struct Ranking: Hashable {
   let rank: Int  // 1...n
-  let count: Int
+  let value: Int
 
   static var empty: Ranking {
-    Ranking(rank: 0, count: 0)
+    Ranking(rank: 0, value: 0)
   }
 }

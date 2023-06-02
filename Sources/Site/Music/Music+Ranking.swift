@@ -77,7 +77,7 @@ extension Music {
     let itemRankMap: [T: Ranking] = itemsOrdered.reversed().reduce(into: [:]) {
       dictionary, itemRankings in
       itemRankings.0.forEach { item in
-        dictionary[item] = Ranking(rank: rank, count: itemRankings.1)
+        dictionary[item] = Ranking(rank: rank, value: itemRankings.1)
       }
       rank += 1
     }
