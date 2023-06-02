@@ -8,11 +8,7 @@
 import Foundation
 
 extension Music {
-  typealias ItemValue = ([String], Int)  // Int is the value. All the items in this array have the same value.
-  typealias ItemRankings = [ItemValue]  // From least to most.
-  typealias ItemRankingMap = [String: Ranking]  // Lookup an items Ranking
-
-  var artistRankings: ItemRankingMap {
+  var artistRankings: [Artist.ID: Ranking] {
     let artistShowCounts: [(Artist.ID, Int)] = self.artists.reduce(into: [:]) {
       $0[$1.id] = self.showsForArtist($1).count
     }.map { $0 }
@@ -20,7 +16,7 @@ extension Music {
     return computeRankings(items: artistShowCounts)
   }
 
-  var venueRankings: ItemRankingMap {
+  var venueRankings: [Venue.ID: Ranking] {
     let venuesShowCount: [(Venue.ID, Int)] = self.venues.reduce(into: [:]) {
       $0[$1.id] = self.showsForVenue($1).count
     }.map { $0 }
@@ -28,7 +24,7 @@ extension Music {
     return computeRankings(items: venuesShowCount)
   }
 
-  var artistSpanRankings: ItemRankingMap {
+  var artistSpanRankings: [Artist.ID: Ranking] {
     let artistShowSpans: [(Artist.ID, Int)] = self.artists.reduce(into: [:]) {
       $0[$1.id] = self.showsForArtist($1).map { $0.date }.yearSpan
     }.map { $0 }
@@ -36,7 +32,7 @@ extension Music {
     return computeRankings(items: artistShowSpans)
   }
 
-  var venueSpanRankings: ItemRankingMap {
+  var venueSpanRankings: [Venue.ID: Ranking] {
     let venueShowSpans: [(Venue.ID, Int)] = self.venues.reduce(into: [:]) {
       $0[$1.id] = self.showsForVenue($1).map { $0.date }.yearSpan
     }.map { $0 }
@@ -44,7 +40,7 @@ extension Music {
     return computeRankings(items: venueShowSpans)
   }
 
-  var artistVenueRankings: ItemRankingMap {
+  var artistVenueRankings: [Artist.ID: Ranking] {
     let artistVenueCounts: [(Artist.ID, Int)] = self.artists.reduce(into: [:]) {
       $0[$1.id] = Set(self.showsForArtist($1).map { $0.venue }).count
     }.map { $0 }
@@ -52,7 +48,7 @@ extension Music {
     return computeRankings(items: artistVenueCounts)
   }
 
-  var venueArtistRankings: ItemRankingMap {
+  var venueArtistRankings: [Venue.ID: Ranking] {
     let venueArtistCounts: [(Venue.ID, Int)] = self.venues.reduce(into: [:]) {
       $0[$1.id] = Set(self.showsForVenue($1).flatMap { $0.artists }).count
     }.map { $0 }
