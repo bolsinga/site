@@ -21,10 +21,14 @@ actor Atlas {
   private var count = 0
   private var waitUntil: ContinuousClock.Instant = .now + Constants.timeUntilReset
 
-  private func idleAndReset() async throws {
-    try await ContinuousClock().sleep(until: waitUntil)
+  private func reset() {
     waitUntil = .now + Constants.timeUntilReset
     count = 0
+  }
+
+  private func idleAndReset() async throws {
+    try await ContinuousClock().sleep(until: waitUntil)
+    reset()
   }
 
   public func geocode(_ location: Location) async throws -> CLPlacemark {
@@ -37,7 +41,10 @@ actor Atlas {
   }
 
   private func gatedGeocode(_ location: Location) async throws -> CLPlacemark {
-    if count != 0, count % Constants.maxRequests == 0 {
+    if ContinuousClock.now.duration(to: waitUntil) <= .seconds(0) {
+      // wait time expired
+      reset()
+    } else if count != 0, count % Constants.maxRequests == 0 {
       // hit max requests
       try await idleAndReset()
     }
