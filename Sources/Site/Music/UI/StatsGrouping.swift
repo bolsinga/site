@@ -47,7 +47,7 @@ struct StatsGrouping: View {
     if let yearsSpanRanking {
       HStack {
         Text(
-          "\(yearsSpanRanking.count) Year(s)", bundle: .module,
+          "\(yearsSpanRanking.value) Year(s)", bundle: .module,
           comment: "Years Span for StatsGrouping.")
         Spacer()
         Text(yearsSpanRanking.formatted(.rankOnly))
@@ -137,7 +137,7 @@ struct StatsGrouping: View {
     let showWeekdayOrMonthChart = shows.count > statsThreshold
 
     let statsCategoryCases = StatsCategory.allCases
-      .filter { $0 == .years ? (yearsSpanRanking?.count ?? 0) > 1 : true }
+      .filter { $0 == .years ? (yearsSpanRanking?.value ?? 0) > 1 : true }
       .filter { $0 == .venues ? showVenues : true }
       .filter { $0 == .artists ? showArtists : true }
       .filter { $0 == .weekday ? showWeekdayOrMonthChart : true }

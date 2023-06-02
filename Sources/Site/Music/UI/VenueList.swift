@@ -17,7 +17,7 @@ struct VenueList: View {
 
   var body: some View {
     LibraryComparableList(
-      items: venues, itemContentValue: { vault.lookup.venueRank(venue: $0).count },
+      items: venues, itemContentValue: { vault.lookup.venueRank(venue: $0).value },
       searchString: $searchString, algorithm: $algorithm
     )
     .navigationTitle(Text("Venues", bundle: .module, comment: "Title for the Venue Detail"))

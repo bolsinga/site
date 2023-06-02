@@ -36,7 +36,7 @@ extension Ranking.FormatStyle: Foundation.FormatStyle {
     case .rankAndCount:
       return String(
         localized:
-          "#\(value.rank.formatted(.number)) Count: \(value.count.formatted(.number))",
+          "#\(value.rank.formatted(.number)) Count: \(value.value.formatted(.number))",
         bundle: .module, comment: "Ranking.FormatStyle.rankAndCount")
     }
   }

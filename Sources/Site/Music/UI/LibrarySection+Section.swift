@@ -16,7 +16,7 @@ extension LibrarySection {
       HStack {
         Text(ranking.formatted(.rankOnly))
         Spacer()
-        Text("\(ranking.count) Show(s)", bundle: .module, comment: "LibrarySection.ranking count.")
+        Text("\(ranking.value) Show(s)", bundle: .module, comment: "LibrarySection.ranking count.")
       }
     }
   }
