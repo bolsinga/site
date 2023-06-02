@@ -57,7 +57,7 @@ extension FormatStyle where Self == Ranking.FormatStyle {
   static var rankOnly: Self { .init(.rankOnly) }
   static var rankAndCount: Self { .init(.rankAndCount) }
 
-  static func librarySection(style: Ranking.FormatStyle.Style = .rankOnly) -> Self {
+  static func ranking(style: Ranking.FormatStyle.Style = .rankOnly) -> Self {
     .init(style)
   }
 }
