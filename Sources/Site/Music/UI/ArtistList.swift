@@ -11,20 +11,68 @@ struct ArtistList: View {
   @Environment(\.vault) private var vault: Vault
   let artists: [Artist]
 
-  @Binding var algorithm: LibrarySectionAlgorithm
+  @Binding var sort: ArtistSort
 
   @State private var searchString: String = ""
+
+  private var sectioner: LibrarySectioner {
+    switch sort {
+    case .alphabetical:
+      return vault.sectioner
+    case .showCount:
+      return vault.rankSectioner
+    case .showYearRange:
+      return vault.showSpanSectioner
+    case .venueRank:
+      return vault.artistVenueRankSectioner
+    }
+  }
+
+  @ViewBuilder private func contentView(for artist: Artist) -> some View {
+    switch sort {
+    case .alphabetical, .showYearRange:
+      Text(
+        "\(vault.lookup.showRank(artist: artist).value) Show(s)", bundle: .module,
+        comment: "Value for the Artist # of Shows.")
+    case .showCount, .venueRank:
+      EmptyView()
+    }
+  }
+
+  @ViewBuilder private func sectionHeader(for section: LibrarySection) -> some View {
+    switch sort {
+    case .alphabetical:
+      section.representingView
+    case .showCount:
+      switch section {
+      case .alphabetic(_), .numeric, .punctuation:
+        EmptyView()
+      case .ranking(let ranking):
+        ranking.showsCountView
+      }
+    case .showYearRange:
+      switch section {
+      case .alphabetic(_), .numeric, .punctuation:
+        EmptyView()
+      case .ranking(let ranking):
+        ranking.yearsCountView
+      }
+    case .venueRank:
+      switch section {
+      case .alphabetic(_), .numeric, .punctuation:
+        EmptyView()
+      case .ranking(let ranking):
+        ranking.venuesCountView
+      }
+    }
+  }
 
   var body: some View {
     LibraryComparableList(
       items: artists,
-      sectioner: vault.sectioner(for: algorithm),
-      itemContentView: {
-        algorithm.itemContentView(vault.lookup.showRank(artist: $0).value)
-      },
-      sectionHeaderView: { section in
-        algorithm.headerView(section)
-      },
+      sectioner: sectioner,
+      itemContentView: { contentView(for: $0) },
+      sectionHeaderView: { sectionHeader(for: $0) },
       searchString: $searchString
     )
     .navigationTitle(Text("Artists", bundle: .module, comment: "Title for the Artist Detail"))
@@ -33,7 +81,7 @@ struct ArtistList: View {
         localized: "Artist Names", bundle: .module, comment: "ArtistList searchPrompt"),
       searchString: $searchString
     )
-    .sortable(algorithm: $algorithm, disallowedAlgorithms: [.venueArtistRank])
+    .sortable(algorithm: $sort)
   }
 }
 
@@ -42,7 +90,7 @@ struct ArtistList_Previews: PreviewProvider {
     let vault = Vault.previewData
 
     NavigationStack {
-      ArtistList(artists: vault.music.artists, algorithm: .constant(.alphabetical))
+      ArtistList(artists: vault.music.artists, sort: .constant(.alphabetical))
         .environment(\.vault, vault)
         .musicDestinations()
     }
