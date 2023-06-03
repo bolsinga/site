@@ -39,3 +39,5 @@ enum LibrarySectionAlgorithm: Int, CaseIterable {
     }
   }
 }
+
+extension LibrarySectionAlgorithm: Sorting {}

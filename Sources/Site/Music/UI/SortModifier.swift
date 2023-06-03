@@ -1,5 +1,5 @@
 //
-//  LibraryComparableSortModifier.swift
+//  SortModifier.swift
 //
 //
 //  Created by Greg Bolsinga on 5/31/23.
@@ -7,10 +7,14 @@
 
 import SwiftUI
 
-struct LibraryComparableSortModifier: ViewModifier {
-  @Binding var algorithm: LibrarySectionAlgorithm
+protocol Sorting: CaseIterable, Hashable {
+  var localizedString: String { get }
+}
 
-  let disallowedAlgorithms: Set<LibrarySectionAlgorithm>
+struct SortModifier<T: Sorting>: ViewModifier {
+  @Binding var algorithm: T
+
+  let disallowedAlgorithms: Set<T>
 
   func body(content: Content) -> some View {
     content
@@ -21,9 +25,7 @@ struct LibraryComparableSortModifier: ViewModifier {
             comment: "Shown to change the sort order of the LibraryComparableList.")
           Menu {
             Picker(selection: $algorithm) {
-              let algorithms = LibrarySectionAlgorithm.allCases.filter {
-                !disallowedAlgorithms.contains($0)
-              }
+              let algorithms = T.allCases.filter { !disallowedAlgorithms.contains($0) }
               ForEach(algorithms, id: \.self) { category in
                 Text(category.localizedString).tag(category)
               }
@@ -43,12 +45,7 @@ struct LibraryComparableSortModifier: ViewModifier {
 }
 
 extension View {
-  func sortable(
-    algorithm: Binding<LibrarySectionAlgorithm>,
-    disallowedAlgorithms: Set<LibrarySectionAlgorithm> = []
-  ) -> some View {
-    modifier(
-      LibraryComparableSortModifier(
-        algorithm: algorithm, disallowedAlgorithms: disallowedAlgorithms))
+  func sortable<T: Sorting>(algorithm: Binding<T>, disallowedAlgorithms: Set<T> = []) -> some View {
+    modifier(SortModifier(algorithm: algorithm, disallowedAlgorithms: disallowedAlgorithms))
   }
 }
