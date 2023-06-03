@@ -7,14 +7,14 @@
 
 import SwiftUI
 
-struct LibraryComparableList<T, SectionHeader : View>: View
+struct LibraryComparableList<T, SectionHeader: View>: View
 where T: LibraryComparable, T: Identifiable, T: Hashable, T.ID == String {
   @Environment(\.vault) private var vault: Vault
 
   let items: [T]
   let itemContentValue: (T) -> Int
-  let sectioner : LibrarySectioner
-  let sectionHeaderView : (LibrarySection) -> SectionHeader
+  let sectioner: LibrarySectioner
+  let sectionHeaderView: (LibrarySection) -> SectionHeader
 
   @Binding var searchString: String
   @Binding var algorithm: LibrarySectionAlgorithm
