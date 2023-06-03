@@ -33,7 +33,7 @@ struct VenueList: View {
         localized: "Venue Names", bundle: .module, comment: "VenueList searchPrompt"),
       searchString: $searchString
     )
-    .sortable(algorithm: $algorithm, disallowedAlgorithms: [.artistVenueRank])
+    .sortable(algorithm: $algorithm)
   }
 }
 

@@ -13,8 +13,7 @@ public struct ArchiveCategoryList: View {
 
   @State private var todayShows: [Show] = []
   @SceneStorage("venue.sort") private var venueListAlgorithm = LibrarySectionAlgorithm.alphabetical
-  @SceneStorage("artist.sort") private var artistListAlgorithm = LibrarySectionAlgorithm
-    .alphabetical
+  @SceneStorage("artist.sort") private var artistSort = ArtistSort.alphabetical
 
   private var music: Music {
     vault.music
@@ -54,7 +53,7 @@ public struct ArchiveCategoryList: View {
       case .venues:
         VenueList(venues: music.venues, algorithm: $venueListAlgorithm)
       case .artists:
-        ArtistList(artists: music.artists, algorithm: $artistListAlgorithm)
+        ArtistList(artists: music.artists, sort: $artistSort)
       }
     }
     .musicDestinations()
