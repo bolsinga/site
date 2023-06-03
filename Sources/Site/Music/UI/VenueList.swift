@@ -31,7 +31,9 @@ struct VenueList: View {
   @ViewBuilder private func contentView(for venue: Venue) -> some View {
     switch sort {
     case .alphabetical, .showYearRange:
-      Text("\(vault.lookup.venueRank(venue: venue).value) Show(s)", bundle: .module, comment: "Value for the Artist # of Shows.")
+      Text(
+        "\(vault.lookup.venueRank(venue: venue).value) Show(s)", bundle: .module,
+        comment: "Value for the Artist # of Shows.")
     case .showCount, .venueArtistRank:
       EmptyView()
     }
