@@ -9,8 +9,6 @@ import SwiftUI
 
 struct LibraryComparableList<T, ItemContent: View, SectionHeader: View>: View
 where T: LibraryComparable, T: Identifiable, T: Hashable, T.ID == String {
-  @Environment(\.vault) private var vault: Vault
-
   let items: [T]
   let sectioner: LibrarySectioner
   let itemContentView: (T) -> ItemContent
