@@ -13,6 +13,7 @@ where T: LibraryComparable, T: Identifiable, T: Hashable, T.ID == String {
 
   let items: [T]
   let itemContentValue: (T) -> Int
+  let sectioner : LibrarySectioner
 
   @Binding var searchString: String
   @Binding var algorithm: LibrarySectionAlgorithm
@@ -24,7 +25,7 @@ where T: LibraryComparable, T: Identifiable, T: Hashable, T.ID == String {
 
   private var sectionMap: [LibrarySection: [T]] {
     filteredItems.reduce(into: [LibrarySection: [T]]()) {
-      let section = vault.sectioner(for: algorithm).librarySection($1)
+      let section = sectioner.librarySection($1)
       var arr = ($0[section] ?? [])
       arr.append($1)
       $0[section] = arr
@@ -60,8 +61,11 @@ struct LibraryComparableList_Previews: PreviewProvider {
 
     NavigationStack {
       LibraryComparableList(
-        items: vault.music.artists, itemContentValue: { vault.music.showsForArtist($0).count },
-        searchString: .constant(""), algorithm: .constant(.alphabetical)
+        items: vault.music.artists,
+        itemContentValue: { vault.music.showsForArtist($0).count },
+        sectioner: LibrarySectioner(),
+        searchString: .constant(""),
+        algorithm: .constant(.alphabetical)
       )
       .navigationTitle("Artists")
       .environment(\.vault, vault)
@@ -70,7 +74,10 @@ struct LibraryComparableList_Previews: PreviewProvider {
 
     NavigationStack {
       LibraryComparableList(
-        items: vault.music.venues, itemContentValue: { _ in 0 }, searchString: .constant(""),
+        items: vault.music.venues,
+        itemContentValue: { _ in 0 },
+        sectioner: LibrarySectioner(),
+        searchString: .constant(""),
         algorithm: .constant(.alphabetical)
       )
       .navigationTitle("Venues")
