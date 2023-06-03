@@ -20,6 +20,9 @@ struct ArtistList: View {
       items: artists,
       itemContentValue: { vault.lookup.showRank(artist: $0).value },
       sectioner: vault.sectioner(for: algorithm),
+      sectionHeaderView: { section in
+        algorithm.headerView(section)
+      },
       searchString: $searchString,
       algorithm: $algorithm
     )

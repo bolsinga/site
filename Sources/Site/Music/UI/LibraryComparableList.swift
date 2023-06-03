@@ -7,13 +7,14 @@
 
 import SwiftUI
 
-struct LibraryComparableList<T>: View
+struct LibraryComparableList<T, SectionHeader : View>: View
 where T: LibraryComparable, T: Identifiable, T: Hashable, T.ID == String {
   @Environment(\.vault) private var vault: Vault
 
   let items: [T]
   let itemContentValue: (T) -> Int
   let sectioner : LibrarySectioner
+  let sectionHeaderView : (LibrarySection) -> SectionHeader
 
   @Binding var searchString: String
   @Binding var algorithm: LibrarySectionAlgorithm
@@ -47,7 +48,7 @@ where T: LibraryComparable, T: Identifiable, T: Hashable, T.ID == String {
             }
           }
         } header: {
-          algorithm.headerView(section)
+          sectionHeaderView(section)
         }
       }
     }
@@ -64,6 +65,9 @@ struct LibraryComparableList_Previews: PreviewProvider {
         items: vault.music.artists,
         itemContentValue: { vault.music.showsForArtist($0).count },
         sectioner: LibrarySectioner(),
+        sectionHeaderView: { section in
+          Text("Artists")
+        },
         searchString: .constant(""),
         algorithm: .constant(.alphabetical)
       )
@@ -77,6 +81,9 @@ struct LibraryComparableList_Previews: PreviewProvider {
         items: vault.music.venues,
         itemContentValue: { _ in 0 },
         sectioner: LibrarySectioner(),
+        sectionHeaderView: { section in
+          Text("Venues")
+        },
         searchString: .constant(""),
         algorithm: .constant(.alphabetical)
       )

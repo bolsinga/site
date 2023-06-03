@@ -20,6 +20,9 @@ struct VenueList: View {
       items: venues,
       itemContentValue: { vault.lookup.venueRank(venue: $0).value },
       sectioner: vault.sectioner(for: algorithm),
+      sectionHeaderView: { section in
+        algorithm.headerView(section)
+      },
       searchString: $searchString,
       algorithm: $algorithm
     )
