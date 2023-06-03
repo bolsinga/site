@@ -18,13 +18,14 @@ struct VenueList: View {
   var body: some View {
     LibraryComparableList(
       items: venues,
-      itemContentValue: { vault.lookup.venueRank(venue: $0).value },
       sectioner: vault.sectioner(for: algorithm),
+      itemContentView: {
+        algorithm.itemContentView(vault.lookup.venueRank(venue: $0).value)
+      },
       sectionHeaderView: { section in
         algorithm.headerView(section)
       },
-      searchString: $searchString,
-      algorithm: $algorithm
+      searchString: $searchString
     )
     .navigationTitle(Text("Venues", bundle: .module, comment: "Title for the Venue Detail"))
     .libraryComparableSearchable(
