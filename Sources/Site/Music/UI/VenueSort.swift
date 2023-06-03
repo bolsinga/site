@@ -1,5 +1,5 @@
 //
-//  LibrarySectionAlgorithm.swift
+//  VenueSort.swift
 //
 //
 //  Created by Greg Bolsinga on 5/24/23.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum LibrarySectionAlgorithm: Int, CaseIterable {
+enum VenueSort: Int, Sorting {
   case alphabetical
   case showCount
   case showYearRange
@@ -18,21 +18,19 @@ enum LibrarySectionAlgorithm: Int, CaseIterable {
     case .alphabetical:
       return String(
         localized: "Sort Alphabetically", bundle: .module,
-        comment: "LibrarySectionAlgorithm.alphabetical")
+        comment: "VenueSort.alphabetical")
     case .showCount:
       return String(
         localized: "Sort By Show Count", bundle: .module,
-        comment: "LibrarySectionAlgorithm.showCount")
+        comment: "VenueSort.showCount")
     case .showYearRange:
       return String(
         localized: "Sort By Year Range", bundle: .module,
-        comment: "LibrarySectionAlgorithm.showYearRange")
+        comment: "VenueSort.showYearRange")
     case .venueArtistRank:
       return String(
         localized: "Sort By Artist Count", bundle: .module,
-        comment: "LibrarySectionAlgorithm.venueArtistRank")
+        comment: "VenueSort.venueArtistRank")
     }
   }
 }
-
-extension LibrarySectionAlgorithm: Sorting {}

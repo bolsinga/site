@@ -79,21 +79,21 @@ ArchiveCategory Shows */
 /* Shown to change the sort order of the LibraryComparableList. */
 "Sort" = "Sort";
 
-/* LibrarySectionAlgorithm.alphabetical
+/* VenueSort.alphabetical
 ArtistSort.alphabetical */
 "Sort Alphabetically" = "Sort Alphabetically";
 
-/* LibrarySectionAlgorithm.venueArtistRank */
+/* VenueSort.venueArtistRank */
 "Sort By Artist Count" = "Sort By Artist Count";
 
-/* LibrarySectionAlgorithm.showCount
+/* VenueSort.showCount
 ArtistSort.showCount */
 "Sort By Show Count" = "Sort By Show Count";
 
 /* ArtistSort.artistVenueRank */
 "Sort By Venue Count" = "Sort By Venue Count";
 
-/* LibrarySectionAlgorithm.showYearRange
+/* VenueSort.showYearRange
 ArtistSort.showYearRange */
 "Sort By Year Range" = "Sort By Year Range";
 
