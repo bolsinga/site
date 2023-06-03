@@ -59,14 +59,12 @@ struct LibraryComparableList_Previews: PreviewProvider {
   static var previews: some View {
     let vault = Vault.previewData
 
-    let algorithm = LibrarySectionAlgorithm.alphabetical
-
     NavigationStack {
       LibraryComparableList(
         items: vault.music.artists,
         sectioner: LibrarySectioner(),
         itemContentView: {
-          algorithm.itemContentView(vault.music.showsForArtist($0).count)
+          Text(vault.music.showsForArtist($0).count.formatted(.number))
         },
         sectionHeaderView: { section in
           Text("Artists")
@@ -83,7 +81,7 @@ struct LibraryComparableList_Previews: PreviewProvider {
         items: vault.music.venues,
         sectioner: LibrarySectioner(),
         itemContentView: { _ in
-          algorithm.itemContentView(0)
+          EmptyView()
         },
         sectionHeaderView: { section in
           Text("Venues")
