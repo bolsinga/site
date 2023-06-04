@@ -7,14 +7,12 @@
 
 import SwiftUI
 
-protocol Sorting: CaseIterable, Hashable {
+protocol Sorting: CaseIterable, Hashable where AllCases: RandomAccessCollection {
   var localizedString: String { get }
 }
 
 struct SortModifier<T: Sorting>: ViewModifier {
   @Binding var algorithm: T
-
-  let disallowedAlgorithms: Set<T>
 
   func body(content: Content) -> some View {
     content
@@ -25,8 +23,7 @@ struct SortModifier<T: Sorting>: ViewModifier {
             comment: "Shown to change the sort order of the LibraryComparableList.")
           Menu {
             Picker(selection: $algorithm) {
-              let algorithms = T.allCases.filter { !disallowedAlgorithms.contains($0) }
-              ForEach(algorithms, id: \.self) { category in
+              ForEach(T.allCases, id: \.self) { category in
                 Text(category.localizedString).tag(category)
               }
             } label: {
@@ -45,7 +42,7 @@ struct SortModifier<T: Sorting>: ViewModifier {
 }
 
 extension View {
-  func sortable<T: Sorting>(algorithm: Binding<T>, disallowedAlgorithms: Set<T> = []) -> some View {
-    modifier(SortModifier(algorithm: algorithm, disallowedAlgorithms: disallowedAlgorithms))
+  func sortable<T: Sorting>(algorithm: Binding<T>) -> some View {
+    modifier(SortModifier(algorithm: algorithm))
   }
 }
