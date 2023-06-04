@@ -17,7 +17,7 @@ struct ArtistList: View {
 
   private func rank(for artist: Artist) -> Ranking {
     switch sort {
-    case .alphabetical:
+    case .alphabetical, .firstSeen:
       return Ranking.empty
     case .showCount:
       return vault.lookup.showRank(artist: artist)
@@ -36,7 +36,7 @@ struct ArtistList: View {
 
   @ViewBuilder private func sectionHeader(for ranking: Ranking) -> some View {
     switch sort {
-    case .alphabetical:
+    case .alphabetical, .firstSeen:
       EmptyView()
     case .showCount:
       ranking.showsCountView
@@ -56,6 +56,29 @@ struct ArtistList: View {
         sectionHeaderView: { $0.representingView },
         searchString: $searchString
       )
+    } else if case .firstSeen = sort {
+      RankingList(
+        items: artists,
+        rankingMapBuilder: { artists in
+          artists.reduce(into: [PartialDate: [(Artist, FirstSet)]]()) {
+            let firstSet = vault.lookup.firstSet(artist: $1)
+            var arr = ($0[firstSet.date] ?? [])
+            arr.append(($1, firstSet))
+            $0[firstSet.date] = arr
+          }.reduce(into: [PartialDate: [Artist]]()) {
+            $0[$1.key] = $1.value.sorted(by: { lhs, rhs in
+              lhs.1.rank < rhs.1.rank
+            }).map { $0.0 }
+          }
+        },
+        rankSorted: PartialDate.compareWithUnknownsMuted(lhs:rhs:),
+        itemContentView: { artist in
+          Text(vault.lookup.firstSet(artist: artist).rank.formatted(.hash))
+        },
+        sectionHeaderView: {
+          Text($0.formatted(.compact))
+        },
+        searchString: $searchString)
     } else {
       RankingList(
         items: artists,
