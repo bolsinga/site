@@ -43,4 +43,16 @@ extension PartialDate: Comparable {
     }
     return false
   }
+
+  public static func compareWithUnknownsMuted(lhs: PartialDate, rhs: PartialDate) -> Bool {
+    // Sort the unknown dates after known dates
+    let lhUnknown = lhs.isUnknown
+    let rhUnknown = rhs.isUnknown
+
+    if lhUnknown || rhUnknown {
+      // if lhUnknown, return false, otherwise rhUnknown and return true
+      return !lhUnknown
+    }
+    return lhs < rhs
+  }
 }
