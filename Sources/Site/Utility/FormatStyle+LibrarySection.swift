@@ -45,8 +45,6 @@ extension LibrarySection.FormatStyle: Foundation.FormatStyle {
       return String(
         localized: "Punctuation", bundle: .module,
         comment: "String used to describe LibrarySection.punctuation.")
-    case .ranking(let rank):
-      return rank.formatted(.rankAndCount)
     }
   }
 }
