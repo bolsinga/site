@@ -7,15 +7,6 @@
 
 import SwiftUI
 
-extension LibrarySection {
-  var ranking: Ranking {
-    if case .ranking(let ranking) = self {
-      return ranking
-    }
-    return Ranking.empty
-  }
-}
-
 struct ArtistList: View {
   @Environment(\.vault) private var vault: Vault
   let artists: [Artist]
