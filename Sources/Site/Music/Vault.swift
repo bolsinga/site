@@ -14,7 +14,6 @@ public struct Vault {
   internal let sectioner: LibrarySectioner
   internal let rankSectioner: LibrarySectioner
   internal let showSpanSectioner: LibrarySectioner
-  internal let venueArtistRankSectioner: LibrarySectioner
   internal let atlas = Atlas()
 
   public init(music: Music) {
@@ -22,13 +21,12 @@ public struct Vault {
     self.init(
       music: music, lookup: Lookup(music: music), comparator: LibraryComparator(),
       sectioner: LibrarySectioner(), rankSectioner: LibrarySectioner(),
-      showSpanSectioner: LibrarySectioner(), venueArtistRankSectioner: LibrarySectioner())
+      showSpanSectioner: LibrarySectioner())
   }
 
   internal init(
     music: Music, lookup: Lookup, comparator: LibraryComparator, sectioner: LibrarySectioner,
-    rankSectioner: LibrarySectioner, showSpanSectioner: LibrarySectioner,
-    venueArtistRankSectioner: LibrarySectioner
+    rankSectioner: LibrarySectioner, showSpanSectioner: LibrarySectioner
   ) {
     self.music = music
     self.lookup = lookup
@@ -36,7 +34,6 @@ public struct Vault {
     self.sectioner = sectioner
     self.rankSectioner = rankSectioner
     self.showSpanSectioner = showSpanSectioner
-    self.venueArtistRankSectioner = venueArtistRankSectioner
   }
 
   public static func create(music: Music) async -> Vault {
@@ -49,8 +46,6 @@ public struct Vault {
 
     async let rankSectioner = await LibrarySectioner.createRankSectioner(lookup: lookup)
     async let showSpanSectioner = await LibrarySectioner.createShowSpanSectioner(lookup: lookup)
-    async let venueArtistRankSectioner = await LibrarySectioner.createVenueArtistRankSectioner(
-      lookup: lookup)
 
     async let sortedArtists = lookup.artistsWithShows(music.shows).sorted(
       by: comparator.libraryCompare(lhs:rhs:))
@@ -70,8 +65,7 @@ public struct Vault {
 
     let v = Vault(
       music: sortedMusic, lookup: lookup, comparator: comparator, sectioner: await sectioner,
-      rankSectioner: await rankSectioner, showSpanSectioner: await showSpanSectioner,
-      venueArtistRankSectioner: await venueArtistRankSectioner)
+      rankSectioner: await rankSectioner, showSpanSectioner: await showSpanSectioner)
 
     //    Task {
     //      do {

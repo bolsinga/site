@@ -15,16 +15,16 @@ struct VenueList: View {
 
   @State private var searchString: String = ""
 
-  private var sectioner: LibrarySectioner {
+  private func rank(for venue: Venue) -> Ranking {
     switch sort {
     case .alphabetical:
-      return vault.sectioner
+      return Ranking.empty
     case .showCount:
-      return vault.rankSectioner
+      return vault.rankSectioner.librarySection(venue).ranking
     case .showYearRange:
-      return vault.showSpanSectioner
+      return vault.showSpanSectioner.librarySection(venue).ranking
     case .venueArtistRank:
-      return vault.venueArtistRankSectioner
+      return vault.lookup.venueArtistRank(venue: venue)
     }
   }
 
@@ -61,7 +61,7 @@ struct VenueList: View {
         items: venues,
         rankingMapBuilder: { artists in
           artists.reduce(into: [Ranking: [Venue]]()) {
-            let ranking = sectioner.librarySection($1).ranking
+            let ranking = rank(for: $1)
             var arr = ($0[ranking] ?? [])
             arr.append($1)
             $0[ranking] = arr
