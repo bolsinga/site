@@ -22,7 +22,7 @@ struct ArtistList: View {
     case .showCount:
       return vault.rankSectioner.librarySection(artist).ranking
     case .showYearRange:
-      return vault.showSpanSectioner.librarySection(artist).ranking
+      return vault.lookup.spanRank(artist: artist)
     case .venueRank:
       return vault.lookup.artistVenueRank(artist: artist)
     }
