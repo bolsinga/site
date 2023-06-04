@@ -36,11 +36,4 @@ extension LibrarySectioner {
     ) { $0[$1.key] = LibrarySection.ranking($1.value) }
     return LibrarySectioner(sectionMap: await sectionMap)
   }
-
-  public static func createVenueArtistRankSectioner(lookup: Lookup) async -> LibrarySectioner {
-    async let sectionMap = lookup.venueArtistRankingMap.reduce(into: [:]) {
-      $0[$1.key] = LibrarySection.ranking($1.value)
-    }
-    return LibrarySectioner(sectionMap: await sectionMap)
-  }
 }
