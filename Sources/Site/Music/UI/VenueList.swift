@@ -20,7 +20,7 @@ struct VenueList: View {
     case .alphabetical:
       return Ranking.empty
     case .showCount:
-      return vault.rankSectioner.librarySection(venue).ranking
+      return vault.lookup.venueRank(venue: venue)
     case .showYearRange:
       return vault.lookup.spanRank(venue: venue)
     case .venueArtistRank:
