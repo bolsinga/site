@@ -28,60 +28,64 @@ struct VenueList: View {
     }
   }
 
-  @ViewBuilder private func contentView(for venue: Venue) -> some View {
+  @ViewBuilder private func showCount(for venue: Venue) -> some View {
+    Text(
+      "\(vault.lookup.venueRank(venue: venue).value) Show(s)", bundle: .module,
+      comment: "Value for the Venue # of Shows.")
+  }
+
+  @ViewBuilder private func sectionHeader(for ranking: Ranking) -> some View {
     switch sort {
-    case .alphabetical, .showYearRange:
-      Text(
-        "\(vault.lookup.venueRank(venue: venue).value) Show(s)", bundle: .module,
-        comment: "Value for the Artist # of Shows.")
-    case .showCount, .venueArtistRank:
+    case .alphabetical:
       EmptyView()
+    case .showCount:
+      ranking.showsCountView
+    case .showYearRange:
+      ranking.yearsCountView
+    case .venueArtistRank:
+      ranking.artistsCountView
     }
   }
 
-  @ViewBuilder private func sectionHeader(for section: LibrarySection) -> some View {
-    switch sort {
-    case .alphabetical:
-      section.representingView
-    case .showCount:
-      switch section {
-      case .alphabetic(_), .numeric, .punctuation:
-        EmptyView()
-      case .ranking(let ranking):
-        ranking.showsCountView
-      }
-    case .showYearRange:
-      switch section {
-      case .alphabetic(_), .numeric, .punctuation:
-        EmptyView()
-      case .ranking(let ranking):
-        ranking.yearsCountView
-      }
-    case .venueArtistRank:
-      switch section {
-      case .alphabetic(_), .numeric, .punctuation:
-        EmptyView()
-      case .ranking(let ranking):
-        ranking.artistsCountView
-      }
+  @ViewBuilder private var listElement: some View {
+    if case .alphabetical = sort {
+      LibraryComparableList(
+        items: venues,
+        sectioner: vault.sectioner,
+        itemContentView: { showCount(for: $0) },
+        sectionHeaderView: { $0.representingView },
+        searchString: $searchString
+      )
+    } else {
+      RankingList(
+        items: venues,
+        rankingMapBuilder: { artists in
+          artists.reduce(into: [Ranking: [Venue]]()) {
+            let ranking = sectioner.librarySection($1).ranking
+            var arr = ($0[ranking] ?? [])
+            arr.append($1)
+            $0[ranking] = arr
+          }
+        },
+        itemContentView: {
+          if case .showYearRange = sort {
+            showCount(for: $0)
+          }
+        },
+        sectionHeaderView: { sectionHeader(for: $0) },
+        searchString: $searchString)
     }
   }
 
   var body: some View {
-    LibraryComparableList(
-      items: venues,
-      sectioner: sectioner,
-      itemContentView: { contentView(for: $0) },
-      sectionHeaderView: { sectionHeader(for: $0) },
-      searchString: $searchString
-    )
-    .navigationTitle(Text("Venues", bundle: .module, comment: "Title for the Venue Detail"))
-    .libraryComparableSearchable(
-      searchPrompt: String(
-        localized: "Venue Names", bundle: .module, comment: "VenueList searchPrompt"),
-      searchString: $searchString
-    )
-    .sortable(algorithm: $sort)
+    listElement
+      .navigationTitle(Text("Venues", bundle: .module, comment: "Title for the Venue Detail"))
+      .libraryComparableSearchable(
+        searchPrompt: String(
+          localized: "Venue Names", bundle: .module, comment: "VenueList searchPrompt"),
+        searchString: $searchString
+      )
+      .sortable(algorithm: $sort)
   }
 }
 

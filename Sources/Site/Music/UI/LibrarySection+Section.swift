@@ -21,3 +21,12 @@ extension LibrarySection {
     }
   }
 }
+
+extension LibrarySection {
+  var ranking: Ranking {
+    if case .ranking(let ranking) = self {
+      return ranking
+    }
+    return Ranking.empty
+  }
+}
