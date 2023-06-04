@@ -14,8 +14,6 @@ extension PartialDate {
 }
 
 struct ShowYearList: View {
-  @Environment(\.vault) private var vault: Vault
-
   let shows: [Show]
 
   @State private var decadesMap: [Decade: [PartialDate: [Show]]] = [:]
