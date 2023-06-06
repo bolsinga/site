@@ -11,6 +11,7 @@ struct RankingList<T, R, ItemContent: View, SectionHeader: View>: View
 where T: LibraryComparable, T: Hashable, R: Comparable, R: Hashable {
   let items: [T]
   let rankingMapBuilder: ([T]) -> [R: [T]]
+  var rankSorted: ((R, R) -> Bool)?
   @ViewBuilder let itemContentView: (T) -> ItemContent
   @ViewBuilder let sectionHeaderView: (R) -> SectionHeader
 
@@ -24,7 +25,7 @@ where T: LibraryComparable, T: Hashable, R: Comparable, R: Hashable {
   var body: some View {
     let rankingMap = rankingMapBuilder(filteredItems)
     List {
-      ForEach(rankingMap.keys.sorted(), id: \.self) { ranking in
+      ForEach(rankingMap.keys.sorted(by: rankSorted ?? (<)), id: \.self) { ranking in
         Section {
           ForEach(rankingMap[ranking] ?? []) { item in
             NavigationLink(value: item) {
@@ -54,6 +55,7 @@ struct RankingList_Previews: PreviewProvider {
         rankingMapBuilder: { artists in
           return [Ranking(rank: 1, value: 3): artists]
         },
+        rankSorted: >,
         itemContentView: {
           Text(vault.music.showsForArtist($0).count.formatted(.number))
         },
