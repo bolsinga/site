@@ -32,6 +32,7 @@ struct VenueDetail: View {
     ) {
       AddressView(location: venue.location)
       LocationMap(location: venue.location)
+        .frame(minHeight: 300)
     }
   }
 
@@ -40,8 +41,9 @@ struct VenueDetail: View {
     if shows.count > 1 {
       Section(header: Text(ArchiveCategory.stats.localizedString)) {
         StatsGrouping(
-          shows: shows, kind: .venue, yearsSpanRanking: vault.lookup.spanRank(venue: venue),
-          computeShowsRank: { vault.lookup.venueRank(venue: venue) })
+          shows: shows, yearsSpanRanking: vault.lookup.spanRank(venue: venue),
+          computeShowsRank: { vault.lookup.venueRank(venue: venue) },
+          computeVenueArtistsRank: { vault.lookup.venueArtistRank(venue: venue) })
       }
     }
   }

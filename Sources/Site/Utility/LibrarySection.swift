@@ -11,7 +11,6 @@ enum LibrarySection: Hashable {
   case alphabetic(String)
   case numeric
   case punctuation
-  case ranking(Ranking)
 }
 
 extension LibrarySection: Comparable {
@@ -35,12 +34,6 @@ extension LibrarySection: Comparable {
       return true
     case (.alphabetic(_), .punctuation):
       return true
-    case (.ranking(let lh), .ranking(let rh)):
-      return lh.rank < rh.rank
-    case (.ranking(_), _):
-      return false
-    case (_, .ranking(_)):
-      return false
     }
   }
 }

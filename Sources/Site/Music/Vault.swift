@@ -12,28 +12,22 @@ public struct Vault {
   public let lookup: Lookup
   public let comparator: LibraryComparator
   internal let sectioner: LibrarySectioner
-  internal let rankSectioner: LibrarySectioner
-  internal let showSpanSectioner: LibrarySectioner
   internal let atlas = Atlas()
 
   public init(music: Music) {
     // non-parallel, used for previews, tests
     self.init(
       music: music, lookup: Lookup(music: music), comparator: LibraryComparator(),
-      sectioner: LibrarySectioner(), rankSectioner: LibrarySectioner(),
-      showSpanSectioner: LibrarySectioner())
+      sectioner: LibrarySectioner())
   }
 
   internal init(
-    music: Music, lookup: Lookup, comparator: LibraryComparator, sectioner: LibrarySectioner,
-    rankSectioner: LibrarySectioner, showSpanSectioner: LibrarySectioner
+    music: Music, lookup: Lookup, comparator: LibraryComparator, sectioner: LibrarySectioner
   ) {
     self.music = music
     self.lookup = lookup
     self.comparator = comparator
     self.sectioner = sectioner
-    self.rankSectioner = rankSectioner
-    self.showSpanSectioner = showSpanSectioner
   }
 
   public static func create(music: Music) async -> Vault {
@@ -43,9 +37,6 @@ public struct Vault {
 
     let lookup = await asyncLookup
     let comparator = await asyncComparator
-
-    async let rankSectioner = await LibrarySectioner.createRankSectioner(lookup: lookup)
-    async let showSpanSectioner = await LibrarySectioner.createShowSpanSectioner(lookup: lookup)
 
     async let sortedArtists = lookup.artistsWithShows(music.shows).sorted(
       by: comparator.libraryCompare(lhs:rhs:))
@@ -64,11 +55,19 @@ public struct Vault {
       venues: await sortedVenues)
 
     let v = Vault(
-      music: sortedMusic, lookup: lookup, comparator: comparator, sectioner: await sectioner,
-      rankSectioner: await rankSectioner, showSpanSectioner: await showSpanSectioner)
+      music: sortedMusic, lookup: lookup, comparator: comparator, sectioner: await sectioner)
 
     //    Task {
-    //      await v.atlas.geocode(batch: v.music.venues.map { $0.location })
+    //      do {
+    //        for try await (location, placemark) in BatchGeocode(
+    //          atlas: v.atlas, locations: v.music.venues.map { $0.location })
+    //        {
+    //          print("geocoded: \(location) to \(placemark)")
+    //        }
+    //      } catch {
+    //        print("batch error: \(error)")
+    //      }
+    //      print("Batch Geocoding Completed.")
     //    }
 
     return v

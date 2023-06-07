@@ -9,21 +9,6 @@ import CoreLocation
 import MapKit
 import SwiftUI
 
-extension CLPlacemark {
-  internal var coordinate: CLLocationCoordinate2D {
-    self.location?.coordinate ?? kCLLocationCoordinate2DInvalid
-  }
-
-  internal var coordinateRegion: MKCoordinateRegion {
-    var radius = 100.0  // meters
-    if let circularRegion = self.region as? CLCircularRegion {
-      radius = circularRegion.radius
-    }
-    return MKCoordinateRegion(
-      center: self.coordinate, latitudinalMeters: radius, longitudinalMeters: radius)
-  }
-}
-
 extension CLPlacemark: Identifiable {}
 
 struct LocationMap: View {
@@ -36,19 +21,22 @@ struct LocationMap: View {
   var body: some View {
     ZStack {
       if let placemark {
-        Map(
-          coordinateRegion: .constant(placemark.coordinateRegion),
-          interactionModes: MapInteractionModes(), annotationItems: [placemark]
-        ) { placemark in
-          MapMarker(coordinate: placemark.coordinate)
-        }
-        .onTapGesture {
-          MKMapItem(placemark: MKPlacemark(placemark: placemark)).openInMaps()
-        }
-        .frame(minHeight: 300)
+        LocatableMap(locations: .constant([placemark]))
+          .onTapGesture {
+            MKMapItem(placemark: MKPlacemark(placemark: placemark)).openInMaps()
+          }
       }
-    }.task {
+    }.task(id: location) {
       do { placemark = try await vault.atlas.geocode(location) } catch {}
     }
+  }
+}
+
+struct LocationMap_Previews: PreviewProvider {
+  static var previews: some View {
+    let vault = Vault.previewData
+
+    LocationMap(location: vault.music.venues[0].location)
+      .environment(\.vault, vault)
   }
 }

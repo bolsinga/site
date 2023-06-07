@@ -8,28 +8,30 @@
 import SwiftUI
 
 struct StatsGrouping: View {
-  enum Kind {
-    case all
-    case artist
-    case venue
-  }
-
   @Environment(\.vault) private var vault: Vault
   @Environment(\.statsThreshold) private var statsThreshold: Int
 
   let shows: [Show]
-  let kind: Kind
+  let shouldCalculateArtistCount: Bool
   let yearsSpanRanking: Ranking?
   let computeShowsRank: (() -> Ranking)?
+  let computeArtistVenuesRank: (() -> Ranking)?
+  let computeVenueArtistsRank: (() -> Ranking)?
 
   internal init(
-    shows: [Show], kind: StatsGrouping.Kind, yearsSpanRanking: Ranking? = nil,
-    computeShowsRank: (() -> Ranking)? = nil
+    shows: [Show],
+    shouldCalculateArtistCount: Bool = true,
+    yearsSpanRanking: Ranking? = nil,
+    computeShowsRank: (() -> Ranking)? = nil,
+    computeArtistVenuesRank: (() -> Ranking)? = nil,
+    computeVenueArtistsRank: (() -> Ranking)? = nil
   ) {
     self.shows = shows
-    self.kind = kind
+    self.shouldCalculateArtistCount = shouldCalculateArtistCount
     self.yearsSpanRanking = yearsSpanRanking
     self.computeShowsRank = computeShowsRank
+    self.computeArtistVenuesRank = computeArtistVenuesRank
+    self.computeVenueArtistsRank = computeVenueArtistsRank
   }
 
   private var computedStateCounts: [String: Int] {
@@ -45,7 +47,7 @@ struct StatsGrouping: View {
     if let yearsSpanRanking {
       HStack {
         Text(
-          "\(yearsSpanRanking.count) Year(s)", bundle: .module,
+          "\(yearsSpanRanking.value) Year(s)", bundle: .module,
           comment: "Years Span for StatsGrouping.")
         Spacer()
         Text(yearsSpanRanking.formatted(.rankOnly))
@@ -53,23 +55,18 @@ struct StatsGrouping: View {
     }
   }
 
-  private var computedVenuesOfShows: [Venue] {
+  private var computeVenues: [Venue] {
     Array(
       Set(shows.compactMap { do { return try vault.lookup.venueForShow($0) } catch { return nil } })
     )
   }
 
   private var computeArtists: [Artist] {
-    switch kind {
-    case .artist:
-      return []
-    case .all, .venue:
-      return Array(
-        Set(
-          shows.flatMap {
-            do { return try vault.lookup.artistsForShow($0) } catch { return [Artist]() }
-          }))
-    }
+    Array(
+      Set(
+        shows.flatMap {
+          do { return try vault.lookup.artistsForShow($0) } catch { return [Artist]() }
+        }))
   }
 
   @ViewBuilder var showCount: some View {
@@ -88,17 +85,51 @@ struct StatsGrouping: View {
     }
   }
 
+  @ViewBuilder func count(venues: [Venue]) -> some View {
+    Text("\(venues.count) Venue(s)", bundle: .module, comment: "Venues Count for StatsGrouping.")
+  }
+
+  @ViewBuilder func element(for venues: [Venue]) -> some View {
+    if let computeArtistVenuesRank {
+      HStack {
+        count(venues: venues)
+        Spacer()
+        Text(computeArtistVenuesRank().formatted(.rankOnly))
+      }
+    } else {
+      count(venues: venues)
+    }
+  }
+
+  @ViewBuilder func count(artists: [Artist]) -> some View {
+    Text("\(artists.count) Artist(s)", bundle: .module, comment: "Artists Count for StatsGrouping.")
+  }
+
+  @ViewBuilder func element(for artists: [Artist]) -> some View {
+    if let computeVenueArtistsRank {
+      HStack {
+        count(artists: artists)
+        Spacer()
+        Text(computeVenueArtistsRank().formatted(.rankOnly))
+      }
+    } else {
+      count(artists: artists)
+    }
+  }
+
   var body: some View {
     let knownShowDates = shows.filter { $0.date.day != nil }
       .filter { $0.date.month != nil }
       .filter { $0.date.year != nil }
       .compactMap { $0.date.date }
 
-    let venues = computedVenuesOfShows
-    let showVenues = venues.count > 1
+    let venues = computeVenues
+    let venuesCount = venues.count
+    let showVenues = venuesCount > 1
 
-    let artists = computeArtists
-    let showArtists = artists.count > 1
+    let artists = shouldCalculateArtistCount ? computeArtists : []
+    let artistsCount = artists.count
+    let showArtists = artistsCount > 1
 
     let stateCounts = computedStateCounts
     let showState = stateCounts.keys.count > 1
@@ -106,7 +137,7 @@ struct StatsGrouping: View {
     let showWeekdayOrMonthChart = shows.count > statsThreshold
 
     let statsCategoryCases = StatsCategory.allCases
-      .filter { $0 == .years ? (yearsSpanRanking?.count ?? 0) > 1 : true }
+      .filter { $0 == .years ? (yearsSpanRanking?.value ?? 0) > 1 : true }
       .filter { $0 == .venues ? showVenues : true }
       .filter { $0 == .artists ? showArtists : true }
       .filter { $0 == .weekday ? showWeekdayOrMonthChart : true }
@@ -121,12 +152,9 @@ struct StatsGrouping: View {
         case .years:
           yearsElement
         case .venues:
-          Text(
-            "\(venues.count) Venue(s)", bundle: .module, comment: "Venues Count for StatsGrouping.")
+          element(for: venues)
         case .artists:
-          Text(
-            "\(artists.count) Artist(s)", bundle: .module,
-            comment: "Artists Count for StatsGrouping.")
+          element(for: artists)
         case .weekday:
           let name = String(localized: "Weekdays", bundle: .module, comment: "Weekdays Stats")
           NavigationLink(name) { WeekdayChart(dates: knownShowDates).navigationTitle(name) }

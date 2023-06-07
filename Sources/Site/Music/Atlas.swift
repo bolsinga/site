@@ -9,20 +9,64 @@ import CoreLocation
 import Foundation
 
 actor Atlas {
+  private enum Constants {
+    static let maxRequests = 50
+    static let timeUntilReset = Duration.seconds(60)
+  }
+
   typealias Cache = [Location: CLPlacemark]
-  typealias CacheChangeElement = (Cache.Key, Cache.Value?)
-  typealias ValueChangeAction = (CacheChangeElement) -> Void
 
   private var cache: Cache = [:]
-  private var action: ValueChangeAction? = nil
+
+  private var count = 0
+  private var waitUntil: ContinuousClock.Instant = .now + Constants.timeUntilReset
+
+  private func reset() {
+    waitUntil = .now + Constants.timeUntilReset
+    count = 0
+  }
+
+  private func idleAndReset() async throws {
+    try await ContinuousClock().sleep(until: waitUntil)
+    reset()
+  }
 
   public func geocode(_ location: Location) async throws -> CLPlacemark {
     if let result = self[location] {
       return result
     }
-    let result: CLPlacemark = try await location.geocode()
+    let result = try await gatedGeocode(location)
     self[location] = result
     return result
+  }
+
+  private func gatedGeocode(_ location: Location) async throws -> CLPlacemark {
+    if ContinuousClock.now.duration(to: waitUntil) <= .seconds(0) {
+      // wait time expired
+      reset()
+    } else if count != 0, count % Constants.maxRequests == 0 {
+      // hit max requests
+      try await idleAndReset()
+    }
+
+    var retry = false
+    repeat {
+      do {
+        let placemark = try await location.geocode()
+        count += 1
+        return placemark
+      } catch let error as NSError {
+        if error.code == CLError.network.rawValue, error.domain == kCLErrorDomain {
+          // throttling error
+          try await idleAndReset()
+          retry = true
+        } else {
+          throw error
+        }
+      } catch {
+        throw error
+      }
+    } while retry
   }
 
   subscript(index: Location) -> CLPlacemark? {
@@ -31,22 +75,6 @@ actor Atlas {
     }
     set(newValue) {
       cache[index] = newValue
-      action?(CacheChangeElement(index, newValue))
-    }
-  }
-
-  var geocodedLocations: AsyncStream<CacheChangeElement> {
-    guard action == nil else { fatalError("only one Atlas.AsyncStream") }
-
-    return AsyncStream { continuation in
-      // Send what we already may have.
-      for element in cache {
-        continuation.yield(CacheChangeElement(element.key, element.value))
-      }
-      // Now observe.
-      action = { element in
-        continuation.yield(element)
-      }
     }
   }
 }

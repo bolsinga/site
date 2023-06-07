@@ -12,12 +12,6 @@ extension LibrarySection {
     switch self {
     case .alphabetic(_), .numeric, .punctuation:
       Text(self.formatted(.long))
-    case .ranking(let ranking):
-      HStack {
-        Text(ranking.formatted(.rankOnly))
-        Spacer()
-        Text("\(ranking.count) Show(s)", bundle: .module, comment: "LibrarySection.ranking count.")
-      }
     }
   }
 }
