@@ -11,6 +11,7 @@ enum Kind: Hashable {
   case show(Show.ID)
   case venue(Venue.ID)
   case artist(Artist.ID)
+  case year(Int)
 }
 
 protocol Archivable {
@@ -73,6 +74,9 @@ struct ArchiveDestinationModifier: ViewModifier {
           if let archivable = vault.lookup.artistMap[iD] {
             ArchiveView(archivable: archivable)
           }
+          
+        case .year(let year):
+          Text("year: \(year.formatted(.number))")
         }
       }
   }
