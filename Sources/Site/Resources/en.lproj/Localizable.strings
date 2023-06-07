@@ -10,7 +10,8 @@
 /* Decade.decade format string where the format is a full digits year. */
 "%@s" = "%@s";
 
-/* Title for the ArchivesList. */
+/* Title for the ArchiveCategorySplit.
+Title for the ArchivesList. */
 "Archives" = "Archives";
 
 /* ArtistList searchPrompt */
@@ -66,6 +67,9 @@ Label in the chart for the Count in StateChart. */
 
 /* Title of the Related Venues Section for VenueDetail. */
 "Related Venues" = "Related Venues";
+
+/* Shown when no ArchiveCategory is selected. */
+"Select An Item" = "Select An Item";
 
 /* Title for the ShowYearList. */
 "Show Years" = "Show Years";
