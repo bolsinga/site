@@ -26,18 +26,20 @@ where T: LibraryComparable, T: Hashable, R: Comparable, R: Hashable {
     let rankingMap = rankingMapBuilder(filteredItems)
     List {
       ForEach(rankingMap.keys.sorted(by: rankSorted ?? (<)), id: \.self) { ranking in
-        Section {
-          ForEach(rankingMap[ranking] ?? []) { item in
-            NavigationLink(value: item) {
-              LabeledContent {
-                itemContentView(item)
-              } label: {
-                Text(item.name)
+        if let items = rankingMap[ranking] {
+          Section {
+            ForEach(items) { item in
+              NavigationLink(value: item) {
+                LabeledContent {
+                  itemContentView(item)
+                } label: {
+                  Text(item.name)
+                }
               }
             }
+          } header: {
+            sectionHeaderView(ranking)
           }
-        } header: {
-          sectionHeaderView(ranking)
         }
       }
     }
