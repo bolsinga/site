@@ -35,7 +35,7 @@ struct ArchiveCategoryDetail: View {
         ArtistList(artists: music.artists, sort: $artistSort)
       }
     } else {
-      Text("SELECT SOMETHING")
+      Text("Select An Item", bundle: .module, comment: "Shown when no ArchiveCategory is selected.")
     }
   }
 
