@@ -17,16 +17,16 @@ struct ArchiveDestinationModifier: ViewModifier {
       .navigationDestination(for: Kind.self) { kind in
         switch kind {
         case .show(let iD):
-          if let archivable = vault.lookup.showMap[iD] {
-            ShowDetail(show: archivable)
+          if let show = vault.lookup.showMap[iD] {
+            ShowDetail(show: show)
           }
         case .venue(let iD):
-          if let archivable = vault.lookup.venueMap[iD] {
-            VenueDetail(venue: archivable)
+          if let venue = vault.lookup.venueMap[iD] {
+            VenueDetail(venue: venue)
           }
         case .artist(let iD):
-          if let archivable = vault.lookup.artistMap[iD] {
-            ArtistDetail(artist: archivable)
+          if let artist = vault.lookup.artistMap[iD] {
+            ArtistDetail(artist: artist)
           }
 
         case .year(let annum):
