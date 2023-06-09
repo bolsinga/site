@@ -17,12 +17,12 @@ enum Kind: Hashable {
 protocol Archivable {
   associatedtype ArchivableDestinationView: View
 
-  var archiveKind: Kind { get }
+  var kind: Kind { get }
   @ViewBuilder var archiveDestinationView: ArchivableDestinationView { get }
 }
 
 extension Show: Archivable {
-  var archiveKind: Kind { .show(id) }
+  var kind: Kind { .show(id) }
 
   @ViewBuilder var archiveDestinationView: some View {
     ShowDetail(show: self)
@@ -30,7 +30,7 @@ extension Show: Archivable {
 }
 
 extension Venue: Archivable {
-  var archiveKind: Kind { .venue(id) }
+  var kind: Kind { .venue(id) }
 
   @ViewBuilder var archiveDestinationView: some View {
     VenueDetail(venue: self)
@@ -38,7 +38,7 @@ extension Venue: Archivable {
 }
 
 extension Artist: Archivable {
-  var archiveKind: Kind { .artist(id) }
+  var kind: Kind { .artist(id) }
 
   @ViewBuilder var archiveDestinationView: some View {
     ArtistDetail(artist: self)
@@ -46,52 +46,9 @@ extension Artist: Archivable {
 }
 
 extension Annum: Archivable {
-  var archiveKind: Kind { .year(self) }
+  var kind: Kind { .year(self) }
 
   @ViewBuilder var archiveDestinationView: some View {
     YearDetail(annum: self)
-  }
-}
-
-struct ArchiveView<T: Archivable>: View {
-  let archivable: T
-
-  var body: some View {
-    archivable.archiveDestinationView
-  }
-}
-
-struct ArchiveDestinationModifier: ViewModifier {
-  @Environment(\.vault) var vault: Vault
-
-  // Is there a way to extend Kind to make a ArchiveView?
-  // The @Environment Vault needs to be on a SwiftUI type to work properly....
-  func body(content: Content) -> some View {
-    content
-      .navigationDestination(for: Kind.self) { kind in
-        switch kind {
-        case .show(let iD):
-          if let archivable = vault.lookup.showMap[iD] {
-            ArchiveView(archivable: archivable)
-          }
-        case .venue(let iD):
-          if let archivable = vault.lookup.venueMap[iD] {
-            ArchiveView(archivable: archivable)
-          }
-        case .artist(let iD):
-          if let archivable = vault.lookup.artistMap[iD] {
-            ArchiveView(archivable: archivable)
-          }
-
-        case .year(let annum):
-          ArchiveView(archivable: annum)
-        }
-      }
-  }
-}
-
-extension View {
-  func archiveDestinations() -> some View {
-    modifier(ArchiveDestinationModifier())
   }
 }
