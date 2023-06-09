@@ -30,7 +30,7 @@ struct ArchiveCategoryDetail : View {
         List { StatsGrouping(shows: music.shows) }
           .navigationTitle(Text(category.localizedString))
       case .shows:
-        ShowYearList(shows: music.shows)
+        ShowYearList()
       case .venues:
         VenueList(venues: music.venues, sort: $venueSort)
       case .artists:

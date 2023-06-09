@@ -11,7 +11,7 @@ enum Kind: Hashable {
   case show(Show.ID)
   case venue(Venue.ID)
   case artist(Artist.ID)
-  case year(Int)
+  case year(Annum)
 }
 
 protocol Archivable {
@@ -45,6 +45,14 @@ extension Artist: Archivable {
   }
 }
 
+extension Annum : Archivable {
+  var archiveKind: Kind { .year(self)}
+  
+  @ViewBuilder var archiveDestinationView: some View {
+    YearDetail(annum: self)
+  }
+}
+
 struct ArchiveView<T: Archivable>: View {
   let archivable: T
 
@@ -75,8 +83,8 @@ struct ArchiveDestinationModifier: ViewModifier {
             ArchiveView(archivable: archivable)
           }
           
-        case .year(let year):
-          Text("year: \(year.formatted(.number))")
+        case .year(let annum):
+          ArchiveView(archivable: annum)
         }
       }
   }
