@@ -12,7 +12,7 @@ extension NavigationLink where Destination == Never {
     self.init(value: value?.kind, label: label)
   }
 
-  init<S>(_ title: S, value: Archivable?) where Label == Text, S : StringProtocol {
+  init<S>(_ title: S, value: Archivable?) where Label == Text, S: StringProtocol {
     self.init(title, value: value?.kind)
   }
 }
