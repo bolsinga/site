@@ -8,17 +8,12 @@
 import SwiftUI
 
 struct YearDetail: View {
-  let shows: [Show]
-  var annum: Annum?
+  @Environment(\.vault) private var vault: Vault
 
-  private var title: String {
-    if let annum {
-      return annum.formatted()
-    }
-    return String(
-      localized: "Shows",
-      bundle: .module,
-      comment: "Title for the YearDetail")
+  let annum: Annum
+
+  private var shows: [Show] {
+    vault.lookup.decadesMap[annum.decade]?[annum] ?? []
   }
 
   @ViewBuilder private var statsElement: some View {
@@ -50,7 +45,7 @@ struct YearDetail: View {
     #if os(iOS)
       .listStyle(.grouped)
     #endif
-    .navigationTitle(Text(title))
+    .navigationTitle(Text(annum.formatted()))
   }
 }
 
@@ -59,7 +54,7 @@ struct YearDetail_Previews: PreviewProvider {
     let vault = Vault.previewData
 
     NavigationStack {
-      YearDetail(shows: vault.music.shows)
+      YearDetail(annum: Annum.year(2001))
         .environment(\.vault, vault)
         .musicDestinations()
     }
