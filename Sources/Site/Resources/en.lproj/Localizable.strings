@@ -10,8 +10,7 @@
 /* Decade.decade format string where the format is a full digits year. */
 "%@s" = "%@s";
 
-/* Title for the ArchiveCategorySplit.
-Title for the ArchivesList. */
+/* Title for the ArchiveCategorySplit. */
 "Archives" = "Archives";
 
 /* ArtistList searchPrompt */
@@ -126,6 +125,7 @@ ArchiveCategory Venues */
 /* Weekdays Stats */
 "Weekdays" = "Weekdays";
 
-/* String for when a Show.PartialDate is unknown, and only the year is being shown. */
+/* String for when a Show.PartialDate is unknown, and only the year is being shown.
+String for when a Annum is unknown. */
 "Year Unknown" = "Year Unknown";
 
