@@ -7,27 +7,21 @@
 
 import SwiftUI
 
-extension PartialDate {
-  var yearOnly: PartialDate {
-    PartialDate(year: year)
-  }
-}
-
 struct ShowYearList: View {
   let shows: [Show]
 
-  @State private var decadesMap: [Decade: [PartialDate: [Show]]] = [:]
+  @State private var decadesMap: [Decade: [Annum: [Show]]] = [:]
 
   var body: some View {
     List {
       ForEach(decadesMap.keys.sorted(), id: \.self) { decade in
         let decadeMap = decadesMap[decade] ?? [:]
         Section {
-          ForEach(decadeMap.keys.sorted(), id: \.self) { yearOnly in
-            let shows = decadeMap[yearOnly] ?? []
-            NavigationLink(value: yearOnly) {
+          ForEach(decadeMap.keys.sorted(), id: \.self) { annum in
+            let shows = decadeMap[annum] ?? []
+            NavigationLink(value: annum) {
               LabeledContent(
-                yearOnly.formatted(.yearOnly),
+                annum.formatted(),
                 value: String(
                   localized: "\(shows.count) Show(s)", bundle: .module,
                   comment: "Value for the ShowYearList Shows per year."))
@@ -40,8 +34,8 @@ struct ShowYearList: View {
     }
     .listStyle(.plain)
     .navigationTitle(Text("Show Years", bundle: .module, comment: "Title for the ShowYearList."))
-    .navigationDestination(for: PartialDate.self) {
-      YearDetail(shows: decadesMap[$0.decade]?[$0] ?? [], yearPartialDate: $0)
+    .navigationDestination(for: Annum.self) { annum in
+      YearDetail(shows: decadesMap[annum.decade]?[annum] ?? [], annum: annum)
     }.task {
       let decadeShowMap: [Decade: [Show]] = shows.reduce(into: [:]) {
         let decade = $1.date.decade
@@ -52,10 +46,10 @@ struct ShowYearList: View {
 
       self.decadesMap = decadeShowMap.reduce(into: [:]) {
         $0[$1.key] = $1.value.reduce(into: [:]) {
-          let yearOnly = $1.date.yearOnly
-          var arr = $0[yearOnly] ?? []
+          let annum = $1.date.annum
+          var arr = $0[annum] ?? []
           arr.append($1)
-          $0[yearOnly] = arr
+          $0[annum] = arr
         }
       }
     }

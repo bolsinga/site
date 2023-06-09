@@ -9,11 +9,11 @@ import SwiftUI
 
 struct YearDetail: View {
   let shows: [Show]
-  var yearPartialDate: PartialDate?
+  var annum: Annum?
 
   private var title: String {
-    if let yearPartialDate {
-      return yearPartialDate.formatted(.yearOnly)
+    if let annum {
+      return annum.formatted()
     }
     return String(
       localized: "Shows",
