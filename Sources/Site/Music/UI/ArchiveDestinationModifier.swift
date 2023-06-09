@@ -18,19 +18,19 @@ struct ArchiveDestinationModifier: ViewModifier {
         switch kind {
         case .show(let iD):
           if let archivable = vault.lookup.showMap[iD] {
-            archivable.archiveDestinationView
+            ShowDetail(show: archivable)
           }
         case .venue(let iD):
           if let archivable = vault.lookup.venueMap[iD] {
-            archivable.archiveDestinationView
+            VenueDetail(venue: archivable)
           }
         case .artist(let iD):
           if let archivable = vault.lookup.artistMap[iD] {
-            archivable.archiveDestinationView
+            ArtistDetail(artist: archivable)
           }
 
         case .year(let annum):
-          annum.archiveDestinationView
+          YearDetail(annum: annum)
         }
       }
   }
