@@ -53,7 +53,7 @@ struct VenueDetail: View {
       header: Text("Shows", bundle: .module, comment: "Title of the Shows section of VenueDetail")
     ) {
       ForEach(shows) { show in
-        NavigationLink(archivable: show) { VenueBlurb(show: show) }
+        NavigationLink(value: show) { VenueBlurb(show: show) }
       }
     }
   }
@@ -67,7 +67,7 @@ struct VenueDetail: View {
           comment: "Title of the Related Venues Section for VenueDetail.")
       ) {
         ForEach(relatedVenues) { relatedVenue in
-          NavigationLink(relatedVenue.name, archivable: relatedVenue)
+          NavigationLink(relatedVenue.name, value: relatedVenue)
         }
       }
     }

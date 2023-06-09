@@ -37,7 +37,7 @@ where T: LibraryComparable, T: Identifiable, T: Hashable, T.ID == String, T: Arc
         if let items = sectionMap[section] {
           Section {
             ForEach(items) { item in
-              NavigationLink(archivable: item) {
+              NavigationLink(value: item) {
                 LabeledContent {
                   itemContentView(item)
                 } label: {

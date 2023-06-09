@@ -20,7 +20,7 @@ struct TodayList: View {
       .foregroundColor(.secondary)
     } else {
       List(shows) { show in
-        NavigationLink(archivable: show) { TodayBlurb(show: show) }
+        NavigationLink(value: show) { TodayBlurb(show: show) }
       }
       .listStyle(.plain)
       .navigationTitle(

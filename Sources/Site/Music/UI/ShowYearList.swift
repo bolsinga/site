@@ -18,7 +18,7 @@ struct ShowYearList: View {
         Section {
           ForEach(decadeMap.keys.sorted(), id: \.self) { annum in
             let shows = decadeMap[annum] ?? []
-            NavigationLink(archivable: annum) {
+            NavigationLink(value: annum) {
               LabeledContent(
                 annum.formatted(),
                 value: String(

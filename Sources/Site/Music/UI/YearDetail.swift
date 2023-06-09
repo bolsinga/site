@@ -31,7 +31,7 @@ struct YearDetail: View {
           "Shows", bundle: .module, comment: "Title of the Shows section of YearDetail")
       ) {
         ForEach(shows) { show in
-          NavigationLink(archivable: show) { ShowBlurb(show: show) }
+          NavigationLink(value: show) { ShowBlurb(show: show) }
         }
       }
     }

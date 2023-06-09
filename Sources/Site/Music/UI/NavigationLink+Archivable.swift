@@ -8,11 +8,11 @@
 import SwiftUI
 
 extension NavigationLink where Destination == Never {
-  init<T: Archivable>(archivable: T, @ViewBuilder label: () -> Label) {
-    self.init(value: archivable.kind, label: label)
+  init(value: Archivable?, @ViewBuilder label: () -> Label) {
+    self.init(value: value?.kind, label: label)
   }
 
-  init<S, T: Archivable>(_ title: S, archivable: T) where Label == Text, S: StringProtocol {
-    self.init(title, value: archivable.kind)
+  init<S>(_ title: S, value: Archivable?) where Label == Text, S : StringProtocol {
+    self.init(title, value: value?.kind)
   }
 }

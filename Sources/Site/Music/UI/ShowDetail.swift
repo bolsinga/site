@@ -34,7 +34,7 @@ struct ShowDetail: View {
         comment: "Title of the Lineup for ShowDetail.")
     ) {
       ForEach(artists) { artist in
-        NavigationLink(artist.name, archivable: artist)
+        NavigationLink(artist.name, value: artist)
       }
     }
   }

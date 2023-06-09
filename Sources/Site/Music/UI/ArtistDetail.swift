@@ -47,7 +47,7 @@ struct ArtistDetail: View {
           "Shows", bundle: .module, comment: "Title of the Shows section of ArtistDetail")
       ) {
         ForEach(shows) { show in
-          NavigationLink(archivable: show) {
+          NavigationLink(value: show) {
             ArtistBlurb(show: show)
           }
         }
@@ -64,7 +64,7 @@ struct ArtistDetail: View {
           comment: "Title of the Related Artists Section for ArtistDetail.")
       ) {
         ForEach(relatedArtists) { relatedArtist in
-          NavigationLink(relatedArtist.name, archivable: relatedArtist)
+          NavigationLink(relatedArtist.name, value: relatedArtist)
         }
       }
     }
