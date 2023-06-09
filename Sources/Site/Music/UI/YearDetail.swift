@@ -10,7 +10,7 @@ import SwiftUI
 struct YearDetail: View {
   @Environment(\.vault) private var vault: Vault
 
-  var annum: Annum
+  let annum: Annum
 
   private var shows: [Show] {
     vault.lookup.decadesMap[annum.decade]?[annum] ?? []
