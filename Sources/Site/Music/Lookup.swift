@@ -101,7 +101,7 @@ public struct Lookup {
       venueShowSpanRankingMap: venueSpanRankings,
       artistVenueRankingMap: artistVenueRankings,
       venueArtistRankingMap: venueArtistRankings,
-    decadesMap: decadesMap)
+      decadesMap: decadesMap)
   }
 
   enum LookupError: Error {
