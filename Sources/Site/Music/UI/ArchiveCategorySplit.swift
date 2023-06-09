@@ -14,7 +14,9 @@ struct ArchiveCategorySplit: View {
   @SceneStorage("artist.sort") private var artistSort = ArtistSort.alphabetical
 
   @State private var todayShows: [Show] = []
+
   @State private var selectedCategory: ArchiveCategory? = nil
+  @State private var path: [ArchivePath] = []
 
   private var music: Music {
     vault.music
@@ -48,9 +50,11 @@ struct ArchiveCategorySplit: View {
         .navigationTitle(
           Text("Archives", bundle: .module, comment: "Title for the ArchiveCategorySplit."))
     } detail: {
-      ArchiveCategoryDetail(
-        category: selectedCategory, todayShows: $todayShows, venueSort: $venueSort,
-        artistSort: $artistSort)
+      NavigationStack(path: $path) {
+        ArchiveCategoryDetail(
+          category: selectedCategory, todayShows: $todayShows, venueSort: $venueSort,
+          artistSort: $artistSort)
+      }
     }
     .environment(\.vault, vault)
     .onDayChanged {
