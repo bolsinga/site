@@ -45,9 +45,9 @@ extension Artist: Archivable {
   }
 }
 
-extension Annum : Archivable {
-  var archiveKind: Kind { .year(self)}
-  
+extension Annum: Archivable {
+  var archiveKind: Kind { .year(self) }
+
   @ViewBuilder var archiveDestinationView: some View {
     YearDetail(annum: self)
   }
@@ -82,7 +82,7 @@ struct ArchiveDestinationModifier: ViewModifier {
           if let archivable = vault.lookup.artistMap[iD] {
             ArchiveView(archivable: archivable)
           }
-          
+
         case .year(let annum):
           ArchiveView(archivable: annum)
         }
