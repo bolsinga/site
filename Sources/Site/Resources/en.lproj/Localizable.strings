@@ -73,7 +73,7 @@ Label in the chart for the Count in StateChart. */
 /* Title for the ShowYearList. */
 "Show Years" = "Show Years";
 
-/* Title for the YearDetail
+/* Title of the Shows section of YearDetail
 Title of the Shows section of ArtistDetail
 Title of the Shows section of VenueDetail
 ArchiveCategory Shows */
