@@ -8,12 +8,28 @@
 import SwiftUI
 
 struct MusicDestinationModifier: ViewModifier {
+  @Environment(\.vault) var vault: Vault
+
   func body(content: Content) -> some View {
     content
-      .navigationDestination(for: Show.self) { ShowDetail(show: $0) }
-      .navigationDestination(for: Venue.self) { VenueDetail(venue: $0) }
-      .navigationDestination(for: Artist.self) { ArtistDetail(artist: $0) }
-      .navigationDestination(for: Annum.self) { YearDetail(annum: $0) }
+      .navigationDestination(for: ArchivePath.self) { archivePath in
+        switch archivePath {
+        case .show(let iD):
+          if let show = vault.lookup.showMap[iD] {
+            ShowDetail(show: show)
+          }
+        case .venue(let iD):
+          if let venue = vault.lookup.venueMap[iD] {
+            VenueDetail(venue: venue)
+          }
+        case .artist(let iD):
+          if let artist = vault.lookup.artistMap[iD] {
+            ArtistDetail(artist: artist)
+          }
+        case .year(let annum):
+          YearDetail(annum: annum)
+        }
+      }
   }
 }
 

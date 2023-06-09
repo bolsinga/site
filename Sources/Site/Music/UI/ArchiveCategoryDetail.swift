@@ -10,6 +10,8 @@ import SwiftUI
 struct ArchiveCategoryDetail: View {
   @Environment(\.vault) private var vault: Vault
 
+  @State private var path: [ArchivePath] = []
+
   let category: ArchiveCategory?
   @Binding var todayShows: [Show]
   @Binding var venueSort: VenueSort
@@ -40,7 +42,7 @@ struct ArchiveCategoryDetail: View {
   }
 
   var body: some View {
-    NavigationStack {
+    NavigationStack(path: $path) {
       stackElement
         .musicDestinations()
     }
