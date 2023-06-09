@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct LibraryComparableList<T, ItemContent: View, SectionHeader: View>: View
-where T: LibraryComparable, T: Identifiable, T: Hashable, T.ID == String, T: Archivable {
+where T: LibraryComparable, T: Identifiable, T: Hashable, T.ID == String, T: PathRestorable {
   let items: [T]
   let sectioner: LibrarySectioner
   let itemContentView: (T) -> ItemContent
