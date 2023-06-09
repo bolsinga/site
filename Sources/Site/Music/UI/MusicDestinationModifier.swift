@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct MusicDestinationModifier: ViewModifier {
-  @Environment(\.vault) private var vault: Vault
-
   func body(content: Content) -> some View {
     content
       .navigationDestination(for: Show.self) { ShowDetail(show: $0) }
