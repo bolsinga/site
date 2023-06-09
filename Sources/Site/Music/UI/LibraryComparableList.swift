@@ -73,7 +73,7 @@ struct LibraryComparableList_Previews: PreviewProvider {
       )
       .navigationTitle("Artists")
       .environment(\.vault, vault)
-      .archiveDestinations()
+      .musicDestinations()
     }
 
     NavigationStack {
@@ -90,7 +90,7 @@ struct LibraryComparableList_Previews: PreviewProvider {
       )
       .navigationTitle("Venues")
       .environment(\.vault, vault)
-      .archiveDestinations()
+      .musicDestinations()
     }
   }
 }

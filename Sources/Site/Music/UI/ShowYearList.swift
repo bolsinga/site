@@ -43,7 +43,7 @@ struct ShowYearList_Previews: PreviewProvider {
     NavigationStack {
       ShowYearList()
         .environment(\.vault, vault)
-        .archiveDestinations()
+        .musicDestinations()
     }
   }
 }

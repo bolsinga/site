@@ -1,17 +1,15 @@
 //
-//  ArchiveDestinationModifier.swift
+//  MusicDestinationModifier.swift
 //
 //
-//  Created by Greg Bolsinga on 6/9/23.
+//  Created by Greg Bolsinga on 4/6/23.
 //
 
 import SwiftUI
 
-struct ArchiveDestinationModifier: ViewModifier {
+struct MusicDestinationModifier: ViewModifier {
   @Environment(\.vault) var vault: Vault
 
-  // Is there a way to extend Kind to make a ArchiveView?
-  // The @Environment Vault needs to be on a SwiftUI type to work properly....
   func body(content: Content) -> some View {
     content
       .navigationDestination(for: Kind.self) { kind in
@@ -37,7 +35,7 @@ struct ArchiveDestinationModifier: ViewModifier {
 }
 
 extension View {
-  func archiveDestinations() -> some View {
-    modifier(ArchiveDestinationModifier())
+  func musicDestinations() -> some View {
+    modifier(MusicDestinationModifier())
   }
 }

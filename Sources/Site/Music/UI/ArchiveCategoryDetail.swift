@@ -44,7 +44,7 @@ struct ArchiveCategoryDetail: View {
   var body: some View {
     NavigationStack(path: $path) {
       stackElement
-        .archiveDestinations()
+        .musicDestinations()
     }
   }
 }

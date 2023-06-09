@@ -93,7 +93,7 @@ struct VenueDetail_Previews: PreviewProvider {
     NavigationStack {
       VenueDetail(venue: vault.music.venues[0])
         .environment(\.vault, vault)
-        .archiveDestinations()
+        .musicDestinations()
     }
   }
 }

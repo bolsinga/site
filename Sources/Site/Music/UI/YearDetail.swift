@@ -56,7 +56,7 @@ struct YearDetail_Previews: PreviewProvider {
     NavigationStack {
       YearDetail(annum: Annum.year(2001))
         .environment(\.vault, vault)
-        .archiveDestinations()
+        .musicDestinations()
     }
   }
 }

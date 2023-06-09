@@ -68,7 +68,7 @@ struct RankingList_Previews: PreviewProvider {
       )
       .navigationTitle("Artists")
       .environment(\.vault, vault)
-      .archiveDestinations()
+      .musicDestinations()
     }
 
     NavigationStack {
@@ -85,7 +85,7 @@ struct RankingList_Previews: PreviewProvider {
       )
       .navigationTitle("Venues")
       .environment(\.vault, vault)
-      .archiveDestinations()
+      .musicDestinations()
     }
   }
 }

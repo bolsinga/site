@@ -86,19 +86,19 @@ struct ShowDetail_Previews: PreviewProvider {
     NavigationStack {
       ShowDetail(show: vault.music.shows[0])
         .environment(\.vault, vault)
-        .archiveDestinations()
+        .musicDestinations()
     }
 
     NavigationStack {
       ShowDetail(show: vault.music.shows[1])
         .environment(\.vault, vault)
-        .archiveDestinations()
+        .musicDestinations()
     }
 
     NavigationStack {
       ShowDetail(show: vault.music.shows[2])
         .environment(\.vault, vault)
-        .archiveDestinations()
+        .musicDestinations()
     }
   }
 }

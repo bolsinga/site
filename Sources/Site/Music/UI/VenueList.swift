@@ -95,7 +95,7 @@ struct VenueList_Previews: PreviewProvider {
     NavigationStack {
       VenueList(venues: vault.music.venues, sort: .constant(.alphabetical))
         .environment(\.vault, vault)
-        .archiveDestinations()
+        .musicDestinations()
     }
   }
 }

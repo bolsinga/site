@@ -90,13 +90,13 @@ struct ArtistDetail_Previews: PreviewProvider {
     NavigationStack {
       ArtistDetail(artist: vault.music.artists[0])
         .environment(\.vault, vault)
-        .archiveDestinations()
+        .musicDestinations()
     }
 
     NavigationStack {
       ArtistDetail(artist: vault.music.artists[1])
         .environment(\.vault, vault)
-        .archiveDestinations()
+        .musicDestinations()
     }
   }
 }
