@@ -12,8 +12,8 @@ struct MusicDestinationModifier: ViewModifier {
 
   func body(content: Content) -> some View {
     content
-      .navigationDestination(for: Kind.self) { kind in
-        switch kind {
+      .navigationDestination(for: ArchivePath.self) { archivePath in
+        switch archivePath {
         case .show(let iD):
           if let show = vault.lookup.showMap[iD] {
             ShowDetail(show: show)

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-enum Kind: Hashable {
+enum ArchivePath: Hashable {
   case show(Show.ID)
   case venue(Venue.ID)
   case artist(Artist.ID)
@@ -15,21 +15,21 @@ enum Kind: Hashable {
 }
 
 protocol Archivable {
-  var kind: Kind { get }
+  var archivePath: ArchivePath { get }
 }
 
 extension Show: Archivable {
-  var kind: Kind { .show(id) }
+  var archivePath: ArchivePath { .show(id) }
 }
 
 extension Venue: Archivable {
-  var kind: Kind { .venue(id) }
+  var archivePath: ArchivePath { .venue(id) }
 }
 
 extension Artist: Archivable {
-  var kind: Kind { .artist(id) }
+  var archivePath: ArchivePath { .artist(id) }
 }
 
 extension Annum: Archivable {
-  var kind: Kind { .year(self) }
+  var archivePath: ArchivePath { .year(self) }
 }

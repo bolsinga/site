@@ -10,7 +10,7 @@ import SwiftUI
 struct ArchiveCategoryDetail: View {
   @Environment(\.vault) private var vault: Vault
 
-  @State private var path: [Kind] = []
+  @State private var path: [ArchivePath] = []
 
   let category: ArchiveCategory?
   @Binding var todayShows: [Show]
