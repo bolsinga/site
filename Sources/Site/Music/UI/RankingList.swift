@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct RankingList<T, R, ItemContent: View, SectionHeader: View>: View
-where T: LibraryComparable, T: Hashable, R: Comparable, R: Hashable {
+where T: LibraryComparable, T: Hashable, T: Archivable, R: Comparable, R: Hashable {
   let items: [T]
   let rankingMapBuilder: ([T]) -> [R: [T]]
   var rankSorted: ((R, R) -> Bool)?
@@ -29,7 +29,7 @@ where T: LibraryComparable, T: Hashable, R: Comparable, R: Hashable {
         if let items = rankingMap[ranking] {
           Section {
             ForEach(items) { item in
-              NavigationLink(value: item) {
+              NavigationLink(archivable: item) {
                 LabeledContent {
                   itemContentView(item)
                 } label: {
