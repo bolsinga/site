@@ -15,9 +15,7 @@ struct MusicDestinationModifier: ViewModifier {
       .navigationDestination(for: Show.self) { ShowDetail(show: $0) }
       .navigationDestination(for: Venue.self) { VenueDetail(venue: $0) }
       .navigationDestination(for: Artist.self) { ArtistDetail(artist: $0) }
-      .navigationDestination(for: Annum.self) { annum in
-        YearDetail(shows: vault.lookup.decadesMap[annum.decade]?[annum] ?? [], annum: annum)
-      }
+      .navigationDestination(for: Annum.self) { YearDetail(annum: $0) }
   }
 }
 
