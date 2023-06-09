@@ -26,7 +26,6 @@ struct MusicDestinationModifier: ViewModifier {
           if let artist = vault.lookup.artistMap[iD] {
             ArtistDetail(artist: artist)
           }
-
         case .year(let annum):
           YearDetail(annum: annum)
         }
