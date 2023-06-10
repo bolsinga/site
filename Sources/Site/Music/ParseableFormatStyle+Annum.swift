@@ -20,7 +20,7 @@ extension Annum.FormatStyle {
     public func parse(_ value: String) throws -> Annum {
       let trimmedValue = value.trimmingCharacters(in: .whitespaces)
 
-      if trimmedValue == Annum.unknown.formatted() {
+      if trimmedValue == Annum.FormatStyle.unknown {
         return .unknown
       }
 
