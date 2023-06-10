@@ -5,14 +5,7 @@
 //  Created by Greg Bolsinga on 5/25/23.
 //
 
-import SwiftUI
-
-enum ArchivePath: Hashable {
-  case show(Show.ID)
-  case venue(Venue.ID)
-  case artist(Artist.ID)
-  case year(Annum)
-}
+import Foundation
 
 protocol PathRestorable {
   var archivePath: ArchivePath { get }
@@ -32,14 +25,4 @@ extension Artist: PathRestorable {
 
 extension Annum: PathRestorable {
   var archivePath: ArchivePath { .year(self) }
-}
-
-extension NavigationLink where Destination == Never {
-  init(value: PathRestorable?, @ViewBuilder label: () -> Label) {
-    self.init(value: value?.archivePath, label: label)
-  }
-
-  init<S>(_ title: S, value: PathRestorable?) where Label == Text, S: StringProtocol {
-    self.init(title, value: value?.archivePath)
-  }
 }
