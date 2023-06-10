@@ -12,7 +12,8 @@ import XCTest
 final class AnnumTests: XCTestCase {
   func testFormat() throws {
     XCTAssertEqual(Annum.year(1989).formatted(), "1989")
-    XCTAssertEqual(Annum.unknown.formatted(), "Year Unknown")
+    XCTAssertEqual(Annum.unknown.formatted(.year), "Year Unknown")
+    XCTAssertEqual(Annum.unknown.formatted(.json), "unknown")
   }
 
   func testParse() throws {
@@ -41,6 +42,7 @@ final class AnnumTests: XCTestCase {
     XCTAssertThrowsError(try Annum("1989z"))
 
     XCTAssertThrowsError(try Annum("zzz"))
-    XCTAssertEqual(try Annum("Year Unknown"), Annum.unknown)
+    XCTAssertThrowsError(try Annum("Year Unknown"))
+    XCTAssertEqual(try Annum("unknown"), Annum.unknown)
   }
 }
