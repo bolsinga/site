@@ -44,5 +44,8 @@ final class AnnumTests: XCTestCase {
     XCTAssertThrowsError(try Annum("zzz"))
     XCTAssertThrowsError(try Annum("Year Unknown"))
     XCTAssertEqual(try Annum("unknown"), Annum.unknown)
+
+    XCTAssertThrowsError(try Annum(""))
+    XCTAssertThrowsError(try Annum(" "))
   }
 }

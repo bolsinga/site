@@ -11,6 +11,8 @@ extension Annum.FormatStyle {
   public struct ParseStrategy: Foundation.ParseStrategy {
     enum ValidationError: Error {
       case invalidCharacters
+      case emptyInput
+      case unknown
     }
 
     static let validCharacterSet = CharacterSet(charactersIn: "0123456789")
@@ -19,6 +21,8 @@ extension Annum.FormatStyle {
 
     public func parse(_ value: String) throws -> Annum {
       let trimmedValue = value.trimmingCharacters(in: .whitespaces)
+
+      guard !trimmedValue.isEmpty else { throw ValidationError.emptyInput }
 
       if trimmedValue == Annum.FormatStyle.unknown {
         return .unknown
@@ -32,7 +36,7 @@ extension Annum.FormatStyle {
         return .year(validAnnum)
       }
 
-      return .unknown
+      throw ValidationError.unknown
     }
   }
 }
