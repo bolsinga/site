@@ -1,5 +1,5 @@
 //
-//  FormatStyle+Decade.swift
+//  Decade+FormatStyle.swift
 //
 //
 //  Created by Greg Bolsinga on 5/26/23.
