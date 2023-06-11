@@ -29,19 +29,12 @@ extension ArchivePath: Codable {
 extension Array where Element == ArchivePath {
   var jsonData: Data? {
     get {
-      let data = try? JSONEncoder().encode(self)
-      if let jsonString = String(data: data!, encoding: .utf8) {
-        print("encode: " + jsonString)
-      }
-      return data
+      try? JSONEncoder().encode(self)
     }
     set {
       guard let data = newValue,
         let array = try? JSONDecoder().decode(Self.self, from: data)
       else { return }
-      if let jsonString = String(data: data, encoding: .utf8) {
-        print("decode: " + jsonString)
-      }
       self = array
     }
   }
