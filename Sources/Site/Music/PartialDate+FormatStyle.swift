@@ -1,5 +1,5 @@
 //
-//  FormatStyle+PartialDate.swift
+//  PartialDate+FormatStyle.swift
 //
 //
 //  Created by Greg Bolsinga on 4/8/23.
