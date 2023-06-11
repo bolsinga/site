@@ -16,11 +16,7 @@ struct ArchiveCategorySplit: View {
   @State private var todayShows: [Show] = []
 
   @State private var selectedCategory: ArchiveCategory? = nil
-  @SceneStorage("selected.category") private var selectedCategoryData: Data?
-
   @State private var navigationPath: [ArchivePath] = []
-  @SceneStorage("navigation.path") private var navigationPathData: Data?
-  @State private var pendingNavigationPath: [ArchivePath]?
 
   private var music: Music {
     vault.music
@@ -66,36 +62,6 @@ struct ArchiveCategorySplit: View {
         vault.comparator.showCompare(lhs: $0, rhs: $1, lookup: vault.lookup)
       }
     }
-    .task {
-      if let data = selectedCategoryData {
-        if let data = navigationPathData {
-          // Hold onto the loading navigationPath for after the selectedCategory changes.
-          var pending = [ArchivePath]()
-          pending.jsonData = data
-          pendingNavigationPath = pending
-        }
-
-        // Changing the selectedCategory will reset the NavigationStack's navigationPath.
-        if selectedCategory != nil {
-          selectedCategory?.jsonData = data
-        } else {
-          var category = ArchiveCategory.today
-          category.jsonData = data
-          selectedCategory = category
-        }
-      }
-    }
-    .onChange(of: selectedCategory) { newValue in
-      selectedCategoryData = newValue?.jsonData
-
-      // Change the navigationPath after selectedCategory changes.
-      if let pendingNavigationPath {
-        navigationPath = pendingNavigationPath
-        self.pendingNavigationPath = nil
-      }
-    }
-    .onChange(of: navigationPath) { newPath in
-      navigationPathData = newPath.jsonData
-    }
+    .archiveStorage(selectedCategory: $selectedCategory, navigationPath: $navigationPath)
   }
 }
