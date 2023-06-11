@@ -15,7 +15,7 @@ struct ArchiveCategorySplit: View {
 
   @State private var todayShows: [Show] = []
 
-  @State private var selectedCategory: ArchiveCategory? = nil
+  @SceneStorage("selected.category") private var selectedCategory: ArchiveCategory = .none
   @State private var path: [ArchivePath] = []
 
   private var music: Music {
@@ -23,9 +23,11 @@ struct ArchiveCategorySplit: View {
   }
 
   @ViewBuilder var sidebar: some View {
-    List(ArchiveCategory.allCases, id: \.self, selection: $selectedCategory) { category in
+    List(ArchiveCategory.displayableCases, id: \.self, selection: $selectedCategory) { category in
       LabeledContent {
         switch category {
+        case .none:
+          fatalError()
         case .today:
           Text(todayShows.count.formatted(.number))
             .animation(.easeInOut)

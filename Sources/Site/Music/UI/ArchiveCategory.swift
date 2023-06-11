@@ -7,7 +7,8 @@
 
 import SwiftUI
 
-enum ArchiveCategory: CaseIterable {
+enum ArchiveCategory: Int, CaseIterable {
+  case none
   case today
   case stats
   case shows
@@ -16,6 +17,8 @@ enum ArchiveCategory: CaseIterable {
 
   var localizedString: String {
     switch self {
+    case .none:
+      fatalError()
     case .today:
       return String(localized: "Today", bundle: .module, comment: "ArchiveCategory Today")
     case .stats:
@@ -31,6 +34,8 @@ enum ArchiveCategory: CaseIterable {
 
   @ViewBuilder var label: some View {
     switch self {
+    case .none:
+      fatalError()
     case .today:
       Label(self.localizedString, systemImage: "calendar.circle")
     case .stats:
@@ -42,5 +47,9 @@ enum ArchiveCategory: CaseIterable {
     case .artists:
       Label(self.localizedString, systemImage: "music.mic")
     }
+  }
+
+  static var displayableCases: [ArchiveCategory] {
+    allCases.filter { $0 != .none }
   }
 }
