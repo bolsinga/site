@@ -61,4 +61,22 @@ final class ArchivePathTests: XCTestCase {
     XCTAssertThrowsError(try ArchivePath(""))
     XCTAssertThrowsError(try ArchivePath(" "))
   }
+
+  func testURLFormat() throws {
+    XCTAssertEqual(
+      try ArchivePath(URL(string: "https://www.example.com/bands/L.html#ar852")!),
+      ArchivePath.artist("ar852"))
+    XCTAssertEqual(
+      try ArchivePath(URL(string: "https://www.example.com/venues/L.html#ar852")!),
+      ArchivePath.venue("ar852"))
+    XCTAssertEqual(
+      try ArchivePath(URL(string: "https://www.example.com/dates/L.html#ar852")!),
+      ArchivePath.show("ar852"))
+    XCTAssertThrowsError(
+      try ArchivePath(URL(string: "https://www.example.com/archives/L.html#ar852")!))
+    XCTAssertThrowsError(try ArchivePath(URL(string: "https://www.example.com/bands/L.html")!))
+    XCTAssertThrowsError(try ArchivePath(URL(string: "https://www.example.com/bands/")!))
+    XCTAssertThrowsError(try ArchivePath(URL(string: "https://www.example.com/")!))
+    XCTAssertThrowsError(try ArchivePath(URL(string: "http://www.example.com/")!))
+  }
 }

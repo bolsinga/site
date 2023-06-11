@@ -61,10 +61,60 @@ extension ArchivePath.FormatStyle {
       }
     }
   }
+
+  public struct URLParseStrategy: Foundation.ParseStrategy {
+    enum ValidationError: Error {
+      case invalidURL
+      case invalidScheme
+      case invalidPath
+      case invalidFragment
+      case invalidType
+    }
+
+    public init() {}
+
+    public func parse(_ url: URL) throws -> ArchivePath {
+      let urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false)
+
+      guard let urlComponents else {
+        throw ValidationError.invalidURL
+      }
+
+      guard let scheme = urlComponents.scheme, scheme == "https" else {
+        throw ValidationError.invalidScheme
+      }
+
+      let pathComponents = urlComponents.path.components(separatedBy: "/")
+      guard pathComponents.count == 3 else {
+        throw ValidationError.invalidPath
+      }
+
+      guard let fragment = urlComponents.fragment, !fragment.isEmpty else {
+        throw ValidationError.invalidFragment
+      }
+
+      let type = pathComponents[1]
+
+      switch type {
+      case "bands":
+        return ArchivePath.artist(fragment)
+      case "venues":
+        return ArchivePath.venue(fragment)
+      case "dates":
+        return ArchivePath.show(fragment)
+      default:
+        throw ValidationError.invalidType
+      }
+    }
+  }
 }
 
 extension ArchivePath.FormatStyle: ParseableFormatStyle {
   public var parseStrategy: ArchivePath.FormatStyle.ParseStrategy {
+    .init()
+  }
+
+  public var urlParseStrategy: ArchivePath.FormatStyle.URLParseStrategy {
     .init()
   }
 }
@@ -79,6 +129,19 @@ extension ArchivePath {
     T: ParseStrategy, Value: StringProtocol, T.ParseInput == String, T.ParseOutput == ArchivePath
   {
     self = try standard.parse(value.description)
+  }
+}
+
+extension ArchivePath {
+  init(_ url: URL) throws {
+    self = try ArchivePath.FormatStyle().urlParseStrategy.parse(url)
+  }
+
+  init<T>(_ value: URL, standard: T) throws
+  where
+    T: ParseStrategy, T.ParseInput == URL, T.ParseOutput == ArchivePath
+  {
+    self = try standard.parse(value)
   }
 }
 
