@@ -10,7 +10,7 @@ import SwiftUI
 struct ArchiveCategoryDetail: View {
   @Environment(\.vault) private var vault: Vault
 
-  let category: ArchiveCategory
+  let category: ArchiveCategory?
   @Binding var todayShows: [Show]
   @Binding var venueSort: VenueSort
   @Binding var artistSort: ArtistSort
@@ -20,20 +20,22 @@ struct ArchiveCategoryDetail: View {
   }
 
   @ViewBuilder private var stackElement: some View {
-    switch category {
-    case .none:
+    if let category {
+      switch category {
+      case .today:
+        TodayList(shows: todayShows)
+      case .stats:
+        List { StatsGrouping(shows: music.shows) }
+          .navigationTitle(Text(category.localizedString))
+      case .shows:
+        ShowYearList()
+      case .venues:
+        VenueList(venues: music.venues, sort: $venueSort)
+      case .artists:
+        ArtistList(artists: music.artists, sort: $artistSort)
+      }
+    } else {
       Text("Select An Item", bundle: .module, comment: "Shown when no ArchiveCategory is selected.")
-    case .today:
-      TodayList(shows: todayShows)
-    case .stats:
-      List { StatsGrouping(shows: music.shows) }
-        .navigationTitle(Text(category.localizedString))
-    case .shows:
-      ShowYearList()
-    case .venues:
-      VenueList(venues: music.venues, sort: $venueSort)
-    case .artists:
-      ArtistList(artists: music.artists, sort: $artistSort)
     }
   }
 
