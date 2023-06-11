@@ -16,6 +16,7 @@ struct ArchiveCategorySplit: View {
   @State private var todayShows: [Show] = []
 
   @State private var selectedCategory: ArchiveCategory? = nil
+  @SceneStorage("selected.category") private var selectedCategoryData: Data?
   @State private var path: [ArchivePath] = []
 
   private var music: Music {
@@ -61,6 +62,20 @@ struct ArchiveCategorySplit: View {
       self.todayShows = vault.music.showsOnDate(Date.now).sorted {
         vault.comparator.showCompare(lhs: $0, rhs: $1, lookup: vault.lookup)
       }
+    }
+    .task {
+      if let data = selectedCategoryData {
+        if selectedCategory != nil {
+          selectedCategory?.jsonData = data
+        } else {
+          var category = ArchiveCategory.today
+          category.jsonData = data
+          selectedCategory = category
+        }
+      }
+    }
+    .onChange(of: selectedCategory) { newValue in
+      selectedCategoryData = newValue?.jsonData
     }
   }
 }
