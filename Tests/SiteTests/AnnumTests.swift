@@ -12,8 +12,14 @@ import XCTest
 final class AnnumTests: XCTestCase {
   func testFormat() throws {
     XCTAssertEqual(Annum.year(1989).formatted(), "1989")
+    XCTAssertEqual(Annum.year(1989).formatted(.year), "1989")
+    XCTAssertEqual(Annum.year(1989).formatted(.json), "1989")
+    XCTAssertEqual(Annum.year(1989).formatted(.pathAndFragment), "1989")
+
+    XCTAssertEqual(Annum.unknown.formatted(), "Year Unknown")
     XCTAssertEqual(Annum.unknown.formatted(.year), "Year Unknown")
     XCTAssertEqual(Annum.unknown.formatted(.json), "unknown")
+    XCTAssertEqual(Annum.unknown.formatted(.pathAndFragment), "other")
   }
 
   func testParse() throws {
