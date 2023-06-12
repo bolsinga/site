@@ -14,12 +14,12 @@ final class AnnumTests: XCTestCase {
     XCTAssertEqual(Annum.year(1989).formatted(), "1989")
     XCTAssertEqual(Annum.year(1989).formatted(.year), "1989")
     XCTAssertEqual(Annum.year(1989).formatted(.json), "1989")
-    XCTAssertEqual(Annum.year(1989).formatted(.pathAndFragment), "1989")
+    XCTAssertEqual(Annum.year(1989).formatted(.urlPath), "1989")
 
     XCTAssertEqual(Annum.unknown.formatted(), "Year Unknown")
     XCTAssertEqual(Annum.unknown.formatted(.year), "Year Unknown")
     XCTAssertEqual(Annum.unknown.formatted(.json), "unknown")
-    XCTAssertEqual(Annum.unknown.formatted(.pathAndFragment), "other")
+    XCTAssertEqual(Annum.unknown.formatted(.urlPath), "other")
   }
 
   func testParse() throws {

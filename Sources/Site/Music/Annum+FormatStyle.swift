@@ -12,7 +12,7 @@ extension Annum {
     public enum Style: Codable, Equatable, Hashable {
       case year  // 1989 / "Year Unknown"
       case json  // 1989 / unknown
-      case pathAndFragment  // 1989 / other
+      case urlPath  // 1989 / other
     }
 
     let style: Style
@@ -47,7 +47,7 @@ extension Annum.FormatStyle: Foundation.FormatStyle {
         return unknownLocalized
       case .json:
         return Annum.FormatStyle.unknown
-      case .pathAndFragment:
+      case .urlPath:
         return Annum.FormatStyle.other
       }
     }
@@ -68,7 +68,7 @@ extension Annum {
 extension FormatStyle where Self == Annum.FormatStyle {
   public static var year: Self { .init(.year) }
   public static var json: Self { .init(.json) }
-  public static var pathAndFragment: Self { .init(.pathAndFragment) }
+  public static var urlPath: Self { .init(.urlPath) }
 
   static func annum(style: Annum.FormatStyle.Style = .year) -> Self {
     .init(style)

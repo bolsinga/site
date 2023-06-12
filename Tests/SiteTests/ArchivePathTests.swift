@@ -18,6 +18,17 @@ final class ArchivePathTests: XCTestCase {
     XCTAssertEqual(ArchivePath.year(Annum.unknown).formatted(), "y-unknown")
   }
 
+  func testURLPathFormat() throws {
+    XCTAssertEqual(
+      ArchivePath.show("someIdentifier").formatted(.urlPath), "/dates/someIdentifier.html")
+    XCTAssertEqual(
+      ArchivePath.venue("someIdentifier").formatted(.urlPath), "/venues/someIdentifier.html")
+    XCTAssertEqual(
+      ArchivePath.artist("someIdentifier").formatted(.urlPath), "/bands/someIdentifier.html")
+    XCTAssertEqual(ArchivePath.year(Annum.year(1989)).formatted(.urlPath), "/dates/1989.html")
+    XCTAssertEqual(ArchivePath.year(Annum.unknown).formatted(.urlPath), "/dates/other.html")
+  }
+
   func testParse() throws {
     XCTAssertEqual(try ArchivePath("y-1989"), ArchivePath.year(Annum.year(1989)))
     XCTAssertEqual(try ArchivePath("y-unknown"), ArchivePath.year(Annum.unknown))
