@@ -64,11 +64,13 @@ extension ArchivePath.FormatStyle {
 
   public struct URLParseStrategy: Foundation.ParseStrategy {
     enum ValidationError: Error {
-      case invalidURL
-      case invalidScheme
-      case invalidPath
-      case invalidFragment
-      case invalidType
+      case url
+      case scheme
+      case path
+      case fragment
+      case filenameFormat
+      case fileType
+      case archiveType
     }
 
     public init() {}
@@ -77,33 +79,45 @@ extension ArchivePath.FormatStyle {
       let urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false)
 
       guard let urlComponents else {
-        throw ValidationError.invalidURL
+        throw ValidationError.url
       }
 
       guard let scheme = urlComponents.scheme, scheme == "https" else {
-        throw ValidationError.invalidScheme
+        throw ValidationError.scheme
       }
 
       let pathComponents = urlComponents.path.components(separatedBy: "/")
       guard pathComponents.count == 3 else {
-        throw ValidationError.invalidPath
+        throw ValidationError.path
       }
 
-      guard let fragment = urlComponents.fragment, !fragment.isEmpty else {
-        throw ValidationError.invalidFragment
+      guard urlComponents.fragment == nil else {
+        throw ValidationError.fragment
+      }
+
+      let fileName = pathComponents[2]
+      let filenameComponents = fileName.components(separatedBy: ".")
+      guard filenameComponents.count == 2 else {
+        throw ValidationError.filenameFormat
+      }
+
+      let filenameExtension = filenameComponents[1]
+      guard filenameExtension == "html" else {
+        throw ValidationError.fileType
       }
 
       let type = pathComponents[1]
+      let id = filenameComponents[0]
 
       switch type {
       case "bands":
-        return ArchivePath.artist(fragment)
+        return ArchivePath.artist(id)
       case "venues":
-        return ArchivePath.venue(fragment)
+        return ArchivePath.venue(id)
       case "dates":
-        return ArchivePath.show(fragment)
+        return ArchivePath.show(id)
       default:
-        throw ValidationError.invalidType
+        throw ValidationError.archiveType
       }
     }
   }
