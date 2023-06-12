@@ -18,7 +18,7 @@ final class ArchivePathTests: XCTestCase {
     XCTAssertEqual(ArchivePath.year(Annum.unknown).formatted(), "y-unknown")
   }
 
-  func testPathAndFragmentFormat() throws {
+  func testURLPathFormat() throws {
     XCTAssertEqual(
       ArchivePath.show("someIdentifier").formatted(.urlPath), "/dates/someIdentifier.html")
     XCTAssertEqual(
