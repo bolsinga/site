@@ -79,4 +79,12 @@ final class ArchivePathTests: XCTestCase {
     XCTAssertThrowsError(try ArchivePath(URL(string: "https://www.example.com/")!))
     XCTAssertThrowsError(try ArchivePath(URL(string: "http://www.example.com/")!))
   }
+
+  func testArchiveCategories() throws {
+    XCTAssertEqual(try ArchivePath.artist("blah").category(), ArchiveCategory.artists)
+    XCTAssertEqual(try ArchivePath.venue("blah").category(), ArchiveCategory.venues)
+    XCTAssertEqual(try ArchivePath.show("blah").category(), ArchiveCategory.shows)
+    XCTAssertThrowsError(try ArchivePath.year(.year(1989)).category())
+    XCTAssertThrowsError(try ArchivePath.year(.unknown).category())
+  }
 }
