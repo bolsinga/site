@@ -57,8 +57,7 @@ struct ArchiveCategorySplit: View {
           artistSort: $artistSort)
       }
     }
-    .archiveStorage()  // This references the @EnvironmentObject, so it must come first.
-    .environmentObject(archiveNavigation)
+    .archiveStorage(archiveNavigation: archiveNavigation)
     .environment(\.vault, vault)
     .onDayChanged {
       self.todayShows = vault.music.showsOnDate(Date.now).sorted {

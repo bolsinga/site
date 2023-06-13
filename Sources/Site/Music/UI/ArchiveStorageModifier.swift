@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ArchiveStorageModifier: ViewModifier {
-  @EnvironmentObject private var archiveNavigation: ArchiveNavigation
+  let archiveNavigation: ArchiveNavigation
 
   @SceneStorage("selected.category") private var selectedCategoryData: Data?
   @SceneStorage("navigation.path") private var navigationPathData: Data?
@@ -51,8 +51,7 @@ struct ArchiveStorageModifier: ViewModifier {
 }
 
 extension View {
-  func archiveStorage() -> some View {
-    modifier(
-      ArchiveStorageModifier())
+  func archiveStorage(archiveNavigation: ArchiveNavigation) -> some View {
+    modifier(ArchiveStorageModifier(archiveNavigation: archiveNavigation))
   }
 }
