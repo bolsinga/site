@@ -8,10 +8,9 @@
 import SwiftUI
 
 struct ArchiveStorageModifier: ViewModifier {
-  @Binding var selectedCategory: ArchiveCategory?
-  @SceneStorage("selected.category") private var selectedCategoryData: Data?
+  @EnvironmentObject private var archiveNavigation: ArchiveNavigation
 
-  @Binding var navigationPath: [ArchivePath]
+  @SceneStorage("selected.category") private var selectedCategoryData: Data?
   @SceneStorage("navigation.path") private var navigationPathData: Data?
   @State private var pendingNavigationPath: [ArchivePath]?
 
@@ -27,35 +26,33 @@ struct ArchiveStorageModifier: ViewModifier {
           }
 
           // Changing the selectedCategory will reset the NavigationStack's navigationPath.
-          if selectedCategory != nil {
-            selectedCategory?.jsonData = data
+          if archiveNavigation.selectedCategory != nil {
+            archiveNavigation.selectedCategory?.jsonData = data
           } else {
             var category = ArchiveCategory.today
             category.jsonData = data
-            selectedCategory = category
+            archiveNavigation.selectedCategory = category
           }
         }
       }
-      .onChange(of: selectedCategory) { newValue in
+      .onChange(of: archiveNavigation.selectedCategory) { newValue in
         selectedCategoryData = newValue?.jsonData
 
         // Change the navigationPath after selectedCategory changes.
         if let pendingNavigationPath {
-          navigationPath = pendingNavigationPath
+          archiveNavigation.navigationPath = pendingNavigationPath
           self.pendingNavigationPath = nil
         }
       }
-      .onChange(of: navigationPath) { newPath in
+      .onChange(of: archiveNavigation.navigationPath) { newPath in
         navigationPathData = newPath.jsonData
       }
   }
 }
 
 extension View {
-  func archiveStorage(
-    selectedCategory: Binding<ArchiveCategory?>, navigationPath: Binding<[ArchivePath]>
-  ) -> some View {
+  func archiveStorage() -> some View {
     modifier(
-      ArchiveStorageModifier(selectedCategory: selectedCategory, navigationPath: navigationPath))
+      ArchiveStorageModifier())
   }
 }

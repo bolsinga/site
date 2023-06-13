@@ -15,15 +15,15 @@ struct ArchiveCategorySplit: View {
 
   @State private var todayShows: [Show] = []
 
-  @State private var selectedCategory: ArchiveCategory? = nil
-  @State private var navigationPath: [ArchivePath] = []
+  @StateObject private var archiveNavigation = ArchiveNavigation()
 
   private var music: Music {
     vault.music
   }
 
   @ViewBuilder var sidebar: some View {
-    List(ArchiveCategory.allCases, id: \.self, selection: $selectedCategory) { category in
+    List(ArchiveCategory.allCases, id: \.self, selection: $archiveNavigation.selectedCategory) {
+      category in
       LabeledContent {
         switch category {
         case .today:
@@ -50,18 +50,20 @@ struct ArchiveCategorySplit: View {
         .navigationTitle(
           Text("Archives", bundle: .module, comment: "Title for the ArchiveCategorySplit."))
     } detail: {
-      NavigationStack(path: $navigationPath) {
+      NavigationStack(path: $archiveNavigation.navigationPath) {
         ArchiveCategoryDetail(
-          category: selectedCategory, todayShows: $todayShows, venueSort: $venueSort,
+          category: archiveNavigation.selectedCategory, todayShows: $todayShows,
+          venueSort: $venueSort,
           artistSort: $artistSort)
       }
     }
+    .archiveStorage()  // This references the @EnvironmentObject, so it must come first.
+    .environmentObject(archiveNavigation)
     .environment(\.vault, vault)
     .onDayChanged {
       self.todayShows = vault.music.showsOnDate(Date.now).sorted {
         vault.comparator.showCompare(lhs: $0, rhs: $1, lookup: vault.lookup)
       }
     }
-    .archiveStorage(selectedCategory: $selectedCategory, navigationPath: $navigationPath)
   }
 }
