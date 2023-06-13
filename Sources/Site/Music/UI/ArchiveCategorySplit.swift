@@ -12,6 +12,7 @@ extension Logger {
   static let today = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "today")
   static let continuation = Logger(
     subsystem: Bundle.main.bundleIdentifier!, category: "continuation")
+  static let link = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "link")
 }
 
 struct ArchiveCategorySplit: View {
@@ -77,6 +78,10 @@ struct ArchiveCategorySplit: View {
       if let archivePath = try? userActivity.typedPayload(ArchivePath.self) {
         archiveNavigation.navigate(to: archivePath)
       }
+    }
+    .onOpenURL { url in
+      Logger.link.log("url: \(url.absoluteString, privacy: .public)")
+      do { archiveNavigation.navigate(to: try ArchivePath(url)) } catch {}
     }
   }
 }
