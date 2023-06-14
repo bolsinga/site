@@ -45,4 +45,12 @@ final class ArchiveNavigation: ObservableObject {
       self.pendingNavigationPath = nil
     }
   }
+
+  func navigate(to path: ArchivePath) {
+    navigationPath.append(path)
+  }
+
+  func navigate(to category: ArchiveCategory) {
+    selectedCategory = category
+  }
 }
