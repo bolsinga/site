@@ -25,7 +25,7 @@ struct ArchiveCategoryDetail: View {
       case .today:
         TodayList(shows: todayShows)
       case .stats:
-        List { StatsGrouping(shows: music.shows) }
+        List { StatsGrouping(shows: music.shows, displayArchiveCategoryCounts: false) }
           .navigationTitle(Text(category.localizedString))
       case .shows:
         ShowYearList()

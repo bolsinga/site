@@ -17,6 +17,7 @@ struct StatsGrouping: View {
   let computeShowsRank: (() -> Ranking)?
   let computeArtistVenuesRank: (() -> Ranking)?
   let computeVenueArtistsRank: (() -> Ranking)?
+  let displayArchiveCategoryCounts: Bool  // Basically do not want this at the ArchiveCategory.stats.
 
   internal init(
     shows: [Show],
@@ -24,7 +25,8 @@ struct StatsGrouping: View {
     yearsSpanRanking: Ranking? = nil,
     computeShowsRank: (() -> Ranking)? = nil,
     computeArtistVenuesRank: (() -> Ranking)? = nil,
-    computeVenueArtistsRank: (() -> Ranking)? = nil
+    computeVenueArtistsRank: (() -> Ranking)? = nil,
+    displayArchiveCategoryCounts: Bool = true
   ) {
     self.shows = shows
     self.shouldCalculateArtistCount = shouldCalculateArtistCount
@@ -32,6 +34,7 @@ struct StatsGrouping: View {
     self.computeShowsRank = computeShowsRank
     self.computeArtistVenuesRank = computeArtistVenuesRank
     self.computeVenueArtistsRank = computeVenueArtistsRank
+    self.displayArchiveCategoryCounts = displayArchiveCategoryCounts
   }
 
   private var computedStateCounts: [String: Int] {
@@ -117,7 +120,7 @@ struct StatsGrouping: View {
     }
   }
 
-  var body: some View {
+  private func configure() -> ([StatsCategory], [Venue], [Artist], [Date], [String: Int]) {
     let knownShowDates = shows.filter { $0.date.day != nil }
       .filter { $0.date.month != nil }
       .filter { $0.date.year != nil }
@@ -136,13 +139,35 @@ struct StatsGrouping: View {
 
     let showWeekdayOrMonthChart = shows.count > statsThreshold
 
-    let statsCategoryCases = StatsCategory.allCases
-      .filter { $0 == .years ? (yearsSpanRanking?.value ?? 0) > 1 : true }
-      .filter { $0 == .venues ? showVenues : true }
-      .filter { $0 == .artists ? showArtists : true }
-      .filter { $0 == .weekday ? showWeekdayOrMonthChart : true }
-      .filter { $0 == .month ? showWeekdayOrMonthChart : true }
-      .filter { $0 == .state ? showState : true }
+    // This needs to be broken down like this or the swift compiler says it is too complex.
+    var statsCategoryCases = [StatsCategory]()
+    if displayArchiveCategoryCounts {
+      statsCategoryCases.append(.shows)
+    }
+    if displayArchiveCategoryCounts && (yearsSpanRanking?.value ?? 0) > 1 {
+      statsCategoryCases.append(.years)
+    }
+    if displayArchiveCategoryCounts && showVenues {
+      statsCategoryCases.append(.venues)
+    }
+    if displayArchiveCategoryCounts && showArtists {
+      statsCategoryCases.append(.artists)
+    }
+    if showWeekdayOrMonthChart {
+      statsCategoryCases.append(.weekday)
+    }
+    if showWeekdayOrMonthChart {
+      statsCategoryCases.append(.month)
+    }
+    if showState {
+      statsCategoryCases.append(.state)
+    }
+
+    return (statsCategoryCases, venues, artists, knownShowDates, stateCounts)
+  }
+
+  var body: some View {
+    let (statsCategoryCases, venues, artists, knownShowDates, stateCounts) = configure()
 
     ForEach(statsCategoryCases, id: \.self) { category in
       Group {
