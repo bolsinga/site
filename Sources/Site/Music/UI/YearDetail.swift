@@ -46,6 +46,7 @@ struct YearDetail: View {
       .listStyle(.grouped)
     #endif
     .navigationTitle(Text(annum.formatted()))
+    .userActivity(ArchivePath.activityType) { annum.updateActivity($0) }
   }
 }
 

@@ -80,6 +80,7 @@ struct ArtistDetail: View {
       .listStyle(.grouped)
     #endif
     .navigationTitle(artist.name)
+    .userActivity(ArchivePath.activityType) { artist.updateActivity($0) }
   }
 }
 

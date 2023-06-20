@@ -64,5 +64,10 @@ struct ArchiveCategorySplit: View {
         vault.comparator.showCompare(lhs: $0, rhs: $1, lookup: vault.lookup)
       }
     }
+    .onContinueUserActivity(ArchivePath.activityType) { userActivity in
+      if let archivePath = try? userActivity.typedPayload(ArchivePath.self) {
+        archiveNavigation.navigate(to: archivePath)
+      }
+    }
   }
 }
