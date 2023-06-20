@@ -31,6 +31,10 @@ final class ArchiveNavigation: ObservableObject {
         category.jsonData = selectionData
         selectedCategory = category
       }
+    } else {
+      if let pathData {
+        navigationPath.jsonData = pathData
+      }
     }
   }
 
