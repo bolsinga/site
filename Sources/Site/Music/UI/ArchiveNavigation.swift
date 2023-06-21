@@ -14,8 +14,8 @@ final class ArchiveNavigation: ObservableObject {
 
   private var pendingNavigationPath: [ArchivePath]?
 
-  func restoreNavigation(selectionData: Data?, pathData: Data?) {
-    if let selectionData {
+  func restoreNavigation(selectedCategoryStorage: ArchiveCategory?, pathData: Data?) {
+    if let selectedCategoryStorage {
       if let pathData {
         // Hold onto the loading navigationPath for after the selectedCategory changes.
         var pending = [ArchivePath]()
@@ -24,13 +24,7 @@ final class ArchiveNavigation: ObservableObject {
       }
 
       // Changing the selectedCategory will reset the NavigationStack's navigationPath.
-      if selectedCategory != nil {
-        selectedCategory?.jsonData = selectionData
-      } else {
-        var category = ArchiveCategory.today
-        category.jsonData = selectionData
-        selectedCategory = category
-      }
+      selectedCategory = selectedCategoryStorage
     } else {
       if let pathData {
         navigationPath.jsonData = pathData

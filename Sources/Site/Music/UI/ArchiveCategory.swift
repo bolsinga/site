@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-enum ArchiveCategory: CaseIterable, Codable {
+enum ArchiveCategory: String, CaseIterable {
   case today
   case stats
   case shows
@@ -41,18 +41,6 @@ enum ArchiveCategory: CaseIterable, Codable {
       Label(self.localizedString, systemImage: "music.note.house")
     case .artists:
       Label(self.localizedString, systemImage: "music.mic")
-    }
-  }
-
-  var jsonData: Data? {
-    get {
-      try? JSONEncoder().encode(self)
-    }
-    set {
-      guard let data = newValue,
-        let category = try? JSONDecoder().decode(Self.self, from: data)
-      else { return }
-      self = category
     }
   }
 }
