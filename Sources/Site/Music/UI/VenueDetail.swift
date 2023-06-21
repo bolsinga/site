@@ -84,6 +84,7 @@ struct VenueDetail: View {
       .listStyle(.grouped)
     #endif
     .navigationTitle(venue.name)
+    .userActivity(ArchivePath.activityType) { venue.updateActivity($0) }
   }
 }
 
