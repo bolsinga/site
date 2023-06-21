@@ -6,6 +6,13 @@
 //
 
 import SwiftUI
+import os
+
+extension Logger {
+  static let today = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "today")
+  static let continuation = Logger(
+    subsystem: Bundle.main.bundleIdentifier!, category: "continuation")
+}
 
 struct ArchiveCategorySplit: View {
   let vault: Vault
@@ -63,8 +70,10 @@ struct ArchiveCategorySplit: View {
       self.todayShows = vault.music.showsOnDate(Date.now).sorted {
         vault.comparator.showCompare(lhs: $0, rhs: $1, lookup: vault.lookup)
       }
+      Logger.today.log("fired: \(todayShows.count, privacy: .public)")
     }
     .onContinueUserActivity(ArchivePath.activityType) { userActivity in
+      Logger.today.log("activity: \(ArchivePath.activityType, privacy: .public)")
       if let archivePath = try? userActivity.typedPayload(ArchivePath.self) {
         archiveNavigation.navigate(to: archivePath)
       }

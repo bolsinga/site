@@ -6,6 +6,11 @@
 //
 
 import SwiftUI
+import os
+
+extension Logger {
+  static let archive = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "archive")
+}
 
 struct ArchiveStorageModifier: ViewModifier {
   let archiveNavigation: ArchiveNavigation
@@ -16,15 +21,22 @@ struct ArchiveStorageModifier: ViewModifier {
   func body(content: Content) -> some View {
     content
       .task {
+        Logger.archive.log("start restore")
+        defer {
+          Logger.archive.log("end restore")
+        }
         archiveNavigation.restoreNavigation(
           selectedCategoryStorage: selectedCategoryStorage, pathData: navigationPathData)
       }
       .onChange(of: archiveNavigation.selectedCategory) { newValue in
+        Logger.archive.log("category: \(newValue?.rawValue ?? "nil", privacy: .public)")
         selectedCategoryStorage = newValue
 
         archiveNavigation.restorePendingData()
       }
       .onChange(of: archiveNavigation.navigationPath) { newPath in
+        Logger.archive.log(
+          "path: \(newPath.map { $0.formatted() }.joined(separator: ":"), privacy: .public)")
         navigationPathData = newPath.jsonData
       }
   }

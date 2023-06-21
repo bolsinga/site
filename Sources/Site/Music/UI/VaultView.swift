@@ -6,6 +6,11 @@
 //
 
 import SwiftUI
+import os
+
+extension Logger {
+  static let refresh = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "refresh")
+}
 
 public struct VaultView: View {
   let url: URL
@@ -18,9 +23,14 @@ public struct VaultView: View {
   }
 
   private func refresh() async {
+    Logger.refresh.log("start")
+    defer {
+      Logger.refresh.log("end")
+    }
     do {
       vault = try await Vault.load(url: url)
     } catch {
+      Logger.refresh.log("error: \(error.localizedDescription, privacy: .public)")
       self.error = error
     }
   }
