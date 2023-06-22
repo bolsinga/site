@@ -19,7 +19,5 @@ extension Annum: PathRestorableUserActivity {
       localized: "See Shows From This Year", bundle: .module,
       comment: "Spotlight Description for Annum")
     userActivity.contentAttributeSet = attributes
-
-    try? userActivity.setTypedPayload(self.archivePath)
   }
 }
