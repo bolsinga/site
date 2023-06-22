@@ -74,7 +74,7 @@ struct ArchiveCategorySplit: View {
       Logger.today.log("fired: \(todayShows.count, privacy: .public)")
     }
     .onContinueUserActivity(ArchivePath.activityType) { userActivity in
-      Logger.continuation.log("activity: \(ArchivePath.activityType, privacy: .public)")
+      Logger.continuation.log("activity: \(userActivity.activityType, privacy: .public)")
       if let archivePath = try? userActivity.typedPayload(ArchivePath.self) {
         archiveNavigation.navigate(to: archivePath)
       }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension Show {
+extension Show: PathRestorableUserActivity {
   func updateActivity(_ userActivity: NSUserActivity) {
     userActivity.isEligibleForHandoff = true
     try? userActivity.setTypedPayload(self.archivePath)
