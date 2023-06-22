@@ -26,9 +26,11 @@ struct PathRestorableUserActivityModifier<T: PathRestorableUserActivity>: ViewMo
 
   func body(content: Content) -> some View {
     content
-      .userActivity(ArchivePath.activityType) {
-        Logger.userActivity.log("advertise: \(item.archivePath.formatted(), privacy: .public)")
-        item.updateActivity($0)
+      .userActivity(ArchivePath.activityType) { userActivity in
+        let identifier = item.archivePath.formatted()
+        Logger.userActivity.log("advertise: \(identifier, privacy: .public)")
+        userActivity.targetContentIdentifier = identifier
+        item.updateActivity(userActivity)
       }
   }
 
