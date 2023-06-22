@@ -6,6 +6,12 @@
 //
 
 import SwiftUI
+import os
+
+extension Logger {
+  static let userActivity = Logger(
+    subsystem: Bundle.main.bundleIdentifier!, category: "userActivity")
+}
 
 extension ArchivePath {
   static let activityType = "gdb.SiteApp.view-archivePath"
@@ -20,7 +26,10 @@ struct PathRestorableUserActivityModifier<T: PathRestorableUserActivity>: ViewMo
 
   func body(content: Content) -> some View {
     content
-      .userActivity(ArchivePath.activityType) { item.updateActivity($0) }
+      .userActivity(ArchivePath.activityType) {
+        Logger.userActivity.log("advertise: \(item.archivePath.formatted(), privacy: .public)")
+        item.updateActivity($0)
+      }
   }
 
 }
