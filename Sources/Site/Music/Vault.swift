@@ -7,30 +7,45 @@
 
 import Foundation
 
+extension URL {
+  var baseURL: URL? {
+    let urlComponents = URLComponents(url: self, resolvingAgainstBaseURL: false)
+
+    var newUrlComponents = URLComponents()
+    newUrlComponents.host = urlComponents?.host
+    newUrlComponents.scheme = urlComponents?.scheme
+
+    return newUrlComponents.url
+  }
+}
+
 public struct Vault {
   public let music: Music
   public let lookup: Lookup
   public let comparator: LibraryComparator
   internal let sectioner: LibrarySectioner
   internal let atlas = Atlas()
+  internal let baseURL: URL?
 
-  public init(music: Music) {
+  public init(music: Music, url: URL? = nil) {
     // non-parallel, used for previews, tests
     self.init(
       music: music, lookup: Lookup(music: music), comparator: LibraryComparator(),
-      sectioner: LibrarySectioner())
+      sectioner: LibrarySectioner(), baseURL: url?.baseURL)
   }
 
   internal init(
-    music: Music, lookup: Lookup, comparator: LibraryComparator, sectioner: LibrarySectioner
+    music: Music, lookup: Lookup, comparator: LibraryComparator, sectioner: LibrarySectioner,
+    baseURL: URL?
   ) {
     self.music = music
     self.lookup = lookup
     self.comparator = comparator
     self.sectioner = sectioner
+    self.baseURL = baseURL
   }
 
-  public static func create(music: Music) async -> Vault {
+  public static func create(music: Music, url: URL) async -> Vault {
     async let asyncLookup = await Lookup.create(music: music)
     async let asyncComparator = await LibraryComparator.create(music: music)
     async let sectioner = await LibrarySectioner.create(music: music)
@@ -55,7 +70,8 @@ public struct Vault {
       venues: await sortedVenues)
 
     let v = Vault(
-      music: sortedMusic, lookup: lookup, comparator: comparator, sectioner: await sectioner)
+      music: sortedMusic, lookup: lookup, comparator: comparator, sectioner: await sectioner,
+      baseURL: url.baseURL)
 
     //    Task {
     //      do {
