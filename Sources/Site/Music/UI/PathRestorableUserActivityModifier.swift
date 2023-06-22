@@ -22,14 +22,25 @@ protocol PathRestorableUserActivity: PathRestorable {
 }
 
 struct PathRestorableUserActivityModifier<T: PathRestorableUserActivity>: ViewModifier {
+  @Environment(\.vault) var vault: Vault
+
   let item: T
 
   func body(content: Content) -> some View {
     content
       .userActivity(ArchivePath.activityType) { userActivity in
-        let identifier = item.archivePath.formatted()
+        let archivePath = item.archivePath
+
+        let identifier = archivePath.formatted()
         Logger.userActivity.log("advertise: \(identifier, privacy: .public)")
         userActivity.targetContentIdentifier = identifier
+
+        if let url = vault.createURL(for: archivePath) {
+          Logger.userActivity.log("web: \(url.absoluteString, privacy: .public)")
+          userActivity.isEligibleForPublicIndexing = true
+          userActivity.webpageURL = url
+        }
+
         item.updateActivity(userActivity)
       }
   }
