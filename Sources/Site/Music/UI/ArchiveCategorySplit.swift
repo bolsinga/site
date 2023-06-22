@@ -75,8 +75,11 @@ struct ArchiveCategorySplit: View {
     }
     .onContinueUserActivity(ArchivePath.activityType) { userActivity in
       Logger.continuation.log("activity: \(userActivity.activityType, privacy: .public)")
-      if let archivePath = try? userActivity.typedPayload(ArchivePath.self) {
+      do {
+        let archivePath = try userActivity.typedPayload(ArchivePath.self)
         archiveNavigation.navigate(to: archivePath)
+      } catch {
+        Logger.continuation.log("error: \(error, privacy: .public)")
       }
     }
     .onOpenURL { url in
