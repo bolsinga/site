@@ -42,6 +42,12 @@ struct PathRestorableUserActivityModifier<T: PathRestorableUserActivity>: ViewMo
         }
 
         item.updateActivity(userActivity)
+
+        do {
+          try userActivity.setTypedPayload(archivePath)
+        } catch {
+          Logger.userActivity.log("error: \(error, privacy: .public)")
+        }
       }
   }
 

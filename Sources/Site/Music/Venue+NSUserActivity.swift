@@ -19,7 +19,5 @@ extension Venue: PathRestorableUserActivity {
       localized: "See Shows At This Venue", bundle: .module,
       comment: "Spotlight Description for Venue")
     userActivity.contentAttributeSet = attributes
-
-    try? userActivity.setTypedPayload(self.archivePath)
   }
 }

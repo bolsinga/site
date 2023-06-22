@@ -19,7 +19,5 @@ extension Artist: PathRestorableUserActivity {
       localized: "See Shows With This Artist", bundle: .module,
       comment: "Spotlight Description for Artist")
     userActivity.contentAttributeSet = attributes
-
-    try? userActivity.setTypedPayload(self.archivePath)
   }
 }
