@@ -76,7 +76,7 @@ struct ShowDetail: View {
       .listStyle(.grouped)
     #endif
     .navigationTitle(venueName)
-    .userActivity(ArchivePath.activityType) { show.updateActivity($0) }
+    .pathRestorableUserActivityModifier(show)
   }
 }
 

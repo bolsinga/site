@@ -30,10 +30,6 @@ extension ArchivePath: Codable {
   }
 }
 
-extension ArchivePath {
-  static let activityType = "gdb.SiteApp.view-archivePath"
-}
-
 extension Array where Element == ArchivePath {
   var jsonData: Data? {
     get {
