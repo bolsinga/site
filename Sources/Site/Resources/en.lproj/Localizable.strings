@@ -67,6 +67,15 @@ Label in the chart for the Count in StateChart. */
 /* Title of the Related Venues Section for VenueDetail. */
 "Related Venues" = "Related Venues";
 
+/* Spotlight Description for Venue */
+"See Shows At This Venue" = "See Shows At This Venue";
+
+/* Spotlight Description for Annum */
+"See Shows From This Year" = "See Shows From This Year";
+
+/* Spotlight Description for Artist */
+"See Shows With This Artist" = "See Shows With This Artist";
+
 /* Shown when no ArchiveCategory is selected. */
 "Select An Item" = "Select An Item";
 
