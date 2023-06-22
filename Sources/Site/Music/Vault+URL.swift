@@ -19,6 +19,6 @@ extension Vault {
       Logger.vault.log("end")
     }
     let music = try await Music.load(url: url)
-    return await Vault.create(music: music)
+    return await Vault.create(music: music, url: url)
   }
 }
