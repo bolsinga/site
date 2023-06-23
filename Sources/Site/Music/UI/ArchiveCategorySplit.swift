@@ -84,7 +84,12 @@ struct ArchiveCategorySplit: View {
     }
     .onOpenURL { url in
       Logger.link.log("url: \(url.absoluteString, privacy: .public)")
-      do { archiveNavigation.navigate(to: try ArchivePath(url)) } catch {}
+      do {
+        let archivePath = try ArchivePath(url)
+        archiveNavigation.navigate(to: archivePath)
+      } catch {
+        Logger.link.log("error: \(error, privacy: .public)")
+      }
     }
   }
 }
