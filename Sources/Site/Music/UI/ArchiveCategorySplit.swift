@@ -71,7 +71,7 @@ struct ArchiveCategorySplit: View {
       self.todayShows = vault.music.showsOnDate(Date.now).sorted {
         vault.comparator.showCompare(lhs: $0, rhs: $1, lookup: vault.lookup)
       }
-      Logger.today.log("fired: \(todayShows.count, privacy: .public)")
+      Logger.today.log("Count: \(todayShows.count, privacy: .public)")
     }
     .onContinueUserActivity(ArchivePath.activityType) { userActivity in
       Logger.continuation.log("activity: \(userActivity.activityType, privacy: .public)")
