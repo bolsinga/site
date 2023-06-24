@@ -15,7 +15,7 @@ extension Logger {
 struct ArchiveStorageModifier: ViewModifier {
   let archiveNavigation: ArchiveNavigation
 
-  @SceneStorage("selected.category") private var selectedCategoryStorage: ArchiveCategory?
+  @SceneStorage("selected.category") private var selectedCategoryStorage: String?
   @SceneStorage("navigation.path") private var navigationPathData: Data?
 
   func body(content: Content) -> some View {
@@ -25,12 +25,14 @@ struct ArchiveStorageModifier: ViewModifier {
         defer {
           Logger.archive.log("end restore")
         }
+        let archiveCategory =
+          selectedCategoryStorage != nil ? ArchiveCategory(rawValue: selectedCategoryStorage!) : nil
         archiveNavigation.restoreNavigation(
-          selectedCategoryStorage: selectedCategoryStorage, pathData: navigationPathData)
+          selectedCategoryStorage: archiveCategory, pathData: navigationPathData)
       }
       .onChange(of: archiveNavigation.selectedCategory) { newValue in
         Logger.archive.log("category: \(newValue?.rawValue ?? "nil", privacy: .public)")
-        selectedCategoryStorage = newValue
+        selectedCategoryStorage = newValue?.rawValue ?? nil
 
         archiveNavigation.restorePendingData()
       }
