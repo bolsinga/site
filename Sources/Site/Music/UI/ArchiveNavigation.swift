@@ -19,7 +19,7 @@ final class ArchiveNavigation: ObservableObject {
   @Published var selectedCategory: ArchiveCategory?
   @Published var navigationPath: [ArchivePath] = []
 
-  private var pendingNavigationPath: [ArchivePath]?
+  internal var pendingNavigationPath: [ArchivePath]?
 
   func restoreNavigation(selectedCategoryStorage: ArchiveCategory?, pathData: Data?) {
     if let selectedCategoryStorage {
@@ -59,8 +59,8 @@ final class ArchiveNavigation: ObservableObject {
     navigationPath.append(path)
   }
 
-  func navigate(to category: ArchiveCategory) {
-    Logger.programmatic.log("nav to category: \(category.rawValue, privacy: .public)")
+  func navigate(to category: ArchiveCategory?) {
+    Logger.programmatic.log("nav to category: \((category != nil ? category!.rawValue : "nil"), privacy: .public)")
     selectedCategory = category
   }
 }
