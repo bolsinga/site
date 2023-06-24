@@ -10,8 +10,6 @@ import os
 
 extension Logger {
   static let today = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "today")
-  static let continuation = Logger(
-    subsystem: Bundle.main.bundleIdentifier!, category: "continuation")
   static let link = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "link")
 }
 
@@ -74,12 +72,10 @@ struct ArchiveCategorySplit: View {
       Logger.today.log("Count: \(todayShows.count, privacy: .public)")
     }
     .onContinueUserActivity(ArchivePath.activityType) { userActivity in
-      Logger.continuation.log("activity: \(userActivity.activityType, privacy: .public)")
       do {
-        let archivePath = try userActivity.typedPayload(ArchivePath.self)
-        archiveNavigation.navigate(to: archivePath)
+        archiveNavigation.navigate(to: try userActivity.archivePath())
       } catch {
-        Logger.continuation.log("error: \(error, privacy: .public)")
+        Logger.decodeActivity.log("error: \(error, privacy: .public)")
       }
     }
     .onOpenURL { url in
