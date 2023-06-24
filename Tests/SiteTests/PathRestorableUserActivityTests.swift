@@ -15,7 +15,7 @@ final class PathRestorableUserActivityTests: XCTestCase {
 
     let item = Show(artists: [], date: PartialDate(), id: "1", venue: "1")
 
-    XCTAssertNoThrow(try userActivity.update(item, url: nil))
+    userActivity.update(item, url: nil)
 
     XCTAssertTrue(userActivity.isEligibleForHandoff)
 
@@ -35,7 +35,7 @@ final class PathRestorableUserActivityTests: XCTestCase {
 
     let item = Artist(id: "1", name: "name")
 
-    XCTAssertNoThrow(try userActivity.update(item, url: nil))
+    userActivity.update(item, url: nil)
 
     XCTAssertTrue(userActivity.isEligibleForHandoff)
 
@@ -55,7 +55,7 @@ final class PathRestorableUserActivityTests: XCTestCase {
 
     let item = Venue(id: "1", location: Location(city: "city", state: "st"), name: "name")
 
-    XCTAssertNoThrow(try userActivity.update(item, url: nil))
+    userActivity.update(item, url: nil)
 
     XCTAssertTrue(userActivity.isEligibleForHandoff)
 
@@ -75,7 +75,7 @@ final class PathRestorableUserActivityTests: XCTestCase {
 
     let item = Annum.year(1990)
 
-    XCTAssertNoThrow(try userActivity.update(item, url: nil))
+    userActivity.update(item, url: nil)
 
     XCTAssertTrue(userActivity.isEligibleForHandoff)
 
@@ -96,9 +96,37 @@ final class PathRestorableUserActivityTests: XCTestCase {
     let item = Show(artists: [], date: PartialDate(), id: "1", venue: "1")
     let url = URL(string: "https://www.example.com")!
 
-    XCTAssertNoThrow(try userActivity.update(item, url: url))
+    userActivity.update(item, url: url)
 
     XCTAssertTrue(userActivity.isEligibleForPublicIndexing)
     XCTAssertEqual(userActivity.webpageURL, url)
+  }
+
+  func test_decodeError_noUserInfo() throws {
+    let userActivity = NSUserActivity(activityType: "test-type")
+    userActivity.userInfo = nil
+
+    XCTAssertThrowsError(try userActivity.archivePath())
+  }
+
+  func test_decodeError_emptyUserInfo() throws {
+    let userActivity = NSUserActivity(activityType: "test-type")
+    userActivity.userInfo = [:]
+
+    XCTAssertThrowsError(try userActivity.archivePath())
+  }
+
+  func test_decodeError_wrongType() throws {
+    let userActivity = NSUserActivity(activityType: "test-type")
+    userActivity.userInfo = [NSUserActivity.archiveKey: 6]
+
+    XCTAssertThrowsError(try userActivity.archivePath())
+  }
+
+  func test_decode() throws {
+    let userActivity = NSUserActivity(activityType: "test-type")
+    userActivity.userInfo = [NSUserActivity.archiveKey: "y-1988"]
+
+    XCTAssertEqual(try userActivity.archivePath(), ArchivePath.year(Annum.year(1988)))
   }
 }

@@ -15,18 +15,14 @@ public enum ArchivePath: Hashable {
 }
 
 extension ArchivePath: Codable {
-  enum CodingKeys: String, CodingKey {
-    case json
-  }
-
   public func encode(to encoder: Encoder) throws {
-    var container = encoder.container(keyedBy: CodingKeys.self)
-    try container.encode(self.formatted(.json), forKey: .json)
+    var container = encoder.singleValueContainer()
+    try container.encode(self.formatted(.json))
   }
 
   public init(from decoder: Decoder) throws {
-    let container = try decoder.container(keyedBy: CodingKeys.self)
-    self = try ArchivePath(container.decode(String.self, forKey: .json))
+    let container = try decoder.singleValueContainer()
+    try self = ArchivePath(container.decode(String.self))
   }
 }
 

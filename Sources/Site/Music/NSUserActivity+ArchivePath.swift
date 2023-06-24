@@ -17,10 +17,18 @@ extension Logger {
 }
 
 extension NSUserActivity {
-  func update<T: PathRestorableUserActivity>(_ item: T, url: URL?) throws {
+  enum DecodeError: Error {
+    case noUserInfo
+    case noArchiveKey
+    case archiveKeyIncorrectType
+  }
+
+  static let archiveKey = "archive"
+
+  func update<T: PathRestorableUserActivity>(_ item: T, url: URL?) {
     let archivePath = item.archivePath
 
-    let identifier = archivePath.formatted()
+    let identifier = archivePath.formatted(.json)
     Logger.updateActivity.log("advertise: \(identifier, privacy: .public)")
     self.targetContentIdentifier = identifier
 
@@ -32,11 +40,29 @@ extension NSUserActivity {
 
     item.updateActivity(self)
 
-    try self.setTypedPayload(archivePath)
+    self.addUserInfoEntries(from: [NSUserActivity.archiveKey: identifier])
   }
 
   func archivePath() throws -> ArchivePath {
     Logger.decodeActivity.log("type: \(self.activityType, privacy: .public)")
-    return try self.typedPayload(ArchivePath.self)
+
+    guard let userInfo = self.userInfo else {
+      Logger.decodeActivity.log("no userInfo")
+      throw DecodeError.noUserInfo
+    }
+
+    guard let value = userInfo[NSUserActivity.archiveKey] else {
+      Logger.decodeActivity.log("no archiveKey")
+      throw DecodeError.noArchiveKey
+    }
+
+    guard let archiveString = value as? String else {
+      Logger.decodeActivity.log("archiveKey not String")
+      throw DecodeError.archiveKeyIncorrectType
+    }
+
+    Logger.decodeActivity.log("decode: \(archiveString, privacy: .public)")
+
+    return try ArchivePath(archiveString)
   }
 }

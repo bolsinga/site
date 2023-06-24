@@ -24,11 +24,7 @@ struct PathRestorableUserActivityModifier<T: PathRestorableUserActivity>: ViewMo
   func body(content: Content) -> some View {
     content
       .userActivity(ArchivePath.activityType) { userActivity in
-        do {
-          try userActivity.update(item, url: vault.createURL(for: item.archivePath))
-        } catch {
-          Logger.updateActivity.log("error: \(error, privacy: .public)")
-        }
+        userActivity.update(item, url: vault.createURL(for: item.archivePath))
       }
   }
 }
