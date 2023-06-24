@@ -60,7 +60,7 @@ final class ArchiveNavigation: ObservableObject {
   }
 
   func navigate(to category: ArchiveCategory?) {
-    Logger.programmatic.log("nav to category: \((category != nil ? category!.rawValue : "nil"), privacy: .public)")
+    Logger.programmatic.log("nav to category: \(category?.rawValue ?? "nil", privacy: .public)")
     selectedCategory = category
   }
 }
