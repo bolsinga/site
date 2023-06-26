@@ -109,7 +109,7 @@ extension Music {
   }
 
   var artistFirstSets: [Artist.ID: FirstSet] {
-    var artistsOrdered = Set<Artist.ID>()
+    var artistsTracked = Set<Artist.ID>()
     var allUnknownDateArtists = Set<Artist.ID>()
     var firstSetsOrdered = [(Artist.ID, FirstSet)]()
 
@@ -119,18 +119,18 @@ extension Music {
       if show.date.isUnknown {
         show.artists.forEach { allUnknownDateArtists.insert($0) }
       } else {
-        show.artists.filter { !artistsOrdered.contains($0) }.reversed().forEach { artistID in
+        show.artists.filter { !artistsTracked.contains($0) }.reversed().forEach { artistID in
           firstSetsOrdered.append((artistID, FirstSet(rank: .rank(order), date: show.date)))
           order += 1
 
-          artistsOrdered.insert(artistID)
+          artistsTracked.insert(artistID)
         }
       }
     }
 
     let unknownFirstSet = FirstSet(rank: .unknown, date: PartialDate())
 
-    let onlyUnknownDateArtists = allUnknownDateArtists.subtracting(artistsOrdered)
+    let onlyUnknownDateArtists = allUnknownDateArtists.subtracting(artistsTracked)
     onlyUnknownDateArtists.forEach { artistID in
       firstSetsOrdered.append((artistID, unknownFirstSet))
     }
