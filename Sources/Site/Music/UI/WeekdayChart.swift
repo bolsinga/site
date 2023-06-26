@@ -35,7 +35,7 @@ struct WeekdayChart: View {
   @State private var firstWeekday = Calendar.autoupdatingCurrent.firstWeekday
 
   private var computeWeekdayCounts: [(String, Int)] {  // (weekday as String, count of that weekday), sorted in week-order using firstWeekday!
-    let weekdayCountMap: [Int: (String, Int)] = dates.reduce(into: WeekdayAbbreviations) { // weekday (1...7) : (weekday String, count)
+    let weekdayCountMap: [Int: (String, Int)] = dates.reduce(into: WeekdayAbbreviations) {  // weekday (1...7) : (weekday String, count)
       let weekday = Calendar.autoupdatingCurrent.component(.weekday, from: $1)
       let pair = $0[weekday] ?? (WeekdayChartFormat.format($1), 0)
       $0[weekday] = (pair.0, pair.1 + 1)
