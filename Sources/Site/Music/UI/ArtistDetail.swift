@@ -26,10 +26,19 @@ struct ArtistDetail: View {
     music.related(artist).sorted(by: vault.comparator.libraryCompare(lhs:rhs:))
   }
 
+  @ViewBuilder private var firstSetElement: some View {
+    HStack {
+      Text("First Set", bundle: .module, comment: "First Set Caption")
+      Spacer()
+      Text(vault.lookup.firstSet(artist: artist).rank.formatted())
+    }
+  }
+
   @ViewBuilder private var statsElement: some View {
     let shows = computedShows
     if !shows.isEmpty {
       Section(header: Text(ArchiveCategory.stats.localizedString)) {
+        firstSetElement
         StatsGrouping(
           shows: shows, shouldCalculateArtistCount: false,
           yearsSpanRanking: vault.lookup.spanRank(artist: artist),

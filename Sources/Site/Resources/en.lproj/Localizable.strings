@@ -37,6 +37,9 @@ Label in the chart for the Count in StateChart. */
 /* String for when a Decade is unknown. */
 "Decade Unknown" = "Decade Unknown";
 
+/* First Set Caption */
+"First Set" = "First Set";
+
 /* Title of the Lineup for ShowDetail. */
 "Lineup" = "Lineup";
 
@@ -60,6 +63,9 @@ Label in the chart for the Count in StateChart. */
 
 /* String used to describe LibrarySection.punctuation. */
 "Punctuation" = "Punctuation";
+
+/* String for when a Rank is unknown. */
+"Rank Unknown" = "Rank Unknown";
 
 /* Title of the Related Artists Section for ArtistDetail. */
 "Related Artists" = "Related Artists";

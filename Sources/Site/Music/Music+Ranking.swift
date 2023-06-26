@@ -107,4 +107,34 @@ extension Music {
       }
     }
   }
+
+  var artistFirstSets: [Artist.ID: FirstSet] {
+    var artistsTracked = Set<Artist.ID>()
+    var allUnknownDateArtists = Set<Artist.ID>()
+    var firstSetsOrdered = [(Artist.ID, FirstSet)]()
+
+    var order = 1
+    shows.sorted(by: { PartialDate.compareWithUnknownsMuted(lhs: $0.date, rhs: $1.date) }).forEach {
+      show in
+      if show.date.isUnknown {
+        show.artists.forEach { allUnknownDateArtists.insert($0) }
+      } else {
+        show.artists.filter { !artistsTracked.contains($0) }.reversed().forEach { artistID in
+          firstSetsOrdered.append((artistID, FirstSet(rank: .rank(order), date: show.date)))
+          order += 1
+
+          artistsTracked.insert(artistID)
+        }
+      }
+    }
+
+    let unknownFirstSet = FirstSet(rank: .unknown, date: PartialDate())
+
+    let onlyUnknownDateArtists = allUnknownDateArtists.subtracting(artistsTracked)
+    onlyUnknownDateArtists.forEach { artistID in
+      firstSetsOrdered.append((artistID, unknownFirstSet))
+    }
+
+    return firstSetsOrdered.reduce(into: [:]) { $0[$1.0] = $1.1 }
+  }
 }
