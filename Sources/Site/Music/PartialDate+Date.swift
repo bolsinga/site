@@ -33,10 +33,8 @@ internal func compareOptional<T: Comparable>(lhs: T?, rhs: T?, equalAction: (() 
   -> Bool
 {
   if let lhs, let rhs {
-    if lhs == rhs {
-      if let equalAction {
-        return equalAction()
-      }
+    if let equalAction, lhs == rhs {
+      return equalAction()
     }
     return lhs < rhs
   }
