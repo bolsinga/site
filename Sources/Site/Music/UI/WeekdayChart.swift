@@ -32,12 +32,20 @@ private let WeekdayAbbreviations = WeekdayAbbreviationsGetter
 struct WeekdayChart: View {
   let dates: [Date]
 
-  private var computeWeekdayCounts: [(String, Int)] {  // (weekday as string, count of that weekday), sorted in week-order
-    return dates.reduce(into: WeekdayAbbreviations) {
+  @State private var firstWeekday = Calendar.autoupdatingCurrent.firstWeekday
+
+  private var computeWeekdayCounts: [(String, Int)] {  // (weekday as String, count of that weekday), sorted in week-order using firstWeekday!
+    let weekdayCountMap: [Int: (String, Int)] = dates.reduce(into: WeekdayAbbreviations) { // weekday (1...7) : (weekday String, count)
       let weekday = Calendar.autoupdatingCurrent.component(.weekday, from: $1)
       let pair = $0[weekday] ?? (WeekdayChartFormat.format($1), 0)
       $0[weekday] = (pair.0, pair.1 + 1)
-    }.sorted { $0.key < $1.key }.map { $0.value }
+    }
+    let sortedWeekdayCounts = weekdayCountMap.sorted { $0.key < $1.key }
+    let zeroBasedFirstWeekday = firstWeekday - 1
+    let weekdayCountsFirstDayOrdered =
+      Array(sortedWeekdayCounts[zeroBasedFirstWeekday...])
+      + Array(sortedWeekdayCounts[0..<zeroBasedFirstWeekday])
+    return weekdayCountsFirstDayOrdered.map { $0.value }
   }
 
   var body: some View {
@@ -61,6 +69,9 @@ struct WeekdayChart: View {
             .font(.caption2)
         }
       }
+    }
+    .onNotification(name: NSLocale.currentLocaleDidChangeNotification) {
+      firstWeekday = Calendar.current.firstWeekday
     }
   }
 }
