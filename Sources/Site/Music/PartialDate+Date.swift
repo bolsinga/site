@@ -28,13 +28,11 @@ extension PartialDate: Comparable {
       return false
     }
 
-    if let lhDate = lhs.date {
-      if let rhDate = rhs.date {
-        return lhDate < rhDate
+    return compareOptional(lhs: lhs.year, rhs: rhs.year) {
+      compareOptional(lhs: lhs.month, rhs: rhs.month) {
+        compareOptional(lhs: lhs.day, rhs: rhs.day)
       }
-      return true
     }
-    return false
   }
 
   public static func compareWithUnknownsMuted(lhs: PartialDate, rhs: PartialDate) -> Bool {
