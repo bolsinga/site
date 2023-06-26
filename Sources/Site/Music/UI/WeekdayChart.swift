@@ -32,32 +32,32 @@ private let WeekdayAbbreviations = WeekdayAbbreviationsGetter
 struct WeekdayChart: View {
   let dates: [Date]
 
-  private var computeWeekdayCounts: [Int: (String, Int)] {  // weekday as int: (weekday as string, count of that weekday)
+  private var computeWeekdayCounts: [(String, Int)] {  // (weekday as string, count of that weekday), sorted in week-order
     return dates.reduce(into: WeekdayAbbreviations) {
       let weekday = Calendar.autoupdatingCurrent.component(.weekday, from: $1)
       let pair = $0[weekday] ?? (WeekdayChartFormat.format($1), 0)
       $0[weekday] = (pair.0, pair.1 + 1)
-    }
+    }.sorted { $0.key < $1.key }.map { $0.value }
   }
 
   var body: some View {
-    let weekdayCounts = computeWeekdayCounts.sorted { $0.key < $1.key }  // array of dictionary elements
-    Chart(weekdayCounts, id: \.key) { item in
+    let weekdayCounts = computeWeekdayCounts
+    Chart(weekdayCounts, id: \.0) { item in
       BarMark(
         x: .value(
           Text(
             "Weekday",
             bundle: .module,
-            comment: "Label in the chart for the Weekday in WeekdayChart."), item.value.0),
+            comment: "Label in the chart for the Weekday in WeekdayChart."), item.0),
         y: .value(
           Text(
             "Count",
             bundle: .module,
-            comment: "Label in the chart for the Count in WeekdayChart."), item.value.1)
+            comment: "Label in the chart for the Count in WeekdayChart."), item.1)
       )
       .annotation(position: .top) {
-        if item.value.1 > 0 {
-          Text(item.value.1.formatted(.number))
+        if item.1 > 0 {
+          Text(item.1.formatted(.number))
             .font(.caption2)
         }
       }
