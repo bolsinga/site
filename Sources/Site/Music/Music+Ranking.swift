@@ -137,4 +137,31 @@ extension Music {
 
     return firstSetsOrdered.reduce(into: [:]) { $0[$1.0] = $1.1 }
   }
+
+  var venueFirstSets: [Venue.ID: FirstSet] {
+    var venuesTracked = Set<Venue.ID>()
+    var allUnknownDateVenues = Set<Venue.ID>()
+    var firstSetsOrdered = [(Venue.ID, FirstSet)]()
+
+    var order = 1
+    shows.sorted(by: { PartialDate.compareWithUnknownsMuted(lhs: $0.date, rhs: $1.date) }).forEach {
+      show in
+      if show.date.isUnknown {
+        allUnknownDateVenues.insert(show.venue)
+      } else if !venuesTracked.contains(show.venue) {
+        firstSetsOrdered.append((show.venue, FirstSet(rank: .rank(order), date: show.date)))
+        venuesTracked.insert(show.venue)
+        order += 1
+      }
+    }
+
+    let unknownFirstSet = FirstSet(rank: .unknown, date: PartialDate())
+
+    let onlyUnknownDateVenues = allUnknownDateVenues.subtracting(venuesTracked)
+    onlyUnknownDateVenues.forEach { venueID in
+      firstSetsOrdered.append((venueID, unknownFirstSet))
+    }
+
+    return firstSetsOrdered.reduce(into: [:]) { $0[$1.0] = $1.1 }
+  }
 }
