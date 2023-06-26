@@ -35,12 +35,47 @@ extension PartialDate: Comparable {
       return false
     }
 
-    if let lhDate = lhs.date {
-      if let rhDate = rhs.date {
-        return lhDate < rhDate
+    // Year
+    let lhYear = lhs.year
+    let rhYear = rhs.year
+
+    if let lhYear, let rhYear {
+      if lhYear == rhYear {
+        // Month
+        let lhMonth = lhs.month
+        let rhMonth = rhs.month
+
+        if let lhMonth, let rhMonth {
+          if lhMonth == rhMonth {
+            // Day
+            let lhDay = lhs.day
+            let rhDay = rhs.day
+
+            if let lhDay, let rhDay {
+              return lhDay < rhDay
+            }
+
+            if lhDay != nil || rhDay != nil {
+              // Now lhs or rhs is nil. If lhs is nil it sorts before the non nil rhs
+              return lhDay == nil
+            }
+          }
+          return lhMonth < rhMonth
+        }
+
+        if lhMonth != nil || rhMonth != nil {
+          // Now lhs or rhs is nil. If lhs is nil it sorts before the non nil rhs
+          return lhMonth == nil
+        }
       }
-      return true
+      return lhYear < rhYear
     }
+
+    if lhYear != nil || rhYear != nil {
+      // Now lhs or rhs is nil. If lhs is nil it sorts before the non nil rhs
+      return lhYear == nil
+    }
+
     return false
   }
 
