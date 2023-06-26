@@ -29,54 +29,37 @@ extension PartialDate {
   }
 }
 
+internal func compareOptional<T: Comparable>(lhs: T?, rhs: T?, equalAction: (() -> Bool)? = nil)
+  -> Bool
+{
+  if let lhs, let rhs {
+    if lhs == rhs {
+      if let equalAction {
+        return equalAction()
+      }
+    }
+    return lhs < rhs
+  }
+
+  if lhs != nil || rhs != nil {
+    // Now lhs or rhs is nil. If lhs is nil it sorts before the non nil rhs
+    return lhs == nil
+  }
+
+  return false
+}
+
 extension PartialDate: Comparable {
   public static func < (lhs: PartialDate, rhs: PartialDate) -> Bool {
     if lhs.isUnknown, rhs.isUnknown {
       return false
     }
 
-    // Year
-    let lhYear = lhs.year
-    let rhYear = rhs.year
-
-    if let lhYear, let rhYear {
-      if lhYear == rhYear {
-        // Month
-        let lhMonth = lhs.month
-        let rhMonth = rhs.month
-
-        if let lhMonth, let rhMonth {
-          if lhMonth == rhMonth {
-            // Day
-            let lhDay = lhs.day
-            let rhDay = rhs.day
-
-            if let lhDay, let rhDay {
-              return lhDay < rhDay
-            }
-
-            if lhDay != nil || rhDay != nil {
-              // Now lhs or rhs is nil. If lhs is nil it sorts before the non nil rhs
-              return lhDay == nil
-            }
-          }
-          return lhMonth < rhMonth
-        }
-
-        if lhMonth != nil || rhMonth != nil {
-          // Now lhs or rhs is nil. If lhs is nil it sorts before the non nil rhs
-          return lhMonth == nil
-        }
+    return compareOptional(lhs: lhs.year, rhs: rhs.year) {
+      compareOptional(lhs: lhs.month, rhs: rhs.month) {
+        compareOptional(lhs: lhs.day, rhs: rhs.day)
       }
-      return lhYear < rhYear
     }
-
-    if lhYear != nil || rhYear != nil {
-      // Now lhs or rhs is nil. If lhs is nil it sorts before the non nil rhs
-      return lhYear == nil
-    }
-
-    return false
   }
 
   public static func compareWithUnknownsMuted(lhs: PartialDate, rhs: PartialDate) -> Bool {
