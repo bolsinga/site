@@ -32,6 +32,5 @@ struct StateChart: View {
         }
       }
     }
-    .frame(minHeight: 200)
   }
 }

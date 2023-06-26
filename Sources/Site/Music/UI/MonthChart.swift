@@ -57,6 +57,5 @@ struct MonthChart: View {
         }
       }
     }
-    .frame(minHeight: 200)
   }
 }
