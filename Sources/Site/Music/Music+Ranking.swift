@@ -57,7 +57,7 @@ extension Music {
   }
 
   internal func computeRankings<T, V, R>(
-    items: [(T, V)], rankBuilder: (Int, V) -> R, rankSorted: (V, V) -> Bool
+    items: [(T, V)], rankBuilder: (Rank, V) -> R, rankSorted: (V, V) -> Bool
   ) -> [T: R]
   where V: Hashable, V: Comparable {
     let itemRanks: [V: [T]] = Dictionary(grouping: items) { $0.1 }
@@ -75,7 +75,7 @@ extension Music {
     let itemRankMap: [T: R] = itemsOrdered.reduce(into: [:]) {
       dictionary, itemRankings in
       itemRankings.0.forEach { item in
-        dictionary[item] = rankBuilder(rank, itemRankings.1)
+        dictionary[item] = rankBuilder(.rank(rank), itemRankings.1)
       }
       rank += 1
     }

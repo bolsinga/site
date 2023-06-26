@@ -30,13 +30,11 @@ extension Ranking.FormatStyle: Foundation.FormatStyle {
   func format(_ value: Ranking) -> String {
     switch style {
     case .rankOnly:
-      return String(
-        localized: "#\(value.rank.formatted(.number))", bundle: .module,
-        comment: "Ranking.FormatStyle.rankOnly")
+      return value.rank.formatted(.hash)
     case .rankAndCount:
       return String(
         localized:
-          "#\(value.rank.formatted(.number)) Count: \(value.value.formatted(.number))",
+          "\(value.rank.formatted(.hash)) Count: \(value.value.formatted(.number))",
         bundle: .module, comment: "Ranking.FormatStyle.rankAndCount")
     }
   }

@@ -1,9 +1,8 @@
-/* Ranking.FormatStyle.rankOnly
-Rank.FormatStyle.hash */
+/* Rank.FormatStyle.hash */
 "#%@" = "#%@";
 
 /* Ranking.FormatStyle.rankAndCount */
-"#%@ Count: %@" = "#%@ Count: %@";
+"%@ Count: %@" = "%@ Count: %@";
 
 /* Rank.FormatStyle.dotted */
 "%@." = "%@.";
