@@ -37,9 +37,13 @@ extension Rank.FormatStyle: Foundation.FormatStyle {
     case .rank(let rank):
       switch style {
       case .hash:
-        return "#\(rank.formatted(.number.grouping(.never)))"
+        return String(
+          localized: "#\(rank.formatted(.number.grouping(.never)))", bundle: .module,
+          comment: "Rank.FormatStyle.hash")
       case .dotted:
-        return "\(rank.formatted(.number.grouping(.never)))."
+        return String(
+          localized: "\(rank.formatted(.number.grouping(.never))).", bundle: .module,
+          comment: "Rank.FormatStyle.dotted")
       }
     case .unknown:
       return unknownLocalized
