@@ -1,8 +1,12 @@
-/* Ranking.FormatStyle.rankOnly */
+/* Ranking.FormatStyle.rankOnly
+Rank.FormatStyle.hash */
 "#%@" = "#%@";
 
 /* Ranking.FormatStyle.rankAndCount */
 "#%@ Count: %@" = "#%@ Count: %@";
+
+/* Rank.FormatStyle.dotted */
+"%@." = "%@.";
 
 /* Decade.decade format string where the format is a two digit year. */
 "%@’s" = "%@’s";
