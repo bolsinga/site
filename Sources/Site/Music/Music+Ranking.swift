@@ -128,11 +128,9 @@ extension Music {
       }
     }
 
-    let unknownFirstSet = FirstSet(rank: .unknown, date: PartialDate())
-
     let onlyUnknownDateArtists = allUnknownDateArtists.subtracting(artistsTracked)
     onlyUnknownDateArtists.forEach { artistID in
-      firstSetsOrdered.append((artistID, unknownFirstSet))
+      firstSetsOrdered.append((artistID, FirstSet.empty))
     }
 
     return firstSetsOrdered.reduce(into: [:]) { $0[$1.0] = $1.1 }
@@ -155,11 +153,9 @@ extension Music {
       }
     }
 
-    let unknownFirstSet = FirstSet(rank: .unknown, date: PartialDate())
-
     let onlyUnknownDateVenues = allUnknownDateVenues.subtracting(venuesTracked)
     onlyUnknownDateVenues.forEach { venueID in
-      firstSetsOrdered.append((venueID, unknownFirstSet))
+      firstSetsOrdered.append((venueID, FirstSet.empty))
     }
 
     return firstSetsOrdered.reduce(into: [:]) { $0[$1.0] = $1.1 }
