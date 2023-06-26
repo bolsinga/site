@@ -41,7 +41,7 @@ struct WeekdayChart: View {
       $0[weekday] = (pair.0, pair.1 + 1)
     }
     let sortedWeekdayCounts = weekdayCountMap.sorted { $0.key < $1.key }
-    let zeroBasedFirstWeekday = firstWeekday - 1
+    let zeroBasedFirstWeekday = min(0, firstWeekday - 1)
     let weekdayCountsFirstDayOrdered =
       Array(sortedWeekdayCounts[zeroBasedFirstWeekday...])
       + Array(sortedWeekdayCounts[0..<zeroBasedFirstWeekday])
