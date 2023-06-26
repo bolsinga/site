@@ -20,13 +20,6 @@ extension PartialDate {
     }
     return false
   }
-
-  public var normalizedYear: Int {
-    if let year {
-      return year
-    }
-    return 0
-  }
 }
 
 extension PartialDate: Comparable {
