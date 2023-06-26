@@ -25,17 +25,7 @@ extension Location: Comparable {
   public static func < (lhs: Location, rhs: Location) -> Bool {
     if lhs.state == rhs.state {
       if lhs.city == rhs.city {
-        let lhStreet = lhs.street
-        let rhStreet = rhs.street
-
-        if let lhStreet, let rhStreet {
-          return lhStreet < rhStreet
-        }
-
-        if lhStreet != nil || rhStreet != nil {
-          // Now lhs or rhs is nil. If lhs is nil it sorts before the non nil rhs
-          return lhStreet == nil
-        }
+        return compareOptional(lhs: lhs.street, rhs: rhs.street)
       }
       return lhs.city < rhs.city
     }
