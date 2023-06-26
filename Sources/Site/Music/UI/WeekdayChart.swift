@@ -62,6 +62,5 @@ struct WeekdayChart: View {
         }
       }
     }
-    .frame(minHeight: 200)
   }
 }
