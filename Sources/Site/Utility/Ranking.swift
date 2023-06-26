@@ -8,11 +8,11 @@
 import Foundation
 
 struct Ranking: Comparable, Hashable {
-  let rank: Int  // 1...n
+  let rank: Rank
   let value: Int
 
   static var empty: Ranking {
-    Ranking(rank: 0, value: 0)
+    Ranking(rank: .unknown, value: 0)
   }
 
   static func < (lhs: Ranking, rhs: Ranking) -> Bool {
