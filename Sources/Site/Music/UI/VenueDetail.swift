@@ -24,6 +24,14 @@ struct VenueDetail: View {
     music.showsForVenue(venue)
   }
 
+  @ViewBuilder private var firstSetElement: some View {
+    HStack {
+      Text("First Set", bundle: .module, comment: "Venue First Set Caption")
+      Spacer()
+      Text(vault.lookup.firstSet(venue: venue).rank.formatted())
+    }
+  }
+
   @ViewBuilder private var locationElement: some View {
     Section(
       header: Text(
@@ -38,8 +46,9 @@ struct VenueDetail: View {
 
   @ViewBuilder private var statsElement: some View {
     let shows = shows
-    if shows.count > 1 {
-      Section(header: Text(ArchiveCategory.stats.localizedString)) {
+    Section(header: Text(ArchiveCategory.stats.localizedString)) {
+      firstSetElement
+      if shows.count > 1 {
         StatsGrouping(
           shows: shows, yearsSpanRanking: vault.lookup.spanRank(venue: venue),
           computeShowsRank: { vault.lookup.venueRank(venue: venue) },

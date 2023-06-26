@@ -37,7 +37,8 @@ Label in the chart for the Count in StateChart. */
 /* String for when a Decade is unknown. */
 "Decade Unknown" = "Decade Unknown";
 
-/* First Set Caption */
+/* First Set Caption
+Venue First Set Caption */
 "First Set" = "First Set";
 
 /* Title of the Lineup for ShowDetail. */
