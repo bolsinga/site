@@ -108,7 +108,8 @@ ArtistSort.alphabetical */
 /* VenueSort.venueArtistRank */
 "Sort By Artist Count" = "Sort By Artist Count";
 
-/* ArtistSort.firstSeen */
+/* VenueSort.firstSeen
+ArtistSort.firstSeen */
 "Sort By First Show" = "Sort By First Show";
 
 /* VenueSort.showCount
