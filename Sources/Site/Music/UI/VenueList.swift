@@ -17,7 +17,7 @@ struct VenueList: View {
 
   private func rank(for venue: Venue) -> Ranking {
     switch sort {
-    case .alphabetical:
+    case .alphabetical, .firstSeen:
       return Ranking.empty
     case .showCount:
       return vault.lookup.venueRank(venue: venue)
@@ -36,7 +36,7 @@ struct VenueList: View {
 
   @ViewBuilder private func sectionHeader(for ranking: Ranking) -> some View {
     switch sort {
-    case .alphabetical:
+    case .alphabetical, .firstSeen:
       EmptyView()
     case .showCount:
       ranking.showsCountView
@@ -56,6 +56,29 @@ struct VenueList: View {
         sectionHeaderView: { $0.representingView },
         searchString: $searchString
       )
+    } else if case .firstSeen = sort {
+      RankingList(
+        items: venues,
+        rankingMapBuilder: { venues in
+          venues.reduce(into: [PartialDate: [(Venue, FirstSet)]]()) {
+            let firstSet = vault.lookup.firstSet(venue: $1)
+            var arr = ($0[firstSet.date] ?? [])
+            arr.append(($1, firstSet))
+            $0[firstSet.date] = arr
+          }.reduce(into: [PartialDate: [Venue]]()) {
+            $0[$1.key] = $1.value.sorted(by: { lhs, rhs in
+              lhs.1.rank < rhs.1.rank
+            }).map { $0.0 }
+          }
+        },
+        rankSorted: PartialDate.compareWithUnknownsMuted(lhs:rhs:),
+        itemContentView: { venue in
+          Text(vault.lookup.firstSet(venue: venue).rank.formatted(.hash))
+        },
+        sectionHeaderView: {
+          Text($0.formatted(.compact))
+        },
+        searchString: $searchString)
     } else {
       RankingList(
         items: venues,
