@@ -12,6 +12,7 @@ enum ArtistSort: Int, Sorting {
   case showCount
   case showYearRange
   case venueRank
+  case firstSeen
 
   var localizedString: String {
     switch self {
@@ -31,6 +32,10 @@ enum ArtistSort: Int, Sorting {
       return String(
         localized: "Sort By Venue Count", bundle: .module,
         comment: "ArtistSort.artistVenueRank")
+    case .firstSeen:
+      return String(
+        localized: "Sort By First Show", bundle: .module,
+        comment: "ArtistSort.firstSeen")
     }
   }
 }
