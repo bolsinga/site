@@ -103,10 +103,10 @@ struct ArtistList: View {
   var body: some View {
     listElement
       .navigationTitle(Text("Artists", bundle: .module, comment: "Title for the Artist Detail"))
-      .libraryComparableSearchable(
-        searchPrompt: String(
-          localized: "Artist Names", bundle: .module, comment: "ArtistList searchPrompt"),
-        searchString: $searchString
+      .searchable(
+        text: $searchString,
+        prompt: String(
+          localized: "Artist Names", bundle: .module, comment: "ArtistList searchPrompt")
       )
       .sortable(algorithm: $sort)
   }

@@ -103,10 +103,9 @@ struct VenueList: View {
   var body: some View {
     listElement
       .navigationTitle(Text("Venues", bundle: .module, comment: "Title for the Venue Detail"))
-      .libraryComparableSearchable(
-        searchPrompt: String(
-          localized: "Venue Names", bundle: .module, comment: "VenueList searchPrompt"),
-        searchString: $searchString
+      .searchable(
+        text: $searchString,
+        prompt: String(localized: "Venue Names", bundle: .module, comment: "VenueList searchPrompt")
       )
       .sortable(algorithm: $sort)
   }
