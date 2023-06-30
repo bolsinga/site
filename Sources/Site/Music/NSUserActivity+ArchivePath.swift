@@ -40,6 +40,7 @@ extension NSUserActivity {
 
     item.updateActivity(self)
 
+    self.requiredUserInfoKeys = [NSUserActivity.archiveKey]
     self.addUserInfoEntries(from: [NSUserActivity.archiveKey: identifier])
   }
 
