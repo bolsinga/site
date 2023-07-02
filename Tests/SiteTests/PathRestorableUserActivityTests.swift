@@ -28,6 +28,8 @@ final class PathRestorableUserActivityTests: XCTestCase {
     XCTAssertNil(userActivity.webpageURL)
 
     XCTAssertEqual(try userActivity.archivePath(), try ArchivePath("sh-1"))
+
+    XCTAssertNotNil(userActivity.expirationDate)
   }
 
   func testArtist() throws {

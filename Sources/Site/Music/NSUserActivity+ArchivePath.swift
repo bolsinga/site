@@ -42,6 +42,8 @@ extension NSUserActivity {
 
     self.requiredUserInfoKeys = [NSUserActivity.archiveKey]
     self.addUserInfoEntries(from: [NSUserActivity.archiveKey: identifier])
+
+    self.expirationDate = .now + (60 * 60 * 24)
   }
 
   func archivePath() throws -> ArchivePath {
