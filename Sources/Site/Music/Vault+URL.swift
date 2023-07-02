@@ -9,7 +9,7 @@ import Foundation
 import os
 
 extension Logger {
-  static let vault = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "vault")
+  static let vault = Logger(category: "vault")
 }
 
 extension Vault {

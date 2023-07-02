@@ -9,11 +9,8 @@ import Foundation
 import os
 
 extension Logger {
-  public static let updateActivity = Logger(
-    subsystem: Bundle.main.bundleIdentifier!, category: "updateActivity")
-
-  public static let decodeActivity = Logger(
-    subsystem: Bundle.main.bundleIdentifier!, category: "decodeActivity")
+  public static let updateActivity = Logger(category: "updateActivity")
+  public static let decodeActivity = Logger(category: "decodeActivity")
 }
 
 extension NSUserActivity {

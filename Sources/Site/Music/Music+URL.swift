@@ -9,9 +9,8 @@ import Foundation
 import os
 
 extension Logger {
-  static let url = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "url")
-
-  static let music = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "music")
+  static let url = Logger(category: "url")
+  static let music = Logger(category: "music")
 }
 
 extension Music {

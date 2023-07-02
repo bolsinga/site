@@ -10,9 +10,8 @@ import Foundation
 import os
 
 extension Logger {
-  static let programmatic = Logger(
-    subsystem: Bundle.main.bundleIdentifier!, category: "programmatic")
-  static let pending = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "pending")
+  static let programmatic = Logger(category: "programmatic")
+  static let pending = Logger(category: "pending")
 }
 
 final class ArchiveNavigation: ObservableObject {
