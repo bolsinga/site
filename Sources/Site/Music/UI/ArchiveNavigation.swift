@@ -10,8 +10,7 @@ import Foundation
 import os
 
 extension Logger {
-  static let programmatic = Logger(category: "programmatic")
-  static let pending = Logger(category: "pending")
+  static let archive = Logger(category: "archive")
 }
 
 final class ArchiveNavigation: ObservableObject {
@@ -26,8 +25,9 @@ final class ArchiveNavigation: ObservableObject {
         // Hold onto the loading navigationPath for after the selectedCategory changes.
         var pending = [ArchivePath]()
         pending.jsonData = pathData
-        Logger.pending.log(
-          "saving: \(pending.map { $0.formatted() }.joined(separator: ":"), privacy: .public)")
+        Logger.archive.log(
+          "pending save: \(pending.map { $0.formatted() }.joined(separator: ":"), privacy: .public)"
+        )
         pendingNavigationPath = pending
       }
 
@@ -43,7 +43,7 @@ final class ArchiveNavigation: ObservableObject {
   func restorePendingData() {
     // Change the navigationPath after selectedCategory changes.
     if let pendingNavigationPath {
-      Logger.pending.log("restore")
+      Logger.archive.log("pending restore")
       navigationPath = pendingNavigationPath
       self.pendingNavigationPath = nil
     }
@@ -51,15 +51,15 @@ final class ArchiveNavigation: ObservableObject {
 
   func navigate(to path: ArchivePath) {
     guard path != navigationPath.last else {
-      Logger.programmatic.log("already presented: \(path.formatted(), privacy: .public)")
+      Logger.archive.log("already presented: \(path.formatted(), privacy: .public)")
       return
     }
-    Logger.programmatic.log("nav to path: \(path.formatted(), privacy: .public)")
+    Logger.archive.log("nav to path: \(path.formatted(), privacy: .public)")
     navigationPath.append(path)
   }
 
   func navigate(to category: ArchiveCategory?) {
-    Logger.programmatic.log("nav to category: \(category?.rawValue ?? "nil", privacy: .public)")
+    Logger.archive.log("nav to category: \(category?.rawValue ?? "nil", privacy: .public)")
     selectedCategory = category
   }
 }
