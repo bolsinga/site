@@ -9,8 +9,8 @@ import SwiftUI
 import os
 
 extension Logger {
-  static let today = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "today")
-  static let link = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "link")
+  static let today = Logger(category: "today")
+  static let link = Logger(category: "link")
 }
 
 struct ArchiveCategorySplit: View {

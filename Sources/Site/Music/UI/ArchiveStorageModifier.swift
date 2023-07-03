@@ -9,7 +9,7 @@ import SwiftUI
 import os
 
 extension Logger {
-  static let archive = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "archive")
+  static let archive = Logger(category: "archive")
 }
 
 struct ArchiveStorageModifier: ViewModifier {

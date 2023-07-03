@@ -9,7 +9,7 @@ import SwiftUI
 import os
 
 extension Logger {
-  static let refresh = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "refresh")
+  static let refresh = Logger(category: "refresh")
 }
 
 public struct VaultView: View {

@@ -9,7 +9,7 @@ import Foundation
 import os
 
 extension Logger {
-  static let json = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "json")
+  static let json = Logger(category: "json")
 }
 
 extension Data {
