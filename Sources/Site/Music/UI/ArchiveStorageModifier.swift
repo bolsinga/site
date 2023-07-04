@@ -9,7 +9,7 @@ import SwiftUI
 import os
 
 extension Logger {
-  static let archive = Logger(category: "archive")
+  static let storage = Logger(category: "storage")
 }
 
 struct ArchiveStorageModifier: ViewModifier {
@@ -21,9 +21,9 @@ struct ArchiveStorageModifier: ViewModifier {
   func body(content: Content) -> some View {
     content
       .task {
-        Logger.archive.log("start restore")
+        Logger.storage.log("start restore")
         defer {
-          Logger.archive.log("end restore")
+          Logger.storage.log("end restore")
         }
         let archiveCategory =
           selectedCategoryStorage != nil ? ArchiveCategory(rawValue: selectedCategoryStorage!) : nil
@@ -31,13 +31,13 @@ struct ArchiveStorageModifier: ViewModifier {
           selectedCategoryStorage: archiveCategory, pathData: navigationPathData)
       }
       .onChange(of: archiveNavigation.selectedCategory) { newValue in
-        Logger.archive.log("category: \(newValue?.rawValue ?? "nil", privacy: .public)")
+        Logger.storage.log("category: \(newValue?.rawValue ?? "nil", privacy: .public)")
         selectedCategoryStorage = newValue?.rawValue ?? nil
 
         archiveNavigation.restorePendingData()
       }
       .onChange(of: archiveNavigation.navigationPath) { newPath in
-        Logger.archive.log(
+        Logger.storage.log(
           "path: \(newPath.map { $0.formatted() }.joined(separator: ":"), privacy: .public)")
         navigationPathData = newPath.jsonData
       }
