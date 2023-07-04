@@ -13,7 +13,7 @@ extension ArchivePath {
 }
 
 protocol PathRestorableUserActivity: PathRestorable {
-  func updateActivity(_ userActivity: NSUserActivity)
+  func updateActivity(_ userActivity: NSUserActivity, vault: Vault)
 }
 
 struct PathRestorableUserActivityModifier<T: PathRestorableUserActivity>: ViewModifier {
@@ -24,7 +24,7 @@ struct PathRestorableUserActivityModifier<T: PathRestorableUserActivity>: ViewMo
   func body(content: Content) -> some View {
     content
       .userActivity(ArchivePath.activityType) { userActivity in
-        userActivity.update(item, url: vault.createURL(for: item.archivePath))
+        userActivity.update(item, vault: vault)
       }
   }
 }

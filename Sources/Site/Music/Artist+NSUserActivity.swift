@@ -9,7 +9,7 @@ import CoreSpotlight
 import Foundation
 
 extension Artist: PathRestorableUserActivity {
-  func updateActivity(_ userActivity: NSUserActivity) {
+  func updateActivity(_ userActivity: NSUserActivity, vault: Vault) {
     userActivity.isEligibleForHandoff = true
 
     userActivity.isEligibleForSearch = true
