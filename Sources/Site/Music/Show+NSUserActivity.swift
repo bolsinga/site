@@ -5,10 +5,19 @@
 //  Created by Greg Bolsinga on 6/21/23.
 //
 
+import CoreSpotlight
 import Foundation
 
 extension Show: PathRestorableUserActivity {
   func updateActivity(_ userActivity: NSUserActivity, vault: Vault) {
     userActivity.isEligibleForHandoff = true
+
+    userActivity.isEligibleForSearch = true
+    userActivity.title = self.formatted(.headlinerAndVenue, lookup: vault.lookup)
+    let attributes = CSSearchableItemAttributeSet(contentType: .content)
+    attributes.contentDescription = String(
+      localized: "See More About This Show", bundle: .module,
+      comment: "Spotlight Description for Show")
+    userActivity.contentAttributeSet = attributes
   }
 }

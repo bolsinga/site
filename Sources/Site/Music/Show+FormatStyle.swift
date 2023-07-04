@@ -73,7 +73,7 @@ extension Show.FormatStyle: Foundation.FormatStyle {
           localized: "\(artists) @ \(venue.name)", bundle: .module,
           comment: "Show.FormatStyle.artistsAndVenue artists - venue")
       case .headlinerAndVenue:
-        let headliner = try lookup.artistsForShow(value)[0].name
+        let headliner = try lookup.artistsForShow(value).first?.name ?? ""
         let venue = try lookup.venueForShow(value)
         return String(
           localized: "\(headliner), \(venue.name)", bundle: .module,

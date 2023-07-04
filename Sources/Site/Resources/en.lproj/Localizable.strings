@@ -86,6 +86,9 @@ Venue First Set Caption */
 /* Title of the Related Venues Section for VenueDetail. */
 "Related Venues" = "Related Venues";
 
+/* Spotlight Description for Show */
+"See More About This Show" = "See More About This Show";
+
 /* Spotlight Description for Venue */
 "See Shows At This Venue" = "See Shows At This Venue";
 
