@@ -60,7 +60,7 @@ struct Program: AsyncParsableCommand {
       vault.comparator.showCompare(lhs: $0, rhs: $1, lookup: vault.lookup)
     }
     for show in sortedShows.reversed() {
-      print(vault.description(for: show))
+      print(show.formatted(.full, lookup: vault.lookup))
     }
 
     let sortedAlbums = music.albums.sorted {

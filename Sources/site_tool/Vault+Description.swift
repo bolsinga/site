@@ -8,31 +8,6 @@
 import Site
 
 extension Vault {
-  public func description(for show: Show) -> String {
-    var parts: [String] = []
-    parts.append(show.id)
-    parts.append(show.date.formatted(.compact))
-
-    var artistList = "[Unknown Artists]"
-    do {
-      artistList = try self.lookup.artistsForShow(show).map { $0.name }.joined(separator: ", ")
-    } catch {
-    }
-    parts.append(artistList)
-
-    var venueName = "[Unknown Venue]"
-    do {
-      venueName = try self.lookup.venueForShow(show).name
-    } catch {}
-    parts.append(venueName)
-
-    if let comment = show.comment {
-      parts.append("\(comment.prefix(10))\(comment.count > 10 ?"…" :"")")
-    }
-
-    return parts.joined(separator: ": ")
-  }
-
   public func description(for album: Album) -> String {
     var parts: [String] = []
     parts.append(album.id)
@@ -122,7 +97,7 @@ extension Vault {
 
     var showParts: [String] = []
     for show in shows {
-      showParts.append(description(for: show))
+      showParts.append(show.formatted(.full, lookup: lookup))
     }
 
     parts.append("(\(showParts.joined(separator: "; ")))")

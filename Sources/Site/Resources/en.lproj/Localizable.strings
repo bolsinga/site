@@ -1,8 +1,17 @@
 /* Rank.FormatStyle.hash */
 "#%@" = "#%@";
 
+/* Show.FormatStyle.artistsAndVenue artists - venue */
+"%@ @ %@" = "%@ @ %@";
+
+/* Show.FormatStyle.full artists - venue - date */
+"%@ @ %@ : %@" = "%@ @ %@ : %@";
+
 /* Ranking.FormatStyle.rankAndCount */
 "%@ Count: %@" = "%@ Count: %@";
+
+/* Show.FormatStyle.headlinerAndVenue artist headliner - venue */
+"%@, %@" = "%@, %@";
 
 /* Rank.FormatStyle.dotted */
 "%@." = "%@.";
