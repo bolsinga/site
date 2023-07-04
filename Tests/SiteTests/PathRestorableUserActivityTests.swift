@@ -23,8 +23,8 @@ final class PathRestorableUserActivityTests: XCTestCase {
 
     XCTAssertEqual(userActivity.targetContentIdentifier, "sh-1")
 
-    XCTAssertFalse(userActivity.isEligibleForSearch)
-    XCTAssertNil(userActivity.contentAttributeSet)
+    XCTAssertTrue(userActivity.isEligibleForSearch)
+    XCTAssertNotNil(userActivity.contentAttributeSet)
 
     XCTAssertTrue(userActivity.isEligibleForPublicIndexing)
     XCTAssertNotNil(userActivity.webpageURL)
