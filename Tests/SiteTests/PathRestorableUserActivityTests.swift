@@ -10,12 +10,14 @@ import XCTest
 @testable import Site
 
 final class PathRestorableUserActivityTests: XCTestCase {
+  let vault = Vault.previewData
+
   func testShow() throws {
     let userActivity = NSUserActivity(activityType: "test-type")
 
     let item = Show(artists: [], date: PartialDate(), id: "1", venue: "1")
 
-    userActivity.update(item, url: nil)
+    userActivity.update(item, vault: vault)
 
     XCTAssertTrue(userActivity.isEligibleForHandoff)
 
@@ -24,8 +26,8 @@ final class PathRestorableUserActivityTests: XCTestCase {
     XCTAssertFalse(userActivity.isEligibleForSearch)
     XCTAssertNil(userActivity.contentAttributeSet)
 
-    XCTAssertFalse(userActivity.isEligibleForPublicIndexing)
-    XCTAssertNil(userActivity.webpageURL)
+    XCTAssertTrue(userActivity.isEligibleForPublicIndexing)
+    XCTAssertNotNil(userActivity.webpageURL)
 
     XCTAssertEqual(try userActivity.archivePath(), try ArchivePath("sh-1"))
 
@@ -37,7 +39,7 @@ final class PathRestorableUserActivityTests: XCTestCase {
 
     let item = Artist(id: "1", name: "name")
 
-    userActivity.update(item, url: nil)
+    userActivity.update(item, vault: vault)
 
     XCTAssertTrue(userActivity.isEligibleForHandoff)
 
@@ -46,8 +48,8 @@ final class PathRestorableUserActivityTests: XCTestCase {
     XCTAssertTrue(userActivity.isEligibleForSearch)
     XCTAssertNotNil(userActivity.contentAttributeSet)
 
-    XCTAssertFalse(userActivity.isEligibleForPublicIndexing)
-    XCTAssertNil(userActivity.webpageURL)
+    XCTAssertTrue(userActivity.isEligibleForPublicIndexing)
+    XCTAssertNotNil(userActivity.webpageURL)
 
     XCTAssertEqual(try userActivity.archivePath(), try ArchivePath("ar-1"))
   }
@@ -57,7 +59,7 @@ final class PathRestorableUserActivityTests: XCTestCase {
 
     let item = Venue(id: "1", location: Location(city: "city", state: "st"), name: "name")
 
-    userActivity.update(item, url: nil)
+    userActivity.update(item, vault: vault)
 
     XCTAssertTrue(userActivity.isEligibleForHandoff)
 
@@ -66,8 +68,8 @@ final class PathRestorableUserActivityTests: XCTestCase {
     XCTAssertTrue(userActivity.isEligibleForSearch)
     XCTAssertNotNil(userActivity.contentAttributeSet)
 
-    XCTAssertFalse(userActivity.isEligibleForPublicIndexing)
-    XCTAssertNil(userActivity.webpageURL)
+    XCTAssertTrue(userActivity.isEligibleForPublicIndexing)
+    XCTAssertNotNil(userActivity.webpageURL)
 
     XCTAssertEqual(try userActivity.archivePath(), try ArchivePath("v-1"))
   }
@@ -77,7 +79,7 @@ final class PathRestorableUserActivityTests: XCTestCase {
 
     let item = Annum.year(1990)
 
-    userActivity.update(item, url: nil)
+    userActivity.update(item, vault: vault)
 
     XCTAssertTrue(userActivity.isEligibleForHandoff)
 
@@ -86,8 +88,8 @@ final class PathRestorableUserActivityTests: XCTestCase {
     XCTAssertTrue(userActivity.isEligibleForSearch)
     XCTAssertNotNil(userActivity.contentAttributeSet)
 
-    XCTAssertFalse(userActivity.isEligibleForPublicIndexing)
-    XCTAssertNil(userActivity.webpageURL)
+    XCTAssertTrue(userActivity.isEligibleForPublicIndexing)
+    XCTAssertNotNil(userActivity.webpageURL)
 
     XCTAssertEqual(try userActivity.archivePath(), try ArchivePath("y-1990"))
   }
@@ -96,9 +98,9 @@ final class PathRestorableUserActivityTests: XCTestCase {
     let userActivity = NSUserActivity(activityType: "test-type")
 
     let item = Show(artists: [], date: PartialDate(), id: "1", venue: "1")
-    let url = URL(string: "https://www.example.com")!
+    let url = URL(string: "https://www.example.com/dates/1.html")!
 
-    userActivity.update(item, url: url)
+    userActivity.update(item, vault: vault)
 
     XCTAssertTrue(userActivity.isEligibleForPublicIndexing)
     XCTAssertEqual(userActivity.webpageURL, url)

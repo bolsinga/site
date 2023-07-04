@@ -8,7 +8,7 @@
 import Foundation
 
 extension Show: PathRestorableUserActivity {
-  func updateActivity(_ userActivity: NSUserActivity) {
+  func updateActivity(_ userActivity: NSUserActivity, vault: Vault) {
     userActivity.isEligibleForHandoff = true
   }
 }

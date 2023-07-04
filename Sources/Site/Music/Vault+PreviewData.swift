@@ -39,6 +39,6 @@ extension Vault {
       timestamp: Date.now,
       venues: [venue])
 
-    return Vault(music: music)
+    return Vault(music: music, url: URL(string: "https://www.example.com"))
   }
 }
