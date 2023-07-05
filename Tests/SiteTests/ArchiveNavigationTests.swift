@@ -13,19 +13,24 @@ final class ArchiveNavigationTests: XCTestCase {
   func testNavigateToCategory() throws {
     let ar = ArchiveNavigation()
     XCTAssertNil(ar.selectedCategory)
+    XCTAssertTrue(ar.navigationPath.isEmpty)
 
     ar.navigate(to: .today)
     XCTAssertEqual(ar.selectedCategory, .today)
+    XCTAssertTrue(ar.navigationPath.isEmpty)
 
     ar.navigate(to: nil)
     XCTAssertNil(ar.selectedCategory)
+    XCTAssertTrue(ar.navigationPath.isEmpty)
   }
 
   func testNavigateToArchivePath() throws {
     let ar = ArchiveNavigation()
+    XCTAssertNil(ar.selectedCategory)
     XCTAssertTrue(ar.navigationPath.isEmpty)
 
     ar.navigate(to: ArchivePath.artist("id"))
+    XCTAssertNil(ar.selectedCategory)
     XCTAssertEqual(ar.navigationPath.count, 1)
 
     XCTAssertNotNil(ar.navigationPath.first)
