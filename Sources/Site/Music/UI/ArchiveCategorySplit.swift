@@ -87,5 +87,11 @@ struct ArchiveCategorySplit: View {
         Logger.link.log("error: \(error, privacy: .public)")
       }
     }
+    .refreshable {
+      self.todayShows = vault.music.showsOnDate(Date.now).sorted {
+        vault.comparator.showCompare(lhs: $0, rhs: $1, lookup: vault.lookup)
+      }
+      Logger.today.log("refreshed count: \(todayShows.count, privacy: .public)")
+    }
   }
 }
