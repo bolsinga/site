@@ -9,7 +9,7 @@ import SwiftUI
 import os
 
 extension Logger {
-  static let refresh = Logger(category: "refresh")
+  static let vaultLoad = Logger(category: "vaultLoad")
 }
 
 public struct VaultView: View {
@@ -22,15 +22,15 @@ public struct VaultView: View {
     self.url = url
   }
 
-  private func refresh() async {
-    Logger.refresh.log("start")
+  private func loadVault() async {
+    Logger.vaultLoad.log("start")
     defer {
-      Logger.refresh.log("end")
+      Logger.vaultLoad.log("end")
     }
     do {
       vault = try await Vault.load(url: url)
     } catch {
-      Logger.refresh.log("error: \(error.localizedDescription, privacy: .public)")
+      Logger.vaultLoad.log("error: \(error.localizedDescription, privacy: .public)")
       self.error = error
     }
   }
@@ -40,7 +40,8 @@ public struct VaultView: View {
       if let vault {
         ArchiveCategorySplit(vault: vault)
           .refreshable {
-            await refresh()
+            Logger.vaultLoad.log("refresh")
+            await loadVault()
           }
       } else if let error {
         Text(error.localizedDescription)
@@ -48,7 +49,8 @@ public struct VaultView: View {
         ProgressView()
       }
     }.task {
-      await refresh()
+      Logger.vaultLoad.log("task")
+      await loadVault()
     }
   }
 }
