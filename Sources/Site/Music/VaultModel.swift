@@ -13,7 +13,7 @@ extension Logger {
   static let vaultModel = Logger(category: "vaultModel")
 }
 
-public final class VaultModel: ObservableObject {
+@MainActor public final class VaultModel: ObservableObject {
   let url: URL
 
   @Published var vault: Vault?
