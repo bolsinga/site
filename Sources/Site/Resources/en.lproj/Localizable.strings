@@ -80,6 +80,9 @@ Venue First Set Caption */
 /* String for when a Rank is unknown. */
 "Rank Unknown" = "Rank Unknown";
 
+/* Menu Action to call refreshable action. */
+"Refresh" = "Refresh";
+
 /* Title of the Related Artists Section for ArtistDetail. */
 "Related Artists" = "Related Artists";
 
