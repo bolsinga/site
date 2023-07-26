@@ -20,7 +20,7 @@ struct Program: AsyncParsableCommand {
 
     let contents = """
       {
-        "appLinks" : {
+        "applinks" : {
           "details" : [
             {
               "appIDs" : [ "\(applicationIdentifier).\(bundleIdentifier)" ],
