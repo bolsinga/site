@@ -77,6 +77,7 @@ struct ShowDetail: View {
     #endif
     .navigationTitle(venueName)
     .pathRestorableUserActivityModifier(show)
+    .sharePathRestorable(show)
   }
 }
 
