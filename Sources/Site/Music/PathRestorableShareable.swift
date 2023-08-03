@@ -31,3 +31,13 @@ extension Venue: PathRestorableShareable {
     Text(self.name)
   }
 }
+
+extension Annum: PathRestorableShareable {
+  func subject(vault: Vault) -> Text {
+    Text(self.formatted())
+  }
+
+  func message(vault: Vault) -> Text {
+    Text(self.formatted())
+  }
+}
