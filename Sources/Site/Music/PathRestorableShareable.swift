@@ -21,3 +21,13 @@ extension Show: PathRestorableShareable {
     Text(self.formatted(.full, lookup: vault.lookup))
   }
 }
+
+extension Venue: PathRestorableShareable {
+  func subject(vault: Vault) -> Text {
+    Text(self.name)
+  }
+
+  func message(vault: Vault) -> Text {
+    Text(self.name)
+  }
+}

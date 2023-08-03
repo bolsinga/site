@@ -94,6 +94,7 @@ struct VenueDetail: View {
     #endif
     .navigationTitle(venue.name)
     .pathRestorableUserActivityModifier(venue)
+    .sharePathRestorable(venue)
   }
 }
 
