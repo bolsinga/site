@@ -13,7 +13,7 @@ let package = Package(
     .library(name: "Site", targets: ["Site"]),
     .executable(name: "site_tool", targets: ["site_tool"]),
     .executable(name: "site_associated_domains", targets: ["site_associated_domains"]),
-    .executable(name: "stable_ids", targets: ["stable_ids"]),
+    .executable(name: "next_id", targets: ["next_id"]),
   ],
   dependencies: [
     .package(url: "https://github.com/apple/swift-argument-parser", from: "1.2.2"),
@@ -33,7 +33,7 @@ let package = Package(
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
       ]),
     .executableTarget(
-      name: "stable_ids",
+      name: "next_id",
       dependencies: [
         .byName(name: "Site"),
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
