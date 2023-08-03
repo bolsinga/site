@@ -8,8 +8,8 @@
 import Foundation
 
 extension ArchivePath {
-  static let showPrefix = "sh"
-  static let venuePrefix = "v"
+  public static let showPrefix = "sh"
+  public static let venuePrefix = "v"
   static let artistPrefix = "ar"
   static let yearPrefix = "y"
   static let separator = "-"
