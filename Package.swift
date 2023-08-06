@@ -14,7 +14,6 @@ let package = Package(
     .executable(name: "site_tool", targets: ["site_tool"]),
     .executable(name: "site_associated_domains", targets: ["site_associated_domains"]),
     .executable(name: "next_id", targets: ["next_id"]),
-    .executable(name: "artist_ids", targets: ["artist_ids"]),
   ],
   dependencies: [
     .package(url: "https://github.com/apple/swift-argument-parser", from: "1.2.2"),
@@ -35,12 +34,6 @@ let package = Package(
       ]),
     .executableTarget(
       name: "next_id",
-      dependencies: [
-        .byName(name: "Site"),
-        .product(name: "ArgumentParser", package: "swift-argument-parser"),
-      ]),
-    .executableTarget(
-      name: "artist_ids",
       dependencies: [
         .byName(name: "Site"),
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
