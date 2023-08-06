@@ -13,12 +13,12 @@ extension Logger {
 }
 
 extension Vault {
-  public static func load(url: URL) async throws -> Vault {
+  public static func load(url: URL, artistsWithShowsOnly: Bool = true) async throws -> Vault {
     Logger.vault.log("start")
     defer {
       Logger.vault.log("end")
     }
     let music = try await Music.load(url: url)
-    return await Vault.create(music: music, url: url)
+    return await Vault.create(music: music, url: url, artistsWithShowsOnly: artistsWithShowsOnly)
   }
 }

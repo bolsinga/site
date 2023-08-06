@@ -45,7 +45,7 @@ public struct Vault {
     self.baseURL = baseURL
   }
 
-  public static func create(music: Music, url: URL) async -> Vault {
+  public static func create(music: Music, url: URL, artistsWithShowsOnly: Bool) async -> Vault {
     async let asyncLookup = await Lookup.create(music: music)
     async let asyncComparator = await LibraryComparator.create(music: music)
     async let sectioner = await LibrarySectioner.create(music: music)
@@ -53,8 +53,10 @@ public struct Vault {
     let lookup = await asyncLookup
     let comparator = await asyncComparator
 
-    async let sortedArtists = lookup.artistsWithShows(music.shows).sorted(
-      by: comparator.libraryCompare(lhs:rhs:))
+    async let sortedArtists =
+      (artistsWithShowsOnly ? lookup.artistsWithShows(music.shows) : music.artists)
+      .sorted(
+        by: comparator.libraryCompare(lhs:rhs:))
     async let sortedShows = music.shows.sorted {
       comparator.showCompare(lhs: $0, rhs: $1, lookup: lookup)
     }
