@@ -41,3 +41,13 @@ extension Annum: PathRestorableShareable {
     Text(self.formatted())
   }
 }
+
+extension Artist: PathRestorableShareable {
+  func subject(vault: Vault) -> Text {
+    Text(self.name)
+  }
+
+  func message(vault: Vault) -> Text {
+    Text(self.name)
+  }
+}

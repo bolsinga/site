@@ -90,6 +90,7 @@ struct ArtistDetail: View {
     #endif
     .navigationTitle(artist.name)
     .pathRestorableUserActivityModifier(artist)
+    .sharePathRestorable(artist)
   }
 }
 
