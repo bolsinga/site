@@ -10,7 +10,7 @@ import Foundation
 extension ArchivePath {
   public static let showPrefix = "sh"
   public static let venuePrefix = "v"
-  static let artistPrefix = "ar"
+  public static let artistPrefix = "ar"
   static let yearPrefix = "y"
   static let separator = "-"
 

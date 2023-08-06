@@ -26,9 +26,11 @@ struct Program: AsyncParsableCommand {
   var rootURL: URL
 
   func run() async throws {
-    let vault = try await Vault.load(url: rootURL.appending(path: "music.json"))
+    let vault = try await Vault.load(
+      url: rootURL.appending(path: "music.json"), artistsWithShowsOnly: false)
 
     print("Next Show: \(vault.nextShowID)")
     print("Next Venue: \(vault.nextVenueID)")
+    print("Next Artist: \(vault.nextArtistID)")
   }
 }
