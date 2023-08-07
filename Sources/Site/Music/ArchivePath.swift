@@ -12,6 +12,7 @@ public enum ArchivePath: Hashable {
   case venue(Venue.ID)
   case artist(Artist.ID)
   case year(Annum)
+  case today
 }
 
 extension ArchivePath: Codable {
