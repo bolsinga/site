@@ -7,6 +7,11 @@
 
 import SwiftUI
 
+// iOS Only:
+// When sharing via Messages, link is shared followed by the message text.
+// When sharing via Mail, subject is as expected, and message is link followed by message text.
+// macos ventura: no subject nor message shown messages nor mail
+
 protocol PathRestorableShareable: PathRestorable {
   func subject(vault: Vault) -> Text
   func message(vault: Vault) -> Text
@@ -23,12 +28,16 @@ extension Show: PathRestorableShareable {
 }
 
 extension Venue: PathRestorableShareable {
+  private var descriptor: String {
+    String(localized: "Shows at \(self.name)", bundle: .module, comment: "Venue shared string")
+  }
+
   func subject(vault: Vault) -> Text {
-    Text(self.name)
+    Text(descriptor)
   }
 
   func message(vault: Vault) -> Text {
-    Text(self.name)
+    Text(descriptor)
   }
 }
 
@@ -43,11 +52,15 @@ extension Annum: PathRestorableShareable {
 }
 
 extension Artist: PathRestorableShareable {
+  private var descriptor: String {
+    String(localized: "Shows with \(self.name)", bundle: .module, comment: "Artist shared string")
+  }
+
   func subject(vault: Vault) -> Text {
-    Text(self.name)
+    Text(descriptor)
   }
 
   func message(vault: Vault) -> Text {
-    Text(self.name)
+    Text(descriptor)
   }
 }
