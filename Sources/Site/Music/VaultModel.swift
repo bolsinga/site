@@ -40,7 +40,10 @@ extension Logger {
   }
 
   private func updateTodayShows() {
-    guard let vault else { fatalError("strange days") }
+    guard let vault else {
+      Logger.vaultModel.log("No Vault to calculate todayShows.")
+      return
+    }
 
     todayShows = vault.music.showsOnDate(Date.now).sorted {
       vault.comparator.showCompare(lhs: $0, rhs: $1, lookup: vault.lookup)
