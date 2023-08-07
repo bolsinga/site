@@ -18,6 +18,7 @@ extension Logger {
 
   @Published var vault: Vault?
   @Published var error: Error?
+  @Published var todayShows: [Show] = []
 
   public init(url: URL) {
     self.url = url
@@ -30,9 +31,30 @@ extension Logger {
     }
     do {
       vault = try await Vault.load(url: url)
+      updateTodayShows()
+      await monitorDayChanges()
     } catch {
       Logger.vaultModel.log("error: \(error.localizedDescription, privacy: .public)")
       self.error = error
+    }
+  }
+
+  private func updateTodayShows() {
+    guard let vault else {
+      Logger.vaultModel.log("No Vault to calculate todayShows.")
+      return
+    }
+
+    todayShows = vault.music.showsOnDate(Date.now).sorted {
+      vault.comparator.showCompare(lhs: $0, rhs: $1, lookup: vault.lookup)
+    }
+
+    Logger.vaultModel.log("Today Count: \(self.todayShows.count, privacy: .public)")
+  }
+
+  private func monitorDayChanges() async {
+    for await _ in NotificationCenter.default.notifications(named: .NSCalendarDayChanged) {
+      updateTodayShows()
     }
   }
 }
