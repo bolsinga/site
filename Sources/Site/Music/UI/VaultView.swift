@@ -22,7 +22,7 @@ public struct VaultView: View {
   public var body: some View {
     Group {
       if let vault = model.vault {
-        ArchiveCategorySplit(vault: vault)
+        ArchiveCategorySplit(vault: vault, model: model)
           .refreshable {
             Logger.vaultLoad.log("refresh")
             await model.load()
