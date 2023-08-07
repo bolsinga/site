@@ -13,6 +13,7 @@ extension Annum {
       case year  // 1989 / "Year Unknown"
       case json  // 1989 / unknown
       case urlPath  // 1989 / other
+      case shared  // "Shows from 1989" / "Shows from Unknown Years"
     }
 
     let style: Style
@@ -33,6 +34,12 @@ extension Annum.FormatStyle: Foundation.FormatStyle {
       localized: "Year Unknown", bundle: .module, comment: "String for when a Annum is unknown.")
   }
 
+  private var sharedUnknownLocalized: String {
+    return String(
+      localized: "Shows from Unknown Years", bundle: .module,
+      comment: "String for when a sharing an unknown Annum.")
+  }
+
   static let unknown = "unknown"
   static let other = "other"
 
@@ -40,7 +47,14 @@ extension Annum.FormatStyle: Foundation.FormatStyle {
     switch value {
     case .year(let year):
       guard let date = PartialDate(year: year).date else { return unknownLocalized }
-      return Date.FormatStyle.dateTime.year(.defaultDigits).format(date)
+      if case .shared = self {
+        return String(
+          localized: "Shows from \(Date.FormatStyle.dateTime.year(.defaultDigits).format(date))",
+          bundle: .module,
+          comment: "Annum.FormatStyle.shared")
+      } else {
+        return Date.FormatStyle.dateTime.year(.defaultDigits).format(date)
+      }
     case .unknown:
       switch style {
       case .year:
@@ -49,6 +63,8 @@ extension Annum.FormatStyle: Foundation.FormatStyle {
         return Annum.FormatStyle.unknown
       case .urlPath:
         return Annum.FormatStyle.other
+      case .shared:
+        return sharedUnknownLocalized
       }
     }
   }
@@ -69,6 +85,7 @@ extension FormatStyle where Self == Annum.FormatStyle {
   public static var year: Self { .init(.year) }
   public static var json: Self { .init(.json) }
   public static var urlPath: Self { .init(.urlPath) }
+  public static var shared: Self { .init(.shared) }
 
   static func annum(style: Annum.FormatStyle.Style = .year) -> Self {
     .init(style)
