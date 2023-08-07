@@ -113,6 +113,12 @@ Title of the Shows section of VenueDetail
 ArchiveCategory Shows */
 "Shows" = "Shows";
 
+/* Annum.FormatStyle.shared */
+"Shows from %@" = "Shows from %@";
+
+/* String for when a sharing an unknown Annum. */
+"Shows from Unknown Years" = "Shows from Unknown Years";
+
 /* Shown to change the sort order of the LibraryComparableList. */
 "Sort" = "Sort";
 
