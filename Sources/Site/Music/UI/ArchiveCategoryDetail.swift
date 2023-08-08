@@ -24,15 +24,25 @@ struct ArchiveCategoryDetail: View {
       switch category {
       case .today:
         TodayList(shows: todayShows)
+          .shareCategory(category)
+          .archiveCategoryUserActivity(category)
       case .stats:
         List { StatsGrouping(shows: music.shows, displayArchiveCategoryCounts: false) }
           .navigationTitle(Text(category.localizedString))
+          .shareCategory(category)
+          .archiveCategoryUserActivity(category)
       case .shows:
         ShowYearList()
+          .shareCategory(category)
+          .archiveCategoryUserActivity(category)
       case .venues:
         VenueList(venues: music.venues, sort: $venueSort)
+          .shareCategory(category)
+          .archiveCategoryUserActivity(category)
       case .artists:
         ArtistList(artists: music.artists, sort: $artistSort)
+          .shareCategory(category)
+          .archiveCategoryUserActivity(category)
       }
     } else {
       Text("Select An Item", bundle: .module, comment: "Shown when no ArchiveCategory is selected.")

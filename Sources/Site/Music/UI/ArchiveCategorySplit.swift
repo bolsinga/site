@@ -70,13 +70,27 @@ struct ArchiveCategorySplit: View {
         Logger.decodeActivity.log("error: \(error, privacy: .public)")
       }
     }
+    .onContinueUserActivity(ArchiveCategory.activityType) { userActivity in
+      do {
+        archiveNavigation.navigate(to: try userActivity.archiveCategory())
+      } catch {
+        Logger.decodeActivity.log("error: \(error, privacy: .public)")
+      }
+    }
     .onOpenURL { url in
       Logger.link.log("url: \(url.absoluteString, privacy: .public)")
       do {
         let archivePath = try ArchivePath(url)
         archiveNavigation.navigate(to: archivePath)
       } catch {
-        Logger.link.log("error: \(error, privacy: .public)")
+        Logger.link.log("ArchivePath to URL error: \(error, privacy: .public)")
+
+        do {
+          let archiveCategory = try ArchiveCategory(url)
+          archiveNavigation.navigate(to: archiveCategory)
+        } catch {
+          Logger.link.log("ArchiveCategory to URL error: \(error, privacy: .public)")
+        }
       }
     }
   }
