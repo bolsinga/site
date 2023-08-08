@@ -49,7 +49,7 @@ final class ArchiveNavigation: ObservableObject {
     }
   }
 
-  func navigate(to path: ArchivePath) {
+  func navigate(toPath path: ArchivePath) {
     guard path != navigationPath.last else {
       Logger.archive.log("already presented: \(path.formatted(), privacy: .public)")
       return
@@ -58,7 +58,7 @@ final class ArchiveNavigation: ObservableObject {
     navigationPath.append(path)
   }
 
-  func navigate(to category: ArchiveCategory?) {
+  func navigate(toCategory category: ArchiveCategory?) {
     Logger.archive.log("nav to category: \(category?.rawValue ?? "nil", privacy: .public)")
     selectedCategory = category
   }

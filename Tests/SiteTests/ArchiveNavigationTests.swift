@@ -15,11 +15,11 @@ final class ArchiveNavigationTests: XCTestCase {
     XCTAssertNil(ar.selectedCategory)
     XCTAssertTrue(ar.navigationPath.isEmpty)
 
-    ar.navigate(to: .today)
+    ar.navigate(toCategory: .today)
     XCTAssertEqual(ar.selectedCategory, .today)
     XCTAssertTrue(ar.navigationPath.isEmpty)
 
-    ar.navigate(to: nil)
+    ar.navigate(toCategory: nil)
     XCTAssertNil(ar.selectedCategory)
     XCTAssertTrue(ar.navigationPath.isEmpty)
   }
@@ -29,7 +29,7 @@ final class ArchiveNavigationTests: XCTestCase {
     XCTAssertNil(ar.selectedCategory)
     XCTAssertTrue(ar.navigationPath.isEmpty)
 
-    ar.navigate(to: ArchivePath.artist("id"))
+    ar.navigate(toPath: ArchivePath.artist("id"))
     XCTAssertNil(ar.selectedCategory)
     XCTAssertEqual(ar.navigationPath.count, 1)
 
@@ -39,13 +39,13 @@ final class ArchiveNavigationTests: XCTestCase {
 
   func testNavigateToArchivePath_noDoubles() throws {
     let ar = ArchiveNavigation()
-    ar.navigate(to: ArchivePath.artist("id"))
+    ar.navigate(toPath: ArchivePath.artist("id"))
     XCTAssertEqual(ar.navigationPath.count, 1)
 
-    ar.navigate(to: ArchivePath.artist("id"))
+    ar.navigate(toPath: ArchivePath.artist("id"))
     XCTAssertEqual(ar.navigationPath.count, 1)
 
-    ar.navigate(to: ArchivePath.artist("id-1"))
+    ar.navigate(toPath: ArchivePath.artist("id-1"))
     XCTAssertEqual(ar.navigationPath.count, 2)
   }
 

@@ -65,7 +65,7 @@ struct ArchiveCategorySplit: View {
     .environment(\.vault, vault)
     .onContinueUserActivity(ArchivePath.activityType) { userActivity in
       do {
-        archiveNavigation.navigate(to: try userActivity.archivePath())
+        archiveNavigation.navigate(toPath: try userActivity.archivePath())
       } catch {
         Logger.decodeActivity.log("error: \(error, privacy: .public)")
       }
@@ -74,7 +74,7 @@ struct ArchiveCategorySplit: View {
       Logger.link.log("url: \(url.absoluteString, privacy: .public)")
       do {
         let archivePath = try ArchivePath(url)
-        archiveNavigation.navigate(to: archivePath)
+        archiveNavigation.navigate(toPath: archivePath)
       } catch {
         Logger.link.log("error: \(error, privacy: .public)")
       }
