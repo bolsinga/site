@@ -14,13 +14,13 @@ extension Logger {
 }
 
 extension NSUserActivity {
-  enum DecodeError: Error {
+  private enum DecodeError: Error {
     case noUserInfo
     case noArchiveKey
     case archiveKeyIncorrectType
   }
 
-  static let archiveKey = "archive"
+  internal static let archivePathKey = "archivePath"
 
   func update<T: PathRestorableUserActivity>(_ item: T, vault: Vault) {
     let archivePath = item.archivePath
@@ -37,8 +37,8 @@ extension NSUserActivity {
 
     item.updateActivity(self, vault: vault)
 
-    self.requiredUserInfoKeys = [NSUserActivity.archiveKey]
-    self.addUserInfoEntries(from: [NSUserActivity.archiveKey: identifier])
+    self.requiredUserInfoKeys = [NSUserActivity.archivePathKey]
+    self.addUserInfoEntries(from: [NSUserActivity.archivePathKey: identifier])
 
     self.expirationDate = .now + (60 * 60 * 24)
   }
@@ -51,13 +51,13 @@ extension NSUserActivity {
       throw DecodeError.noUserInfo
     }
 
-    guard let value = userInfo[NSUserActivity.archiveKey] else {
-      Logger.decodeActivity.log("no archiveKey")
+    guard let value = userInfo[NSUserActivity.archivePathKey] else {
+      Logger.decodeActivity.log("no archivePathKey")
       throw DecodeError.noArchiveKey
     }
 
     guard let archiveString = value as? String else {
-      Logger.decodeActivity.log("archiveKey not String")
+      Logger.decodeActivity.log("archivePathKey not String")
       throw DecodeError.archiveKeyIncorrectType
     }
 

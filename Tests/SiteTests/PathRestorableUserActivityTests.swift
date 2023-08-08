@@ -122,14 +122,14 @@ final class PathRestorableUserActivityTests: XCTestCase {
 
   func test_decodeError_wrongType() throws {
     let userActivity = NSUserActivity(activityType: "test-type")
-    userActivity.userInfo = [NSUserActivity.archiveKey: 6]
+    userActivity.userInfo = [NSUserActivity.archivePathKey: 6]
 
     XCTAssertThrowsError(try userActivity.archivePath())
   }
 
   func test_decode() throws {
     let userActivity = NSUserActivity(activityType: "test-type")
-    userActivity.userInfo = [NSUserActivity.archiveKey: "y-1988"]
+    userActivity.userInfo = [NSUserActivity.archivePathKey: "y-1988"]
 
     XCTAssertEqual(try userActivity.archivePath(), ArchivePath.year(Annum.year(1988)))
   }
