@@ -14,13 +14,13 @@ extension Logger {
 }
 
 extension NSUserActivity {
-  enum DecodeError: Error {
+  private enum DecodeError: Error {
     case noUserInfo
     case noArchiveKey
     case archiveKeyIncorrectType
   }
 
-  static let archiveKey = "archive"
+  private static let archiveKey = "archive"
 
   func update<T: PathRestorableUserActivity>(_ item: T, vault: Vault) {
     let archivePath = item.archivePath
