@@ -24,7 +24,10 @@ public struct VaultView: View {
       if let vault = model.vault {
         ArchiveCategorySplit(vault: vault, model: model)
           .refreshable {
-            Logger.vaultLoad.log("refresh")
+            Logger.vaultLoad.log("start refresh")
+            defer {
+              Logger.vaultLoad.log("end refresh")
+            }
             await model.load()
           }
       } else if let error = model.error {
@@ -33,7 +36,10 @@ public struct VaultView: View {
         ProgressView()
       }
     }.task {
-      Logger.vaultLoad.log("task")
+      Logger.vaultLoad.log("start task")
+      defer {
+        Logger.vaultLoad.log("end task")
+      }
       await model.load()
     }
   }
