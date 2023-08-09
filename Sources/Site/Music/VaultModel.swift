@@ -32,7 +32,9 @@ extension Logger {
     do {
       vault = try await Vault.load(url: url)
       updateTodayShows()
-      await monitorDayChanges()
+      Task {
+        await monitorDayChanges()
+      }
     } catch {
       Logger.vaultModel.log("error: \(error.localizedDescription, privacy: .public)")
       self.error = error
@@ -53,7 +55,12 @@ extension Logger {
   }
 
   private func monitorDayChanges() async {
+    Logger.vaultModel.log("start day monitoring")
+    defer {
+      Logger.vaultModel.log("end day monitoring")
+    }
     for await _ in NotificationCenter.default.notifications(named: .NSCalendarDayChanged) {
+      Logger.vaultModel.log("day changed")
       updateTodayShows()
     }
   }
