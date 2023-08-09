@@ -122,6 +122,9 @@ ArchiveCategory Shows */
 /* String for when a sharing an unknown Annum. */
 "Shows from Unknown Years" = "Shows from Unknown Years";
 
+/* Today Shows shared string */
+"Shows Today: %@" = "Shows Today: %@";
+
 /* Artist shared string */
 "Shows with %@" = "Shows with %@";
 

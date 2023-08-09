@@ -99,4 +99,16 @@ public struct Vault {
     urlComponents?.path = archivePath.formatted(.urlPath)
     return urlComponents?.url
   }
+
+  func createURL(forCategory category: ArchiveCategory) -> URL? {
+    guard let baseURL else {
+      return nil
+    }
+    guard category != .stats else {
+      return nil
+    }
+    var urlComponents = URLComponents(url: baseURL, resolvingAgainstBaseURL: false)
+    urlComponents?.path = category.formatted(.urlPath)
+    return urlComponents?.url
+  }
 }
