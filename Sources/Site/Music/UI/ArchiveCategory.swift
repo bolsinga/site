@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-enum ArchiveCategory: String, CaseIterable {
+public enum ArchiveCategory: String, CaseIterable {
   case today
   case stats
   case shows
