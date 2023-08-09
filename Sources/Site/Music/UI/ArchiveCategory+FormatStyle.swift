@@ -31,7 +31,7 @@ extension ArchiveCategory.FormatStyle: Foundation.FormatStyle {
     case .urlPath:
       switch value {
       case .today:
-        return "/today.html"
+        return "/dates/today.html"
       case .stats:
         return "/stats.html"
       case .shows:

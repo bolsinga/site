@@ -47,7 +47,7 @@ extension ArchiveCategory.FormatStyle {
       switch (directory, filenameComponents[0]) {
       case (nil, "stats"):
         return ArchiveCategory.stats
-      case (nil, "today"):
+      case ("dates", "today"):
         return ArchiveCategory.today
       case ("dates", "stats"):
         return ArchiveCategory.shows
