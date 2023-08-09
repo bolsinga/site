@@ -16,7 +16,6 @@ final class ArchivePathTests: XCTestCase {
     XCTAssertEqual(ArchivePath.artist("someIdentifier").formatted(), "ar-someIdentifier")
     XCTAssertEqual(ArchivePath.year(Annum.year(1989)).formatted(), "y-1989")
     XCTAssertEqual(ArchivePath.year(Annum.unknown).formatted(), "y-unknown")
-    XCTAssertEqual(ArchivePath.today.formatted(), "t-day")
   }
 
   func testURLPathFormat() throws {
@@ -28,7 +27,6 @@ final class ArchivePathTests: XCTestCase {
       ArchivePath.artist("someIdentifier").formatted(.urlPath), "/bands/someIdentifier.html")
     XCTAssertEqual(ArchivePath.year(Annum.year(1989)).formatted(.urlPath), "/dates/1989.html")
     XCTAssertEqual(ArchivePath.year(Annum.unknown).formatted(.urlPath), "/dates/other.html")
-    XCTAssertEqual(ArchivePath.today.formatted(.urlPath), "/dates/stats.html")
   }
 
   func testParse() throws {
@@ -42,9 +40,6 @@ final class ArchivePathTests: XCTestCase {
     XCTAssertEqual(try ArchivePath("sh-someIdentifier"), ArchivePath.show("someIdentifier"))
     XCTAssertEqual(try ArchivePath("v-someIdentifier"), ArchivePath.venue("someIdentifier"))
     XCTAssertEqual(try ArchivePath("ar-someIdentifier"), ArchivePath.artist("someIdentifier"))
-
-    XCTAssertEqual(try ArchivePath("t-day"), ArchivePath.today)
-    XCTAssertThrowsError(try ArchivePath("t-morrow"))
 
     XCTAssertThrowsError(try ArchivePath("a-someIdentifier"))
     XCTAssertThrowsError(try ArchivePath("av-someIdentifier"))
@@ -88,9 +83,6 @@ final class ArchivePathTests: XCTestCase {
     XCTAssertEqual(
       try ArchivePath(URL(string: "https://www.example.com/dates/ar852.html")!),
       ArchivePath.show("ar852"))
-    XCTAssertEqual(
-      try ArchivePath(URL(string: "https://www.example.com/dates/stats.html")!),
-      ArchivePath.today)
     XCTAssertThrowsError(
       try ArchivePath(URL(string: "https://www.example.com/venues/L.html#ar852")!))
     XCTAssertThrowsError(try ArchivePath(URL(string: "https://www.example.com/venues/ar852")!))
@@ -105,7 +97,6 @@ final class ArchivePathTests: XCTestCase {
     XCTAssertEqual(try ArchivePath.artist("blah").category(), ArchiveCategory.artists)
     XCTAssertEqual(try ArchivePath.venue("blah").category(), ArchiveCategory.venues)
     XCTAssertEqual(try ArchivePath.show("blah").category(), ArchiveCategory.shows)
-    XCTAssertEqual(try ArchivePath.today.category(), ArchiveCategory.today)
     XCTAssertThrowsError(try ArchivePath.year(.year(1989)).category())
     XCTAssertThrowsError(try ArchivePath.year(.unknown).category())
   }

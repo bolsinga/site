@@ -22,8 +22,6 @@ extension ArchivePath {
       return .artists
     case .year(_):
       throw CategoryError.invalidCategory
-    case .today:
-      return .today
     }
   }
 }
