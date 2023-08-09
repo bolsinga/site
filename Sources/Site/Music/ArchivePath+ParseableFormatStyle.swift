@@ -14,14 +14,12 @@ extension ArchivePath.FormatStyle {
       case invalidSeparator
       case invalidPrefixCharacters
       case invalidPrefix
-      case invalidToday
     }
 
     static let validPrefixSet = CharacterSet(charactersIn: ArchivePath.showPrefix)
       .union(CharacterSet(charactersIn: ArchivePath.venuePrefix))
       .union(CharacterSet(charactersIn: ArchivePath.artistPrefix))
       .union(CharacterSet(charactersIn: ArchivePath.yearPrefix))
-      .union(CharacterSet(charactersIn: ArchivePath.todayPrefix))
 
     static let validSeparatorSet = CharacterSet(charactersIn: ArchivePath.separator)
 
@@ -58,11 +56,6 @@ extension ArchivePath.FormatStyle {
         return ArchivePath.artist(identifier)
       case ArchivePath.yearPrefix:
         return ArchivePath.year(try Annum(identifier))
-      case ArchivePath.todayPrefix:
-        if identifier == ArchivePath.todaySuffix {
-          return ArchivePath.today
-        }
-        throw ValidationError.invalidToday
       default:
         throw ValidationError.invalidPrefix
       }
@@ -122,9 +115,6 @@ extension ArchivePath.FormatStyle {
       case "venues":
         return ArchivePath.venue(id)
       case "dates":
-        if id == "stats" {
-          return ArchivePath.today
-        }
         return ArchivePath.show(id)
       default:
         throw ValidationError.archiveType

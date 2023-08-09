@@ -28,8 +28,6 @@ struct MusicDestinationModifier: ViewModifier {
           }
         case .year(let annum):
           YearDetail(annum: annum)
-        case .today:
-          fatalError("ArchivePath.today is not yet implemented.")
         }
       }
   }

@@ -12,8 +12,6 @@ extension ArchivePath {
   public static let venuePrefix = "v"
   public static let artistPrefix = "ar"
   static let yearPrefix = "y"
-  static let todayPrefix = "t"
-  static let todaySuffix = "day"
   static let separator = "-"
 
   var prefix: String {
@@ -27,8 +25,6 @@ extension ArchivePath {
         return ArchivePath.artistPrefix
       case .year(_):
         return ArchivePath.yearPrefix
-      case .today:
-        return ArchivePath.todayPrefix
       }
     }() + ArchivePath.separator
   }
@@ -66,8 +62,6 @@ extension ArchivePath.FormatStyle: Foundation.FormatStyle {
             return iD
           case .year(let annum):
             return annum.formatted(.json)
-          case .today:
-            return ArchivePath.todaySuffix
           }
         }()
     case .urlPath:
@@ -80,8 +74,6 @@ extension ArchivePath.FormatStyle: Foundation.FormatStyle {
         return "/bands/\(iD).html"
       case .year(let annum):
         return "/dates/\(annum.formatted(.urlPath)).html"
-      case .today:
-        return "/dates/stats.html"
       }
     }
   }
