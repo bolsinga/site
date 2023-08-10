@@ -134,6 +134,9 @@ ArchiveCategory Shows */
 /* String for when a sharing an unknown Annum. */
 "Shows from Unknown Years" = "Shows from Unknown Years";
 
+/* Suggested invocation phrase for ArchiveCategory.today */
+"Shows Today" = "Shows Today";
+
 /* ArchiveCategory.today shared title */
 "Shows On This Date: %@" = "Shows On This Date: %@";
 
