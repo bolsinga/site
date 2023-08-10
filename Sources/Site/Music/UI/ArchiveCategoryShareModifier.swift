@@ -8,23 +8,12 @@
 import SwiftUI
 
 extension ArchiveCategory {
-  private var descriptor: String {
-    switch self {
-    case .today:
-      return String(
-        localized: "Shows Today: \(Date.now.formatted(.dateTime.month(.defaultDigits).day()))",
-        bundle: .module, comment: "Today Shows shared string")
-    default:
-      return self.localizedString
-    }
-  }
-
   var subject: Text {
-    Text(self.descriptor)
+    Text(self.title)
   }
 
   var message: Text {
-    Text(self.descriptor)
+    Text(self.title)
   }
 }
 

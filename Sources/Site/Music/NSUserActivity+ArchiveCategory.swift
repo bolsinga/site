@@ -30,6 +30,8 @@ extension NSUserActivity {
 
     self.isEligibleForHandoff = true
 
+    self.title = category.title
+
     if let url = vault.createURL(forCategory: category) {
       Logger.updateCategoryActivity.log("web: \(url.absoluteString, privacy: .public)")
       self.isEligibleForPublicIndexing = true

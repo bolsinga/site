@@ -22,6 +22,9 @@
 /* Decade.decade format string where the format is a full digits year. */
 "%@s" = "%@s";
 
+/* ArchiveCategory.shows shared title */
+"All Shows" = "All Shows";
+
 /* Title for the ArchiveCategorySplit. */
 "Archives" = "Archives";
 
@@ -104,6 +107,15 @@ Venue First Set Caption */
 /* Shown when no ArchiveCategory is selected. */
 "Select An Item" = "Select An Item";
 
+/* ArchiveCategory.artists shared title */
+"Show Artists" = "Show Artists";
+
+/* ArchiveCategory.stats shared title */
+"Show Statistics" = "Show Statistics";
+
+/* ArchiveCategory.venues shared title */
+"Show Venues" = "Show Venues";
+
 /* Title for the ShowYearList. */
 "Show Years" = "Show Years";
 
@@ -122,8 +134,8 @@ ArchiveCategory Shows */
 /* String for when a sharing an unknown Annum. */
 "Shows from Unknown Years" = "Shows from Unknown Years";
 
-/* Today Shows shared string */
-"Shows Today: %@" = "Shows Today: %@";
+/* ArchiveCategory.today shared title */
+"Shows On This Date: %@" = "Shows On This Date: %@";
 
 /* Artist shared string */
 "Shows with %@" = "Shows with %@";

@@ -43,4 +43,30 @@ public enum ArchiveCategory: String, CaseIterable {
       Label(self.localizedString, systemImage: "music.mic")
     }
   }
+
+  var title: String {
+    switch self {
+    case .today:
+      return String(
+        localized:
+          "Shows On This Date: \(Date.now.formatted(.dateTime.month(.defaultDigits).day()))",
+        bundle: .module, comment: "ArchiveCategory.today shared title")
+    case .stats:
+      return String(
+        localized: "Show Statistics",
+        bundle: .module, comment: "ArchiveCategory.stats shared title")
+    case .shows:
+      return String(
+        localized: "All Shows",
+        bundle: .module, comment: "ArchiveCategory.shows shared title")
+    case .venues:
+      return String(
+        localized: "Show Venues",
+        bundle: .module, comment: "ArchiveCategory.venues shared title")
+    case .artists:
+      return String(
+        localized: "Show Artists",
+        bundle: .module, comment: "ArchiveCategory.artists shared title")
+    }
+  }
 }
