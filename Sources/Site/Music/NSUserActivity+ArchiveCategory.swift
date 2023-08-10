@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Intents
 import os
 
 extension Logger {
@@ -31,6 +32,16 @@ extension NSUserActivity {
     self.isEligibleForHandoff = true
 
     self.title = category.title
+
+    self.persistentIdentifier = category.rawValue
+    if category == .today {
+      #if os(iOS)
+        self.isEligibleForPrediction = true
+      #endif
+      self.suggestedInvocationPhrase = String(
+        localized: "Shows Today", bundle: .module,
+        comment: "Suggested invocation phrase for ArchiveCategory.today")
+    }
 
     if let url = vault.createURL(forCategory: category) {
       Logger.updateCategoryActivity.log("web: \(url.absoluteString, privacy: .public)")
