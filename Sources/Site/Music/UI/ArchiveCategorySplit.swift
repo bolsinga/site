@@ -57,8 +57,8 @@ struct ArchiveCategorySplit: View {
       NavigationStack(path: $archiveNavigation.navigationPath) {
         ArchiveCategoryDetail(
           category: archiveNavigation.selectedCategory, todayShows: $model.todayShows,
-          venueSort: $venueSort,
-          artistSort: $artistSort)
+          venueSort: $venueSort, artistSort: $artistSort,
+          isCategoryActive: .constant(archiveNavigation.navigationPath.isEmpty))
       }
     }
     .archiveStorage(archiveNavigation: archiveNavigation)
