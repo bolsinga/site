@@ -16,16 +16,20 @@ struct ArchiveCategoryUserActivityModifier: ViewModifier {
 
   let category: ArchiveCategory
 
+  @Binding var isActive: Bool
+
   func body(content: Content) -> some View {
     content
-      .userActivity(ArchiveCategory.activityType) { userActivity in
+      .userActivity(ArchiveCategory.activityType, isActive: isActive) { userActivity in
         userActivity.update(category, vault: vault)
       }
   }
 }
 
 extension View {
-  func archiveCategoryUserActivity(_ category: ArchiveCategory) -> some View {
-    modifier(ArchiveCategoryUserActivityModifier(category: category))
+  func archiveCategoryUserActivity(_ category: ArchiveCategory, isActive: Binding<Bool>)
+    -> some View
+  {
+    modifier(ArchiveCategoryUserActivityModifier(category: category, isActive: isActive))
   }
 }
