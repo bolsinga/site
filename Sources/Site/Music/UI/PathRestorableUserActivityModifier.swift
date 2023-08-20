@@ -17,7 +17,7 @@ protocol PathRestorableUserActivity: PathRestorable {
 }
 
 struct PathRestorableUserActivityModifier<T: PathRestorableUserActivity>: ViewModifier {
-  @Environment(\.vault) var vault: Vault
+  @Environment(\.vault) private var vault: Vault
 
   let item: T
 

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MusicDestinationModifier: ViewModifier {
-  @Environment(\.vault) var vault: Vault
+  @Environment(\.vault) private var vault: Vault
 
   func body(content: Content) -> some View {
     content

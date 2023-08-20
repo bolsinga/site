@@ -12,7 +12,7 @@ extension ArchiveCategory {
 }
 
 struct ArchiveCategoryUserActivityModifier: ViewModifier {
-  @Environment(\.vault) var vault: Vault
+  @Environment(\.vault) private var vault: Vault
 
   let category: ArchiveCategory
 
