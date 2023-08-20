@@ -27,7 +27,7 @@ struct MusicDestinationModifier: ViewModifier {
             ArtistDetail(artist: artist)
           }
         case .year(let annum):
-          YearDetail(annum: annum)
+          YearDetail(annum: annum, shows: vault.lookup.decadesMap[annum.decade]?[annum] ?? [])
         }
       }
   }
