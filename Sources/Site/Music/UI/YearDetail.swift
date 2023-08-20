@@ -53,7 +53,6 @@ struct YearDetail_Previews: PreviewProvider {
     NavigationStack {
       let annum = Annum.year(2001)
       YearDetail(annum: annum, shows: vault.lookup.decadesMap[annum.decade]?[annum] ?? [])
-        .environment(\.vault, vault)
         .musicDestinations()
     }
   }
