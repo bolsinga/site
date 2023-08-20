@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct PathRestorableShareModifier<T: PathRestorableShareable>: ViewModifier {
-  @Environment(\.vault) var vault: Vault
+  @Environment(\.vault) private var vault: Vault
 
   let item: T
 
