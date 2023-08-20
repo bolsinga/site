@@ -48,9 +48,8 @@ public enum ArchiveCategory: String, CaseIterable {
     switch self {
     case .today:
       return String(
-        localized:
-          "Shows On This Date: \(Date.now.formatted(.dateTime.month(.defaultDigits).day()))",
-        bundle: .module, comment: "ArchiveCategory.today shared title")
+        localized: "Display Shows On This Date", bundle: .module,
+        comment: "ArchiveCategory.today shared title")
     case .stats:
       return String(
         localized: "Show Statistics",
