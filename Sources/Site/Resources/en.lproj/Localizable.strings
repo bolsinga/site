@@ -52,6 +52,9 @@ Label in the chart for the Count in StateChart. */
 /* String for when a Decade is unknown. */
 "Decade Unknown" = "Decade Unknown";
 
+/* ArchiveCategory.today shared title */
+"Display Shows On This Date" = "Display Shows On This Date";
+
 /* First Set Caption
 Venue First Set Caption */
 "First Set" = "First Set";
@@ -136,9 +139,6 @@ ArchiveCategory Shows */
 
 /* Suggested invocation phrase for ArchiveCategory.today */
 "Shows Today" = "Shows Today";
-
-/* ArchiveCategory.today shared title */
-"Shows On This Date: %@" = "Shows On This Date: %@";
 
 /* Artist shared string */
 "Shows with %@" = "Shows with %@";
