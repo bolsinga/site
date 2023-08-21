@@ -61,19 +61,19 @@ extension Show.FormatStyle: Foundation.FormatStyle {
     do {
       switch style {
       case .full:
-        let artists = try lookup.artistsForShow(value).map { $0.name }.joined(separator: ", ")
+        let artists = lookup.artistsForShow(value).map { $0.name }.joined(separator: ", ")
         let venue = try lookup.venueForShow(value)
         return String(
           localized: "\(artists) @ \(venue.name) : \(value.date.formatted(.compact))",
           bundle: .module, comment: "Show.FormatStyle.full artists - venue - date")
       case .artistsAndVenue:
-        let artists = try lookup.artistsForShow(value).map { $0.name }.joined(separator: ", ")
+        let artists = lookup.artistsForShow(value).map { $0.name }.joined(separator: ", ")
         let venue = try lookup.venueForShow(value)
         return String(
           localized: "\(artists) @ \(venue.name)", bundle: .module,
           comment: "Show.FormatStyle.artistsAndVenue artists - venue")
       case .headlinerAndVenue:
-        let headliner = try lookup.artistsForShow(value).first?.name ?? ""
+        let headliner = lookup.artistsForShow(value).first?.name ?? ""
         let venue = try lookup.venueForShow(value)
         return String(
           localized: "\(headliner), \(venue.name)", bundle: .module,

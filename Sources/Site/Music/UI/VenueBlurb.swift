@@ -13,11 +13,7 @@ struct VenueBlurb: View {
   let show: Show
 
   private var artists: [Artist] {
-    do {
-      return try vault.lookup.artistsForShow(show)
-    } catch {
-      return []
-    }
+    vault.lookup.artistsForShow(show)
   }
 
   @ViewBuilder private var artistsView: some View {

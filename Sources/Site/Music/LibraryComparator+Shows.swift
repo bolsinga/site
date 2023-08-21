@@ -14,15 +14,13 @@ extension LibraryComparator {
         let rhVenue = try? lookup.venueForShow(rhs)
       {
         if lhVenue == rhVenue {
-          if let lhArtists = try? lookup.artistsForShow(lhs),
-            let rhArtists = try? lookup.artistsForShow(rhs)
+          if let lhHeadliner = lookup.artistsForShow(lhs).first,
+            let rhHeadliner = lookup.artistsForShow(rhs).first
           {
-            if let lhHeadliner = lhArtists.first, let rhHeadliner = rhArtists.first {
-              if lhHeadliner == rhHeadliner {
-                return lhs.id < rhs.id
-              }
-              return libraryCompare(lhs: lhHeadliner, rhs: rhHeadliner)
+            if lhHeadliner == rhHeadliner {
+              return lhs.id < rhs.id
             }
+            return libraryCompare(lhs: lhHeadliner, rhs: rhHeadliner)
           }
         }
         return libraryCompare(lhs: lhVenue, rhs: rhVenue)

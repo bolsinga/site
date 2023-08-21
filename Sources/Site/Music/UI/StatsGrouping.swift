@@ -65,11 +65,7 @@ struct StatsGrouping: View {
   }
 
   private var computeArtists: [Artist] {
-    Array(
-      Set(
-        shows.flatMap {
-          do { return try vault.lookup.artistsForShow($0) } catch { return [Artist]() }
-        }))
+    Array(Set(shows.flatMap { vault.lookup.artistsForShow($0) }))
   }
 
   @ViewBuilder var showCount: some View {
