@@ -128,9 +128,10 @@ public struct Lookup {
     case missingVenue(Show)
   }
 
-  public func venueForShow(_ show: Show) throws -> Venue {
+  public func venueForShow(_ show: Show) -> Venue? {
     guard let venue = venueMap[show.venue] else {
-      throw LookupError.missingVenue(show)
+      Logger.lookup.log("Show: \(show.id) missing venue")
+      return nil
     }
     return venue
   }

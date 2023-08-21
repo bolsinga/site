@@ -10,9 +10,7 @@ import Foundation
 extension LibraryComparator {
   public func showCompare(lhs: Show, rhs: Show, lookup: Lookup) -> Bool {
     if lhs.date == rhs.date {
-      if let lhVenue = try? lookup.venueForShow(lhs),
-        let rhVenue = try? lookup.venueForShow(rhs)
-      {
+      if let lhVenue = lookup.venueForShow(lhs), let rhVenue = lookup.venueForShow(rhs) {
         if lhVenue == rhVenue {
           if let lhHeadliner = lookup.artistsForShow(lhs).first,
             let rhHeadliner = lookup.artistsForShow(rhs).first

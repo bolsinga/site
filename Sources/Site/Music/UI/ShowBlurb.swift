@@ -16,11 +16,7 @@ struct ShowBlurb: View {
   }
 
   private var venue: Venue? {
-    do {
-      return try vault.lookup.venueForShow(show)
-    } catch {
-      return nil
-    }
+    vault.lookup.venueForShow(show)
   }
 
   @ViewBuilder private var artistsView: some View {

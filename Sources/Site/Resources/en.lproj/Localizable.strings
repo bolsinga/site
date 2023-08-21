@@ -1,6 +1,9 @@
 /* Rank.FormatStyle.hash */
 "#%@" = "#%@";
 
+/* Show.FormatStyle.full artists - date - No Venue */
+"%@ : %@" = "%@ : %@";
+
 /* Show.FormatStyle.artistsAndVenue artists - venue */
 "%@ @ %@" = "%@ @ %@";
 
