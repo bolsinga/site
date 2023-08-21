@@ -12,11 +12,7 @@ struct ShowDetail: View {
   let show: Show
 
   private var artists: [Artist] {
-    do {
-      return try vault.lookup.artistsForShow(show)
-    } catch {
-      return []
-    }
+    vault.lookup.artistsForShow(show)
   }
 
   private var venueName: String {

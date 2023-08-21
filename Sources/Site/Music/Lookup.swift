@@ -6,6 +6,11 @@
 //
 
 import Foundation
+import os
+
+extension Logger {
+  static let lookup = Logger(category: "lookup")
+}
 
 private func createLookup<T: Identifiable>(_ sequence: [T]) -> [T.ID: T] {
   sequence.reduce(into: [:]) { $0[$1.id] = $1 }
@@ -121,7 +126,6 @@ public struct Lookup {
 
   enum LookupError: Error {
     case missingVenue(Show)
-    case missingArtist(Show, String)
   }
 
   public func venueForShow(_ show: Show) throws -> Venue {
@@ -131,11 +135,12 @@ public struct Lookup {
     return venue
   }
 
-  public func artistsForShow(_ show: Show) throws -> [Artist] {
+  public func artistsForShow(_ show: Show) -> [Artist] {
     var showArtists = [Artist]()
     for id in show.artists {
       guard let artist = artistMap[id] else {
-        throw LookupError.missingArtist(show, id)
+        Logger.lookup.log("Show: \(show.id) missing artist: \(id)")
+        continue
       }
       showArtists.append(artist)
     }
