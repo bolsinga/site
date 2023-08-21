@@ -124,10 +124,6 @@ public struct Lookup {
       venueFirstSetsMap: venueFirstSets)
   }
 
-  enum LookupError: Error {
-    case missingVenue(Show)
-  }
-
   public func venueForShow(_ show: Show) -> Venue? {
     guard let venue = venueMap[show.venue] else {
       Logger.lookup.log("Show: \(show.id) missing venue")
