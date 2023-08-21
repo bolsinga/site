@@ -8,12 +8,8 @@
 import SwiftUI
 
 struct ArtistBlurb: View {
-  @Environment(\.vault) private var vault: Vault
   let show: Show
-
-  private var venue: Venue? {
-    vault.lookup.venueForShow(show)
-  }
+  let venue: Venue?
 
   var body: some View {
     LabeledContent {
@@ -33,13 +29,19 @@ struct ArtistBlurbView_Previews: PreviewProvider {
   static var previews: some View {
     let vault = Vault.previewData
 
-    ArtistBlurb(show: vault.music.shows[0])
-      .environment(\.vault, vault)
+    NavigationStack {
+      let show = vault.music.shows[0]
+      ArtistBlurb(show: show, venue: vault.lookup.venueForShow(show))
+    }
 
-    ArtistBlurb(show: vault.music.shows[1])
-      .environment(\.vault, vault)
+    NavigationStack {
+      let show = vault.music.shows[1]
+      ArtistBlurb(show: show, venue: vault.lookup.venueForShow(show))
+    }
 
-    ArtistBlurb(show: vault.music.shows[2])
-      .environment(\.vault, vault)
+    NavigationStack {
+      let show = vault.music.shows[2]
+      ArtistBlurb(show: show, venue: vault.lookup.venueForShow(show))
+    }
   }
 }
