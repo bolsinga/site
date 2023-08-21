@@ -16,11 +16,10 @@ struct ShowDetail: View {
   }
 
   private var venueName: String {
-    do {
-      return try vault.lookup.venueForShow(show).name
-    } catch {
+    guard let venue = vault.lookup.venueForShow(show) else {
       return ""
     }
+    return venue.name
   }
 
   @ViewBuilder private var lineupElement: some View {

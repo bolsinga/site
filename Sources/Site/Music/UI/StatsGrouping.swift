@@ -38,9 +38,9 @@ struct StatsGrouping: View {
   }
 
   private var computedStateCounts: [String: Int] {
-    shows.compactMap {
-      do { return try vault.lookup.venueForShow($0).location } catch { return nil }
-    }.map { $0.state }.reduce(into: [String: Int]()) {
+    shows.compactMap { vault.lookup.venueForShow($0)?.location }.map { $0.state }.reduce(
+      into: [String: Int]()
+    ) {
       let count = $0[$1] ?? 0
       $0[$1] = count + 1
     }
@@ -59,9 +59,7 @@ struct StatsGrouping: View {
   }
 
   private var computeVenues: [Venue] {
-    Array(
-      Set(shows.compactMap { do { return try vault.lookup.venueForShow($0) } catch { return nil } })
-    )
+    Array(Set(shows.compactMap { vault.lookup.venueForShow($0) }))
   }
 
   private var computeArtists: [Artist] {

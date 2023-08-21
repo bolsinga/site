@@ -58,29 +58,37 @@ extension Show.FormatStyle: Foundation.FormatStyle {
     guard let lookup else {
       fatalError("Show.FormatStyle requires Lookup")
     }
-    do {
-      switch style {
-      case .full:
-        let artists = lookup.artistsForShow(value).map { $0.name }.joined(separator: ", ")
-        let venue = try lookup.venueForShow(value)
+    let venue = lookup.venueForShow(value)
+    switch style {
+    case .full:
+      let artists = lookup.artistsForShow(value).map { $0.name }.joined(separator: ", ")
+      if let venue {
         return String(
           localized: "\(artists) @ \(venue.name) : \(value.date.formatted(.compact))",
           bundle: .module, comment: "Show.FormatStyle.full artists - venue - date")
-      case .artistsAndVenue:
-        let artists = lookup.artistsForShow(value).map { $0.name }.joined(separator: ", ")
-        let venue = try lookup.venueForShow(value)
+      } else {
+        return String(
+          localized: "\(artists) : \(value.date.formatted(.compact))", bundle: .module,
+          comment: "Show.FormatStyle.full artists - date - No Venue")
+      }
+    case .artistsAndVenue:
+      let artists = lookup.artistsForShow(value).map { $0.name }.joined(separator: ", ")
+      if let venue {
         return String(
           localized: "\(artists) @ \(venue.name)", bundle: .module,
           comment: "Show.FormatStyle.artistsAndVenue artists - venue")
-      case .headlinerAndVenue:
-        let headliner = lookup.artistsForShow(value).first?.name ?? ""
-        let venue = try lookup.venueForShow(value)
+      } else {
+        return artists
+      }
+    case .headlinerAndVenue:
+      let headliner = lookup.artistsForShow(value).first?.name ?? ""
+      if let venue {
         return String(
           localized: "\(headliner), \(venue.name)", bundle: .module,
           comment: "Show.FormatStyle.headlinerAndVenue artist headliner - venue")
+      } else {
+        return headliner
       }
-    } catch {
-      return ""
     }
   }
 }
