@@ -126,7 +126,7 @@ public struct Lookup {
 
   public func venueForShow(_ show: Show) -> Venue? {
     guard let venue = venueMap[show.venue] else {
-      Logger.lookup.log("Show: \(show.id) missing venue")
+      Logger.lookup.log("Show: \(show.id, privacy: .public) missing venue")
       return nil
     }
     return venue
@@ -136,7 +136,8 @@ public struct Lookup {
     var showArtists = [Artist]()
     for id in show.artists {
       guard let artist = artistMap[id] else {
-        Logger.lookup.log("Show: \(show.id) missing artist: \(id)")
+        Logger.lookup.log(
+          "Show: \(show.id, privacy: .public) missing artist: \(id, privacy: .public)")
         continue
       }
       showArtists.append(artist)
