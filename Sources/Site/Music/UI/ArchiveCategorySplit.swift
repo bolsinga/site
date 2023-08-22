@@ -31,7 +31,7 @@ struct ArchiveCategorySplit: View {
       LabeledContent {
         switch category {
         case .today:
-          Text(model.todayShows.count.formatted(.number))
+          Text(model.todayConcerts.count.formatted(.number))
             .animation(.easeInOut)
         case .stats:
           EmptyView()
@@ -56,7 +56,7 @@ struct ArchiveCategorySplit: View {
     } detail: {
       NavigationStack(path: $archiveNavigation.navigationPath) {
         ArchiveCategoryDetail(
-          category: archiveNavigation.selectedCategory, todayShows: $model.todayShows,
+          category: archiveNavigation.selectedCategory, todayConcerts: $model.todayConcerts,
           venueSort: $venueSort, artistSort: $artistSort,
           isCategoryActive: .constant(archiveNavigation.navigationPath.isEmpty))
       }

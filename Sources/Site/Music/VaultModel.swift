@@ -18,7 +18,7 @@ extension Logger {
 
   @Published var vault: Vault?
   @Published var error: Error?
-  @Published var todayShows: [Show] = []
+  @Published var todayConcerts: [Concert] = []
 
   public init(url: URL) {
     self.url = url
@@ -31,7 +31,7 @@ extension Logger {
     }
     do {
       vault = try await Vault.load(url: url)
-      updateTodayShows()
+      updateTodayConcerts()
       Task {
         await monitorDayChanges()
       }
@@ -41,17 +41,17 @@ extension Logger {
     }
   }
 
-  private func updateTodayShows() {
+  private func updateTodayConcerts() {
     guard let vault else {
-      Logger.vaultModel.log("No Vault to calculate todayShows.")
+      Logger.vaultModel.log("No Vault to calculate todayConcerts.")
       return
     }
 
-    todayShows = vault.music.showsOnDate(Date.now).sorted {
+    todayConcerts = vault.music.showsOnDate(Date.now).sorted {
       vault.comparator.showCompare(lhs: $0, rhs: $1, lookup: vault.lookup)
-    }
+    }.map { vault.concert(from: $0) }
 
-    Logger.vaultModel.log("Today Count: \(self.todayShows.count, privacy: .public)")
+    Logger.vaultModel.log("Today Count: \(self.todayConcerts.count, privacy: .public)")
   }
 
   private func monitorDayChanges() async {
@@ -61,7 +61,7 @@ extension Logger {
     }
     for await _ in NotificationCenter.default.notifications(named: .NSCalendarDayChanged) {
       Logger.vaultModel.log("day changed")
-      updateTodayShows()
+      updateTodayConcerts()
     }
   }
 }
