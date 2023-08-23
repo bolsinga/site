@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct YearDetail: View {
+  @Environment(\.vault) private var vault: Vault
   let annum: Annum
   let shows: [Show]
 
@@ -26,7 +27,7 @@ struct YearDetail: View {
           "Shows", bundle: .module, comment: "Title of the Shows section of YearDetail")
       ) {
         ForEach(shows) { show in
-          NavigationLink(value: show) { ShowBlurb(show: show) }
+          NavigationLink(value: show) { ConcertBlurb(concert: vault.concert(from: show)) }
         }
       }
     }
