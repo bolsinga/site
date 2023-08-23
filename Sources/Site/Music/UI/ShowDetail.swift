@@ -8,15 +8,10 @@
 import SwiftUI
 
 struct ShowDetail: View {
-  @Environment(\.vault) private var vault: Vault
-  let show: Show
-
-  private var artists: [Artist] {
-    vault.lookup.artistsForShow(show)
-  }
+  let concert: Concert
 
   private var venueName: String {
-    guard let venue = vault.lookup.venueForShow(show) else {
+    guard let venue = concert.venue else {
       return ""
     }
     return venue.name
@@ -28,7 +23,7 @@ struct ShowDetail: View {
         "Lineup", bundle: .module,
         comment: "Title of the Lineup for ShowDetail.")
     ) {
-      ForEach(artists) { artist in
+      ForEach(concert.artists) { artist in
         NavigationLink(artist.name, value: artist)
       }
     }
@@ -38,6 +33,7 @@ struct ShowDetail: View {
     Section(
       header: Text("Date", bundle: .module, comment: "Title of the date section of ShowDetail")
     ) {
+      let show = concert.show
       if !show.date.isUnknown, let date = show.date.date {
         LabeledContent {
           Text(date.formatted(.relative(presentation: .numeric)))
@@ -51,7 +47,7 @@ struct ShowDetail: View {
   }
 
   @ViewBuilder private var commentElement: some View {
-    if let comment = show.comment {
+    if let comment = concert.show.comment {
       Section(
         header: Text(
           "Comment", bundle: .module, comment: "Title of the comment section of ShowDetail")
@@ -71,8 +67,8 @@ struct ShowDetail: View {
       .listStyle(.grouped)
     #endif
     .navigationTitle(venueName)
-    .pathRestorableUserActivityModifier(show)
-    .sharePathRestorable(show)
+    .pathRestorableUserActivityModifier(concert.show)
+    .sharePathRestorable(concert.show)
   }
 }
 
@@ -81,20 +77,17 @@ struct ShowDetail_Previews: PreviewProvider {
     let vault = Vault.previewData
 
     NavigationStack {
-      ShowDetail(show: vault.music.shows[0])
-        .environment(\.vault, vault)
+      ShowDetail(concert: vault.concert(from: vault.music.shows[0]))
         .musicDestinations()
     }
 
     NavigationStack {
-      ShowDetail(show: vault.music.shows[1])
-        .environment(\.vault, vault)
+      ShowDetail(concert: vault.concert(from: vault.music.shows[1]))
         .musicDestinations()
     }
 
     NavigationStack {
-      ShowDetail(show: vault.music.shows[2])
-        .environment(\.vault, vault)
+      ShowDetail(concert: vault.concert(from: vault.music.shows[2]))
         .musicDestinations()
     }
   }
