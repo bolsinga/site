@@ -8,19 +8,18 @@
 import SwiftUI
 
 struct ArtistBlurb: View {
-  let show: Show
-  let venue: Venue?
+  let concert: Concert
 
   var body: some View {
     LabeledContent {
       Text(
-        "\(show.artists.count) Artist(s)", bundle: .module,
+        "\(concert.show.artists.count) Artist(s)", bundle: .module,
         comment: "Content of the LabeledContent in a ArtistBlurb.")
     } label: {
-      if let venue {
+      if let venue = concert.venue {
         Text(venue.name)
       }
-      Text(show.date.formatted(.compact))
+      Text(concert.show.date.formatted(.compact))
     }
   }
 }
@@ -30,18 +29,15 @@ struct ArtistBlurbView_Previews: PreviewProvider {
     let vault = Vault.previewData
 
     NavigationStack {
-      let show = vault.music.shows[0]
-      ArtistBlurb(show: show, venue: vault.lookup.venueForShow(show))
+      ArtistBlurb(concert: vault.concert(from: vault.music.shows[0]))
     }
 
     NavigationStack {
-      let show = vault.music.shows[1]
-      ArtistBlurb(show: show, venue: vault.lookup.venueForShow(show))
+      ArtistBlurb(concert: vault.concert(from: vault.music.shows[1]))
     }
 
     NavigationStack {
-      let show = vault.music.shows[2]
-      ArtistBlurb(show: show, venue: vault.lookup.venueForShow(show))
+      ArtistBlurb(concert: vault.concert(from: vault.music.shows[2]))
     }
   }
 }

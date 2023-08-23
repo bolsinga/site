@@ -57,7 +57,7 @@ struct ArtistDetail: View {
       ) {
         ForEach(shows) { show in
           NavigationLink(value: show) {
-            ArtistBlurb(show: show, venue: vault.lookup.venueForShow(show))
+            ArtistBlurb(concert: vault.concert(from: show))
           }
         }
       }
