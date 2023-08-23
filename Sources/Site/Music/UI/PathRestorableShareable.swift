@@ -17,13 +17,13 @@ protocol PathRestorableShareable: PathRestorable {
   func message(vault: Vault) -> Text
 }
 
-extension Show: PathRestorableShareable {
+extension Concert: PathRestorableShareable {
   func subject(vault: Vault) -> Text {
-    Text(self.formatted(.headlinerAndVenue, lookup: vault.lookup))
+    Text(self.show.formatted(.headlinerAndVenue, lookup: vault.lookup))
   }
 
   func message(vault: Vault) -> Text {
-    Text(self.formatted(.full, lookup: vault.lookup))
+    Text(self.show.formatted(.full, lookup: vault.lookup))
   }
 }
 

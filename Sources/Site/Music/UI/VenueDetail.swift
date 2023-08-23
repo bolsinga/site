@@ -62,7 +62,8 @@ struct VenueDetail: View {
       header: Text("Shows", bundle: .module, comment: "Title of the Shows section of VenueDetail")
     ) {
       ForEach(shows) { show in
-        NavigationLink(value: show) { VenueBlurb(concert: vault.concert(from: show)) }
+        let concert = vault.concert(from: show)
+        NavigationLink(value: concert) { VenueBlurb(concert: concert) }
       }
     }
   }

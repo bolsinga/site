@@ -11,10 +11,6 @@ protocol PathRestorable {
   var archivePath: ArchivePath { get }
 }
 
-extension Show: PathRestorable {
-  var archivePath: ArchivePath { .show(id) }
-}
-
 extension Venue: PathRestorable {
   var archivePath: ArchivePath { .venue(id) }
 }
