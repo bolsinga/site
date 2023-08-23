@@ -8,17 +8,11 @@
 import SwiftUI
 
 struct VenueBlurb: View {
-  @Environment(\.vault) private var vault: Vault
-
-  let show: Show
-
-  private var artists: [Artist] {
-    vault.lookup.artistsForShow(show)
-  }
+  let concert: Concert
 
   @ViewBuilder private var artistsView: some View {
     VStack(alignment: .leading) {
-      ForEach(artists) { artist in
+      ForEach(concert.artists) { artist in
         Text(artist.name).font(.headline)
       }
     }
@@ -26,7 +20,7 @@ struct VenueBlurb: View {
 
   @ViewBuilder private var detailsView: some View {
     VStack(alignment: .trailing) {
-      Text(show.date.formatted(.compact))
+      Text(concert.show.date.formatted(.compact))
     }
     .font(.footnote)
   }
@@ -44,13 +38,10 @@ struct VenueBlurb_Previews: PreviewProvider {
   static var previews: some View {
     let vault = Vault.previewData
 
-    VenueBlurb(show: vault.music.shows[0])
-      .environment(\.vault, vault)
+    VenueBlurb(concert: vault.concert(from: vault.music.shows[0]))
 
-    VenueBlurb(show: vault.music.shows[1])
-      .environment(\.vault, vault)
+    VenueBlurb(concert: vault.concert(from: vault.music.shows[1]))
 
-    VenueBlurb(show: vault.music.shows[2])
-      .environment(\.vault, vault)
+    VenueBlurb(concert: vault.concert(from: vault.music.shows[2]))
   }
 }
