@@ -8,21 +8,11 @@
 import SwiftUI
 
 struct TodayBlurb: View {
-  @Environment(\.vault) private var vault: Vault
-
-  let show: Show
-
-  private var artists: [Artist] {
-    vault.lookup.artistsForShow(show)
-  }
-
-  private var venue: Venue? {
-    vault.lookup.venueForShow(show)
-  }
+  let concert: Concert
 
   @ViewBuilder private var artistsView: some View {
     VStack(alignment: .leading) {
-      ForEach(artists) { artist in
+      ForEach(concert.artists) { artist in
         Text(artist.name).font(.headline)
       }
     }
@@ -30,10 +20,10 @@ struct TodayBlurb: View {
 
   @ViewBuilder private var detailsView: some View {
     VStack(alignment: .trailing) {
-      if let venue {
+      if let venue = concert.venue {
         Text(venue.name)
       }
-      if let date = show.date.date {
+      if let date = concert.show.date.date {
         Text(date.formatted(.relative(presentation: .numeric)))
       }
     }
@@ -53,13 +43,10 @@ struct TodayBlurb_Previews: PreviewProvider {
   static var previews: some View {
     let vault = Vault.previewData
 
-    TodayBlurb(show: vault.music.shows[0])
-      .environment(\.vault, vault)
+    TodayBlurb(concert: vault.concert(from: vault.music.shows[0]))
 
-    TodayBlurb(show: vault.music.shows[1])
-      .environment(\.vault, vault)
+    TodayBlurb(concert: vault.concert(from: vault.music.shows[1]))
 
-    TodayBlurb(show: vault.music.shows[2])
-      .environment(\.vault, vault)
+    TodayBlurb(concert: vault.concert(from: vault.music.shows[2]))
   }
 }
