@@ -15,13 +15,11 @@ final class PathRestorableUserActivityTests: XCTestCase {
   func testShow() throws {
     let userActivity = NSUserActivity(activityType: "test-type")
 
-    let item = Show(artists: [], date: PartialDate(), id: "1", venue: "1")
-
-    userActivity.update(item, vault: vault)
+    userActivity.update(vault.music.shows[0], vault: vault)
 
     XCTAssertTrue(userActivity.isEligibleForHandoff)
 
-    XCTAssertEqual(userActivity.targetContentIdentifier, "sh-1")
+    XCTAssertEqual(userActivity.targetContentIdentifier, "sh-sh15")
 
     XCTAssertTrue(userActivity.isEligibleForSearch)
     XCTAssertNotNil(userActivity.contentAttributeSet)
@@ -29,7 +27,7 @@ final class PathRestorableUserActivityTests: XCTestCase {
     XCTAssertTrue(userActivity.isEligibleForPublicIndexing)
     XCTAssertNotNil(userActivity.webpageURL)
 
-    XCTAssertEqual(try userActivity.archivePath(), try ArchivePath("sh-1"))
+    XCTAssertEqual(try userActivity.archivePath(), try ArchivePath("sh-sh15"))
 
     XCTAssertNotNil(userActivity.expirationDate)
   }
@@ -37,13 +35,11 @@ final class PathRestorableUserActivityTests: XCTestCase {
   func testArtist() throws {
     let userActivity = NSUserActivity(activityType: "test-type")
 
-    let item = Artist(id: "1", name: "name")
-
-    userActivity.update(item, vault: vault)
+    userActivity.update(vault.music.artists[0], vault: vault)
 
     XCTAssertTrue(userActivity.isEligibleForHandoff)
 
-    XCTAssertEqual(userActivity.targetContentIdentifier, "ar-1")
+    XCTAssertEqual(userActivity.targetContentIdentifier, "ar-ar0")
 
     XCTAssertTrue(userActivity.isEligibleForSearch)
     XCTAssertNotNil(userActivity.contentAttributeSet)
@@ -51,19 +47,17 @@ final class PathRestorableUserActivityTests: XCTestCase {
     XCTAssertTrue(userActivity.isEligibleForPublicIndexing)
     XCTAssertNotNil(userActivity.webpageURL)
 
-    XCTAssertEqual(try userActivity.archivePath(), try ArchivePath("ar-1"))
+    XCTAssertEqual(try userActivity.archivePath(), try ArchivePath("ar-ar0"))
   }
 
   func testVenue() throws {
     let userActivity = NSUserActivity(activityType: "test-type")
 
-    let item = Venue(id: "1", location: Location(city: "city", state: "st"), name: "name")
-
-    userActivity.update(item, vault: vault)
+    userActivity.update(vault.music.venues[0], vault: vault)
 
     XCTAssertTrue(userActivity.isEligibleForHandoff)
 
-    XCTAssertEqual(userActivity.targetContentIdentifier, "v-1")
+    XCTAssertEqual(userActivity.targetContentIdentifier, "v-v10")
 
     XCTAssertTrue(userActivity.isEligibleForSearch)
     XCTAssertNotNil(userActivity.contentAttributeSet)
@@ -71,7 +65,7 @@ final class PathRestorableUserActivityTests: XCTestCase {
     XCTAssertTrue(userActivity.isEligibleForPublicIndexing)
     XCTAssertNotNil(userActivity.webpageURL)
 
-    XCTAssertEqual(try userActivity.archivePath(), try ArchivePath("v-1"))
+    XCTAssertEqual(try userActivity.archivePath(), try ArchivePath("v-v10"))
   }
 
   func testAnnum() throws {
@@ -97,10 +91,9 @@ final class PathRestorableUserActivityTests: XCTestCase {
   func testShow_withURL() throws {
     let userActivity = NSUserActivity(activityType: "test-type")
 
-    let item = Show(artists: [], date: PartialDate(), id: "1", venue: "1")
-    let url = URL(string: "https://www.example.com/dates/1.html")!
+    let url = URL(string: "https://www.example.com/dates/sh15.html")!
 
-    userActivity.update(item, vault: vault)
+    userActivity.update(vault.music.shows[0], vault: vault)
 
     XCTAssertTrue(userActivity.isEligibleForPublicIndexing)
     XCTAssertEqual(userActivity.webpageURL, url)
