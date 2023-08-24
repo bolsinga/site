@@ -15,7 +15,7 @@ final class PathRestorableUserActivityTests: XCTestCase {
   func testShow() throws {
     let userActivity = NSUserActivity(activityType: "test-type")
 
-    userActivity.update(vault.music.shows[0], vault: vault)
+    userActivity.update(vault.concert(from: vault.music.shows[0]), vault: vault)
 
     XCTAssertTrue(userActivity.isEligibleForHandoff)
 
@@ -93,7 +93,7 @@ final class PathRestorableUserActivityTests: XCTestCase {
 
     let url = URL(string: "https://www.example.com/dates/sh15.html")!
 
-    userActivity.update(vault.music.shows[0], vault: vault)
+    userActivity.update(vault.concert(from: vault.music.shows[0]), vault: vault)
 
     XCTAssertTrue(userActivity.isEligibleForPublicIndexing)
     XCTAssertEqual(userActivity.webpageURL, url)
