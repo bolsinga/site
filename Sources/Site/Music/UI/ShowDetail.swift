@@ -67,8 +67,8 @@ struct ShowDetail: View {
       .listStyle(.grouped)
     #endif
     .navigationTitle(venueName)
-    .pathRestorableUserActivityModifier(concert.show)
-    .sharePathRestorable(concert.show)
+    .pathRestorableUserActivityModifier(concert)
+    .sharePathRestorable(concert)
   }
 }
 

@@ -27,7 +27,8 @@ struct YearDetail: View {
           "Shows", bundle: .module, comment: "Title of the Shows section of YearDetail")
       ) {
         ForEach(shows) { show in
-          NavigationLink(value: show) { ConcertBlurb(concert: vault.concert(from: show)) }
+          let concert = vault.concert(from: show)
+          NavigationLink(value: concert) { ConcertBlurb(concert: concert) }
         }
       }
     }
