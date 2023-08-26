@@ -61,7 +61,7 @@ struct Program: AsyncParsableCommand {
     }
     for show in sortedShows.reversed() {
       let concert = vault.concert(from: show)
-      print(concert.formatted(.full, lookup: vault.lookup))
+      print(concert.formatted(.full))
     }
 
     let sortedAlbums = music.albums.sorted {
