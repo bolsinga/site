@@ -16,8 +16,7 @@ struct PathRestorableShareModifier<T: PathRestorableShareable>: ViewModifier {
     content
       .toolbar {
         if let url = vault.createURL(for: item.archivePath) {
-          ShareLink(
-            item: url, subject: item.subject(vault: vault), message: item.message(vault: vault))
+          ShareLink(item: url, subject: item.subject, message: item.message)
         }
       }
   }

@@ -35,7 +35,7 @@ extension NSUserActivity {
       self.webpageURL = url
     }
 
-    item.updateActivity(self, vault: vault)
+    item.updateActivity(self)
 
     self.requiredUserInfoKeys = [NSUserActivity.archivePathKey]
     self.addUserInfoEntries(from: [NSUserActivity.archivePathKey: identifier])
