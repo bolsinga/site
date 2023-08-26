@@ -1,5 +1,5 @@
 //
-//  Show+FormatStyle.swift
+//  Concert+FormatStyle.swift
 //
 //
 //  Created by Greg Bolsinga on 7/2/23.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension Show {
+extension Concert {
   public struct FormatStyle: Codable, Equatable, Hashable {
     public enum Style: Codable, Equatable, Hashable {
       case full  // Headliner, Opener @ Venue on 12/01/2002
@@ -42,7 +42,7 @@ extension Show {
     }
 
     // Needed to ignore Lookup for Equatable
-    public static func == (lhs: Show.FormatStyle, rhs: Show.FormatStyle) -> Bool {
+    public static func == (lhs: Concert.FormatStyle, rhs: Concert.FormatStyle) -> Bool {
       lhs.style == rhs.style
     }
 
@@ -53,39 +53,36 @@ extension Show {
   }
 }
 
-extension Show.FormatStyle: Foundation.FormatStyle {
-  public func format(_ value: Show) -> String {
-    guard let lookup else {
-      fatalError("Show.FormatStyle requires Lookup")
-    }
-    let venue = lookup.venueForShow(value)
+extension Concert.FormatStyle: Foundation.FormatStyle {
+  public func format(_ value: Concert) -> String {
+    let venue = value.venue
     switch style {
     case .full:
-      let artists = lookup.artistsForShow(value).map { $0.name }.joined(separator: ", ")
+      let artists = value.artists.map { $0.name }.joined(separator: ", ")
       if let venue {
         return String(
-          localized: "\(artists) @ \(venue.name) : \(value.date.formatted(.compact))",
-          bundle: .module, comment: "Show.FormatStyle.full artists - venue - date")
+          localized: "\(artists) @ \(venue.name) : \(value.show.date.formatted(.compact))",
+          bundle: .module, comment: "Concert.FormatStyle.full artists - venue - date")
       } else {
         return String(
-          localized: "\(artists) : \(value.date.formatted(.compact))", bundle: .module,
-          comment: "Show.FormatStyle.full artists - date - No Venue")
+          localized: "\(artists) : \(value.show.date.formatted(.compact))", bundle: .module,
+          comment: "Concert.FormatStyle.full artists - date - No Venue")
       }
     case .artistsAndVenue:
-      let artists = lookup.artistsForShow(value).map { $0.name }.joined(separator: ", ")
+      let artists = value.artists.map { $0.name }.joined(separator: ", ")
       if let venue {
         return String(
           localized: "\(artists) @ \(venue.name)", bundle: .module,
-          comment: "Show.FormatStyle.artistsAndVenue artists - venue")
+          comment: "Concert.FormatStyle.artistsAndVenue artists - venue")
       } else {
         return artists
       }
     case .headlinerAndVenue:
-      let headliner = lookup.artistsForShow(value).first?.name ?? ""
+      let headliner = value.artists.first?.name ?? ""
       if let venue {
         return String(
           localized: "\(headliner), \(venue.name)", bundle: .module,
-          comment: "Show.FormatStyle.headlinerAndVenue artist headliner - venue")
+          comment: "Concert.FormatStyle.headlinerAndVenue artist headliner - venue")
       } else {
         return headliner
       }
@@ -93,19 +90,19 @@ extension Show.FormatStyle: Foundation.FormatStyle {
   }
 }
 
-extension Show {
-  public func formatted(_ style: Show.FormatStyle.Style = .full, lookup: Lookup) -> String {
+extension Concert {
+  public func formatted(_ style: Concert.FormatStyle.Style = .full, lookup: Lookup) -> String {
     Self.FormatStyle(style, lookup: lookup).format(self)
   }
 
   public func formatted<F: Foundation.FormatStyle>(_ style: F) -> F.FormatOutput
-  where F.FormatInput == Show {
+  where F.FormatInput == Concert {
     style.format(self)
   }
 }
 
-extension FormatStyle where Self == Show.FormatStyle {
-  static func show(style: Show.FormatStyle.Style = .full, lookup: Lookup) -> Self {
+extension FormatStyle where Self == Concert.FormatStyle {
+  static func show(style: Concert.FormatStyle.Style = .full, lookup: Lookup) -> Self {
     .init(style, lookup: lookup)
   }
 }

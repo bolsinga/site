@@ -97,7 +97,8 @@ extension Vault {
 
     var showParts: [String] = []
     for show in shows {
-      showParts.append(show.formatted(.full, lookup: lookup))
+      let concert = self.concert(from: show)
+      showParts.append(concert.formatted(.full, lookup: lookup))
     }
 
     parts.append("(\(showParts.joined(separator: "; ")))")
