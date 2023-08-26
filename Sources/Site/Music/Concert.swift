@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct Concert: Identifiable {
-  var id: Show.ID { show.id }
+public struct Concert: Identifiable {
+  public var id: Show.ID { show.id }
 
   let show: Show
   let venue: Venue?

@@ -8,7 +8,7 @@
 import Foundation
 
 extension Vault {
-  func concert(from show: Show) -> Concert {
+  public func concert(from show: Show) -> Concert {
     return Concert(
       show: show, venue: lookup.venueForShow(show), artists: lookup.artistsForShow(show))
   }

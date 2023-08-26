@@ -13,7 +13,7 @@ extension Concert: PathRestorableUserActivity {
     userActivity.isEligibleForHandoff = true
 
     userActivity.isEligibleForSearch = true
-    userActivity.title = self.show.formatted(.headlinerAndVenue, lookup: vault.lookup)
+    userActivity.title = self.formatted(.headlinerAndVenue, lookup: vault.lookup)
     let attributes = CSSearchableItemAttributeSet(contentType: .content)
     attributes.contentDescription = String(
       localized: "See More About This Show", bundle: .module,

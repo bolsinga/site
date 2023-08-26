@@ -19,11 +19,11 @@ protocol PathRestorableShareable: PathRestorable {
 
 extension Concert: PathRestorableShareable {
   func subject(vault: Vault) -> Text {
-    Text(self.show.formatted(.headlinerAndVenue, lookup: vault.lookup))
+    Text(self.formatted(.headlinerAndVenue, lookup: vault.lookup))
   }
 
   func message(vault: Vault) -> Text {
-    Text(self.show.formatted(.full, lookup: vault.lookup))
+    Text(self.formatted(.full, lookup: vault.lookup))
   }
 }
 

@@ -1,19 +1,19 @@
 /* Rank.FormatStyle.hash */
 "#%@" = "#%@";
 
-/* Show.FormatStyle.full artists - date - No Venue */
+/* Concert.FormatStyle.full artists - date - No Venue */
 "%@ : %@" = "%@ : %@";
 
-/* Show.FormatStyle.artistsAndVenue artists - venue */
+/* Concert.FormatStyle.artistsAndVenue artists - venue */
 "%@ @ %@" = "%@ @ %@";
 
-/* Show.FormatStyle.full artists - venue - date */
+/* Concert.FormatStyle.full artists - venue - date */
 "%@ @ %@ : %@" = "%@ @ %@ : %@";
 
 /* Ranking.FormatStyle.rankAndCount */
 "%@ Count: %@" = "%@ Count: %@";
 
-/* Show.FormatStyle.headlinerAndVenue artist headliner - venue */
+/* Concert.FormatStyle.headlinerAndVenue artist headliner - venue */
 "%@, %@" = "%@, %@";
 
 /* Rank.FormatStyle.dotted */
