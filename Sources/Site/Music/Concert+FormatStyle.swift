@@ -17,23 +17,12 @@ extension Concert {
 
     let style: Style
 
-    // This is Optional since this must conform to decodable (and Optional types are OK).
-    //  If it is non-Optional, then Decoder init(from:) is required, which would mean it would have
-    //  to create a Lookup, which is non-trivial.
-    var lookup: Lookup?
-
-    // Make this private so that in practice lookup is never nil
-    private init(style: Style, lookup: Lookup?) {
+    public init(_ style: Style = .full) {
       self.style = style
-      self.lookup = lookup
     }
 
-    public init(_ style: Style = .full, lookup: Lookup) {
-      self.init(style: style, lookup: lookup)
-    }
-
-    public func style(_ style: Style, lookup: Lookup) -> Self {
-      .init(style, lookup: lookup)
+    public func style(_ style: Style) -> Self {
+      .init(style)
     }
 
     // Needed to ignore Lookup for Codable
@@ -91,8 +80,8 @@ extension Concert.FormatStyle: Foundation.FormatStyle {
 }
 
 extension Concert {
-  public func formatted(_ style: Concert.FormatStyle.Style = .full, lookup: Lookup) -> String {
-    Self.FormatStyle(style, lookup: lookup).format(self)
+  public func formatted(_ style: Concert.FormatStyle.Style = .full) -> String {
+    Self.FormatStyle(style).format(self)
   }
 
   public func formatted<F: Foundation.FormatStyle>(_ style: F) -> F.FormatOutput
@@ -102,7 +91,7 @@ extension Concert {
 }
 
 extension FormatStyle where Self == Concert.FormatStyle {
-  static func show(style: Concert.FormatStyle.Style = .full, lookup: Lookup) -> Self {
-    .init(style, lookup: lookup)
+  static func show(style: Concert.FormatStyle.Style = .full) -> Self {
+    .init(style)
   }
 }
