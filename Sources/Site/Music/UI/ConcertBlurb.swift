@@ -41,10 +41,10 @@ struct ConcertBlurbView_Previews: PreviewProvider {
   static var previews: some View {
     let vault = Vault.previewData
 
-    ConcertBlurb(concert: vault.concert(from: vault.music.shows[0]))
+    ConcertBlurb(concert: vault.lookup.concert(from: vault.music.shows[0]))
 
-    ConcertBlurb(concert: vault.concert(from: vault.music.shows[1]))
+    ConcertBlurb(concert: vault.lookup.concert(from: vault.music.shows[1]))
 
-    ConcertBlurb(concert: vault.concert(from: vault.music.shows[2]))
+    ConcertBlurb(concert: vault.lookup.concert(from: vault.music.shows[2]))
   }
 }

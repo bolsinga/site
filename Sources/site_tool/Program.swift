@@ -56,7 +56,9 @@ struct Program: AsyncParsableCommand {
     print("Songs: \(music.songs.count)")
     print("Venues: \(music.venues.count)")
 
-    let sortedConcerts = music.shows.map { vault.concert(from: $0)}.sorted { vault.comparator.compare(lhs: $0, rhs: $1) }
+    let sortedConcerts = music.shows.map { vault.lookup.concert(from: $0) }.sorted {
+      vault.comparator.compare(lhs: $0, rhs: $1)
+    }
     for concert in sortedConcerts.reversed() {
       print(concert.formatted(.full))
     }

@@ -47,7 +47,8 @@ extension Logger {
       return
     }
 
-    todayConcerts = vault.music.showsOnDate(Date.now).map { vault.concert(from: $0) }.sorted {
+    todayConcerts = vault.music.showsOnDate(Date.now).map { vault.lookup.concert(from: $0) }.sorted
+    {
       vault.comparator.compare(lhs: $0, rhs: $1)
     }
 

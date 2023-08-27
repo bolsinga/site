@@ -43,10 +43,10 @@ struct TodayBlurb_Previews: PreviewProvider {
   static var previews: some View {
     let vault = Vault.previewData
 
-    TodayBlurb(concert: vault.concert(from: vault.music.shows[0]))
+    TodayBlurb(concert: vault.lookup.concert(from: vault.music.shows[0]))
 
-    TodayBlurb(concert: vault.concert(from: vault.music.shows[1]))
+    TodayBlurb(concert: vault.lookup.concert(from: vault.music.shows[1]))
 
-    TodayBlurb(concert: vault.concert(from: vault.music.shows[2]))
+    TodayBlurb(concert: vault.lookup.concert(from: vault.music.shows[2]))
   }
 }
