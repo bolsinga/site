@@ -21,10 +21,6 @@ struct ArchiveCategorySplit: View {
 
   @StateObject private var archiveNavigation = ArchiveNavigation()
 
-  private var music: Music {
-    vault.music
-  }
-
   @ViewBuilder var sidebar: some View {
     List(ArchiveCategory.allCases, id: \.self, selection: $archiveNavigation.selectedCategory) {
       category in
@@ -36,11 +32,11 @@ struct ArchiveCategorySplit: View {
         case .stats:
           EmptyView()
         case .shows:
-          Text(music.shows.count.formatted(.number))
+          Text(vault.music.shows.count.formatted(.number))
         case .venues:
-          Text(music.venues.count.formatted(.number))
+          Text(vault.music.venues.count.formatted(.number))
         case .artists:
-          Text(music.artists.count.formatted(.number))
+          Text(vault.music.artists.count.formatted(.number))
         }
       } label: {
         category.label

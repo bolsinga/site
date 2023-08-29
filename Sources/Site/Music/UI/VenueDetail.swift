@@ -12,16 +12,12 @@ struct VenueDetail: View {
 
   let venue: Venue
 
-  private var music: Music {
-    vault.music
-  }
-
   private var computedRelatedVenues: [Venue] {
-    music.related(venue).sorted(by: vault.comparator.libraryCompare(lhs:rhs:))
+    vault.music.related(venue).sorted(by: vault.comparator.libraryCompare(lhs:rhs:))
   }
 
   private var shows: [Show] {
-    music.showsForVenue(venue)
+    vault.music.showsForVenue(venue)
   }
 
   @ViewBuilder private var firstSetElement: some View {

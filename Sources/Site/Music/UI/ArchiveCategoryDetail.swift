@@ -16,10 +16,6 @@ struct ArchiveCategoryDetail: View {
   @Binding var artistSort: ArtistSort
   @Binding var isCategoryActive: Bool
 
-  private var music: Music {
-    vault.music
-  }
-
   @ViewBuilder private var stackElement: some View {
     if let category {
       switch category {
@@ -28,7 +24,7 @@ struct ArchiveCategoryDetail: View {
           .shareCategory(category)
           .archiveCategoryUserActivity(category, isActive: $isCategoryActive)
       case .stats:
-        List { StatsGrouping(shows: music.shows, displayArchiveCategoryCounts: false) }
+        List { StatsGrouping(shows: vault.music.shows, displayArchiveCategoryCounts: false) }
           .navigationTitle(Text(category.localizedString))
           .shareCategory(category)
           .archiveCategoryUserActivity(category, isActive: $isCategoryActive)
@@ -37,11 +33,11 @@ struct ArchiveCategoryDetail: View {
           .shareCategory(category)
           .archiveCategoryUserActivity(category, isActive: $isCategoryActive)
       case .venues:
-        VenueList(venues: music.venues, sort: $venueSort)
+        VenueList(venues: vault.music.venues, sort: $venueSort)
           .shareCategory(category)
           .archiveCategoryUserActivity(category, isActive: $isCategoryActive)
       case .artists:
-        ArtistList(artists: music.artists, sort: $artistSort)
+        ArtistList(artists: vault.music.artists, sort: $artistSort)
           .shareCategory(category)
           .archiveCategoryUserActivity(category, isActive: $isCategoryActive)
       }

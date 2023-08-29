@@ -12,18 +12,14 @@ struct ArtistDetail: View {
 
   let artist: Artist
 
-  private var music: Music {
-    vault.music
-  }
-
   private var computedShows: [Show] {
-    return music.showsForArtist(artist).sorted {
+    return vault.music.showsForArtist(artist).sorted {
       vault.comparator.showCompare(lhs: $0, rhs: $1, lookup: vault.lookup)
     }
   }
 
   private var computedRelatedArtists: [Artist] {
-    music.related(artist).sorted(by: vault.comparator.libraryCompare(lhs:rhs:))
+    vault.music.related(artist).sorted(by: vault.comparator.libraryCompare(lhs:rhs:))
   }
 
   @ViewBuilder private var firstSetElement: some View {
