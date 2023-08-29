@@ -120,7 +120,7 @@ public struct Vault {
     music.venues
   }
 
-  var shows: [Show] {
+  public var shows: [Show] {
     music.shows
   }
 
