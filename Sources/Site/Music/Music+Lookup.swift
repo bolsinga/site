@@ -15,11 +15,4 @@ extension Music {
   public func showsForVenue(_ venue: Venue) -> [Show] {
     shows.filter { $0.venue == venue.id }
   }
-
-  public func showsOnDate(_ date: Date) -> [Show] {
-    return shows.filter { $0.date.day != nil }.filter { $0.date.month != nil }.filter {
-      Calendar.autoupdatingCurrent.date(
-        date, matchesComponents: DateComponents(month: $0.date.month!, day: $0.date.day!))
-    }
-  }
 }

@@ -47,10 +47,7 @@ extension Logger {
       return
     }
 
-    todayConcerts = vault.music.showsOnDate(Date.now).map { vault.lookup.concert(from: $0) }.sorted
-    {
-      vault.comparator.compare(lhs: $0, rhs: $1)
-    }
+    todayConcerts = vault.concerts(on: Date.now)
 
     Logger.vaultModel.log("Today Count: \(self.todayConcerts.count, privacy: .public)")
   }
