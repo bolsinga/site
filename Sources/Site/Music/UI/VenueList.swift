@@ -115,7 +115,7 @@ struct VenueList_Previews: PreviewProvider {
   static var previews: some View {
     let vault = Vault.previewData
     NavigationStack {
-      VenueList(venues: vault.music.venues, sort: .constant(.alphabetical))
+      VenueList(venues: vault.venues, sort: .constant(.alphabetical))
         .environment(\.vault, vault)
         .musicDestinations()
     }

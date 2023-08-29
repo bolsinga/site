@@ -78,7 +78,7 @@ struct LibraryComparableList_Previews: PreviewProvider {
 
     NavigationStack {
       LibraryComparableList(
-        items: vault.music.venues,
+        items: vault.venues,
         sectioner: LibrarySectioner(),
         itemContentView: { _ in
           EmptyView()

@@ -53,7 +53,7 @@ final class PathRestorableUserActivityTests: XCTestCase {
   func testVenue() throws {
     let userActivity = NSUserActivity(activityType: "test-type")
 
-    userActivity.update(vault.music.venues[0], vault: vault)
+    userActivity.update(vault.venues[0], vault: vault)
 
     XCTAssertTrue(userActivity.isEligibleForHandoff)
 
