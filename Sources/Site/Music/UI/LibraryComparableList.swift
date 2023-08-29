@@ -63,8 +63,8 @@ struct LibraryComparableList_Previews: PreviewProvider {
       LibraryComparableList(
         items: vault.artists,
         sectioner: LibrarySectioner(),
-        itemContentView: {
-          Text(vault.music.showsForArtist($0).count.formatted(.number))
+        itemContentView: { _ in
+          Text(3.formatted(.number))
         },
         sectionHeaderView: { section in
           Text("Artists")
