@@ -19,7 +19,7 @@ struct ArtistDetail: View {
   }
 
   private var computedRelatedArtists: [Artist] {
-    vault.music.related(artist).sorted(by: vault.comparator.libraryCompare(lhs:rhs:))
+    vault.related(artist).sorted(by: vault.comparator.libraryCompare(lhs:rhs:))
   }
 
   @ViewBuilder private var firstSetElement: some View {

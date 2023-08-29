@@ -13,7 +13,7 @@ struct VenueDetail: View {
   let venue: Venue
 
   private var computedRelatedVenues: [Venue] {
-    vault.music.related(venue).sorted(by: vault.comparator.libraryCompare(lhs:rhs:))
+    vault.related(venue).sorted(by: vault.comparator.libraryCompare(lhs:rhs:))
   }
 
   private var shows: [Show] {
