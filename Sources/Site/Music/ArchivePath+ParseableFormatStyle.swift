@@ -71,6 +71,7 @@ extension ArchivePath.FormatStyle {
       case filenameFormat
       case fileType
       case archiveType
+      case invalidPrefix
     }
 
     public init() {}
@@ -111,10 +112,19 @@ extension ArchivePath.FormatStyle {
 
       switch type {
       case "bands":
+        guard id.starts(with: ArchivePath.artistPrefix) else {
+          throw ValidationError.invalidPrefix
+        }
         return ArchivePath.artist(id)
       case "venues":
+        guard id.starts(with: ArchivePath.venuePrefix) else {
+          throw ValidationError.invalidPrefix
+        }
         return ArchivePath.venue(id)
       case "dates":
+        guard id.starts(with: ArchivePath.showPrefix) else {
+          throw ValidationError.invalidPrefix
+        }
         return ArchivePath.show(id)
       default:
         throw ValidationError.archiveType
