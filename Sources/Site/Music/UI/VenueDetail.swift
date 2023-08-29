@@ -99,7 +99,7 @@ struct VenueDetail_Previews: PreviewProvider {
   static var previews: some View {
     let vault = Vault.previewData
     NavigationStack {
-      VenueDetail(venue: vault.music.venues[0])
+      VenueDetail(venue: vault.venues[0])
         .environment(\.vault, vault)
         .musicDestinations()
     }

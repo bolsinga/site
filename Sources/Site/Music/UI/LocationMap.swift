@@ -36,7 +36,7 @@ struct LocationMap_Previews: PreviewProvider {
   static var previews: some View {
     let vault = Vault.previewData
 
-    LocationMap(location: vault.music.venues[0].location)
+    LocationMap(location: vault.venues[0].location)
       .environment(\.vault, vault)
   }
 }

@@ -111,4 +111,8 @@ public struct Vault {
     urlComponents?.path = category.formatted(.urlPath)
     return urlComponents?.url
   }
+
+  var venues: [Venue] {
+    music.venues
+  }
 }
