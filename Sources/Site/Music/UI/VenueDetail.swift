@@ -17,7 +17,7 @@ struct VenueDetail: View {
   }
 
   private var shows: [Show] {
-    vault.music.showsForVenue(venue)
+    vault.shows.filter { $0.venue == venue.id }
   }
 
   @ViewBuilder private var firstSetElement: some View {

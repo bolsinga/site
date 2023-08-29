@@ -17,8 +17,8 @@ extension Music {
   }
 
   var venueRankings: [Venue.ID: Ranking] {
-    let venuesShowCount: [(Venue.ID, Int)] = self.venues.reduce(into: [:]) {
-      $0[$1.id] = self.showsForVenue($1).count
+    let venuesShowCount: [(Venue.ID, Int)] = self.venues.reduce(into: [:]) { d, item in
+      d[item.id] = self.shows.filter { $0.venue == item.id }.count
     }.map { $0 }
 
     return computeRankings(items: venuesShowCount)
@@ -33,8 +33,8 @@ extension Music {
   }
 
   var venueSpanRankings: [Venue.ID: Ranking] {
-    let venueShowSpans: [(Venue.ID, Int)] = self.venues.reduce(into: [:]) {
-      $0[$1.id] = self.showsForVenue($1).map { $0.date }.yearSpan
+    let venueShowSpans: [(Venue.ID, Int)] = self.venues.reduce(into: [:]) { d, item in
+      d[item.id] = self.shows.filter { $0.venue == item.id }.map { $0.date }.yearSpan
     }.map { $0 }
 
     return computeRankings(items: venueShowSpans)
@@ -49,8 +49,8 @@ extension Music {
   }
 
   var venueArtistRankings: [Venue.ID: Ranking] {
-    let venueArtistCounts: [(Venue.ID, Int)] = self.venues.reduce(into: [:]) {
-      $0[$1.id] = Set(self.showsForVenue($1).flatMap { $0.artists }).count
+    let venueArtistCounts: [(Venue.ID, Int)] = self.venues.reduce(into: [:]) { d, item in
+      d[item.id] = Set(self.shows.filter { $0.venue == item.id }.flatMap { $0.artists }).count
     }.map { $0 }
 
     return computeRankings(items: venueArtistCounts)
