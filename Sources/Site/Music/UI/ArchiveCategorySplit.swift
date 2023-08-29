@@ -36,7 +36,7 @@ struct ArchiveCategorySplit: View {
         case .venues:
           Text(vault.venues.count.formatted(.number))
         case .artists:
-          Text(vault.music.artists.count.formatted(.number))
+          Text(vault.artists.count.formatted(.number))
         }
       } label: {
         category.label

@@ -35,7 +35,7 @@ final class PathRestorableUserActivityTests: XCTestCase {
   func testArtist() throws {
     let userActivity = NSUserActivity(activityType: "test-type")
 
-    userActivity.update(vault.music.artists[0], vault: vault)
+    userActivity.update(vault.artists[0], vault: vault)
 
     XCTAssertTrue(userActivity.isEligibleForHandoff)
 

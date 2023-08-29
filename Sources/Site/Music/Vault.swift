@@ -112,6 +112,10 @@ public struct Vault {
     return urlComponents?.url
   }
 
+  var artists: [Artist] {
+    music.artists
+  }
+
   var venues: [Venue] {
     music.venues
   }
