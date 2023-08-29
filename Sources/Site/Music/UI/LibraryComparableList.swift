@@ -61,7 +61,7 @@ struct LibraryComparableList_Previews: PreviewProvider {
 
     NavigationStack {
       LibraryComparableList(
-        items: vault.music.artists,
+        items: vault.artists,
         sectioner: LibrarySectioner(),
         itemContentView: {
           Text(vault.music.showsForArtist($0).count.formatted(.number))

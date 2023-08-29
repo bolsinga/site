@@ -37,7 +37,7 @@ struct ArchiveCategoryDetail: View {
           .shareCategory(category)
           .archiveCategoryUserActivity(category, isActive: $isCategoryActive)
       case .artists:
-        ArtistList(artists: vault.music.artists, sort: $artistSort)
+        ArtistList(artists: vault.artists, sort: $artistSort)
           .shareCategory(category)
           .archiveCategoryUserActivity(category, isActive: $isCategoryActive)
       }

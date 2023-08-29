@@ -117,7 +117,7 @@ struct ArtistList_Previews: PreviewProvider {
     let vault = Vault.previewData
 
     NavigationStack {
-      ArtistList(artists: vault.music.artists, sort: .constant(.alphabetical))
+      ArtistList(artists: vault.artists, sort: .constant(.alphabetical))
         .environment(\.vault, vault)
         .musicDestinations()
     }
