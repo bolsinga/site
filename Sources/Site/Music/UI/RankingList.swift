@@ -58,8 +58,8 @@ struct RankingList_Previews: PreviewProvider {
           return [Ranking(rank: .rank(1), value: 3): artists]
         },
         rankSorted: >,
-        itemContentView: {
-          Text(vault.music.showsForArtist($0).count.formatted(.number))
+        itemContentView: { _ in
+          Text(3.formatted(.number))
         },
         sectionHeaderView: { section in
           Text("Artists")
