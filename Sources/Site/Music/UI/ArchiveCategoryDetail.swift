@@ -24,7 +24,7 @@ struct ArchiveCategoryDetail: View {
           .shareCategory(category)
           .archiveCategoryUserActivity(category, isActive: $isCategoryActive)
       case .stats:
-        List { StatsGrouping(shows: vault.music.shows, displayArchiveCategoryCounts: false) }
+        List { StatsGrouping(shows: vault.shows, displayArchiveCategoryCounts: false) }
           .navigationTitle(Text(category.localizedString))
           .shareCategory(category)
           .archiveCategoryUserActivity(category, isActive: $isCategoryActive)
