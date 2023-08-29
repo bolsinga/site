@@ -123,4 +123,15 @@ public struct Vault {
   var shows: [Show] {
     music.shows
   }
+
+  func concerts(on date: Date) -> [Concert] {
+    return shows.filter { $0.date.day != nil }
+      .filter { $0.date.month != nil }
+      .filter {
+        Calendar.autoupdatingCurrent.date(
+          date, matchesComponents: DateComponents(month: $0.date.month!, day: $0.date.day!))
+      }
+      .map { lookup.concert(from: $0) }
+      .sorted { comparator.compare(lhs: $0, rhs: $1) }
+  }
 }
