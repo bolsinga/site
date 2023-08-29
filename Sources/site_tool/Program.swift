@@ -84,7 +84,7 @@ struct Program: AsyncParsableCommand {
     }
 
     for artist in music.artists.sorted(by: vault.comparator.libraryCompare(lhs:rhs:)) {
-      let shows = vault.music.showsForArtist(artist).sorted {
+      let shows = vault.shows.filter { $0.artists.contains(artist.id) }.sorted {
         vault.comparator.showCompare(lhs: $0, rhs: $1, lookup: vault.lookup)
       }
       if !shows.isEmpty {

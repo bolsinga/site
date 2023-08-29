@@ -13,7 +13,7 @@ struct ArtistDetail: View {
   let artist: Artist
 
   private var computedShows: [Show] {
-    return vault.music.showsForArtist(artist).sorted {
+    return vault.shows.filter { $0.artists.contains(artist.id) }.sorted {
       vault.comparator.showCompare(lhs: $0, rhs: $1, lookup: vault.lookup)
     }
   }

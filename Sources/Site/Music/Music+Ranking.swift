@@ -9,8 +9,8 @@ import Foundation
 
 extension Music {
   var artistRankings: [Artist.ID: Ranking] {
-    let artistShowCounts: [(Artist.ID, Int)] = self.artists.reduce(into: [:]) {
-      $0[$1.id] = self.showsForArtist($1).count
+    let artistShowCounts: [(Artist.ID, Int)] = self.artists.reduce(into: [:]) { d, item in
+      d[item.id] = self.shows.filter { $0.artists.contains(item.id) }.count
     }.map { $0 }
 
     return computeRankings(items: artistShowCounts)
@@ -25,8 +25,8 @@ extension Music {
   }
 
   var artistSpanRankings: [Artist.ID: Ranking] {
-    let artistShowSpans: [(Artist.ID, Int)] = self.artists.reduce(into: [:]) {
-      $0[$1.id] = self.showsForArtist($1).map { $0.date }.yearSpan
+    let artistShowSpans: [(Artist.ID, Int)] = self.artists.reduce(into: [:]) { d, item in
+      d[item.id] = self.shows.filter { $0.artists.contains(item.id) }.map { $0.date }.yearSpan
     }.map { $0 }
 
     return computeRankings(items: artistShowSpans)
@@ -41,8 +41,8 @@ extension Music {
   }
 
   var artistVenueRankings: [Artist.ID: Ranking] {
-    let artistVenueCounts: [(Artist.ID, Int)] = self.artists.reduce(into: [:]) {
-      $0[$1.id] = Set(self.showsForArtist($1).map { $0.venue }).count
+    let artistVenueCounts: [(Artist.ID, Int)] = self.artists.reduce(into: [:]) { d, item in
+      d[item.id] = Set(self.shows.filter { $0.artists.contains(item.id) }.map { $0.venue }).count
     }.map { $0 }
 
     return computeRankings(items: artistVenueCounts)
