@@ -119,4 +119,8 @@ public struct Vault {
   var venues: [Venue] {
     music.venues
   }
+
+  var shows: [Show] {
+    music.shows
+  }
 }

@@ -32,7 +32,7 @@ struct ArchiveCategorySplit: View {
         case .stats:
           EmptyView()
         case .shows:
-          Text(vault.music.shows.count.formatted(.number))
+          Text(vault.shows.count.formatted(.number))
         case .venues:
           Text(vault.venues.count.formatted(.number))
         case .artists:
