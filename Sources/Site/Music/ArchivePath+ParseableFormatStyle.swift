@@ -67,7 +67,6 @@ extension ArchivePath.FormatStyle {
       case url
       case scheme
       case path
-      case fragment
       case filenameFormat
       case fileType
       case archiveType
@@ -92,10 +91,6 @@ extension ArchivePath.FormatStyle {
         throw ValidationError.path
       }
 
-      guard urlComponents.fragment == nil else {
-        throw ValidationError.fragment
-      }
-
       let fileName = pathComponents[2]
       let filenameComponents = fileName.components(separatedBy: ".")
       guard filenameComponents.count == 2 else {
@@ -108,7 +103,7 @@ extension ArchivePath.FormatStyle {
       }
 
       let type = pathComponents[1]
-      let id = filenameComponents[0]
+      let id = urlComponents.fragment ?? filenameComponents[0]
 
       switch type {
       case "bands":

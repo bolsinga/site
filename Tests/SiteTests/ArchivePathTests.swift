@@ -84,6 +84,16 @@ final class ArchivePathTests: XCTestCase {
       try ArchivePath(URL(string: "https://www.example.com/dates/sh852.html")!),
       ArchivePath.show("sh852"))
 
+    XCTAssertEqual(
+      try ArchivePath(URL(string: "https://www.example.com/bands/Z.html#ar852")!),
+      ArchivePath.artist("ar852"))
+    XCTAssertEqual(
+      try ArchivePath(URL(string: "https://www.example.com/venues/Z.html#v852")!),
+      ArchivePath.venue("v852"))
+    XCTAssertEqual(
+      try ArchivePath(URL(string: "https://www.example.com/dates/Z.html#sh852")!),
+      ArchivePath.show("sh852"))
+
     XCTAssertThrowsError(
       try ArchivePath(URL(string: "https://www.example.com/bands/v852.html")!))
     XCTAssertThrowsError(
@@ -97,6 +107,12 @@ final class ArchivePathTests: XCTestCase {
       try ArchivePath(URL(string: "https://www.example.com/venues/stats.html")!))
     XCTAssertThrowsError(
       try ArchivePath(URL(string: "https://www.example.com/dates/stats.html")!))
+
+    XCTAssertThrowsError(
+      try ArchivePath(URL(string: "https://www.example.com/datess/Z.html#ar852")!))
+    XCTAssertThrowsError(try ArchivePath(URL(string: "https://www.example.com/bands/Z.html#v852")!))
+    XCTAssertThrowsError(
+      try ArchivePath(URL(string: "https://www.example.com/venues/Z.html#sh852")!))
 
     XCTAssertThrowsError(
       try ArchivePath(URL(string: "https://www.example.com/venues/L.html#ar852")!))
