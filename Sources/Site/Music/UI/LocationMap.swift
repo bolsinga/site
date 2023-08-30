@@ -12,9 +12,8 @@ import SwiftUI
 extension CLPlacemark: Identifiable {}
 
 struct LocationMap: View {
-  @Environment(\.vault) private var vault: Vault
-
   let location: Location
+  let geocode : (Location) async throws -> CLPlacemark
 
   @State private var placemark: CLPlacemark? = nil
 
@@ -27,7 +26,7 @@ struct LocationMap: View {
           }
       }
     }.task(id: location) {
-      do { placemark = try await vault.atlas.geocode(location) } catch {}
+      do { placemark = try await geocode(location) } catch {}
     }
   }
 }
@@ -36,7 +35,8 @@ struct LocationMap_Previews: PreviewProvider {
   static var previews: some View {
     let vault = Vault.previewData
 
-    LocationMap(location: vault.venues[0].location)
-      .environment(\.vault, vault)
+    LocationMap(location: vault.venues[0].location) {
+      try await vault.atlas.geocode($0)
+    }
   }
 }

@@ -32,7 +32,9 @@ struct VenueDetail: View {
         comment: "Title of the Location / Address Section for VenueDetail.")
     ) {
       AddressView(location: venue.location)
-      LocationMap(location: venue.location)
+      LocationMap(location: venue.location) {
+        try await vault.atlas.geocode($0)
+      }
         .frame(minHeight: 300)
     }
   }
