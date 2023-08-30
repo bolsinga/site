@@ -36,7 +36,7 @@ struct TodayList_Previews: PreviewProvider {
     let vault = Vault.previewData
 
     NavigationStack {
-      TodayList(concerts: vault.shows.map { vault.lookup.concert(from: $0) })
+      TodayList(concerts: vault.concerts)
         .musicDestinations()
     }
   }

@@ -26,6 +26,7 @@ public struct Vault {
   internal let sectioner: LibrarySectioner
   internal let atlas = Atlas()
   internal let baseURL: URL?
+  public let concerts: [Concert]
 
   public init(music: Music, url: URL? = nil) {
     // non-parallel, used for previews, tests
@@ -43,6 +44,9 @@ public struct Vault {
     self.comparator = comparator
     self.sectioner = sectioner
     self.baseURL = baseURL
+    self.concerts = music.shows.map { lookup.concert(from: $0) }.sorted {
+      comparator.compare(lhs: $0, rhs: $1)
+    }
   }
 
   public static func create(music: Music, url: URL, artistsWithShowsOnly: Bool) async -> Vault {
@@ -124,18 +128,14 @@ public struct Vault {
     music.shows
   }
 
-  public var concerts: [Concert] {
-    shows.map { lookup.concert(from: $0) }.sorted { comparator.compare(lhs: $0, rhs: $1) }
-  }
-
   func concerts(on date: Date) -> [Concert] {
-    return shows.filter { $0.date.day != nil }
-      .filter { $0.date.month != nil }
+    return concerts.filter { $0.show.date.day != nil }
+      .filter { $0.show.date.month != nil }
       .filter {
         Calendar.autoupdatingCurrent.date(
-          date, matchesComponents: DateComponents(month: $0.date.month!, day: $0.date.day!))
+          date,
+          matchesComponents: DateComponents(month: $0.show.date.month!, day: $0.show.date.day!))
       }
-      .map { lookup.concert(from: $0) }
       .sorted { comparator.compare(lhs: $0, rhs: $1) }
   }
 }

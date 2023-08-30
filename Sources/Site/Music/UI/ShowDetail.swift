@@ -77,17 +77,17 @@ struct ShowDetail_Previews: PreviewProvider {
     let vault = Vault.previewData
 
     NavigationStack {
-      ShowDetail(concert: vault.lookup.concert(from: vault.shows[0]))
+      ShowDetail(concert: vault.concerts[0])
         .musicDestinations()
     }
 
     NavigationStack {
-      ShowDetail(concert: vault.lookup.concert(from: vault.shows[1]))
+      ShowDetail(concert: vault.concerts[1])
         .musicDestinations()
     }
 
     NavigationStack {
-      ShowDetail(concert: vault.lookup.concert(from: vault.shows[2]))
+      ShowDetail(concert: vault.concerts[2])
         .musicDestinations()
     }
   }
