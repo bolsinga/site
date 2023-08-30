@@ -18,14 +18,13 @@ extension ArchiveCategory {
 }
 
 struct ArchiveCategoryShareModifier: ViewModifier {
-  @Environment(\.vault) private var vault: Vault
-
   let category: ArchiveCategory
+  let url: URL?
 
   func body(content: Content) -> some View {
     content
       .toolbar {
-        if let url = vault.createURL(forCategory: category) {
+        if let url {
           ShareLink(item: url, subject: category.subject, message: category.message)
         }
       }
@@ -33,7 +32,7 @@ struct ArchiveCategoryShareModifier: ViewModifier {
 }
 
 extension View {
-  func shareCategory(_ category: ArchiveCategory) -> some View {
-    modifier(ArchiveCategoryShareModifier(category: category))
+  func shareCategory(_ category: ArchiveCategory, url: URL?) -> some View {
+    modifier(ArchiveCategoryShareModifier(category: category, url: url))
   }
 }
