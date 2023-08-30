@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ShowDetail: View {
   let concert: Concert
+  let url: URL?
 
   private var venueName: String {
     guard let venue = concert.venue else {
@@ -67,7 +68,7 @@ struct ShowDetail: View {
       .listStyle(.grouped)
     #endif
     .navigationTitle(venueName)
-    .pathRestorableUserActivityModifier(concert)
+    .pathRestorableUserActivityModifier(concert, url: url)
     .sharePathRestorable(concert)
   }
 }
@@ -77,17 +78,20 @@ struct ShowDetail_Previews: PreviewProvider {
     let vault = Vault.previewData
 
     NavigationStack {
-      ShowDetail(concert: vault.concerts[0])
+      let concert = vault.concerts[0]
+      ShowDetail(concert: concert, url: vault.createURL(for: concert.archivePath))
         .musicDestinations()
     }
 
     NavigationStack {
-      ShowDetail(concert: vault.concerts[1])
+      let concert = vault.concerts[1]
+      ShowDetail(concert: concert, url: vault.createURL(for: concert.archivePath))
         .musicDestinations()
     }
 
     NavigationStack {
-      ShowDetail(concert: vault.concerts[2])
+      let concert = vault.concerts[2]
+      ShowDetail(concert: concert, url: vault.createURL(for: concert.archivePath))
         .musicDestinations()
     }
   }

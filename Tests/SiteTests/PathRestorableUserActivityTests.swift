@@ -15,7 +15,7 @@ final class PathRestorableUserActivityTests: XCTestCase {
   func testShow() throws {
     let userActivity = NSUserActivity(activityType: "test-type")
 
-    userActivity.update(vault.concerts[0], vault: vault)
+    userActivity.update(vault.concerts[0], url: vault.createURL(for: vault.concerts[0].archivePath))
 
     XCTAssertTrue(userActivity.isEligibleForHandoff)
 
@@ -35,7 +35,7 @@ final class PathRestorableUserActivityTests: XCTestCase {
   func testArtist() throws {
     let userActivity = NSUserActivity(activityType: "test-type")
 
-    userActivity.update(vault.artists[0], vault: vault)
+    userActivity.update(vault.artists[0], url: vault.createURL(for: vault.artists[0].archivePath))
 
     XCTAssertTrue(userActivity.isEligibleForHandoff)
 
@@ -53,7 +53,7 @@ final class PathRestorableUserActivityTests: XCTestCase {
   func testVenue() throws {
     let userActivity = NSUserActivity(activityType: "test-type")
 
-    userActivity.update(vault.venues[0], vault: vault)
+    userActivity.update(vault.venues[0], url: vault.createURL(for: vault.venues[0].archivePath))
 
     XCTAssertTrue(userActivity.isEligibleForHandoff)
 
@@ -73,7 +73,7 @@ final class PathRestorableUserActivityTests: XCTestCase {
 
     let item = Annum.year(1990)
 
-    userActivity.update(item, vault: vault)
+    userActivity.update(item, url: vault.createURL(for: item.archivePath))
 
     XCTAssertTrue(userActivity.isEligibleForHandoff)
 
@@ -93,7 +93,7 @@ final class PathRestorableUserActivityTests: XCTestCase {
 
     let url = URL(string: "https://www.example.com/dates/sh17.html")!
 
-    userActivity.update(vault.concerts[0], vault: vault)
+    userActivity.update(vault.concerts[0], url: vault.createURL(for: vault.concerts[0].archivePath))
 
     XCTAssertTrue(userActivity.isEligibleForPublicIndexing)
     XCTAssertEqual(userActivity.webpageURL, url)

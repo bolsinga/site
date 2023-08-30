@@ -76,7 +76,7 @@ struct ArtistDetail: View {
       .listStyle(.grouped)
     #endif
     .navigationTitle(artist.name)
-    .pathRestorableUserActivityModifier(artist)
+    .pathRestorableUserActivityModifier(artist, url: vault.createURL(for: artist.archivePath))
     .sharePathRestorable(artist)
   }
 }

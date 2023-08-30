@@ -9,6 +9,7 @@ import SwiftUI
 
 struct YearDetail: View {
   let annum: Annum
+  let url: URL?
   let concerts: [Concert]
 
   @ViewBuilder private var statsElement: some View {
@@ -41,7 +42,7 @@ struct YearDetail: View {
       .listStyle(.grouped)
     #endif
     .navigationTitle(Text(annum.formatted()))
-    .pathRestorableUserActivityModifier(annum)
+    .pathRestorableUserActivityModifier(annum, url: url)
     .sharePathRestorable(annum)
   }
 }
@@ -52,8 +53,11 @@ struct YearDetail_Previews: PreviewProvider {
 
     NavigationStack {
       let annum = Annum.year(2001)
-      YearDetail(annum: annum, concerts: vault.concerts(during: annum))
-        .musicDestinations()
+      YearDetail(
+        annum: annum, url: vault.createURL(for: annum.archivePath),
+        concerts: vault.concerts(during: annum)
+      )
+      .musicDestinations()
     }
   }
 }
