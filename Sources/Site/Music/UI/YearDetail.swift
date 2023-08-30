@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct YearDetail: View {
-  @Environment(\.vault) private var vault: Vault
   let annum: Annum
   let concerts: [Concert]
 
