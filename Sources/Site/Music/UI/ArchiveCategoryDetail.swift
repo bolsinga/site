@@ -33,7 +33,7 @@ struct ArchiveCategoryDetail: View {
           ArtistList(artists: vault.artists, sort: $artistSort)
         }
       }
-      .shareCategory(category)
+      .shareCategory(category, url: vault.createURL(forCategory: category))
       .archiveCategoryUserActivity(category, isActive: $isCategoryActive)
     } else {
       Text("Select An Item", bundle: .module, comment: "Shown when no ArchiveCategory is selected.")
