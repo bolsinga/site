@@ -9,18 +9,18 @@ import Foundation
 import Site
 
 extension Vault {
-  var nextShowID: Show.ID {
-    let nextIndex = max(music.shows.count, 0)
+  public var nextShowID: Show.ID {
+    let nextIndex = max(concerts.count, 0)
     return "\(ArchivePath.showPrefix)\(nextIndex)"
   }
 
-  var nextVenueID: Venue.ID {
-    let nextIndex = max(music.venues.count, 0)
+  public var nextVenueID: Venue.ID {
+    let nextIndex = max(venues.count, 0)
     return "\(ArchivePath.venuePrefix)\(nextIndex)"
   }
 
-  var nextArtistID: Venue.ID {
-    let nextIndex = max(music.artists.count, 0)
+  public var nextArtistID: Venue.ID {
+    let nextIndex = max(artists.count, 0)
     return "\(ArchivePath.artistPrefix)\(nextIndex)"
   }
 }
