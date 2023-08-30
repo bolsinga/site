@@ -20,7 +20,10 @@ struct MusicDestinationModifier: ViewModifier {
           }
         case .venue(let iD):
           if let venue = vault.lookup.venueMap[iD] {
-            VenueDetail(venue: venue)
+            VenueDetail(
+              venue: venue,
+              concerts: vault.concerts.filter { $0.show.venue == venue.id }.sorted(
+                by: vault.comparator.compare(lhs:rhs:)))
           }
         case .artist(let iD):
           if let artist = vault.lookup.artistMap[iD] {
