@@ -8,7 +8,7 @@
 import Foundation
 
 extension LibraryComparator {
-  public static func create(music: Music) async -> LibraryComparator {
+  static func create(music: Music) async -> LibraryComparator {
     async let tokenMap = music.artists.reduce(
       into: music.venues.reduce(into: [:]) {
         $0[$1.id] = $1.librarySortToken

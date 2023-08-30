@@ -8,7 +8,7 @@
 import Foundation
 
 extension LibrarySectioner {
-  public static func create(music: Music) async -> LibrarySectioner {
+  static func create(music: Music) async -> LibrarySectioner {
     async let sectionMap = music.artists.reduce(
       into: music.venues.reduce(into: [:]) {
         $0[$1.id] = $1.librarySortString.librarySection
