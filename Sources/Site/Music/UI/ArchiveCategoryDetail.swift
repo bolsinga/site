@@ -29,7 +29,7 @@ struct ArchiveCategoryDetail: View {
           .shareCategory(category)
           .archiveCategoryUserActivity(category, isActive: $isCategoryActive)
       case .shows:
-        ShowYearList()
+        ShowYearList(decadesMap: vault.lookup.decadesMap)
           .shareCategory(category)
           .archiveCategoryUserActivity(category, isActive: $isCategoryActive)
       case .venues:

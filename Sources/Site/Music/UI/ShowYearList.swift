@@ -8,10 +8,9 @@
 import SwiftUI
 
 struct ShowYearList: View {
-  @Environment(\.vault) private var vault: Vault
+  let decadesMap: [Decade: [Annum: [Concert.ID]]]
 
   var body: some View {
-    let decadesMap = vault.lookup.decadesMap
     List {
       ForEach(decadesMap.keys.sorted(), id: \.self) { decade in
         let decadeMap = decadesMap[decade] ?? [:]
@@ -41,8 +40,7 @@ struct ShowYearList_Previews: PreviewProvider {
     let vault = Vault.previewData
 
     NavigationStack {
-      ShowYearList()
-        .environment(\.vault, vault)
+      ShowYearList(decadesMap: vault.lookup.decadesMap)
         .musicDestinations()
     }
   }
