@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct StatsGrouping: View {
-  @Environment(\.vault) private var vault: Vault
   @Environment(\.statsThreshold) private var statsThreshold: Int
 
   let concerts: [Concert]
