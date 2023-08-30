@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Site
 
 extension Vault {
   public var nextShowID: Show.ID {
