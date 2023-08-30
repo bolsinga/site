@@ -29,12 +29,12 @@ extension Location.FormatStyle: Foundation.FormatStyle {
   public func format(_ value: Location) -> String {
     switch style {
     case .oneLine:
-      var physicalAddress: String
+      var physicalAddress: String = ""
       if let street = value.street {
-        physicalAddress = "\(street), \(value.city), \(value.state)"
-      } else {
-        physicalAddress = "\(value.city), \(value.state)"
+        physicalAddress = "\(street), "
       }
+
+      physicalAddress += "\(value.city), \(value.state)"
 
       if let url = value.web {
         return "\(physicalAddress) [\(url)]"
