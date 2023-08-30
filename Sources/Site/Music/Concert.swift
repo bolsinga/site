@@ -10,7 +10,7 @@ import Foundation
 public struct Concert: Identifiable {
   public var id: Show.ID { show.id }
 
-  let show: Show
-  let venue: Venue?
-  let artists: [Artist]
+  public let show: Show
+  public let venue: Venue?
+  public let artists: [Artist]
 }

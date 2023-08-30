@@ -21,7 +21,7 @@ extension URL {
 
 public struct Vault {
   public let music: Music
-  public let lookup: Lookup
+  let lookup: Lookup
   public let comparator: LibraryComparator
   internal let sectioner: LibrarySectioner
   internal let atlas = Atlas()
@@ -120,8 +120,12 @@ public struct Vault {
     music.venues
   }
 
-  public var shows: [Show] {
+  var shows: [Show] {
     music.shows
+  }
+
+  public var concerts: [Concert] {
+    shows.map { lookup.concert(from: $0) }.sorted { comparator.compare(lhs: $0, rhs: $1) }
   }
 
   func concerts(on date: Date) -> [Concert] {
