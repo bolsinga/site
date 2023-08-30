@@ -33,7 +33,7 @@ extension Location.FormatStyle: Foundation.FormatStyle {
       if let street = value.street {
         physicalAddress = "\(street), \(value.city), \(value.state)"
       } else {
-        physicalAddress = "\(value.city), \(value.state))"
+        physicalAddress = "\(value.city), \(value.state)"
       }
 
       if let url = value.web {
