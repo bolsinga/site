@@ -13,7 +13,7 @@ extension CLPlacemark: Identifiable {}
 
 struct LocationMap: View {
   let location: Location
-  let geocode : (Location) async throws -> CLPlacemark
+  let geocode: (Location) async throws -> CLPlacemark
 
   @State private var placemark: CLPlacemark? = nil
 

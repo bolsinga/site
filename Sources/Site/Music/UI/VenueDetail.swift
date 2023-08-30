@@ -35,7 +35,7 @@ struct VenueDetail: View {
       LocationMap(location: venue.location) {
         try await vault.atlas.geocode($0)
       }
-        .frame(minHeight: 300)
+      .frame(minHeight: 300)
     }
   }
 
