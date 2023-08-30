@@ -17,12 +17,12 @@ struct ShowYearList: View {
         let decadeMap = decadesMap[decade] ?? [:]
         Section {
           ForEach(decadeMap.keys.sorted(), id: \.self) { annum in
-            let shows = decadeMap[annum] ?? []
+            let concerts = decadeMap[annum] ?? []
             NavigationLink(value: annum) {
               LabeledContent(
                 annum.formatted(),
                 value: String(
-                  localized: "\(shows.count) Show(s)", bundle: .module,
+                  localized: "\(concerts.count) Show(s)", bundle: .module,
                   comment: "Value for the ShowYearList Shows per year."))
             }
           }

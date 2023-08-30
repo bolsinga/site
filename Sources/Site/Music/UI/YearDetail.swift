@@ -10,24 +10,23 @@ import SwiftUI
 struct YearDetail: View {
   @Environment(\.vault) private var vault: Vault
   let annum: Annum
-  let shows: [Show]
+  let concerts: [Concert]
 
   @ViewBuilder private var statsElement: some View {
-    if !shows.isEmpty {
+    if !concerts.isEmpty {
       Section(header: Text(ArchiveCategory.stats.localizedString)) {
-        StatsGrouping(shows: shows)
+        StatsGrouping(shows: concerts.map { $0.show })
       }
     }
   }
 
   @ViewBuilder private var showsElement: some View {
-    if !shows.isEmpty {
+    if !concerts.isEmpty {
       Section(
         header: Text(
           "Shows", bundle: .module, comment: "Title of the Shows section of YearDetail")
       ) {
-        ForEach(shows) { show in
-          let concert = vault.lookup.concert(from: show)
+        ForEach(concerts) { concert in
           NavigationLink(value: concert) { ConcertBlurb(concert: concert) }
         }
       }
@@ -54,7 +53,7 @@ struct YearDetail_Previews: PreviewProvider {
 
     NavigationStack {
       let annum = Annum.year(2001)
-      YearDetail(annum: annum, shows: vault.lookup.decadesMap[annum.decade]?[annum] ?? [])
+      YearDetail(annum: annum, concerts: vault.concerts(during: annum))
         .musicDestinations()
     }
   }

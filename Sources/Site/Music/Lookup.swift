@@ -26,7 +26,7 @@ public struct Lookup {
   let venueShowSpanRankingMap: [Venue.ID: Ranking]
   let artistVenueRankingMap: [Artist.ID: Ranking]
   let venueArtistRankingMap: [Venue.ID: Ranking]
-  let decadesMap: [Decade: [Annum: [Show]]]
+  let decadesMap: [Decade: [Annum: [Show.ID]]]
   let artistFirstSetsMap: [Artist.ID: FirstSet]
   let venueFirstSetsMap: [Venue.ID: FirstSet]
 
@@ -67,7 +67,7 @@ public struct Lookup {
     venueShowSpanRankingMap: [Venue.ID: Ranking],
     artistVenueRankingMap: [Artist.ID: Ranking],
     venueArtistRankingMap: [Venue.ID: Ranking],
-    decadesMap: [Decade: [Annum: [Show]]],
+    decadesMap: [Decade: [Annum: [Show.ID]]],
     artistFirstSetsMap: [Artist.ID: FirstSet],
     venueFirstSetsMap: [Venue.ID: FirstSet]
   ) {

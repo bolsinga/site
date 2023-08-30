@@ -138,4 +138,12 @@ public struct Vault {
       }
       .sorted { comparator.compare(lhs: $0, rhs: $1) }
   }
+
+  func concerts(during annum: Annum) -> [Concert] {
+    var result: [Concert] = []
+    for id in lookup.decadesMap[annum.decade]?[annum] ?? [] {
+      result += concerts.filter { $0.id == id }
+    }
+    return result.sorted { comparator.compare(lhs: $0, rhs: $1) }
+  }
 }
