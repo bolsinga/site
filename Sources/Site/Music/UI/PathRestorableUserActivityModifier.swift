@@ -17,20 +17,21 @@ protocol PathRestorableUserActivity: PathRestorable {
 }
 
 struct PathRestorableUserActivityModifier<T: PathRestorableUserActivity>: ViewModifier {
-  @Environment(\.vault) private var vault: Vault
-
   let item: T
+  let url: URL?
 
   func body(content: Content) -> some View {
     content
       .userActivity(ArchivePath.activityType) { userActivity in
-        userActivity.update(item, vault: vault)
+        userActivity.update(item, url: url)
       }
   }
 }
 
 extension View {
-  func pathRestorableUserActivityModifier<T: PathRestorableUserActivity>(_ item: T) -> some View {
-    modifier(PathRestorableUserActivityModifier(item: item))
+  func pathRestorableUserActivityModifier<T: PathRestorableUserActivity>(_ item: T, url: URL?)
+    -> some View
+  {
+    modifier(PathRestorableUserActivityModifier(item: item, url: url))
   }
 }

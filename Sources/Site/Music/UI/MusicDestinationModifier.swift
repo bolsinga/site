@@ -16,7 +16,8 @@ struct MusicDestinationModifier: ViewModifier {
         switch archivePath {
         case .show(let iD):
           if let show = vault.lookup.showMap[iD] {
-            ShowDetail(concert: vault.lookup.concert(from: show))
+            let concert = vault.lookup.concert(from: show)
+            ShowDetail(concert: concert, url: vault.createURL(for: concert.archivePath))
           }
         case .venue(let iD):
           if let venue = vault.lookup.venueMap[iD] {
@@ -33,7 +34,9 @@ struct MusicDestinationModifier: ViewModifier {
                 by: vault.comparator.compare(lhs:rhs:)))
           }
         case .year(let annum):
-          YearDetail(annum: annum, concerts: vault.concerts(during: annum))
+          YearDetail(
+            annum: annum, url: vault.createURL(for: annum.archivePath),
+            concerts: vault.concerts(during: annum))
         }
       }
   }

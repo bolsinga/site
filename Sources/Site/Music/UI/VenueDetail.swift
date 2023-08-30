@@ -87,7 +87,7 @@ struct VenueDetail: View {
       .listStyle(.grouped)
     #endif
     .navigationTitle(venue.name)
-    .pathRestorableUserActivityModifier(venue)
+    .pathRestorableUserActivityModifier(venue, url: vault.createURL(for: venue.archivePath))
     .sharePathRestorable(venue)
   }
 }

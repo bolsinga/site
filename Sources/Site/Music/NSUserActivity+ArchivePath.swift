@@ -22,14 +22,12 @@ extension NSUserActivity {
 
   internal static let archivePathKey = "archivePath"
 
-  func update<T: PathRestorableUserActivity>(_ item: T, vault: Vault) {
-    let archivePath = item.archivePath
-
-    let identifier = archivePath.formatted(.json)
+  func update<T: PathRestorableUserActivity>(_ item: T, url: URL?) {
+    let identifier = item.archivePath.formatted(.json)
     Logger.updateActivity.log("advertise: \(identifier, privacy: .public)")
     self.targetContentIdentifier = identifier
 
-    if let url = vault.createURL(for: archivePath) {
+    if let url {
       Logger.updateActivity.log("web: \(url.absoluteString, privacy: .public)")
       self.isEligibleForPublicIndexing = true
       self.webpageURL = url
