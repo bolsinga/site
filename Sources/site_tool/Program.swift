@@ -49,11 +49,9 @@ struct Program: AsyncParsableCommand {
     let vault = try await Vault.load(url: rootURL.appending(path: "music.json"))
     let music = vault.music
 
-    print("Albums: \(music.albums.count)")
     print("Artists: \(music.artists.count)")
     print("Relations: \(music.relations.count)")
     print("Shows: \(music.shows.count)")
-    print("Songs: \(music.songs.count)")
     print("Venues: \(music.venues.count)")
 
     let sortedConcerts = music.shows.map { vault.lookup.concert(from: $0) }.sorted {
@@ -61,18 +59,6 @@ struct Program: AsyncParsableCommand {
     }
     for concert in sortedConcerts.reversed() {
       print(concert.formatted(.full))
-    }
-
-    let sortedAlbums = music.albums.sorted {
-      vault.comparator.albumCompare(lhs: $0, rhs: $1, lookup: vault.lookup)
-    }
-    for album in sortedAlbums {
-      print(vault.description(for: album))
-    }
-
-    let albumMap: [Album.ID: Album] = music.albums.reduce(into: [:]) { $0[$1.id] = $1 }
-    for artist in music.artists.sorted(by: vault.comparator.libraryCompare(lhs:rhs:)) {
-      print(vault.description(for: artist, albumMap: albumMap))
     }
 
     for venue in music.venues.sorted(by: vault.comparator.libraryCompare(lhs:rhs:)) {
