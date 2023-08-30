@@ -24,7 +24,7 @@ extension NSUserActivity {
 
   internal static let archiveCategoryKey = "archiveCategory"
 
-  func update(_ category: ArchiveCategory, vault: Vault) {
+  func update(_ category: ArchiveCategory, url: URL?) {
     let identifier = category.rawValue
     Logger.updateCategoryActivity.log("advertise: \(identifier, privacy: .public)")
     self.targetContentIdentifier = identifier
@@ -43,7 +43,7 @@ extension NSUserActivity {
         comment: "Suggested invocation phrase for ArchiveCategory.today")
     }
 
-    if let url = vault.createURL(forCategory: category) {
+    if let url {
       Logger.updateCategoryActivity.log("web: \(url.absoluteString, privacy: .public)")
       self.isEligibleForPublicIndexing = true
       self.webpageURL = url

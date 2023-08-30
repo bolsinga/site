@@ -12,24 +12,23 @@ extension ArchiveCategory {
 }
 
 struct ArchiveCategoryUserActivityModifier: ViewModifier {
-  @Environment(\.vault) private var vault: Vault
-
   let category: ArchiveCategory
+  let url: URL?
 
   @Binding var isActive: Bool
 
   func body(content: Content) -> some View {
     content
       .userActivity(ArchiveCategory.activityType, isActive: isActive) { userActivity in
-        userActivity.update(category, vault: vault)
+        userActivity.update(category, url: url)
       }
   }
 }
 
 extension View {
-  func archiveCategoryUserActivity(_ category: ArchiveCategory, isActive: Binding<Bool>)
+  func archiveCategoryUserActivity(_ category: ArchiveCategory, url: URL?, isActive: Binding<Bool>)
     -> some View
   {
-    modifier(ArchiveCategoryUserActivityModifier(category: category, isActive: isActive))
+    modifier(ArchiveCategoryUserActivityModifier(category: category, url: url, isActive: isActive))
   }
 }
