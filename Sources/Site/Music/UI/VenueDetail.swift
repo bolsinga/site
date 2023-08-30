@@ -38,12 +38,11 @@ struct VenueDetail: View {
   }
 
   @ViewBuilder private var statsElement: some View {
-    let shows = concerts.map { $0.show }
     Section(header: Text(ArchiveCategory.stats.localizedString)) {
       firstSetElement
-      if shows.count > 1 {
+      if concerts.count > 1 {
         StatsGrouping(
-          shows: shows, yearsSpanRanking: vault.lookup.spanRank(venue: venue),
+          concerts: concerts, yearsSpanRanking: vault.lookup.spanRank(venue: venue),
           computeShowsRank: { vault.lookup.venueRank(venue: venue) },
           computeVenueArtistsRank: { vault.lookup.venueArtistRank(venue: venue) })
       }

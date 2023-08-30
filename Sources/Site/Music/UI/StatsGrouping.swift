@@ -11,7 +11,7 @@ struct StatsGrouping: View {
   @Environment(\.vault) private var vault: Vault
   @Environment(\.statsThreshold) private var statsThreshold: Int
 
-  let shows: [Show]
+  let concerts: [Concert]
   let shouldCalculateArtistCount: Bool
   let yearsSpanRanking: Ranking?
   let computeShowsRank: (() -> Ranking)?
@@ -20,7 +20,7 @@ struct StatsGrouping: View {
   let displayArchiveCategoryCounts: Bool  // Basically do not want this at the ArchiveCategory.stats.
 
   internal init(
-    shows: [Show],
+    concerts: [Concert],
     shouldCalculateArtistCount: Bool = true,
     yearsSpanRanking: Ranking? = nil,
     computeShowsRank: (() -> Ranking)? = nil,
@@ -28,7 +28,7 @@ struct StatsGrouping: View {
     computeVenueArtistsRank: (() -> Ranking)? = nil,
     displayArchiveCategoryCounts: Bool = true
   ) {
-    self.shows = shows
+    self.concerts = concerts
     self.shouldCalculateArtistCount = shouldCalculateArtistCount
     self.yearsSpanRanking = yearsSpanRanking
     self.computeShowsRank = computeShowsRank
@@ -38,7 +38,7 @@ struct StatsGrouping: View {
   }
 
   private var computedStateCounts: [String: Int] {
-    shows.compactMap { vault.lookup.venueForShow($0)?.location }.map { $0.state }.reduce(
+    concerts.compactMap { $0.venue?.location }.map { $0.state }.reduce(
       into: [String: Int]()
     ) {
       let count = $0[$1] ?? 0
@@ -59,15 +59,15 @@ struct StatsGrouping: View {
   }
 
   private var computeVenues: [Venue] {
-    Array(Set(shows.compactMap { vault.lookup.venueForShow($0) }))
+    Array(Set(concerts.compactMap { $0.venue }))
   }
 
   private var computeArtists: [Artist] {
-    Array(Set(shows.flatMap { vault.lookup.artistsForShow($0) }))
+    Array(Set(concerts.flatMap { $0.artists }))
   }
 
   @ViewBuilder var showCount: some View {
-    Text("\(shows.count) Show(s)", bundle: .module, comment: "Shows Count for StatsGrouping.")
+    Text("\(concerts.count) Show(s)", bundle: .module, comment: "Shows Count for StatsGrouping.")
   }
 
   @ViewBuilder var showsElement: some View {
@@ -115,10 +115,10 @@ struct StatsGrouping: View {
   }
 
   private func configure() -> ([StatsCategory], [Venue], [Artist], [Date], [String: Int]) {
-    let knownShowDates = shows.filter { $0.date.day != nil }
-      .filter { $0.date.month != nil }
-      .filter { $0.date.year != nil }
-      .compactMap { $0.date.date }
+    let knownShowDates = concerts.map { $0.show.date }.filter { $0.day != nil }
+      .filter { $0.month != nil }
+      .filter { $0.year != nil }
+      .compactMap { $0.date }
 
     let venues = computeVenues
     let venuesCount = venues.count
@@ -131,7 +131,7 @@ struct StatsGrouping: View {
     let stateCounts = computedStateCounts
     let showState = stateCounts.keys.count > 1
 
-    let showWeekdayOrMonthChart = shows.count > statsThreshold
+    let showWeekdayOrMonthChart = concerts.count > statsThreshold
 
     // This needs to be broken down like this or the swift compiler says it is too complex.
     var statsCategoryCases = [StatsCategory]()
