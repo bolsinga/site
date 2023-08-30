@@ -80,7 +80,7 @@ struct Program: AsyncParsableCommand {
     }
 
     for location in music.venues.map({ $0.location }).sorted(by: <) {
-      print(vault.description(for: location))
+      print(location.formatted(.oneLine))
     }
 
     for artist in music.artists.sorted(by: vault.comparator.libraryCompare(lhs:rhs:)) {

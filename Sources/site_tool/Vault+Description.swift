@@ -63,20 +63,6 @@ extension Vault {
     return parts.joined(separator: ": ")
   }
 
-  public func description(for location: Location) -> String {
-    var parts: [String] = []
-    parts.append("\(location.city), \(location.state)")
-
-    if let street = location.street {
-      parts.append("(\(street))")
-    }
-
-    if let url = location.web {
-      parts.append(url.absoluteString)
-    }
-    return parts.joined(separator: ": ")
-  }
-
   public func description(for venue: Venue) -> String {
     var parts: [String] = []
     parts.append(venue.id)
@@ -86,7 +72,7 @@ extension Vault {
       parts.append("(\(sortname)")
     }
 
-    parts.append(self.description(for: venue.location))
+    parts.append(venue.location.formatted(.oneLine))
 
     return parts.joined(separator: ": ")
   }
