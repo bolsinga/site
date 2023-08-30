@@ -90,7 +90,7 @@ extension Music {
     }
   }
 
-  var decadesMap: [Decade: [Annum: [Show]]] {
+  var decadesMap: [Decade: [Annum: [Show.ID]]] {
     let decadeShowMap: [Decade: [Show]] = shows.reduce(into: [:]) {
       let decade = $1.date.decade
       var arr = $0[decade] ?? []
@@ -102,7 +102,7 @@ extension Music {
       $0[$1.key] = $1.value.reduce(into: [:]) {
         let annum = $1.date.annum
         var arr = $0[annum] ?? []
-        arr.append($1)
+        arr.append($1.id)
         $0[annum] = arr
       }
     }

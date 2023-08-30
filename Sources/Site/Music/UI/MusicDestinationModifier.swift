@@ -33,7 +33,7 @@ struct MusicDestinationModifier: ViewModifier {
                 by: vault.comparator.compare(lhs:rhs:)))
           }
         case .year(let annum):
-          YearDetail(annum: annum, shows: vault.lookup.decadesMap[annum.decade]?[annum] ?? [])
+          YearDetail(annum: annum, concerts: vault.concerts(during: annum))
         }
       }
   }
