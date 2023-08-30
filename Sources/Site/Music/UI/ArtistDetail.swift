@@ -11,12 +11,7 @@ struct ArtistDetail: View {
   @Environment(\.vault) private var vault: Vault
 
   let artist: Artist
-
-  private var computedShows: [Show] {
-    return vault.shows.filter { $0.artists.contains(artist.id) }.sorted {
-      vault.comparator.showCompare(lhs: $0, rhs: $1, lookup: vault.lookup)
-    }
-  }
+  let concerts: [Concert]
 
   private var computedRelatedArtists: [Artist] {
     vault.related(artist).sorted(by: vault.comparator.libraryCompare(lhs:rhs:))
@@ -31,7 +26,7 @@ struct ArtistDetail: View {
   }
 
   @ViewBuilder private var statsElement: some View {
-    let shows = computedShows
+    let shows = concerts.map { $0.show }
     if !shows.isEmpty {
       Section(header: Text(ArchiveCategory.stats.localizedString)) {
         firstSetElement
@@ -45,14 +40,12 @@ struct ArtistDetail: View {
   }
 
   @ViewBuilder private var showsElement: some View {
-    let shows = computedShows
-    if !shows.isEmpty {
+    if !concerts.isEmpty {
       Section(
         header: Text(
           "Shows", bundle: .module, comment: "Title of the Shows section of ArtistDetail")
       ) {
-        ForEach(shows) { show in
-          let concert = vault.lookup.concert(from: show)
+        ForEach(concerts) { concert in
           NavigationLink(value: concert) { ArtistBlurb(concert: concert) }
         }
       }
@@ -94,15 +87,21 @@ struct ArtistDetail_Previews: PreviewProvider {
     let vault = Vault.previewData
 
     NavigationStack {
-      ArtistDetail(artist: vault.artists[0])
-        .environment(\.vault, vault)
-        .musicDestinations()
+      let artist = vault.artists[0]
+      ArtistDetail(
+        artist: artist, concerts: vault.concerts.filter { $0.show.artists.contains(artist.id) }
+      )
+      .environment(\.vault, vault)
+      .musicDestinations()
     }
 
     NavigationStack {
-      ArtistDetail(artist: vault.artists[1])
-        .environment(\.vault, vault)
-        .musicDestinations()
+      let artist = vault.artists[1]
+      ArtistDetail(
+        artist: artist, concerts: vault.concerts.filter { $0.show.artists.contains(artist.id) }
+      )
+      .environment(\.vault, vault)
+      .musicDestinations()
     }
   }
 }
