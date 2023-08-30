@@ -76,7 +76,7 @@ struct Program: AsyncParsableCommand {
     }
 
     for venue in music.venues.sorted(by: vault.comparator.libraryCompare(lhs:rhs:)) {
-      print(vault.description(for: venue))
+      print(venue.formatted(.oneLine))
     }
 
     for location in music.venues.map({ $0.location }).sorted(by: <) {

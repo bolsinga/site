@@ -63,20 +63,6 @@ extension Vault {
     return parts.joined(separator: ": ")
   }
 
-  public func description(for venue: Venue) -> String {
-    var parts: [String] = []
-    parts.append(venue.id)
-    parts.append(venue.name)
-
-    if let sortname = venue.sortname {
-      parts.append("(\(sortname)")
-    }
-
-    parts.append(venue.location.formatted(.oneLine))
-
-    return parts.joined(separator: ": ")
-  }
-
   public func description(for artist: Artist, shows: [Show]) -> String {
     var parts: [String] = []
     parts.append(artist.name)
