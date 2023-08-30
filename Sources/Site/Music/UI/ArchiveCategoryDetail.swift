@@ -18,6 +18,7 @@ struct ArchiveCategoryDetail: View {
 
   @ViewBuilder private var stackElement: some View {
     if let category {
+      let url = vault.createURL(forCategory: category)
       ZStack {
         switch category {
         case .today:
@@ -33,8 +34,8 @@ struct ArchiveCategoryDetail: View {
           ArtistList(artists: vault.artists, sort: $artistSort)
         }
       }
-      .shareCategory(category, url: vault.createURL(forCategory: category))
-      .archiveCategoryUserActivity(category, isActive: $isCategoryActive)
+      .shareCategory(category, url: url)
+      .archiveCategoryUserActivity(category, url: url, isActive: $isCategoryActive)
     } else {
       Text("Select An Item", bundle: .module, comment: "Shown when no ArchiveCategory is selected.")
     }
