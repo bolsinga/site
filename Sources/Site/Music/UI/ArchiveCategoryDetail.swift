@@ -18,29 +18,23 @@ struct ArchiveCategoryDetail: View {
 
   @ViewBuilder private var stackElement: some View {
     if let category {
-      switch category {
-      case .today:
-        TodayList(concerts: todayConcerts)
-          .shareCategory(category)
-          .archiveCategoryUserActivity(category, isActive: $isCategoryActive)
-      case .stats:
-        List { StatsGrouping(concerts: vault.concerts, displayArchiveCategoryCounts: false) }
-          .navigationTitle(Text(category.localizedString))
-          .shareCategory(category)
-          .archiveCategoryUserActivity(category, isActive: $isCategoryActive)
-      case .shows:
-        ShowYearList(decadesMap: vault.lookup.decadesMap)
-          .shareCategory(category)
-          .archiveCategoryUserActivity(category, isActive: $isCategoryActive)
-      case .venues:
-        VenueList(venues: vault.venues, sort: $venueSort)
-          .shareCategory(category)
-          .archiveCategoryUserActivity(category, isActive: $isCategoryActive)
-      case .artists:
-        ArtistList(artists: vault.artists, sort: $artistSort)
-          .shareCategory(category)
-          .archiveCategoryUserActivity(category, isActive: $isCategoryActive)
+      ZStack {
+        switch category {
+        case .today:
+          TodayList(concerts: todayConcerts)
+        case .stats:
+          List { StatsGrouping(concerts: vault.concerts, displayArchiveCategoryCounts: false) }
+            .navigationTitle(Text(category.localizedString))
+        case .shows:
+          ShowYearList(decadesMap: vault.lookup.decadesMap)
+        case .venues:
+          VenueList(venues: vault.venues, sort: $venueSort)
+        case .artists:
+          ArtistList(artists: vault.artists, sort: $artistSort)
+        }
       }
+      .shareCategory(category)
+      .archiveCategoryUserActivity(category, isActive: $isCategoryActive)
     } else {
       Text("Select An Item", bundle: .module, comment: "Shown when no ArchiveCategory is selected.")
     }
