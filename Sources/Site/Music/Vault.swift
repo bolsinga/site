@@ -124,10 +124,6 @@ public struct Vault {
     music.venues
   }
 
-  var shows: [Show] {
-    music.shows
-  }
-
   func concerts(on date: Date) -> [Concert] {
     return concerts.filter { $0.show.date.day != nil }
       .filter { $0.show.date.month != nil }
