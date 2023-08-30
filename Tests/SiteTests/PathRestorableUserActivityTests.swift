@@ -15,11 +15,11 @@ final class PathRestorableUserActivityTests: XCTestCase {
   func testShow() throws {
     let userActivity = NSUserActivity(activityType: "test-type")
 
-    userActivity.update(vault.lookup.concert(from: vault.shows[0]), vault: vault)
+    userActivity.update(vault.concerts[0], vault: vault)
 
     XCTAssertTrue(userActivity.isEligibleForHandoff)
 
-    XCTAssertEqual(userActivity.targetContentIdentifier, "sh-sh15")
+    XCTAssertEqual(userActivity.targetContentIdentifier, "sh-sh17")
 
     XCTAssertTrue(userActivity.isEligibleForSearch)
     XCTAssertNotNil(userActivity.contentAttributeSet)
@@ -27,7 +27,7 @@ final class PathRestorableUserActivityTests: XCTestCase {
     XCTAssertTrue(userActivity.isEligibleForPublicIndexing)
     XCTAssertNotNil(userActivity.webpageURL)
 
-    XCTAssertEqual(try userActivity.archivePath(), try ArchivePath("sh-sh15"))
+    XCTAssertEqual(try userActivity.archivePath(), try ArchivePath("sh-sh17"))
 
     XCTAssertNotNil(userActivity.expirationDate)
   }
@@ -91,9 +91,9 @@ final class PathRestorableUserActivityTests: XCTestCase {
   func testShow_withURL() throws {
     let userActivity = NSUserActivity(activityType: "test-type")
 
-    let url = URL(string: "https://www.example.com/dates/sh15.html")!
+    let url = URL(string: "https://www.example.com/dates/sh17.html")!
 
-    userActivity.update(vault.lookup.concert(from: vault.shows[0]), vault: vault)
+    userActivity.update(vault.concerts[0], vault: vault)
 
     XCTAssertTrue(userActivity.isEligibleForPublicIndexing)
     XCTAssertEqual(userActivity.webpageURL, url)
