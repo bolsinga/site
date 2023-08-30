@@ -11,13 +11,10 @@ struct VenueDetail: View {
   @Environment(\.vault) private var vault: Vault
 
   let venue: Venue
+  let concerts: [Concert]
 
   private var computedRelatedVenues: [Venue] {
     vault.related(venue).sorted(by: vault.comparator.libraryCompare(lhs:rhs:))
-  }
-
-  private var shows: [Show] {
-    vault.shows.filter { $0.venue == venue.id }
   }
 
   @ViewBuilder private var firstSetElement: some View {
@@ -41,7 +38,7 @@ struct VenueDetail: View {
   }
 
   @ViewBuilder private var statsElement: some View {
-    let shows = shows
+    let shows = concerts.map { $0.show }
     Section(header: Text(ArchiveCategory.stats.localizedString)) {
       firstSetElement
       if shows.count > 1 {
@@ -57,8 +54,7 @@ struct VenueDetail: View {
     Section(
       header: Text("Shows", bundle: .module, comment: "Title of the Shows section of VenueDetail")
     ) {
-      ForEach(shows) { show in
-        let concert = vault.lookup.concert(from: show)
+      ForEach(concerts) { concert in
         NavigationLink(value: concert) { VenueBlurb(concert: concert) }
       }
     }
@@ -99,7 +95,8 @@ struct VenueDetail_Previews: PreviewProvider {
   static var previews: some View {
     let vault = Vault.previewData
     NavigationStack {
-      VenueDetail(venue: vault.venues[0])
+      let venue = vault.venues[0]
+      VenueDetail(venue: venue, concerts: vault.concerts.filter { $0.show.venue == venue.id })
         .environment(\.vault, vault)
         .musicDestinations()
     }
