@@ -47,37 +47,37 @@ struct Program: AsyncParsableCommand {
     try jsonDirectoryURL?.appending(path: "diary.json").writeJSON(diary)
 
     let vault = try await Vault.load(url: rootURL.appending(path: "music.json"))
-    let music = vault.music
 
-    print("Artists: \(music.artists.count)")
-    print("Relations: \(music.relations.count)")
-    print("Shows: \(music.shows.count)")
-    print("Venues: \(music.venues.count)")
+    let concerts = vault.concerts
+    let artists = Array(Set(concerts.flatMap { $0.artists })).sorted(
+      by: vault.comparator.libraryCompare(lhs:rhs:))
+    let venues = Array(Set(concerts.compactMap { $0.venue })).sorted(
+      by: vault.comparator.libraryCompare(lhs:rhs:))
 
-    let sortedConcerts = music.shows.map { vault.lookup.concert(from: $0) }.sorted {
-      vault.comparator.compare(lhs: $0, rhs: $1)
-    }
-    for concert in sortedConcerts.reversed() {
+    print("Artists: \(artists.count)")
+    print("Shows: \(concerts.count)")
+    print("Venues: \(venues.count)")
+
+    for concert in concerts.reversed() {
       print(concert.formatted(.full))
     }
 
-    for venue in music.venues.sorted(by: vault.comparator.libraryCompare(lhs:rhs:)) {
+    for venue in venues {
       print(venue.formatted(.oneLine))
     }
 
-    for location in music.venues.map({ $0.location }).sorted(by: <) {
-      print(location.formatted(.oneLine))
+    for artist in artists {
+      let concerts = concerts.filter { $0.show.artists.contains(artist.id) }
+
+      guard !concerts.isEmpty else { continue }
+
+      var concertParts: [String] = []
+      for concert in concerts {
+        concertParts.append(concert.formatted(.full))
+      }
+      print("\(artist.name): (\(concertParts.joined(separator: "; "))")
     }
 
-    for artist in music.artists.sorted(by: vault.comparator.libraryCompare(lhs:rhs:)) {
-      let shows = vault.shows.filter { $0.artists.contains(artist.id) }.sorted {
-        vault.comparator.showCompare(lhs: $0, rhs: $1, lookup: vault.lookup)
-      }
-      if !shows.isEmpty {
-        print(vault.description(for: artist, shows: shows))
-      }
-    }
-
-    try jsonDirectoryURL?.appending(path: "music.json").writeJSON(music)
+    try jsonDirectoryURL?.appending(path: "music.json").writeJSON(vault.music)
   }
 }
