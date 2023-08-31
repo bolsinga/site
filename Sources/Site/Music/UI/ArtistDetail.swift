@@ -12,10 +12,7 @@ struct ArtistDetail: View {
 
   let artist: Artist
   let concerts: [Concert]
-
-  private var computedRelatedArtists: [Artist] {
-    vault.related(artist).sorted(by: vault.comparator.libraryCompare(lhs:rhs:))
-  }
+  let related: [Artist]
 
   @ViewBuilder private var firstSetElement: some View {
     HStack {
@@ -52,14 +49,13 @@ struct ArtistDetail: View {
   }
 
   @ViewBuilder private var relatedsElement: some View {
-    let relatedArtists = computedRelatedArtists
-    if !relatedArtists.isEmpty {
+    if !related.isEmpty {
       Section(
         header: Text(
           "Related Artists", bundle: .module,
           comment: "Title of the Related Artists Section for ArtistDetail.")
       ) {
-        ForEach(relatedArtists) { relatedArtist in
+        ForEach(related) { relatedArtist in
           NavigationLink(relatedArtist.name, value: relatedArtist)
         }
       }
@@ -89,7 +85,8 @@ struct ArtistDetail_Previews: PreviewProvider {
     NavigationStack {
       let artist = vault.artists[0]
       ArtistDetail(
-        artist: artist, concerts: vault.concerts.filter { $0.show.artists.contains(artist.id) }
+        artist: artist, concerts: vault.concerts.filter { $0.show.artists.contains(artist.id) },
+        related: vault.related(artist).sorted(by: vault.comparator.libraryCompare(lhs:rhs:))
       )
       .environment(\.vault, vault)
       .musicDestinations()
@@ -98,7 +95,8 @@ struct ArtistDetail_Previews: PreviewProvider {
     NavigationStack {
       let artist = vault.artists[1]
       ArtistDetail(
-        artist: artist, concerts: vault.concerts.filter { $0.show.artists.contains(artist.id) }
+        artist: artist, concerts: vault.concerts.filter { $0.show.artists.contains(artist.id) },
+        related: vault.related(artist).sorted(by: vault.comparator.libraryCompare(lhs:rhs:))
       )
       .environment(\.vault, vault)
       .musicDestinations()

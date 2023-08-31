@@ -31,7 +31,8 @@ struct MusicDestinationModifier: ViewModifier {
             ArtistDetail(
               artist: artist,
               concerts: vault.concerts.filter { $0.show.artists.contains(artist.id) }.sorted(
-                by: vault.comparator.compare(lhs:rhs:)))
+                by: vault.comparator.compare(lhs:rhs:)),
+              related: vault.related(artist).sorted(by: vault.comparator.libraryCompare(lhs:rhs:)))
           }
         case .year(let annum):
           YearDetail(
