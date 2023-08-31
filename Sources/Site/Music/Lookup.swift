@@ -18,7 +18,6 @@ private func createLookup<T: Identifiable>(_ sequence: [T]) -> [T.ID: T] {
 
 public struct Lookup {
   let artistMap: [Artist.ID: Artist]
-  let showMap: [Show.ID: Show]
   let venueMap: [Venue.ID: Venue]
   let artistRankingMap: [Artist.ID: Ranking]
   let venueRankingMap: [Venue.ID: Ranking]
@@ -44,7 +43,6 @@ public struct Lookup {
 
     self.init(
       artistMap: createLookup(music.artists),
-      showMap: createLookup(music.shows),
       venueMap: createLookup(music.venues),
       artistRankingMap: artistRanks,
       venueRankingMap: venueRanks,
@@ -59,7 +57,6 @@ public struct Lookup {
 
   internal init(
     artistMap: [Artist.ID: Artist],
-    showMap: [Show.ID: Show],
     venueMap: [Venue.ID: Venue],
     artistRankingMap: [Artist.ID: Ranking],
     venueRankingMap: [Venue.ID: Ranking],
@@ -72,7 +69,6 @@ public struct Lookup {
     venueFirstSetsMap: [Venue.ID: FirstSet]
   ) {
     self.artistMap = artistMap
-    self.showMap = showMap
     self.venueMap = venueMap
     self.artistRankingMap = artistRankingMap
     self.venueRankingMap = venueRankingMap
@@ -88,7 +84,6 @@ public struct Lookup {
   public static func create(music: Music) async -> Lookup {
     // parallel
     async let artistLookup = createLookup(music.artists)
-    async let showLookup = createLookup(music.shows)
     async let venueLookup = createLookup(music.venues)
     async let artistRanks = music.artistRankings
     async let venueRanks = music.venueRankings
@@ -101,17 +96,16 @@ public struct Lookup {
     async let venueFirsts = music.venueFirstSets
 
     let (
-      artistMap, showMap, venueMap, artistRankings, venueRankings, artistSpanRankings,
+      artistMap, venueMap, artistRankings, venueRankings, artistSpanRankings,
       venueSpanRankings, artistVenueRankings, venueArtistRankings, decadesMap, artistFirstSets,
       venueFirstSets
     ) = await (
-      artistLookup, showLookup, venueLookup, artistRanks, venueRanks, artistSpanRanks,
+      artistLookup, venueLookup, artistRanks, venueRanks, artistSpanRanks,
       venueSpanRanks, artistVenueRanks, venueArtistRanks, decades, artistFirsts, venueFirsts
     )
 
     return Lookup(
       artistMap: artistMap,
-      showMap: showMap,
       venueMap: venueMap,
       artistRankingMap: artistRankings,
       venueRankingMap: venueRankings,

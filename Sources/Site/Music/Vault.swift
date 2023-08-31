@@ -27,6 +27,7 @@ public struct Vault {
   internal let atlas = Atlas()
   internal let baseURL: URL?
   public let concerts: [Concert]
+  public let concertMap: [Concert.ID : Concert]
 
   public init(music: Music, url: URL? = nil) {
     // non-parallel, used for previews, tests
@@ -47,6 +48,7 @@ public struct Vault {
     self.concerts = music.shows.map { lookup.concert(from: $0) }.sorted {
       comparator.compare(lhs: $0, rhs: $1)
     }
+    self.concertMap = self.concerts.reduce(into: [:]) { $0[$1.id] = $1 }
   }
 
   public static func create(music: Music, url: URL, artistsWithShowsOnly: Bool) async -> Vault {

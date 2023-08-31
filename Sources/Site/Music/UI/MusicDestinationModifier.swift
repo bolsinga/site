@@ -15,8 +15,7 @@ struct MusicDestinationModifier: ViewModifier {
       .navigationDestination(for: ArchivePath.self) { archivePath in
         switch archivePath {
         case .show(let iD):
-          if let show = vault.lookup.showMap[iD] {
-            let concert = vault.lookup.concert(from: show)
+          if let concert = vault.concertMap[iD] {
             ShowDetail(concert: concert, url: vault.createURL(for: concert.archivePath))
           }
         case .venue(let iD):
