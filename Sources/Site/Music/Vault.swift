@@ -27,7 +27,7 @@ public struct Vault {
   internal let atlas = Atlas()
   internal let baseURL: URL?
   public let concerts: [Concert]
-  public let concertMap: [Concert.ID : Concert]
+  public let concertMap: [Concert.ID: Concert]
 
   public init(music: Music, url: URL? = nil) {
     // non-parallel, used for previews, tests
