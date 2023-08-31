@@ -12,4 +12,8 @@ struct ArtistDigest {
   let url: URL?
   let concerts: [Concert]
   let related: [Artist]
+  let firstSet: FirstSet
+  let spanRank: Ranking
+  let showRank: Ranking
+  let venueRank: Ranking
 }
