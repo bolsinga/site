@@ -69,7 +69,7 @@ struct ShowDetail: View {
     #endif
     .navigationTitle(venueName)
     .pathRestorableUserActivityModifier(concert, url: url)
-    .sharePathRestorable(concert)
+    .sharePathRestorable(concert, url: url)
   }
 }
 

@@ -77,6 +77,7 @@ struct VenueDetail: View {
   }
 
   var body: some View {
+    let url = vault.createURL(for: venue.archivePath)
     List {
       locationElement
       statsElement
@@ -87,8 +88,8 @@ struct VenueDetail: View {
       .listStyle(.grouped)
     #endif
     .navigationTitle(venue.name)
-    .pathRestorableUserActivityModifier(venue, url: vault.createURL(for: venue.archivePath))
-    .sharePathRestorable(venue)
+    .pathRestorableUserActivityModifier(venue, url: url)
+    .sharePathRestorable(venue, url: url)
   }
 }
 

@@ -8,14 +8,13 @@
 import SwiftUI
 
 struct PathRestorableShareModifier<T: PathRestorableShareable>: ViewModifier {
-  @Environment(\.vault) private var vault: Vault
-
   let item: T
+  let url: URL?
 
   func body(content: Content) -> some View {
     content
       .toolbar {
-        if let url = vault.createURL(for: item.archivePath) {
+        if let url {
           ShareLink(item: url, subject: item.subject, message: item.message)
         }
       }
@@ -23,7 +22,7 @@ struct PathRestorableShareModifier<T: PathRestorableShareable>: ViewModifier {
 }
 
 extension View {
-  func sharePathRestorable<T: PathRestorableShareable>(_ item: T) -> some View {
-    modifier(PathRestorableShareModifier(item: item))
+  func sharePathRestorable<T: PathRestorableShareable>(_ item: T, url: URL?) -> some View {
+    modifier(PathRestorableShareModifier(item: item, url: url))
   }
 }
