@@ -10,38 +10,36 @@ import SwiftUI
 struct ArtistDetail: View {
   @Environment(\.vault) private var vault: Vault
 
-  let artist: Artist
-  let concerts: [Concert]
-  let related: [Artist]
+  let digest: ArtistDigest
 
   @ViewBuilder private var firstSetElement: some View {
     HStack {
       Text("First Set", bundle: .module, comment: "First Set Caption")
       Spacer()
-      Text(vault.lookup.firstSet(artist: artist).rank.formatted())
+      Text(vault.lookup.firstSet(artist: digest.artist).rank.formatted())
     }
   }
 
   @ViewBuilder private var statsElement: some View {
-    if !concerts.isEmpty {
+    if !digest.concerts.isEmpty {
       Section(header: Text(ArchiveCategory.stats.localizedString)) {
         firstSetElement
         StatsGrouping(
-          concerts: concerts, shouldCalculateArtistCount: false,
-          yearsSpanRanking: vault.lookup.spanRank(artist: artist),
-          computeShowsRank: { vault.lookup.showRank(artist: artist) },
-          computeArtistVenuesRank: { vault.lookup.artistVenueRank(artist: artist) })
+          concerts: digest.concerts, shouldCalculateArtistCount: false,
+          yearsSpanRanking: vault.lookup.spanRank(artist: digest.artist),
+          computeShowsRank: { vault.lookup.showRank(artist: digest.artist) },
+          computeArtistVenuesRank: { vault.lookup.artistVenueRank(artist: digest.artist) })
       }
     }
   }
 
   @ViewBuilder private var showsElement: some View {
-    if !concerts.isEmpty {
+    if !digest.concerts.isEmpty {
       Section(
         header: Text(
           "Shows", bundle: .module, comment: "Title of the Shows section of ArtistDetail")
       ) {
-        ForEach(concerts) { concert in
+        ForEach(digest.concerts) { concert in
           NavigationLink(value: concert) { ArtistBlurb(concert: concert) }
         }
       }
@@ -49,13 +47,13 @@ struct ArtistDetail: View {
   }
 
   @ViewBuilder private var relatedsElement: some View {
-    if !related.isEmpty {
+    if !digest.related.isEmpty {
       Section(
         header: Text(
           "Related Artists", bundle: .module,
           comment: "Title of the Related Artists Section for ArtistDetail.")
       ) {
-        ForEach(related) { relatedArtist in
+        ForEach(digest.related) { relatedArtist in
           NavigationLink(relatedArtist.name, value: relatedArtist)
         }
       }
@@ -63,7 +61,7 @@ struct ArtistDetail: View {
   }
 
   var body: some View {
-    let url = vault.createURL(for: artist.archivePath)
+    let url = vault.createURL(for: digest.artist.archivePath)
     List {
       statsElement
       showsElement
@@ -72,9 +70,9 @@ struct ArtistDetail: View {
     #if os(iOS)
       .listStyle(.grouped)
     #endif
-    .navigationTitle(artist.name)
-    .pathRestorableUserActivityModifier(artist, url: url)
-    .sharePathRestorable(artist, url: url)
+    .navigationTitle(digest.artist.name)
+    .pathRestorableUserActivityModifier(digest.artist, url: url)
+    .sharePathRestorable(digest.artist, url: url)
   }
 }
 
@@ -83,23 +81,15 @@ struct ArtistDetail_Previews: PreviewProvider {
     let vault = Vault.previewData
 
     NavigationStack {
-      let artist = vault.artists[0]
-      ArtistDetail(
-        artist: artist, concerts: vault.concerts.filter { $0.show.artists.contains(artist.id) },
-        related: vault.related(artist).sorted(by: vault.comparator.libraryCompare(lhs:rhs:))
-      )
-      .environment(\.vault, vault)
-      .musicDestinations()
+      ArtistDetail(digest: vault.digest(for: vault.artists[0]))
+        .environment(\.vault, vault)
+        .musicDestinations()
     }
 
     NavigationStack {
-      let artist = vault.artists[1]
-      ArtistDetail(
-        artist: artist, concerts: vault.concerts.filter { $0.show.artists.contains(artist.id) },
-        related: vault.related(artist).sorted(by: vault.comparator.libraryCompare(lhs:rhs:))
-      )
-      .environment(\.vault, vault)
-      .musicDestinations()
+      ArtistDetail(digest: vault.digest(for: vault.artists[1]))
+        .environment(\.vault, vault)
+        .musicDestinations()
     }
   }
 }

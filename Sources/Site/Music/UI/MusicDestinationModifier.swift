@@ -28,11 +28,7 @@ struct MusicDestinationModifier: ViewModifier {
           }
         case .artist(let iD):
           if let artist = vault.lookup.artistMap[iD] {
-            ArtistDetail(
-              artist: artist,
-              concerts: vault.concerts.filter { $0.show.artists.contains(artist.id) }.sorted(
-                by: vault.comparator.compare(lhs:rhs:)),
-              related: vault.related(artist).sorted(by: vault.comparator.libraryCompare(lhs:rhs:)))
+            ArtistDetail(digest: vault.digest(for: artist))
           }
         case .year(let annum):
           YearDetail(
