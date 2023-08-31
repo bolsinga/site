@@ -18,6 +18,9 @@ extension Vault {
       firstSet: lookup.firstSet(venue: venue),
       spanRank: lookup.spanRank(venue: venue),
       showRank: lookup.venueRank(venue: venue),
-      venueArtistRank: lookup.venueArtistRank(venue: venue))
+      venueArtistRank: lookup.venueArtistRank(venue: venue)
+    ) {
+      try await atlas.geocode(venue.location)
+    }
   }
 }

@@ -5,6 +5,7 @@
 //  Created by Greg Bolsinga on 8/30/23.
 //
 
+import CoreLocation
 import Foundation
 
 struct VenueDigest {
@@ -16,4 +17,6 @@ struct VenueDigest {
   let spanRank: Ranking
   let showRank: Ranking
   let venueArtistRank: Ranking
+
+  let geocode: () async throws -> CLPlacemark?
 }

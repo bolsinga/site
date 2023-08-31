@@ -9,8 +9,6 @@ import CoreLocation
 import SwiftUI
 
 struct VenueDetail: View {
-  @Environment(\.vault) private var vault: Vault
-
   let digest: VenueDigest
 
   @State private var placemark: CLPlacemark? = nil
@@ -32,7 +30,7 @@ struct VenueDetail: View {
       AddressView(location: digest.venue.location)
       LocationMap(placemark: $placemark)
         .task(id: digest.venue.location) {
-          do { placemark = try await vault.atlas.geocode(digest.venue.location) } catch {}
+          do { placemark = try await digest.geocode() } catch {}
         }
         .frame(minHeight: 300)
     }
@@ -95,7 +93,6 @@ struct VenueDetail_Previews: PreviewProvider {
     let vault = Vault.previewData
     NavigationStack {
       VenueDetail(digest: vault.digest(for: vault.venues[0]))
-        .environment(\.vault, vault)
         .musicDestinations()
     }
   }
