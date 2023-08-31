@@ -9,6 +9,7 @@ import Foundation
 
 struct ArtistDigest {
   let artist: Artist
+  let url: URL?
   let concerts: [Concert]
   let related: [Artist]
 }

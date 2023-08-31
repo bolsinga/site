@@ -61,7 +61,6 @@ struct ArtistDetail: View {
   }
 
   var body: some View {
-    let url = vault.createURL(for: digest.artist.archivePath)
     List {
       statsElement
       showsElement
@@ -71,8 +70,8 @@ struct ArtistDetail: View {
       .listStyle(.grouped)
     #endif
     .navigationTitle(digest.artist.name)
-    .pathRestorableUserActivityModifier(digest.artist, url: url)
-    .sharePathRestorable(digest.artist, url: url)
+    .pathRestorableUserActivityModifier(digest.artist, url: digest.url)
+    .sharePathRestorable(digest.artist, url: digest.url)
   }
 }
 
