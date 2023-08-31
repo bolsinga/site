@@ -27,9 +27,7 @@ struct MusicDestinationModifier: ViewModifier {
             ArtistDetail(digest: vault.digest(for: artist))
           }
         case .year(let annum):
-          YearDetail(
-            annum: annum, url: vault.createURL(for: annum.archivePath),
-            concerts: vault.concerts(during: annum))
+          YearDetail(digest: vault.digest(for: annum))
         }
       }
   }
