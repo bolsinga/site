@@ -12,10 +12,7 @@ import SwiftUI
 extension CLPlacemark: Identifiable {}
 
 struct LocationMap: View {
-  let location: Location
-  let geocode: (Location) async throws -> CLPlacemark
-
-  @State private var placemark: CLPlacemark? = nil
+  @Binding var placemark: CLPlacemark?
 
   var body: some View {
     ZStack {
@@ -25,18 +22,6 @@ struct LocationMap: View {
             MKMapItem(placemark: MKPlacemark(placemark: placemark)).openInMaps()
           }
       }
-    }.task(id: location) {
-      do { placemark = try await geocode(location) } catch {}
-    }
-  }
-}
-
-struct LocationMap_Previews: PreviewProvider {
-  static var previews: some View {
-    let vault = Vault.previewData
-
-    LocationMap(location: vault.venues[0].location) {
-      try await vault.atlas.geocode($0)
     }
   }
 }

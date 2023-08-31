@@ -5,12 +5,15 @@
 //  Created by Greg Bolsinga on 2/16/23.
 //
 
+import CoreLocation
 import SwiftUI
 
 struct VenueDetail: View {
   @Environment(\.vault) private var vault: Vault
 
   let digest: VenueDigest
+
+  @State private var placemark: CLPlacemark? = nil
 
   @ViewBuilder private var firstSetElement: some View {
     HStack {
@@ -27,10 +30,11 @@ struct VenueDetail: View {
         comment: "Title of the Location / Address Section for VenueDetail.")
     ) {
       AddressView(location: digest.venue.location)
-      LocationMap(location: digest.venue.location) {
-        try await vault.atlas.geocode($0)
-      }
-      .frame(minHeight: 300)
+      LocationMap(placemark: $placemark)
+        .task(id: digest.venue.location) {
+          do { placemark = try await vault.atlas.geocode(digest.venue.location) } catch {}
+        }
+        .frame(minHeight: 300)
     }
   }
 
