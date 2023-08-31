@@ -8,15 +8,13 @@
 import SwiftUI
 
 struct ArtistDetail: View {
-  @Environment(\.vault) private var vault: Vault
-
   let digest: ArtistDigest
 
   @ViewBuilder private var firstSetElement: some View {
     HStack {
       Text("First Set", bundle: .module, comment: "First Set Caption")
       Spacer()
-      Text(vault.lookup.firstSet(artist: digest.artist).rank.formatted())
+      Text(digest.firstSet.rank.formatted())
     }
   }
 
@@ -26,9 +24,9 @@ struct ArtistDetail: View {
         firstSetElement
         StatsGrouping(
           concerts: digest.concerts, shouldCalculateArtistCount: false,
-          yearsSpanRanking: vault.lookup.spanRank(artist: digest.artist),
-          computeShowsRank: { vault.lookup.showRank(artist: digest.artist) },
-          computeArtistVenuesRank: { vault.lookup.artistVenueRank(artist: digest.artist) })
+          yearsSpanRanking: digest.spanRank,
+          computeShowsRank: { digest.showRank },
+          computeArtistVenuesRank: { digest.venueRank })
       }
     }
   }
@@ -81,13 +79,11 @@ struct ArtistDetail_Previews: PreviewProvider {
 
     NavigationStack {
       ArtistDetail(digest: vault.digest(for: vault.artists[0]))
-        .environment(\.vault, vault)
         .musicDestinations()
     }
 
     NavigationStack {
       ArtistDetail(digest: vault.digest(for: vault.artists[1]))
-        .environment(\.vault, vault)
         .musicDestinations()
     }
   }

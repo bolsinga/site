@@ -14,6 +14,10 @@ extension Vault {
       url: createURL(for: artist.archivePath),
       concerts: concerts.filter { $0.show.artists.contains(artist.id) }.sorted(
         by: comparator.compare(lhs:rhs:)),
-      related: related(artist).sorted(by: comparator.libraryCompare(lhs:rhs:)))
+      related: related(artist).sorted(by: comparator.libraryCompare(lhs:rhs:)),
+      firstSet: lookup.firstSet(artist: artist),
+      spanRank: lookup.spanRank(artist: artist),
+      showRank: lookup.showRank(artist: artist),
+      venueRank: lookup.artistVenueRank(artist: artist))
   }
 }
