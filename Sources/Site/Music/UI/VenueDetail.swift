@@ -10,18 +10,13 @@ import SwiftUI
 struct VenueDetail: View {
   @Environment(\.vault) private var vault: Vault
 
-  let venue: Venue
-  let concerts: [Concert]
-
-  private var computedRelatedVenues: [Venue] {
-    vault.related(venue).sorted(by: vault.comparator.libraryCompare(lhs:rhs:))
-  }
+  let digest: VenueDigest
 
   @ViewBuilder private var firstSetElement: some View {
     HStack {
       Text("First Set", bundle: .module, comment: "Venue First Set Caption")
       Spacer()
-      Text(vault.lookup.firstSet(venue: venue).rank.formatted())
+      Text(digest.firstSet.rank.formatted())
     }
   }
 
@@ -31,8 +26,8 @@ struct VenueDetail: View {
         "Location", bundle: .module,
         comment: "Title of the Location / Address Section for VenueDetail.")
     ) {
-      AddressView(location: venue.location)
-      LocationMap(location: venue.location) {
+      AddressView(location: digest.venue.location)
+      LocationMap(location: digest.venue.location) {
         try await vault.atlas.geocode($0)
       }
       .frame(minHeight: 300)
@@ -42,11 +37,11 @@ struct VenueDetail: View {
   @ViewBuilder private var statsElement: some View {
     Section(header: Text(ArchiveCategory.stats.localizedString)) {
       firstSetElement
-      if concerts.count > 1 {
+      if digest.concerts.count > 1 {
         StatsGrouping(
-          concerts: concerts, yearsSpanRanking: vault.lookup.spanRank(venue: venue),
-          computeShowsRank: { vault.lookup.venueRank(venue: venue) },
-          computeVenueArtistsRank: { vault.lookup.venueArtistRank(venue: venue) })
+          concerts: digest.concerts, yearsSpanRanking: digest.spanRank,
+          computeShowsRank: { digest.showRank },
+          computeVenueArtistsRank: { digest.venueArtistRank })
       }
     }
   }
@@ -55,21 +50,20 @@ struct VenueDetail: View {
     Section(
       header: Text("Shows", bundle: .module, comment: "Title of the Shows section of VenueDetail")
     ) {
-      ForEach(concerts) { concert in
+      ForEach(digest.concerts) { concert in
         NavigationLink(value: concert) { VenueBlurb(concert: concert) }
       }
     }
   }
 
   @ViewBuilder private var relatedsElement: some View {
-    let relatedVenues = computedRelatedVenues
-    if !relatedVenues.isEmpty {
+    if !digest.related.isEmpty {
       Section(
         header: Text(
           "Related Venues", bundle: .module,
           comment: "Title of the Related Venues Section for VenueDetail.")
       ) {
-        ForEach(relatedVenues) { relatedVenue in
+        ForEach(digest.related) { relatedVenue in
           NavigationLink(relatedVenue.name, value: relatedVenue)
         }
       }
@@ -77,7 +71,6 @@ struct VenueDetail: View {
   }
 
   var body: some View {
-    let url = vault.createURL(for: venue.archivePath)
     List {
       locationElement
       statsElement
@@ -87,9 +80,9 @@ struct VenueDetail: View {
     #if os(iOS)
       .listStyle(.grouped)
     #endif
-    .navigationTitle(venue.name)
-    .pathRestorableUserActivityModifier(venue, url: url)
-    .sharePathRestorable(venue, url: url)
+    .navigationTitle(digest.venue.name)
+    .pathRestorableUserActivityModifier(digest.venue, url: digest.url)
+    .sharePathRestorable(digest.venue, url: digest.url)
   }
 }
 
@@ -97,8 +90,7 @@ struct VenueDetail_Previews: PreviewProvider {
   static var previews: some View {
     let vault = Vault.previewData
     NavigationStack {
-      let venue = vault.venues[0]
-      VenueDetail(venue: venue, concerts: vault.concerts.filter { $0.show.venue == venue.id })
+      VenueDetail(digest: vault.digest(for: vault.venues[0]))
         .environment(\.vault, vault)
         .musicDestinations()
     }
