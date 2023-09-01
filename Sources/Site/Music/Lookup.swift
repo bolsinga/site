@@ -19,16 +19,16 @@ private func createLookup<T: Identifiable>(_ sequence: [T]) -> [T.ID: T] {
 public struct Lookup {
   let artistMap: [Artist.ID: Artist]
   let venueMap: [Venue.ID: Venue]
-  let artistRankingMap: [Artist.ID: Ranking]
-  let venueRankingMap: [Venue.ID: Ranking]
-  let artistShowSpanRankingMap: [Artist.ID: Ranking]
-  let venueShowSpanRankingMap: [Venue.ID: Ranking]
-  let artistVenueRankingMap: [Artist.ID: Ranking]
-  let venueArtistRankingMap: [Venue.ID: Ranking]
+  private let artistRankingMap: [Artist.ID: Ranking]
+  private let venueRankingMap: [Venue.ID: Ranking]
+  private let artistShowSpanRankingMap: [Artist.ID: Ranking]
+  private let venueShowSpanRankingMap: [Venue.ID: Ranking]
+  private let artistVenueRankingMap: [Artist.ID: Ranking]
+  private let venueArtistRankingMap: [Venue.ID: Ranking]
   let decadesMap: [Decade: [Annum: [Show.ID]]]
-  let artistFirstSetsMap: [Artist.ID: FirstSet]
-  let venueFirstSetsMap: [Venue.ID: FirstSet]
-  let relationMap: [String: [String]]  // Artist/Venue ID : [Artist/Venue ID]
+  private let artistFirstSetsMap: [Artist.ID: FirstSet]
+  private let venueFirstSetsMap: [Venue.ID: FirstSet]
+  private let relationMap: [String: [String]]  // Artist/Venue ID : [Artist/Venue ID]
 
   public init(music: Music) {
     // non-parallel, used for Previews, tests
