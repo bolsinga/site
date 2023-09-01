@@ -14,7 +14,7 @@ extension Music {
     let artistIDsWithoutShows = Set(self.artists.map { $0.id }).subtracting(artistIDsWithShows)
 
     let artistsShowsOnly = artists.filter { artistIDsWithShows.contains($0.id) }
-    let relationsShowsOnly: [Relation] = relations.map {
+    let relationsShowsOnly = relations.map {
       Set($0.members).intersection(artistIDsWithoutShows).isEmpty
         ? $0
         : Relation(
