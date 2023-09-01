@@ -51,7 +51,7 @@ public struct Vault {
     self.concertMap = self.concerts.reduce(into: [:]) { $0[$1.id] = $1 }
   }
 
-  public static func create(music: Music, url: URL, artistsWithShowsOnly: Bool) async -> Vault {
+  public static func create(music: Music, url: URL) async -> Vault {
     async let asyncLookup = await Lookup.create(music: music)
     async let asyncComparator = await LibraryComparator.create(music: music)
     async let sectioner = await LibrarySectioner.create(music: music)
@@ -59,10 +59,7 @@ public struct Vault {
     let lookup = await asyncLookup
     let comparator = await asyncComparator
 
-    async let sortedArtists =
-      (artistsWithShowsOnly ? lookup.artistsWithShows(music.shows) : music.artists)
-      .sorted(
-        by: comparator.libraryCompare(lhs:rhs:))
+    async let sortedArtists = music.artists.sorted(by: comparator.libraryCompare(lhs:rhs:))
     async let sortedShows = music.shows.sorted {
       comparator.showCompare(lhs: $0, rhs: $1, lookup: lookup)
     }
