@@ -9,28 +9,28 @@ import SwiftUI
 
 struct ArtistList: View {
   @Environment(\.vault) private var vault: Vault
-  let artists: [Artist]
+  let artistDigests: [ArtistDigest]
 
   @Binding var sort: ArtistSort
 
   @State private var searchString: String = ""
 
-  private func rank(for artist: Artist) -> Ranking {
+  private func rank(for artistDigest: ArtistDigest) -> Ranking {
     switch sort {
     case .alphabetical, .firstSeen:
       return Ranking.empty
     case .showCount:
-      return vault.lookup.showRank(artist: artist)
+      return artistDigest.showRank
     case .showYearRange:
-      return vault.lookup.spanRank(artist: artist)
+      return artistDigest.spanRank
     case .venueRank:
-      return vault.lookup.artistVenueRank(artist: artist)
+      return artistDigest.venueRank
     }
   }
 
-  @ViewBuilder private func showCount(for artist: Artist) -> some View {
+  @ViewBuilder private func showCount(for artistDigest: ArtistDigest) -> some View {
     Text(
-      "\(vault.lookup.showRank(artist: artist).value) Show(s)", bundle: .module,
+      "\(artistDigest.showRank.value) Show(s)", bundle: .module,
       comment: "Value for the Artist # of Shows.")
   }
 
@@ -50,7 +50,7 @@ struct ArtistList: View {
   @ViewBuilder private var listElement: some View {
     if case .alphabetical = sort {
       LibraryComparableList(
-        items: artists,
+        items: artistDigests,
         sectioner: vault.sectioner,
         itemContentView: { showCount(for: $0) },
         sectionHeaderView: { $0.representingView },
@@ -58,22 +58,22 @@ struct ArtistList: View {
       )
     } else if case .firstSeen = sort {
       RankingList(
-        items: artists,
-        rankingMapBuilder: { artists in
-          artists.reduce(into: [PartialDate: [(Artist, FirstSet)]]()) {
-            let firstSet = vault.lookup.firstSet(artist: $1)
+        items: artistDigests,
+        rankingMapBuilder: {
+          $0.reduce(into: [PartialDate: [(ArtistDigest, FirstSet)]]()) {
+            let firstSet = $1.firstSet
             var arr = ($0[firstSet.date] ?? [])
             arr.append(($1, firstSet))
             $0[firstSet.date] = arr
-          }.reduce(into: [PartialDate: [Artist]]()) {
+          }.reduce(into: [PartialDate: [ArtistDigest]]()) {
             $0[$1.key] = $1.value.sorted(by: { lhs, rhs in
               lhs.1.rank < rhs.1.rank
             }).map { $0.0 }
           }
         },
         rankSorted: PartialDate.compareWithUnknownsMuted(lhs:rhs:),
-        itemContentView: { artist in
-          Text(vault.lookup.firstSet(artist: artist).rank.formatted(.hash))
+        itemContentView: {
+          Text($0.firstSet.rank.formatted(.hash))
         },
         sectionHeaderView: {
           Text($0.formatted(.compact))
@@ -81,9 +81,9 @@ struct ArtistList: View {
         searchString: $searchString)
     } else {
       RankingList(
-        items: artists,
-        rankingMapBuilder: { artists in
-          artists.reduce(into: [Ranking: [Artist]]()) {
+        items: artistDigests,
+        rankingMapBuilder: {
+          $0.reduce(into: [Ranking: [ArtistDigest]]()) {
             let ranking = rank(for: $1)
             var arr = ($0[ranking] ?? [])
             arr.append($1)
@@ -117,7 +117,7 @@ struct ArtistList_Previews: PreviewProvider {
     let vault = Vault.previewData
 
     NavigationStack {
-      ArtistList(artists: vault.artists, sort: .constant(.alphabetical))
+      ArtistList(artistDigests: vault.artistDigests, sort: .constant(.alphabetical))
         .environment(\.vault, vault)
         .musicDestinations()
     }

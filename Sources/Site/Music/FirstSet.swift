@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct FirstSet {
+struct FirstSet: Equatable, Hashable {
   let rank: Rank
   let date: PartialDate
 

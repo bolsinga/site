@@ -53,7 +53,7 @@ struct RankingList_Previews: PreviewProvider {
 
     NavigationStack {
       RankingList(
-        items: vault.artists,
+        items: vault.artistDigests,
         rankingMapBuilder: { artists in
           return [Ranking(rank: .rank(1), value: 3): artists]
         },

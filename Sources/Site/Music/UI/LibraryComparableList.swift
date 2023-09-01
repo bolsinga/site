@@ -61,7 +61,7 @@ struct LibraryComparableList_Previews: PreviewProvider {
 
     NavigationStack {
       LibraryComparableList(
-        items: vault.artists,
+        items: vault.artistDigests,
         sectioner: LibrarySectioner(),
         itemContentView: { _ in
           Text(3.formatted(.number))

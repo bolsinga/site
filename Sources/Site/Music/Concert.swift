@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Concert: Equatable, Identifiable {
+public struct Concert: Equatable, Hashable, Identifiable {
   public var id: Show.ID { show.id }
 
   public let show: Show
