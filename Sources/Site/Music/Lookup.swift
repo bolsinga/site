@@ -28,6 +28,7 @@ public struct Lookup {
   let decadesMap: [Decade: [Annum: [Show.ID]]]
   let artistFirstSetsMap: [Artist.ID: FirstSet]
   let venueFirstSetsMap: [Venue.ID: FirstSet]
+  let relationMap: [String: [String]]  // Artist/Venue ID : [Artist/Venue ID]
 
   public init(music: Music) {
     // non-parallel, used for Previews, tests
@@ -40,6 +41,7 @@ public struct Lookup {
     let decadesMap = music.decadesMap
     let artistFirstSets = music.artistFirstSets
     let venueFirstSets = music.venueFirstSets
+    let relationMap = music.relationMap
 
     self.init(
       artistMap: createLookup(music.artists),
@@ -52,7 +54,8 @@ public struct Lookup {
       venueArtistRankingMap: venueArtistRanks,
       decadesMap: decadesMap,
       artistFirstSetsMap: artistFirstSets,
-      venueFirstSetsMap: venueFirstSets)
+      venueFirstSetsMap: venueFirstSets,
+      relationMap: relationMap)
   }
 
   internal init(
@@ -66,7 +69,8 @@ public struct Lookup {
     venueArtistRankingMap: [Venue.ID: Ranking],
     decadesMap: [Decade: [Annum: [Show.ID]]],
     artistFirstSetsMap: [Artist.ID: FirstSet],
-    venueFirstSetsMap: [Venue.ID: FirstSet]
+    venueFirstSetsMap: [Venue.ID: FirstSet],
+    relationMap: [String: [String]]
   ) {
     self.artistMap = artistMap
     self.venueMap = venueMap
@@ -79,6 +83,7 @@ public struct Lookup {
     self.decadesMap = decadesMap
     self.artistFirstSetsMap = artistFirstSetsMap
     self.venueFirstSetsMap = venueFirstSetsMap
+    self.relationMap = relationMap
   }
 
   public static func create(music: Music) async -> Lookup {
@@ -94,14 +99,16 @@ public struct Lookup {
     async let decades = music.decadesMap
     async let artistFirsts = music.artistFirstSets
     async let venueFirsts = music.venueFirstSets
+    async let relations = music.relationMap
 
     let (
       artistMap, venueMap, artistRankings, venueRankings, artistSpanRankings,
       venueSpanRankings, artistVenueRankings, venueArtistRankings, decadesMap, artistFirstSets,
-      venueFirstSets
+      venueFirstSets, relationMap
     ) = await (
       artistLookup, venueLookup, artistRanks, venueRanks, artistSpanRanks,
-      venueSpanRanks, artistVenueRanks, venueArtistRanks, decades, artistFirsts, venueFirsts
+      venueSpanRanks, artistVenueRanks, venueArtistRanks, decades, artistFirsts, venueFirsts,
+      relations
     )
 
     return Lookup(
@@ -115,7 +122,8 @@ public struct Lookup {
       venueArtistRankingMap: venueArtistRankings,
       decadesMap: decadesMap,
       artistFirstSetsMap: artistFirstSets,
-      venueFirstSetsMap: venueFirstSets)
+      venueFirstSetsMap: venueFirstSets,
+      relationMap: relationMap)
   }
 
   public func venueForShow(_ show: Show) -> Venue? {
@@ -180,5 +188,13 @@ public struct Lookup {
 
   func firstSet(venue: Venue) -> FirstSet {
     return venueFirstSetsMap[venue.id] ?? FirstSet.empty
+  }
+
+  func related(_ item: Venue) -> [Venue] {
+    relationMap[item.id]?.compactMap { venueMap[$0] } ?? []
+  }
+
+  func related(_ item: Artist) -> [Artist] {
+    relationMap[item.id]?.compactMap { artistMap[$0] } ?? []
   }
 }

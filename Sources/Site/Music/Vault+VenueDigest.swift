@@ -14,7 +14,7 @@ extension Vault {
       url: createURL(for: venue.archivePath),
       concerts: concerts.filter { $0.show.venue == venue.id }.sorted(
         by: comparator.compare(lhs:rhs:)),
-      related: related(venue).sorted(by: comparator.libraryCompare(lhs:rhs:)),
+      related: lookup.related(venue).sorted(by: comparator.libraryCompare(lhs:rhs:)),
       firstSet: lookup.firstSet(venue: venue),
       spanRank: lookup.spanRank(venue: venue),
       showRank: lookup.venueRank(venue: venue),
