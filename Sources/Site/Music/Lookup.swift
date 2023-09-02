@@ -158,10 +158,6 @@ public struct Lookup {
     artistRankingMap[artist.id] ?? Ranking.empty
   }
 
-  func venueRank(artist: Artist) -> Ranking {
-    artistVenueRankingMap[artist.id] ?? Ranking.empty
-  }
-
   func venueRank(venue: Venue) -> Ranking {
     venueRankingMap[venue.id] ?? Ranking.empty
   }
