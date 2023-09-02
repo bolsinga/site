@@ -106,6 +106,61 @@ public struct Vault {
     return v
   }
 
+  public static func create2(music: Music, url: URL) async {
+    async let asyncLookup = await Lookup.create(music: music)
+    async let asyncComparator = await LibraryComparator.create(music: music)
+
+    let baseURL = url.baseURL
+
+    let (lookup, comparator) = await (asyncLookup, asyncComparator)
+
+    async let asyncConcerts = music.shows.map { lookup.concert(from: $0) }.sorted(
+      by: comparator.compare(lhs:rhs:))
+
+    let concerts = await asyncConcerts
+
+    async let artists = music.artists.sorted(by: comparator.libraryCompare(lhs:rhs:)).map {
+      ArtistDigest(
+        artist: $0,
+        url: $0.archivePath.url(using: baseURL),
+        concerts: concerts.filter { $0.show.artists.contains($0.id) }.sorted(
+          by: comparator.compare(lhs:rhs:)),
+        related: lookup.related($0),
+        firstSet: lookup.firstSet(artist: $0),
+        spanRank: lookup.spanRank(artist: $0),
+        showRank: lookup.showRank(artist: $0),
+        venueRank: lookup.artistVenueRank(artist: $0))
+    }
+
+    let atlas = Atlas()
+
+    async let venues = music.venues.sorted(by: comparator.libraryCompare(lhs:rhs:)).map { venue in
+      VenueDigest(
+        venue: venue,
+        url: venue.archivePath.url(using: baseURL),
+        concerts: concerts.filter { $0.show.venue == $0.id }.sorted(
+          by: comparator.compare(lhs:rhs:)),
+        related: lookup.related(venue),
+        firstSet: lookup.firstSet(venue: venue),
+        spanRank: lookup.spanRank(venue: venue),
+        showRank: lookup.venueRank(venue: venue),
+        venueArtistRank: lookup.venueArtistRank(venue: venue)
+      ) {
+        try await atlas.geocode(venue.location)
+      }
+    }
+
+    async let asyncDecadesMap = music.decadesMap
+
+    let annums = await asyncDecadesMap.values.flatMap { $0.keys }.map { annum in
+      AnnumDigest(
+        annum: annum,
+        url: annum.archivePath.url(using: baseURL),
+        concerts: concerts.filter { $0.show.date.annum == annum }.sorted(
+          by: comparator.compare(lhs:rhs:)))
+    }
+  }
+
   func createURL(forCategory category: ArchiveCategory) -> URL? {
     guard let baseURL else {
       return nil
