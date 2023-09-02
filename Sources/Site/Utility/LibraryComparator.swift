@@ -9,7 +9,7 @@ import Foundation
 
 public struct LibraryComparator {
 
-  let tokenMap: [String: String]
+  private let tokenMap: [String: String]
 
   public init(tokenMap: [String: String] = [:]) {
     self.tokenMap = tokenMap
@@ -21,7 +21,7 @@ public struct LibraryComparator {
     return libraryCompareTokens(lhs: lhToken, rhs: rhToken)
   }
 
-  public func libraryCompare(lhs: String, rhs: String) -> Bool {
+  func libraryCompare(lhs: String, rhs: String) -> Bool {
     return libraryCompareTokens(
       lhs: lhs.removeCommonInitialPunctuation, rhs: rhs.removeCommonInitialPunctuation)
   }
