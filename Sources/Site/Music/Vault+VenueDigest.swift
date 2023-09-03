@@ -11,7 +11,7 @@ extension Vault {
   func digest(for venue: Venue) -> VenueDigest {
     return VenueDigest(
       venue: venue,
-      url: createURL(for: venue.archivePath),
+      url: venue.archivePath.url(using: baseURL),
       concerts: concerts.filter { $0.show.venue == venue.id }.sorted(
         by: comparator.compare(lhs:rhs:)),
       related: lookup.related(venue).sorted(by: comparator.libraryCompare(lhs:rhs:)),

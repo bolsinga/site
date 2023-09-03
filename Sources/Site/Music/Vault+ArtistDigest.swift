@@ -11,7 +11,7 @@ extension Vault {
   func digest(for artist: Artist) -> ArtistDigest {
     return ArtistDigest(
       artist: artist,
-      url: createURL(for: artist.archivePath),
+      url: artist.archivePath.url(using: baseURL),
       concerts: concerts.filter { $0.show.artists.contains(artist.id) }.sorted(
         by: comparator.compare(lhs:rhs:)),
       related: lookup.related(artist).sorted(by: comparator.libraryCompare(lhs:rhs:)),

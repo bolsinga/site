@@ -94,10 +94,6 @@ public struct Vault {
     return v
   }
 
-  func createURL(for archivePath: ArchivePath) -> URL? {
-    archivePath.url(using: baseURL)
-  }
-
   func createURL(forCategory category: ArchiveCategory) -> URL? {
     guard let baseURL else {
       return nil

@@ -10,6 +10,6 @@ import Foundation
 extension Vault {
   func digest(for annum: Annum) -> AnnumDigest {
     return AnnumDigest(
-      annum: annum, url: createURL(for: annum.archivePath), concerts: concerts(during: annum))
+      annum: annum, url: annum.archivePath.url(using: baseURL), concerts: concerts(during: annum))
   }
 }
