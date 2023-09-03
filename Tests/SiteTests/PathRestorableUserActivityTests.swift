@@ -15,8 +15,10 @@ final class PathRestorableUserActivityTests: XCTestCase {
   func testShow() throws {
     let userActivity = NSUserActivity(activityType: "test-type")
 
-    userActivity.update(
-      vault.concerts[0], url: vault.concerts[0].archivePath.url(using: vault.baseURL))
+    let concert = Concert(
+      show: Show(artists: [], date: PartialDate(), id: "sh17", venue: "v0"),
+      venue: Venue(id: "v0", location: Location(city: "c", state: "s"), name: "V0"), artists: [])
+    userActivity.update(concert, url: concert.archivePath.url(using: vault.baseURL))
 
     XCTAssertTrue(userActivity.isEligibleForHandoff)
 
@@ -36,8 +38,8 @@ final class PathRestorableUserActivityTests: XCTestCase {
   func testArtist() throws {
     let userActivity = NSUserActivity(activityType: "test-type")
 
-    userActivity.update(
-      vault.artists[0], url: vault.artists[0].archivePath.url(using: vault.baseURL))
+    let artist = Artist(id: "ar0", name: "AR0")
+    userActivity.update(artist, url: artist.archivePath.url(using: vault.baseURL))
 
     XCTAssertTrue(userActivity.isEligibleForHandoff)
 
@@ -55,7 +57,8 @@ final class PathRestorableUserActivityTests: XCTestCase {
   func testVenue() throws {
     let userActivity = NSUserActivity(activityType: "test-type")
 
-    userActivity.update(vault.venues[0], url: vault.venues[0].archivePath.url(using: vault.baseURL))
+    let venue = Venue(id: "v10", location: Location(city: "c", state: "s"), name: "V10")
+    userActivity.update(venue, url: venue.archivePath.url(using: vault.baseURL))
 
     XCTAssertTrue(userActivity.isEligibleForHandoff)
 
@@ -95,8 +98,11 @@ final class PathRestorableUserActivityTests: XCTestCase {
 
     let url = URL(string: "https://www.example.com/dates/sh17.html")!
 
-    userActivity.update(
-      vault.concerts[0], url: vault.concerts[0].archivePath.url(using: vault.baseURL))
+    let concert = Concert(
+      show: Show(artists: [], date: PartialDate(), id: "sh17", venue: "v0"),
+      venue: Venue(id: "v0", location: Location(city: "c", state: "s"), name: "V0"), artists: [])
+
+    userActivity.update(concert, url: concert.archivePath.url(using: vault.baseURL))
 
     XCTAssertTrue(userActivity.isEligibleForPublicIndexing)
     XCTAssertEqual(userActivity.webpageURL, url)
