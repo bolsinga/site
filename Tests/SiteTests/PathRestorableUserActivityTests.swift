@@ -15,7 +15,8 @@ final class PathRestorableUserActivityTests: XCTestCase {
   func testShow() throws {
     let userActivity = NSUserActivity(activityType: "test-type")
 
-    userActivity.update(vault.concerts[0], url: vault.createURL(for: vault.concerts[0].archivePath))
+    userActivity.update(
+      vault.concerts[0], url: vault.concerts[0].archivePath.url(using: vault.baseURL))
 
     XCTAssertTrue(userActivity.isEligibleForHandoff)
 
@@ -35,7 +36,8 @@ final class PathRestorableUserActivityTests: XCTestCase {
   func testArtist() throws {
     let userActivity = NSUserActivity(activityType: "test-type")
 
-    userActivity.update(vault.artists[0], url: vault.createURL(for: vault.artists[0].archivePath))
+    userActivity.update(
+      vault.artists[0], url: vault.artists[0].archivePath.url(using: vault.baseURL))
 
     XCTAssertTrue(userActivity.isEligibleForHandoff)
 
@@ -53,7 +55,7 @@ final class PathRestorableUserActivityTests: XCTestCase {
   func testVenue() throws {
     let userActivity = NSUserActivity(activityType: "test-type")
 
-    userActivity.update(vault.venues[0], url: vault.createURL(for: vault.venues[0].archivePath))
+    userActivity.update(vault.venues[0], url: vault.venues[0].archivePath.url(using: vault.baseURL))
 
     XCTAssertTrue(userActivity.isEligibleForHandoff)
 
@@ -73,7 +75,7 @@ final class PathRestorableUserActivityTests: XCTestCase {
 
     let item = Annum.year(1990)
 
-    userActivity.update(item, url: vault.createURL(for: item.archivePath))
+    userActivity.update(item, url: item.archivePath.url(using: vault.baseURL))
 
     XCTAssertTrue(userActivity.isEligibleForHandoff)
 
@@ -93,7 +95,8 @@ final class PathRestorableUserActivityTests: XCTestCase {
 
     let url = URL(string: "https://www.example.com/dates/sh17.html")!
 
-    userActivity.update(vault.concerts[0], url: vault.createURL(for: vault.concerts[0].archivePath))
+    userActivity.update(
+      vault.concerts[0], url: vault.concerts[0].archivePath.url(using: vault.baseURL))
 
     XCTAssertTrue(userActivity.isEligibleForPublicIndexing)
     XCTAssertEqual(userActivity.webpageURL, url)
