@@ -23,8 +23,8 @@ struct MusicDestinationModifier: ViewModifier {
             VenueDetail(digest: vault.digest(for: venue))
           }
         case .artist(let iD):
-          if let artist = vault.lookup.artistMap[iD] {
-            ArtistDetail(digest: vault.digest(for: artist))
+          if let artistDigest = vault.artistDigestMap[iD] {
+            ArtistDetail(digest: artistDigest)
           }
         case .year(let annum):
           YearDetail(digest: vault.digest(for: annum))
