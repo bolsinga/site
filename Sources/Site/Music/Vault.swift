@@ -89,7 +89,7 @@ public struct Vault {
 
     let v = Vault(
       music: sortedMusic, lookup: lookup, comparator: comparator, sectioner: await sectioner,
-      baseURL: baseURL, concerts: await concerts)
+      baseURL: await baseURL, concerts: await concerts)
 
     //    Task {
     //      do {
