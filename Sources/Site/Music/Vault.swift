@@ -68,7 +68,6 @@ extension Array where Element == Venue {
 }
 
 public struct Vault {
-  public let music: Music
   let lookup: Lookup
   public let comparator: LibraryComparator
   internal let sectioner: LibrarySectioner
@@ -97,18 +96,15 @@ public struct Vault {
       concerts: concerts, baseURL: baseURL, atlas: atlas, lookup: lookup, comparator: comparator)
 
     self.init(
-      music: music, lookup: lookup, comparator: comparator, sectioner: LibrarySectioner(),
-      atlas: atlas, baseURL: baseURL, concerts: concerts, artistDigests: artistDigests,
-      venueDigests: venueDigests
+      lookup: lookup, comparator: comparator, sectioner: LibrarySectioner(), atlas: atlas,
+      baseURL: baseURL, concerts: concerts, artistDigests: artistDigests, venueDigests: venueDigests
     )
   }
 
   internal init(
-    music: Music, lookup: Lookup, comparator: LibraryComparator, sectioner: LibrarySectioner,
-    atlas: Atlas, baseURL: URL?, concerts: [Concert], artistDigests: [ArtistDigest],
-    venueDigests: [VenueDigest]
+    lookup: Lookup, comparator: LibraryComparator, sectioner: LibrarySectioner, atlas: Atlas,
+    baseURL: URL?, concerts: [Concert], artistDigests: [ArtistDigest], venueDigests: [VenueDigest]
   ) {
-    self.music = music
     self.lookup = lookup
     self.comparator = comparator
     self.sectioner = sectioner
@@ -135,27 +131,12 @@ public struct Vault {
     let lookup = await asyncLookup
     let comparator = await asyncComparator
 
-    async let sortedArtists = music.artists.sorted(by: comparator.libraryCompare(lhs:rhs:))
-    async let sortedShows = music.shows.sorted {
-      comparator.showCompare(lhs: $0, rhs: $1, lookup: lookup)
-    }
-    async let sortedVenues = music.venues.sorted(by: comparator.libraryCompare(lhs:rhs:))
-
     async let asyncConcerts = music.shows.concerts(lookup: lookup, comparator: comparator)
-
-    let sortedMusic = Music(
-      albums: music.albums,
-      artists: await sortedArtists,
-      relations: music.relations,
-      shows: await sortedShows,
-      songs: music.songs,
-      timestamp: music.timestamp,
-      venues: await sortedVenues)
 
     let concerts = await asyncConcerts
     let baseURL = await asyncBaseURL
 
-    async let artistDigests = sortedMusic.artists.digests(
+    async let artistDigests = music.artists.digests(
       concerts: concerts, baseURL: baseURL, lookup: lookup, comparator: comparator)
 
     let atlas = await asyncAtlas
@@ -164,8 +145,8 @@ public struct Vault {
       concerts: concerts, baseURL: baseURL, atlas: atlas, lookup: lookup, comparator: comparator)
 
     let v = Vault(
-      music: sortedMusic, lookup: lookup, comparator: comparator, sectioner: await sectioner,
-      atlas: atlas, baseURL: baseURL, concerts: concerts, artistDigests: await artistDigests,
+      lookup: lookup, comparator: comparator, sectioner: await sectioner, atlas: atlas,
+      baseURL: baseURL, concerts: concerts, artistDigests: await artistDigests,
       venueDigests: await venueDigests)
 
     //    Task {

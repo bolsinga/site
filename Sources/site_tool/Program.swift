@@ -77,7 +77,5 @@ struct Program: AsyncParsableCommand {
       }
       print("\(artist.name): (\(concertParts.joined(separator: "; "))")
     }
-
-    try jsonDirectoryURL?.appending(path: "music.json").writeJSON(vault.music)
   }
 }
