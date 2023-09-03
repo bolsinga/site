@@ -19,6 +19,12 @@ extension URL {
   }
 }
 
+extension Array where Element == Show {
+  func concerts(lookup: Lookup, comparator: LibraryComparator) -> [Concert] {
+    self.map { lookup.concert(from: $0) }.sorted { comparator.compare(lhs: $0, rhs: $1) }
+  }
+}
+
 public struct Vault {
   public let music: Music
   let lookup: Lookup
@@ -31,23 +37,27 @@ public struct Vault {
 
   public init(music: Music, url: URL? = nil) {
     // non-parallel, used for previews, tests
+    let lookup = Lookup(music: music)
+    let comparator = LibraryComparator()
+
+    let concerts = music.shows.concerts(lookup: lookup, comparator: comparator)
+
     self.init(
-      music: music, lookup: Lookup(music: music), comparator: LibraryComparator(),
-      sectioner: LibrarySectioner(), baseURL: url?.baseURL)
+      music: music, lookup: lookup, comparator: comparator, sectioner: LibrarySectioner(),
+      baseURL: url?.baseURL, concerts: concerts)
   }
 
   internal init(
     music: Music, lookup: Lookup, comparator: LibraryComparator, sectioner: LibrarySectioner,
-    baseURL: URL?
+    baseURL: URL?, concerts: [Concert]
   ) {
     self.music = music
     self.lookup = lookup
     self.comparator = comparator
     self.sectioner = sectioner
     self.baseURL = baseURL
-    self.concerts = music.shows.map { lookup.concert(from: $0) }.sorted {
-      comparator.compare(lhs: $0, rhs: $1)
-    }
+
+    self.concerts = concerts
     self.concertMap = self.concerts.reduce(into: [:]) { $0[$1.id] = $1 }
   }
 
@@ -65,6 +75,8 @@ public struct Vault {
     }
     async let sortedVenues = music.venues.sorted(by: comparator.libraryCompare(lhs:rhs:))
 
+    async let concerts = music.shows.concerts(lookup: lookup, comparator: comparator)
+
     let sortedMusic = Music(
       albums: music.albums,
       artists: await sortedArtists,
@@ -76,7 +88,7 @@ public struct Vault {
 
     let v = Vault(
       music: sortedMusic, lookup: lookup, comparator: comparator, sectioner: await sectioner,
-      baseURL: url.baseURL)
+      baseURL: url.baseURL, concerts: await concerts)
 
     //    Task {
     //      do {
