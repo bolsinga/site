@@ -44,12 +44,35 @@ extension Array where Element == Artist {
   }
 }
 
+extension Array where Element == Venue {
+  func digests(
+    concerts: [Concert], baseURL: URL?, atlas: Atlas, lookup: Lookup, comparator: LibraryComparator
+  ) -> [VenueDigest] {
+    self.map { venue in
+      VenueDigest(
+        venue: venue,
+        url: venue.archivePath.url(using: baseURL),
+        concerts: concerts.filter { $0.show.venue == venue.id }.sorted(
+          by: comparator.compare(lhs:rhs:)),
+        related: lookup.related(venue),
+        firstSet: lookup.firstSet(venue: venue),
+        spanRank: lookup.spanRank(venue: venue),
+        showRank: lookup.venueRank(venue: venue),
+        venueArtistRank: lookup.venueArtistRank(venue: venue)
+      ) {
+        try await atlas.geocode(venue.location)
+      }
+    }
+
+  }
+}
+
 public struct Vault {
   public let music: Music
   let lookup: Lookup
   public let comparator: LibraryComparator
   internal let sectioner: LibrarySectioner
-  internal let atlas = Atlas()
+  internal let atlas: Atlas
   internal let baseURL: URL?
   public let concerts: [Concert]
   public let concertMap: [Concert.ID: Concert]
@@ -57,29 +80,39 @@ public struct Vault {
   internal let artistDigests: [ArtistDigest]
   internal let artistDigestMap: [Artist.ID: ArtistDigest]
 
+  internal let venueDigests: [VenueDigest]
+  internal let venueDigestMap: [Venue.ID: VenueDigest]
+
   public init(music: Music, url: URL? = nil) {
     // non-parallel, used for previews, tests
     let lookup = Lookup(music: music)
     let comparator = LibraryComparator()
     let baseURL = url?.baseURL
+    let atlas = Atlas()
 
     let concerts = music.shows.concerts(lookup: lookup, comparator: comparator)
     let artistDigests = music.artists.digests(
       concerts: concerts, baseURL: baseURL, lookup: lookup, comparator: comparator)
+    let venueDigests = music.venues.digests(
+      concerts: concerts, baseURL: baseURL, atlas: atlas, lookup: lookup, comparator: comparator)
 
     self.init(
       music: music, lookup: lookup, comparator: comparator, sectioner: LibrarySectioner(),
-      baseURL: baseURL, concerts: concerts, artistDigests: artistDigests)
+      atlas: atlas, baseURL: baseURL, concerts: concerts, artistDigests: artistDigests,
+      venueDigests: venueDigests
+    )
   }
 
   internal init(
     music: Music, lookup: Lookup, comparator: LibraryComparator, sectioner: LibrarySectioner,
-    baseURL: URL?, concerts: [Concert], artistDigests: [ArtistDigest]
+    atlas: Atlas, baseURL: URL?, concerts: [Concert], artistDigests: [ArtistDigest],
+    venueDigests: [VenueDigest]
   ) {
     self.music = music
     self.lookup = lookup
     self.comparator = comparator
     self.sectioner = sectioner
+    self.atlas = atlas
     self.baseURL = baseURL
 
     self.concerts = concerts
@@ -87,10 +120,14 @@ public struct Vault {
 
     self.artistDigests = artistDigests
     self.artistDigestMap = self.artistDigests.reduce(into: [:]) { $0[$1.artist.id] = $1 }
+
+    self.venueDigests = venueDigests
+    self.venueDigestMap = self.venueDigests.reduce(into: [:]) { $0[$1.venue.id] = $1 }
   }
 
   public static func create(music: Music, url: URL) async -> Vault {
     async let asyncBaseURL = url.baseURL
+    async let asyncAtlas = Atlas()
     async let asyncLookup = await Lookup.create(music: music)
     async let asyncComparator = await LibraryComparator.create(music: music)
     async let sectioner = await LibrarySectioner.create(music: music)
@@ -121,9 +158,15 @@ public struct Vault {
     async let artistDigests = sortedMusic.artists.digests(
       concerts: concerts, baseURL: baseURL, lookup: lookup, comparator: comparator)
 
+    let atlas = await asyncAtlas
+
+    async let venueDigests = music.venues.digests(
+      concerts: concerts, baseURL: baseURL, atlas: atlas, lookup: lookup, comparator: comparator)
+
     let v = Vault(
       music: sortedMusic, lookup: lookup, comparator: comparator, sectioner: await sectioner,
-      baseURL: baseURL, concerts: concerts, artistDigests: await artistDigests)
+      atlas: atlas, baseURL: baseURL, concerts: concerts, artistDigests: await artistDigests,
+      venueDigests: await venueDigests)
 
     //    Task {
     //      do {
@@ -158,7 +201,7 @@ public struct Vault {
   }
 
   var venues: [Venue] {
-    music.venues
+    venueDigests.map { $0.venue }
   }
 
   func concerts(on date: Date) -> [Concert] {

@@ -19,8 +19,8 @@ struct MusicDestinationModifier: ViewModifier {
             ShowDetail(concert: concert, url: archivePath.url(using: vault.baseURL))
           }
         case .venue(let iD):
-          if let venue = vault.lookup.venueMap[iD] {
-            VenueDetail(digest: vault.digest(for: venue))
+          if let venueDigest = vault.venueDigestMap[iD] {
+            VenueDetail(digest: venueDigest)
           }
         case .artist(let iD):
           if let artistDigest = vault.artistDigestMap[iD] {
