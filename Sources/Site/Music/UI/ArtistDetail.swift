@@ -78,12 +78,12 @@ struct ArtistDetail_Previews: PreviewProvider {
     let vault = Vault.previewData
 
     NavigationStack {
-      ArtistDetail(digest: vault.digest(for: vault.artists[0]))
+      ArtistDetail(digest: vault.artistDigests[0])
         .musicDestinations()
     }
 
     NavigationStack {
-      ArtistDetail(digest: vault.digest(for: vault.artists[1]))
+      ArtistDetail(digest: vault.artistDigests[1])
         .musicDestinations()
     }
   }

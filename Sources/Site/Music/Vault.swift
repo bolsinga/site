@@ -25,6 +25,25 @@ extension Array where Element == Show {
   }
 }
 
+extension Array where Element == Artist {
+  func digests(concerts: [Concert], baseURL: URL?, lookup: Lookup, comparator: LibraryComparator)
+    -> [ArtistDigest]
+  {
+    self.map { artist in
+      ArtistDigest(
+        artist: artist,
+        url: artist.archivePath.url(using: baseURL),
+        concerts: concerts.filter { $0.show.artists.contains(artist.id) }.sorted(
+          by: comparator.compare(lhs:rhs:)),
+        related: lookup.related(artist),
+        firstSet: lookup.firstSet(artist: artist),
+        spanRank: lookup.spanRank(artist: artist),
+        showRank: lookup.showRank(artist: artist),
+        venueRank: lookup.artistVenueRank(artist: artist))
+    }
+  }
+}
+
 public struct Vault {
   public let music: Music
   let lookup: Lookup
@@ -35,21 +54,27 @@ public struct Vault {
   public let concerts: [Concert]
   public let concertMap: [Concert.ID: Concert]
 
+  internal let artistDigests: [ArtistDigest]
+  internal let artistDigestMap: [Artist.ID: ArtistDigest]
+
   public init(music: Music, url: URL? = nil) {
     // non-parallel, used for previews, tests
     let lookup = Lookup(music: music)
     let comparator = LibraryComparator()
+    let baseURL = url?.baseURL
 
     let concerts = music.shows.concerts(lookup: lookup, comparator: comparator)
+    let artistDigests = music.artists.digests(
+      concerts: concerts, baseURL: baseURL, lookup: lookup, comparator: comparator)
 
     self.init(
       music: music, lookup: lookup, comparator: comparator, sectioner: LibrarySectioner(),
-      baseURL: url?.baseURL, concerts: concerts)
+      baseURL: baseURL, concerts: concerts, artistDigests: artistDigests)
   }
 
   internal init(
     music: Music, lookup: Lookup, comparator: LibraryComparator, sectioner: LibrarySectioner,
-    baseURL: URL?, concerts: [Concert]
+    baseURL: URL?, concerts: [Concert], artistDigests: [ArtistDigest]
   ) {
     self.music = music
     self.lookup = lookup
@@ -59,10 +84,13 @@ public struct Vault {
 
     self.concerts = concerts
     self.concertMap = self.concerts.reduce(into: [:]) { $0[$1.id] = $1 }
+
+    self.artistDigests = artistDigests
+    self.artistDigestMap = self.artistDigests.reduce(into: [:]) { $0[$1.artist.id] = $1 }
   }
 
   public static func create(music: Music, url: URL) async -> Vault {
-    async let baseURL = url.baseURL
+    async let asyncBaseURL = url.baseURL
     async let asyncLookup = await Lookup.create(music: music)
     async let asyncComparator = await LibraryComparator.create(music: music)
     async let sectioner = await LibrarySectioner.create(music: music)
@@ -76,7 +104,7 @@ public struct Vault {
     }
     async let sortedVenues = music.venues.sorted(by: comparator.libraryCompare(lhs:rhs:))
 
-    async let concerts = music.shows.concerts(lookup: lookup, comparator: comparator)
+    async let asyncConcerts = music.shows.concerts(lookup: lookup, comparator: comparator)
 
     let sortedMusic = Music(
       albums: music.albums,
@@ -87,9 +115,15 @@ public struct Vault {
       timestamp: music.timestamp,
       venues: await sortedVenues)
 
+    let concerts = await asyncConcerts
+    let baseURL = await asyncBaseURL
+
+    async let artistDigests = sortedMusic.artists.digests(
+      concerts: concerts, baseURL: baseURL, lookup: lookup, comparator: comparator)
+
     let v = Vault(
       music: sortedMusic, lookup: lookup, comparator: comparator, sectioner: await sectioner,
-      baseURL: await baseURL, concerts: await concerts)
+      baseURL: baseURL, concerts: concerts, artistDigests: await artistDigests)
 
     //    Task {
     //      do {
@@ -120,7 +154,7 @@ public struct Vault {
   }
 
   var artists: [Artist] {
-    music.artists
+    artistDigests.map { $0.artist }
   }
 
   var venues: [Venue] {
