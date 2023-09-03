@@ -62,6 +62,7 @@ public struct Vault {
   }
 
   public static func create(music: Music, url: URL) async -> Vault {
+    async let baseURL = url.baseURL
     async let asyncLookup = await Lookup.create(music: music)
     async let asyncComparator = await LibraryComparator.create(music: music)
     async let sectioner = await LibrarySectioner.create(music: music)
@@ -88,7 +89,7 @@ public struct Vault {
 
     let v = Vault(
       music: sortedMusic, lookup: lookup, comparator: comparator, sectioner: await sectioner,
-      baseURL: url.baseURL, concerts: await concerts)
+      baseURL: await baseURL, concerts: await concerts)
 
     //    Task {
     //      do {
