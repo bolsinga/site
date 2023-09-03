@@ -1,5 +1,5 @@
 //
-//  ShowComparatorTests.swift
+//  ConcertComparatorTests.swift
 //
 //
 //  Created by Greg Bolsinga on 2/26/23.
@@ -9,7 +9,7 @@ import XCTest
 
 @testable import Site
 
-final class ShowComparatorTests: XCTestCase {
+final class ConcertComparatorTests: XCTestCase {
   let date = PartialDate(year: 1996, month: 12, day: 15)
 
   let venue1 = Venue(id: "v0", location: Location(city: "city", state: "CA"), name: "A Venue")
@@ -34,9 +34,12 @@ final class ShowComparatorTests: XCTestCase {
     let vault = createVault(
       artists: [artist1, artist2], shows: [show1, show2], venues: [venue1, venue2])
 
-    XCTAssertNotEqual(show1, show2)
-    XCTAssertTrue(vault.comparator.showCompare(lhs: show1, rhs: show2, lookup: vault.lookup))
-    XCTAssertFalse(vault.comparator.showCompare(lhs: show2, rhs: show1, lookup: vault.lookup))
+    let concert1 = vault.concertMap[show1.id]!
+    let concert2 = vault.concertMap[show2.id]!
+
+    XCTAssertNotEqual(concert1, concert2)
+    XCTAssertTrue(vault.comparator.compare(lhs: concert1, rhs: concert2))
+    XCTAssertFalse(vault.comparator.compare(lhs: concert2, rhs: concert1))
   }
 
   func testSameDates_differentVenues() throws {
@@ -46,9 +49,12 @@ final class ShowComparatorTests: XCTestCase {
     let vault = createVault(
       artists: [artist1, artist2], shows: [show1, show2], venues: [venue1, venue2])
 
-    XCTAssertNotEqual(show1, show2)
-    XCTAssertFalse(vault.comparator.showCompare(lhs: show1, rhs: show2, lookup: vault.lookup))
-    XCTAssertTrue(vault.comparator.showCompare(lhs: show2, rhs: show1, lookup: vault.lookup))
+    let concert1 = vault.concertMap[show1.id]!
+    let concert2 = vault.concertMap[show2.id]!
+
+    XCTAssertNotEqual(concert1, concert2)
+    XCTAssertFalse(vault.comparator.compare(lhs: concert1, rhs: concert2))
+    XCTAssertTrue(vault.comparator.compare(lhs: concert2, rhs: concert1))
   }
 
   func testSameDates_sameVenues_differentArtists() throws {
@@ -58,9 +64,12 @@ final class ShowComparatorTests: XCTestCase {
     let vault = createVault(
       artists: [artist1, artist2], shows: [show1, show2], venues: [venue1, venue2])
 
-    XCTAssertNotEqual(show1, show2)
-    XCTAssertTrue(vault.comparator.showCompare(lhs: show1, rhs: show2, lookup: vault.lookup))
-    XCTAssertFalse(vault.comparator.showCompare(lhs: show2, rhs: show1, lookup: vault.lookup))
+    let concert1 = vault.concertMap[show1.id]!
+    let concert2 = vault.concertMap[show2.id]!
+
+    XCTAssertNotEqual(concert1, concert2)
+    XCTAssertTrue(vault.comparator.compare(lhs: concert1, rhs: concert2))
+    XCTAssertFalse(vault.comparator.compare(lhs: concert2, rhs: concert1))
   }
 
   func testSameDates_sameVenues_sameArtists() throws {
@@ -70,9 +79,12 @@ final class ShowComparatorTests: XCTestCase {
     let vault = createVault(
       artists: [artist1, artist2], shows: [show1, show2], venues: [venue1, venue2])
 
-    XCTAssertNotEqual(show1, show2)
-    XCTAssertTrue(vault.comparator.showCompare(lhs: show1, rhs: show2, lookup: vault.lookup))
-    XCTAssertFalse(vault.comparator.showCompare(lhs: show2, rhs: show1, lookup: vault.lookup))
+    let concert1 = vault.concertMap[show1.id]!
+    let concert2 = vault.concertMap[show2.id]!
+
+    XCTAssertNotEqual(concert1, concert2)
+    XCTAssertTrue(vault.comparator.compare(lhs: concert1, rhs: concert2))
+    XCTAssertFalse(vault.comparator.compare(lhs: concert2, rhs: concert1))
   }
 
   func testEdgeCase() throws {
@@ -82,8 +94,11 @@ final class ShowComparatorTests: XCTestCase {
     let vault = createVault(
       artists: [artist1, artist2], shows: [show1, show2], venues: [venue1, venue2])
 
-    XCTAssertEqual(show1, show2)
-    XCTAssertFalse(vault.comparator.showCompare(lhs: show1, rhs: show2, lookup: vault.lookup))
-    XCTAssertFalse(vault.comparator.showCompare(lhs: show2, rhs: show1, lookup: vault.lookup))
+    let concert1 = vault.concertMap[show1.id]!
+    let concert2 = vault.concertMap[show2.id]!
+
+    XCTAssertEqual(concert1, concert2)
+    XCTAssertFalse(vault.comparator.compare(lhs: concert1, rhs: concert2))
+    XCTAssertFalse(vault.comparator.compare(lhs: concert2, rhs: concert1))
   }
 }
