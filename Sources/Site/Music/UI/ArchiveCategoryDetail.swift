@@ -8,8 +8,7 @@
 import SwiftUI
 
 struct ArchiveCategoryDetail: View {
-  @Environment(\.vault) private var vault: Vault
-
+  let vault: Vault
   let category: ArchiveCategory?
   @Binding var todayConcerts: [Concert]
   @Binding var venueSort: VenueSort
@@ -53,33 +52,28 @@ struct ArchiveCategoryDetail_Previews: PreviewProvider {
     let vaultPreview = Vault.previewData
 
     ArchiveCategoryDetail(
-      category: .today, todayConcerts: .constant([]), venueSort: .constant(.alphabetical),
-      artistSort: .constant(.alphabetical), isCategoryActive: .constant(true)
-    )
-    .environment(\.vault, vaultPreview)
+      vault: vaultPreview, category: .today, todayConcerts: .constant([]),
+      venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
+      isCategoryActive: .constant(true))
 
     ArchiveCategoryDetail(
-      category: .stats, todayConcerts: .constant([]), venueSort: .constant(.alphabetical),
-      artistSort: .constant(.alphabetical), isCategoryActive: .constant(true)
-    )
-    .environment(\.vault, vaultPreview)
+      vault: vaultPreview, category: .stats, todayConcerts: .constant([]),
+      venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
+      isCategoryActive: .constant(true))
 
     ArchiveCategoryDetail(
-      category: .shows, todayConcerts: .constant([]), venueSort: .constant(.alphabetical),
-      artistSort: .constant(.alphabetical), isCategoryActive: .constant(true)
-    )
-    .environment(\.vault, vaultPreview)
+      vault: vaultPreview, category: .shows, todayConcerts: .constant([]),
+      venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
+      isCategoryActive: .constant(true))
 
     ArchiveCategoryDetail(
-      category: .venues, todayConcerts: .constant([]), venueSort: .constant(.alphabetical),
-      artistSort: .constant(.alphabetical), isCategoryActive: .constant(true)
-    )
-    .environment(\.vault, vaultPreview)
+      vault: vaultPreview, category: .venues, todayConcerts: .constant([]),
+      venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
+      isCategoryActive: .constant(true))
 
     ArchiveCategoryDetail(
-      category: .artists, todayConcerts: .constant([]), venueSort: .constant(.alphabetical),
-      artistSort: .constant(.alphabetical), isCategoryActive: .constant(true)
-    )
-    .environment(\.vault, vaultPreview)
+      vault: vaultPreview, category: .artists, todayConcerts: .constant([]),
+      venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
+      isCategoryActive: .constant(true))
   }
 }
