@@ -52,13 +52,12 @@ struct ArchiveCategorySplit: View {
     } detail: {
       NavigationStack(path: $archiveNavigation.navigationPath) {
         ArchiveCategoryDetail(
-          category: archiveNavigation.selectedCategory, todayConcerts: $model.todayConcerts,
-          venueSort: $venueSort, artistSort: $artistSort,
+          vault: vault, category: archiveNavigation.selectedCategory,
+          todayConcerts: $model.todayConcerts, venueSort: $venueSort, artistSort: $artistSort,
           isCategoryActive: .constant(archiveNavigation.navigationPath.isEmpty))
       }
     }
     .archiveStorage(archiveNavigation: archiveNavigation)
-    .environment(\.vault, vault)
     .onContinueUserActivity(ArchivePath.activityType) { userActivity in
       do {
         archiveNavigation.navigate(to: try userActivity.archivePath())
