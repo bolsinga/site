@@ -30,7 +30,7 @@ struct Program: AsyncParsableCommand {
       url: rootURL.appending(path: "music.json"), artistsWithShowsOnly: false)
 
     print("Next Show: \(vault.nextShowID)")
-    print("Next Venue: \(vault.nextVenueID)")
+    print("Next Venue: \(vault.nextVenueID) -- NOTE: v178 is available!")
     print("Next Artist: \(vault.nextArtistID)")
   }
 }
