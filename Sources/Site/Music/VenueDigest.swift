@@ -21,15 +21,16 @@ struct VenueDigest: Equatable, Hashable, Identifiable {
   let venueArtistRank: Ranking
 
   let geocode: () async throws -> CLPlacemark?
+  let concertCompare: (Concert, Concert) -> Bool
 
-  // needed due to the gecode closure above.
+  // needed due to the closures above.
   static func == (lhs: VenueDigest, rhs: VenueDigest) -> Bool {
     lhs.venue == rhs.venue && lhs.url == rhs.url && lhs.concerts == rhs.concerts
       && lhs.related == rhs.related && lhs.firstSet == rhs.firstSet && lhs.spanRank == rhs.spanRank
       && lhs.showRank == rhs.showRank && lhs.venueArtistRank == rhs.venueArtistRank
   }
 
-  // needed due to the gecode closure above.
+  // needed due to the closures above.
   public func hash(into hasher: inout Hasher) {
     hasher.combine(venue)
     hasher.combine(url)

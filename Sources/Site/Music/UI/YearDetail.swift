@@ -24,7 +24,7 @@ struct YearDetail: View {
         header: Text(
           "Shows", bundle: .module, comment: "Title of the Shows section of YearDetail")
       ) {
-        ForEach(digest.concerts) { concert in
+        ForEach(digest.concerts.sorted(by: digest.concertCompare)) { concert in
           NavigationLink(value: concert) { ConcertBlurb(concert: concert) }
         }
       }

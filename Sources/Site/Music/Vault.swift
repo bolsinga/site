@@ -43,7 +43,8 @@ extension Array where Element == Artist {
         firstSet: lookup.firstSet(artist: artist),
         spanRank: lookup.spanRank(artist: artist),
         showRank: lookup.showRank(artist: artist),
-        venueRank: lookup.artistVenueRank(artist: artist))
+        venueRank: lookup.artistVenueRank(artist: artist),
+        concertCompare: comparator.compare(lhs:rhs:))
     }
   }
 }
@@ -62,10 +63,9 @@ extension Array where Element == Venue {
         firstSet: lookup.firstSet(venue: venue),
         spanRank: lookup.spanRank(venue: venue),
         showRank: lookup.venueRank(venue: venue),
-        venueArtistRank: lookup.venueArtistRank(venue: venue)
-      ) {
-        try await atlas.geocode(venue.location)
-      }
+        venueArtistRank: lookup.venueArtistRank(venue: venue),
+        geocode: { try await atlas.geocode(venue.location) },
+        concertCompare: comparator.compare(lhs:rhs:))
     }
 
   }
