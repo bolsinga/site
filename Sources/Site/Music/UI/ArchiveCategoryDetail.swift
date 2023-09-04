@@ -44,7 +44,7 @@ struct ArchiveCategoryDetail: View {
 
   var body: some View {
     stackElement
-      .musicDestinations()
+      .musicDestinations(vault)
   }
 }
 

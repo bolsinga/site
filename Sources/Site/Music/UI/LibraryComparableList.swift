@@ -72,7 +72,7 @@ struct LibraryComparableList_Previews: PreviewProvider {
         searchString: .constant("")
       )
       .navigationTitle("Artists")
-      .musicDestinations()
+      .musicDestinations(vault)
     }
 
     NavigationStack {
@@ -88,7 +88,7 @@ struct LibraryComparableList_Previews: PreviewProvider {
         searchString: .constant("")
       )
       .navigationTitle("Venues")
-      .musicDestinations()
+      .musicDestinations(vault)
     }
   }
 }

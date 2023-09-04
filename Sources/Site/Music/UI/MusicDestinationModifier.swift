@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MusicDestinationModifier: ViewModifier {
-  @Environment(\.vault) private var vault: Vault
+  let vault: Vault
 
   func body(content: Content) -> some View {
     content
@@ -34,7 +34,7 @@ struct MusicDestinationModifier: ViewModifier {
 }
 
 extension View {
-  func musicDestinations() -> some View {
-    modifier(MusicDestinationModifier())
+  func musicDestinations(_ vault: Vault) -> some View {
+    modifier(MusicDestinationModifier(vault: vault))
   }
 }

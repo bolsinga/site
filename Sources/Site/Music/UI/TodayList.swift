@@ -37,7 +37,7 @@ struct TodayList_Previews: PreviewProvider {
 
     NavigationStack {
       TodayList(concerts: vault.concerts)
-        .musicDestinations()
+        .musicDestinations(vault)
     }
   }
 }

@@ -80,19 +80,19 @@ struct ShowDetail_Previews: PreviewProvider {
     NavigationStack {
       let concert = vault.concerts[0]
       ShowDetail(concert: concert, url: concert.archivePath.url(using: vault.baseURL))
-        .musicDestinations()
+        .musicDestinations(vault)
     }
 
     NavigationStack {
       let concert = vault.concerts[1]
       ShowDetail(concert: concert, url: concert.archivePath.url(using: vault.baseURL))
-        .musicDestinations()
+        .musicDestinations(vault)
     }
 
     NavigationStack {
       let concert = vault.concerts[2]
       ShowDetail(concert: concert, url: concert.archivePath.url(using: vault.baseURL))
-        .musicDestinations()
+        .musicDestinations(vault)
     }
   }
 }

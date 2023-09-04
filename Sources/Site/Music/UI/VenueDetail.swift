@@ -93,7 +93,7 @@ struct VenueDetail_Previews: PreviewProvider {
     let vault = Vault.previewData
     NavigationStack {
       VenueDetail(digest: vault.venueDigests[0])
-        .musicDestinations()
+        .musicDestinations(vault)
     }
   }
 }
