@@ -40,7 +40,7 @@ struct ShowYearList_Previews: PreviewProvider {
     let vaultPreview = Vault.previewData
 
     NavigationStack {
-      ShowYearList(decadesMap: vaultPreview.lookup.decadesMap)
+      ShowYearList(decadesMap: vaultPreview.decadesMap)
         .musicDestinations(vaultPreview)
     }
   }
