@@ -24,21 +24,6 @@ extension Concert {
     public func style(_ style: Style) -> Self {
       .init(style)
     }
-
-    // Needed to ignore Lookup for Codable
-    private enum CodingKeys: String, CodingKey {
-      case style
-    }
-
-    // Needed to ignore Lookup for Equatable
-    public static func == (lhs: Concert.FormatStyle, rhs: Concert.FormatStyle) -> Bool {
-      lhs.style == rhs.style
-    }
-
-    // Needed to ignore Lookup for Hashable
-    public func hash(into hasher: inout Hasher) {
-      hasher.combine(style)
-    }
   }
 }
 
