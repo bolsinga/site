@@ -19,7 +19,7 @@ extension Vault {
   }
 
   public var nextArtistID: Venue.ID {
-    let nextIndex = max(artists.count, 0)
+    let nextIndex = max(artistDigests.count, 0)
     return "\(ArchivePath.artistPrefix)\(nextIndex)"
   }
 }
