@@ -72,7 +72,6 @@ struct LibraryComparableList_Previews: PreviewProvider {
         searchString: .constant("")
       )
       .navigationTitle("Artists")
-      .environment(\.vault, vault)
       .musicDestinations()
     }
 
@@ -89,7 +88,6 @@ struct LibraryComparableList_Previews: PreviewProvider {
         searchString: .constant("")
       )
       .navigationTitle("Venues")
-      .environment(\.vault, vault)
       .musicDestinations()
     }
   }
