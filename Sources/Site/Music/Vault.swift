@@ -72,7 +72,6 @@ extension Array where Element == Venue {
 }
 
 public struct Vault {
-  let lookup: Lookup
   public let comparator: LibraryComparator
   internal let sectioner: LibrarySectioner
   internal let atlas: Atlas
@@ -86,6 +85,8 @@ public struct Vault {
   internal let venueDigests: [VenueDigest]
   internal let venueDigestMap: [Venue.ID: VenueDigest]
 
+  let decadesMap: [Decade: [Annum: [Show.ID]]]
+
   public init(music: Music, url: URL? = nil) {
     // non-parallel, used for previews, tests
     let lookup = Lookup(music: music)
@@ -98,18 +99,19 @@ public struct Vault {
       concerts: concerts, baseURL: baseURL, lookup: lookup, comparator: comparator)
     let venueDigests = music.venues.digests(
       concerts: concerts, baseURL: baseURL, atlas: atlas, lookup: lookup, comparator: comparator)
+    let decadesMap = lookup.decadesMap
 
     self.init(
-      lookup: lookup, comparator: comparator, sectioner: LibrarySectioner(), atlas: atlas,
-      baseURL: baseURL, concerts: concerts, artistDigests: artistDigests, venueDigests: venueDigests
-    )
+      comparator: comparator, sectioner: LibrarySectioner(), atlas: atlas, baseURL: baseURL,
+      concerts: concerts, artistDigests: artistDigests, venueDigests: venueDigests,
+      decadesMap: decadesMap)
   }
 
   internal init(
-    lookup: Lookup, comparator: LibraryComparator, sectioner: LibrarySectioner, atlas: Atlas,
-    baseURL: URL?, concerts: [Concert], artistDigests: [ArtistDigest], venueDigests: [VenueDigest]
+    comparator: LibraryComparator, sectioner: LibrarySectioner, atlas: Atlas,
+    baseURL: URL?, concerts: [Concert], artistDigests: [ArtistDigest], venueDigests: [VenueDigest],
+    decadesMap: [Decade: [Annum: [Show.ID]]]
   ) {
-    self.lookup = lookup
     self.comparator = comparator
     self.sectioner = sectioner
     self.atlas = atlas
@@ -123,6 +125,8 @@ public struct Vault {
 
     self.venueDigests = venueDigests
     self.venueDigestMap = self.venueDigests.reduce(into: [:]) { $0[$1.venue.id] = $1 }
+
+    self.decadesMap = decadesMap
   }
 
   public static func create(music: Music, url: URL) async -> Vault {
@@ -135,6 +139,8 @@ public struct Vault {
     let baseURL = await asyncBaseURL
     let lookup = await asyncLookup
     let comparator = await asyncComparator
+
+    async let decadesMap = lookup.decadesMap
 
     async let asyncConcerts = music.shows.concerts(
       baseURL: baseURL, lookup: lookup, comparator: comparator)
@@ -150,9 +156,9 @@ public struct Vault {
       concerts: concerts, baseURL: baseURL, atlas: atlas, lookup: lookup, comparator: comparator)
 
     let v = Vault(
-      lookup: lookup, comparator: comparator, sectioner: await sectioner, atlas: atlas,
-      baseURL: baseURL, concerts: concerts, artistDigests: await artistDigests,
-      venueDigests: await venueDigests)
+      comparator: comparator, sectioner: await sectioner, atlas: atlas, baseURL: baseURL,
+      concerts: concerts, artistDigests: await artistDigests, venueDigests: await venueDigests,
+      decadesMap: await decadesMap)
 
     //    Task {
     //      do {
@@ -195,7 +201,7 @@ public struct Vault {
 
   func concerts(during annum: Annum) -> [Concert] {
     var result: [Concert] = []
-    for id in lookup.decadesMap[annum.decade]?[annum] ?? [] {
+    for id in decadesMap[annum.decade]?[annum] ?? [] {
       result += concerts.filter { $0.id == id }
     }
     return result.sorted { comparator.compare(lhs: $0, rhs: $1) }

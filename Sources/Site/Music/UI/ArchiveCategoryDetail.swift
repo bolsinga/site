@@ -26,7 +26,7 @@ struct ArchiveCategoryDetail: View {
           List { StatsGrouping(concerts: vault.concerts, displayArchiveCategoryCounts: false) }
             .navigationTitle(Text(category.localizedString))
         case .shows:
-          ShowYearList(decadesMap: vault.lookup.decadesMap)
+          ShowYearList(decadesMap: vault.decadesMap)
         case .venues:
           VenueList(venueDigests: vault.venueDigests, sectioner: vault.sectioner, sort: $venueSort)
         case .artists:
