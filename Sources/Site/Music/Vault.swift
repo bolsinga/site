@@ -177,10 +177,6 @@ public struct Vault {
     return urlComponents?.url
   }
 
-  var venues: [Venue] {
-    venueDigests.map { $0.venue }
-  }
-
   func concerts(on date: Date) -> [Concert] {
     return concerts.filter { $0.show.date.day != nil }
       .filter { $0.show.date.month != nil }

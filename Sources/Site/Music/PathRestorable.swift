@@ -15,6 +15,10 @@ extension Venue: PathRestorable {
   var archivePath: ArchivePath { .venue(id) }
 }
 
+extension VenueDigest: PathRestorable {
+  var archivePath: ArchivePath { venue.archivePath }
+}
+
 extension Artist: PathRestorable {
   var archivePath: ArchivePath { .artist(id) }
 }
