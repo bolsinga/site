@@ -31,7 +31,7 @@ struct ArchiveCategoryDetail: View {
         case .venues:
           VenueList(venues: vault.venues, sort: $venueSort)
         case .artists:
-          ArtistList(artists: vault.artists, sort: $artistSort)
+          ArtistList(artistDigests: vault.artistDigests, sort: $artistSort)
         }
       }
       .shareCategory(category, url: url)

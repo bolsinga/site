@@ -19,6 +19,10 @@ extension Artist: PathRestorable {
   var archivePath: ArchivePath { .artist(id) }
 }
 
+extension ArtistDigest: PathRestorable {
+  var archivePath: ArchivePath { artist.archivePath }
+}
+
 extension Annum: PathRestorable {
   var archivePath: ArchivePath { .year(self) }
 }

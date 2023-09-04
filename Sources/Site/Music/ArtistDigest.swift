@@ -7,7 +7,9 @@
 
 import Foundation
 
-struct ArtistDigest {
+public struct ArtistDigest: Equatable, Hashable, Identifiable {
+  public var id: Artist.ID { artist.id }
+
   let artist: Artist
   let url: URL?
   let concerts: [Concert]
@@ -16,4 +18,14 @@ struct ArtistDigest {
   let spanRank: Ranking
   let showRank: Ranking
   let venueRank: Ranking
+}
+
+extension ArtistDigest: LibraryComparable {
+  public var sortname: String? {
+    artist.sortname
+  }
+
+  public var name: String {
+    artist.name
+  }
 }
