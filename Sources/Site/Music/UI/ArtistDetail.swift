@@ -79,12 +79,12 @@ struct ArtistDetail_Previews: PreviewProvider {
 
     NavigationStack {
       ArtistDetail(digest: vault.artistDigests[0])
-        .musicDestinations()
+        .musicDestinations(vault)
     }
 
     NavigationStack {
       ArtistDetail(digest: vault.artistDigests[1])
-        .musicDestinations()
+        .musicDestinations(vault)
     }
   }
 }

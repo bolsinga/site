@@ -118,7 +118,7 @@ struct VenueList_Previews: PreviewProvider {
       VenueList(
         venueDigests: vault.venueDigests, sectioner: vault.sectioner, sort: .constant(.alphabetical)
       )
-      .musicDestinations()
+      .musicDestinations(vault)
     }
   }
 }

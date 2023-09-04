@@ -41,7 +41,7 @@ struct ShowYearList_Previews: PreviewProvider {
 
     NavigationStack {
       ShowYearList(decadesMap: vault.lookup.decadesMap)
-        .musicDestinations()
+        .musicDestinations(vault)
     }
   }
 }

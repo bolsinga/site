@@ -121,7 +121,7 @@ struct ArtistList_Previews: PreviewProvider {
         artistDigests: vault.artistDigests, sectioner: vault.sectioner,
         sort: .constant(.alphabetical)
       )
-      .musicDestinations()
+      .musicDestinations(vault)
     }
   }
 }
