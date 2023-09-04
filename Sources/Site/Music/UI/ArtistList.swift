@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct ArtistList: View {
-  @Environment(\.vault) private var vault: Vault
   let artistDigests: [ArtistDigest]
+  let sectioner: LibrarySectioner
 
   @Binding var sort: ArtistSort
 
@@ -51,7 +51,7 @@ struct ArtistList: View {
     if case .alphabetical = sort {
       LibraryComparableList(
         items: artistDigests,
-        sectioner: vault.sectioner,
+        sectioner: sectioner,
         itemContentView: { showCount(for: $0) },
         sectionHeaderView: { $0.representingView },
         searchString: $searchString
@@ -117,9 +117,11 @@ struct ArtistList_Previews: PreviewProvider {
     let vault = Vault.previewData
 
     NavigationStack {
-      ArtistList(artistDigests: vault.artistDigests, sort: .constant(.alphabetical))
-        .environment(\.vault, vault)
-        .musicDestinations()
+      ArtistList(
+        artistDigests: vault.artistDigests, sectioner: vault.sectioner,
+        sort: .constant(.alphabetical)
+      )
+      .musicDestinations()
     }
   }
 }

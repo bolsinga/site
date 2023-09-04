@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct VenueList: View {
-  @Environment(\.vault) private var vault: Vault
   let venueDigests: [VenueDigest]
+  let sectioner: LibrarySectioner
 
   @Binding var sort: VenueSort
 
@@ -51,7 +51,7 @@ struct VenueList: View {
     if case .alphabetical = sort {
       LibraryComparableList(
         items: venueDigests,
-        sectioner: vault.sectioner,
+        sectioner: sectioner,
         itemContentView: { showCount(for: $0) },
         sectionHeaderView: { $0.representingView },
         searchString: $searchString
@@ -115,9 +115,10 @@ struct VenueList_Previews: PreviewProvider {
   static var previews: some View {
     let vault = Vault.previewData
     NavigationStack {
-      VenueList(venueDigests: vault.venueDigests, sort: .constant(.alphabetical))
-        .environment(\.vault, vault)
-        .musicDestinations()
+      VenueList(
+        venueDigests: vault.venueDigests, sectioner: vault.sectioner, sort: .constant(.alphabetical)
+      )
+      .musicDestinations()
     }
   }
 }
