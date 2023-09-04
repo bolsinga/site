@@ -20,8 +20,12 @@ extension URL {
 }
 
 extension Array where Element == Show {
-  func concerts(lookup: Lookup, comparator: LibraryComparator) -> [Concert] {
-    self.map { lookup.concert(from: $0) }.sorted { comparator.compare(lhs: $0, rhs: $1) }
+  func concerts(baseURL: URL?, lookup: Lookup, comparator: LibraryComparator) -> [Concert] {
+    self.map {
+      Concert(
+        show: $0, venue: lookup.venueForShow($0), artists: lookup.artistsForShow($0),
+        url: $0.archivePath.url(using: baseURL))
+    }.sorted { comparator.compare(lhs: $0, rhs: $1) }
   }
 }
 
@@ -89,7 +93,7 @@ public struct Vault {
     let baseURL = url?.baseURL
     let atlas = Atlas()
 
-    let concerts = music.shows.concerts(lookup: lookup, comparator: comparator)
+    let concerts = music.shows.concerts(baseURL: baseURL, lookup: lookup, comparator: comparator)
     let artistDigests = music.artists.digests(
       concerts: concerts, baseURL: baseURL, lookup: lookup, comparator: comparator)
     let venueDigests = music.venues.digests(
@@ -128,13 +132,14 @@ public struct Vault {
     async let asyncComparator = await LibraryComparator.create(music: music)
     async let sectioner = await LibrarySectioner.create(music: music)
 
+    let baseURL = await asyncBaseURL
     let lookup = await asyncLookup
     let comparator = await asyncComparator
 
-    async let asyncConcerts = music.shows.concerts(lookup: lookup, comparator: comparator)
+    async let asyncConcerts = music.shows.concerts(
+      baseURL: baseURL, lookup: lookup, comparator: comparator)
 
     let concerts = await asyncConcerts
-    let baseURL = await asyncBaseURL
 
     async let artistDigests = music.artists.digests(
       concerts: concerts, baseURL: baseURL, lookup: lookup, comparator: comparator)

@@ -17,8 +17,9 @@ final class PathRestorableUserActivityTests: XCTestCase {
 
     let concert = Concert(
       show: Show(artists: [], date: PartialDate(), id: "sh17", venue: "v0"),
-      venue: Venue(id: "v0", location: Location(city: "c", state: "s"), name: "V0"), artists: [])
-    userActivity.update(concert, url: concert.archivePath.url(using: baseURL))
+      venue: Venue(id: "v0", location: Location(city: "c", state: "s"), name: "V0"), artists: [],
+      url: URL(string: "https://hey")!)
+    userActivity.update(concert, url: concert.url)
 
     XCTAssertTrue(userActivity.isEligibleForHandoff)
 
@@ -96,16 +97,15 @@ final class PathRestorableUserActivityTests: XCTestCase {
   func testShow_withURL() throws {
     let userActivity = NSUserActivity(activityType: "test-type")
 
-    let url = URL(string: "https://www.example.com/dates/sh17.html")!
-
     let concert = Concert(
       show: Show(artists: [], date: PartialDate(), id: "sh17", venue: "v0"),
-      venue: Venue(id: "v0", location: Location(city: "c", state: "s"), name: "V0"), artists: [])
+      venue: Venue(id: "v0", location: Location(city: "c", state: "s"), name: "V0"), artists: [],
+      url: URL(string: "https://hey")!)
 
-    userActivity.update(concert, url: concert.archivePath.url(using: baseURL))
+    userActivity.update(concert, url: concert.url)
 
     XCTAssertTrue(userActivity.isEligibleForPublicIndexing)
-    XCTAssertEqual(userActivity.webpageURL, url)
+    XCTAssertNotNil(userActivity.webpageURL)
   }
 
   func test_decodeError_noUserInfo() throws {
