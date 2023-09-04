@@ -67,7 +67,6 @@ struct RankingList_Previews: PreviewProvider {
         searchString: .constant("")
       )
       .navigationTitle("Artists")
-      .environment(\.vault, vault)
       .musicDestinations()
     }
 
@@ -84,7 +83,6 @@ struct RankingList_Previews: PreviewProvider {
         searchString: .constant("")
       )
       .navigationTitle("Venues")
-      .environment(\.vault, vault)
       .musicDestinations()
     }
   }
