@@ -90,10 +90,10 @@ struct VenueDetail: View {
 
 struct VenueDetail_Previews: PreviewProvider {
   static var previews: some View {
-    let vault = Vault.previewData
+    let vaultPreview = Vault.previewData
     NavigationStack {
-      VenueDetail(digest: vault.venueDigests[0])
-        .musicDestinations(vault)
+      VenueDetail(digest: vaultPreview.venueDigests[0])
+        .musicDestinations(vaultPreview)
     }
   }
 }

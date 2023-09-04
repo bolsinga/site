@@ -47,11 +47,11 @@ struct YearDetail: View {
 
 struct YearDetail_Previews: PreviewProvider {
   static var previews: some View {
-    let vault = Vault.previewData
+    let vaultPreview = Vault.previewData
 
     NavigationStack {
-      YearDetail(digest: vault.digest(for: Annum.year(2001)))
-        .musicDestinations(vault)
+      YearDetail(digest: vaultPreview.digest(for: Annum.year(2001)))
+        .musicDestinations(vaultPreview)
     }
   }
 }

@@ -113,12 +113,13 @@ struct VenueList: View {
 
 struct VenueList_Previews: PreviewProvider {
   static var previews: some View {
-    let vault = Vault.previewData
+    let vaultPreview = Vault.previewData
     NavigationStack {
       VenueList(
-        venueDigests: vault.venueDigests, sectioner: vault.sectioner, sort: .constant(.alphabetical)
+        venueDigests: vaultPreview.venueDigests, sectioner: vaultPreview.sectioner,
+        sort: .constant(.alphabetical)
       )
-      .musicDestinations(vault)
+      .musicDestinations(vaultPreview)
     }
   }
 }

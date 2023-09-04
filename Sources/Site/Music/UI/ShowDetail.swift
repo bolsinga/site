@@ -75,24 +75,24 @@ struct ShowDetail: View {
 
 struct ShowDetail_Previews: PreviewProvider {
   static var previews: some View {
-    let vault = Vault.previewData
+    let vaultPreview = Vault.previewData
 
     NavigationStack {
-      let concert = vault.concerts[0]
-      ShowDetail(concert: concert, url: concert.archivePath.url(using: vault.baseURL))
-        .musicDestinations(vault)
+      let concert = vaultPreview.concerts[0]
+      ShowDetail(concert: concert, url: concert.archivePath.url(using: vaultPreview.baseURL))
+        .musicDestinations(vaultPreview)
     }
 
     NavigationStack {
-      let concert = vault.concerts[1]
-      ShowDetail(concert: concert, url: concert.archivePath.url(using: vault.baseURL))
-        .musicDestinations(vault)
+      let concert = vaultPreview.concerts[1]
+      ShowDetail(concert: concert, url: concert.archivePath.url(using: vaultPreview.baseURL))
+        .musicDestinations(vaultPreview)
     }
 
     NavigationStack {
-      let concert = vault.concerts[2]
-      ShowDetail(concert: concert, url: concert.archivePath.url(using: vault.baseURL))
-        .musicDestinations(vault)
+      let concert = vaultPreview.concerts[2]
+      ShowDetail(concert: concert, url: concert.archivePath.url(using: vaultPreview.baseURL))
+        .musicDestinations(vaultPreview)
     }
   }
 }

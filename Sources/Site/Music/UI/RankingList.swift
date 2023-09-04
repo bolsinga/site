@@ -49,11 +49,11 @@ where T: LibraryComparable, T: Hashable, T: PathRestorable, R: Comparable, R: Ha
 
 struct RankingList_Previews: PreviewProvider {
   static var previews: some View {
-    let vault = Vault.previewData
+    let vaultPreview = Vault.previewData
 
     NavigationStack {
       RankingList(
-        items: vault.artistDigests,
+        items: vaultPreview.artistDigests,
         rankingMapBuilder: { artists in
           return [Ranking(rank: .rank(1), value: 3): artists]
         },
@@ -67,12 +67,12 @@ struct RankingList_Previews: PreviewProvider {
         searchString: .constant("")
       )
       .navigationTitle("Artists")
-      .musicDestinations(vault)
+      .musicDestinations(vaultPreview)
     }
 
     NavigationStack {
       RankingList(
-        items: vault.venueDigests,
+        items: vaultPreview.venueDigests,
         rankingMapBuilder: { artists in
           return [Ranking(rank: .rank(1), value: 3): artists]
         },
@@ -83,7 +83,7 @@ struct RankingList_Previews: PreviewProvider {
         searchString: .constant("")
       )
       .navigationTitle("Venues")
-      .musicDestinations(vault)
+      .musicDestinations(vaultPreview)
     }
   }
 }
