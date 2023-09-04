@@ -52,7 +52,7 @@ struct VenueDetail: View {
     Section(
       header: Text("Shows", bundle: .module, comment: "Title of the Shows section of VenueDetail")
     ) {
-      ForEach(digest.concerts) { concert in
+      ForEach(digest.concerts.sorted(by: digest.concertCompare)) { concert in
         NavigationLink(value: concert) { VenueBlurb(concert: concert) }
       }
     }

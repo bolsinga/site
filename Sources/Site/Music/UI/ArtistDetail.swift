@@ -37,7 +37,7 @@ struct ArtistDetail: View {
         header: Text(
           "Shows", bundle: .module, comment: "Title of the Shows section of ArtistDetail")
       ) {
-        ForEach(digest.concerts) { concert in
+        ForEach(digest.concerts.sorted(by: digest.concertCompare)) { concert in
           NavigationLink(value: concert) { ArtistBlurb(concert: concert) }
         }
       }
