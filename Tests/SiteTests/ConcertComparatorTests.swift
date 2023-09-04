@@ -31,74 +31,74 @@ final class ConcertComparatorTests: XCTestCase {
     let show1 = Show(artists: [artist1.id], date: date, id: "sh0", venue: venue1.id)
     let show2 = Show(artists: [artist2.id], date: dateLater, id: "sh1", venue: venue2.id)
 
-    let vault = createVault(
+    let vaultTest = createVault(
       artists: [artist1, artist2], shows: [show1, show2], venues: [venue1, venue2])
 
-    let concert1 = vault.concertMap[show1.id]!
-    let concert2 = vault.concertMap[show2.id]!
+    let concert1 = vaultTest.concertMap[show1.id]!
+    let concert2 = vaultTest.concertMap[show2.id]!
 
     XCTAssertNotEqual(concert1, concert2)
-    XCTAssertTrue(vault.comparator.compare(lhs: concert1, rhs: concert2))
-    XCTAssertFalse(vault.comparator.compare(lhs: concert2, rhs: concert1))
+    XCTAssertTrue(vaultTest.comparator.compare(lhs: concert1, rhs: concert2))
+    XCTAssertFalse(vaultTest.comparator.compare(lhs: concert2, rhs: concert1))
   }
 
   func testSameDates_differentVenues() throws {
     let show1 = Show(artists: [artist1.id], date: date, id: "sh0", venue: venue1.id)
     let show2 = Show(artists: [artist2.id], date: date, id: "sh1", venue: venue2.id)
 
-    let vault = createVault(
+    let vaultTest = createVault(
       artists: [artist1, artist2], shows: [show1, show2], venues: [venue1, venue2])
 
-    let concert1 = vault.concertMap[show1.id]!
-    let concert2 = vault.concertMap[show2.id]!
+    let concert1 = vaultTest.concertMap[show1.id]!
+    let concert2 = vaultTest.concertMap[show2.id]!
 
     XCTAssertNotEqual(concert1, concert2)
-    XCTAssertFalse(vault.comparator.compare(lhs: concert1, rhs: concert2))
-    XCTAssertTrue(vault.comparator.compare(lhs: concert2, rhs: concert1))
+    XCTAssertFalse(vaultTest.comparator.compare(lhs: concert1, rhs: concert2))
+    XCTAssertTrue(vaultTest.comparator.compare(lhs: concert2, rhs: concert1))
   }
 
   func testSameDates_sameVenues_differentArtists() throws {
     let show1 = Show(artists: [artist1.id], date: date, id: "sh0", venue: venue1.id)
     let show2 = Show(artists: [artist2.id], date: date, id: "sh1", venue: venue1.id)
 
-    let vault = createVault(
+    let vaultTest = createVault(
       artists: [artist1, artist2], shows: [show1, show2], venues: [venue1, venue2])
 
-    let concert1 = vault.concertMap[show1.id]!
-    let concert2 = vault.concertMap[show2.id]!
+    let concert1 = vaultTest.concertMap[show1.id]!
+    let concert2 = vaultTest.concertMap[show2.id]!
 
     XCTAssertNotEqual(concert1, concert2)
-    XCTAssertTrue(vault.comparator.compare(lhs: concert1, rhs: concert2))
-    XCTAssertFalse(vault.comparator.compare(lhs: concert2, rhs: concert1))
+    XCTAssertTrue(vaultTest.comparator.compare(lhs: concert1, rhs: concert2))
+    XCTAssertFalse(vaultTest.comparator.compare(lhs: concert2, rhs: concert1))
   }
 
   func testSameDates_sameVenues_sameArtists() throws {
     let show1 = Show(artists: [artist1.id], date: date, id: "sh0", venue: venue1.id)
     let show2 = Show(artists: [artist1.id], date: date, id: "sh1", venue: venue1.id)
 
-    let vault = createVault(
+    let vaultTest = createVault(
       artists: [artist1, artist2], shows: [show1, show2], venues: [venue1, venue2])
 
-    let concert1 = vault.concertMap[show1.id]!
-    let concert2 = vault.concertMap[show2.id]!
+    let concert1 = vaultTest.concertMap[show1.id]!
+    let concert2 = vaultTest.concertMap[show2.id]!
 
     XCTAssertNotEqual(concert1, concert2)
-    XCTAssertTrue(vault.comparator.compare(lhs: concert1, rhs: concert2))
-    XCTAssertFalse(vault.comparator.compare(lhs: concert2, rhs: concert1))
+    XCTAssertTrue(vaultTest.comparator.compare(lhs: concert1, rhs: concert2))
+    XCTAssertFalse(vaultTest.comparator.compare(lhs: concert2, rhs: concert1))
   }
 
   func testEdgeCase() throws {
     let show1 = Show(artists: [artist1.id], date: date, id: "sh0", venue: venue1.id)
     let show2 = show1
 
-    let vault = createVault(
+    let vaultTest = createVault(
       artists: [artist1, artist2], shows: [show1, show2], venues: [venue1, venue2])
 
-    let concert1 = vault.concertMap[show1.id]!
-    let concert2 = vault.concertMap[show2.id]!
+    let concert1 = vaultTest.concertMap[show1.id]!
+    let concert2 = vaultTest.concertMap[show2.id]!
 
     XCTAssertEqual(concert1, concert2)
-    XCTAssertFalse(vault.comparator.compare(lhs: concert1, rhs: concert2))
-    XCTAssertFalse(vault.comparator.compare(lhs: concert2, rhs: concert1))
+    XCTAssertFalse(vaultTest.comparator.compare(lhs: concert1, rhs: concert2))
+    XCTAssertFalse(vaultTest.comparator.compare(lhs: concert2, rhs: concert1))
   }
 }

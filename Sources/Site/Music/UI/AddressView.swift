@@ -24,9 +24,9 @@ struct AddressView: View {
 
 struct AddressView_Previews: PreviewProvider {
   static var previews: some View {
-    let vault = Vault.previewData
+    let vaultPreview = Vault.previewData
 
-    AddressView(location: vault.venueDigests[0].venue.location)
+    AddressView(location: vaultPreview.venueDigests[0].venue.location)
 
     let locationWithoutOptionals = Location(city: "Charleston", state: "IL")
     AddressView(location: locationWithoutOptionals)

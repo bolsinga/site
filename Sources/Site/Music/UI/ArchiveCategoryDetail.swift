@@ -50,36 +50,36 @@ struct ArchiveCategoryDetail: View {
 
 struct ArchiveCategoryDetail_Previews: PreviewProvider {
   static var previews: some View {
-    let vault = Vault.previewData
+    let vaultPreview = Vault.previewData
 
     ArchiveCategoryDetail(
       category: .today, todayConcerts: .constant([]), venueSort: .constant(.alphabetical),
       artistSort: .constant(.alphabetical), isCategoryActive: .constant(true)
     )
-    .environment(\.vault, vault)
+    .environment(\.vault, vaultPreview)
 
     ArchiveCategoryDetail(
       category: .stats, todayConcerts: .constant([]), venueSort: .constant(.alphabetical),
       artistSort: .constant(.alphabetical), isCategoryActive: .constant(true)
     )
-    .environment(\.vault, vault)
+    .environment(\.vault, vaultPreview)
 
     ArchiveCategoryDetail(
       category: .shows, todayConcerts: .constant([]), venueSort: .constant(.alphabetical),
       artistSort: .constant(.alphabetical), isCategoryActive: .constant(true)
     )
-    .environment(\.vault, vault)
+    .environment(\.vault, vaultPreview)
 
     ArchiveCategoryDetail(
       category: .venues, todayConcerts: .constant([]), venueSort: .constant(.alphabetical),
       artistSort: .constant(.alphabetical), isCategoryActive: .constant(true)
     )
-    .environment(\.vault, vault)
+    .environment(\.vault, vaultPreview)
 
     ArchiveCategoryDetail(
       category: .artists, todayConcerts: .constant([]), venueSort: .constant(.alphabetical),
       artistSort: .constant(.alphabetical), isCategoryActive: .constant(true)
     )
-    .environment(\.vault, vault)
+    .environment(\.vault, vaultPreview)
   }
 }

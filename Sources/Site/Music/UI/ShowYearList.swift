@@ -37,11 +37,11 @@ struct ShowYearList: View {
 
 struct ShowYearList_Previews: PreviewProvider {
   static var previews: some View {
-    let vault = Vault.previewData
+    let vaultPreview = Vault.previewData
 
     NavigationStack {
-      ShowYearList(decadesMap: vault.lookup.decadesMap)
-        .musicDestinations(vault)
+      ShowYearList(decadesMap: vaultPreview.lookup.decadesMap)
+        .musicDestinations(vaultPreview)
     }
   }
 }

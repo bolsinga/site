@@ -114,14 +114,14 @@ struct ArtistList: View {
 
 struct ArtistList_Previews: PreviewProvider {
   static var previews: some View {
-    let vault = Vault.previewData
+    let vaultPreview = Vault.previewData
 
     NavigationStack {
       ArtistList(
-        artistDigests: vault.artistDigests, sectioner: vault.sectioner,
+        artistDigests: vaultPreview.artistDigests, sectioner: vaultPreview.sectioner,
         sort: .constant(.alphabetical)
       )
-      .musicDestinations(vault)
+      .musicDestinations(vaultPreview)
     }
   }
 }

@@ -57,11 +57,11 @@ where T: LibraryComparable, T: Identifiable, T: Hashable, T.ID == String, T: Pat
 
 struct LibraryComparableList_Previews: PreviewProvider {
   static var previews: some View {
-    let vault = Vault.previewData
+    let vaultPreview = Vault.previewData
 
     NavigationStack {
       LibraryComparableList(
-        items: vault.artistDigests,
+        items: vaultPreview.artistDigests,
         sectioner: LibrarySectioner(),
         itemContentView: { _ in
           Text(3.formatted(.number))
@@ -72,12 +72,12 @@ struct LibraryComparableList_Previews: PreviewProvider {
         searchString: .constant("")
       )
       .navigationTitle("Artists")
-      .musicDestinations(vault)
+      .musicDestinations(vaultPreview)
     }
 
     NavigationStack {
       LibraryComparableList(
-        items: vault.venueDigests,
+        items: vaultPreview.venueDigests,
         sectioner: LibrarySectioner(),
         itemContentView: { _ in
           EmptyView()
@@ -88,7 +88,7 @@ struct LibraryComparableList_Previews: PreviewProvider {
         searchString: .constant("")
       )
       .navigationTitle("Venues")
-      .musicDestinations(vault)
+      .musicDestinations(vaultPreview)
     }
   }
 }
