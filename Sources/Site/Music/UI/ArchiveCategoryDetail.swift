@@ -29,9 +29,10 @@ struct ArchiveCategoryDetail: View {
         case .shows:
           ShowYearList(decadesMap: vault.lookup.decadesMap)
         case .venues:
-          VenueList(venueDigests: vault.venueDigests, sort: $venueSort)
+          VenueList(venueDigests: vault.venueDigests, sectioner: vault.sectioner, sort: $venueSort)
         case .artists:
-          ArtistList(artistDigests: vault.artistDigests, sort: $artistSort)
+          ArtistList(
+            artistDigests: vault.artistDigests, sectioner: vault.sectioner, sort: $artistSort)
         }
       }
       .shareCategory(category, url: url)
