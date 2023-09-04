@@ -177,10 +177,6 @@ public struct Vault {
     return urlComponents?.url
   }
 
-  var artists: [Artist] {
-    artistDigests.map { $0.artist }
-  }
-
   var venues: [Venue] {
     venueDigests.map { $0.venue }
   }
