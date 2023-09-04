@@ -14,7 +14,7 @@ extension Vault {
   }
 
   public var nextVenueID: Venue.ID {
-    let nextIndex = max(venues.count, 0)
+    let nextIndex = max(venueDigests.count, 0)
     return "\(ArchivePath.venuePrefix)\(nextIndex)"
   }
 

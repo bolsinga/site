@@ -29,7 +29,7 @@ struct ArchiveCategoryDetail: View {
         case .shows:
           ShowYearList(decadesMap: vault.lookup.decadesMap)
         case .venues:
-          VenueList(venues: vault.venues, sort: $venueSort)
+          VenueList(venueDigests: vault.venueDigests, sort: $venueSort)
         case .artists:
           ArtistList(artistDigests: vault.artistDigests, sort: $artistSort)
         }

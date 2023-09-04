@@ -8,7 +8,9 @@
 import CoreLocation
 import Foundation
 
-struct VenueDigest {
+struct VenueDigest: Equatable, Hashable, Identifiable {
+  public var id: Venue.ID { venue.id }
+
   let venue: Venue
   let url: URL?
   let concerts: [Concert]
@@ -19,4 +21,33 @@ struct VenueDigest {
   let venueArtistRank: Ranking
 
   let geocode: () async throws -> CLPlacemark?
+
+  // needed due to the gecode closure above.
+  static func == (lhs: VenueDigest, rhs: VenueDigest) -> Bool {
+    lhs.venue == rhs.venue && lhs.url == rhs.url && lhs.concerts == rhs.concerts
+      && lhs.related == rhs.related && lhs.firstSet == rhs.firstSet && lhs.spanRank == rhs.spanRank
+      && lhs.showRank == rhs.showRank && lhs.venueArtistRank == rhs.venueArtistRank
+  }
+
+  // needed due to the gecode closure above.
+  public func hash(into hasher: inout Hasher) {
+    hasher.combine(venue)
+    hasher.combine(url)
+    hasher.combine(concerts)
+    hasher.combine(related)
+    hasher.combine(firstSet)
+    hasher.combine(spanRank)
+    hasher.combine(showRank)
+    hasher.combine(venueArtistRank)
+  }
+}
+
+extension VenueDigest: LibraryComparable {
+  public var sortname: String? {
+    venue.sortname
+  }
+
+  public var name: String {
+    venue.name
+  }
 }
