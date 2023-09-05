@@ -10,6 +10,7 @@ import SwiftUI
 
 struct VenueDetail: View {
   let digest: VenueDigest
+  let concertCompare: (Concert, Concert) -> Bool
 
   @State private var placemark: CLPlacemark? = nil
 
@@ -52,7 +53,7 @@ struct VenueDetail: View {
     Section(
       header: Text("Shows", bundle: .module, comment: "Title of the Shows section of VenueDetail")
     ) {
-      ForEach(digest.concerts.sorted(by: digest.concertCompare)) { concert in
+      ForEach(digest.concerts.sorted(by: concertCompare)) { concert in
         NavigationLink(value: concert) { VenueBlurb(concert: concert) }
       }
     }
@@ -92,8 +93,11 @@ struct VenueDetail_Previews: PreviewProvider {
   static var previews: some View {
     let vaultPreview = Vault.previewData
     NavigationStack {
-      VenueDetail(digest: vaultPreview.venueDigests[0])
-        .musicDestinations(vaultPreview)
+      VenueDetail(
+        digest: vaultPreview.venueDigests[0],
+        concertCompare: vaultPreview.comparator.compare(lhs:rhs:)
+      )
+      .musicDestinations(vaultPreview)
     }
   }
 }
