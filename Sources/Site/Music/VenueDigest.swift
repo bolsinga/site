@@ -8,10 +8,10 @@
 import CoreLocation
 import Foundation
 
-struct VenueDigest: Equatable, Hashable, Identifiable {
+public struct VenueDigest: Equatable, Hashable, Identifiable {
   public var id: Venue.ID { venue.id }
 
-  let venue: Venue
+  public let venue: Venue
   let url: URL?
   let concerts: [Concert]
   let related: [Venue]
@@ -24,7 +24,7 @@ struct VenueDigest: Equatable, Hashable, Identifiable {
   let concertCompare: (Concert, Concert) -> Bool
 
   // needed due to the closures above.
-  static func == (lhs: VenueDigest, rhs: VenueDigest) -> Bool {
+  public static func == (lhs: VenueDigest, rhs: VenueDigest) -> Bool {
     lhs.venue == rhs.venue && lhs.url == rhs.url && lhs.concerts == rhs.concerts
       && lhs.related == rhs.related && lhs.firstSet == rhs.firstSet && lhs.spanRank == rhs.spanRank
       && lhs.showRank == rhs.showRank && lhs.venueArtistRank == rhs.venueArtistRank

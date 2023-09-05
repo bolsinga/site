@@ -72,17 +72,17 @@ extension Array where Element == Venue {
 }
 
 public struct Vault {
-  public let comparator: LibraryComparator
+  internal let comparator: LibraryComparator
   internal let sectioner: LibrarySectioner
   internal let atlas: Atlas
   internal let baseURL: URL?
   public let concerts: [Concert]
   public let concertMap: [Concert.ID: Concert]
 
-  internal let artistDigests: [ArtistDigest]
+  public let artistDigests: [ArtistDigest]
   internal let artistDigestMap: [Artist.ID: ArtistDigest]
 
-  internal let venueDigests: [VenueDigest]
+  public let venueDigests: [VenueDigest]
   internal let venueDigestMap: [Venue.ID: VenueDigest]
 
   let decadesMap: [Decade: [Annum: [Show.ID]]]

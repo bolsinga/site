@@ -49,25 +49,23 @@ struct Program: AsyncParsableCommand {
     let vault = try await Vault.load(url: rootURL.appending(path: "music.json"))
 
     let concerts = vault.concerts
-    let artists = Array(Set(concerts.flatMap { $0.artists })).sorted(
-      by: vault.comparator.libraryCompare(lhs:rhs:))
-    let venues = Array(Set(concerts.compactMap { $0.venue })).sorted(
-      by: vault.comparator.libraryCompare(lhs:rhs:))
+    let artistDigests = vault.artistDigests
+    let venueDigests = vault.venueDigests
 
-    print("Artists: \(artists.count)")
+    print("Artists: \(artistDigests.count)")
     print("Shows: \(concerts.count)")
-    print("Venues: \(venues.count)")
+    print("Venues: \(venueDigests.count)")
 
     for concert in concerts.reversed() {
       print(concert.formatted(.full))
     }
 
-    for venue in venues {
-      print(venue.formatted(.oneLine))
+    for digest in venueDigests {
+      print(digest.venue.formatted(.oneLine))
     }
 
-    for artist in artists {
-      let concerts = concerts.filter { $0.show.artists.contains(artist.id) }
+    for digest in artistDigests {
+      let concerts = digest.concerts
 
       guard !concerts.isEmpty else { continue }
 
@@ -75,7 +73,7 @@ struct Program: AsyncParsableCommand {
       for concert in concerts {
         concertParts.append(concert.formatted(.full))
       }
-      print("\(artist.name): (\(concertParts.joined(separator: "; "))")
+      print("\(digest.artist.name): (\(concertParts.joined(separator: "; "))")
     }
   }
 }

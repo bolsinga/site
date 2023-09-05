@@ -10,9 +10,9 @@ import Foundation
 public struct ArtistDigest: Equatable, Hashable, Identifiable {
   public var id: Artist.ID { artist.id }
 
-  let artist: Artist
+  public let artist: Artist
   let url: URL?
-  let concerts: [Concert]
+  public let concerts: [Concert]
   let related: [Artist]
   let firstSet: FirstSet
   let spanRank: Ranking
