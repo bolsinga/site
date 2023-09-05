@@ -43,8 +43,7 @@ extension Array where Element == Artist {
         firstSet: lookup.firstSet(artist: artist),
         spanRank: lookup.spanRank(artist: artist),
         showRank: lookup.showRank(artist: artist),
-        venueRank: lookup.artistVenueRank(artist: artist),
-        concertCompare: comparator.compare(lhs:rhs:))
+        venueRank: lookup.artistVenueRank(artist: artist))
     }
   }
 }

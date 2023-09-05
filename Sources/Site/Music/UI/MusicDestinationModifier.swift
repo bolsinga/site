@@ -24,7 +24,7 @@ struct MusicDestinationModifier: ViewModifier {
           }
         case .artist(let iD):
           if let artistDigest = vault.artistDigestMap[iD] {
-            ArtistDetail(digest: artistDigest)
+            ArtistDetail(digest: artistDigest, concertCompare: vault.comparator.compare(lhs:rhs:))
           }
         case .year(let annum):
           YearDetail(
