@@ -11,6 +11,4 @@ struct AnnumDigest {
   let annum: Annum
   let url: URL?
   let concerts: [Concert]
-
-  let concertCompare: (Concert, Concert) -> Bool
 }

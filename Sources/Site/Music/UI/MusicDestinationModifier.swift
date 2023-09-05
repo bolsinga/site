@@ -27,7 +27,8 @@ struct MusicDestinationModifier: ViewModifier {
             ArtistDetail(digest: artistDigest)
           }
         case .year(let annum):
-          YearDetail(digest: vault.digest(for: annum))
+          YearDetail(
+            digest: vault.digest(for: annum), concertCompare: vault.comparator.compare(lhs:rhs:))
         }
       }
   }

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct YearDetail: View {
   let digest: AnnumDigest
+  let concertCompare: (Concert, Concert) -> Bool
 
   @ViewBuilder private var statsElement: some View {
     if !digest.concerts.isEmpty {
@@ -24,7 +25,7 @@ struct YearDetail: View {
         header: Text(
           "Shows", bundle: .module, comment: "Title of the Shows section of YearDetail")
       ) {
-        ForEach(digest.concerts.sorted(by: digest.concertCompare)) { concert in
+        ForEach(digest.concerts.sorted(by: concertCompare)) { concert in
           NavigationLink(value: concert) { ConcertBlurb(concert: concert) }
         }
       }
@@ -50,8 +51,11 @@ struct YearDetail_Previews: PreviewProvider {
     let vaultPreview = Vault.previewData
 
     NavigationStack {
-      YearDetail(digest: vaultPreview.digest(for: Annum.year(2001)))
-        .musicDestinations(vaultPreview)
+      YearDetail(
+        digest: vaultPreview.digest(for: Annum.year(2001)),
+        concertCompare: vaultPreview.comparator.compare(lhs:rhs:)
+      )
+      .musicDestinations(vaultPreview)
     }
   }
 }
