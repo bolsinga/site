@@ -64,8 +64,7 @@ extension Array where Element == Venue {
         spanRank: lookup.spanRank(venue: venue),
         showRank: lookup.venueRank(venue: venue),
         venueArtistRank: lookup.venueArtistRank(venue: venue),
-        geocode: { try await atlas.geocode(venue.location) },
-        concertCompare: comparator.compare(lhs:rhs:))
+        geocode: { try await atlas.geocode(venue.location) })
     }
 
   }

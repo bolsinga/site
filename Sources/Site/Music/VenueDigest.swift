@@ -21,7 +21,6 @@ public struct VenueDigest: Equatable, Hashable, Identifiable {
   let venueArtistRank: Ranking
 
   let geocode: () async throws -> CLPlacemark?
-  let concertCompare: (Concert, Concert) -> Bool
 
   // needed due to the closures above.
   public static func == (lhs: VenueDigest, rhs: VenueDigest) -> Bool {
