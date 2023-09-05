@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ArtistDetail: View {
   let digest: ArtistDigest
+  let concertCompare: (Concert, Concert) -> Bool
 
   @ViewBuilder private var firstSetElement: some View {
     HStack {
@@ -37,7 +38,7 @@ struct ArtistDetail: View {
         header: Text(
           "Shows", bundle: .module, comment: "Title of the Shows section of ArtistDetail")
       ) {
-        ForEach(digest.concerts.sorted(by: digest.concertCompare)) { concert in
+        ForEach(digest.concerts.sorted(by: concertCompare)) { concert in
           NavigationLink(value: concert) { ArtistBlurb(concert: concert) }
         }
       }
@@ -78,13 +79,19 @@ struct ArtistDetail_Previews: PreviewProvider {
     let vaultPreview = Vault.previewData
 
     NavigationStack {
-      ArtistDetail(digest: vaultPreview.artistDigests[0])
-        .musicDestinations(vaultPreview)
+      ArtistDetail(
+        digest: vaultPreview.artistDigests[0],
+        concertCompare: vaultPreview.comparator.compare(lhs:rhs:)
+      )
+      .musicDestinations(vaultPreview)
     }
 
     NavigationStack {
-      ArtistDetail(digest: vaultPreview.artistDigests[1])
-        .musicDestinations(vaultPreview)
+      ArtistDetail(
+        digest: vaultPreview.artistDigests[1],
+        concertCompare: vaultPreview.comparator.compare(lhs:rhs:)
+      )
+      .musicDestinations(vaultPreview)
     }
   }
 }
