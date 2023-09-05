@@ -11,6 +11,7 @@ import SwiftUI
 struct VenueDetail: View {
   let digest: VenueDigest
   let concertCompare: (Concert, Concert) -> Bool
+  let geocode: (Location) async throws -> CLPlacemark?
 
   @State private var placemark: CLPlacemark? = nil
 
@@ -31,7 +32,7 @@ struct VenueDetail: View {
       AddressView(location: digest.venue.location)
       LocationMap(placemark: $placemark)
         .task(id: digest.venue.location) {
-          do { placemark = try await digest.geocode() } catch {}
+          do { placemark = try await geocode(digest.venue.location) } catch {}
         }
         .frame(minHeight: 300)
     }
@@ -95,7 +96,10 @@ struct VenueDetail_Previews: PreviewProvider {
     NavigationStack {
       VenueDetail(
         digest: vaultPreview.venueDigests[0],
-        concertCompare: vaultPreview.comparator.compare(lhs:rhs:)
+        concertCompare: vaultPreview.comparator.compare(lhs:rhs:),
+        geocode: { _ in
+          nil
+        }
       )
       .musicDestinations(vaultPreview)
     }
