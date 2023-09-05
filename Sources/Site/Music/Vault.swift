@@ -50,7 +50,7 @@ extension Array where Element == Artist {
 
 extension Array where Element == Venue {
   func digests(
-    concerts: [Concert], baseURL: URL?, atlas: Atlas, lookup: Lookup, comparator: LibraryComparator
+    concerts: [Concert], baseURL: URL?, lookup: Lookup, comparator: LibraryComparator
   ) -> [VenueDigest] {
     self.map { venue in
       VenueDigest(
@@ -62,10 +62,8 @@ extension Array where Element == Venue {
         firstSet: lookup.firstSet(venue: venue),
         spanRank: lookup.spanRank(venue: venue),
         showRank: lookup.venueRank(venue: venue),
-        venueArtistRank: lookup.venueArtistRank(venue: venue),
-        geocode: { try await atlas.geocode(venue.location) })
+        venueArtistRank: lookup.venueArtistRank(venue: venue))
     }
-
   }
 }
 
@@ -96,7 +94,7 @@ public struct Vault {
     let artistDigests = music.artists.digests(
       concerts: concerts, baseURL: baseURL, lookup: lookup, comparator: comparator)
     let venueDigests = music.venues.digests(
-      concerts: concerts, baseURL: baseURL, atlas: atlas, lookup: lookup, comparator: comparator)
+      concerts: concerts, baseURL: baseURL, lookup: lookup, comparator: comparator)
     let decadesMap = lookup.decadesMap
 
     self.init(
@@ -151,7 +149,7 @@ public struct Vault {
     let atlas = await asyncAtlas
 
     async let venueDigests = music.venues.digests(
-      concerts: concerts, baseURL: baseURL, atlas: atlas, lookup: lookup, comparator: comparator)
+      concerts: concerts, baseURL: baseURL, lookup: lookup, comparator: comparator)
 
     let v = Vault(
       comparator: comparator, sectioner: await sectioner, atlas: atlas, baseURL: baseURL,
