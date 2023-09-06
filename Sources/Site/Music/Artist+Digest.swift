@@ -8,15 +8,16 @@
 import Foundation
 
 extension Array where Element == Artist {
-  func digests(concerts: [Concert], baseURL: URL?, lookup: Lookup, comparator: LibraryComparator)
+  func digests(
+    concerts: [Concert], baseURL: URL?, lookup: Lookup, comparator: (Concert, Concert) -> Bool
+  )
     -> [ArtistDigest]
   {
     self.map { artist in
       ArtistDigest(
         artist: artist,
         url: artist.archivePath.url(using: baseURL),
-        concerts: concerts.filter { $0.show.artists.contains(artist.id) }.sorted(
-          by: comparator.compare(lhs:rhs:)),
+        concerts: concerts.filter { $0.show.artists.contains(artist.id) }.sorted(by: comparator),
         related: lookup.related(artist),
         firstSet: lookup.firstSet(artist: artist),
         spanRank: lookup.spanRank(artist: artist),

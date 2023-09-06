@@ -42,11 +42,14 @@ public struct Vault {
     let baseURL = url?.baseURL
     let atlas = Atlas()
 
-    let concerts = music.shows.concerts(baseURL: baseURL, lookup: lookup, comparator: comparator)
+    let concerts = music.shows.concerts(
+      baseURL: baseURL, lookup: lookup, comparator: comparator.compare(lhs:rhs:))
     let artistDigests = music.artists.digests(
-      concerts: concerts, baseURL: baseURL, lookup: lookup, comparator: comparator)
+      concerts: concerts, baseURL: baseURL, lookup: lookup, comparator: comparator.compare(lhs:rhs:)
+    )
     let venueDigests = music.venues.digests(
-      concerts: concerts, baseURL: baseURL, lookup: lookup, comparator: comparator)
+      concerts: concerts, baseURL: baseURL, lookup: lookup, comparator: comparator.compare(lhs:rhs:)
+    )
     let decadesMap = lookup.decadesMap
 
     self.init(
@@ -91,17 +94,19 @@ public struct Vault {
     async let decadesMap = lookup.decadesMap
 
     async let asyncConcerts = music.shows.concerts(
-      baseURL: baseURL, lookup: lookup, comparator: comparator)
+      baseURL: baseURL, lookup: lookup, comparator: comparator.compare(lhs:rhs:))
 
     let concerts = await asyncConcerts
 
     async let artistDigests = music.artists.digests(
-      concerts: concerts, baseURL: baseURL, lookup: lookup, comparator: comparator)
+      concerts: concerts, baseURL: baseURL, lookup: lookup, comparator: comparator.compare(lhs:rhs:)
+    )
 
     let atlas = await asyncAtlas
 
     async let venueDigests = music.venues.digests(
-      concerts: concerts, baseURL: baseURL, lookup: lookup, comparator: comparator)
+      concerts: concerts, baseURL: baseURL, lookup: lookup, comparator: comparator.compare(lhs:rhs:)
+    )
 
     let v = Vault(
       comparator: comparator, sectioner: await sectioner, atlas: atlas, baseURL: baseURL,
