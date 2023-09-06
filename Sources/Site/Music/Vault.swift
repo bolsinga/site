@@ -19,54 +19,6 @@ extension URL {
   }
 }
 
-extension Array where Element == Show {
-  func concerts(baseURL: URL?, lookup: Lookup, comparator: LibraryComparator) -> [Concert] {
-    self.map {
-      Concert(
-        show: $0, venue: lookup.venueForShow($0), artists: lookup.artistsForShow($0),
-        url: $0.archivePath.url(using: baseURL))
-    }.sorted { comparator.compare(lhs: $0, rhs: $1) }
-  }
-}
-
-extension Array where Element == Artist {
-  func digests(concerts: [Concert], baseURL: URL?, lookup: Lookup, comparator: LibraryComparator)
-    -> [ArtistDigest]
-  {
-    self.map { artist in
-      ArtistDigest(
-        artist: artist,
-        url: artist.archivePath.url(using: baseURL),
-        concerts: concerts.filter { $0.show.artists.contains(artist.id) }.sorted(
-          by: comparator.compare(lhs:rhs:)),
-        related: lookup.related(artist),
-        firstSet: lookup.firstSet(artist: artist),
-        spanRank: lookup.spanRank(artist: artist),
-        showRank: lookup.showRank(artist: artist),
-        venueRank: lookup.artistVenueRank(artist: artist))
-    }
-  }
-}
-
-extension Array where Element == Venue {
-  func digests(
-    concerts: [Concert], baseURL: URL?, lookup: Lookup, comparator: LibraryComparator
-  ) -> [VenueDigest] {
-    self.map { venue in
-      VenueDigest(
-        venue: venue,
-        url: venue.archivePath.url(using: baseURL),
-        concerts: concerts.filter { $0.show.venue == venue.id }.sorted(
-          by: comparator.compare(lhs:rhs:)),
-        related: lookup.related(venue),
-        firstSet: lookup.firstSet(venue: venue),
-        spanRank: lookup.spanRank(venue: venue),
-        showRank: lookup.venueRank(venue: venue),
-        venueArtistRank: lookup.venueArtistRank(venue: venue))
-    }
-  }
-}
-
 public struct Vault {
   internal let comparator: LibraryComparator
   internal let sectioner: LibrarySectioner
