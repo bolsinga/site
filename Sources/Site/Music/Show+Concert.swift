@@ -7,13 +7,18 @@
 
 import Foundation
 
+extension Show {
+  func concert(baseURL: URL?, lookup: Lookup, comparator: (Concert, Concert) -> Bool) -> Concert {
+    Concert(
+      show: self, venue: lookup.venueForShow(self), artists: lookup.artistsForShow(self),
+      url: self.archivePath.url(using: baseURL))
+  }
+}
+
 extension Array where Element == Show {
   func concerts(baseURL: URL?, lookup: Lookup, comparator: (Concert, Concert) -> Bool) -> [Concert]
   {
-    self.map {
-      Concert(
-        show: $0, venue: lookup.venueForShow($0), artists: lookup.artistsForShow($0),
-        url: $0.archivePath.url(using: baseURL))
-    }.sorted(by: comparator)
+    self.map { $0.concert(baseURL: baseURL, lookup: lookup, comparator: comparator) }.sorted(
+      by: comparator)
   }
 }

@@ -7,20 +7,28 @@
 
 import Foundation
 
+extension Venue {
+  func digest(
+    concerts: [Concert], baseURL: URL?, lookup: Lookup, comparator: (Concert, Concert) -> Bool
+  ) -> VenueDigest {
+    VenueDigest(
+      venue: self,
+      url: self.archivePath.url(using: baseURL),
+      concerts: concerts.filter { $0.show.venue == id }.sorted(by: comparator),
+      related: lookup.related(self),
+      firstSet: lookup.firstSet(venue: self),
+      spanRank: lookup.spanRank(venue: self),
+      showRank: lookup.venueRank(venue: self),
+      venueArtistRank: lookup.venueArtistRank(venue: self))
+  }
+}
+
 extension Array where Element == Venue {
   func digests(
     concerts: [Concert], baseURL: URL?, lookup: Lookup, comparator: (Concert, Concert) -> Bool
   ) -> [VenueDigest] {
-    self.map { venue in
-      VenueDigest(
-        venue: venue,
-        url: venue.archivePath.url(using: baseURL),
-        concerts: concerts.filter { $0.show.venue == venue.id }.sorted(by: comparator),
-        related: lookup.related(venue),
-        firstSet: lookup.firstSet(venue: venue),
-        spanRank: lookup.spanRank(venue: venue),
-        showRank: lookup.venueRank(venue: venue),
-        venueArtistRank: lookup.venueArtistRank(venue: venue))
+    self.map {
+      $0.digest(concerts: concerts, baseURL: baseURL, lookup: lookup, comparator: comparator)
     }
   }
 }
