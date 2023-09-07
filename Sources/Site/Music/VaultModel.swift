@@ -20,8 +20,10 @@ extension Logger {
   @Published var error: Error?
   @Published var todayConcerts: [Concert] = []
 
-  public init(url: URL) {
+  public init(url: URL, vault: Vault? = nil, error: Error? = nil) {
     self.url = url
+    self.vault = vault
+    self.error = error
   }
 
   func load() async {
