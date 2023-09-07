@@ -36,11 +36,29 @@ public struct VaultView: View {
         ProgressView()
       }
     }.task {
+      guard model.vault == nil, model.error == nil else { return }
+
       Logger.vaultLoad.log("start task")
       defer {
         Logger.vaultLoad.log("end task")
       }
       await model.load()
     }
+  }
+}
+
+struct VaultView_Previews: PreviewProvider {
+  enum MyError: Error {
+    case testError
+  }
+
+  static var previews: some View {
+    VaultView(
+      VaultModel(
+        url: URL(string: "https://www.example.com")!, error: MyError.testError))
+
+    VaultView(VaultModel(url: URL(string: "https://www.example.com")!))
+
+    VaultView(VaultModel(url: URL(string: "https://www.example.com")!, vault: Vault.previewData))
   }
 }
