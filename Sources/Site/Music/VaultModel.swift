@@ -47,6 +47,7 @@ extension VaultError: LocalizedError {
     do {
       guard let url = URL(string: urlString) else { throw VaultError.illegalURL(urlString) }
 
+      error = nil
       vault = try await Vault.load(url: url)
       updateTodayConcerts()
       Task {

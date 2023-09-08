@@ -31,7 +31,20 @@ public struct VaultView: View {
             await model.load()
           }
       } else if let error = model.error {
-        Text(error.localizedDescription)
+        VStack(alignment: .center) {
+          Text(error.localizedDescription)
+          Button(
+            String(
+              localized: "Retry", bundle: .module,
+              comment: "Title for the Retry button when the Model could not be created.")
+          ) {
+            Task {
+              Logger.vaultLoad.log("User retry")
+              await model.load()
+            }
+          }
+          .buttonStyle(.borderedProminent)
+        }
       } else {
         ProgressView()
       }
