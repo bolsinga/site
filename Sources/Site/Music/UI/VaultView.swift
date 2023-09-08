@@ -33,15 +33,17 @@ public struct VaultView: View {
       } else if let error = model.error {
         VStack(alignment: .center) {
           Text(error.localizedDescription)
-          Button(
-            String(
-              localized: "Retry", bundle: .module,
-              comment: "Title for the Retry button when the Model could not be created.")
-          ) {
+          Button {
             Task {
               Logger.vaultLoad.log("User retry")
               await model.load()
             }
+          } label: {
+            Label(
+              String(
+                localized: "Retry", bundle: .module,
+                comment: "Title for the Retry button when the Model could not be created."),
+              systemImage: "arrow.clockwise")
           }
           .buttonStyle(.borderedProminent)
         }
