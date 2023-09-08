@@ -98,6 +98,9 @@ Venue First Set Caption */
 /* Title of the Related Venues Section for VenueDetail. */
 "Related Venues" = "Related Venues";
 
+/* Title for the Retry button when the Model could not be created. */
+"Retry" = "Retry";
+
 /* Spotlight Description for Show */
 "See More About This Show" = "See More About This Show";
 
