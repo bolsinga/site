@@ -53,12 +53,10 @@ struct VaultView_Previews: PreviewProvider {
   }
 
   static var previews: some View {
-    VaultView(
-      VaultModel(
-        url: URL(string: "https://www.example.com")!, error: MyError.testError))
+    VaultView(VaultModel(urlString: "https://www.example.com", error: MyError.testError))
 
-    VaultView(VaultModel(url: URL(string: "https://www.example.com")!))
+    VaultView(VaultModel(urlString: "https://www.example.com"))
 
-    VaultView(VaultModel(url: URL(string: "https://www.example.com")!, vault: Vault.previewData))
+    VaultView(VaultModel(urlString: "https://www.example.com", vault: Vault.previewData))
   }
 }
