@@ -53,8 +53,7 @@ extension VaultError: LocalizedError {
         await monitorDayChanges()
       }
     } catch {
-      Logger.vaultModel.log(
-        "error: \(error.localizedDescription, privacy: .public) url: \(self.urlString)")
+      Logger.vaultModel.log("error: \(error.localizedDescription, privacy: .public)")
       self.error = error
     }
   }
