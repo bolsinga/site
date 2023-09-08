@@ -13,15 +13,28 @@ extension Logger {
   static let vaultModel = Logger(category: "vaultModel")
 }
 
+enum VaultError: Error {
+  case illegalURL(String)
+}
+
+extension VaultError: LocalizedError {
+  public var errorDescription: String? {
+    switch self {
+    case .illegalURL(let urlString):
+      return "URL (\(urlString)) is not valid."
+    }
+  }
+}
+
 @MainActor public final class VaultModel: ObservableObject {
-  let url: URL
+  let urlString: String
 
   @Published var vault: Vault?
   @Published var error: Error?
   @Published var todayConcerts: [Concert] = []
 
-  public init(url: URL, vault: Vault? = nil, error: Error? = nil) {
-    self.url = url
+  public init(urlString: String, vault: Vault? = nil, error: Error? = nil) {
+    self.urlString = urlString
     self.vault = vault
     self.error = error
   }
@@ -32,13 +45,16 @@ extension Logger {
       Logger.vaultModel.log("end")
     }
     do {
+      guard let url = URL(string: urlString) else { throw VaultError.illegalURL(urlString) }
+
       vault = try await Vault.load(url: url)
       updateTodayConcerts()
       Task {
         await monitorDayChanges()
       }
     } catch {
-      Logger.vaultModel.log("error: \(error.localizedDescription, privacy: .public)")
+      Logger.vaultModel.log(
+        "error: \(error.localizedDescription, privacy: .public) url: \(self.urlString)")
       self.error = error
     }
   }
