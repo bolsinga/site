@@ -25,7 +25,10 @@ struct ArchiveCategoryShareModifier: ViewModifier {
     content
       .toolbar {
         if let url {
-          ShareLink(item: url, subject: category.subject, message: category.message)
+          ShareLink(
+            item: url, subject: category.subject, message: category.message,
+            preview: SharePreview(
+              category.subject, image: Bundle.main.appIcon))
         }
       }
   }

@@ -15,7 +15,10 @@ struct PathRestorableShareModifier<T: PathRestorableShareable>: ViewModifier {
     content
       .toolbar {
         if let url {
-          ShareLink(item: url, subject: item.subject, message: item.message)
+          ShareLink(
+            item: url, subject: item.subject, message: item.message,
+            preview: SharePreview(
+              item.subject, image: Bundle.main.appIcon))
         }
       }
   }
