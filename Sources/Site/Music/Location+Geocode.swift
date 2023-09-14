@@ -9,7 +9,7 @@ import Contacts
 import CoreLocation
 import Foundation
 
-extension CNPostalAddress {
+extension CNPostalAddress: Geocodable {
   private enum GeocodeError: Error {
     case noPlacemark
   }
