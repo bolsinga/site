@@ -31,7 +31,7 @@ extension VenueDigest: LibraryComparable {
   }
 }
 
-extension VenueDigest: Geocodable {
+extension VenueDigest: AtlasItem {
   func geocode() async throws -> CLPlacemark {
     try await venue.geocode()
   }
