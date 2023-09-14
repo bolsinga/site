@@ -47,10 +47,6 @@ actor Atlas<T: Geocodable> {
       Logger.atlas.log("cached result")
       return result
     }
-    Logger.atlas.log("start geocode")
-    defer {
-      Logger.atlas.log("end geocode")
-    }
 
     let result = try await gatedGeocode(geocodable)
     self[geocodable] = result
