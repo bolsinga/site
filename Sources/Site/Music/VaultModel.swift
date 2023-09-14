@@ -6,6 +6,7 @@
 //
 
 import Combine
+import CoreLocation
 import Foundation
 import os
 
@@ -32,6 +33,7 @@ extension VaultError: LocalizedError {
   @Published var vault: Vault?
   @Published var error: Error?
   @Published var todayConcerts: [Concert] = []
+  @Published var venuePlacemarks: [Venue.ID: CLPlacemark] = [:]
 
   public init(urlString: String, vault: Vault? = nil, error: Error? = nil) {
     self.urlString = urlString
@@ -52,6 +54,9 @@ extension VaultError: LocalizedError {
       updateTodayConcerts()
       Task {
         await monitorDayChanges()
+      }
+      Task {
+        await geocodeVenues()
       }
     } catch {
       Logger.vaultModel.log("error: \(error.localizedDescription, privacy: .public)")
@@ -78,6 +83,29 @@ extension VaultError: LocalizedError {
     for await _ in NotificationCenter.default.notifications(named: .NSCalendarDayChanged) {
       Logger.vaultModel.log("day changed")
       updateTodayConcerts()
+    }
+  }
+
+  private func geocodeVenues() async {
+    guard let vault else {
+      Logger.vaultModel.log("No Vault to geocode venues.")
+      return
+    }
+
+    Logger.vaultModel.log("start batch geocode")
+    defer {
+      Logger.vaultModel.log("end batch geocode")
+    }
+
+    do {
+      for try await (digest, placemark) in BatchGeocode(
+        atlas: vault.atlas, geocodables: vault.venueDigests)
+      {
+        Logger.vaultModel.log("geocoded: \(digest.id, privacy: .public)")
+        venuePlacemarks[digest.id] = placemark
+      }
+    } catch {
+      Logger.vaultModel.log("batch geocode error: \(error, privacy: .public)")
     }
   }
 }
