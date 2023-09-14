@@ -7,6 +7,11 @@
 
 import CoreLocation
 import Foundation
+import os
+
+extension Logger {
+  static let atlas = Logger(category: "atlas")
+}
 
 protocol Geocodable: Hashable {
   func geocode() async throws -> CLPlacemark
@@ -26,30 +31,45 @@ actor Atlas<T: Geocodable> {
   private var waitUntil: ContinuousClock.Instant = .now + Constants.timeUntilReset
 
   private func reset() {
+    Logger.atlas.log("reset")
     waitUntil = .now + Constants.timeUntilReset
     count = 0
   }
 
   private func idleAndReset() async throws {
+    Logger.atlas.log("idleAndReset")
     try await ContinuousClock().sleep(until: waitUntil)
     reset()
   }
 
   public func geocode(_ geocodable: T) async throws -> CLPlacemark {
     if let result = self[geocodable] {
+      Logger.atlas.log("cached result")
       return result
     }
+    Logger.atlas.log("start geocode")
+    defer {
+      Logger.atlas.log("end geocode")
+    }
+
     let result = try await gatedGeocode(geocodable)
     self[geocodable] = result
     return result
   }
 
   private func gatedGeocode(_ geocodable: T) async throws -> CLPlacemark {
+    Logger.atlas.log("start gatedGeocode")
+    defer {
+      Logger.atlas.log("end gatedGeocode")
+    }
+
     if ContinuousClock.now.duration(to: waitUntil) <= .seconds(0) {
       // wait time expired
+      Logger.atlas.log("wait expired")
       reset()
     } else if count != 0, count % Constants.maxRequests == 0 {
       // hit max requests
+      Logger.atlas.log("reached max requests")
       try await idleAndReset()
     }
 
@@ -61,10 +81,12 @@ actor Atlas<T: Geocodable> {
         return placemark
       } catch let error as NSError {
         if error.code == CLError.network.rawValue, error.domain == kCLErrorDomain {
+          Logger.atlas.log("throttle: \(error.localizedDescription, privacy: .public)")
           // throttling error
           try await idleAndReset()
           retry = true
         } else {
+          Logger.atlas.log("error: \(error.localizedDescription, privacy: .public)")
           throw error
         }
       } catch {
