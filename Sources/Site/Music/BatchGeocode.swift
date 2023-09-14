@@ -8,31 +8,31 @@
 import CoreLocation
 import Foundation
 
-struct BatchGeocode: AsyncSequence {
-  typealias Element = (Location, CLPlacemark)
+struct BatchGeocode<T: Geocodable>: AsyncSequence {
+  typealias Element = (T, CLPlacemark)
 
-  let atlas: Atlas
-  let locations: [Location]
+  let atlas: Atlas<T>
+  let geocodables: [T]
 
   struct AsyncIterator: AsyncIteratorProtocol {
-    let atlas: Atlas
-    let locations: [Location]
+    let atlas: Atlas<T>
+    let geocodables: [T]
 
     var index: Int = 0
 
     mutating func next() async throws -> Element? {
       guard !Task.isCancelled else { return nil }
 
-      guard index < locations.count else { return nil }
+      guard index < geocodables.count else { return nil }
 
-      let location = locations[index]
-      let placemark = try await atlas.geocode(location)
+      let geocodable = geocodables[index]
+      let placemark = try await atlas.geocode(geocodable)
       index += 1
-      return (location, placemark)
+      return (geocodable, placemark)
     }
   }
 
   func makeAsyncIterator() -> AsyncIterator {
-    AsyncIterator(atlas: atlas, locations: locations)
+    AsyncIterator(atlas: atlas, geocodables: geocodables)
   }
 }

@@ -22,7 +22,7 @@ extension URL {
 public struct Vault {
   internal let comparator: LibraryComparator
   internal let sectioner: LibrarySectioner
-  internal let atlas: Atlas
+  internal let atlas: Atlas<Location>
   internal let baseURL: URL?
   public let concerts: [Concert]
   public let concertMap: [Concert.ID: Concert]
@@ -40,7 +40,7 @@ public struct Vault {
     let lookup = Lookup(music: music)
     let comparator = LibraryComparator()
     let baseURL = url?.baseURL
-    let atlas = Atlas()
+    let atlas = Atlas<Location>()
 
     let concerts = music.shows.concerts(
       baseURL: baseURL, lookup: lookup, comparator: comparator.compare(lhs:rhs:))
@@ -59,7 +59,7 @@ public struct Vault {
   }
 
   internal init(
-    comparator: LibraryComparator, sectioner: LibrarySectioner, atlas: Atlas,
+    comparator: LibraryComparator, sectioner: LibrarySectioner, atlas: Atlas<Location>,
     baseURL: URL?, concerts: [Concert], artistDigests: [ArtistDigest], venueDigests: [VenueDigest],
     decadesMap: [Decade: [Annum: [Show.ID]]]
   ) {
@@ -82,7 +82,7 @@ public struct Vault {
 
   public static func create(music: Music, url: URL) async -> Vault {
     async let asyncBaseURL = url.baseURL
-    async let asyncAtlas = Atlas()
+    async let asyncAtlas = Atlas<Location>()
     async let asyncLookup = await Lookup.create(music: music)
     async let asyncComparator = await LibraryComparator.create(music: music)
     async let sectioner = await LibrarySectioner.create(music: music)
@@ -116,7 +116,7 @@ public struct Vault {
     //    Task {
     //      do {
     //        for try await (location, placemark) in BatchGeocode(
-    //          atlas: v.atlas, locations: v.music.venues.map { $0.location })
+    //          atlas: v.atlas, geocodables: v.venueDigests.map { $0.venue.location })
     //        {
     //          print("geocoded: \(location) to \(placemark)")
     //        }
