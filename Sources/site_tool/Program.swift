@@ -11,8 +11,9 @@ import Site
 
 @main
 struct Program: AsyncParsableCommand {
-  enum URLError: Error {
+  enum ProgramError: Error {
     case notURLString(String)
+    case noVault
   }
 
   @Argument(
@@ -20,7 +21,7 @@ struct Program: AsyncParsableCommand {
       "The root URL for the json files.",
     transform: ({
       let url = URL(string: $0)
-      guard let url else { throw URLError.notURLString($0) }
+      guard let url else { throw ProgramError.notURLString($0) }
       return url
     })
   )
@@ -46,7 +47,9 @@ struct Program: AsyncParsableCommand {
 
     try jsonDirectoryURL?.appending(path: "diary.json").writeJSON(diary)
 
-    let vault = try await Vault.load(url: rootURL.appending(path: "music.json"))
+    let model = await VaultModel(urlString: rootURL.appending(path: "music.json").absoluteString)
+    await model.load()
+    guard let vault = await model.vault else { throw ProgramError.noVault }
 
     let concerts = vault.concerts
     let artistDigests = vault.artistDigests
