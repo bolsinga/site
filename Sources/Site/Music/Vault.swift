@@ -113,19 +113,6 @@ public struct Vault {
       concerts: concerts, artistDigests: await artistDigests, venueDigests: await venueDigests,
       decadesMap: await decadesMap)
 
-    //    Task {
-    //      do {
-    //        for try await (location, placemark) in BatchGeocode(
-    //          atlas: v.atlas, geocodables: v.venueDigests.map { $0.venue.location })
-    //        {
-    //          print("geocoded: \(location) to \(placemark)")
-    //        }
-    //      } catch {
-    //        print("batch error: \(error)")
-    //      }
-    //      print("Batch Geocoding Completed.")
-    //    }
-
     return v
   }
 
