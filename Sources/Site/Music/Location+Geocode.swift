@@ -22,7 +22,7 @@ extension CNPostalAddress {
   }
 }
 
-extension Location {
+extension Location: Geocodable {
   public func geocode() async throws -> CLPlacemark {
     try await postalAddress.geocode()
   }
