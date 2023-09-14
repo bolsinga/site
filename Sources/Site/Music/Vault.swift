@@ -115,8 +115,10 @@ public struct Vault {
 
     //    Task {
     //      do {
-    //        for try await (digest, placemark) in BatchGeocode(atlas: v.atlas, items: v.venueDigests) {
-    //          print("geocoded: \(digest) to \(placemark)")
+    //        for try await (location, placemark) in BatchGeocode(
+    //          atlas: v.atlas, geocodables: v.venueDigests.map { $0.venue.location })
+    //        {
+    //          print("geocoded: \(location) to \(placemark)")
     //        }
     //      } catch {
     //        print("batch error: \(error)")

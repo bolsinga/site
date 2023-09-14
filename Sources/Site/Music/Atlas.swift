@@ -8,19 +8,17 @@
 import CoreLocation
 import Foundation
 
-protocol Geocodable {
+protocol Geocodable: Hashable {
   func geocode() async throws -> CLPlacemark
 }
-
-protocol AtlasItem: Geocodable, Identifiable {}
 
 private enum Constants {
   static let maxRequests = 50
   static let timeUntilReset = Duration.seconds(60)
 }
 
-actor Atlas<T: AtlasItem> {
-  typealias Cache = [T.ID: CLPlacemark]
+actor Atlas<T: Geocodable> {
+  typealias Cache = [T: CLPlacemark]
 
   private var cache: Cache = [:]
 
@@ -37,16 +35,16 @@ actor Atlas<T: AtlasItem> {
     reset()
   }
 
-  public func geocode(_ item: T) async throws -> CLPlacemark {
-    if let result = self[item] {
+  public func geocode(_ geocodable: T) async throws -> CLPlacemark {
+    if let result = self[geocodable] {
       return result
     }
-    let result = try await gatedGeocode(item)
-    self[item] = result
+    let result = try await gatedGeocode(geocodable)
+    self[geocodable] = result
     return result
   }
 
-  private func gatedGeocode<G: Geocodable>(_ geocodable: G) async throws -> CLPlacemark {
+  private func gatedGeocode(_ geocodable: T) async throws -> CLPlacemark {
     if ContinuousClock.now.duration(to: waitUntil) <= .seconds(0) {
       // wait time expired
       reset()
@@ -77,10 +75,10 @@ actor Atlas<T: AtlasItem> {
 
   subscript(index: T) -> CLPlacemark? {
     get {
-      cache[index.id]
+      cache[index]
     }
     set(newValue) {
-      cache[index.id] = newValue
+      cache[index] = newValue
     }
   }
 }
