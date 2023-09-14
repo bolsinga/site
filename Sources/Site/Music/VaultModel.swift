@@ -30,7 +30,7 @@ extension VaultError: LocalizedError {
 @MainActor public final class VaultModel: ObservableObject {
   let urlString: String
 
-  @Published var vault: Vault?
+  @Published public var vault: Vault?
   @Published var error: Error?
   @Published var todayConcerts: [Concert] = []
   @Published var venuePlacemarks: [Venue.ID: CLPlacemark] = [:]
@@ -41,7 +41,7 @@ extension VaultError: LocalizedError {
     self.error = error
   }
 
-  func load() async {
+  public func load() async {
     Logger.vaultModel.log("start")
     defer {
       Logger.vaultModel.log("end")
