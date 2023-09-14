@@ -9,7 +9,7 @@ import Contacts
 import CoreLocation
 import Foundation
 
-extension CNPostalAddress {
+extension CNPostalAddress: Geocodable {
   private enum GeocodeError: Error {
     case noPlacemark
   }
@@ -22,7 +22,7 @@ extension CNPostalAddress {
   }
 }
 
-extension Location {
+extension Location: Geocodable {
   public func geocode() async throws -> CLPlacemark {
     try await postalAddress.geocode()
   }
