@@ -11,7 +11,7 @@ import SwiftUI
 struct VenueDetail: View {
   let digest: VenueDigest
   let concertCompare: (Concert, Concert) -> Bool
-  let geocode: (Location) async throws -> CLPlacemark?
+  let geocode: (VenueDigest) async throws -> CLPlacemark?
 
   @State private var placemark: CLPlacemark? = nil
 
@@ -31,8 +31,8 @@ struct VenueDetail: View {
     ) {
       AddressView(location: digest.venue.location)
       LocationMap(placemark: $placemark)
-        .task(id: digest.venue.location) {
-          do { placemark = try await geocode(digest.venue.location) } catch {}
+        .task(id: digest) {
+          do { placemark = try await geocode(digest) } catch {}
         }
         .frame(minHeight: 300)
     }
