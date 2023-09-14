@@ -120,7 +120,7 @@ public struct Vault {
     guard let baseURL else {
       return nil
     }
-    guard category != .stats else {
+    guard category != .today, category != .stats else {
       return nil
     }
     var urlComponents = URLComponents(url: baseURL, resolvingAgainstBaseURL: false)
