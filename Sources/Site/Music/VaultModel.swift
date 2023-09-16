@@ -129,5 +129,6 @@ extension VaultError: LocalizedError {
       .filter {
         venuePlacemarks[$0.venue!.id]!.nearby(to: location, distanceThreshold: distanceThreshold)
       }
+      .sorted { vault.comparator.compare(lhs: $0, rhs: $1) }
   }
 }
