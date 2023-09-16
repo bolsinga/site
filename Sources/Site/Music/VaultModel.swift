@@ -30,6 +30,8 @@ extension VaultError: LocalizedError {
 @MainActor public final class VaultModel: ObservableObject {
   let urlString: String
 
+  private let currentLocation = CLLocation(latitude: 45.52274700, longitude: -122.68470530)
+
   @Published public var vault: Vault?
   @Published var error: Error?
   @Published var todayConcerts: [Concert] = []
@@ -107,5 +109,25 @@ extension VaultError: LocalizedError {
     } catch {
       Logger.vaultModel.log("batch geocode error: \(error, privacy: .public)")
     }
+  }
+
+  func nearbyConcerts() -> [Concert] {
+    concerts(nearby: currentLocation)
+  }
+
+  func concerts(nearby location: CLLocation, distanceThreshold: CLLocationDistance = 1600 * 10)
+    -> [Concert]
+  {
+    guard let vault else {
+      Logger.vaultModel.log("No Vault to calculate nearby Concerts.")
+      return []
+    }
+
+    return vault.concerts
+      .filter { $0.venue != nil }
+      .filter { venuePlacemarks[$0.venue!.id] != nil }
+      .filter {
+        venuePlacemarks[$0.venue!.id]!.nearby(to: location, distanceThreshold: distanceThreshold)
+      }
   }
 }
