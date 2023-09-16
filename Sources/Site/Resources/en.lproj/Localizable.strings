@@ -41,9 +41,9 @@ ArchiveCategory Artists */
 /* Title of the comment section of ShowDetail */
 "Comment" = "Comment";
 
-/* Label in the chart for the Count in MonthChart.
-Label in the chart for the Count in WeekdayChart.
-Label in the chart for the Count in StateChart. */
+/* Label in the chart for the Count in WeekdayChart.
+Label in the chart for the Count in StateChart.
+Label in the chart for the Count in MonthChart. */
 "Count" = "Count";
 
 /* Title of the date section of ShowDetail */
@@ -54,6 +54,9 @@ Label in the chart for the Count in StateChart. */
 
 /* String for when a Decade is unknown. */
 "Decade Unknown" = "Decade Unknown";
+
+/* ArchiveCategory.nearby shared title */
+"Display Nearby Shows" = "Display Nearby Shows";
 
 /* ArchiveCategory.today shared title */
 "Display Shows On This Date" = "Display Shows On This Date";
@@ -68,11 +71,26 @@ Venue First Set Caption */
 /* Title of the Location / Address Section for VenueDetail. */
 "Location" = "Location";
 
+/* Text shown when location services are restrictued by user. */
+"Location Disabled" = "Location Disabled";
+
+/* Text shown when location services are denied. */
+"Location Unavailable" = "Location Unavailable";
+
 /* Label in the chart for the Month in MonthChart. */
 "Month" = "Month";
 
 /* Months Stats */
 "Months" = "Months";
+
+/* ArchiveCategory Nearby */
+"Nearby" = "Nearby";
+
+/* Nearby Shows Title */
+"Nearby Shows" = "Nearby Shows";
+
+/* Text shown when there are no nearby concerts. */
+"No Shows Nearby" = "No Shows Nearby";
 
 /* Text shown when there are no shows today. */
 "No Shows On This Day" = "No Shows On This Day";
@@ -129,9 +147,9 @@ Venue First Set Caption */
 "Show Years" = "Show Years";
 
 /* Title of the Shows section of ArtistDetail
+ArchiveCategory Shows
 Title of the Shows section of YearDetail
-Title of the Shows section of VenueDetail
-ArchiveCategory Shows */
+Title of the Shows section of VenueDetail */
 "Shows" = "Shows";
 
 /* Venue shared string */
@@ -189,8 +207,8 @@ ArtistSort.showYearRange */
 /* VenueList searchPrompt */
 "Venue Names" = "Venue Names";
 
-/* ArchiveCategory Venues
-Title for the Venue Detail */
+/* Title for the Venue Detail
+ArchiveCategory Venues */
 "Venues" = "Venues";
 
 /* Label in the chart for the Weekday in WeekdayChart. */
