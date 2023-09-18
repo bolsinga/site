@@ -30,12 +30,17 @@ extension VaultError: LocalizedError {
 @MainActor public final class VaultModel: ObservableObject {
   let urlString: String
 
-  private let currentLocation = CLLocation(latitude: 45.52274700, longitude: -122.68470530)
-
   @Published public var vault: Vault?
   @Published var error: Error?
   @Published var todayConcerts: [Concert] = []
   @Published var venuePlacemarks: [Venue.ID: CLPlacemark] = [:]
+  @Published var currentLocation: CLLocation?
+
+  private let locationManager = LocationManager(
+    activityType: .other,
+    distanceFilter: 10,
+    desiredAccuracy: kCLLocationAccuracyHundredMeters,
+    access: .inUse)
 
   public init(urlString: String, vault: Vault? = nil, error: Error? = nil) {
     self.urlString = urlString
@@ -59,6 +64,9 @@ extension VaultError: LocalizedError {
       }
       Task {
         await geocodeVenues()
+      }
+      Task {
+        await monitorUserLocation()
       }
     } catch {
       Logger.vaultModel.log("error: \(error.localizedDescription, privacy: .public)")
@@ -111,8 +119,25 @@ extension VaultError: LocalizedError {
     }
   }
 
-  func nearbyConcerts() -> [Concert] {
-    concerts(nearby: currentLocation)
+  private func monitorUserLocation() async {
+    Logger.vaultModel.log("start location monitoring")
+    defer {
+      Logger.vaultModel.log("end location monitoring")
+    }
+    do {
+      let locationStream = try await locationManager.locationStream()
+      for try await location in locationStream {
+        Logger.vaultModel.log("location received")
+        currentLocation = location
+      }
+    } catch {
+      Logger.vaultModel.log("location error: \(error, privacy: .public)")
+    }
+  }
+
+  var nearbyConcerts: [Concert] {
+    guard let currentLocation else { return [] }
+    return concerts(nearby: currentLocation)
   }
 
   func concerts(nearby location: CLLocation, distanceThreshold: CLLocationDistance = 1600 * 10)
