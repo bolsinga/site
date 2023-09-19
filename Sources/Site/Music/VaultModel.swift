@@ -27,6 +27,12 @@ extension VaultError: LocalizedError {
   }
 }
 
+enum LocationAuthorization {
+  case allowed
+  case restricted  // Locations are not possible.
+  case denied  // Locations denied by user.
+}
+
 @MainActor public final class VaultModel: ObservableObject {
   let urlString: String
 
@@ -36,6 +42,7 @@ extension VaultError: LocalizedError {
   @Published var venuePlacemarks: [Venue.ID: CLPlacemark] = [:]
   @Published var geocodedVenuesCount = 0
   @Published var currentLocation: CLLocation?
+  @Published var locationAuthorization = LocationAuthorization.allowed
 
   private let locationManager = LocationManager(
     activityType: .other,
@@ -128,14 +135,23 @@ extension VaultError: LocalizedError {
     defer {
       Logger.vaultModel.log("end location monitoring")
     }
+
     do {
       let locationStream = try await locationManager.locationStream()
-      for try await location in locationStream {
-        Logger.vaultModel.log("location received")
-        currentLocation = location
+      do {
+        for try await location in locationStream {
+          Logger.vaultModel.log("location received")
+          currentLocation = location
+        }
+      } catch {
+        Logger.vaultModel.log("location stream error: \(error, privacy: .public)")
       }
+    } catch LocationAuthorizationError.denied {
+      Logger.vaultModel.log("location denied")
+      locationAuthorization = .denied
     } catch {
       Logger.vaultModel.log("location error: \(error, privacy: .public)")
+      locationAuthorization = .restricted
     }
   }
 
