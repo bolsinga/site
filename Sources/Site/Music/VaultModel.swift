@@ -34,6 +34,7 @@ extension VaultError: LocalizedError {
   @Published var error: Error?
   @Published var todayConcerts: [Concert] = []
   @Published var venuePlacemarks: [Venue.ID: CLPlacemark] = [:]
+  @Published var geocodedVenuesCount = 0
   @Published var currentLocation: CLLocation?
 
   private let locationManager = LocationManager(
@@ -115,6 +116,7 @@ extension VaultError: LocalizedError {
       {
         Logger.vaultModel.log("geocoded: \(digest.id, privacy: .public)")
         venuePlacemarks[digest.id] = placemark
+        geocodedVenuesCount = venuePlacemarks.count
       }
     } catch {
       Logger.vaultModel.log("batch geocode error: \(error, privacy: .public)")
