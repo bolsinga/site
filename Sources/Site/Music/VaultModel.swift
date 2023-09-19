@@ -90,7 +90,9 @@ extension VaultError: LocalizedError {
     defer {
       Logger.vaultModel.log("end day monitoring")
     }
-    for await _ in NotificationCenter.default.notifications(named: .NSCalendarDayChanged) {
+    for await _ in NotificationCenter.default.notifications(named: .NSCalendarDayChanged).map({
+      $0.name
+    }) {
       Logger.vaultModel.log("day changed")
       updateTodayConcerts()
     }

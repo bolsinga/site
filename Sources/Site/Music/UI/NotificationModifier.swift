@@ -30,7 +30,7 @@ struct NotificationModifier: ViewModifier {
       .task {
         Logger.notification.log("task: \(name.rawValue, privacy: .public)")
         mainDeferredAction()
-        for await _ in NotificationCenter.default.notifications(named: name) {
+        for await _ in NotificationCenter.default.notifications(named: name).map({ $0.name }) {
           Logger.notification.log("notified: \(name.rawValue, privacy: .public)")
           mainDeferredAction()
         }
