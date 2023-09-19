@@ -8,8 +8,8 @@
 import CoreLocation
 
 enum LocationAuthorizationError: Error {
-  case restricted
-  case denied
+  case restricted  // Locations are not possible.
+  case denied  // Locations denied by user.
 }
 
 extension CLAuthorizationStatus {
