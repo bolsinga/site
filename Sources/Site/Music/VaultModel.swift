@@ -39,7 +39,7 @@ enum LocationAuthorization {
   @Published public var vault: Vault?
   @Published var error: Error?
   @Published var todayConcerts: [Concert] = []
-  @Published var venuePlacemarks: [Venue.ID: CLPlacemark] = [:]
+  private var venuePlacemarks: [Venue.ID: CLPlacemark] = [:]
   @Published var geocodedVenuesCount = 0
   @Published var currentLocation: CLLocation?
   @Published var locationAuthorization = LocationAuthorization.allowed
