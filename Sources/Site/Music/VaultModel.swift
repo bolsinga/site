@@ -33,7 +33,7 @@ enum LocationAuthorization {
   case denied  // Locations denied by user.
 }
 
-@MainActor public final class VaultModel: ObservableObject {
+public final class VaultModel: ObservableObject {
   let urlString: String
 
   @Published public var vault: Vault?
@@ -56,6 +56,7 @@ enum LocationAuthorization {
     self.error = error
   }
 
+  @MainActor
   public func load() async {
     Logger.vaultModel.log("start")
     defer {
@@ -82,6 +83,7 @@ enum LocationAuthorization {
     }
   }
 
+  @MainActor
   private func updateTodayConcerts() {
     guard let vault else {
       Logger.vaultModel.log("No Vault to calculate todayConcerts.")
@@ -93,6 +95,7 @@ enum LocationAuthorization {
     Logger.vaultModel.log("Today Count: \(self.todayConcerts.count, privacy: .public)")
   }
 
+  @MainActor
   private func monitorDayChanges() async {
     Logger.vaultModel.log("start day monitoring")
     defer {
@@ -106,6 +109,7 @@ enum LocationAuthorization {
     }
   }
 
+  @MainActor
   private func geocodeVenues() async {
     guard let vault else {
       Logger.vaultModel.log("No Vault to geocode venues.")
@@ -130,6 +134,7 @@ enum LocationAuthorization {
     }
   }
 
+  @MainActor
   private func monitorUserLocation() async {
     Logger.vaultModel.log("start location monitoring")
     defer {
