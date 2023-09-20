@@ -41,8 +41,8 @@ ArchiveCategory Artists */
 /* Title of the comment section of ShowDetail */
 "Comment" = "Comment";
 
-/* Label in the chart for the Count in WeekdayChart.
-Label in the chart for the Count in MonthChart.
+/* Label in the chart for the Count in MonthChart.
+Label in the chart for the Count in WeekdayChart.
 Label in the chart for the Count in StateChart. */
 "Count" = "Count";
 
@@ -128,8 +128,8 @@ Venue First Set Caption */
 /* Title for the ShowYearList. */
 "Show Years" = "Show Years";
 
-/* Title of the Shows section of YearDetail
-Title of the Shows section of ArtistDetail
+/* Title of the Shows section of ArtistDetail
+Title of the Shows section of YearDetail
 Title of the Shows section of VenueDetail
 ArchiveCategory Shows */
 "Shows" = "Shows";
@@ -189,8 +189,8 @@ ArtistSort.showYearRange */
 /* VenueList searchPrompt */
 "Venue Names" = "Venue Names";
 
-/* Title for the Venue Detail
-ArchiveCategory Venues */
+/* ArchiveCategory Venues
+Title for the Venue Detail */
 "Venues" = "Venues";
 
 /* Label in the chart for the Weekday in WeekdayChart. */
@@ -199,7 +199,7 @@ ArchiveCategory Venues */
 /* Weekdays Stats */
 "Weekdays" = "Weekdays";
 
-/* String for when a Show.PartialDate is unknown, and only the year is being shown.
-String for when a Annum is unknown. */
+/* String for when a Annum is unknown.
+String for when a Show.PartialDate is unknown, and only the year is being shown. */
 "Year Unknown" = "Year Unknown";
 
