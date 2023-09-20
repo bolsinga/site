@@ -82,7 +82,7 @@ actor Atlas<T: Geocodable> {
           try await idleAndReset()
           retry = true
         } else {
-          Logger.atlas.log("error: \(error.localizedDescription, privacy: .public)")
+          Logger.atlas.error("error: \(error.localizedDescription, privacy: .public)")
           throw error
         }
       } catch {

@@ -59,17 +59,17 @@ extension NSUserActivity {
     Logger.decodeCategoryActivity.log("type: \(self.activityType, privacy: .public)")
 
     guard let userInfo = self.userInfo else {
-      Logger.decodeCategoryActivity.log("no userInfo")
+      Logger.decodeCategoryActivity.error("no userInfo")
       throw DecodeError.noUserInfo
     }
 
     guard let value = userInfo[NSUserActivity.archiveCategoryKey] else {
-      Logger.decodeCategoryActivity.log("no archiveCategoryKey")
+      Logger.decodeCategoryActivity.error("no archiveCategoryKey")
       throw DecodeError.noArchiveKey
     }
 
     guard let archiveCategoryString = value as? String else {
-      Logger.decodeCategoryActivity.log("archiveCategoryKey not String")
+      Logger.decodeCategoryActivity.error("archiveCategoryKey not String")
       throw DecodeError.archiveKeyIncorrectType
     }
 
