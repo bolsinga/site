@@ -77,7 +77,7 @@ enum LocationAuthorization {
         await monitorUserLocation()
       }
     } catch {
-      Logger.vaultModel.error("error: \(error.localizedDescription, privacy: .public)")
+      Logger.vaultModel.fault("error: \(error.localizedDescription, privacy: .public)")
       self.error = error
     }
   }
