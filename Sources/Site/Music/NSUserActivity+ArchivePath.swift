@@ -45,17 +45,17 @@ extension NSUserActivity {
     Logger.decodeActivity.log("type: \(self.activityType, privacy: .public)")
 
     guard let userInfo = self.userInfo else {
-      Logger.decodeActivity.log("no userInfo")
+      Logger.decodeActivity.error("no userInfo")
       throw DecodeError.noUserInfo
     }
 
     guard let value = userInfo[NSUserActivity.archivePathKey] else {
-      Logger.decodeActivity.log("no archivePathKey")
+      Logger.decodeActivity.error("no archivePathKey")
       throw DecodeError.noArchiveKey
     }
 
     guard let archiveString = value as? String else {
-      Logger.decodeActivity.log("archivePathKey not String")
+      Logger.decodeActivity.error("archivePathKey not String")
       throw DecodeError.archiveKeyIncorrectType
     }
 

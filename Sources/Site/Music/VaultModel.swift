@@ -77,7 +77,7 @@ enum LocationAuthorization {
         await monitorUserLocation()
       }
     } catch {
-      Logger.vaultModel.log("error: \(error.localizedDescription, privacy: .public)")
+      Logger.vaultModel.fault("error: \(error.localizedDescription, privacy: .public)")
       self.error = error
     }
   }
@@ -126,7 +126,7 @@ enum LocationAuthorization {
         geocodedVenuesCount = venuePlacemarks.count
       }
     } catch {
-      Logger.vaultModel.log("batch geocode error: \(error, privacy: .public)")
+      Logger.vaultModel.error("batch geocode error: \(error, privacy: .public)")
     }
   }
 
@@ -144,13 +144,13 @@ enum LocationAuthorization {
           currentLocation = location
         }
       } catch {
-        Logger.vaultModel.log("location stream error: \(error, privacy: .public)")
+        Logger.vaultModel.error("location stream error: \(error, privacy: .public)")
       }
     } catch LocationAuthorizationError.denied {
-      Logger.vaultModel.log("location denied")
+      Logger.vaultModel.error("location denied")
       locationAuthorization = .denied
     } catch {
-      Logger.vaultModel.log("location error: \(error, privacy: .public)")
+      Logger.vaultModel.error("location error: \(error, privacy: .public)")
       locationAuthorization = .restricted
     }
   }
