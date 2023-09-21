@@ -8,7 +8,7 @@
 import CoreLocation
 import Foundation
 
-extension Venue: Geocodable {
+extension Venue: AtlasGeocodable {
   func geocode() async throws -> CLPlacemark {
     try await location.geocode()
   }

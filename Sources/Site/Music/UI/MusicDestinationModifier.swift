@@ -21,7 +21,7 @@ struct MusicDestinationModifier: ViewModifier {
         case .venue(let iD):
           if let venueDigest = vault.venueDigestMap[iD] {
             VenueDetail(digest: venueDigest, concertCompare: vault.comparator.compare(lhs:rhs:)) {
-              try await vault.atlas.geocode($0)
+              try await vault.atlas.geocode($0.venue)
             }
           }
         case .artist(let iD):

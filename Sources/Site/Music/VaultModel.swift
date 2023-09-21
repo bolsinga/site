@@ -122,11 +122,11 @@ public final class VaultModel: ObservableObject {
     }
 
     do {
-      for try await (digest, placemark) in BatchGeocode(
-        atlas: vault.atlas, geocodables: vault.venueDigests)
+      for try await (venue, placemark) in BatchGeocode(
+        atlas: vault.atlas, geocodables: vault.venueDigests.map { $0.venue })
       {
-        Logger.vaultModel.log("geocoded: \(digest.id, privacy: .public)")
-        venuePlacemarks[digest.id] = placemark
+        Logger.vaultModel.log("geocoded: \(venue.id, privacy: .public)")
+        venuePlacemarks[venue.id] = placemark
         geocodedVenuesCount = venuePlacemarks.count
       }
     } catch {

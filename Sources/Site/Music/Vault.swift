@@ -22,7 +22,7 @@ extension URL {
 public struct Vault {
   internal let comparator: LibraryComparator
   internal let sectioner: LibrarySectioner
-  internal let atlas: Atlas<VenueDigest>
+  internal let atlas: Atlas<Venue>
   internal let baseURL: URL?
   public let concerts: [Concert]
   public let concertMap: [Concert.ID: Concert]
@@ -40,7 +40,7 @@ public struct Vault {
     let lookup = Lookup(music: music)
     let comparator = LibraryComparator()
     let baseURL = url?.baseURL
-    let atlas = Atlas<VenueDigest>()
+    let atlas = Atlas<Venue>()
 
     let concerts = music.shows.concerts(
       baseURL: baseURL, lookup: lookup, comparator: comparator.compare(lhs:rhs:))
@@ -59,7 +59,7 @@ public struct Vault {
   }
 
   internal init(
-    comparator: LibraryComparator, sectioner: LibrarySectioner, atlas: Atlas<VenueDigest>,
+    comparator: LibraryComparator, sectioner: LibrarySectioner, atlas: Atlas<Venue>,
     baseURL: URL?, concerts: [Concert], artistDigests: [ArtistDigest], venueDigests: [VenueDigest],
     decadesMap: [Decade: [Annum: [Show.ID]]]
   ) {
@@ -82,7 +82,7 @@ public struct Vault {
 
   public static func create(music: Music, url: URL) async -> Vault {
     async let asyncBaseURL = url.baseURL
-    async let asyncAtlas = Atlas<VenueDigest>()
+    async let asyncAtlas = Atlas<Venue>()
     async let asyncLookup = await Lookup.create(music: music)
     async let asyncComparator = await LibraryComparator.create(music: music)
     async let sectioner = await LibrarySectioner.create(music: music)
