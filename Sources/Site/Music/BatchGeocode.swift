@@ -8,7 +8,7 @@
 import CoreLocation
 import Foundation
 
-struct BatchGeocode<T: Geocodable>: AsyncSequence {
+struct BatchGeocode<T: AtlasGeocodable>: AsyncSequence {
   typealias Element = (T, CLPlacemark)
 
   let atlas: Atlas<T>

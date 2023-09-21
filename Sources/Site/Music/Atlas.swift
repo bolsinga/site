@@ -13,16 +13,18 @@ extension Logger {
   static let atlas = Logger(category: "atlas")
 }
 
-protocol Geocodable: Hashable {
+protocol Geocodable {
   func geocode() async throws -> CLPlacemark
 }
+
+protocol AtlasGeocodable: Geocodable, Codable, Equatable, Hashable {}
 
 private enum Constants {
   static let maxRequests = 50
   static let timeUntilReset = Duration.seconds(60)
 }
 
-actor Atlas<T: Geocodable> {
+actor Atlas<T: AtlasGeocodable> {
   typealias Cache = [T: CLPlacemark]
 
   private var cache: Cache = [:]
