@@ -24,10 +24,15 @@ private enum Constants {
   static let timeUntilReset = Duration.seconds(60)
 }
 
-actor Atlas<T: AtlasGeocodable> {
-  typealias Cache = [T: CLPlacemark]
+private let ExpirationStaggerDuration = 60.0 * 60.0 * 6.0  // Quarter day
+private var ExpirationStagger = 0.0
 
-  private var cache: Cache = [:]
+actor Atlas<T: AtlasGeocodable> {
+  private var cache = AtlasCache<T> {
+    let result = ExpirationStagger
+    ExpirationStagger += ExpirationStaggerDuration
+    return result
+  }
 
   private var count = 0
   private var waitUntil: ContinuousClock.Instant = .now + Constants.timeUntilReset
