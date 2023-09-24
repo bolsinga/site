@@ -13,8 +13,7 @@ extension Logger {
   static let atlasCache = Logger(category: "atlasCache")
 }
 
-//private let expirationOffset = 60.0 * 60.0 * 24.0 * 30.0 * 6.0  // Six months
-private let expirationOffset = 60.0 * 60.0 * 1.0  // One hour
+private let expirationOffset = 60.0 * 60.0 * 24.0 * 30.0 * 6.0  // Six months
 
 struct AtlasCache<T: AtlasGeocodable> {
   struct Value: Codable {
