@@ -9,6 +9,7 @@ import SwiftUI
 
 public enum ArchiveCategory: String, CaseIterable {
   case today
+  case nearby
   case stats
   case shows
   case venues
@@ -18,6 +19,8 @@ public enum ArchiveCategory: String, CaseIterable {
     switch self {
     case .today:
       return String(localized: "Today", bundle: .module, comment: "ArchiveCategory Today")
+    case .nearby:
+      return String(localized: "Nearby", bundle: .module, comment: "ArchiveCategory Nearby")
     case .stats:
       return String(localized: "Stats", bundle: .module, comment: "ArchiveCategory Stats")
     case .shows:
@@ -33,6 +36,8 @@ public enum ArchiveCategory: String, CaseIterable {
     switch self {
     case .today:
       Label(self.localizedString, systemImage: "calendar.circle")
+    case .nearby:
+      Label(self.localizedString, systemImage: "location.circle")
     case .stats:
       Label(self.localizedString, systemImage: "chart.bar")
     case .shows:
@@ -50,6 +55,10 @@ public enum ArchiveCategory: String, CaseIterable {
       return String(
         localized: "Display Shows On This Date", bundle: .module,
         comment: "ArchiveCategory.today shared title")
+    case .nearby:
+      return String(
+        localized: "Display Nearby Shows", bundle: .module,
+        comment: "ArchiveCategory.nearby shared title")
     case .stats:
       return String(
         localized: "Show Statistics",

@@ -21,6 +21,27 @@ struct ArchiveCategorySplit: View {
 
   @StateObject private var archiveNavigation = ArchiveNavigation()
 
+  private var geocodingProgress: Double {
+    Double(model.geocodedVenuesCount) / Double(vault.venueDigests.count)
+  }
+
+  @ViewBuilder private var nearbyLabel: some View {
+    switch model.locationAuthorization {
+    case .allowed:
+      NearbyLabel(
+        nearbyConcertCount: .constant(model.nearbyConcerts.count),
+        geocodingProgress: .constant(geocodingProgress))
+    case .restricted:
+      Text(
+        "Location Disabled", bundle: .module,
+        comment: "Text shown when location services are restrictued by user.")
+    case .denied:
+      Text(
+        "Location Unavailable", bundle: .module,
+        comment: "Text shown when location services are denied.")
+    }
+  }
+
   @ViewBuilder var sidebar: some View {
     List(ArchiveCategory.allCases, id: \.self, selection: $archiveNavigation.selectedCategory) {
       category in
@@ -29,6 +50,8 @@ struct ArchiveCategorySplit: View {
         case .today:
           Text(model.todayConcerts.count.formatted(.number))
             .animation(.easeInOut)
+        case .nearby:
+          nearbyLabel
         case .stats:
           EmptyView()
         case .shows:
@@ -53,8 +76,10 @@ struct ArchiveCategorySplit: View {
       NavigationStack(path: $archiveNavigation.navigationPath) {
         ArchiveCategoryDetail(
           vault: vault, category: archiveNavigation.selectedCategory,
-          todayConcerts: $model.todayConcerts, venueSort: $venueSort, artistSort: $artistSort,
-          isCategoryActive: .constant(archiveNavigation.navigationPath.isEmpty))
+          todayConcerts: $model.todayConcerts, nearbyConcerts: .constant(model.nearbyConcerts),
+          venueSort: $venueSort, artistSort: $artistSort,
+          isCategoryActive: .constant(archiveNavigation.navigationPath.isEmpty),
+          geocodingProgress: .constant(geocodingProgress))
       }
     }
     .archiveStorage(archiveNavigation: archiveNavigation)
