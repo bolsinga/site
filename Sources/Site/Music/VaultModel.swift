@@ -6,7 +6,7 @@
 //
 
 import Combine
-import CoreLocation
+@preconcurrency import CoreLocation
 import Foundation
 import os
 
