@@ -19,7 +19,7 @@ extension URL {
   }
 }
 
-public struct Vault {
+public struct Vault: Sendable {
   internal let comparator: LibraryComparator
   internal let sectioner: LibrarySectioner
   internal let atlas: Atlas<Venue>
