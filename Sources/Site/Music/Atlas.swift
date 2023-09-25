@@ -17,7 +17,7 @@ protocol Geocodable {
   func geocode() async throws -> CLPlacemark
 }
 
-protocol AtlasGeocodable: Geocodable, Codable, Equatable, Hashable {}
+protocol AtlasGeocodable: Geocodable, Codable, Equatable, Hashable, Sendable {}
 
 private enum Constants {
   static let maxRequests = 50
