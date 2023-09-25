@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum Rank {
+public enum Rank: Sendable {
   case rank(Int)  // 1..n The Rank.
   case unknown  // Rank is somehow unknown.
 }

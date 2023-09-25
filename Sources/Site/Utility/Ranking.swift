@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Ranking: Comparable, Hashable {
+struct Ranking: Comparable, Hashable, Sendable {
   let rank: Rank
   let value: Int
 
