@@ -17,6 +17,7 @@ struct ArchiveCategoryDetail: View {
   @Binding var isCategoryActive: Bool
   @Binding var geocodingProgress: Double
 
+  @MainActor
   @ViewBuilder private var stackElement: some View {
     if let category {
       let url = vault.createURL(forCategory: category)
