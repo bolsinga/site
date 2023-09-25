@@ -14,6 +14,7 @@ extension Logger {
 }
 
 private let expirationOffset = 60.0 * 60.0 * 24.0 * 30.0 * 6.0  // Six months
+private let ExpirationStaggerDuration = 60.0 * 60.0 * 6.0  // Quarter day
 
 struct AtlasCache<T: AtlasGeocodable> {
   struct Value: Codable {
@@ -23,13 +24,12 @@ struct AtlasCache<T: AtlasGeocodable> {
   }
 
   let fileName: String
-  let stagger: (() -> TimeInterval)  // This allows batch geocodes to be "staggered" in their expiration so they do not run all the time once the day comes.
 
+  private var staggerOffset = 0.0
   var cache: [T: Value] = [:]
 
-  internal init(fileName: String = "atlas.json", stagger: @escaping (() -> TimeInterval)) {
+  internal init(fileName: String = "atlas.json") {
     self.fileName = fileName
-    self.stagger = stagger
 
     do {
       let diskCache = try [T: Value].read(fileName: fileName)
@@ -54,7 +54,10 @@ struct AtlasCache<T: AtlasGeocodable> {
       if let newValue {
         cache[index] = Value(
           placemark: newValue,
-          expirationDate: .now + expirationOffset + stagger())
+          expirationDate: .now + expirationOffset + staggerOffset)
+
+        // This allows batch geocodes to be "staggered" in their expiration so they do not run all the time once the day comes.
+        staggerOffset += ExpirationStaggerDuration
       } else {
         cache[index] = nil
       }
