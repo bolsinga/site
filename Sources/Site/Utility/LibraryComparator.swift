@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct LibraryComparator : Sendable {
+public struct LibraryComparator: Sendable {
 
   private let tokenMap: [String: String]
 
