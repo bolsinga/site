@@ -29,7 +29,7 @@ extension CLAuthorizationStatus {
   }
 }
 
-struct LocationManager {
+actor LocationManager {
   enum Access {
     case inUse
     case always
@@ -76,8 +76,8 @@ struct LocationManager {
 
     return LocationStream { continuation in
       continuation.onTermination = { _ in
-        manager.stopUpdatingLocation()
-        delegate.locationStreamContinuation = nil
+        self.manager.stopUpdatingLocation()
+        self.delegate.locationStreamContinuation = nil
       }
 
       delegate.locationStreamContinuation = continuation
