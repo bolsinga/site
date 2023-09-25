@@ -16,7 +16,7 @@ private func createLookup<T: Identifiable>(_ sequence: [T]) -> [T.ID: T] {
   sequence.reduce(into: [:]) { $0[$1.id] = $1 }
 }
 
-public struct Lookup {
+public struct Lookup: Sendable {
   let artistMap: [Artist.ID: Artist]
   let venueMap: [Venue.ID: Venue]
   private let artistRankingMap: [Artist.ID: Ranking]
