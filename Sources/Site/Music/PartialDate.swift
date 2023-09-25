@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct PartialDate: Codable, Equatable, Hashable {
+public struct PartialDate: Codable, Equatable, Hashable, Sendable {
   public let year: Int?
   public let month: Int?
   public let day: Int?

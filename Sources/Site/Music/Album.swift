@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Album: Codable, Equatable, Identifiable {
+public struct Album: Codable, Equatable, Identifiable, Sendable {
   public let id: String
   public let performer: String?
   public let release: PartialDate?

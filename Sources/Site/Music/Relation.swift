@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Relation: Codable, Identifiable {
+public struct Relation: Codable, Identifiable, Sendable {
   public let id: String
   public let members: [String]
   public let reason: String?

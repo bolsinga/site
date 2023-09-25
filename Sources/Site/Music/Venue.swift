@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Venue: Codable, Equatable, Hashable, Identifiable {
+public struct Venue: Codable, Equatable, Hashable, Identifiable, Sendable {
   public let id: String
   public let location: Location
   public let name: String
