@@ -5,7 +5,7 @@
 //  Created by Greg Bolsinga on 9/17/23.
 //
 
-import CoreLocation
+@preconcurrency import CoreLocation
 
 enum LocationAuthorizationError: Error {
   case restricted  // Locations are not possible.
