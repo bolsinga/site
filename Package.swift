@@ -19,9 +19,7 @@ let package = Package(
     .package(url: "https://github.com/apple/swift-argument-parser", from: "1.2.3")
   ],
   targets: [
-    .target(
-      name: "Site",
-      swiftSettings: [.enableExperimentalFeature("StrictConcurrency")]),
+    .target(name: "Site"),
     .testTarget(name: "SiteTests", dependencies: ["Site"]),
     .executableTarget(
       name: "site_tool",
