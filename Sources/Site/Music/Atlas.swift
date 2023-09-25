@@ -24,15 +24,8 @@ private enum Constants {
   static let timeUntilReset = Duration.seconds(60)
 }
 
-private let ExpirationStaggerDuration = 60.0 * 60.0 * 6.0  // Quarter day
-private var ExpirationStagger = 0.0
-
 actor Atlas<T: AtlasGeocodable> {
-  private var cache = AtlasCache<T> {
-    let result = ExpirationStagger
-    ExpirationStagger += ExpirationStaggerDuration
-    return result
-  }
+  private var cache = AtlasCache<T>()
 
   private var count = 0
   private var waitUntil: ContinuousClock.Instant = .now + Constants.timeUntilReset
