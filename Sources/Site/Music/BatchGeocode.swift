@@ -5,7 +5,7 @@
 //  Created by Greg Bolsinga on 5/3/23.
 //
 
-import CoreLocation
+@preconcurrency import CoreLocation
 import Foundation
 
 struct BatchGeocode<T: AtlasGeocodable>: AsyncSequence {

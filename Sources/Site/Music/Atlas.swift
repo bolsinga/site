@@ -5,7 +5,7 @@
 //  Created by Greg Bolsinga on 5/1/23.
 //
 
-import CoreLocation
+@preconcurrency import CoreLocation
 import Foundation
 import os
 

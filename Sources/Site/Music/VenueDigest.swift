@@ -5,7 +5,6 @@
 //  Created by Greg Bolsinga on 8/30/23.
 //
 
-import CoreLocation
 import Foundation
 
 public struct VenueDigest: Equatable, Hashable, Identifiable {

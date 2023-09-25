@@ -5,7 +5,6 @@
 //  Created by Greg Bolsinga on 5/31/23.
 //
 
-import CoreLocation
 import MapKit
 
 protocol Locatable: Identifiable {
