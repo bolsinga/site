@@ -47,9 +47,9 @@ struct Program: AsyncParsableCommand {
 
     try jsonDirectoryURL?.appending(path: "diary.json").writeJSON(diary)
 
-    let model = await VaultModel(urlString: rootURL.appending(path: "music.json").absoluteString)
+    let model = VaultModel(urlString: rootURL.appending(path: "music.json").absoluteString)
     await model.load()
-    guard let vault = await model.vault else { throw ProgramError.noVault }
+    guard let vault = model.vault else { throw ProgramError.noVault }
 
     let concerts = vault.concerts
     let artistDigests = vault.artistDigests
