@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct VenueDigest: Equatable, Hashable, Identifiable {
+public struct VenueDigest: Equatable, Hashable, Identifiable, Sendable {
   public var id: Venue.ID { venue.id }
 
   public let venue: Venue
