@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Song: Codable, Identifiable {
+public struct Song: Codable, Identifiable, Sendable {
   public let artist: String
   public let digitized: Bool
   public let genre: String?

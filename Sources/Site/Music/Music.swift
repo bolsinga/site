@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Music: Codable {
+public struct Music: Codable, Sendable {
   public let albums: [Album]
   public let artists: [Artist]
   public let relations: [Relation]
