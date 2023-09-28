@@ -19,9 +19,9 @@ struct NotificationModifier: ViewModifier {
   private func mainDeferredAction() {
     // This Task / @MainActor seems to accomplish a similar DispatchQueue.main.async feel.
     // Still not clear to me why this is necessary in SwiftUI.
-    Task { @MainActor in
+    Task {
       Logger.notification.log("main action: \(name.rawValue, privacy: .public)")
-      action()
+      await action()
     }
   }
 
