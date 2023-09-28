@@ -14,7 +14,7 @@ extension Logger {
 
 struct NotificationModifier: ViewModifier {
   let name: Notification.Name
-  let action: @Sendable () -> Void
+  let action: @MainActor @Sendable () -> Void
 
   private func mainDeferredAction() {
     // This Task / @MainActor seems to accomplish a similar DispatchQueue.main.async feel.
@@ -41,7 +41,7 @@ struct NotificationModifier: ViewModifier {
 extension View {
   func onNotification(
     name: Notification.Name,
-    action: @Sendable @escaping () -> Void
+    action: @MainActor @Sendable @escaping () -> Void
   ) -> some View {
     modifier(NotificationModifier(name: name, action: action))
   }
