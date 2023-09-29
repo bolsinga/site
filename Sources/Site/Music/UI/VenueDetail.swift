@@ -5,7 +5,7 @@
 //  Created by Greg Bolsinga on 2/16/23.
 //
 
-import CoreLocation
+@preconcurrency import CoreLocation
 import SwiftUI
 
 struct VenueDetail: View {
@@ -23,6 +23,7 @@ struct VenueDetail: View {
     }
   }
 
+  @MainActor
   @ViewBuilder private var locationElement: some View {
     Section(
       header: Text(
