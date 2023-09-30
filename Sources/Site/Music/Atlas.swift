@@ -43,13 +43,13 @@ actor Atlas<T: AtlasGeocodable> {
   }
 
   public func geocode(_ geocodable: T) async throws -> CLPlacemark {
-    if let result = self[geocodable] {
+    if let result = cache[geocodable] {
       Logger.atlas.log("cached result")
       return result
     }
 
     let result = try await gatedGeocode(geocodable)
-    self[geocodable] = result
+    cache[geocodable] = result
     return result
   }
 
@@ -89,14 +89,5 @@ actor Atlas<T: AtlasGeocodable> {
         throw error
       }
     } while retry
-  }
-
-  subscript(index: T) -> CLPlacemark? {
-    get {
-      cache[index]
-    }
-    set(newValue) {
-      cache[index] = newValue
-    }
   }
 }
