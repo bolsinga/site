@@ -5,7 +5,7 @@
 //  Created by Greg Bolsinga on 9/17/23.
 //
 
-@preconcurrency import CoreLocation
+import CoreLocation
 
 enum LocationAuthorizationError: Error {
   case restricted  // Locations are not possible.
@@ -76,13 +76,17 @@ actor LocationManager {
 
     return LocationStream { continuation in
       continuation.onTermination = { _ in
-        self.manager.stopUpdatingLocation()
-        self.delegate.locationStreamContinuation = nil
+        Task { await self.terminate() }
       }
 
       delegate.locationStreamContinuation = continuation
       manager.startUpdatingLocation()
     }
+  }
+
+  private func terminate() {
+    delegate.locationStreamContinuation = nil
+    manager.stopUpdatingLocation()
   }
 
   private class Delegate: NSObject, CLLocationManagerDelegate {
