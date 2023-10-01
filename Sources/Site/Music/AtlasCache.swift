@@ -16,7 +16,7 @@ extension Logger {
 private let expirationOffset = 60.0 * 60.0 * 24.0 * 30.0 * 6.0  // Six months
 private let ExpirationStaggerDuration = 60.0 * 60.0 * 6.0  // Quarter day
 
-struct AtlasCache<T: AtlasGeocodable> {
+actor AtlasCache<T: AtlasGeocodable> {
   struct Value: Codable {
     @NSCodingCodable
     var placemark: CLPlacemark
@@ -46,7 +46,11 @@ struct AtlasCache<T: AtlasGeocodable> {
     }
   }
 
-  subscript(index: T) -> CLPlacemark? {
+  func get(_ item: T) -> CLPlacemark? { self[item] }
+
+  func add(_ item: T, value: CLPlacemark) { self[item] = value }
+
+  private subscript(index: T) -> CLPlacemark? {
     get {
       cache[index]?.placemark
     }
