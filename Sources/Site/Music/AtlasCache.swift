@@ -23,10 +23,10 @@ actor AtlasCache<T: AtlasGeocodable> {
     let expirationDate: Date
   }
 
-  let fileName: String
+  private let fileName: String
 
   private var staggerOffset = 0.0
-  var cache: [T: Value] = [:]
+  private var cache: [T: Value] = [:]
 
   internal init(fileName: String = "atlas.json") {
     self.fileName = fileName
