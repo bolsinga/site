@@ -6,6 +6,11 @@
 //
 
 import CoreLocation
+import os
+
+extension Logger {
+  static let location = Logger(category: "location")
+}
 
 enum LocationAuthorizationError: Error {
   case restricted  // Locations are not possible.
@@ -30,7 +35,7 @@ extension CLAuthorizationStatus {
 }
 
 actor LocationManager {
-  enum Access {
+  enum Access: String {
     case inUse
     case always
   }
@@ -56,7 +61,12 @@ actor LocationManager {
   }
 
   private func requestAuthorization() async -> CLAuthorizationStatus {
+    Logger.location.log("start authorization - access: \(self.access.rawValue, privacy: .public)")
+    defer {
+      Logger.location.log("end authorization")
+    }
     guard manager.authorizationStatus == .notDetermined else {
+      Logger.location.log("authorization known")
       return manager.authorizationStatus
     }
 
@@ -73,6 +83,8 @@ actor LocationManager {
 
   func locationStream() async throws -> LocationStream {
     try await requestAuthorization().isStreamable()
+
+    Logger.location.log("locationStream")
 
     return LocationStream { continuation in
       continuation.onTermination = { _ in
@@ -96,16 +108,20 @@ actor LocationManager {
     var locationStreamContinuation: LocationStream.Continuation?
 
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+      Logger.location.log("delegate authorization")
       authorizationStreamContinuation?.resume(returning: manager.authorizationStatus)
       authorizationStreamContinuation = nil
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+      Logger.location.log("delegate error: \(error, privacy: .public)")
       locationStreamContinuation?.finish(throwing: error)
       locationStreamContinuation = nil
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+      Logger.location.log("delegate locations: \(locations.count, privacy: .public)")
+
       guard let continuation = locationStreamContinuation else { return }
 
       locations.forEach {
