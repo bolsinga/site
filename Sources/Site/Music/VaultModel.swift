@@ -144,12 +144,16 @@ public final class VaultModel: ObservableObject {
     do {
       let locationStream = try await locationManager.locationStream()
       do {
+        Logger.vaultModel.log("start locationstream")
+        defer {
+          Logger.vaultModel.log("end locationstream")
+        }
         for try await location in locationStream {
           Logger.vaultModel.log("location received")
           currentLocation = location
         }
       } catch {
-        Logger.vaultModel.error("location stream error: \(error, privacy: .public)")
+        Logger.vaultModel.error("locationstream error: \(error, privacy: .public)")
       }
     } catch LocationAuthorizationError.denied {
       Logger.vaultModel.error("location denied")
