@@ -5,6 +5,7 @@
 //  Created by Greg Bolsinga on 4/6/23.
 //
 
+@preconcurrency import CoreLocation
 import SwiftUI
 
 struct MusicDestinationModifier: ViewModifier {
