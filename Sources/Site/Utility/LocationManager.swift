@@ -114,6 +114,13 @@ actor LocationManager {
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+      guard let nsError = error as NSError?, nsError.domain == kCLErrorDomain,
+        nsError.code != 0 /* kCLErrorLocationUnknown */
+      else {
+        Logger.location.log("ignore unknown location error: \(error, privacy: .public)")
+        return
+      }
+
       Logger.location.log("delegate error: \(error, privacy: .public)")
       locationStreamContinuation?.finish(throwing: error)
       locationStreamContinuation = nil
