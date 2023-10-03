@@ -83,6 +83,9 @@ First Set Caption */
 /* Months Stats */
 "Months" = "Months";
 
+/* Label for changing the nearby concerts distance threshold. */
+"Nearby Distance" = "Nearby Distance";
+
 /* Text shown when there are no shows today. */
 "No Shows On This Day" = "No Shows On This Day";
 
@@ -137,10 +140,10 @@ First Set Caption */
 /* Title for the ShowYearList. */
 "Show Years" = "Show Years";
 
-/* ArchiveCategory Shows
-Title of the Shows section of VenueDetail
+/* Title of the Shows section of VenueDetail
+Title of the Shows section of YearDetail
 Title of the Shows section of ArtistDetail
-Title of the Shows section of YearDetail */
+ArchiveCategory Shows */
 "Shows" = "Shows";
 
 /* Venue shared string */
@@ -161,26 +164,26 @@ Title of the Shows section of YearDetail */
 /* Shown to change the sort order of the LibraryComparableList. */
 "Sort" = "Sort";
 
-/* VenueSort.alphabetical
-ArtistSort.alphabetical */
+/* ArtistSort.alphabetical
+VenueSort.alphabetical */
 "Sort Alphabetically" = "Sort Alphabetically";
 
 /* VenueSort.venueArtistRank */
 "Sort By Artist Count" = "Sort By Artist Count";
 
-/* VenueSort.firstSeen
-ArtistSort.firstSeen */
+/* ArtistSort.firstSeen
+VenueSort.firstSeen */
 "Sort By First Show" = "Sort By First Show";
 
-/* VenueSort.showCount
-ArtistSort.showCount */
+/* ArtistSort.showCount
+VenueSort.showCount */
 "Sort By Show Count" = "Sort By Show Count";
 
 /* ArtistSort.artistVenueRank */
 "Sort By Venue Count" = "Sort By Venue Count";
 
-/* VenueSort.showYearRange
-ArtistSort.showYearRange */
+/* ArtistSort.showYearRange
+VenueSort.showYearRange */
 "Sort By Year Range" = "Sort By Year Range";
 
 /* Label in the chart for the State in StateChart. */
@@ -198,8 +201,8 @@ ArtistSort.showYearRange */
 /* VenueList searchPrompt */
 "Venue Names" = "Venue Names";
 
-/* ArchiveCategory Venues
-Title for the Venue Detail */
+/* Title for the Venue Detail
+ArchiveCategory Venues */
 "Venues" = "Venues";
 
 /* Label in the chart for the Weekday in WeekdayChart. */
