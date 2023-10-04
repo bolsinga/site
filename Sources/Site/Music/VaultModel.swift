@@ -164,14 +164,12 @@ public final class VaultModel: ObservableObject {
     }
   }
 
-  var nearbyConcerts: [Concert] {
+  func concertsNearby(_ distanceThreshold: CLLocationDistance) -> [Concert] {
     guard let currentLocation else { return [] }
-    return concerts(nearby: currentLocation)
+    return concerts(nearby: currentLocation, distanceThreshold: distanceThreshold)
   }
 
-  func concerts(nearby location: CLLocation, distanceThreshold: CLLocationDistance = 1600 * 10)
-    -> [Concert]
-  {
+  func concerts(nearby location: CLLocation, distanceThreshold: CLLocationDistance) -> [Concert] {
     guard let vault else {
       Logger.vaultModel.log("No Vault to calculate nearby Concerts.")
       return []

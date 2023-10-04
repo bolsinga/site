@@ -5,6 +5,7 @@
 //  Created by Greg Bolsinga on 5/21/23.
 //
 
+import CoreLocation
 import SwiftUI
 import os
 
@@ -18,6 +19,8 @@ struct ArchiveCategorySplit: View {
 
   @SceneStorage("venue.sort") private var venueSort = VenueSort.alphabetical
   @SceneStorage("artist.sort") private var artistSort = ArtistSort.alphabetical
+  @SceneStorage("nearby.distance") private var nearbyDistanceThreshold: CLLocationDistance =
+    16093.44  // 10 miles
 
   @StateObject private var archiveNavigation = ArchiveNavigation()
 
@@ -29,7 +32,7 @@ struct ArchiveCategorySplit: View {
     switch model.locationAuthorization {
     case .allowed:
       NearbyLabel(
-        nearbyConcertCount: .constant(model.nearbyConcerts.count),
+        nearbyConcertCount: .constant(model.concertsNearby(nearbyDistanceThreshold).count),
         geocodingProgress: .constant(geocodingProgress))
     case .restricted:
       Text(
@@ -76,7 +79,8 @@ struct ArchiveCategorySplit: View {
       NavigationStack(path: $archiveNavigation.navigationPath) {
         ArchiveCategoryDetail(
           vault: vault, category: archiveNavigation.selectedCategory,
-          todayConcerts: $model.todayConcerts, nearbyConcerts: .constant(model.nearbyConcerts),
+          todayConcerts: $model.todayConcerts,
+          nearbyConcerts: .constant(model.concertsNearby(nearbyDistanceThreshold)),
           venueSort: $venueSort, artistSort: $artistSort,
           isCategoryActive: .constant(archiveNavigation.navigationPath.isEmpty),
           geocodingProgress: .constant(geocodingProgress))
