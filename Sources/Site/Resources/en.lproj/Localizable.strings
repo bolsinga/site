@@ -41,9 +41,9 @@ ArchiveCategory Artists */
 /* Title of the comment section of ShowDetail */
 "Comment" = "Comment";
 
-/* Label in the chart for the Count in WeekdayChart.
-Label in the chart for the Count in StateChart.
-Label in the chart for the Count in MonthChart. */
+/* Label in the chart for the Count in MonthChart.
+Label in the chart for the Count in WeekdayChart.
+Label in the chart for the Count in StateChart. */
 "Count" = "Count";
 
 /* Title of the date section of ShowDetail */
@@ -60,6 +60,9 @@ Label in the chart for the Count in MonthChart. */
 
 /* ArchiveCategory.today shared title */
 "Display Shows On This Date" = "Display Shows On This Date";
+
+/* Label for nearby filtering */
+"Filter Nearby" = "Filter Nearby";
 
 /* First Set Caption
 Venue First Set Caption */
@@ -148,8 +151,8 @@ Venue First Set Caption */
 
 /* Title of the Shows section of ArtistDetail
 ArchiveCategory Shows
-Title of the Shows section of YearDetail
-Title of the Shows section of VenueDetail */
+Title of the Shows section of VenueDetail
+Title of the Shows section of YearDetail */
 "Shows" = "Shows";
 
 /* Venue shared string */
@@ -217,7 +220,7 @@ ArchiveCategory Venues */
 /* Weekdays Stats */
 "Weekdays" = "Weekdays";
 
-/* String for when a Annum is unknown.
-String for when a Show.PartialDate is unknown, and only the year is being shown. */
+/* String for when a Show.PartialDate is unknown, and only the year is being shown.
+String for when a Annum is unknown. */
 "Year Unknown" = "Year Unknown";
 

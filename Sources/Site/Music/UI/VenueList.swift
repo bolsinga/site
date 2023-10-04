@@ -9,11 +9,23 @@ import SwiftUI
 
 struct VenueList: View {
   let venueDigests: [VenueDigest]
+  let nearbyVenueIDs: Set<Venue.ID>
   let sectioner: LibrarySectioner
 
   @Binding var sort: VenueSort
+  @Binding var locationFilter: LocationFilter
+  @Binding var geocodingProgress: Double
 
   @State private var searchString: String = ""
+
+  private var filteredVenueDigests: [VenueDigest] {
+    switch locationFilter {
+    case .none:
+      return venueDigests
+    case .nearby:
+      return venueDigests.filter { nearbyVenueIDs.contains($0.id) }
+    }
+  }
 
   private func rank(for venueDigest: VenueDigest) -> Ranking {
     switch sort {
@@ -48,6 +60,7 @@ struct VenueList: View {
   }
 
   @ViewBuilder private var listElement: some View {
+    let venueDigests = filteredVenueDigests
     if case .alphabetical = sort {
       LibraryComparableList(
         items: venueDigests,
@@ -108,6 +121,7 @@ struct VenueList: View {
         prompt: String(localized: "Venue Names", bundle: .module, comment: "VenueList searchPrompt")
       )
       .sortable(algorithm: $sort)
+      .locationFilter($locationFilter, geocodingProgress: $geocodingProgress)
   }
 }
 
@@ -116,8 +130,10 @@ struct VenueList_Previews: PreviewProvider {
     let vaultPreview = Vault.previewData
     NavigationStack {
       VenueList(
-        venueDigests: vaultPreview.venueDigests, sectioner: vaultPreview.sectioner,
-        sort: .constant(.alphabetical)
+        venueDigests: vaultPreview.venueDigests,
+        nearbyVenueIDs: Set(vaultPreview.venueDigests.map { $0.id }),
+        sectioner: vaultPreview.sectioner, sort: .constant(.alphabetical),
+        locationFilter: .constant(.none), geocodingProgress: .constant(0)
       )
       .musicDestinations(vaultPreview)
     }

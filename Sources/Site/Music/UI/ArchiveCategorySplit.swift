@@ -18,9 +18,11 @@ struct ArchiveCategorySplit: View {
   @ObservedObject var model: VaultModel
 
   @SceneStorage("venue.sort") private var venueSort = VenueSort.alphabetical
+  @SceneStorage("venue.filter") private var venueLocationFilter = LocationFilter.none
   @SceneStorage("artist.sort") private var artistSort = ArtistSort.alphabetical
   @SceneStorage("nearby.distance") private var nearbyDistanceThreshold: CLLocationDistance =
     16093.44  // 10 miles
+  @SceneStorage("show.filter") private var showLocationFilter = LocationFilter.none
 
   @StateObject private var archiveNavigation = ArchiveNavigation()
 
@@ -81,9 +83,9 @@ struct ArchiveCategorySplit: View {
           vault: vault, category: archiveNavigation.selectedCategory,
           todayConcerts: $model.todayConcerts,
           nearbyConcerts: .constant(model.concertsNearby(nearbyDistanceThreshold)),
-          venueSort: $venueSort, artistSort: $artistSort,
+          venueSort: $venueSort, venueLocationFilter: $venueLocationFilter, artistSort: $artistSort,
           isCategoryActive: .constant(archiveNavigation.navigationPath.isEmpty),
-          geocodingProgress: .constant(geocodingProgress))
+          geocodingProgress: .constant(geocodingProgress), showLocationFilter: $showLocationFilter)
       }
     }
     .archiveStorage(archiveNavigation: archiveNavigation)
