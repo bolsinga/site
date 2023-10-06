@@ -30,23 +30,6 @@ struct ArchiveCategorySplit: View {
     Double(model.geocodedVenuesCount) / Double(vault.venueDigests.count)
   }
 
-  @ViewBuilder private var nearbyLabel: some View {
-    switch model.locationAuthorization {
-    case .allowed:
-      NearbyLabel(
-        nearbyConcertCount: .constant(model.concertsNearby(nearbyDistanceThreshold).count),
-        geocodingProgress: .constant(geocodingProgress))
-    case .restricted:
-      Text(
-        "Location Disabled", bundle: .module,
-        comment: "Text shown when location services are restrictued by user.")
-    case .denied:
-      Text(
-        "Location Unavailable", bundle: .module,
-        comment: "Text shown when location services are denied.")
-    }
-  }
-
   @ViewBuilder var sidebar: some View {
     List(ArchiveCategory.allCases, id: \.self, selection: $archiveNavigation.selectedCategory) {
       category in
@@ -55,8 +38,6 @@ struct ArchiveCategorySplit: View {
         case .today:
           Text(model.todayConcerts.count.formatted(.number))
             .animation(.easeInOut)
-        case .nearby:
-          nearbyLabel
         case .stats:
           EmptyView()
         case .shows:

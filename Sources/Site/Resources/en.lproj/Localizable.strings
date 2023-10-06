@@ -41,9 +41,9 @@ ArchiveCategory Artists */
 /* Title of the comment section of ShowDetail */
 "Comment" = "Comment";
 
-/* Label in the chart for the Count in MonthChart.
-Label in the chart for the Count in WeekdayChart.
-Label in the chart for the Count in StateChart. */
+/* Label in the chart for the Count in WeekdayChart.
+Label in the chart for the Count in StateChart.
+Label in the chart for the Count in MonthChart. */
 "Count" = "Count";
 
 /* Title of the date section of ShowDetail */
@@ -55,17 +55,14 @@ Label in the chart for the Count in StateChart. */
 /* String for when a Decade is unknown. */
 "Decade Unknown" = "Decade Unknown";
 
-/* ArchiveCategory.nearby shared title */
-"Display Nearby Shows" = "Display Nearby Shows";
-
 /* ArchiveCategory.today shared title */
 "Display Shows On This Date" = "Display Shows On This Date";
 
 /* Label for nearby filtering */
 "Filter Nearby" = "Filter Nearby";
 
-/* First Set Caption
-Venue First Set Caption */
+/* Venue First Set Caption
+First Set Caption */
 "First Set" = "First Set";
 
 /* Title of the Lineup for ShowDetail. */
@@ -85,15 +82,6 @@ Venue First Set Caption */
 
 /* Months Stats */
 "Months" = "Months";
-
-/* ArchiveCategory Nearby */
-"Nearby" = "Nearby";
-
-/* Nearby Shows Title */
-"Nearby Shows" = "Nearby Shows";
-
-/* Text shown when there are no nearby concerts. */
-"No Shows Nearby" = "No Shows Nearby";
 
 /* Text shown when there are no shows today. */
 "No Shows On This Day" = "No Shows On This Day";
@@ -149,9 +137,9 @@ Venue First Set Caption */
 /* Title for the ShowYearList. */
 "Show Years" = "Show Years";
 
-/* Title of the Shows section of ArtistDetail
-ArchiveCategory Shows
+/* ArchiveCategory Shows
 Title of the Shows section of VenueDetail
+Title of the Shows section of ArtistDetail
 Title of the Shows section of YearDetail */
 "Shows" = "Shows";
 
@@ -210,8 +198,8 @@ ArtistSort.showYearRange */
 /* VenueList searchPrompt */
 "Venue Names" = "Venue Names";
 
-/* Title for the Venue Detail
-ArchiveCategory Venues */
+/* ArchiveCategory Venues
+Title for the Venue Detail */
 "Venues" = "Venues";
 
 /* Label in the chart for the Weekday in WeekdayChart. */
@@ -220,7 +208,7 @@ ArchiveCategory Venues */
 /* Weekdays Stats */
 "Weekdays" = "Weekdays";
 
-/* String for when a Show.PartialDate is unknown, and only the year is being shown.
-String for when a Annum is unknown. */
+/* String for when a Annum is unknown.
+String for when a Show.PartialDate is unknown, and only the year is being shown. */
 "Year Unknown" = "Year Unknown";
 

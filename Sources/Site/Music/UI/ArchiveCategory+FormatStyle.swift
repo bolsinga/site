@@ -32,8 +32,6 @@ extension ArchiveCategory.FormatStyle: Foundation.FormatStyle {
       switch value {
       case .today:
         return "/dates/today.html"
-      case .nearby:
-        return "/stats.html"
       case .stats:
         return "/stats.html"
       case .shows:
