@@ -1,0 +1,36 @@
+//
+//  LocationFilter.swift
+//
+//
+//  Created by Greg Bolsinga on 10/4/23.
+//
+
+import Foundation
+
+enum LocationFilter: Int {
+  case none
+  case nearby
+
+  var isNearby: Bool {
+    switch self {
+    case .none:
+      return false
+    case .nearby:
+      return true
+    }
+  }
+
+  var toggle: Bool {
+    get {
+      switch self {
+      case .none:
+        return false
+      case .nearby:
+        return true
+      }
+    }
+    set {
+      self = newValue ? .nearby : .none
+    }
+  }
+}
