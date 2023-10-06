@@ -85,7 +85,8 @@ struct ArchiveCategorySplit: View {
           nearbyConcerts: .constant(model.concertsNearby(nearbyDistanceThreshold)),
           venueSort: $venueSort, venueLocationFilter: $venueLocationFilter, artistSort: $artistSort,
           isCategoryActive: .constant(archiveNavigation.navigationPath.isEmpty),
-          geocodingProgress: .constant(geocodingProgress), showLocationFilter: $showLocationFilter)
+          geocodingProgress: .constant(geocodingProgress), showLocationFilter: $showLocationFilter,
+          locationAuthorization: $model.locationAuthorization)
       }
     }
     .archiveStorage(archiveNavigation: archiveNavigation)

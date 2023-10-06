@@ -18,6 +18,7 @@ struct ArchiveCategoryDetail: View {
   @Binding var isCategoryActive: Bool
   @Binding var geocodingProgress: Double
   @Binding var showLocationFilter: LocationFilter
+  @Binding var locationAuthorization: LocationAuthorization
 
   @MainActor
   @ViewBuilder private var stackElement: some View {
@@ -35,13 +36,15 @@ struct ArchiveCategoryDetail: View {
         case .shows:
           ShowYearList(
             decadesMap: vault.decadesMap, nearbyConcertIDs: Set(nearbyConcerts.map { $0.id }),
-            locationFilter: $showLocationFilter, geocodingProgress: $geocodingProgress)
+            locationFilter: $showLocationFilter, geocodingProgress: $geocodingProgress,
+            locationAuthorization: $locationAuthorization)
         case .venues:
           VenueList(
             venueDigests: vault.venueDigests,
             nearbyVenueIDs: Set(nearbyConcerts.compactMap { $0.venue?.id }),
             sectioner: vault.sectioner, sort: $venueSort,
-            locationFilter: $venueLocationFilter, geocodingProgress: $geocodingProgress)
+            locationFilter: $venueLocationFilter, geocodingProgress: $geocodingProgress,
+            locationAuthorization: $locationAuthorization)
         case .artists:
           ArtistList(
             artistDigests: vault.artistDigests, sectioner: vault.sectioner, sort: $artistSort)
@@ -69,41 +72,41 @@ struct ArchiveCategoryDetail_Previews: PreviewProvider {
       nearbyConcerts: .constant([]), venueSort: .constant(.alphabetical),
       venueLocationFilter: .constant(.none), artistSort: .constant(.alphabetical),
       isCategoryActive: .constant(true), geocodingProgress: .constant(0.5),
-      showLocationFilter: .constant(.none))
+      showLocationFilter: .constant(.none), locationAuthorization: .constant(.allowed))
 
     ArchiveCategoryDetail(
       vault: vaultPreview, category: .nearby, todayConcerts: .constant([]),
       nearbyConcerts: .constant([]), venueSort: .constant(.alphabetical),
       venueLocationFilter: .constant(.none), artistSort: .constant(.alphabetical),
       isCategoryActive: .constant(true), geocodingProgress: .constant(0.5),
-      showLocationFilter: .constant(.none))
+      showLocationFilter: .constant(.none), locationAuthorization: .constant(.allowed))
 
     ArchiveCategoryDetail(
       vault: vaultPreview, category: .stats, todayConcerts: .constant([]),
       nearbyConcerts: .constant([]), venueSort: .constant(.alphabetical),
       venueLocationFilter: .constant(.none), artistSort: .constant(.alphabetical),
       isCategoryActive: .constant(true), geocodingProgress: .constant(0.5),
-      showLocationFilter: .constant(.none))
+      showLocationFilter: .constant(.none), locationAuthorization: .constant(.allowed))
 
     ArchiveCategoryDetail(
       vault: vaultPreview, category: .shows, todayConcerts: .constant([]),
       nearbyConcerts: .constant([]), venueSort: .constant(.alphabetical),
       venueLocationFilter: .constant(.none), artistSort: .constant(.alphabetical),
       isCategoryActive: .constant(true), geocodingProgress: .constant(0.5),
-      showLocationFilter: .constant(.none))
+      showLocationFilter: .constant(.none), locationAuthorization: .constant(.allowed))
 
     ArchiveCategoryDetail(
       vault: vaultPreview, category: .venues, todayConcerts: .constant([]),
       nearbyConcerts: .constant([]), venueSort: .constant(.alphabetical),
       venueLocationFilter: .constant(.none), artistSort: .constant(.alphabetical),
       isCategoryActive: .constant(true), geocodingProgress: .constant(0.5),
-      showLocationFilter: .constant(.none))
+      showLocationFilter: .constant(.none), locationAuthorization: .constant(.allowed))
 
     ArchiveCategoryDetail(
       vault: vaultPreview, category: .artists, todayConcerts: .constant([]),
       nearbyConcerts: .constant([]), venueSort: .constant(.alphabetical),
       venueLocationFilter: .constant(.none), artistSort: .constant(.alphabetical),
       isCategoryActive: .constant(true), geocodingProgress: .constant(0.5),
-      showLocationFilter: .constant(.none))
+      showLocationFilter: .constant(.none), locationAuthorization: .constant(.allowed))
   }
 }

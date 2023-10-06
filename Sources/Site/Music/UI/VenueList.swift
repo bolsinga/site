@@ -15,6 +15,7 @@ struct VenueList: View {
   @Binding var sort: VenueSort
   @Binding var locationFilter: LocationFilter
   @Binding var geocodingProgress: Double
+  @Binding var locationAuthorization: LocationAuthorization
 
   @State private var searchString: String = ""
 
@@ -121,7 +122,9 @@ struct VenueList: View {
         prompt: String(localized: "Venue Names", bundle: .module, comment: "VenueList searchPrompt")
       )
       .sortable(algorithm: $sort)
-      .locationFilter($locationFilter, geocodingProgress: $geocodingProgress)
+      .locationFilter(
+        $locationFilter, geocodingProgress: $geocodingProgress,
+        locationAuthorization: $locationAuthorization)
   }
 }
 
@@ -133,7 +136,8 @@ struct VenueList_Previews: PreviewProvider {
         venueDigests: vaultPreview.venueDigests,
         nearbyVenueIDs: Set(vaultPreview.venueDigests.map { $0.id }),
         sectioner: vaultPreview.sectioner, sort: .constant(.alphabetical),
-        locationFilter: .constant(.none), geocodingProgress: .constant(0)
+        locationFilter: .constant(.none), geocodingProgress: .constant(0),
+        locationAuthorization: .constant(.allowed)
       )
       .musicDestinations(vaultPreview)
     }
