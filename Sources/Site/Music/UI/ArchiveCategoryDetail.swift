@@ -28,8 +28,6 @@ struct ArchiveCategoryDetail: View {
         switch category {
         case .today:
           TodayList(concerts: todayConcerts)
-        case .nearby:
-          NearbyList(concerts: nearbyConcerts, geocodingProgress: $geocodingProgress)
         case .stats:
           List { StatsGrouping(concerts: vault.concerts, displayArchiveCategoryCounts: false) }
             .navigationTitle(Text(category.localizedString))
@@ -69,13 +67,6 @@ struct ArchiveCategoryDetail_Previews: PreviewProvider {
 
     ArchiveCategoryDetail(
       vault: vaultPreview, category: .today, todayConcerts: .constant([]),
-      nearbyConcerts: .constant([]), venueSort: .constant(.alphabetical),
-      venueLocationFilter: .constant(.none), artistSort: .constant(.alphabetical),
-      isCategoryActive: .constant(true), geocodingProgress: .constant(0.5),
-      showLocationFilter: .constant(.none), locationAuthorization: .constant(.allowed))
-
-    ArchiveCategoryDetail(
-      vault: vaultPreview, category: .nearby, todayConcerts: .constant([]),
       nearbyConcerts: .constant([]), venueSort: .constant(.alphabetical),
       venueLocationFilter: .constant(.none), artistSort: .constant(.alphabetical),
       isCategoryActive: .constant(true), geocodingProgress: .constant(0.5),
