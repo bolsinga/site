@@ -23,7 +23,7 @@ struct LocatableMap<T>: View where T: Locatable, T: Equatable {
     .onAppear {
       mapRect = locations.paddedRect
     }
-    .onChange(of: locations) { newValue in
+    .onChange(of: locations) { _, newValue in
       withAnimation {
         mapRect = newValue.paddedRect
       }
