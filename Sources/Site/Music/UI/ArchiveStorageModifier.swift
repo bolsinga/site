@@ -30,13 +30,13 @@ struct ArchiveStorageModifier: ViewModifier {
         archiveNavigation.restoreNavigation(
           selectedCategoryStorage: archiveCategory, pathData: navigationPathData)
       }
-      .onChange(of: archiveNavigation.selectedCategory) { newValue in
+      .onChange(of: archiveNavigation.selectedCategory) { _, newValue in
         Logger.storage.log("category: \(newValue?.rawValue ?? "nil", privacy: .public)")
         selectedCategoryStorage = newValue?.rawValue ?? nil
 
         archiveNavigation.restorePendingData()
       }
-      .onChange(of: archiveNavigation.navigationPath) { newPath in
+      .onChange(of: archiveNavigation.navigationPath) { _, newPath in
         Logger.storage.log(
           "path: \(newPath.map { $0.formatted() }.joined(separator: ":"), privacy: .public)")
         navigationPathData = newPath.jsonData
