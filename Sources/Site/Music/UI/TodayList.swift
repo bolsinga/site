@@ -33,11 +33,10 @@ struct TodayList: View {
 
 struct TodayList_Previews: PreviewProvider {
   static var previews: some View {
-    let vaultPreview = Vault.previewData
 
     NavigationStack {
-      TodayList(concerts: vaultPreview.concerts)
-        .musicDestinations(vaultPreview)
+      TodayList(concerts: vaultPreviewData.concerts)
+        .musicDestinations(vaultPreviewData)
     }
   }
 }

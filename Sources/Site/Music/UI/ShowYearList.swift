@@ -68,15 +68,15 @@ struct ShowYearList: View {
 
 struct ShowYearList_Previews: PreviewProvider {
   static var previews: some View {
-    let vaultPreview = Vault.previewData
 
     NavigationStack {
       ShowYearList(
-        decadesMap: vaultPreview.decadesMap, nearbyConcertIDs: Set(vaultPreview.concertMap.keys),
+        decadesMap: vaultPreviewData.decadesMap,
+        nearbyConcertIDs: Set(vaultPreviewData.concertMap.keys),
         locationFilter: .constant(.none), geocodingProgress: .constant(0),
         locationAuthorization: .constant(.allowed)
       )
-      .musicDestinations(vaultPreview)
+      .musicDestinations(vaultPreviewData)
     }
   }
 }

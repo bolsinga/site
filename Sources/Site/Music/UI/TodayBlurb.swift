@@ -41,12 +41,11 @@ struct TodayBlurb: View {
 
 struct TodayBlurb_Previews: PreviewProvider {
   static var previews: some View {
-    let vaultPreview = Vault.previewData
 
-    TodayBlurb(concert: vaultPreview.concerts[0])
+    TodayBlurb(concert: vaultPreviewData.concerts[0])
 
-    TodayBlurb(concert: vaultPreview.concerts[1])
+    TodayBlurb(concert: vaultPreviewData.concerts[1])
 
-    TodayBlurb(concert: vaultPreview.concerts[2])
+    TodayBlurb(concert: vaultPreviewData.concerts[2])
   }
 }

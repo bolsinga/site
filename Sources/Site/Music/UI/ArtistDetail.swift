@@ -76,22 +76,21 @@ struct ArtistDetail: View {
 
 struct ArtistDetail_Previews: PreviewProvider {
   static var previews: some View {
-    let vaultPreview = Vault.previewData
 
     NavigationStack {
       ArtistDetail(
-        digest: vaultPreview.artistDigests[0],
-        concertCompare: vaultPreview.comparator.compare(lhs:rhs:)
+        digest: vaultPreviewData.artistDigests[0],
+        concertCompare: vaultPreviewData.comparator.compare(lhs:rhs:)
       )
-      .musicDestinations(vaultPreview)
+      .musicDestinations(vaultPreviewData)
     }
 
     NavigationStack {
       ArtistDetail(
-        digest: vaultPreview.artistDigests[1],
-        concertCompare: vaultPreview.comparator.compare(lhs:rhs:)
+        digest: vaultPreviewData.artistDigests[1],
+        concertCompare: vaultPreviewData.comparator.compare(lhs:rhs:)
       )
-      .musicDestinations(vaultPreview)
+      .musicDestinations(vaultPreviewData)
     }
   }
 }

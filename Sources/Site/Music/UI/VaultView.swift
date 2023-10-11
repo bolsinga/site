@@ -72,6 +72,6 @@ struct VaultView_Previews: PreviewProvider {
 
     VaultView(VaultModel(urlString: "https://www.example.com"))
 
-    VaultView(VaultModel(urlString: "https://www.example.com", vault: Vault.previewData))
+    VaultView(VaultModel(urlString: "https://www.example.com", vault: vaultPreviewData))
   }
 }
