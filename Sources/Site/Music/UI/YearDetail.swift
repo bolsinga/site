@@ -11,21 +11,27 @@ struct YearDetail: View {
   let digest: AnnumDigest
   let concertCompare: (Concert, Concert) -> Bool
 
+  private var concerts: [Concert] {
+    digest.concerts
+  }
+
   @ViewBuilder private var statsElement: some View {
-    if !digest.concerts.isEmpty {
+    let concerts = concerts
+    if !concerts.isEmpty {
       Section(header: Text(ArchiveCategory.stats.localizedString)) {
-        StatsGrouping(concerts: digest.concerts)
+        StatsGrouping(concerts: concerts)
       }
     }
   }
 
   @ViewBuilder private var showsElement: some View {
-    if !digest.concerts.isEmpty {
+    let concerts = concerts
+    if !concerts.isEmpty {
       Section(
         header: Text(
           "Shows", bundle: .module, comment: "Title of the Shows section of YearDetail")
       ) {
-        ForEach(digest.concerts.sorted(by: concertCompare)) { concert in
+        ForEach(concerts.sorted(by: concertCompare)) { concert in
           NavigationLink(value: concert) { ConcertBlurb(concert: concert) }
         }
       }
