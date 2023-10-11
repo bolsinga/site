@@ -24,7 +24,7 @@ struct ArchiveCategorySplit: View {
     16093.44  // 10 miles
   @SceneStorage("show.filter") private var showLocationFilter = LocationFilter.none
 
-  @StateObject private var archiveNavigation = ArchiveNavigation()
+  @State private var archiveNavigation = ArchiveNavigation()
 
   private var geocodingProgress: Double {
     Double(model.geocodedVenuesCount) / Double(vault.venueDigests.count)
