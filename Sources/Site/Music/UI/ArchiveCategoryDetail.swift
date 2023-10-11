@@ -63,38 +63,37 @@ struct ArchiveCategoryDetail: View {
 
 struct ArchiveCategoryDetail_Previews: PreviewProvider {
   static var previews: some View {
-    let vaultPreview = Vault.previewData
 
     ArchiveCategoryDetail(
-      vault: vaultPreview, category: .today, todayConcerts: .constant([]),
+      vault: vaultPreviewData, category: .today, todayConcerts: .constant([]),
       nearbyConcerts: .constant([]), venueSort: .constant(.alphabetical),
       venueLocationFilter: .constant(.none), artistSort: .constant(.alphabetical),
       isCategoryActive: .constant(true), geocodingProgress: .constant(0.5),
       showLocationFilter: .constant(.none), locationAuthorization: .constant(.allowed))
 
     ArchiveCategoryDetail(
-      vault: vaultPreview, category: .stats, todayConcerts: .constant([]),
+      vault: vaultPreviewData, category: .stats, todayConcerts: .constant([]),
       nearbyConcerts: .constant([]), venueSort: .constant(.alphabetical),
       venueLocationFilter: .constant(.none), artistSort: .constant(.alphabetical),
       isCategoryActive: .constant(true), geocodingProgress: .constant(0.5),
       showLocationFilter: .constant(.none), locationAuthorization: .constant(.allowed))
 
     ArchiveCategoryDetail(
-      vault: vaultPreview, category: .shows, todayConcerts: .constant([]),
+      vault: vaultPreviewData, category: .shows, todayConcerts: .constant([]),
       nearbyConcerts: .constant([]), venueSort: .constant(.alphabetical),
       venueLocationFilter: .constant(.none), artistSort: .constant(.alphabetical),
       isCategoryActive: .constant(true), geocodingProgress: .constant(0.5),
       showLocationFilter: .constant(.none), locationAuthorization: .constant(.allowed))
 
     ArchiveCategoryDetail(
-      vault: vaultPreview, category: .venues, todayConcerts: .constant([]),
+      vault: vaultPreviewData, category: .venues, todayConcerts: .constant([]),
       nearbyConcerts: .constant([]), venueSort: .constant(.alphabetical),
       venueLocationFilter: .constant(.none), artistSort: .constant(.alphabetical),
       isCategoryActive: .constant(true), geocodingProgress: .constant(0.5),
       showLocationFilter: .constant(.none), locationAuthorization: .constant(.allowed))
 
     ArchiveCategoryDetail(
-      vault: vaultPreview, category: .artists, todayConcerts: .constant([]),
+      vault: vaultPreviewData, category: .artists, todayConcerts: .constant([]),
       nearbyConcerts: .constant([]), venueSort: .constant(.alphabetical),
       venueLocationFilter: .constant(.none), artistSort: .constant(.alphabetical),
       isCategoryActive: .constant(true), geocodingProgress: .constant(0.5),

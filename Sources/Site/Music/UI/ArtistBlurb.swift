@@ -26,18 +26,17 @@ struct ArtistBlurb: View {
 
 struct ArtistBlurbView_Previews: PreviewProvider {
   static var previews: some View {
-    let vaultPreview = Vault.previewData
 
     NavigationStack {
-      ArtistBlurb(concert: vaultPreview.concerts[0])
+      ArtistBlurb(concert: vaultPreviewData.concerts[0])
     }
 
     NavigationStack {
-      ArtistBlurb(concert: vaultPreview.concerts[1])
+      ArtistBlurb(concert: vaultPreviewData.concerts[1])
     }
 
     NavigationStack {
-      ArtistBlurb(concert: vaultPreview.concerts[2])
+      ArtistBlurb(concert: vaultPreviewData.concerts[2])
     }
   }
 }

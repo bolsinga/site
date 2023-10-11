@@ -74,21 +74,20 @@ struct ShowDetail: View {
 
 struct ShowDetail_Previews: PreviewProvider {
   static var previews: some View {
-    let vaultPreview = Vault.previewData
 
     NavigationStack {
-      ShowDetail(concert: vaultPreview.concerts[0])
-        .musicDestinations(vaultPreview)
+      ShowDetail(concert: vaultPreviewData.concerts[0])
+        .musicDestinations(vaultPreviewData)
     }
 
     NavigationStack {
-      ShowDetail(concert: vaultPreview.concerts[1])
-        .musicDestinations(vaultPreview)
+      ShowDetail(concert: vaultPreviewData.concerts[1])
+        .musicDestinations(vaultPreviewData)
     }
 
     NavigationStack {
-      ShowDetail(concert: vaultPreview.concerts[2])
-        .musicDestinations(vaultPreview)
+      ShowDetail(concert: vaultPreviewData.concerts[2])
+        .musicDestinations(vaultPreviewData)
     }
   }
 }

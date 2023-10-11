@@ -93,16 +93,15 @@ struct VenueDetail: View {
 
 struct VenueDetail_Previews: PreviewProvider {
   static var previews: some View {
-    let vaultPreview = Vault.previewData
     NavigationStack {
       VenueDetail(
-        digest: vaultPreview.venueDigests[0],
-        concertCompare: vaultPreview.comparator.compare(lhs:rhs:),
+        digest: vaultPreviewData.venueDigests[0],
+        concertCompare: vaultPreviewData.comparator.compare(lhs:rhs:),
         geocode: { _ in
           nil
         }
       )
-      .musicDestinations(vaultPreview)
+      .musicDestinations(vaultPreviewData)
     }
   }
 }

@@ -130,16 +130,15 @@ struct VenueList: View {
 
 struct VenueList_Previews: PreviewProvider {
   static var previews: some View {
-    let vaultPreview = Vault.previewData
     NavigationStack {
       VenueList(
-        venueDigests: vaultPreview.venueDigests,
-        nearbyVenueIDs: Set(vaultPreview.venueDigests.map { $0.id }),
-        sectioner: vaultPreview.sectioner, sort: .constant(.alphabetical),
+        venueDigests: vaultPreviewData.venueDigests,
+        nearbyVenueIDs: Set(vaultPreviewData.venueDigests.map { $0.id }),
+        sectioner: vaultPreviewData.sectioner, sort: .constant(.alphabetical),
         locationFilter: .constant(.none), geocodingProgress: .constant(0),
         locationAuthorization: .constant(.allowed)
       )
-      .musicDestinations(vaultPreview)
+      .musicDestinations(vaultPreviewData)
     }
   }
 }
