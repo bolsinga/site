@@ -24,19 +24,14 @@ struct ArtistBlurb: View {
   }
 }
 
-struct ArtistBlurbView_Previews: PreviewProvider {
-  static var previews: some View {
+#Preview {
+  ArtistBlurb(concert: vaultPreviewData.concerts[0])
+}
 
-    NavigationStack {
-      ArtistBlurb(concert: vaultPreviewData.concerts[0])
-    }
+#Preview {
+  ArtistBlurb(concert: vaultPreviewData.concerts[1])
+}
 
-    NavigationStack {
-      ArtistBlurb(concert: vaultPreviewData.concerts[1])
-    }
-
-    NavigationStack {
-      ArtistBlurb(concert: vaultPreviewData.concerts[2])
-    }
-  }
+#Preview {
+  ArtistBlurb(concert: vaultPreviewData.concerts[2])
 }

@@ -66,17 +66,14 @@ struct ShowYearList: View {
   }
 }
 
-struct ShowYearList_Previews: PreviewProvider {
-  static var previews: some View {
-
-    NavigationStack {
-      ShowYearList(
-        decadesMap: vaultPreviewData.decadesMap,
-        nearbyConcertIDs: Set(vaultPreviewData.concertMap.keys),
-        locationFilter: .constant(.none), geocodingProgress: .constant(0),
-        locationAuthorization: .constant(.allowed)
-      )
-      .musicDestinations(vaultPreviewData)
-    }
+#Preview {
+  NavigationStack {
+    ShowYearList(
+      decadesMap: vaultPreviewData.decadesMap,
+      nearbyConcertIDs: Set(vaultPreviewData.concertMap.keys),
+      locationFilter: .constant(.none), geocodingProgress: .constant(0),
+      locationAuthorization: .constant(.allowed)
+    )
+    .musicDestinations(vaultPreviewData)
   }
 }

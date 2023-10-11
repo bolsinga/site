@@ -22,12 +22,10 @@ struct AddressView: View {
   }
 }
 
-struct AddressView_Previews: PreviewProvider {
-  static var previews: some View {
+#Preview {
+  AddressView(location: vaultPreviewData.venueDigests[0].venue.location)
+}
 
-    AddressView(location: vaultPreviewData.venueDigests[0].venue.location)
-
-    let locationWithoutOptionals = Location(city: "Charleston", state: "IL")
-    AddressView(location: locationWithoutOptionals)
-  }
+#Preview {
+  AddressView(location: Location(city: "Charleston", state: "IL"))
 }

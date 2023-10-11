@@ -74,23 +74,22 @@ struct ArtistDetail: View {
   }
 }
 
-struct ArtistDetail_Previews: PreviewProvider {
-  static var previews: some View {
+#Preview {
+  NavigationStack {
+    ArtistDetail(
+      digest: vaultPreviewData.artistDigests[0],
+      concertCompare: vaultPreviewData.comparator.compare(lhs:rhs:)
+    )
+    .musicDestinations(vaultPreviewData)
+  }
+}
 
-    NavigationStack {
-      ArtistDetail(
-        digest: vaultPreviewData.artistDigests[0],
-        concertCompare: vaultPreviewData.comparator.compare(lhs:rhs:)
-      )
-      .musicDestinations(vaultPreviewData)
-    }
-
-    NavigationStack {
-      ArtistDetail(
-        digest: vaultPreviewData.artistDigests[1],
-        concertCompare: vaultPreviewData.comparator.compare(lhs:rhs:)
-      )
-      .musicDestinations(vaultPreviewData)
-    }
+#Preview {
+  NavigationStack {
+    ArtistDetail(
+      digest: vaultPreviewData.artistDigests[1],
+      concertCompare: vaultPreviewData.comparator.compare(lhs:rhs:)
+    )
+    .musicDestinations(vaultPreviewData)
   }
 }

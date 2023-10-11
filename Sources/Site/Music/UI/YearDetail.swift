@@ -46,15 +46,12 @@ struct YearDetail: View {
   }
 }
 
-struct YearDetail_Previews: PreviewProvider {
-  static var previews: some View {
-
-    NavigationStack {
-      YearDetail(
-        digest: vaultPreviewData.digest(for: Annum.year(2001)),
-        concertCompare: vaultPreviewData.comparator.compare(lhs:rhs:)
-      )
-      .musicDestinations(vaultPreviewData)
-    }
+#Preview {
+  NavigationStack {
+    YearDetail(
+      digest: vaultPreviewData.digest(for: Annum.year(2001)),
+      concertCompare: vaultPreviewData.comparator.compare(lhs:rhs:)
+    )
+    .musicDestinations(vaultPreviewData)
   }
 }

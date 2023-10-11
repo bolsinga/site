@@ -31,12 +31,9 @@ struct TodayList: View {
   }
 }
 
-struct TodayList_Previews: PreviewProvider {
-  static var previews: some View {
-
-    NavigationStack {
-      TodayList(concerts: vaultPreviewData.concerts)
-        .musicDestinations(vaultPreviewData)
-    }
+#Preview {
+  NavigationStack {
+    TodayList(concerts: vaultPreviewData.concerts)
+      .musicDestinations(vaultPreviewData)
   }
 }

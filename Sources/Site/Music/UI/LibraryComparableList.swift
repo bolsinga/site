@@ -55,39 +55,38 @@ where T: LibraryComparable, T: Identifiable, T: Hashable, T.ID == String, T: Pat
   }
 }
 
-struct LibraryComparableList_Previews: PreviewProvider {
-  static var previews: some View {
+#Preview {
+  NavigationStack {
+    LibraryComparableList(
+      items: vaultPreviewData.artistDigests,
+      sectioner: LibrarySectioner(),
+      itemContentView: { _ in
+        Text(3.formatted(.number))
+      },
+      sectionHeaderView: { section in
+        Text("Artists")
+      },
+      searchString: .constant("")
+    )
+    .navigationTitle("Artists")
+    .musicDestinations(vaultPreviewData)
+  }
+}
 
-    NavigationStack {
-      LibraryComparableList(
-        items: vaultPreviewData.artistDigests,
-        sectioner: LibrarySectioner(),
-        itemContentView: { _ in
-          Text(3.formatted(.number))
-        },
-        sectionHeaderView: { section in
-          Text("Artists")
-        },
-        searchString: .constant("")
-      )
-      .navigationTitle("Artists")
-      .musicDestinations(vaultPreviewData)
-    }
-
-    NavigationStack {
-      LibraryComparableList(
-        items: vaultPreviewData.venueDigests,
-        sectioner: LibrarySectioner(),
-        itemContentView: { _ in
-          EmptyView()
-        },
-        sectionHeaderView: { section in
-          Text("Venues")
-        },
-        searchString: .constant("")
-      )
-      .navigationTitle("Venues")
-      .musicDestinations(vaultPreviewData)
-    }
+#Preview {
+  NavigationStack {
+    LibraryComparableList(
+      items: vaultPreviewData.venueDigests,
+      sectioner: LibrarySectioner(),
+      itemContentView: { _ in
+        EmptyView()
+      },
+      sectionHeaderView: { section in
+        Text("Venues")
+      },
+      searchString: .constant("")
+    )
+    .navigationTitle("Venues")
+    .musicDestinations(vaultPreviewData)
   }
 }

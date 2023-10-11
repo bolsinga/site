@@ -37,13 +37,14 @@ struct ConcertBlurb: View {
   }
 }
 
-struct ConcertBlurbView_Previews: PreviewProvider {
-  static var previews: some View {
+#Preview {
+  ConcertBlurb(concert: vaultPreviewData.concerts[0])
+}
 
-    ConcertBlurb(concert: vaultPreviewData.concerts[0])
+#Preview {
+  ConcertBlurb(concert: vaultPreviewData.concerts[1])
+}
 
-    ConcertBlurb(concert: vaultPreviewData.concerts[1])
-
-    ConcertBlurb(concert: vaultPreviewData.concerts[2])
-  }
+#Preview {
+  ConcertBlurb(concert: vaultPreviewData.concerts[2])
 }
