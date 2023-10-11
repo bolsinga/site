@@ -39,13 +39,14 @@ struct TodayBlurb: View {
   }
 }
 
-struct TodayBlurb_Previews: PreviewProvider {
-  static var previews: some View {
+#Preview {
+  TodayBlurb(concert: vaultPreviewData.concerts[0])
+}
 
-    TodayBlurb(concert: vaultPreviewData.concerts[0])
+#Preview {
+  TodayBlurb(concert: vaultPreviewData.concerts[1])
+}
 
-    TodayBlurb(concert: vaultPreviewData.concerts[1])
-
-    TodayBlurb(concert: vaultPreviewData.concerts[2])
-  }
+#Preview {
+  TodayBlurb(concert: vaultPreviewData.concerts[2])
 }

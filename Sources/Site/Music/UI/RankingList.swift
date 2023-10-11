@@ -47,42 +47,41 @@ where T: LibraryComparable, T: Hashable, T: PathRestorable, R: Comparable, R: Ha
   }
 }
 
-struct RankingList_Previews: PreviewProvider {
-  static var previews: some View {
+#Preview {
+  NavigationStack {
+    RankingList(
+      items: vaultPreviewData.artistDigests,
+      rankingMapBuilder: { artists in
+        return [Ranking(rank: .rank(1), value: 3): artists]
+      },
+      rankSorted: >,
+      itemContentView: { _ in
+        Text(3.formatted(.number))
+      },
+      sectionHeaderView: { section in
+        Text("Artists")
+      },
+      searchString: .constant("")
+    )
+    .navigationTitle("Artists")
+    .musicDestinations(vaultPreviewData)
+  }
+}
 
-    NavigationStack {
-      RankingList(
-        items: vaultPreviewData.artistDigests,
-        rankingMapBuilder: { artists in
-          return [Ranking(rank: .rank(1), value: 3): artists]
-        },
-        rankSorted: >,
-        itemContentView: { _ in
-          Text(3.formatted(.number))
-        },
-        sectionHeaderView: { section in
-          Text("Artists")
-        },
-        searchString: .constant("")
-      )
-      .navigationTitle("Artists")
-      .musicDestinations(vaultPreviewData)
-    }
-
-    NavigationStack {
-      RankingList(
-        items: vaultPreviewData.venueDigests,
-        rankingMapBuilder: { artists in
-          return [Ranking(rank: .rank(1), value: 3): artists]
-        },
-        itemContentView: { _ in },
-        sectionHeaderView: { section in
-          Text("Venues")
-        },
-        searchString: .constant("")
-      )
-      .navigationTitle("Venues")
-      .musicDestinations(vaultPreviewData)
-    }
+#Preview {
+  NavigationStack {
+    RankingList(
+      items: vaultPreviewData.venueDigests,
+      rankingMapBuilder: { artists in
+        return [Ranking(rank: .rank(1), value: 3): artists]
+      },
+      itemContentView: { _ in },
+      sectionHeaderView: { section in
+        Text("Venues")
+      },
+      searchString: .constant("")
+    )
+    .navigationTitle("Venues")
+    .musicDestinations(vaultPreviewData)
   }
 }

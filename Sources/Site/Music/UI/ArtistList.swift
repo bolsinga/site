@@ -112,15 +112,12 @@ struct ArtistList: View {
   }
 }
 
-struct ArtistList_Previews: PreviewProvider {
-  static var previews: some View {
-
-    NavigationStack {
-      ArtistList(
-        artistDigests: vaultPreviewData.artistDigests, sectioner: vaultPreviewData.sectioner,
-        sort: .constant(.alphabetical)
-      )
-      .musicDestinations(vaultPreviewData)
-    }
+#Preview {
+  NavigationStack {
+    ArtistList(
+      artistDigests: vaultPreviewData.artistDigests, sectioner: vaultPreviewData.sectioner,
+      sort: .constant(.alphabetical)
+    )
+    .musicDestinations(vaultPreviewData)
   }
 }

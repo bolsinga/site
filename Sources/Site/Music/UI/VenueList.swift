@@ -128,17 +128,15 @@ struct VenueList: View {
   }
 }
 
-struct VenueList_Previews: PreviewProvider {
-  static var previews: some View {
-    NavigationStack {
-      VenueList(
-        venueDigests: vaultPreviewData.venueDigests,
-        nearbyVenueIDs: Set(vaultPreviewData.venueDigests.map { $0.id }),
-        sectioner: vaultPreviewData.sectioner, sort: .constant(.alphabetical),
-        locationFilter: .constant(.none), geocodingProgress: .constant(0),
-        locationAuthorization: .constant(.allowed)
-      )
-      .musicDestinations(vaultPreviewData)
-    }
+#Preview {
+  NavigationStack {
+    VenueList(
+      venueDigests: vaultPreviewData.venueDigests,
+      nearbyVenueIDs: Set(vaultPreviewData.venueDigests.map { $0.id }),
+      sectioner: vaultPreviewData.sectioner, sort: .constant(.alphabetical),
+      locationFilter: .constant(.none), geocodingProgress: .constant(0),
+      locationAuthorization: .constant(.allowed)
+    )
+    .musicDestinations(vaultPreviewData)
   }
 }

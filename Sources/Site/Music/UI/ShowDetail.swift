@@ -72,22 +72,23 @@ struct ShowDetail: View {
   }
 }
 
-struct ShowDetail_Previews: PreviewProvider {
-  static var previews: some View {
+#Preview {
+  NavigationStack {
+    ShowDetail(concert: vaultPreviewData.concerts[0])
+      .musicDestinations(vaultPreviewData)
+  }
+}
 
-    NavigationStack {
-      ShowDetail(concert: vaultPreviewData.concerts[0])
-        .musicDestinations(vaultPreviewData)
-    }
+#Preview {
+  NavigationStack {
+    ShowDetail(concert: vaultPreviewData.concerts[1])
+      .musicDestinations(vaultPreviewData)
+  }
+}
 
-    NavigationStack {
-      ShowDetail(concert: vaultPreviewData.concerts[1])
-        .musicDestinations(vaultPreviewData)
-    }
-
-    NavigationStack {
-      ShowDetail(concert: vaultPreviewData.concerts[2])
-        .musicDestinations(vaultPreviewData)
-    }
+#Preview {
+  NavigationStack {
+    ShowDetail(concert: vaultPreviewData.concerts[2])
+      .musicDestinations(vaultPreviewData)
   }
 }

@@ -62,16 +62,14 @@ public struct VaultView: View {
   }
 }
 
-struct VaultView_Previews: PreviewProvider {
-  enum MyError: Error {
-    case testError
-  }
+#Preview {
+  VaultView(VaultModel(urlString: "https://www.example.com", error: VaultError.illegalURL("err")))
+}
 
-  static var previews: some View {
-    VaultView(VaultModel(urlString: "https://www.example.com", error: MyError.testError))
+#Preview {
+  VaultView(VaultModel(urlString: "https://www.example.com"))
+}
 
-    VaultView(VaultModel(urlString: "https://www.example.com"))
-
-    VaultView(VaultModel(urlString: "https://www.example.com", vault: vaultPreviewData))
-  }
+#Preview {
+  VaultView(VaultModel(urlString: "https://www.example.com", vault: vaultPreviewData))
 }

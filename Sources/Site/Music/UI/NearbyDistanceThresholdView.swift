@@ -49,11 +49,9 @@ struct NearbyDistanceThresholdView: View {
   }
 }
 
-struct NearbyDistanceThresholdView_Previews: PreviewProvider {
-  static var previews: some View {
-    NearbyDistanceThresholdView(distanceThreshold: .constant(100.0)) {
-      let v = "Nearby Distance"
-      Text(v)
-    }
+#Preview {
+  NearbyDistanceThresholdView(distanceThreshold: .constant(100.0)) {
+    let v = "Nearby Distance"
+    Text(v)
   }
 }

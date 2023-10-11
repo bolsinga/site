@@ -34,13 +34,14 @@ struct VenueBlurb: View {
   }
 }
 
-struct VenueBlurb_Previews: PreviewProvider {
-  static var previews: some View {
+#Preview {
+  VenueBlurb(concert: vaultPreviewData.concerts[0])
+}
 
-    VenueBlurb(concert: vaultPreviewData.concerts[0])
+#Preview {
+  VenueBlurb(concert: vaultPreviewData.concerts[1])
+}
 
-    VenueBlurb(concert: vaultPreviewData.concerts[1])
-
-    VenueBlurb(concert: vaultPreviewData.concerts[2])
-  }
+#Preview {
+  VenueBlurb(concert: vaultPreviewData.concerts[2])
 }
