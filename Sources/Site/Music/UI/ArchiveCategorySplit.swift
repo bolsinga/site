@@ -30,6 +30,7 @@ struct ArchiveCategorySplit: View {
     Double(model.geocodedVenuesCount) / Double(vault.venueDigests.count)
   }
 
+  @MainActor
   @ViewBuilder var sidebar: some View {
     List(ArchiveCategory.allCases, id: \.self, selection: $archiveNavigation.selectedCategory) {
       category in
