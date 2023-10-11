@@ -8,7 +8,7 @@
 import SwiftUI
 
 public struct RefreshCommand: Commands {
-  @ObservedObject public var model: VaultModel
+  public var model: VaultModel
 
   public init(model: VaultModel) {
     self.model = model
