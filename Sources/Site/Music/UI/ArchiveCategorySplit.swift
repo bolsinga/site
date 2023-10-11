@@ -15,7 +15,7 @@ extension Logger {
 
 struct ArchiveCategorySplit: View {
   let vault: Vault
-  @ObservedObject var model: VaultModel
+  @Bindable var model: VaultModel
 
   @SceneStorage("venue.sort") private var venueSort = VenueSort.alphabetical
   @SceneStorage("venue.filter") private var venueLocationFilter = LocationFilter.none

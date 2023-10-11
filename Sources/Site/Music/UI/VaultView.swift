@@ -13,7 +13,7 @@ extension Logger {
 }
 
 public struct VaultView: View {
-  @ObservedObject private var model: VaultModel
+  private var model: VaultModel
 
   public init(_ model: VaultModel) {
     self.model = model

@@ -5,7 +5,6 @@
 //  Created by Greg Bolsinga on 7/12/23.
 //
 
-import Combine
 @preconcurrency import CoreLocation
 import Foundation
 import os
@@ -33,16 +32,16 @@ enum LocationAuthorization {
   case denied  // Locations denied by user.
 }
 
-public final class VaultModel: ObservableObject {
+@Observable public final class VaultModel {
   let urlString: String
 
-  @Published public var vault: Vault?
-  @Published var error: Error?
-  @Published var todayConcerts: [Concert] = []
-  private var venuePlacemarks: [Venue.ID: CLPlacemark] = [:]
-  @Published var geocodedVenuesCount = 0
-  @Published var currentLocation: CLLocation?
-  @Published var locationAuthorization = LocationAuthorization.allowed
+  public var vault: Vault?
+  var error: Error?
+  var todayConcerts: [Concert] = []
+  @ObservationIgnored private var venuePlacemarks: [Venue.ID: CLPlacemark] = [:]
+  var geocodedVenuesCount = 0
+  var currentLocation: CLLocation?
+  var locationAuthorization = LocationAuthorization.allowed
 
   private let locationManager = LocationManager(
     activityType: .other,
