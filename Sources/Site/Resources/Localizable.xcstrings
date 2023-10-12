@@ -29,7 +29,7 @@
       "comment" : "Decade.decade format string where the format is a full digits year."
     },
     "%lld Artist(s)" : {
-      "comment" : "Artists Count for StatsGrouping.\nContent of the LabeledContent in a ArtistBlurb.\nranked venue artists.",
+      "comment" : "ranked venue artists.\nContent of the LabeledContent in a ArtistBlurb.\nArtists Count for StatsGrouping.",
       "localizations" : {
         "en" : {
           "variations" : {
@@ -58,7 +58,7 @@
       }
     },
     "%lld Show(s)" : {
-      "comment" : "Value for the Venue # of Shows.\nValue for the Artist # of Shows.\nShows Count for StatsGrouping.\nranked shows count.\nValue for the ShowYearList Shows per year.",
+      "comment" : "Value for the Venue # of Shows.\nranked shows count.\nShows Count for StatsGrouping.\nValue for the ShowYearList Shows per year.\nValue for the Artist # of Shows.",
       "localizations" : {
         "en" : {
           "variations" : {
@@ -87,7 +87,7 @@
       }
     },
     "%lld Venue(s)" : {
-      "comment" : "Venues Count for StatsGrouping.\nranked artist venues.",
+      "comment" : "ranked artist venues.\nVenues Count for StatsGrouping.",
       "localizations" : {
         "en" : {
           "variations" : {
@@ -116,7 +116,7 @@
       }
     },
     "%lld Year(s)" : {
-      "comment" : "Years Span for StatsGrouping.\nranked spans years.",
+      "comment" : "ranked spans years.\nYears Span for StatsGrouping.",
       "localizations" : {
         "en" : {
           "variations" : {
@@ -154,13 +154,13 @@
       "comment" : "ArtistList searchPrompt"
     },
     "Artists" : {
-      "comment" : "Title for the Artist Detail\nArchiveCategory Artists"
+      "comment" : "ArchiveCategory Artists\nTitle for the Artist Detail"
     },
     "Comment" : {
       "comment" : "Title of the comment section of ShowDetail"
     },
     "Count" : {
-      "comment" : "Label in the chart for the Count in MonthChart.\nLabel in the chart for the Count in StateChart.\nLabel in the chart for the Count in WeekdayChart."
+      "comment" : "Label in the chart for the Count in WeekdayChart.\nLabel in the chart for the Count in MonthChart.\nLabel in the chart for the Count in StateChart."
     },
     "Date" : {
       "comment" : "Title of the date section of ShowDetail"
@@ -178,7 +178,7 @@
       "comment" : "Label for nearby filtering"
     },
     "First Set" : {
-      "comment" : "Venue First Set Caption\nFirst Set Caption"
+      "comment" : "First Set Caption\nVenue First Set Caption"
     },
     "Lineup" : {
       "comment" : "Title of the Lineup for ShowDetail."
@@ -187,7 +187,13 @@
       "comment" : "Title of the Location / Address Section for VenueDetail."
     },
     "Location Disabled" : {
-      "comment" : "Text shown when location services are restrictued by user."
+      "comment" : "Text shown when location services are restricted by user."
+    },
+    "Location Services are disabled." : {
+      "comment" : "Description test when location services are restricted by user."
+    },
+    "Location Services are not available." : {
+      "comment" : "Description test when location services are denied."
     },
     "Location Unavailable" : {
       "comment" : "Text shown when location services are denied."
@@ -256,7 +262,7 @@
       "comment" : "Title for the ShowYearList."
     },
     "Shows" : {
-      "comment" : "Title of the Shows section of YearDetail\nTitle of the Shows section of VenueDetail\nArchiveCategory Shows\nTitle of the Shows section of ArtistDetail"
+      "comment" : "ArchiveCategory Shows\nTitle of the Shows section of ArtistDetail\nTitle of the Shows section of YearDetail\nTitle of the Shows section of VenueDetail"
     },
     "Shows at %@" : {
       "comment" : "Venue shared string"
@@ -310,7 +316,7 @@
       "comment" : "VenueList searchPrompt"
     },
     "Venues" : {
-      "comment" : "Title for the Venue Detail\nArchiveCategory Venues"
+      "comment" : "ArchiveCategory Venues\nTitle for the Venue Detail"
     },
     "Weekday" : {
       "comment" : "Label in the chart for the Weekday in WeekdayChart."
@@ -319,7 +325,7 @@
       "comment" : "Weekdays Stats"
     },
     "Year Unknown" : {
-      "comment" : "String for when a Show.PartialDate is unknown, and only the year is being shown.\nString for when a Annum is unknown."
+      "comment" : "String for when a Annum is unknown.\nString for when a Show.PartialDate is unknown, and only the year is being shown."
     }
   },
   "version" : "1.0"

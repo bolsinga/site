@@ -24,13 +24,27 @@ struct LocationFilterModifier: ViewModifier {
           #endif
       }
     case .restricted:
-      Text(
-        "Location Disabled", bundle: .module,
-        comment: "Text shown when location services are restrictued by user.")
+      ContentUnavailableView(
+        String(
+          localized: "Location Disabled", bundle: .module,
+          comment: "Text shown when location services are restricted by user."),
+        systemImage: "location.slash.circle",
+        description: Text(
+          "Location Services are disabled.", bundle: .module,
+          comment: "Description test when location services are restricted by user.")
+      )
+      .frame(height: 200)
     case .denied:
-      Text(
-        "Location Unavailable", bundle: .module,
-        comment: "Text shown when location services are denied.")
+      ContentUnavailableView(
+        String(
+          localized: "Location Unavailable", bundle: .module,
+          comment: "Text shown when location services are denied."),
+        systemImage: "location.slash.circle",
+        description: Text(
+          "Location Services are not available.", bundle: .module,
+          comment: "Description test when location services are denied.")
+      )
+      .frame(height: 200)
     }
   }
 
@@ -64,4 +78,25 @@ extension View {
         locationFilter: locationFilter, geocodingProgress: geocodingProgress,
         locationAuthorization: locationAuthorization))
   }
+}
+
+#Preview {
+  Text("Enabled-Geocoding-Allowed")
+    .locationFilter(
+      .constant(.nearby), geocodingProgress: .constant(0),
+      locationAuthorization: .constant(.allowed))
+}
+
+#Preview {
+  Text(String("Enabled-Geocoding-Restricted"))
+    .locationFilter(
+      .constant(.nearby), geocodingProgress: .constant(0),
+      locationAuthorization: .constant(.restricted))
+}
+
+#Preview {
+  Text("Enabled-Geocoding-Denied")
+    .locationFilter(
+      .constant(.nearby), geocodingProgress: .constant(0), locationAuthorization: .constant(.denied)
+    )
 }
