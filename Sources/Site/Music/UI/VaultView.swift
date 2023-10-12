@@ -32,7 +32,11 @@ public struct VaultView: View {
           }
       } else if let error = model.error {
         VStack(alignment: .center) {
-          Text(error.localizedDescription)
+          ContentUnavailableView(
+            error.localizedDescription, systemImage: "network.slash",
+            description: Text(
+              "Unable to load data.", bundle: .module,
+              comment: "Description when Vault data is not able to load."))
           Button {
             Task {
               Logger.vaultLoad.log("User retry")
