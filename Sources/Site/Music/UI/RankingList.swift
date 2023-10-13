@@ -44,6 +44,11 @@ where T: LibraryComparable, T: Hashable, T: PathRestorable, R: Comparable, R: Ha
       }
     }
     .listStyle(.plain)
+    .overlay {
+      if rankingMap.isEmpty {
+        ContentUnavailableView.search(text: searchString)
+      }
+    }
   }
 }
 

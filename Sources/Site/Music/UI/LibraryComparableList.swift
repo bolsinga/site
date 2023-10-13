@@ -52,6 +52,11 @@ where T: LibraryComparable, T: Identifiable, T: Hashable, T.ID == String, T: Pat
       }
     }
     .listStyle(.plain)
+    .overlay {
+      if sectionMap.isEmpty {
+        ContentUnavailableView.search(text: searchString)
+      }
+    }
   }
 }
 
