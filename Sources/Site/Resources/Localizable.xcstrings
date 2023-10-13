@@ -29,7 +29,7 @@
       "comment" : "Decade.decade format string where the format is a full digits year."
     },
     "%lld Artist(s)" : {
-      "comment" : "ranked venue artists.\nContent of the LabeledContent in a ArtistBlurb.\nArtists Count for StatsGrouping.",
+      "comment" : "Artists Count for StatsGrouping.\nContent of the LabeledContent in a ArtistBlurb.\nranked venue artists.",
       "localizations" : {
         "en" : {
           "variations" : {
@@ -58,7 +58,7 @@
       }
     },
     "%lld Show(s)" : {
-      "comment" : "Value for the Venue # of Shows.\nranked shows count.\nShows Count for StatsGrouping.\nValue for the ShowYearList Shows per year.\nValue for the Artist # of Shows.",
+      "comment" : "Shows Count for StatsGrouping.\nranked shows count.\nValue for the ShowYearList Shows per year.\nValue for the Venue # of Shows.\nValue for the Artist # of Shows.",
       "localizations" : {
         "en" : {
           "variations" : {
@@ -87,7 +87,7 @@
       }
     },
     "%lld Venue(s)" : {
-      "comment" : "ranked artist venues.\nVenues Count for StatsGrouping.",
+      "comment" : "Venues Count for StatsGrouping.\nranked artist venues.",
       "localizations" : {
         "en" : {
           "variations" : {
@@ -116,7 +116,7 @@
       }
     },
     "%lld Year(s)" : {
-      "comment" : "ranked spans years.\nYears Span for StatsGrouping.",
+      "comment" : "Years Span for StatsGrouping.\nranked spans years.",
       "localizations" : {
         "en" : {
           "variations" : {
@@ -160,7 +160,7 @@
       "comment" : "Title of the comment section of ShowDetail"
     },
     "Count" : {
-      "comment" : "Label in the chart for the Count in WeekdayChart.\nLabel in the chart for the Count in MonthChart.\nLabel in the chart for the Count in StateChart."
+      "comment" : "Label in the chart for the Count in StateChart.\nLabel in the chart for the Count in MonthChart.\nLabel in the chart for the Count in WeekdayChart."
     },
     "Date" : {
       "comment" : "Title of the date section of ShowDetail"
@@ -262,7 +262,7 @@
       "comment" : "Title for the ShowYearList."
     },
     "Shows" : {
-      "comment" : "ArchiveCategory Shows\nTitle of the Shows section of ArtistDetail\nTitle of the Shows section of YearDetail\nTitle of the Shows section of VenueDetail"
+      "comment" : "Title of the Shows section of YearDetail\nArchiveCategory Shows\nTitle of the Shows section of ArtistDetail\nTitle of the Shows section of VenueDetail"
     },
     "Shows at %@" : {
       "comment" : "Venue shared string"
@@ -311,6 +311,9 @@
     },
     "Today" : {
       "comment" : "ArchiveCategory Today"
+    },
+    "Unable to load data." : {
+      "comment" : "Description when Vault data is not able to load."
     },
     "Venue Names" : {
       "comment" : "VenueList searchPrompt"
