@@ -62,7 +62,8 @@ struct ShowYearList: View {
     .navigationTitle(Text("Show Years", bundle: .module, comment: "Title for the ShowYearList."))
     .locationFilter(
       $locationFilter, geocodingProgress: $geocodingProgress,
-      locationAuthorization: $locationAuthorization)
+      locationAuthorization: $locationAuthorization, filteredDataIsEmpty: filteredDecadesMap.isEmpty
+    )
   }
 }
 

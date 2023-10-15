@@ -11,6 +11,7 @@ struct LocationFilterModifier: ViewModifier {
   @Binding var locationFilter: LocationFilter
   @Binding var geocodingProgress: Double
   @Binding var locationAuthorization: LocationAuthorization
+  let filteredDataIsEmpty: Bool
 
   @ViewBuilder private var nearbyEnabledView: some View {
     switch locationAuthorization {
@@ -22,6 +23,16 @@ struct LocationFilterModifier: ViewModifier {
           #if os(macOS)
             .padding(EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 0))
           #endif
+      } else if filteredDataIsEmpty {
+        ContentUnavailableView(
+          String(
+            localized: "Nothing Nearby", bundle: .module,
+            comment: "Text shown when location filters out all items."),
+          systemImage: "location.slash.circle",
+          description: Text(
+            "Nothing is nearby. Disable the Location Filter or increase the nearby distance filter.",
+            bundle: .module, comment: "Description when location filters out all items..")
+        )
       }
     case .restricted:
       ContentUnavailableView(
@@ -69,14 +80,14 @@ struct LocationFilterModifier: ViewModifier {
 extension View {
   func locationFilter(
     _ locationFilter: Binding<LocationFilter>, geocodingProgress: Binding<Double>,
-    locationAuthorization: Binding<LocationAuthorization>
+    locationAuthorization: Binding<LocationAuthorization>, filteredDataIsEmpty: Bool
   )
     -> some View
   {
     modifier(
       LocationFilterModifier(
         locationFilter: locationFilter, geocodingProgress: geocodingProgress,
-        locationAuthorization: locationAuthorization))
+        locationAuthorization: locationAuthorization, filteredDataIsEmpty: filteredDataIsEmpty))
   }
 }
 
@@ -84,19 +95,26 @@ extension View {
   Text("Enabled-Geocoding-Allowed")
     .locationFilter(
       .constant(.nearby), geocodingProgress: .constant(0),
-      locationAuthorization: .constant(.allowed))
+      locationAuthorization: .constant(.allowed), filteredDataIsEmpty: true)
+}
+
+#Preview {
+  Text("Enabled-Geocoding-Allowed-Empty")
+    .locationFilter(
+      .constant(.nearby), geocodingProgress: .constant(1),
+      locationAuthorization: .constant(.allowed), filteredDataIsEmpty: true)
 }
 
 #Preview {
   Text(String("Enabled-Geocoding-Restricted"))
     .locationFilter(
       .constant(.nearby), geocodingProgress: .constant(0),
-      locationAuthorization: .constant(.restricted))
+      locationAuthorization: .constant(.restricted), filteredDataIsEmpty: false)
 }
 
 #Preview {
   Text("Enabled-Geocoding-Denied")
     .locationFilter(
-      .constant(.nearby), geocodingProgress: .constant(0), locationAuthorization: .constant(.denied)
-    )
+      .constant(.nearby), geocodingProgress: .constant(0),
+      locationAuthorization: .constant(.denied), filteredDataIsEmpty: false)
 }
