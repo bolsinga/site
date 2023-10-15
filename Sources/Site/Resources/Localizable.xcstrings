@@ -58,7 +58,7 @@
       }
     },
     "%lld Show(s)" : {
-      "comment" : "Shows Count for StatsGrouping.\nranked shows count.\nValue for the ShowYearList Shows per year.\nValue for the Venue # of Shows.\nValue for the Artist # of Shows.",
+      "comment" : "Value for the Artist # of Shows.\nShows Count for StatsGrouping.\nValue for the Venue # of Shows.\nranked shows count.\nValue for the ShowYearList Shows per year.",
       "localizations" : {
         "en" : {
           "variations" : {
@@ -160,7 +160,7 @@
       "comment" : "Title of the comment section of ShowDetail"
     },
     "Count" : {
-      "comment" : "Label in the chart for the Count in StateChart.\nLabel in the chart for the Count in MonthChart.\nLabel in the chart for the Count in WeekdayChart."
+      "comment" : "Label in the chart for the Count in WeekdayChart.\nLabel in the chart for the Count in MonthChart.\nLabel in the chart for the Count in StateChart."
     },
     "Date" : {
       "comment" : "Title of the date section of ShowDetail"
@@ -178,7 +178,7 @@
       "comment" : "Label for nearby filtering"
     },
     "First Set" : {
-      "comment" : "First Set Caption\nVenue First Set Caption"
+      "comment" : "Venue First Set Caption\nFirst Set Caption"
     },
     "Lineup" : {
       "comment" : "Title of the Lineup for ShowDetail."
@@ -209,6 +209,12 @@
     },
     "No Shows On This Day" : {
       "comment" : "Text shown when there are no shows today."
+    },
+    "Nothing is nearby. Disable the Location Filter or increase the nearby distance filter." : {
+      "comment" : "Description when location filters out all items.."
+    },
+    "Nothing Nearby" : {
+      "comment" : "Text shown when location filters out all items."
     },
     "Numeric" : {
       "comment" : "String used to describe LibrarySection.numeric."
@@ -262,7 +268,7 @@
       "comment" : "Title for the ShowYearList."
     },
     "Shows" : {
-      "comment" : "Title of the Shows section of YearDetail\nArchiveCategory Shows\nTitle of the Shows section of ArtistDetail\nTitle of the Shows section of VenueDetail"
+      "comment" : "Title of the Shows section of YearDetail\nArchiveCategory Shows\nTitle of the Shows section of VenueDetail\nTitle of the Shows section of ArtistDetail"
     },
     "Shows at %@" : {
       "comment" : "Venue shared string"
@@ -283,22 +289,22 @@
       "comment" : "Shown to change the sort order of the LibraryComparableList."
     },
     "Sort Alphabetically" : {
-      "comment" : "ArtistSort.alphabetical\nVenueSort.alphabetical"
+      "comment" : "VenueSort.alphabetical\nArtistSort.alphabetical"
     },
     "Sort By Artist Count" : {
       "comment" : "VenueSort.venueArtistRank"
     },
     "Sort By First Show" : {
-      "comment" : "ArtistSort.firstSeen\nVenueSort.firstSeen"
+      "comment" : "VenueSort.firstSeen\nArtistSort.firstSeen"
     },
     "Sort By Show Count" : {
-      "comment" : "ArtistSort.showCount\nVenueSort.showCount"
+      "comment" : "VenueSort.showCount\nArtistSort.showCount"
     },
     "Sort By Venue Count" : {
       "comment" : "ArtistSort.artistVenueRank"
     },
     "Sort By Year Range" : {
-      "comment" : "ArtistSort.showYearRange\nVenueSort.showYearRange"
+      "comment" : "VenueSort.showYearRange\nArtistSort.showYearRange"
     },
     "State" : {
       "comment" : "Label in the chart for the State in StateChart."

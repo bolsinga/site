@@ -124,7 +124,8 @@ struct VenueList: View {
       .sortable(algorithm: $sort)
       .locationFilter(
         $locationFilter, geocodingProgress: $geocodingProgress,
-        locationAuthorization: $locationAuthorization)
+        locationAuthorization: $locationAuthorization,
+        filteredDataIsEmpty: filteredVenueDigests.isEmpty)
   }
 }
 
