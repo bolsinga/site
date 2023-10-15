@@ -45,7 +45,7 @@ where T: LibraryComparable, T: Hashable, T: PathRestorable, R: Comparable, R: Ha
     }
     .listStyle(.plain)
     .overlay {
-      if rankingMap.isEmpty {
+      if !searchString.isEmpty, rankingMap.isEmpty {
         ContentUnavailableView.search(text: searchString)
       }
     }
