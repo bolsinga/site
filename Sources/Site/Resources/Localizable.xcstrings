@@ -29,7 +29,7 @@
       "comment" : "Decade.decade format string where the format is a full digits year."
     },
     "%lld Artist(s)" : {
-      "comment" : "Artists Count for StatsGrouping.\nContent of the LabeledContent in a ArtistBlurb.\nranked venue artists.",
+      "comment" : "ranked venue artists.\nContent of the LabeledContent in a ArtistBlurb.\nArtists Count for StatsGrouping.",
       "localizations" : {
         "en" : {
           "variations" : {
@@ -58,7 +58,7 @@
       }
     },
     "%lld Show(s)" : {
-      "comment" : "Value for the Artist # of Shows.\nShows Count for StatsGrouping.\nValue for the Venue # of Shows.\nranked shows count.\nValue for the ShowYearList Shows per year.",
+      "comment" : "ranked shows count.\nValue for the Artist # of Shows.\nValue for the ShowYearList Shows per year.\nShows Count for StatsGrouping.\nValue for the Venue # of Shows.",
       "localizations" : {
         "en" : {
           "variations" : {
@@ -87,7 +87,7 @@
       }
     },
     "%lld Venue(s)" : {
-      "comment" : "Venues Count for StatsGrouping.\nranked artist venues.",
+      "comment" : "ranked artist venues.\nVenues Count for StatsGrouping.",
       "localizations" : {
         "en" : {
           "variations" : {
@@ -116,7 +116,7 @@
       }
     },
     "%lld Year(s)" : {
-      "comment" : "Years Span for StatsGrouping.\nranked spans years.",
+      "comment" : "ranked spans years.\nYears Span for StatsGrouping.",
       "localizations" : {
         "en" : {
           "variations" : {
@@ -154,13 +154,16 @@
       "comment" : "ArtistList searchPrompt"
     },
     "Artists" : {
-      "comment" : "ArchiveCategory Artists\nTitle for the Artist Detail"
+      "comment" : "Title for the Artist Detail\nArchiveCategory Artists"
+    },
+    "Check again tomorrow." : {
+      "comment" : "Description when there are no shows on this date "
     },
     "Comment" : {
       "comment" : "Title of the comment section of ShowDetail"
     },
     "Count" : {
-      "comment" : "Label in the chart for the Count in WeekdayChart.\nLabel in the chart for the Count in MonthChart.\nLabel in the chart for the Count in StateChart."
+      "comment" : "Label in the chart for the Count in WeekdayChart.\nLabel in the chart for the Count in StateChart.\nLabel in the chart for the Count in MonthChart."
     },
     "Date" : {
       "comment" : "Title of the date section of ShowDetail"
@@ -268,7 +271,7 @@
       "comment" : "Title for the ShowYearList."
     },
     "Shows" : {
-      "comment" : "Title of the Shows section of YearDetail\nArchiveCategory Shows\nTitle of the Shows section of VenueDetail\nTitle of the Shows section of ArtistDetail"
+      "comment" : "Title of the Shows section of VenueDetail\nArchiveCategory Shows\nTitle of the Shows section of ArtistDetail\nTitle of the Shows section of YearDetail"
     },
     "Shows at %@" : {
       "comment" : "Venue shared string"
@@ -289,22 +292,22 @@
       "comment" : "Shown to change the sort order of the LibraryComparableList."
     },
     "Sort Alphabetically" : {
-      "comment" : "VenueSort.alphabetical\nArtistSort.alphabetical"
+      "comment" : "ArtistSort.alphabetical\nVenueSort.alphabetical"
     },
     "Sort By Artist Count" : {
       "comment" : "VenueSort.venueArtistRank"
     },
     "Sort By First Show" : {
-      "comment" : "VenueSort.firstSeen\nArtistSort.firstSeen"
+      "comment" : "ArtistSort.firstSeen\nVenueSort.firstSeen"
     },
     "Sort By Show Count" : {
-      "comment" : "VenueSort.showCount\nArtistSort.showCount"
+      "comment" : "ArtistSort.showCount\nVenueSort.showCount"
     },
     "Sort By Venue Count" : {
       "comment" : "ArtistSort.artistVenueRank"
     },
     "Sort By Year Range" : {
-      "comment" : "VenueSort.showYearRange\nArtistSort.showYearRange"
+      "comment" : "ArtistSort.showYearRange\nVenueSort.showYearRange"
     },
     "State" : {
       "comment" : "Label in the chart for the State in StateChart."
