@@ -2,342 +2,273 @@
   "sourceLanguage" : "en",
   "strings" : {
     "#%@" : {
-      "comment" : "Rank.FormatStyle.hash"
+
     },
     "%@ : %@" : {
-      "comment" : "Concert.FormatStyle.full artists - date - No Venue"
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ : %2$@"
+          }
+        }
+      }
     },
     "%@ @ %@" : {
-      "comment" : "Concert.FormatStyle.artistsAndVenue artists - venue"
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ @ %2$@"
+          }
+        }
+      }
     },
     "%@ @ %@ : %@" : {
-      "comment" : "Concert.FormatStyle.full artists - venue - date"
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ @ %2$@ : %3$@"
+          }
+        }
+      }
     },
     "%@ Count: %@" : {
-      "comment" : "Ranking.FormatStyle.rankAndCount"
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ Count: %2$@"
+          }
+        }
+      }
     },
     "%@, %@" : {
-      "comment" : "Concert.FormatStyle.headlinerAndVenue artist headliner - venue"
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@, %2$@"
+          }
+        }
+      }
     },
     "%@." : {
-      "comment" : "Rank.FormatStyle.dotted"
+
     },
     "%@’s" : {
-      "comment" : "Decade.decade format string where the format is a two digit year."
+
     },
     "%@s" : {
-      "comment" : "Decade.decade format string where the format is a full digits year."
+
     },
     "%lld Artist(s)" : {
-      "comment" : "ranked venue artists.\nContent of the LabeledContent in a ArtistBlurb.\nArtists Count for StatsGrouping.",
-      "localizations" : {
-        "en" : {
-          "variations" : {
-            "plural" : {
-              "one" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%lld Artist"
-                }
-              },
-              "other" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%lld Artists"
-                }
-              },
-              "zero" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "No Artists"
-                }
-              }
-            }
-          }
-        }
-      }
+
     },
     "%lld Show(s)" : {
-      "comment" : "ranked shows count.\nValue for the Artist # of Shows.\nValue for the ShowYearList Shows per year.\nShows Count for StatsGrouping.\nValue for the Venue # of Shows.",
-      "localizations" : {
-        "en" : {
-          "variations" : {
-            "plural" : {
-              "one" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%lld Show"
-                }
-              },
-              "other" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%lld Shows"
-                }
-              },
-              "zero" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "No Shows"
-                }
-              }
-            }
-          }
-        }
-      }
+
     },
     "%lld Venue(s)" : {
-      "comment" : "ranked artist venues.\nVenues Count for StatsGrouping.",
-      "localizations" : {
-        "en" : {
-          "variations" : {
-            "plural" : {
-              "one" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%lld Venue"
-                }
-              },
-              "other" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%lld Venues"
-                }
-              },
-              "zero" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "No Venue"
-                }
-              }
-            }
-          }
-        }
-      }
+
     },
     "%lld Year(s)" : {
-      "comment" : "ranked spans years.\nYears Span for StatsGrouping.",
-      "localizations" : {
-        "en" : {
-          "variations" : {
-            "plural" : {
-              "one" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%lld Year"
-                }
-              },
-              "other" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%lld Years"
-                }
-              },
-              "zero" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "No Years"
-                }
-              }
-            }
-          }
-        }
-      }
+
     },
     "All Shows" : {
-      "comment" : "ArchiveCategory.shows shared title"
+
     },
     "Archives" : {
-      "comment" : "Title for the ArchiveCategorySplit."
+
     },
     "Artist Names" : {
-      "comment" : "ArtistList searchPrompt"
+
     },
     "Artists" : {
-      "comment" : "Title for the Artist Detail\nArchiveCategory Artists"
+
     },
     "Check again tomorrow." : {
-      "comment" : "Description when there are no shows on this date "
+
     },
     "Comment" : {
-      "comment" : "Title of the comment section of ShowDetail"
+
     },
     "Count" : {
-      "comment" : "Label in the chart for the Count in WeekdayChart.\nLabel in the chart for the Count in StateChart.\nLabel in the chart for the Count in MonthChart."
+
     },
     "Date" : {
-      "comment" : "Title of the date section of ShowDetail"
+
     },
     "Date Unknown" : {
-      "comment" : "String for when a Show.PartialDate is unknown."
+
     },
     "Decade Unknown" : {
-      "comment" : "String for when a Decade is unknown."
+
     },
     "Display Shows On This Date" : {
-      "comment" : "ArchiveCategory.today shared title"
+
     },
     "Filter Nearby" : {
-      "comment" : "Label for nearby filtering"
+
     },
     "First Set" : {
-      "comment" : "Venue First Set Caption\nFirst Set Caption"
+
     },
     "Lineup" : {
-      "comment" : "Title of the Lineup for ShowDetail."
+
     },
     "Location" : {
-      "comment" : "Title of the Location / Address Section for VenueDetail."
+
     },
     "Location Disabled" : {
-      "comment" : "Text shown when location services are restricted by user."
+
     },
     "Location Services are disabled." : {
-      "comment" : "Description test when location services are restricted by user."
+
     },
     "Location Services are not available." : {
-      "comment" : "Description test when location services are denied."
+
     },
     "Location Unavailable" : {
-      "comment" : "Text shown when location services are denied."
+
     },
     "Month" : {
-      "comment" : "Label in the chart for the Month in MonthChart."
+
     },
     "Months" : {
-      "comment" : "Months Stats"
+
     },
     "Nearby Distance" : {
-      "comment" : "Label for changing the nearby concerts distance threshold."
+
     },
     "No Shows On This Day" : {
-      "comment" : "Text shown when there are no shows today."
+
     },
     "Nothing is nearby. Disable the Location Filter or increase the nearby distance filter." : {
-      "comment" : "Description when location filters out all items.."
+
     },
     "Nothing Nearby" : {
-      "comment" : "Text shown when location filters out all items."
+
     },
     "Numeric" : {
-      "comment" : "String used to describe LibrarySection.numeric."
+
     },
     "On This Day: %@" : {
-      "comment" : "On This Day: - placeholder is date"
+
     },
     "Punctuation" : {
-      "comment" : "String used to describe LibrarySection.punctuation."
+
     },
     "Rank Unknown" : {
-      "comment" : "String for when a Rank is unknown."
+
     },
     "Refresh" : {
-      "comment" : "Menu Action to call refreshable action."
+
     },
     "Related Artists" : {
-      "comment" : "Title of the Related Artists Section for ArtistDetail."
+
     },
     "Related Venues" : {
-      "comment" : "Title of the Related Venues Section for VenueDetail."
+
     },
     "Retry" : {
-      "comment" : "Title for the Retry button when the Model could not be created."
+
     },
     "See More About This Show" : {
-      "comment" : "Spotlight Description for Show"
+
     },
     "See Shows At This Venue" : {
-      "comment" : "Spotlight Description for Venue"
+
     },
     "See Shows From This Year" : {
-      "comment" : "Spotlight Description for Annum"
+
     },
     "See Shows With This Artist" : {
-      "comment" : "Spotlight Description for Artist"
+
     },
     "Select An Item" : {
-      "comment" : "Shown when no ArchiveCategory is selected."
+
     },
     "Show Artists" : {
-      "comment" : "ArchiveCategory.artists shared title"
+
     },
     "Show Statistics" : {
-      "comment" : "ArchiveCategory.stats shared title"
+
     },
     "Show Venues" : {
-      "comment" : "ArchiveCategory.venues shared title"
+
     },
     "Show Years" : {
-      "comment" : "Title for the ShowYearList."
+
     },
     "Shows" : {
-      "comment" : "Title of the Shows section of VenueDetail\nArchiveCategory Shows\nTitle of the Shows section of ArtistDetail\nTitle of the Shows section of YearDetail"
+
     },
     "Shows at %@" : {
-      "comment" : "Venue shared string"
+
     },
     "Shows from %@" : {
-      "comment" : "Annum.FormatStyle.shared"
+
     },
     "Shows from Unknown Years" : {
-      "comment" : "String for when a sharing an unknown Annum."
+
     },
     "Shows Today" : {
-      "comment" : "Suggested invocation phrase for ArchiveCategory.today"
+
     },
     "Shows with %@" : {
-      "comment" : "Artist shared string"
+
     },
     "Sort" : {
-      "comment" : "Shown to change the sort order of the LibraryComparableList."
+
     },
     "Sort Alphabetically" : {
-      "comment" : "ArtistSort.alphabetical\nVenueSort.alphabetical"
+
     },
     "Sort By Artist Count" : {
-      "comment" : "VenueSort.venueArtistRank"
+
     },
     "Sort By First Show" : {
-      "comment" : "ArtistSort.firstSeen\nVenueSort.firstSeen"
+
     },
     "Sort By Show Count" : {
-      "comment" : "ArtistSort.showCount\nVenueSort.showCount"
+
     },
     "Sort By Venue Count" : {
-      "comment" : "ArtistSort.artistVenueRank"
+
     },
     "Sort By Year Range" : {
-      "comment" : "ArtistSort.showYearRange\nVenueSort.showYearRange"
+
     },
     "State" : {
-      "comment" : "Label in the chart for the State in StateChart."
+
     },
     "States" : {
-      "comment" : "States Stats"
+
     },
     "Stats" : {
-      "comment" : "ArchiveCategory Stats"
+
     },
     "Today" : {
-      "comment" : "ArchiveCategory Today"
+
     },
     "Unable to load data." : {
-      "comment" : "Description when Vault data is not able to load."
+
     },
     "Venue Names" : {
-      "comment" : "VenueList searchPrompt"
+
     },
     "Venues" : {
-      "comment" : "ArchiveCategory Venues\nTitle for the Venue Detail"
+
     },
     "Weekday" : {
-      "comment" : "Label in the chart for the Weekday in WeekdayChart."
+
     },
     "Weekdays" : {
-      "comment" : "Weekdays Stats"
+
     },
     "Year Unknown" : {
-      "comment" : "String for when a Annum is unknown.\nString for when a Show.PartialDate is unknown, and only the year is being shown."
+
     }
   },
   "version" : "1.0"

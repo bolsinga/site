@@ -60,16 +60,9 @@ extension PartialDate.FormatStyle: Foundation.FormatStyle {
       return fmt.format(date)
     } else {
       if case .yearOnly = style {
-        return String(
-          localized: "Year Unknown",
-          bundle: .module,
-          comment:
-            "String for when a Show.PartialDate is unknown, and only the year is being shown.")
+        return String(localized: "Year Unknown", bundle: .module)
       }
-      return String(
-        localized: "Date Unknown",
-        bundle: .module,
-        comment: "String for when a Show.PartialDate is unknown.")
+      return String(localized: "Date Unknown", bundle: .module)
     }
   }
 }

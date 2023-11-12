@@ -42,9 +42,7 @@ struct VenueList: View {
   }
 
   @ViewBuilder private func showCount(for venueDigest: VenueDigest) -> some View {
-    Text(
-      "\(venueDigest.showRank.value) Show(s)", bundle: .module,
-      comment: "Value for the Venue # of Shows.")
+    Text("\(venueDigest.showRank.value) Show(s)", bundle: .module)
   }
 
   @ViewBuilder private func sectionHeader(for ranking: Ranking) -> some View {
@@ -116,10 +114,10 @@ struct VenueList: View {
 
   var body: some View {
     listElement
-      .navigationTitle(Text("Venues", bundle: .module, comment: "Title for the Venue Detail"))
+      .navigationTitle(Text("Venues", bundle: .module))
       .searchable(
         text: $searchString,
-        prompt: String(localized: "Venue Names", bundle: .module, comment: "VenueList searchPrompt")
+        prompt: String(localized: "Venue Names", bundle: .module)
       )
       .sortable(algorithm: $sort)
       .locationFilter(

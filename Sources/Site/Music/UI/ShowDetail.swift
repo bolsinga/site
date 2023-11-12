@@ -18,11 +18,7 @@ struct ShowDetail: View {
   }
 
   @ViewBuilder private var lineupElement: some View {
-    Section(
-      header: Text(
-        "Lineup", bundle: .module,
-        comment: "Title of the Lineup for ShowDetail.")
-    ) {
+    Section(header: Text("Lineup", bundle: .module)) {
       ForEach(concert.artists) { artist in
         NavigationLink(artist.name, value: artist)
       }
@@ -30,9 +26,7 @@ struct ShowDetail: View {
   }
 
   @ViewBuilder private var dateElement: some View {
-    Section(
-      header: Text("Date", bundle: .module, comment: "Title of the date section of ShowDetail")
-    ) {
+    Section(header: Text("Date", bundle: .module)) {
       let show = concert.show
       if !show.date.isUnknown, let date = show.date.date {
         LabeledContent {
@@ -48,10 +42,7 @@ struct ShowDetail: View {
 
   @ViewBuilder private var commentElement: some View {
     if let comment = concert.show.comment {
-      Section(
-        header: Text(
-          "Comment", bundle: .module, comment: "Title of the comment section of ShowDetail")
-      ) {
+      Section(header: Text("Comment", bundle: .module)) {
         Text(comment.asAttributedString)
       }
     }

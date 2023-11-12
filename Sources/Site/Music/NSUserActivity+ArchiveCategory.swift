@@ -38,9 +38,7 @@ extension NSUserActivity {
       #if os(iOS)
         self.isEligibleForPrediction = true
       #endif
-      self.suggestedInvocationPhrase = String(
-        localized: "Shows Today", bundle: .module,
-        comment: "Suggested invocation phrase for ArchiveCategory.today")
+      self.suggestedInvocationPhrase = String(localized: "Shows Today", bundle: .module)
     }
 
     if let url {

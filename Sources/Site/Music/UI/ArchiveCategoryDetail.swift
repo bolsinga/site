@@ -50,7 +50,7 @@ struct ArchiveCategoryDetail: View {
       .shareCategory(category, url: url)
       .archiveCategoryUserActivity(category, url: url, isActive: $isCategoryActive)
     } else {
-      Text("Select An Item", bundle: .module, comment: "Shown when no ArchiveCategory is selected.")
+      Text("Select An Item", bundle: .module)
     }
   }
 

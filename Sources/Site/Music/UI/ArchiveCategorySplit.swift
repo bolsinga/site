@@ -57,7 +57,7 @@ struct ArchiveCategorySplit: View {
     NavigationSplitView {
       sidebar
         .navigationTitle(
-          Text("Archives", bundle: .module, comment: "Title for the ArchiveCategorySplit.")
+          Text("Archives", bundle: .module)
         )
         .nearbyDistanceThreshold($nearbyDistanceThreshold)
     } detail: {

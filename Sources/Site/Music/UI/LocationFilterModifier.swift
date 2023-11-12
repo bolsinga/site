@@ -25,35 +25,25 @@ struct LocationFilterModifier: ViewModifier {
           #endif
       } else if filteredDataIsEmpty {
         ContentUnavailableView(
-          String(
-            localized: "Nothing Nearby", bundle: .module,
-            comment: "Text shown when location filters out all items."),
+          String(localized: "Nothing Nearby", bundle: .module),
           systemImage: "location.slash.circle",
           description: Text(
             "Nothing is nearby. Disable the Location Filter or increase the nearby distance filter.",
-            bundle: .module, comment: "Description when location filters out all items..")
+            bundle: .module)
         )
       }
     case .restricted:
       ContentUnavailableView(
-        String(
-          localized: "Location Disabled", bundle: .module,
-          comment: "Text shown when location services are restricted by user."),
+        String(localized: "Location Disabled", bundle: .module),
         systemImage: "location.slash.circle",
-        description: Text(
-          "Location Services are disabled.", bundle: .module,
-          comment: "Description test when location services are restricted by user.")
+        description: Text("Location Services are disabled.", bundle: .module)
       )
       .frame(height: 200)
     case .denied:
       ContentUnavailableView(
-        String(
-          localized: "Location Unavailable", bundle: .module,
-          comment: "Text shown when location services are denied."),
+        String(localized: "Location Unavailable", bundle: .module),
         systemImage: "location.slash.circle",
-        description: Text(
-          "Location Services are not available.", bundle: .module,
-          comment: "Description test when location services are denied.")
+        description: Text("Location Services are not available.", bundle: .module)
       )
       .frame(height: 200)
     }
@@ -69,8 +59,7 @@ struct LocationFilterModifier: ViewModifier {
     .toolbar {
       ToolbarItem(placement: .primaryAction) {
         Toggle(
-          String(
-            localized: "Filter Nearby", bundle: .module, comment: "Label for nearby filtering"),
+          String(localized: "Filter Nearby", bundle: .module),
           systemImage: "location.circle", isOn: $locationFilter.toggle)
       }
     }

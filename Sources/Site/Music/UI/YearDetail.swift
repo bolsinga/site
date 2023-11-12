@@ -27,10 +27,7 @@ struct YearDetail: View {
   @ViewBuilder private var showsElement: some View {
     let concerts = concerts
     if !concerts.isEmpty {
-      Section(
-        header: Text(
-          "Shows", bundle: .module, comment: "Title of the Shows section of YearDetail")
-      ) {
+      Section(header: Text("Shows", bundle: .module)) {
         ForEach(concerts.sorted(by: concertCompare)) { concert in
           NavigationLink(value: concert) { ConcertBlurb(concert: concert) }
         }

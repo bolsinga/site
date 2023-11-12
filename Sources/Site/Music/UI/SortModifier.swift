@@ -18,9 +18,7 @@ struct SortModifier<T: Sorting>: ViewModifier {
     content
       .toolbar {
         ToolbarItem(placement: .primaryAction) {
-          let sortText = Text(
-            "Sort", bundle: .module,
-            comment: "Shown to change the sort order of the LibraryComparableList.")
+          let sortText = Text("Sort", bundle: .module)
           Menu {
             Picker(selection: $algorithm) {
               ForEach(T.allCases, id: \.self) { category in

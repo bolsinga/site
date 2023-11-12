@@ -13,7 +13,7 @@ struct ArtistDetail: View {
 
   @ViewBuilder private var firstSetElement: some View {
     HStack {
-      Text("First Set", bundle: .module, comment: "First Set Caption")
+      Text("First Set", bundle: .module)
       Spacer()
       Text(digest.firstSet.rank.formatted())
     }
@@ -35,8 +35,7 @@ struct ArtistDetail: View {
   @ViewBuilder private var showsElement: some View {
     if !digest.concerts.isEmpty {
       Section(
-        header: Text(
-          "Shows", bundle: .module, comment: "Title of the Shows section of ArtistDetail")
+        header: Text("Shows", bundle: .module)
       ) {
         ForEach(digest.concerts.sorted(by: concertCompare)) { concert in
           NavigationLink(value: concert) { ArtistBlurb(concert: concert) }
@@ -48,9 +47,7 @@ struct ArtistDetail: View {
   @ViewBuilder private var relatedsElement: some View {
     if !digest.related.isEmpty {
       Section(
-        header: Text(
-          "Related Artists", bundle: .module,
-          comment: "Title of the Related Artists Section for ArtistDetail.")
+        header: Text("Related Artists", bundle: .module)
       ) {
         ForEach(digest.related) { relatedArtist in
           NavigationLink(relatedArtist.name, value: relatedArtist)
