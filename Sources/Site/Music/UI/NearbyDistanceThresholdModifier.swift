@@ -16,9 +16,7 @@ struct NearbyDistanceThresholdModifier: ViewModifier {
     content
       .toolbar {
         ToolbarItem(placement: .primaryAction) {
-          let labelText = Text(
-            "Nearby Distance", bundle: .module,
-            comment: "Label for changing the nearby concerts distance threshold.")
+          let labelText = Text("Nearby Distance", bundle: .module)
           Button {
             presentDistanceSliderPopover = true
           } label: {

@@ -15,9 +15,7 @@ extension Concert: PathRestorableUserActivity {
     userActivity.isEligibleForSearch = true
     userActivity.title = self.formatted(.headlinerAndVenue)
     let attributes = CSSearchableItemAttributeSet(contentType: .content)
-    attributes.contentDescription = String(
-      localized: "See More About This Show", bundle: .module,
-      comment: "Spotlight Description for Show")
+    attributes.contentDescription = String(localized: "See More About This Show", bundle: .module)
     userActivity.contentAttributeSet = attributes
   }
 }

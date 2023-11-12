@@ -39,16 +39,8 @@ struct MonthChart: View {
     let monthCounts = computeMonthCounts.sorted { $0.key < $1.key }  // array of dictionary elements
     Chart(monthCounts, id: \.key) { item in
       BarMark(
-        x: .value(
-          Text(
-            "Month",
-            bundle: .module,
-            comment: "Label in the chart for the Month in MonthChart."), item.value.0),
-        y: .value(
-          Text(
-            "Count",
-            bundle: .module,
-            comment: "Label in the chart for the Count in MonthChart."), item.value.1)
+        x: .value(Text("Month", bundle: .module), item.value.0),
+        y: .value(Text("Count", bundle: .module), item.value.1)
       )
       .annotation(position: .top) {
         if item.value.1 > 0 {

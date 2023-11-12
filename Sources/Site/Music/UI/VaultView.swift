@@ -34,20 +34,14 @@ public struct VaultView: View {
         VStack(alignment: .center) {
           ContentUnavailableView(
             error.localizedDescription, systemImage: "network.slash",
-            description: Text(
-              "Unable to load data.", bundle: .module,
-              comment: "Description when Vault data is not able to load."))
+            description: Text("Unable to load data.", bundle: .module))
           Button {
             Task {
               Logger.vaultLoad.log("User retry")
               await model.load()
             }
           } label: {
-            Label(
-              String(
-                localized: "Retry", bundle: .module,
-                comment: "Title for the Retry button when the Model could not be created."),
-              systemImage: "arrow.clockwise")
+            Label(String(localized: "Retry", bundle: .module), systemImage: "arrow.clockwise")
           }
           .buttonStyle(.borderedProminent)
         }

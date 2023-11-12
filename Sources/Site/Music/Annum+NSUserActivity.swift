@@ -15,9 +15,7 @@ extension Annum: PathRestorableUserActivity {
     userActivity.isEligibleForSearch = true
     userActivity.title = self.formatted()
     let attributes = CSSearchableItemAttributeSet(contentType: .content)
-    attributes.contentDescription = String(
-      localized: "See Shows From This Year", bundle: .module,
-      comment: "Spotlight Description for Annum")
+    attributes.contentDescription = String(localized: "See Shows From This Year", bundle: .module)
     userActivity.contentAttributeSet = attributes
   }
 }

@@ -14,16 +14,8 @@ struct StateChart: View {
   var body: some View {
     Chart(counts.sorted { $0.value < $1.value }, id: \.key) { item in
       BarMark(
-        x: .value(
-          Text(
-            "State",
-            bundle: .module,
-            comment: "Label in the chart for the State in StateChart."), item.key),
-        y: .value(
-          Text(
-            "Count",
-            bundle: .module,
-            comment: "Label in the chart for the Count in StateChart."), item.value)
+        x: .value(Text("State", bundle: .module), item.key),
+        y: .value(Text("Count", bundle: .module), item.value)
       )
       .annotation(position: .top) {
         if item.value > 0 {

@@ -48,9 +48,7 @@ struct ShowYearList: View {
             NavigationLink(value: annum) {
               LabeledContent(
                 annum.formatted(),
-                value: String(
-                  localized: "\(concerts.count) Show(s)", bundle: .module,
-                  comment: "Value for the ShowYearList Shows per year."))
+                value: String(localized: "\(concerts.count) Show(s)", bundle: .module))
             }
           }
         } header: {
@@ -59,7 +57,7 @@ struct ShowYearList: View {
       }
     }
     .listStyle(.plain)
-    .navigationTitle(Text("Show Years", bundle: .module, comment: "Title for the ShowYearList."))
+    .navigationTitle(Text("Show Years", bundle: .module))
     .locationFilter(
       $locationFilter, geocodingProgress: $geocodingProgress,
       locationAuthorization: $locationAuthorization, filteredDataIsEmpty: filteredDecadesMap.isEmpty

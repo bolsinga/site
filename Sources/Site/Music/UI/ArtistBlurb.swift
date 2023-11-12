@@ -12,9 +12,7 @@ struct ArtistBlurb: View {
 
   var body: some View {
     LabeledContent {
-      Text(
-        "\(concert.show.artists.count) Artist(s)", bundle: .module,
-        comment: "Content of the LabeledContent in a ArtistBlurb.")
+      Text("\(concert.show.artists.count) Artist(s)", bundle: .module)
     } label: {
       if let venue = concert.venue {
         Text(venue.name)

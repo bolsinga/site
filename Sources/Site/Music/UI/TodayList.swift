@@ -13,13 +13,9 @@ struct TodayList: View {
   var body: some View {
     if concerts.isEmpty {
       ContentUnavailableView(
-        String(
-          localized: "No Shows On This Day", bundle: .module,
-          comment: "Text shown when there are no shows today."),
+        String(localized: "No Shows On This Day", bundle: .module),
         systemImage: "calendar.badge.exclamationmark",
-        description: Text(
-          "Check again tomorrow.",
-          bundle: .module, comment: "Description when there are no shows on this date ")
+        description: Text("Check again tomorrow.", bundle: .module)
       )
     } else {
       List(concerts) { concert in
@@ -29,7 +25,7 @@ struct TodayList: View {
       .navigationTitle(
         Text(
           "On This Day: \(Date.now.formatted(.dateTime.month(.defaultDigits).day()))",
-          bundle: .module, comment: "On This Day: - placeholder is date"))
+          bundle: .module))
     }
   }
 }

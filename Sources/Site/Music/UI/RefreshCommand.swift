@@ -21,7 +21,7 @@ public struct RefreshCommand: Commands {
           await model.load()
         }
       } label: {
-        Text("Refresh", bundle: .module, comment: "Menu Action to call refreshable action.")
+        Text("Refresh", bundle: .module)
       }
       .keyboardShortcut(KeyboardShortcut(KeyEquivalent("r"), modifiers: [.command]))
     }

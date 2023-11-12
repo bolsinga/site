@@ -17,25 +17,15 @@ enum ArtistSort: Int, Sorting {
   var localizedString: String {
     switch self {
     case .alphabetical:
-      return String(
-        localized: "Sort Alphabetically", bundle: .module,
-        comment: "ArtistSort.alphabetical")
+      return String(localized: "Sort Alphabetically", bundle: .module)
     case .showCount:
-      return String(
-        localized: "Sort By Show Count", bundle: .module,
-        comment: "ArtistSort.showCount")
+      return String(localized: "Sort By Show Count", bundle: .module)
     case .showYearRange:
-      return String(
-        localized: "Sort By Year Range", bundle: .module,
-        comment: "ArtistSort.showYearRange")
+      return String(localized: "Sort By Year Range", bundle: .module)
     case .venueRank:
-      return String(
-        localized: "Sort By Venue Count", bundle: .module,
-        comment: "ArtistSort.artistVenueRank")
+      return String(localized: "Sort By Venue Count", bundle: .module)
     case .firstSeen:
-      return String(
-        localized: "Sort By First Show", bundle: .module,
-        comment: "ArtistSort.firstSeen")
+      return String(localized: "Sort By First Show", bundle: .module)
     }
   }
 }

@@ -12,7 +12,7 @@ extension Ranking {
     HStack {
       Text(self.formatted(.rankOnly))
       Spacer()
-      Text("\(self.value) Show(s)", bundle: .module, comment: "ranked shows count.")
+      Text("\(self.value) Show(s)", bundle: .module)
     }
   }
 
@@ -20,7 +20,7 @@ extension Ranking {
     HStack {
       Text(self.formatted(.rankOnly))
       Spacer()
-      Text("\(self.value) Year(s)", bundle: .module, comment: "ranked spans years.")
+      Text("\(self.value) Year(s)", bundle: .module)
     }
   }
 
@@ -28,7 +28,7 @@ extension Ranking {
     HStack {
       Text(self.formatted(.rankOnly))
       Spacer()
-      Text("\(self.value) Venue(s)", bundle: .module, comment: "ranked artist venues.")
+      Text("\(self.value) Venue(s)", bundle: .module)
     }
   }
 
@@ -36,7 +36,7 @@ extension Ranking {
     HStack {
       Text(self.formatted(.rankOnly))
       Spacer()
-      Text("\(self.value) Artist(s)", bundle: .module, comment: "ranked venue artists.")
+      Text("\(self.value) Artist(s)", bundle: .module)
     }
   }
 }
