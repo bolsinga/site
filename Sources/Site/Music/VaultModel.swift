@@ -42,6 +42,7 @@ enum LocationAuthorization {
   var geocodedVenuesCount = 0
   var currentLocation: CLLocation?
   var locationAuthorization = LocationAuthorization.allowed
+  var nearbyDistanceThreshold: CLLocationDistance = 16093.44  // 10 miles
 
   private let locationManager = LocationManager(
     activityType: .other,
@@ -163,12 +164,14 @@ enum LocationAuthorization {
     }
   }
 
-  func concertsNearby(_ distanceThreshold: CLLocationDistance) -> [Concert] {
+  var nearbyConcerts: [Concert] {
     guard let currentLocation else { return [] }
-    return concerts(nearby: currentLocation, distanceThreshold: distanceThreshold)
+    return concerts(nearby: currentLocation, distanceThreshold: nearbyDistanceThreshold)
   }
 
-  func concerts(nearby location: CLLocation, distanceThreshold: CLLocationDistance) -> [Concert] {
+  private func concerts(nearby location: CLLocation, distanceThreshold: CLLocationDistance)
+    -> [Concert]
+  {
     guard let vault else {
       Logger.vaultModel.log("No Vault to calculate nearby Concerts.")
       return []
