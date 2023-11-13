@@ -65,7 +65,7 @@ struct ArchiveCategorySplit: View {
         ArchiveCategoryDetail(
           vault: vault, category: archiveNavigation.selectedCategory,
           todayConcerts: $model.todayConcerts,
-          nearbyConcerts: .constant(model.concertsNearby(nearbyDistanceThreshold)),
+          nearbyConcerts: .constant(model.nearbyConcerts),
           venueSort: $venueSort, artistSort: $artistSort,
           isCategoryActive: .constant(archiveNavigation.navigationPath.isEmpty),
           locationFilter: $locationFilter, geocodingProgress: .constant(geocodingProgress),
@@ -102,6 +102,12 @@ struct ArchiveCategorySplit: View {
           Logger.link.error("ArchiveCategory to URL error: \(error, privacy: .public)")
         }
       }
+    }
+    .onAppear(perform: {
+      model.nearbyDistanceThreshold = self.nearbyDistanceThreshold
+    })
+    .onChange(of: nearbyDistanceThreshold) { _, newValue in
+      model.nearbyDistanceThreshold = newValue
     }
   }
 }
