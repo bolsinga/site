@@ -64,7 +64,7 @@ struct ArchiveCategorySplit: View {
       NavigationStack(path: $archiveNavigation.navigationPath) {
         ArchiveCategoryDetail(
           vault: vault, category: archiveNavigation.selectedCategory,
-          todayConcerts: $model.todayConcerts,
+          todayConcerts: model.todayConcerts,
           nearbyConcerts: model.nearbyConcerts,
           venueSort: $venueSort, artistSort: $artistSort,
           isCategoryActive: .constant(archiveNavigation.navigationPath.isEmpty),
