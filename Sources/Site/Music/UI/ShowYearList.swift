@@ -11,7 +11,7 @@ struct ShowYearList: View {
   let decadesMap: [Decade: [Annum: [Concert.ID]]]
   let nearbyConcertIDs: Set<Concert.ID>
   @Binding var locationFilter: LocationFilter
-  @Binding var geocodingProgress: Double
+  let geocodingProgress: Double
   let locationAuthorization: LocationAuthorization
 
   private var filteredDecadesMap: [Decade: [Annum: [Concert.ID]]] {
@@ -59,7 +59,7 @@ struct ShowYearList: View {
     .listStyle(.plain)
     .navigationTitle(Text("Show Years", bundle: .module))
     .locationFilter(
-      $locationFilter, geocodingProgress: $geocodingProgress,
+      $locationFilter, geocodingProgress: geocodingProgress,
       locationAuthorization: locationAuthorization, filteredDataIsEmpty: filteredDecadesMap.isEmpty
     )
   }
@@ -70,7 +70,7 @@ struct ShowYearList: View {
     ShowYearList(
       decadesMap: vaultPreviewData.decadesMap,
       nearbyConcertIDs: Set(vaultPreviewData.concertMap.keys),
-      locationFilter: .constant(.none), geocodingProgress: .constant(0),
+      locationFilter: .constant(.none), geocodingProgress: 0,
       locationAuthorization: .allowed
     )
     .musicDestinations(vaultPreviewData)
