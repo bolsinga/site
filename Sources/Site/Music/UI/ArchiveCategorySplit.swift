@@ -21,7 +21,7 @@ struct ArchiveCategorySplit: View {
   @SceneStorage("artist.sort") private var artistSort = ArtistSort.alphabetical
   @SceneStorage("nearby.distance") private var nearbyDistanceThreshold: CLLocationDistance =
     16093.44  // 10 miles
-  @SceneStorage("nearby.filter") private var nearbyFilter = LocationFilter.none
+  @SceneStorage("nearby.filter") private var locationFilter = LocationFilter.none
 
   @State private var archiveNavigation = ArchiveNavigation()
 
@@ -68,7 +68,7 @@ struct ArchiveCategorySplit: View {
           nearbyConcerts: .constant(model.concertsNearby(nearbyDistanceThreshold)),
           venueSort: $venueSort, artistSort: $artistSort,
           isCategoryActive: .constant(archiveNavigation.navigationPath.isEmpty),
-          nearbyLocationFilter: $nearbyFilter, geocodingProgress: .constant(geocodingProgress),
+          locationFilter: $locationFilter, geocodingProgress: .constant(geocodingProgress),
           locationAuthorization: $model.locationAuthorization)
       }
     }
