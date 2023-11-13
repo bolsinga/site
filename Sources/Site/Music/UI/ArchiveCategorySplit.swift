@@ -69,7 +69,7 @@ struct ArchiveCategorySplit: View {
           venueSort: $venueSort, artistSort: $artistSort,
           isCategoryActive: .constant(archiveNavigation.navigationPath.isEmpty),
           locationFilter: $locationFilter, geocodingProgress: .constant(geocodingProgress),
-          locationAuthorization: $model.locationAuthorization)
+          locationAuthorization: model.locationAuthorization)
       }
     }
     .archiveStorage(archiveNavigation: archiveNavigation)

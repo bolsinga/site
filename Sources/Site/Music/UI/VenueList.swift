@@ -15,7 +15,7 @@ struct VenueList: View {
   @Binding var sort: VenueSort
   @Binding var locationFilter: LocationFilter
   @Binding var geocodingProgress: Double
-  @Binding var locationAuthorization: LocationAuthorization
+  let locationAuthorization: LocationAuthorization
 
   @State private var searchString: String = ""
 
@@ -122,7 +122,7 @@ struct VenueList: View {
       .sortable(algorithm: $sort)
       .locationFilter(
         $locationFilter, geocodingProgress: $geocodingProgress,
-        locationAuthorization: $locationAuthorization,
+        locationAuthorization: locationAuthorization,
         filteredDataIsEmpty: filteredVenueDigests.isEmpty)
   }
 }
@@ -134,7 +134,7 @@ struct VenueList: View {
       nearbyVenueIDs: Set(vaultPreviewData.venueDigests.map { $0.id }),
       sectioner: vaultPreviewData.sectioner, sort: .constant(.alphabetical),
       locationFilter: .constant(.none), geocodingProgress: .constant(0),
-      locationAuthorization: .constant(.allowed)
+      locationAuthorization: .allowed
     )
     .musicDestinations(vaultPreviewData)
   }

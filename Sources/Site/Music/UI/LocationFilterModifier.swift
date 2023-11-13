@@ -10,7 +10,7 @@ import SwiftUI
 struct LocationFilterModifier: ViewModifier {
   @Binding var locationFilter: LocationFilter
   @Binding var geocodingProgress: Double
-  @Binding var locationAuthorization: LocationAuthorization
+  let locationAuthorization: LocationAuthorization
   let filteredDataIsEmpty: Bool
 
   @ViewBuilder private var nearbyEnabledView: some View {
@@ -69,7 +69,7 @@ struct LocationFilterModifier: ViewModifier {
 extension View {
   func locationFilter(
     _ locationFilter: Binding<LocationFilter>, geocodingProgress: Binding<Double>,
-    locationAuthorization: Binding<LocationAuthorization>, filteredDataIsEmpty: Bool
+    locationAuthorization: LocationAuthorization, filteredDataIsEmpty: Bool
   )
     -> some View
   {
@@ -84,26 +84,26 @@ extension View {
   Text("Enabled-Geocoding-Allowed")
     .locationFilter(
       .constant(.nearby), geocodingProgress: .constant(0),
-      locationAuthorization: .constant(.allowed), filteredDataIsEmpty: true)
+      locationAuthorization: .allowed, filteredDataIsEmpty: true)
 }
 
 #Preview {
   Text("Enabled-Geocoding-Allowed-Empty")
     .locationFilter(
       .constant(.nearby), geocodingProgress: .constant(1),
-      locationAuthorization: .constant(.allowed), filteredDataIsEmpty: true)
+      locationAuthorization: .allowed, filteredDataIsEmpty: true)
 }
 
 #Preview {
   Text(String("Enabled-Geocoding-Restricted"))
     .locationFilter(
       .constant(.nearby), geocodingProgress: .constant(0),
-      locationAuthorization: .constant(.restricted), filteredDataIsEmpty: false)
+      locationAuthorization: .restricted, filteredDataIsEmpty: false)
 }
 
 #Preview {
   Text("Enabled-Geocoding-Denied")
     .locationFilter(
       .constant(.nearby), geocodingProgress: .constant(0),
-      locationAuthorization: .constant(.denied), filteredDataIsEmpty: false)
+      locationAuthorization: .denied, filteredDataIsEmpty: false)
 }
