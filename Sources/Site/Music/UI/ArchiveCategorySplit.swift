@@ -25,10 +25,6 @@ struct ArchiveCategorySplit: View {
 
   @State private var archiveNavigation = ArchiveNavigation()
 
-  private var geocodingProgress: Double {
-    Double(model.geocodedVenuesCount) / Double(vault.venueDigests.count)
-  }
-
   @MainActor
   @ViewBuilder var sidebar: some View {
     List(ArchiveCategory.allCases, id: \.self, selection: $archiveNavigation.selectedCategory) {
@@ -68,7 +64,7 @@ struct ArchiveCategorySplit: View {
           nearbyConcerts: model.nearbyConcerts,
           venueSort: $venueSort, artistSort: $artistSort,
           isCategoryActive: .constant(archiveNavigation.navigationPath.isEmpty),
-          locationFilter: $locationFilter, geocodingProgress: .constant(geocodingProgress),
+          locationFilter: $locationFilter, geocodingProgress: .constant(model.geocodingProgress),
           locationAuthorization: model.locationAuthorization)
       }
     }
