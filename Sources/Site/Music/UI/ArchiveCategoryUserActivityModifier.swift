@@ -14,8 +14,7 @@ extension ArchiveCategory {
 struct ArchiveCategoryUserActivityModifier: ViewModifier {
   let category: ArchiveCategory
   let url: URL?
-
-  @Binding var isActive: Bool
+  let isActive: Bool
 
   func body(content: Content) -> some View {
     content
@@ -26,7 +25,7 @@ struct ArchiveCategoryUserActivityModifier: ViewModifier {
 }
 
 extension View {
-  func archiveCategoryUserActivity(_ category: ArchiveCategory, url: URL?, isActive: Binding<Bool>)
+  func archiveCategoryUserActivity(_ category: ArchiveCategory, url: URL?, isActive: Bool)
     -> some View
   {
     modifier(ArchiveCategoryUserActivityModifier(category: category, url: url, isActive: isActive))
