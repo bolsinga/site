@@ -134,6 +134,15 @@ enum LocationAuthorization {
     }
   }
 
+  var geocodingProgress: Double {
+    guard let vault else {
+      Logger.vaultModel.log("No Vault to determine geocodingProgress.")
+      return 0
+    }
+
+    return Double(geocodedVenuesCount) / Double(vault.venueDigests.count)
+  }
+
   @MainActor
   private func monitorUserLocation() async {
     Logger.vaultModel.log("start location monitoring")
