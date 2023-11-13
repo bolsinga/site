@@ -63,7 +63,7 @@ struct ArchiveCategorySplit: View {
           todayConcerts: model.todayConcerts,
           nearbyConcerts: model.nearbyConcerts,
           venueSort: $venueSort, artistSort: $artistSort,
-          isCategoryActive: .constant(archiveNavigation.navigationPath.isEmpty),
+          isCategoryActive: archiveNavigation.navigationPath.isEmpty,
           locationFilter: $locationFilter, geocodingProgress: model.geocodingProgress,
           locationAuthorization: model.locationAuthorization)
       }
