@@ -11,7 +11,7 @@ struct ArchiveCategoryDetail: View {
   let vault: Vault
   let category: ArchiveCategory?
   @Binding var todayConcerts: [Concert]
-  @Binding var nearbyConcerts: [Concert]
+  let nearbyConcerts: [Concert]
   @Binding var venueSort: VenueSort
   @Binding var artistSort: ArtistSort
   @Binding var isCategoryActive: Bool
@@ -63,7 +63,7 @@ struct ArchiveCategoryDetail: View {
 #Preview {
   ArchiveCategoryDetail(
     vault: vaultPreviewData, category: .today, todayConcerts: .constant([]),
-    nearbyConcerts: .constant([]), venueSort: .constant(.alphabetical),
+    nearbyConcerts: [], venueSort: .constant(.alphabetical),
     artistSort: .constant(.alphabetical), isCategoryActive: .constant(true),
     locationFilter: .constant(.none), geocodingProgress: .constant(0.5),
     locationAuthorization: .constant(.allowed))
@@ -72,7 +72,7 @@ struct ArchiveCategoryDetail: View {
 #Preview {
   ArchiveCategoryDetail(
     vault: vaultPreviewData, category: .stats, todayConcerts: .constant([]),
-    nearbyConcerts: .constant([]), venueSort: .constant(.alphabetical),
+    nearbyConcerts: [], venueSort: .constant(.alphabetical),
     artistSort: .constant(.alphabetical), isCategoryActive: .constant(true),
     locationFilter: .constant(.none), geocodingProgress: .constant(0.5),
     locationAuthorization: .constant(.allowed))
@@ -81,7 +81,7 @@ struct ArchiveCategoryDetail: View {
 #Preview {
   ArchiveCategoryDetail(
     vault: vaultPreviewData, category: .shows, todayConcerts: .constant([]),
-    nearbyConcerts: .constant([]), venueSort: .constant(.alphabetical),
+    nearbyConcerts: [], venueSort: .constant(.alphabetical),
     artistSort: .constant(.alphabetical), isCategoryActive: .constant(true),
     locationFilter: .constant(.none), geocodingProgress: .constant(0.5),
     locationAuthorization: .constant(.allowed))
@@ -90,7 +90,7 @@ struct ArchiveCategoryDetail: View {
 #Preview {
   ArchiveCategoryDetail(
     vault: vaultPreviewData, category: .venues, todayConcerts: .constant([]),
-    nearbyConcerts: .constant([]), venueSort: .constant(.alphabetical),
+    nearbyConcerts: [], venueSort: .constant(.alphabetical),
     artistSort: .constant(.alphabetical), isCategoryActive: .constant(true),
     locationFilter: .constant(.none), geocodingProgress: .constant(0.5),
     locationAuthorization: .constant(.allowed))
@@ -99,7 +99,7 @@ struct ArchiveCategoryDetail: View {
 #Preview {
   ArchiveCategoryDetail(
     vault: vaultPreviewData, category: .artists, todayConcerts: .constant([]),
-    nearbyConcerts: .constant([]), venueSort: .constant(.alphabetical),
+    nearbyConcerts: [], venueSort: .constant(.alphabetical),
     artistSort: .constant(.alphabetical), isCategoryActive: .constant(true),
     locationFilter: .constant(.none), geocodingProgress: .constant(0.5),
     locationAuthorization: .constant(.allowed))
