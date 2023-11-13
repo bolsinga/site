@@ -103,9 +103,9 @@ struct ArchiveCategorySplit: View {
         }
       }
     }
-    .onAppear(perform: {
+    .onAppear {
       model.nearbyDistanceThreshold = self.nearbyDistanceThreshold
-    })
+    }
     .onChange(of: nearbyDistanceThreshold) { _, newValue in
       model.nearbyDistanceThreshold = newValue
     }
