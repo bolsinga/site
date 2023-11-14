@@ -9,15 +9,12 @@ import SwiftUI
 
 struct ArchiveCategoryDetail: View {
   let vault: Vault
+  var model: VaultModel
   let category: ArchiveCategory?
-  let todayConcerts: [Concert]
-  let nearbyConcerts: [Concert]
   @Binding var venueSort: VenueSort
   @Binding var artistSort: ArtistSort
   let isCategoryActive: Bool
   @Binding var locationFilter: LocationFilter
-  let geocodingProgress: Double
-  let locationAuthorization: LocationAuthorization
 
   @MainActor
   @ViewBuilder private var stackElement: some View {
@@ -26,22 +23,22 @@ struct ArchiveCategoryDetail: View {
       ZStack {
         switch category {
         case .today:
-          TodayList(concerts: todayConcerts)
+          TodayList(concerts: model.todayConcerts)
         case .stats:
           List { StatsGrouping(concerts: vault.concerts, displayArchiveCategoryCounts: false) }
             .navigationTitle(Text(category.localizedString))
         case .shows:
           ShowYearList(
-            decadesMap: vault.decadesMap, nearbyConcertIDs: Set(nearbyConcerts.map { $0.id }),
-            locationFilter: $locationFilter, geocodingProgress: geocodingProgress,
-            locationAuthorization: locationAuthorization)
+            decadesMap: vault.decadesMap, nearbyConcertIDs: Set(model.nearbyConcerts.map { $0.id }),
+            locationFilter: $locationFilter, geocodingProgress: model.geocodingProgress,
+            locationAuthorization: model.locationAuthorization)
         case .venues:
           VenueList(
             venueDigests: vault.venueDigests,
-            nearbyVenueIDs: Set(nearbyConcerts.compactMap { $0.venue?.id }),
+            nearbyVenueIDs: Set(model.nearbyConcerts.compactMap { $0.venue?.id }),
             sectioner: vault.sectioner, sort: $venueSort,
-            locationFilter: $locationFilter, geocodingProgress: geocodingProgress,
-            locationAuthorization: locationAuthorization)
+            locationFilter: $locationFilter, geocodingProgress: model.geocodingProgress,
+            locationAuthorization: model.locationAuthorization)
         case .artists:
           ArtistList(
             artistDigests: vault.artistDigests, sectioner: vault.sectioner, sort: $artistSort)
@@ -62,45 +59,35 @@ struct ArchiveCategoryDetail: View {
 
 #Preview {
   ArchiveCategoryDetail(
-    vault: vaultPreviewData, category: .today, todayConcerts: [],
-    nearbyConcerts: [], venueSort: .constant(.alphabetical),
-    artistSort: .constant(.alphabetical), isCategoryActive: true,
-    locationFilter: .constant(.none), geocodingProgress: 0.5,
-    locationAuthorization: .allowed)
+    vault: vaultPreviewData, model: vaultModelPreviewData, category: .today,
+    venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
+    isCategoryActive: true, locationFilter: .constant(.none))
 }
 
 #Preview {
   ArchiveCategoryDetail(
-    vault: vaultPreviewData, category: .stats, todayConcerts: [],
-    nearbyConcerts: [], venueSort: .constant(.alphabetical),
-    artistSort: .constant(.alphabetical), isCategoryActive: true,
-    locationFilter: .constant(.none), geocodingProgress: 0.5,
-    locationAuthorization: .allowed)
+    vault: vaultPreviewData, model: vaultModelPreviewData, category: .stats,
+    venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
+    isCategoryActive: true, locationFilter: .constant(.none))
 }
 
 #Preview {
   ArchiveCategoryDetail(
-    vault: vaultPreviewData, category: .shows, todayConcerts: [],
-    nearbyConcerts: [], venueSort: .constant(.alphabetical),
-    artistSort: .constant(.alphabetical), isCategoryActive: true,
-    locationFilter: .constant(.none), geocodingProgress: 0.5,
-    locationAuthorization: .allowed)
+    vault: vaultPreviewData, model: vaultModelPreviewData, category: .shows,
+    venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
+    isCategoryActive: true, locationFilter: .constant(.none))
 }
 
 #Preview {
   ArchiveCategoryDetail(
-    vault: vaultPreviewData, category: .venues, todayConcerts: [],
-    nearbyConcerts: [], venueSort: .constant(.alphabetical),
-    artistSort: .constant(.alphabetical), isCategoryActive: true,
-    locationFilter: .constant(.none), geocodingProgress: 0.5,
-    locationAuthorization: .allowed)
+    vault: vaultPreviewData, model: vaultModelPreviewData, category: .venues,
+    venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
+    isCategoryActive: true, locationFilter: .constant(.none))
 }
 
 #Preview {
   ArchiveCategoryDetail(
-    vault: vaultPreviewData, category: .artists, todayConcerts: [],
-    nearbyConcerts: [], venueSort: .constant(.alphabetical),
-    artistSort: .constant(.alphabetical), isCategoryActive: true,
-    locationFilter: .constant(.none), geocodingProgress: 0.5,
-    locationAuthorization: .allowed)
+    vault: vaultPreviewData, model: vaultModelPreviewData, category: .artists,
+    venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
+    isCategoryActive: true, locationFilter: .constant(.none))
 }
