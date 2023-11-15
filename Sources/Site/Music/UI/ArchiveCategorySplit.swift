@@ -62,7 +62,7 @@ struct ArchiveCategorySplit: View {
           vault: vault, model: model, category: archiveNavigation.selectedCategory,
           venueSort: $venueSort, artistSort: $artistSort,
           isCategoryActive: archiveNavigation.navigationPath.isEmpty,
-          locationFilter: $locationFilter)
+          locationFilter: $locationFilter, nearbyDistanceThreshold: nearbyDistanceThreshold)
       }
     }
     .archiveStorage(archiveNavigation: archiveNavigation)
@@ -95,12 +95,6 @@ struct ArchiveCategorySplit: View {
           Logger.link.error("ArchiveCategory to URL error: \(error, privacy: .public)")
         }
       }
-    }
-    .onAppear {
-      model.nearbyDistanceThreshold = self.nearbyDistanceThreshold
-    }
-    .onChange(of: nearbyDistanceThreshold) { _, newValue in
-      model.nearbyDistanceThreshold = newValue
     }
   }
 }
