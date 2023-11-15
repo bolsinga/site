@@ -5,6 +5,7 @@
 //  Created by Greg Bolsinga on 6/7/23.
 //
 
+import CoreLocation
 import SwiftUI
 
 struct ArchiveCategoryDetail: View {
@@ -15,6 +16,7 @@ struct ArchiveCategoryDetail: View {
   @Binding var artistSort: ArtistSort
   let isCategoryActive: Bool
   @Binding var locationFilter: LocationFilter
+  let nearbyDistanceThreshold: CLLocationDistance
 
   @MainActor
   @ViewBuilder private var stackElement: some View {
@@ -29,13 +31,15 @@ struct ArchiveCategoryDetail: View {
             .navigationTitle(Text(category.localizedString))
         case .shows:
           ShowYearList(
-            decadesMap: vault.decadesMap, nearbyConcertIDs: Set(model.nearbyConcerts.map { $0.id }),
+            decadesMap: vault.decadesMap,
+            nearbyConcertIDs: Set(model.concertsNearby(nearbyDistanceThreshold).map { $0.id }),
             locationFilter: $locationFilter, geocodingProgress: model.geocodingProgress,
             locationAuthorization: model.locationAuthorization)
         case .venues:
           VenueList(
             venueDigests: vault.venueDigests,
-            nearbyVenueIDs: Set(model.nearbyConcerts.compactMap { $0.venue?.id }),
+            nearbyVenueIDs: Set(
+              model.concertsNearby(nearbyDistanceThreshold).compactMap { $0.venue?.id }),
             sectioner: vault.sectioner, sort: $venueSort,
             locationFilter: $locationFilter, geocodingProgress: model.geocodingProgress,
             locationAuthorization: model.locationAuthorization)
@@ -61,33 +65,33 @@ struct ArchiveCategoryDetail: View {
   ArchiveCategoryDetail(
     vault: vaultPreviewData, model: vaultModelPreviewData, category: .today,
     venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
-    isCategoryActive: true, locationFilter: .constant(.none))
+    isCategoryActive: true, locationFilter: .constant(.none), nearbyDistanceThreshold: 1.0)
 }
 
 #Preview {
   ArchiveCategoryDetail(
     vault: vaultPreviewData, model: vaultModelPreviewData, category: .stats,
     venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
-    isCategoryActive: true, locationFilter: .constant(.none))
+    isCategoryActive: true, locationFilter: .constant(.none), nearbyDistanceThreshold: 1.0)
 }
 
 #Preview {
   ArchiveCategoryDetail(
     vault: vaultPreviewData, model: vaultModelPreviewData, category: .shows,
     venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
-    isCategoryActive: true, locationFilter: .constant(.none))
+    isCategoryActive: true, locationFilter: .constant(.none), nearbyDistanceThreshold: 1.0)
 }
 
 #Preview {
   ArchiveCategoryDetail(
     vault: vaultPreviewData, model: vaultModelPreviewData, category: .venues,
     venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
-    isCategoryActive: true, locationFilter: .constant(.none))
+    isCategoryActive: true, locationFilter: .constant(.none), nearbyDistanceThreshold: 1.0)
 }
 
 #Preview {
   ArchiveCategoryDetail(
     vault: vaultPreviewData, model: vaultModelPreviewData, category: .artists,
     venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
-    isCategoryActive: true, locationFilter: .constant(.none))
+    isCategoryActive: true, locationFilter: .constant(.none), nearbyDistanceThreshold: 1.0)
 }
