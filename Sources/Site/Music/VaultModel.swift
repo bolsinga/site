@@ -177,6 +177,12 @@ enum LocationAuthorization {
     return concerts(nearby: currentLocation, distanceThreshold: distanceThreshold)
   }
 
+  func venueDigestsNearby(_ distanceThreshold: CLLocationDistance) -> [VenueDigest] {
+    guard let vault = vault else { return [] }
+    let nearbyVenueIDs = Set(concertsNearby(distanceThreshold).compactMap { $0.venue?.id })
+    return vault.venueDigests.filter { nearbyVenueIDs.contains($0.id) }
+  }
+
   private func concerts(nearby location: CLLocation, distanceThreshold: CLLocationDistance)
     -> [Concert]
   {

@@ -37,9 +37,8 @@ struct ArchiveCategoryDetail: View {
             locationAuthorization: model.locationAuthorization)
         case .venues:
           VenueList(
-            venueDigests: vault.venueDigests,
-            nearbyVenueIDs: Set(
-              model.concertsNearby(nearbyDistanceThreshold).compactMap { $0.venue?.id }),
+            venueDigests: locationFilter.isNearby
+              ? model.venueDigestsNearby(nearbyDistanceThreshold) : vault.venueDigests,
             sectioner: vault.sectioner, sort: $venueSort,
             locationFilter: $locationFilter, geocodingProgress: model.geocodingProgress,
             locationAuthorization: model.locationAuthorization)
