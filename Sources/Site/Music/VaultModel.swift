@@ -172,7 +172,7 @@ enum LocationAuthorization {
     }
   }
 
-  func concertsNearby(_ distanceThreshold: CLLocationDistance) -> [Concert] {
+  private func concertsNearby(_ distanceThreshold: CLLocationDistance) -> [Concert] {
     guard let currentLocation else { return [] }
     return concerts(nearby: currentLocation, distanceThreshold: distanceThreshold)
   }
@@ -181,6 +181,27 @@ enum LocationAuthorization {
     guard let vault = vault else { return [] }
     let nearbyVenueIDs = Set(concertsNearby(distanceThreshold).compactMap { $0.venue?.id })
     return vault.venueDigests.filter { nearbyVenueIDs.contains($0.id) }
+  }
+
+  func decadesMapsNearby(_ distanceThreshold: CLLocationDistance) -> [Decade: [Annum: [Concert.ID]]]
+  {
+    guard let vault = vault else { return [:] }
+    let nearbyConcertIDs = Set(concertsNearby(distanceThreshold).map { $0.id })
+    return [Decade: [Annum: [Concert.ID]]](
+      uniqueKeysWithValues: vault.decadesMap.compactMap {
+        let nearbyAnnums = [Annum: [Show.ID]](
+          uniqueKeysWithValues: $0.value.compactMap {
+            let nearbyIDs = $0.value.filter { nearbyConcertIDs.contains($0) }
+            if nearbyIDs.isEmpty {
+              return nil
+            }
+            return ($0.key, nearbyIDs)
+          })
+        if nearbyAnnums.isEmpty {
+          return nil
+        }
+        return ($0.key, nearbyAnnums)
+      })
   }
 
   private func concerts(nearby location: CLLocation, distanceThreshold: CLLocationDistance)

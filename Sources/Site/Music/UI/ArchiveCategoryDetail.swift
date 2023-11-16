@@ -31,8 +31,8 @@ struct ArchiveCategoryDetail: View {
             .navigationTitle(Text(category.localizedString))
         case .shows:
           ShowYearList(
-            decadesMap: vault.decadesMap,
-            nearbyConcertIDs: Set(model.concertsNearby(nearbyDistanceThreshold).map { $0.id }),
+            decadesMap: locationFilter.isNearby
+              ? model.decadesMapsNearby(nearbyDistanceThreshold) : vault.decadesMap,
             locationFilter: $locationFilter, geocodingProgress: model.geocodingProgress,
             locationAuthorization: model.locationAuthorization)
         case .venues:
