@@ -9,7 +9,6 @@ import SwiftUI
 
 struct VenueList: View {
   let venueDigests: [VenueDigest]
-  let nearbyVenueIDs: Set<Venue.ID>
   let sectioner: LibrarySectioner
 
   @Binding var sort: VenueSort
@@ -18,15 +17,6 @@ struct VenueList: View {
   let locationAuthorization: LocationAuthorization
 
   @State private var searchString: String = ""
-
-  private var filteredVenueDigests: [VenueDigest] {
-    switch locationFilter {
-    case .none:
-      return venueDigests
-    case .nearby:
-      return venueDigests.filter { nearbyVenueIDs.contains($0.id) }
-    }
-  }
 
   private func rank(for venueDigest: VenueDigest) -> Ranking {
     switch sort {
@@ -59,7 +49,6 @@ struct VenueList: View {
   }
 
   @ViewBuilder private var listElement: some View {
-    let venueDigests = filteredVenueDigests
     if case .alphabetical = sort {
       LibraryComparableList(
         items: venueDigests,
@@ -123,7 +112,7 @@ struct VenueList: View {
       .locationFilter(
         $locationFilter, geocodingProgress: geocodingProgress,
         locationAuthorization: locationAuthorization,
-        filteredDataIsEmpty: filteredVenueDigests.isEmpty)
+        filteredDataIsEmpty: venueDigests.isEmpty)
   }
 }
 
@@ -131,7 +120,6 @@ struct VenueList: View {
   NavigationStack {
     VenueList(
       venueDigests: vaultPreviewData.venueDigests,
-      nearbyVenueIDs: Set(vaultPreviewData.venueDigests.map { $0.id }),
       sectioner: vaultPreviewData.sectioner, sort: .constant(.alphabetical),
       locationFilter: .constant(.none), geocodingProgress: 0,
       locationAuthorization: .allowed
