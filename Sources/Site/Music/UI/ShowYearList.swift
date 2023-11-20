@@ -9,9 +9,6 @@ import SwiftUI
 
 struct ShowYearList: View {
   let decadesMap: [Decade: [Annum: [Concert.ID]]]
-  @Binding var locationFilter: LocationFilter
-  let geocodingProgress: Double
-  let locationAuthorization: LocationAuthorization
 
   var body: some View {
     List {
@@ -33,20 +30,12 @@ struct ShowYearList: View {
     }
     .listStyle(.plain)
     .navigationTitle(Text("Show Years", bundle: .module))
-    .locationFilter(
-      $locationFilter, geocodingProgress: geocodingProgress,
-      locationAuthorization: locationAuthorization, filteredDataIsEmpty: decadesMap.isEmpty
-    )
   }
 }
 
 #Preview {
   NavigationStack {
-    ShowYearList(
-      decadesMap: vaultPreviewData.decadesMap,
-      locationFilter: .constant(.none), geocodingProgress: 0,
-      locationAuthorization: .allowed
-    )
-    .musicDestinations(vaultPreviewData)
+    ShowYearList(decadesMap: vaultPreviewData.decadesMap)
+      .musicDestinations(vaultPreviewData)
   }
 }

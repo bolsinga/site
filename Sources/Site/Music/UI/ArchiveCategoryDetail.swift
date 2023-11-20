@@ -38,15 +38,19 @@ struct ArchiveCategoryDetail: View {
           List { StatsGrouping(concerts: vault.concerts, displayArchiveCategoryCounts: false) }
             .navigationTitle(Text(category.localizedString))
         case .shows:
-          ShowYearList(
-            decadesMap: filteredDecadesMap, locationFilter: $locationFilter,
-            geocodingProgress: model.geocodingProgress,
-            locationAuthorization: model.locationAuthorization)
+          ShowYearList(decadesMap: filteredDecadesMap)
+            .locationFilter(
+              $locationFilter, geocodingProgress: model.geocodingProgress,
+              locationAuthorization: model.locationAuthorization,
+              filteredDataIsEmpty: filteredDecadesMap.isEmpty)
         case .venues:
           VenueList(
-            venueDigests: filteredVenueDigests, sectioner: vault.sectioner, sort: $venueSort,
-            locationFilter: $locationFilter, geocodingProgress: model.geocodingProgress,
-            locationAuthorization: model.locationAuthorization)
+            venueDigests: filteredVenueDigests, sectioner: vault.sectioner, sort: $venueSort
+          )
+          .locationFilter(
+            $locationFilter, geocodingProgress: model.geocodingProgress,
+            locationAuthorization: model.locationAuthorization,
+            filteredDataIsEmpty: filteredVenueDigests.isEmpty)
         case .artists:
           ArtistList(
             artistDigests: vault.artistDigests, sectioner: vault.sectioner, sort: $artistSort)
