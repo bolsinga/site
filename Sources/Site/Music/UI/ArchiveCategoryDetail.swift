@@ -18,6 +18,14 @@ struct ArchiveCategoryDetail: View {
   @Binding var locationFilter: LocationFilter
   let nearbyDistanceThreshold: CLLocationDistance
 
+  private var filteredDecadesMap: [Decade: [Annum: [Concert.ID]]] {
+    locationFilter.isNearby ? model.decadesMapsNearby(nearbyDistanceThreshold) : vault.decadesMap
+  }
+
+  private var filteredVenueDigests: [VenueDigest] {
+    locationFilter.isNearby ? model.venueDigestsNearby(nearbyDistanceThreshold) : vault.venueDigests
+  }
+
   @MainActor
   @ViewBuilder private var stackElement: some View {
     if let category {
@@ -31,15 +39,12 @@ struct ArchiveCategoryDetail: View {
             .navigationTitle(Text(category.localizedString))
         case .shows:
           ShowYearList(
-            decadesMap: locationFilter.isNearby
-              ? model.decadesMapsNearby(nearbyDistanceThreshold) : vault.decadesMap,
-            locationFilter: $locationFilter, geocodingProgress: model.geocodingProgress,
+            decadesMap: filteredDecadesMap, locationFilter: $locationFilter,
+            geocodingProgress: model.geocodingProgress,
             locationAuthorization: model.locationAuthorization)
         case .venues:
           VenueList(
-            venueDigests: locationFilter.isNearby
-              ? model.venueDigestsNearby(nearbyDistanceThreshold) : vault.venueDigests,
-            sectioner: vault.sectioner, sort: $venueSort,
+            venueDigests: filteredVenueDigests, sectioner: vault.sectioner, sort: $venueSort,
             locationFilter: $locationFilter, geocodingProgress: model.geocodingProgress,
             locationAuthorization: model.locationAuthorization)
         case .artists:
