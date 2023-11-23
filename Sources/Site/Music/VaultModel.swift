@@ -20,10 +20,8 @@ enum LocationAuthorization {
 }
 
 @Observable public final class VaultModel {
-  let urlString: String
+  private var loader: VaultLoader
 
-  public var vault: Vault?
-  var error: Error?
   var todayConcerts: [Concert] = []
   @ObservationIgnored private var venuePlacemarks: [Venue.ID: CLPlacemark] = [:]
   var geocodedVenuesCount = 0
@@ -37,9 +35,15 @@ enum LocationAuthorization {
     access: .inUse)
 
   public init(urlString: String, vault: Vault? = nil, error: Error? = nil) {
-    self.urlString = urlString
-    self.vault = vault
-    self.error = error
+    self.loader = VaultLoader(urlString: urlString)
+  }
+
+  public var vault: Vault? {
+    loader.vault
+  }
+
+  var error: Error? {
+    loader.error
   }
 
   @MainActor
@@ -48,25 +52,20 @@ enum LocationAuthorization {
     defer {
       Logger.vaultModel.log("end")
     }
-    do {
-      error = nil
 
-      vault = try await Vault.load(urlString)
+    await loader.load()
 
-      updateTodayConcerts()
-      Task {
-        await monitorDayChanges()
-      }
-      Task {
-        await geocodeVenues()
-      }
-      Task {
-        await monitorUserLocation()
-      }
-    } catch {
-      Logger.vaultModel.fault("error: \(error.localizedDescription, privacy: .public)")
-      self.error = error
+    updateTodayConcerts()
+    Task {
+      await monitorDayChanges()
     }
+    Task {
+      await geocodeVenues()
+    }
+    Task {
+      await monitorUserLocation()
+    }
+
   }
 
   @MainActor
