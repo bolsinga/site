@@ -28,6 +28,13 @@ enum LocationAuthorization {
   var currentLocation: CLLocation?
   var locationAuthorization = LocationAuthorization.allowed
 
+  @ObservationIgnored
+  private var dayChangeTask: Task<Void, Never>?
+  @ObservationIgnored
+  private var geocodeTask: Task<Void, Never>?
+  @ObservationIgnored
+  private var locationTask: Task<Void, Never>?
+
   private let locationManager = LocationManager(
     activityType: .other,
     distanceFilter: 10,
@@ -56,16 +63,21 @@ enum LocationAuthorization {
     await loader.load()
 
     updateTodayConcerts()
-    Task {
-      await monitorDayChanges()
-    }
-    Task {
-      await geocodeVenues()
-    }
-    Task {
-      await monitorUserLocation()
+
+    dayChangeTask?.cancel()
+    dayChangeTask = Task {
+      await self.monitorDayChanges()
     }
 
+    geocodeTask?.cancel()
+    geocodeTask = Task {
+      await self.geocodeVenues()
+    }
+
+    locationTask?.cancel()
+    locationTask = Task {
+      await self.monitorUserLocation()
+    }
   }
 
   @MainActor
