@@ -13,19 +13,6 @@ extension Logger {
   static let vaultModel = Logger(category: "vaultModel")
 }
 
-enum VaultError: Error {
-  case illegalURL(String)
-}
-
-extension VaultError: LocalizedError {
-  public var errorDescription: String? {
-    switch self {
-    case .illegalURL(let urlString):
-      return "URL (\(urlString)) is not valid."
-    }
-  }
-}
-
 enum LocationAuthorization {
   case allowed
   case restricted  // Locations are not possible.
@@ -62,10 +49,10 @@ enum LocationAuthorization {
       Logger.vaultModel.log("end")
     }
     do {
-      guard let url = URL(string: urlString) else { throw VaultError.illegalURL(urlString) }
-
       error = nil
-      vault = try await Vault.load(url: url)
+
+      vault = try await Vault.load(urlString)
+
       updateTodayConcerts()
       Task {
         await monitorDayChanges()
