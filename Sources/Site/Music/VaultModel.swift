@@ -20,7 +20,7 @@ enum LocationAuthorization {
 }
 
 @Observable public final class VaultModel {
-  private var siteModel: SiteModel
+  let vault: Vault
 
   var todayConcerts: [Concert] = []
   @ObservationIgnored private var venuePlacemarks: [Venue.ID: CLPlacemark] = [:]
@@ -41,56 +41,33 @@ enum LocationAuthorization {
     desiredAccuracy: kCLLocationAccuracyHundredMeters,
     access: .inUse)
 
-  convenience public init(urlString: String) {
-    self.init(SiteModel(urlString: urlString))
-  }
-
-  internal init(_ siteModel: SiteModel) {
-    self.siteModel = siteModel
-  }
-
-  public var vault: Vault? {
-    siteModel.vault
-  }
-
-  var error: Error? {
-    siteModel.error
-  }
-
   @MainActor
-  public func load() async {
-    Logger.vaultModel.log("start")
-    defer {
-      Logger.vaultModel.log("end")
-    }
-
-    await siteModel.load()
+  internal init(_ vault: Vault) {
+    self.vault = vault
 
     updateTodayConcerts()
 
-    dayChangeTask?.cancel()
     dayChangeTask = Task {
       await self.monitorDayChanges()
     }
 
-    geocodeTask?.cancel()
     geocodeTask = Task {
       await self.geocodeVenues()
     }
 
-    locationTask?.cancel()
     locationTask = Task {
       await self.monitorUserLocation()
     }
   }
 
+  func cancelTasks() {
+    dayChangeTask?.cancel()
+    geocodeTask?.cancel()
+    locationTask?.cancel()
+  }
+
   @MainActor
   private func updateTodayConcerts() {
-    guard let vault else {
-      Logger.vaultModel.log("No Vault to calculate todayConcerts.")
-      return
-    }
-
     todayConcerts = vault.concerts(on: Date.now)
 
     Logger.vaultModel.log("Today Count: \(self.todayConcerts.count, privacy: .public)")
@@ -112,11 +89,6 @@ enum LocationAuthorization {
 
   @MainActor
   private func geocodeVenues() async {
-    guard let vault else {
-      Logger.vaultModel.log("No Vault to geocode venues.")
-      return
-    }
-
     Logger.vaultModel.log("start batch geocode")
     defer {
       Logger.vaultModel.log("end batch geocode")
@@ -136,11 +108,6 @@ enum LocationAuthorization {
   }
 
   var geocodingProgress: Double {
-    guard let vault else {
-      Logger.vaultModel.log("No Vault to determine geocodingProgress.")
-      return 0
-    }
-
     return Double(geocodedVenuesCount) / Double(vault.venueDigests.count)
   }
 
@@ -180,14 +147,12 @@ enum LocationAuthorization {
   }
 
   func venueDigestsNearby(_ distanceThreshold: CLLocationDistance) -> [VenueDigest] {
-    guard let vault = vault else { return [] }
     let nearbyVenueIDs = Set(concertsNearby(distanceThreshold).compactMap { $0.venue?.id })
     return vault.venueDigests.filter { nearbyVenueIDs.contains($0.id) }
   }
 
   func decadesMapsNearby(_ distanceThreshold: CLLocationDistance) -> [Decade: [Annum: [Concert.ID]]]
   {
-    guard let vault = vault else { return [:] }
     let nearbyConcertIDs = Set(concertsNearby(distanceThreshold).map { $0.id })
     return [Decade: [Annum: [Concert.ID]]](
       uniqueKeysWithValues: vault.decadesMap.compactMap {
@@ -209,11 +174,6 @@ enum LocationAuthorization {
   private func concerts(nearby location: CLLocation, distanceThreshold: CLLocationDistance)
     -> [Concert]
   {
-    guard let vault else {
-      Logger.vaultModel.log("No Vault to calculate nearby Concerts.")
-      return []
-    }
-
     return vault.concerts
       .filter { $0.venue != nil }
       .filter { venuePlacemarks[$0.venue!.id] != nil }

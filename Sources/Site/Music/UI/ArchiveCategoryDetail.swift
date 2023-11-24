@@ -71,35 +71,35 @@ struct ArchiveCategoryDetail: View {
 
 #Preview {
   ArchiveCategoryDetail(
-    vault: vaultPreviewData, model: vaultModelPreviewData, category: .today,
+    vault: vaultPreviewData, model: VaultModel(vaultPreviewData), category: .today,
     venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
     isCategoryActive: true, locationFilter: .constant(.none), nearbyDistanceThreshold: 1.0)
 }
 
 #Preview {
   ArchiveCategoryDetail(
-    vault: vaultPreviewData, model: vaultModelPreviewData, category: .stats,
+    vault: vaultPreviewData, model: VaultModel(vaultPreviewData), category: .stats,
     venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
     isCategoryActive: true, locationFilter: .constant(.none), nearbyDistanceThreshold: 1.0)
 }
 
 #Preview {
   ArchiveCategoryDetail(
-    vault: vaultPreviewData, model: vaultModelPreviewData, category: .shows,
+    vault: vaultPreviewData, model: VaultModel(vaultPreviewData), category: .shows,
     venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
     isCategoryActive: true, locationFilter: .constant(.none), nearbyDistanceThreshold: 1.0)
 }
 
 #Preview {
   ArchiveCategoryDetail(
-    vault: vaultPreviewData, model: vaultModelPreviewData, category: .venues,
+    vault: vaultPreviewData, model: VaultModel(vaultPreviewData), category: .venues,
     venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
     isCategoryActive: true, locationFilter: .constant(.none), nearbyDistanceThreshold: 1.0)
 }
 
 #Preview {
   ArchiveCategoryDetail(
-    vault: vaultPreviewData, model: vaultModelPreviewData, category: .artists,
+    vault: vaultPreviewData, model: VaultModel(vaultPreviewData), category: .artists,
     venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
     isCategoryActive: true, locationFilter: .constant(.none), nearbyDistanceThreshold: 1.0)
 }
