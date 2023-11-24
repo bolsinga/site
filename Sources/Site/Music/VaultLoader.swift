@@ -18,7 +18,7 @@ extension Logger {
   var vault: Vault?
   var error: Error?
 
-  internal init(urlString: String) {
+  internal init(urlString: String, vault: Vault? = nil, error: Error? = nil) {
     self.urlString = urlString
     self.vault = vault
     self.error = error
