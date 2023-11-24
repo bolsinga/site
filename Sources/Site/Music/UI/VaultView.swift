@@ -61,13 +61,17 @@ public struct VaultView: View {
 }
 
 #Preview {
-  VaultView(VaultModel(urlString: "https://www.example.com", error: VaultError.illegalURL("err")))
+  VaultView(
+    VaultModel(
+      loader: VaultLoader(urlString: "https://www.example.com", error: VaultError.illegalURL("err"))
+    ))
 }
 
 #Preview {
-  VaultView(VaultModel(urlString: "https://www.example.com"))
+  VaultView(VaultModel(loader: VaultLoader(urlString: "https://www.example.com")))
 }
 
 #Preview {
-  VaultView(VaultModel(urlString: "https://www.example.com", vault: vaultPreviewData))
+  VaultView(
+    VaultModel(loader: VaultLoader(urlString: "https://www.example.com", vault: vaultPreviewData)))
 }

@@ -41,8 +41,12 @@ enum LocationAuthorization {
     desiredAccuracy: kCLLocationAccuracyHundredMeters,
     access: .inUse)
 
-  public init(urlString: String, vault: Vault? = nil, error: Error? = nil) {
-    self.loader = VaultLoader(urlString: urlString)
+  convenience public init(urlString: String) {
+    self.init(loader: VaultLoader(urlString: urlString))
+  }
+
+  internal init(loader: VaultLoader) {
+    self.loader = loader
   }
 
   public var vault: Vault? {

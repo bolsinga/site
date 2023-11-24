@@ -8,4 +8,4 @@
 import Foundation
 
 let vaultModelPreviewData: VaultModel = VaultModel(
-  urlString: "https://example.com", vault: vaultPreviewData)
+  loader: VaultLoader(urlString: "https://example.com", vault: vaultPreviewData))
