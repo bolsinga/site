@@ -8,9 +8,9 @@
 import SwiftUI
 
 public struct RefreshCommand: Commands {
-  public var model: VaultModel
+  public var model: SiteModel
 
-  public init(model: VaultModel) {
+  public init(model: SiteModel) {
     self.model = model
   }
 

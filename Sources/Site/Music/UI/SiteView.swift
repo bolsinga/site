@@ -13,16 +13,16 @@ extension Logger {
 }
 
 public struct SiteView: View {
-  private var model: VaultModel
+  private var model: SiteModel
 
-  public init(_ model: VaultModel) {
+  public init(_ model: SiteModel) {
     self.model = model
   }
 
   public var body: some View {
     Group {
-      if let vault = model.vault {
-        ArchiveCategorySplit(vault: vault, model: model)
+      if let vaultModel = model.vaultModel {
+        ArchiveCategorySplit(vault: vaultModel.vault, model: vaultModel)
           .refreshable {
             Logger.vaultLoad.log("start refresh")
             defer {
@@ -49,7 +49,7 @@ public struct SiteView: View {
         ProgressView()
       }
     }.task {
-      guard model.vault == nil, model.error == nil else { return }
+      guard model.vaultModel == nil, model.error == nil else { return }
 
       Logger.vaultLoad.log("start task")
       defer {
@@ -61,17 +61,14 @@ public struct SiteView: View {
 }
 
 #Preview {
-  SiteView(
-    VaultModel(
-      SiteModel(urlString: "https://www.example.com", error: VaultError.illegalURL("err"))
-    ))
+  SiteView(SiteModel(urlString: "https://www.example.com", error: VaultError.illegalURL("err")))
 }
 
 #Preview {
-  SiteView(VaultModel(SiteModel(urlString: "https://www.example.com")))
+  SiteView(SiteModel(urlString: "https://www.example.com"))
 }
 
 #Preview {
   SiteView(
-    VaultModel(SiteModel(urlString: "https://www.example.com", vault: vaultPreviewData)))
+    SiteModel(urlString: "https://www.example.com", vaultModel: VaultModel(vaultPreviewData)))
 }

@@ -13,7 +13,7 @@ import Site
 struct Program: AsyncParsableCommand {
   enum ProgramError: Error {
     case notURLString(String)
-    case noVault
+    case noVaultModel
   }
 
   @Argument(
@@ -47,9 +47,10 @@ struct Program: AsyncParsableCommand {
 
     try jsonDirectoryURL?.appending(path: "diary.json").writeJSON(diary)
 
-    let model = VaultModel(urlString: rootURL.appending(path: "music.json").absoluteString)
+    let model = SiteModel(urlString: rootURL.appending(path: "music.json").absoluteString)
     await model.load()
-    guard let vault = model.vault else { throw ProgramError.noVault }
+    guard let vaultModel = model.vaultModel else { throw ProgramError.noVaultModel }
+    let vault = vaultModel.vault
 
     let concerts = vault.concerts
     let artistDigests = vault.artistDigests

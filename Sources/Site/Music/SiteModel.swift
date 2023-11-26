@@ -15,12 +15,12 @@ extension Logger {
 @Observable public final class SiteModel {
   let urlString: String
 
-  var vault: Vault?
+  public var vaultModel: VaultModel?
   var error: Error?
 
-  internal init(urlString: String, vault: Vault? = nil, error: Error? = nil) {
+  public init(urlString: String, vaultModel: VaultModel? = nil, error: Error? = nil) {
     self.urlString = urlString
-    self.vault = vault
+    self.vaultModel = vaultModel
     self.error = error
   }
 
@@ -33,7 +33,10 @@ extension Logger {
     do {
       error = nil
 
-      vault = try await Vault.load(urlString)
+      let vault = try await Vault.load(urlString)
+
+      vaultModel?.cancelTasks()
+      vaultModel = VaultModel(vault)
     } catch {
       Logger.vaultLoader.fault("error: \(error.localizedDescription, privacy: .public)")
       self.error = error
