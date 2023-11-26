@@ -15,7 +15,7 @@ extension Logger {
 @Observable public final class SiteModel {
   let urlString: String
 
-  var vaultModel: VaultModel?
+  public var vaultModel: VaultModel?
   var error: Error?
 
   public init(urlString: String, vaultModel: VaultModel? = nil, error: Error? = nil) {

@@ -20,7 +20,7 @@ enum LocationAuthorization {
 }
 
 @Observable public final class VaultModel {
-  let vault: Vault
+  public let vault: Vault
 
   var todayConcerts: [Concert] = []
   @ObservationIgnored private var venuePlacemarks: [Venue.ID: CLPlacemark] = [:]
