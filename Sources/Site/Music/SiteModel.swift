@@ -1,5 +1,5 @@
 //
-//  VaultLoader.swift
+//  SiteModel.swift
 //
 //
 //  Created by Greg Bolsinga on 11/23/23.
@@ -12,7 +12,7 @@ extension Logger {
   static let vaultLoader = Logger(category: "vaultLoader")
 }
 
-@Observable public final class VaultLoader {
+@Observable public final class SiteModel {
   let urlString: String
 
   var vault: Vault?

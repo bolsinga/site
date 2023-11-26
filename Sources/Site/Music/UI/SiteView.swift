@@ -1,5 +1,5 @@
 //
-//  VaultView.swift
+//  SiteView.swift
 //
 //
 //  Created by Greg Bolsinga on 5/11/23.
@@ -12,7 +12,7 @@ extension Logger {
   static let vaultLoad = Logger(category: "vaultLoad")
 }
 
-public struct VaultView: View {
+public struct SiteView: View {
   private var model: VaultModel
 
   public init(_ model: VaultModel) {
@@ -61,17 +61,17 @@ public struct VaultView: View {
 }
 
 #Preview {
-  VaultView(
+  SiteView(
     VaultModel(
-      loader: VaultLoader(urlString: "https://www.example.com", error: VaultError.illegalURL("err"))
+      SiteModel(urlString: "https://www.example.com", error: VaultError.illegalURL("err"))
     ))
 }
 
 #Preview {
-  VaultView(VaultModel(loader: VaultLoader(urlString: "https://www.example.com")))
+  SiteView(VaultModel(SiteModel(urlString: "https://www.example.com")))
 }
 
 #Preview {
-  VaultView(
-    VaultModel(loader: VaultLoader(urlString: "https://www.example.com", vault: vaultPreviewData)))
+  SiteView(
+    VaultModel(SiteModel(urlString: "https://www.example.com", vault: vaultPreviewData)))
 }
