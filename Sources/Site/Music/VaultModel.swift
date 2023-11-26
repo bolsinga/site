@@ -20,7 +20,7 @@ enum LocationAuthorization {
 }
 
 @Observable public final class VaultModel {
-  private var loader: VaultLoader
+  private var siteModel: SiteModel
 
   var todayConcerts: [Concert] = []
   @ObservationIgnored private var venuePlacemarks: [Venue.ID: CLPlacemark] = [:]
@@ -42,19 +42,19 @@ enum LocationAuthorization {
     access: .inUse)
 
   convenience public init(urlString: String) {
-    self.init(loader: VaultLoader(urlString: urlString))
+    self.init(SiteModel(urlString: urlString))
   }
 
-  internal init(loader: VaultLoader) {
-    self.loader = loader
+  internal init(_ siteModel: SiteModel) {
+    self.siteModel = siteModel
   }
 
   public var vault: Vault? {
-    loader.vault
+    siteModel.vault
   }
 
   var error: Error? {
-    loader.error
+    siteModel.error
   }
 
   @MainActor
@@ -64,7 +64,7 @@ enum LocationAuthorization {
       Logger.vaultModel.log("end")
     }
 
-    await loader.load()
+    await siteModel.load()
 
     updateTodayConcerts()
 
