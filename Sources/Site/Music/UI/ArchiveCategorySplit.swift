@@ -60,7 +60,7 @@ struct ArchiveCategorySplit: View {
     } detail: {
       NavigationStack(path: $archiveNavigation.navigationPath) {
         ArchiveCategoryDetail(
-          vault: vault, model: model, category: archiveNavigation.selectedCategory,
+          model: model, category: archiveNavigation.selectedCategory,
           venueSort: $venueSort, artistSort: $artistSort,
           isCategoryActive: archiveNavigation.navigationPath.isEmpty,
           locationFilter: $locationFilter, nearbyDistanceThreshold: nearbyDistanceThreshold)
