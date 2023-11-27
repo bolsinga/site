@@ -14,7 +14,6 @@ extension Logger {
 }
 
 struct ArchiveCategorySplit: View {
-  let vault: Vault
   var model: VaultModel
 
   @SceneStorage("venue.sort") private var venueSort = VenueSort.alphabetical
@@ -24,6 +23,8 @@ struct ArchiveCategorySplit: View {
   @SceneStorage("nearby.filter") private var locationFilter = LocationFilter.none
 
   @State private var archiveNavigation = ArchiveNavigation()
+
+  private var vault: Vault { model.vault }
 
   @MainActor
   @ViewBuilder var sidebar: some View {

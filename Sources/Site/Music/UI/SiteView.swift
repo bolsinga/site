@@ -22,7 +22,7 @@ public struct SiteView: View {
   public var body: some View {
     Group {
       if let vaultModel = model.vaultModel {
-        ArchiveCategorySplit(vault: vaultModel.vault, model: vaultModel)
+        ArchiveCategorySplit(model: vaultModel)
           .refreshable {
             Logger.vaultLoad.log("start refresh")
             defer {
