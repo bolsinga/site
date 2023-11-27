@@ -24,7 +24,6 @@ enum LocationAuthorization {
 
   var todayConcerts: [Concert] = []
   @ObservationIgnored private var venuePlacemarks: [Venue.ID: CLPlacemark] = [:]
-  var geocodedVenuesCount = 0
   var currentLocation: CLLocation?
   var locationAuthorization = LocationAuthorization.allowed
 
@@ -100,7 +99,6 @@ enum LocationAuthorization {
       {
         Logger.vaultModel.log("geocoded: \(venue.id, privacy: .public)")
         venuePlacemarks[venue.id] = placemark
-        geocodedVenuesCount = venuePlacemarks.count
       }
     } catch {
       Logger.vaultModel.error("batch geocode error: \(error, privacy: .public)")
@@ -108,7 +106,7 @@ enum LocationAuthorization {
   }
 
   var geocodingProgress: Double {
-    return Double(geocodedVenuesCount) / Double(vault.venueDigests.count)
+    return Double(venuePlacemarks.count) / Double(vault.venueDigests.count)
   }
 
   @MainActor
