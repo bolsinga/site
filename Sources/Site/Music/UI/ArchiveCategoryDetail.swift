@@ -9,7 +9,6 @@ import CoreLocation
 import SwiftUI
 
 struct ArchiveCategoryDetail: View {
-  let vault: Vault
   var model: VaultModel
   let category: ArchiveCategory?
   @Binding var venueSort: VenueSort
@@ -17,6 +16,8 @@ struct ArchiveCategoryDetail: View {
   let isCategoryActive: Bool
   @Binding var locationFilter: LocationFilter
   let nearbyDistanceThreshold: CLLocationDistance
+
+  private var vault: Vault { model.vault }
 
   private var filteredDecadesMap: [Decade: [Annum: [Concert.ID]]] {
     locationFilter.isNearby ? model.decadesMapsNearby(nearbyDistanceThreshold) : vault.decadesMap
@@ -71,35 +72,35 @@ struct ArchiveCategoryDetail: View {
 
 #Preview {
   ArchiveCategoryDetail(
-    vault: vaultPreviewData, model: VaultModel(vaultPreviewData), category: .today,
+    model: VaultModel(vaultPreviewData), category: .today,
     venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
     isCategoryActive: true, locationFilter: .constant(.none), nearbyDistanceThreshold: 1.0)
 }
 
 #Preview {
   ArchiveCategoryDetail(
-    vault: vaultPreviewData, model: VaultModel(vaultPreviewData), category: .stats,
+    model: VaultModel(vaultPreviewData), category: .stats,
     venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
     isCategoryActive: true, locationFilter: .constant(.none), nearbyDistanceThreshold: 1.0)
 }
 
 #Preview {
   ArchiveCategoryDetail(
-    vault: vaultPreviewData, model: VaultModel(vaultPreviewData), category: .shows,
+    model: VaultModel(vaultPreviewData), category: .shows,
     venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
     isCategoryActive: true, locationFilter: .constant(.none), nearbyDistanceThreshold: 1.0)
 }
 
 #Preview {
   ArchiveCategoryDetail(
-    vault: vaultPreviewData, model: VaultModel(vaultPreviewData), category: .venues,
+    model: VaultModel(vaultPreviewData), category: .venues,
     venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
     isCategoryActive: true, locationFilter: .constant(.none), nearbyDistanceThreshold: 1.0)
 }
 
 #Preview {
   ArchiveCategoryDetail(
-    vault: vaultPreviewData, model: VaultModel(vaultPreviewData), category: .artists,
+    model: VaultModel(vaultPreviewData), category: .artists,
     venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
     isCategoryActive: true, locationFilter: .constant(.none), nearbyDistanceThreshold: 1.0)
 }
