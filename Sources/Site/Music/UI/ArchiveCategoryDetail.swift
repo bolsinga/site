@@ -14,18 +14,9 @@ struct ArchiveCategoryDetail: View {
   @Binding var venueSort: VenueSort
   @Binding var artistSort: ArtistSort
   let isCategoryActive: Bool
-  @Binding var locationFilter: LocationFilter
-  let nearbyDistanceThreshold: CLLocationDistance
+  var nearbyModel: NearbyModel
 
   private var vault: Vault { model.vault }
-
-  private var filteredDecadesMap: [Decade: [Annum: [Concert.ID]]] {
-    locationFilter.isNearby ? model.decadesMapsNearby(nearbyDistanceThreshold) : vault.decadesMap
-  }
-
-  private var filteredVenueDigests: [VenueDigest] {
-    locationFilter.isNearby ? model.venueDigestsNearby(nearbyDistanceThreshold) : vault.venueDigests
-  }
 
   @MainActor
   @ViewBuilder private var stackElement: some View {
@@ -39,19 +30,13 @@ struct ArchiveCategoryDetail: View {
           List { StatsGrouping(concerts: vault.concerts, displayArchiveCategoryCounts: false) }
             .navigationTitle(Text(category.localizedString))
         case .shows:
-          let decadesMap = filteredDecadesMap
+          let decadesMap = model.filteredDecadesMap(nearbyModel)
           ShowYearList(decadesMap: decadesMap)
-            .locationFilter(
-              $locationFilter, geocodingProgress: model.geocodingProgress,
-              locationAuthorization: model.locationAuthorization,
-              filteredDataIsEmpty: decadesMap.isEmpty)
+            .locationFilter(nearbyModel, filteredDataIsEmpty: decadesMap.isEmpty)
         case .venues:
-          let venueDigests = filteredVenueDigests
+          let venueDigests = model.filteredVenueDigests(nearbyModel)
           VenueList(venueDigests: venueDigests, sectioner: vault.sectioner, sort: $venueSort)
-            .locationFilter(
-              $locationFilter, geocodingProgress: model.geocodingProgress,
-              locationAuthorization: model.locationAuthorization,
-              filteredDataIsEmpty: venueDigests.isEmpty)
+            .locationFilter(nearbyModel, filteredDataIsEmpty: venueDigests.isEmpty)
         case .artists:
           ArtistList(
             artistDigests: vault.artistDigests, sectioner: vault.sectioner, sort: $artistSort)
@@ -74,33 +59,33 @@ struct ArchiveCategoryDetail: View {
   ArchiveCategoryDetail(
     model: VaultModel(vaultPreviewData), category: .today,
     venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
-    isCategoryActive: true, locationFilter: .constant(.none), nearbyDistanceThreshold: 1.0)
+    isCategoryActive: true, nearbyModel: NearbyModel())
 }
 
 #Preview {
   ArchiveCategoryDetail(
     model: VaultModel(vaultPreviewData), category: .stats,
     venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
-    isCategoryActive: true, locationFilter: .constant(.none), nearbyDistanceThreshold: 1.0)
+    isCategoryActive: true, nearbyModel: NearbyModel())
 }
 
 #Preview {
   ArchiveCategoryDetail(
     model: VaultModel(vaultPreviewData), category: .shows,
     venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
-    isCategoryActive: true, locationFilter: .constant(.none), nearbyDistanceThreshold: 1.0)
+    isCategoryActive: true, nearbyModel: NearbyModel())
 }
 
 #Preview {
   ArchiveCategoryDetail(
     model: VaultModel(vaultPreviewData), category: .venues,
     venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
-    isCategoryActive: true, locationFilter: .constant(.none), nearbyDistanceThreshold: 1.0)
+    isCategoryActive: true, nearbyModel: NearbyModel())
 }
 
 #Preview {
   ArchiveCategoryDetail(
     model: VaultModel(vaultPreviewData), category: .artists,
     venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
-    isCategoryActive: true, locationFilter: .constant(.none), nearbyDistanceThreshold: 1.0)
+    isCategoryActive: true, nearbyModel: NearbyModel())
 }

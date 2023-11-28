@@ -9,13 +9,17 @@ import CoreLocation
 import SwiftUI
 
 struct NearbyDistanceThresholdModifier: ViewModifier {
-  @Binding var distanceThreshold: CLLocationDistance
+  @SceneStorage("nearby.distance") private var nearbyDistanceThreshold: CLLocationDistance =
+    16093.44  // 10 miles
+
+  var model: NearbyModel
   @State private var presentDistanceSliderPopover = false
 
   func body(content: Content) -> some View {
     content
       .toolbar {
         ToolbarItem(placement: .primaryAction) {
+          @Bindable var model = model
           let labelText = Text("Nearby Distance", bundle: .module)
           Button {
             presentDistanceSliderPopover = true
@@ -27,16 +31,24 @@ struct NearbyDistanceThresholdModifier: ViewModifier {
             }
           }
           .popover(isPresented: $presentDistanceSliderPopover) {
-            NearbyDistanceThresholdView(distanceThreshold: $distanceThreshold) { labelText }
-              .presentationCompactAdaptation(.popover)
+            NearbyDistanceThresholdView(distanceThreshold: $model.distanceThreshold) {
+              labelText
+            }
+            .presentationCompactAdaptation(.popover)
           }
         }
+      }
+      .task {
+        model.distanceThreshold = nearbyDistanceThreshold
+      }
+      .onChange(of: model.distanceThreshold) { _, newValue in
+        nearbyDistanceThreshold = newValue
       }
   }
 }
 
 extension View {
-  func nearbyDistanceThreshold(_ distanceThreshold: Binding<CLLocationDistance>) -> some View {
-    modifier(NearbyDistanceThresholdModifier(distanceThreshold: distanceThreshold))
+  func nearbyDistanceThreshold(_ model: NearbyModel) -> some View {
+    modifier(NearbyDistanceThresholdModifier(model: model))
   }
 }

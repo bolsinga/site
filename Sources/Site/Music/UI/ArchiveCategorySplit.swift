@@ -18,11 +18,9 @@ struct ArchiveCategorySplit: View {
 
   @SceneStorage("venue.sort") private var venueSort = VenueSort.alphabetical
   @SceneStorage("artist.sort") private var artistSort = ArtistSort.alphabetical
-  @SceneStorage("nearby.distance") private var nearbyDistanceThreshold: CLLocationDistance =
-    16093.44  // 10 miles
-  @SceneStorage("nearby.filter") private var locationFilter = LocationFilter.none
 
   @State private var archiveNavigation = ArchiveNavigation()
+  @State private var nearbyModel = NearbyModel()
 
   private var vault: Vault { model.vault }
 
@@ -56,14 +54,14 @@ struct ArchiveCategorySplit: View {
         .navigationTitle(
           Text("Archives", bundle: .module)
         )
-        .nearbyDistanceThreshold($nearbyDistanceThreshold)
+        .nearbyDistanceThreshold(nearbyModel)
     } detail: {
       NavigationStack(path: $archiveNavigation.navigationPath) {
         ArchiveCategoryDetail(
           model: model, category: archiveNavigation.selectedCategory,
           venueSort: $venueSort, artistSort: $artistSort,
           isCategoryActive: archiveNavigation.navigationPath.isEmpty,
-          locationFilter: $locationFilter, nearbyDistanceThreshold: nearbyDistanceThreshold)
+          nearbyModel: nearbyModel)
       }
     }
     .archiveStorage(archiveNavigation: archiveNavigation)
@@ -96,6 +94,12 @@ struct ArchiveCategorySplit: View {
           Logger.link.error("ArchiveCategory to URL error: \(error, privacy: .public)")
         }
       }
+    }
+    .onChange(of: model.locationAuthorization) { _, newValue in
+      nearbyModel.locationAuthorization = newValue
+    }
+    .onChange(of: model.geocodingProgress) { _, newValue in
+      nearbyModel.geocodingProgress = newValue
     }
   }
 }
