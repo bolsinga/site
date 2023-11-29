@@ -140,8 +140,13 @@ enum LocationAuthorization {
   }
 
   private func concertsNearby(_ distanceThreshold: CLLocationDistance) -> [Concert] {
-    guard let currentLocation else { return [] }
-    return concerts(nearby: currentLocation, distanceThreshold: distanceThreshold)
+    guard let currentLocation else {
+      Logger.vaultModel.log("Nearby: No Location")
+      return []
+    }
+    let nearbyConcerts = concerts(nearby: currentLocation, distanceThreshold: distanceThreshold)
+    Logger.vaultModel.log("Nearby: Concerts: \(nearbyConcerts.count, privacy: .public)")
+    return nearbyConcerts
   }
 
   func venueDigestsNearby(_ distanceThreshold: CLLocationDistance) -> [VenueDigest] {
