@@ -20,7 +20,12 @@ struct ArchiveCategorySplit: View {
   @SceneStorage("artist.sort") private var artistSort = ArtistSort.alphabetical
 
   @State private var archiveNavigation = ArchiveNavigation()
-  @State private var nearbyModel = NearbyModel()
+  @State private var nearbyModel: NearbyModel
+
+  internal init(model: VaultModel) {
+    self.model = model
+    self.nearbyModel = NearbyModel(vaultModel: model)
+  }
 
   private var vault: Vault { model.vault }
 
@@ -94,12 +99,6 @@ struct ArchiveCategorySplit: View {
           Logger.link.error("ArchiveCategory to URL error: \(error, privacy: .public)")
         }
       }
-    }
-    .onChange(of: model.locationAuthorization) { _, newValue in
-      nearbyModel.locationAuthorization = newValue
-    }
-    .onChange(of: model.geocodingProgress) { _, newValue in
-      nearbyModel.geocodingProgress = newValue
     }
   }
 }

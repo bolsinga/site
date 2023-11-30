@@ -59,36 +59,41 @@ struct ArchiveCategoryDetail: View {
 }
 
 #Preview {
-  ArchiveCategoryDetail(
-    model: VaultModel(vaultPreviewData, executeAsynchronousTasks: false), category: .today,
-    venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
-    isCategoryActive: true, nearbyModel: NearbyModel())
+  let vaultModel = VaultModel(vaultPreviewData, executeAsynchronousTasks: false)
+  return ArchiveCategoryDetail(
+    model: vaultModel, category: .today, venueSort: .constant(.alphabetical),
+    artistSort: .constant(.alphabetical), isCategoryActive: true,
+    nearbyModel: NearbyModel(vaultModel: vaultModel))
 }
 
 #Preview {
-  ArchiveCategoryDetail(
-    model: VaultModel(vaultPreviewData, executeAsynchronousTasks: false), category: .stats,
-    venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
-    isCategoryActive: true, nearbyModel: NearbyModel())
+  let vaultModel = VaultModel(vaultPreviewData, executeAsynchronousTasks: false)
+  return ArchiveCategoryDetail(
+    model: vaultModel, category: .stats, venueSort: .constant(.alphabetical),
+    artistSort: .constant(.alphabetical), isCategoryActive: true,
+    nearbyModel: NearbyModel(vaultModel: vaultModel))
 }
 
 #Preview {
-  ArchiveCategoryDetail(
-    model: VaultModel(vaultPreviewData, executeAsynchronousTasks: false), category: .shows,
-    venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
-    isCategoryActive: true, nearbyModel: NearbyModel())
+  let vaultModel = VaultModel(vaultPreviewData, executeAsynchronousTasks: false)
+  return ArchiveCategoryDetail(
+    model: vaultModel, category: .shows, venueSort: .constant(.alphabetical),
+    artistSort: .constant(.alphabetical), isCategoryActive: true,
+    nearbyModel: NearbyModel(vaultModel: vaultModel))
 }
 
 #Preview {
-  ArchiveCategoryDetail(
-    model: VaultModel(vaultPreviewData, executeAsynchronousTasks: false), category: .venues,
-    venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
-    isCategoryActive: true, nearbyModel: NearbyModel())
+  let vaultModel = VaultModel(vaultPreviewData, executeAsynchronousTasks: false)
+  return ArchiveCategoryDetail(
+    model: vaultModel, category: .venues, venueSort: .constant(.alphabetical),
+    artistSort: .constant(.alphabetical), isCategoryActive: true,
+    nearbyModel: NearbyModel(vaultModel: vaultModel))
 }
 
 #Preview {
-  ArchiveCategoryDetail(
-    model: VaultModel(vaultPreviewData, executeAsynchronousTasks: false), category: .artists,
-    venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
-    isCategoryActive: true, nearbyModel: NearbyModel())
+  let vaultModel = VaultModel(vaultPreviewData, executeAsynchronousTasks: false)
+  return ArchiveCategoryDetail(
+    model: vaultModel, category: .artists, venueSort: .constant(.alphabetical),
+    artistSort: .constant(.alphabetical), isCategoryActive: true,
+    nearbyModel: NearbyModel(vaultModel: vaultModel))
 }

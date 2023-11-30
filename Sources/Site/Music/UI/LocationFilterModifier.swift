@@ -90,14 +90,22 @@ extension View {
 #Preview {
   Text("Enabled-Geocoding-Allowed")
     .locationFilter(
-      NearbyModel(locationFilter: .nearby, locationAuthorization: .allowed, geocodingProgress: 0),
+      NearbyModel(
+        locationFilter: .nearby,
+        vaultModel: VaultModel(
+          vaultPreviewData, executeAsynchronousTasks: false, fakeLocationAuthorization: .allowed,
+          fakeGeocodingProgress: 0)),
       filteredDataIsEmpty: true, loadLocationFilterFromStorage: false)
 }
 
 #Preview {
   Text("Enabled-Geocoding-Allowed-Empty")
     .locationFilter(
-      NearbyModel(locationFilter: .nearby, locationAuthorization: .allowed, geocodingProgress: 1),
+      NearbyModel(
+        locationFilter: .nearby,
+        vaultModel: VaultModel(
+          vaultPreviewData, executeAsynchronousTasks: false, fakeLocationAuthorization: .allowed,
+          fakeGeocodingProgress: 1)),
       filteredDataIsEmpty: true, loadLocationFilterFromStorage: false)
 }
 
@@ -105,13 +113,20 @@ extension View {
   Text(String("Enabled-Geocoding-Restricted"))
     .locationFilter(
       NearbyModel(
-        locationFilter: .nearby, locationAuthorization: .restricted, geocodingProgress: 0),
+        locationFilter: .nearby,
+        vaultModel: VaultModel(
+          vaultPreviewData, executeAsynchronousTasks: false, fakeLocationAuthorization: .restricted,
+          fakeGeocodingProgress: 0)),
       filteredDataIsEmpty: false, loadLocationFilterFromStorage: false)
 }
 
 #Preview {
   Text("Enabled-Geocoding-Denied")
     .locationFilter(
-      NearbyModel(locationFilter: .nearby, locationAuthorization: .denied, geocodingProgress: 1),
+      NearbyModel(
+        locationFilter: .nearby,
+        vaultModel: VaultModel(
+          vaultPreviewData, executeAsynchronousTasks: false, fakeLocationAuthorization: .denied,
+          fakeGeocodingProgress: 1)),
       filteredDataIsEmpty: false, loadLocationFilterFromStorage: false)
 }
