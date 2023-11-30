@@ -8,16 +8,18 @@
 import SwiftUI
 
 struct LocationFilterModifier: ViewModifier {
-  @Binding var locationFilter: LocationFilter
-  let geocodingProgress: Double
-  let locationAuthorization: LocationAuthorization
+  @SceneStorage("nearby.filter") private var locationFilter = LocationFilter.none
+
+  var model: NearbyModel
   let filteredDataIsEmpty: Bool
+  // This is used to prevent @SceneStorage from being used in Previews.
+  let loadLocationFilterFromStorage: Bool
 
   @ViewBuilder private var nearbyEnabledView: some View {
-    switch locationAuthorization {
+    switch model.locationAuthorization {
     case .allowed:
-      if geocodingProgress < 1.0 {
-        ProgressView(value: geocodingProgress)
+      if model.geocodingProgress < 1.0 {
+        ProgressView(value: model.geocodingProgress)
           .progressViewStyle(.circular)
           .tint(.accentColor)
           #if os(macOS)
@@ -50,8 +52,9 @@ struct LocationFilterModifier: ViewModifier {
   }
 
   func body(content: Content) -> some View {
+    @Bindable var model = model
     VStack {
-      if locationFilter.isNearby {
+      if model.locationFilter.isNearby {
         nearbyEnabledView
       }
       content
@@ -60,50 +63,55 @@ struct LocationFilterModifier: ViewModifier {
       ToolbarItem(placement: .primaryAction) {
         Toggle(
           String(localized: "Filter Nearby", bundle: .module),
-          systemImage: "location.circle", isOn: $locationFilter.toggle)
+          systemImage: "location.circle", isOn: $model.locationFilter.toggle)
       }
+    }
+    .task {
+      guard loadLocationFilterFromStorage else { return }
+      model.locationFilter = locationFilter
+    }
+    .onChange(of: model.locationFilter) { _, newValue in
+      locationFilter = newValue
     }
   }
 }
 
 extension View {
   func locationFilter(
-    _ locationFilter: Binding<LocationFilter>, geocodingProgress: Double,
-    locationAuthorization: LocationAuthorization, filteredDataIsEmpty: Bool
-  )
-    -> some View
-  {
+    _ model: NearbyModel, filteredDataIsEmpty: Bool, loadLocationFilterFromStorage: Bool = true
+  ) -> some View {
     modifier(
       LocationFilterModifier(
-        locationFilter: locationFilter, geocodingProgress: geocodingProgress,
-        locationAuthorization: locationAuthorization, filteredDataIsEmpty: filteredDataIsEmpty))
+        model: model, filteredDataIsEmpty: filteredDataIsEmpty,
+        loadLocationFilterFromStorage: loadLocationFilterFromStorage))
   }
 }
 
 #Preview {
   Text("Enabled-Geocoding-Allowed")
     .locationFilter(
-      .constant(.nearby), geocodingProgress: 0, locationAuthorization: .allowed,
-      filteredDataIsEmpty: true)
+      NearbyModel(locationFilter: .nearby, locationAuthorization: .allowed, geocodingProgress: 0),
+      filteredDataIsEmpty: true, loadLocationFilterFromStorage: false)
 }
 
 #Preview {
   Text("Enabled-Geocoding-Allowed-Empty")
     .locationFilter(
-      .constant(.nearby), geocodingProgress: 1, locationAuthorization: .allowed,
-      filteredDataIsEmpty: true)
+      NearbyModel(locationFilter: .nearby, locationAuthorization: .allowed, geocodingProgress: 1),
+      filteredDataIsEmpty: true, loadLocationFilterFromStorage: false)
 }
 
 #Preview {
   Text(String("Enabled-Geocoding-Restricted"))
     .locationFilter(
-      .constant(.nearby), geocodingProgress: 0, locationAuthorization: .restricted,
-      filteredDataIsEmpty: false)
+      NearbyModel(
+        locationFilter: .nearby, locationAuthorization: .restricted, geocodingProgress: 0),
+      filteredDataIsEmpty: false, loadLocationFilterFromStorage: false)
 }
 
 #Preview {
   Text("Enabled-Geocoding-Denied")
     .locationFilter(
-      .constant(.nearby), geocodingProgress: 1, locationAuthorization: .denied,
-      filteredDataIsEmpty: false)
+      NearbyModel(locationFilter: .nearby, locationAuthorization: .denied, geocodingProgress: 1),
+      filteredDataIsEmpty: false, loadLocationFilterFromStorage: false)
 }
