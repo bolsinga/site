@@ -52,7 +52,7 @@ struct LocationFilterModifier: ViewModifier {
   }
 
   func body(content: Content) -> some View {
-    @Bindable var model = model
+    @Bindable var bindableModel = model
     VStack {
       if model.locationFilter.isNearby {
         nearbyEnabledView
@@ -63,7 +63,7 @@ struct LocationFilterModifier: ViewModifier {
       ToolbarItem(placement: .primaryAction) {
         Toggle(
           String(localized: "Filter Nearby", bundle: .module),
-          systemImage: "location.circle", isOn: $model.locationFilter.toggle)
+          systemImage: "location.circle", isOn: $bindableModel.locationFilter.toggle)
       }
     }
     .task {
