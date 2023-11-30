@@ -60,35 +60,35 @@ struct ArchiveCategoryDetail: View {
 
 #Preview {
   ArchiveCategoryDetail(
-    model: VaultModel(vaultPreviewData), category: .today,
+    model: VaultModel(vaultPreviewData, executeAsynchronousTasks: false), category: .today,
     venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
     isCategoryActive: true, nearbyModel: NearbyModel())
 }
 
 #Preview {
   ArchiveCategoryDetail(
-    model: VaultModel(vaultPreviewData), category: .stats,
+    model: VaultModel(vaultPreviewData, executeAsynchronousTasks: false), category: .stats,
     venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
     isCategoryActive: true, nearbyModel: NearbyModel())
 }
 
 #Preview {
   ArchiveCategoryDetail(
-    model: VaultModel(vaultPreviewData), category: .shows,
+    model: VaultModel(vaultPreviewData, executeAsynchronousTasks: false), category: .shows,
     venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
     isCategoryActive: true, nearbyModel: NearbyModel())
 }
 
 #Preview {
   ArchiveCategoryDetail(
-    model: VaultModel(vaultPreviewData), category: .venues,
+    model: VaultModel(vaultPreviewData, executeAsynchronousTasks: false), category: .venues,
     venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
     isCategoryActive: true, nearbyModel: NearbyModel())
 }
 
 #Preview {
   ArchiveCategoryDetail(
-    model: VaultModel(vaultPreviewData), category: .artists,
+    model: VaultModel(vaultPreviewData, executeAsynchronousTasks: false), category: .artists,
     venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
     isCategoryActive: true, nearbyModel: NearbyModel())
 }

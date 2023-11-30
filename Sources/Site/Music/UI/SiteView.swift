@@ -70,5 +70,7 @@ public struct SiteView: View {
 
 #Preview {
   SiteView(
-    SiteModel(urlString: "https://www.example.com", vaultModel: VaultModel(vaultPreviewData)))
+    SiteModel(
+      urlString: "https://www.example.com",
+      vaultModel: VaultModel(vaultPreviewData, executeAsynchronousTasks: false)))
 }
