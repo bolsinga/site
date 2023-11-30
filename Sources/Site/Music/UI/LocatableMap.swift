@@ -31,14 +31,14 @@ struct LocatableMap<T>: View where T: Locatable, T: Equatable {
   }
 }
 
-struct PreviewLocation: Locatable, Equatable {
-  var id: UUID { UUID() }
-  var center: CLLocationCoordinate2D {
-    CLLocationCoordinate2D(latitude: 37.76892200, longitude: -122.45262000)
-  }
-  var radius: CLLocationDistance { 100.0 }
-}
-
 #Preview {
-  LocatableMap(locations: .constant([PreviewLocation()]))
+  struct PreviewLocation: Locatable, Equatable {
+    var id: UUID { UUID() }
+    var center: CLLocationCoordinate2D {
+      CLLocationCoordinate2D(latitude: 37.76892200, longitude: -122.45262000)
+    }
+    var radius: CLLocationDistance { 100.0 }
+  }
+
+  return LocatableMap(locations: .constant([PreviewLocation()]))
 }
