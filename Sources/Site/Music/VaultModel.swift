@@ -154,6 +154,12 @@ enum LocationAuthorization {
     return vault.venueDigests.filter { nearbyVenueIDs.contains($0.id) }
   }
 
+  func artistDigestsNearby(_ distanceThreshold: CLLocationDistance) -> [ArtistDigest] {
+    let nearbyArtistIDs = Set(
+      concertsNearby(distanceThreshold).flatMap { $0.artists.map { $0.id } })
+    return vault.artistDigests.filter { nearbyArtistIDs.contains($0.id) }
+  }
+
   func decadesMapsNearby(_ distanceThreshold: CLLocationDistance) -> [Decade: [Annum: [Concert.ID]]]
   {
     let nearbyConcertIDs = Set(concertsNearby(distanceThreshold).map { $0.id })
@@ -194,5 +200,10 @@ enum LocationAuthorization {
   func filteredVenueDigests(_ nearbyModel: NearbyModel) -> [VenueDigest] {
     nearbyModel.locationFilter.isNearby
       ? venueDigestsNearby(nearbyModel.distanceThreshold) : vault.venueDigests
+  }
+
+  func filteredArtistDigests(_ nearbyModel: NearbyModel) -> [ArtistDigest] {
+    nearbyModel.locationFilter.isNearby
+      ? artistDigestsNearby(nearbyModel.distanceThreshold) : vault.artistDigests
   }
 }

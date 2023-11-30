@@ -38,8 +38,11 @@ struct ArchiveCategoryDetail: View {
           VenueList(venueDigests: venueDigests, sectioner: vault.sectioner, sort: $venueSort)
             .locationFilter(nearbyModel, filteredDataIsEmpty: venueDigests.isEmpty)
         case .artists:
+          let artistDigests = model.filteredArtistDigests(nearbyModel)
           ArtistList(
-            artistDigests: vault.artistDigests, sectioner: vault.sectioner, sort: $artistSort)
+            artistDigests: artistDigests, sectioner: vault.sectioner, sort: $artistSort
+          )
+          .locationFilter(nearbyModel, filteredDataIsEmpty: artistDigests.isEmpty)
         }
       }
       .shareCategory(category, url: url)
