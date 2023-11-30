@@ -41,10 +41,15 @@ enum LocationAuthorization {
     access: .inUse)
 
   @MainActor
-  internal init(_ vault: Vault) {
+  internal init(_ vault: Vault, executeAsynchronousTasks: Bool = true) {
     self.vault = vault
 
     updateTodayConcerts()
+
+    guard executeAsynchronousTasks else {
+      Logger.vaultModel.log("Ignoring Asynchronous Tasks")
+      return
+    }
 
     dayChangeTask = Task {
       await self.monitorDayChanges()
