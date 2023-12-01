@@ -6,7 +6,10 @@
 //
 
 @preconcurrency import CoreLocation
+import MapKit
 import SwiftUI
+
+extension CLPlacemark: Identifiable {}
 
 struct VenueDetail: View {
   let digest: VenueDigest
@@ -27,9 +30,13 @@ struct VenueDetail: View {
   @ViewBuilder private var locationElement: some View {
     Section(header: Text("Location", bundle: .module)) {
       AddressView(location: digest.venue.location)
-      LocationMap(placemark: placemark)
+      LocationMap(location: placemark)
         .task(id: digest) {
           do { placemark = try await geocode(digest) } catch {}
+        }
+        .onTapGesture {
+          guard let placemark else { return }
+          MKMapItem(placemark: MKPlacemark(placemark: placemark)).openInMaps()
         }
         .frame(minHeight: 300)
     }
