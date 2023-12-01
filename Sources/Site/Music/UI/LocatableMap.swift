@@ -9,8 +9,13 @@ import MapKit
 import SwiftUI
 
 struct LocatableMap<T>: View where T: Locatable, T: Equatable {
-  @Binding var locations: [T]
-  @State var mapRect: MKMapRect = .world
+  let locations: [T]
+  @State var mapRect: MKMapRect
+
+  internal init(locations: [T]) {
+    self.locations = locations
+    self.mapRect = locations.paddedRect
+  }
 
   var body: some View {
     Map(
@@ -19,14 +24,6 @@ struct LocatableMap<T>: View where T: Locatable, T: Equatable {
       annotationItems: locations
     ) { item in
       MapMarker(coordinate: item.center)
-    }
-    .onAppear {
-      mapRect = locations.paddedRect
-    }
-    .onChange(of: locations) { _, newValue in
-      withAnimation {
-        mapRect = newValue.paddedRect
-      }
     }
   }
 }
@@ -40,5 +37,5 @@ struct LocatableMap<T>: View where T: Locatable, T: Equatable {
     var radius: CLLocationDistance { 100.0 }
   }
 
-  return LocatableMap(locations: .constant([PreviewLocation()]))
+  return LocatableMap(locations: [PreviewLocation()])
 }
