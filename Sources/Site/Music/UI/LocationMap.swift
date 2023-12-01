@@ -12,7 +12,7 @@ import SwiftUI
 extension CLPlacemark: Identifiable {}
 
 struct LocationMap: View {
-  @Binding var placemark: CLPlacemark?
+  let placemark: CLPlacemark?
 
   var body: some View {
     ZStack {
