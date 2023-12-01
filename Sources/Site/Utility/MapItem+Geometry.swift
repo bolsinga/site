@@ -1,5 +1,5 @@
 //
-//  Locatable.swift
+//  MapItem+Geometry.swift
 //
 //
 //  Created by Greg Bolsinga on 5/31/23.
@@ -7,17 +7,9 @@
 
 import MapKit
 
-protocol Locatable: Identifiable {
-  var center: CLLocationCoordinate2D { get }
-  var radius: CLLocationDistance { get }
-}
-
-extension Locatable {
-  var region: MKCoordinateRegion {
-    let radius = radius
-    return MKCoordinateRegion(
-      center: self.center, latitudinalMeters: radius, longitudinalMeters: radius)
-  }
+extension MKMapItem {
+  var center: CLLocationCoordinate2D { self.placemark.center }
+  var radius: CLLocationDistance { self.placemark.radius }
 
   var rect: MKMapRect {
     let center = center
