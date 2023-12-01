@@ -27,7 +27,7 @@ struct VenueDetail: View {
   @ViewBuilder private var locationElement: some View {
     Section(header: Text("Location", bundle: .module)) {
       AddressView(location: digest.venue.location)
-      LocationMap(placemark: $placemark)
+      LocationMap(placemark: placemark)
         .task(id: digest) {
           do { placemark = try await geocode(digest) } catch {}
         }
