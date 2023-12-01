@@ -10,16 +10,10 @@ import SwiftUI
 
 struct LocatableMap<T>: View where T: Locatable, T: Equatable {
   let locations: [T]
-  @State var mapRect: MKMapRect
-
-  internal init(locations: [T]) {
-    self.locations = locations
-    self.mapRect = locations.paddedRect
-  }
 
   var body: some View {
     Map(
-      mapRect: $mapRect,
+      mapRect: .constant(locations.paddedRect),
       interactionModes: MapInteractionModes(),
       annotationItems: locations
     ) { item in
