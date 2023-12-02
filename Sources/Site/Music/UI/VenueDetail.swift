@@ -18,7 +18,7 @@ struct VenueDetail: View {
   let concertCompare: (Concert, Concert) -> Bool
   let geocode: geocoder?
 
-  @State private var placemark: CLPlacemark? = nil
+  @State private var item: MKMapItem? = nil
 
   @ViewBuilder private var firstSetElement: some View {
     HStack {
@@ -32,14 +32,16 @@ struct VenueDetail: View {
   @ViewBuilder private var locationElement: some View {
     Section(header: Text("Location", bundle: .module)) {
       AddressView(location: digest.venue.location)
-      LocationMap(location: placemark)
+      LocationMap(item: item)
         .task(id: digest) {
           guard let geocode else { return }
-          do { placemark = try await geocode(digest) } catch {}
+          do {
+            item = MKMapItem(placemark: MKPlacemark(placemark: try await geocode(digest)))
+          } catch {}
         }
         .onTapGesture {
-          guard let placemark else { return }
-          MKMapItem(placemark: MKPlacemark(placemark: placemark)).openInMaps()
+          guard let item else { return }
+          item.openInMaps()
         }
         .frame(minHeight: 300)
     }

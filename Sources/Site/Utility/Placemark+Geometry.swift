@@ -6,9 +6,8 @@
 //
 
 import CoreLocation
-import MapKit
 
-extension CLPlacemark: Locatable {
+extension CLPlacemark {
   var center: CLLocationCoordinate2D {
     self.location?.coordinate ?? kCLLocationCoordinate2DInvalid
   }
