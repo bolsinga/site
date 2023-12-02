@@ -12,9 +12,11 @@ import SwiftUI
 extension CLPlacemark: Identifiable {}
 
 struct VenueDetail: View {
+  typealias geocoder = (VenueDigest) async throws -> CLPlacemark
+
   let digest: VenueDigest
   let concertCompare: (Concert, Concert) -> Bool
-  let geocode: (VenueDigest) async throws -> CLPlacemark?
+  let geocode: geocoder?
 
   @State private var placemark: CLPlacemark? = nil
 
@@ -32,6 +34,7 @@ struct VenueDetail: View {
       AddressView(location: digest.venue.location)
       LocationMap(location: placemark)
         .task(id: digest) {
+          guard let geocode else { return }
           do { placemark = try await geocode(digest) } catch {}
         }
         .onTapGesture {
@@ -93,9 +96,7 @@ struct VenueDetail: View {
     VenueDetail(
       digest: vaultPreviewData.venueDigests[0],
       concertCompare: vaultPreviewData.comparator.compare(lhs:rhs:),
-      geocode: { _ in
-        nil
-      }
+      geocode: nil
     )
     .musicDestinations(vaultPreviewData)
   }
