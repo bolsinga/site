@@ -5,6 +5,7 @@
 //  Created by Greg Bolsinga on 2/27/23.
 //
 
+#if canImport(Contacts)
 import Contacts
 import Foundation
 
@@ -24,3 +25,4 @@ extension Location {
     CNPostalAddressFormatter().string(from: postalAddress)
   }
 }
+#endif

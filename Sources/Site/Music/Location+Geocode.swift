@@ -5,6 +5,7 @@
 //  Created by Greg Bolsinga on 2/27/23.
 //
 
+#if canImport(Contacts)
 import Contacts
 import CoreLocation
 import Foundation
@@ -27,3 +28,4 @@ extension Location: AtlasGeocodable {
     try await postalAddress.geocode()
   }
 }
+#endif
