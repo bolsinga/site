@@ -17,8 +17,7 @@ extension Location: AtlasGeocodable {
     #if canImport(Contacts)
       try await postalAddress.geocode()
     #else
-      // Temporary...
-      MKMapItem.forCurrentLocation().placemark
+      try await addressString.geocode()
     #endif
   }
 }
