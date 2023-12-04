@@ -6,23 +6,23 @@
 //
 
 #if canImport(Contacts)
-import Contacts
-import Foundation
+  import Contacts
+  import Foundation
 
-extension Location {
-  var postalAddress: CNPostalAddress {
-    let pAddress = CNMutablePostalAddress()
-    pAddress.city = city
-    pAddress.state = state
-    if let street {
-      pAddress.street = street
+  extension Location {
+    var postalAddress: CNPostalAddress {
+      let pAddress = CNMutablePostalAddress()
+      pAddress.city = city
+      pAddress.state = state
+      if let street {
+        pAddress.street = street
+      }
+      return pAddress
     }
-    return pAddress
-  }
 
-  var addressString: String {
-    // Note this requests access to Contacts, despite this not reading any contacts.
-    CNPostalAddressFormatter().string(from: postalAddress)
+    var addressString: String {
+      // Note this requests access to Contacts, despite this not reading any contacts.
+      CNPostalAddressFormatter().string(from: postalAddress)
+    }
   }
-}
 #endif
