@@ -30,12 +30,14 @@ struct NearbyDistanceThresholdModifier: ViewModifier {
               Image(systemName: "gear")
             }
           }
-          .popover(isPresented: $presentDistanceSliderPopover) {
-            NearbyDistanceThresholdView(distanceThreshold: $model.distanceThreshold) {
-              labelText
+          #if !os(tvOS)
+            .popover(isPresented: $presentDistanceSliderPopover) {
+              NearbyDistanceThresholdView(distanceThreshold: $model.distanceThreshold) {
+                labelText
+              }
+              .presentationCompactAdaptation(.popover)
             }
-            .presentationCompactAdaptation(.popover)
-          }
+          #endif
         }
       }
       .task {
