@@ -16,7 +16,5 @@ jobs:
       run: sudo xcode-select -s "/Applications/Xcode_15.0.app"
     - name: Build / Test
       run: swift build -v
-
-# Too many failures building with xcodebuild.
-#    - name: Build (macos, ios)
-#      run: xcodebuild -scheme Site -destination "platform=macOS" -destination "platform=iOS Simulator,name=iPhone 14"
+    - name: Build (macos, ios)
+      run: xcodebuild -scheme Site -destination "platform=macOS" -destination "platform=iOS Simulator,name=iPhone 15"
