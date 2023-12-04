@@ -14,8 +14,11 @@ extension Artist: PathRestorableUserActivity {
 
     userActivity.isEligibleForSearch = true
     userActivity.title = self.name
-    let attributes = CSSearchableItemAttributeSet(contentType: .content)
-    attributes.contentDescription = String(localized: "See Shows With This Artist", bundle: .module)
-    userActivity.contentAttributeSet = attributes
+    #if !os(tvOS)
+      let attributes = CSSearchableItemAttributeSet(contentType: .content)
+      attributes.contentDescription = String(
+        localized: "See Shows With This Artist", bundle: .module)
+      userActivity.contentAttributeSet = attributes
+    #endif
   }
 }

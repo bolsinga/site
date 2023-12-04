@@ -14,8 +14,10 @@ extension Venue: PathRestorableUserActivity {
 
     userActivity.isEligibleForSearch = true
     userActivity.title = self.name
-    let attributes = CSSearchableItemAttributeSet(contentType: .content)
-    attributes.contentDescription = String(localized: "See Shows At This Venue", bundle: .module)
-    userActivity.contentAttributeSet = attributes
+    #if !os(tvOS)
+      let attributes = CSSearchableItemAttributeSet(contentType: .content)
+      attributes.contentDescription = String(localized: "See Shows At This Venue", bundle: .module)
+      userActivity.contentAttributeSet = attributes
+    #endif
   }
 }
