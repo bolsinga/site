@@ -39,10 +39,12 @@ struct VenueDetail: View {
             item = MKMapItem(placemark: MKPlacemark(placemark: try await geocode(digest)))
           } catch {}
         }
-        .onTapGesture {
-          guard let item else { return }
-          item.openInMaps()
-        }
+        #if !os(tvOS)
+          .onTapGesture {
+            guard let item else { return }
+            item.openInMaps()
+          }
+        #endif
         .frame(minHeight: 300)
     }
   }
