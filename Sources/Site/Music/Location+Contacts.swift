@@ -5,11 +5,14 @@
 //  Created by Greg Bolsinga on 2/27/23.
 //
 
+import Foundation
+
 #if canImport(Contacts)
   import Contacts
-  import Foundation
+#endif
 
-  extension Location {
+extension Location {
+  #if canImport(Contacts)
     var postalAddress: CNPostalAddress {
       let pAddress = CNMutablePostalAddress()
       pAddress.city = city
@@ -24,5 +27,13 @@
       // Note this requests access to Contacts, despite this not reading any contacts.
       CNPostalAddressFormatter().string(from: postalAddress)
     }
-  }
-#endif
+  #else
+    var addressString: String {
+      let cityState = "\(city) \(state)"
+      if let street {
+        return "\(street)\n\(cityState)"
+      }
+      return cityState
+    }
+  #endif
+}
