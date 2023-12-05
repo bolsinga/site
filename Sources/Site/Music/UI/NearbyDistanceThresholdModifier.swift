@@ -17,29 +17,29 @@ struct NearbyDistanceThresholdModifier: ViewModifier {
 
   func body(content: Content) -> some View {
     content
-      .toolbar {
-        ToolbarItem(placement: .primaryAction) {
-          @Bindable var model = model
-          let labelText = Text("Nearby Distance", bundle: .module)
-          Button {
-            presentDistanceSliderPopover = true
-          } label: {
-            Label {
-              labelText
-            } icon: {
-              Image(systemName: "gear")
+      #if !os(tvOS)
+        .toolbar {
+          ToolbarItem(placement: .primaryAction) {
+            @Bindable var model = model
+            let labelText = Text("Nearby Distance", bundle: .module)
+            Button {
+              presentDistanceSliderPopover = true
+            } label: {
+              Label {
+                labelText
+              } icon: {
+                Image(systemName: "gear")
+              }
             }
-          }
-          #if !os(tvOS)
             .popover(isPresented: $presentDistanceSliderPopover) {
               NearbyDistanceThresholdView(distanceThreshold: $model.distanceThreshold) {
                 labelText
               }
               .presentationCompactAdaptation(.popover)
             }
-          #endif
+          }
         }
-      }
+      #endif
       .task {
         model.distanceThreshold = nearbyDistanceThreshold
       }
