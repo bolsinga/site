@@ -52,43 +52,46 @@ where T: LibraryComparable, T: Identifiable, T: Hashable, T.ID == String, T: Pat
       }
     }
     .listStyle(.plain)
+    .overlay {
+      if !searchString.isEmpty, sectionMap.isEmpty {
+        ContentUnavailableView.search(text: searchString)
+      }
+    }
   }
 }
 
-struct LibraryComparableList_Previews: PreviewProvider {
-  static var previews: some View {
-    let vaultPreview = Vault.previewData
+#Preview {
+  NavigationStack {
+    LibraryComparableList(
+      items: vaultPreviewData.artistDigests,
+      sectioner: LibrarySectioner(),
+      itemContentView: { _ in
+        Text(3.formatted(.number))
+      },
+      sectionHeaderView: { section in
+        Text("Artists")
+      },
+      searchString: .constant("")
+    )
+    .navigationTitle("Artists")
+    .musicDestinations(vaultPreviewData)
+  }
+}
 
-    NavigationStack {
-      LibraryComparableList(
-        items: vaultPreview.artistDigests,
-        sectioner: LibrarySectioner(),
-        itemContentView: { _ in
-          Text(3.formatted(.number))
-        },
-        sectionHeaderView: { section in
-          Text("Artists")
-        },
-        searchString: .constant("")
-      )
-      .navigationTitle("Artists")
-      .musicDestinations(vaultPreview)
-    }
-
-    NavigationStack {
-      LibraryComparableList(
-        items: vaultPreview.venueDigests,
-        sectioner: LibrarySectioner(),
-        itemContentView: { _ in
-          EmptyView()
-        },
-        sectionHeaderView: { section in
-          Text("Venues")
-        },
-        searchString: .constant("")
-      )
-      .navigationTitle("Venues")
-      .musicDestinations(vaultPreview)
-    }
+#Preview {
+  NavigationStack {
+    LibraryComparableList(
+      items: vaultPreviewData.venueDigests,
+      sectioner: LibrarySectioner(),
+      itemContentView: { _ in
+        EmptyView()
+      },
+      sectionHeaderView: { section in
+        Text("Venues")
+      },
+      searchString: .constant("")
+    )
+    .navigationTitle("Venues")
+    .musicDestinations(vaultPreviewData)
   }
 }

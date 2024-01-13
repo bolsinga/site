@@ -13,6 +13,10 @@ extension Logger {
   static let atlas = Logger(category: "atlas")
 }
 
+enum GeocodeError: Error {
+  case noPlacemark
+}
+
 protocol Geocodable {
   func geocode() async throws -> CLPlacemark
 }

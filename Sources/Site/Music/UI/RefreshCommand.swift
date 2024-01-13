@@ -7,23 +7,25 @@
 
 import SwiftUI
 
-public struct RefreshCommand: Commands {
-  @ObservedObject public var model: VaultModel
+#if !os(tvOS)
+  public struct RefreshCommand: Commands {
+    public var model: SiteModel
 
-  public init(model: VaultModel) {
-    self.model = model
-  }
+    public init(model: SiteModel) {
+      self.model = model
+    }
 
-  public var body: some Commands {
-    CommandGroup(after: .newItem) {
-      Button {
-        Task {
-          await model.load()
+    public var body: some Commands {
+      CommandGroup(after: .newItem) {
+        Button {
+          Task {
+            await model.load()
+          }
+        } label: {
+          Text("Refresh", bundle: .module)
         }
-      } label: {
-        Text("Refresh", bundle: .module, comment: "Menu Action to call refreshable action.")
+        .keyboardShortcut(KeyboardShortcut(KeyEquivalent("r"), modifiers: [.command]))
       }
-      .keyboardShortcut(KeyboardShortcut(KeyEquivalent("r"), modifiers: [.command]))
     }
   }
-}
+#endif

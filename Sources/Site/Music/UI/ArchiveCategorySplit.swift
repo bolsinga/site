@@ -14,22 +14,22 @@ extension Logger {
 }
 
 struct ArchiveCategorySplit: View {
-  let vault: Vault
-  @ObservedObject var model: VaultModel
+  var model: VaultModel
 
   @SceneStorage("venue.sort") private var venueSort = VenueSort.alphabetical
-  @SceneStorage("venue.filter") private var venueLocationFilter = LocationFilter.none
   @SceneStorage("artist.sort") private var artistSort = ArtistSort.alphabetical
-  @SceneStorage("nearby.distance") private var nearbyDistanceThreshold: CLLocationDistance =
-    16093.44  // 10 miles
-  @SceneStorage("show.filter") private var showLocationFilter = LocationFilter.none
 
-  @StateObject private var archiveNavigation = ArchiveNavigation()
+  @State private var archiveNavigation = ArchiveNavigation()
+  @State private var nearbyModel: NearbyModel
 
-  private var geocodingProgress: Double {
-    Double(model.geocodedVenuesCount) / Double(vault.venueDigests.count)
+  internal init(model: VaultModel) {
+    self.model = model
+    self.nearbyModel = NearbyModel(vaultModel: model)
   }
 
+  private var vault: Vault { model.vault }
+
+  @MainActor
   @ViewBuilder var sidebar: some View {
     List(ArchiveCategory.allCases, id: \.self, selection: $archiveNavigation.selectedCategory) {
       category in
@@ -57,17 +57,16 @@ struct ArchiveCategorySplit: View {
     NavigationSplitView {
       sidebar
         .navigationTitle(
-          Text("Archives", bundle: .module, comment: "Title for the ArchiveCategorySplit."))
+          Text("Archives", bundle: .module)
+        )
+        .nearbyDistanceThreshold(nearbyModel)
     } detail: {
       NavigationStack(path: $archiveNavigation.navigationPath) {
         ArchiveCategoryDetail(
-          vault: vault, category: archiveNavigation.selectedCategory,
-          todayConcerts: $model.todayConcerts,
-          nearbyConcerts: .constant(model.concertsNearby(nearbyDistanceThreshold)),
-          venueSort: $venueSort, venueLocationFilter: $venueLocationFilter, artistSort: $artistSort,
-          isCategoryActive: .constant(archiveNavigation.navigationPath.isEmpty),
-          geocodingProgress: .constant(geocodingProgress), showLocationFilter: $showLocationFilter,
-          locationAuthorization: $model.locationAuthorization)
+          model: model, category: archiveNavigation.selectedCategory,
+          venueSort: $venueSort, artistSort: $artistSort,
+          isCategoryActive: archiveNavigation.navigationPath.isEmpty,
+          nearbyModel: nearbyModel)
       }
     }
     .archiveStorage(archiveNavigation: archiveNavigation)

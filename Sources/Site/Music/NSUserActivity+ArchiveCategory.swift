@@ -33,14 +33,16 @@ extension NSUserActivity {
 
     self.title = category.title
 
-    self.persistentIdentifier = category.rawValue
+    #if !os(tvOS)
+      self.persistentIdentifier = category.rawValue
+    #endif
     if category == .today {
       #if os(iOS)
         self.isEligibleForPrediction = true
       #endif
-      self.suggestedInvocationPhrase = String(
-        localized: "Shows Today", bundle: .module,
-        comment: "Suggested invocation phrase for ArchiveCategory.today")
+      #if !os(tvOS)
+        self.suggestedInvocationPhrase = String(localized: "Shows Today", bundle: .module)
+      #endif
     }
 
     if let url {

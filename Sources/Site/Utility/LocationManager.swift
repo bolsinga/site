@@ -26,8 +26,12 @@ extension CLAuthorizationStatus {
       throw LocationAuthorizationError.restricted
     case .denied:
       throw LocationAuthorizationError.denied
-    case .authorizedAlways, .authorizedWhenInUse, .authorized:
+    case .authorizedAlways, .authorizedWhenInUse:
       return true
+    #if !os(tvOS)
+      case .authorized:
+        return true
+    #endif
     @unknown default:
       fatalError("CLocationAuthorizationState unknown not streamable")
     }
@@ -53,7 +57,9 @@ actor LocationManager {
     access: Access = .inUse
   ) {
     manager = CLLocationManager()
-    manager.activityType = activityType
+    #if !os(tvOS)
+      manager.activityType = activityType
+    #endif
     manager.distanceFilter = distanceFilter
     manager.desiredAccuracy = desiredAccuracy
     self.access = access
@@ -72,12 +78,16 @@ actor LocationManager {
 
     return await withCheckedContinuation { continuation in
       delegate.authorizationStreamContinuation = continuation
-      switch access {
-      case .inUse:
+      #if !os(tvOS)
+        switch access {
+        case .inUse:
+          manager.requestWhenInUseAuthorization()
+        case .always:
+          manager.requestAlwaysAuthorization()
+        }
+      #else
         manager.requestWhenInUseAuthorization()
-      case .always:
-        manager.requestAlwaysAuthorization()
-      }
+      #endif
     }
   }
 
@@ -92,7 +102,11 @@ actor LocationManager {
       }
 
       delegate.locationStreamContinuation = continuation
-      manager.startUpdatingLocation()
+      #if !os(tvOS)
+        manager.startUpdatingLocation()
+      #else
+        manager.requestLocation()
+      #endif
     }
   }
 

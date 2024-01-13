@@ -12,7 +12,26 @@ extension Logger {
   static let vault = Logger(category: "vault")
 }
 
+enum VaultError: Error {
+  case illegalURL(String)
+}
+
+extension VaultError: LocalizedError {
+  public var errorDescription: String? {
+    switch self {
+    case .illegalURL(let urlString):
+      return "URL (\(urlString)) is not valid."
+    }
+  }
+}
+
 extension Vault {
+  public static func load(_ urlString: String) async throws -> Vault {
+    guard let url = URL(string: urlString) else { throw VaultError.illegalURL(urlString) }
+
+    return try await Vault.load(url: url)
+  }
+
   public static func load(url: URL, artistsWithShowsOnly: Bool = true) async throws -> Vault {
     Logger.vault.log("start")
     defer {

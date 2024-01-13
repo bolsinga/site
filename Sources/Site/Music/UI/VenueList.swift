@@ -9,24 +9,11 @@ import SwiftUI
 
 struct VenueList: View {
   let venueDigests: [VenueDigest]
-  let nearbyVenueIDs: Set<Venue.ID>
   let sectioner: LibrarySectioner
 
   @Binding var sort: VenueSort
-  @Binding var locationFilter: LocationFilter
-  @Binding var geocodingProgress: Double
-  @Binding var locationAuthorization: LocationAuthorization
 
   @State private var searchString: String = ""
-
-  private var filteredVenueDigests: [VenueDigest] {
-    switch locationFilter {
-    case .none:
-      return venueDigests
-    case .nearby:
-      return venueDigests.filter { nearbyVenueIDs.contains($0.id) }
-    }
-  }
 
   private func rank(for venueDigest: VenueDigest) -> Ranking {
     switch sort {
@@ -42,9 +29,7 @@ struct VenueList: View {
   }
 
   @ViewBuilder private func showCount(for venueDigest: VenueDigest) -> some View {
-    Text(
-      "\(venueDigest.showRank.value) Show(s)", bundle: .module,
-      comment: "Value for the Venue # of Shows.")
+    Text("\(venueDigest.showRank.value) Show(s)", bundle: .module)
   }
 
   @ViewBuilder private func sectionHeader(for ranking: Ranking) -> some View {
@@ -61,7 +46,6 @@ struct VenueList: View {
   }
 
   @ViewBuilder private var listElement: some View {
-    let venueDigests = filteredVenueDigests
     if case .alphabetical = sort {
       LibraryComparableList(
         items: venueDigests,
@@ -116,30 +100,21 @@ struct VenueList: View {
 
   var body: some View {
     listElement
-      .navigationTitle(Text("Venues", bundle: .module, comment: "Title for the Venue Detail"))
+      .navigationTitle(Text("Venues", bundle: .module))
       .searchable(
         text: $searchString,
-        prompt: String(localized: "Venue Names", bundle: .module, comment: "VenueList searchPrompt")
+        prompt: String(localized: "Venue Names", bundle: .module)
       )
       .sortable(algorithm: $sort)
-      .locationFilter(
-        $locationFilter, geocodingProgress: $geocodingProgress,
-        locationAuthorization: $locationAuthorization)
   }
 }
 
-struct VenueList_Previews: PreviewProvider {
-  static var previews: some View {
-    let vaultPreview = Vault.previewData
-    NavigationStack {
-      VenueList(
-        venueDigests: vaultPreview.venueDigests,
-        nearbyVenueIDs: Set(vaultPreview.venueDigests.map { $0.id }),
-        sectioner: vaultPreview.sectioner, sort: .constant(.alphabetical),
-        locationFilter: .constant(.none), geocodingProgress: .constant(0),
-        locationAuthorization: .constant(.allowed)
-      )
-      .musicDestinations(vaultPreview)
-    }
+#Preview {
+  NavigationStack {
+    VenueList(
+      venueDigests: vaultPreviewData.venueDigests, sectioner: vaultPreviewData.sectioner,
+      sort: .constant(.alphabetical)
+    )
+    .musicDestinations(vaultPreviewData)
   }
 }

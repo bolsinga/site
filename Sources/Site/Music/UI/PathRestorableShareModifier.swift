@@ -13,14 +13,20 @@ struct PathRestorableShareModifier<T: PathRestorableShareable>: ViewModifier {
 
   func body(content: Content) -> some View {
     content
-      .toolbar {
-        if let url {
-          ShareLink(
-            item: url, subject: item.subject, message: item.message,
-            preview: SharePreview(
-              item.subject, image: Bundle.main.appIcon))
+      #if os(iOS) || os(macOS)
+        .toolbar {
+          if let url {
+            ShareLink(
+              item: url, subject: item.subject, message: item.message,
+              preview: SharePreview(
+                item.subject, image: Bundle.main.appIcon))
+          }
         }
-      }
+      #elseif os(tvOS)
+          // ShareLink not available on tvOS
+      #else
+          // #warning("ShareLink: unknown OS")
+      #endif
   }
 }
 

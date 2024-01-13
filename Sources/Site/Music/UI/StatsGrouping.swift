@@ -48,9 +48,7 @@ struct StatsGrouping: View {
   @ViewBuilder var yearsElement: some View {
     if let yearsSpanRanking {
       HStack {
-        Text(
-          "\(yearsSpanRanking.value) Year(s)", bundle: .module,
-          comment: "Years Span for StatsGrouping.")
+        Text("\(yearsSpanRanking.value) Year(s)", bundle: .module)
         Spacer()
         Text(yearsSpanRanking.formatted(.rankOnly))
       }
@@ -66,7 +64,7 @@ struct StatsGrouping: View {
   }
 
   @ViewBuilder var showCount: some View {
-    Text("\(concerts.count) Show(s)", bundle: .module, comment: "Shows Count for StatsGrouping.")
+    Text("\(concerts.count) Show(s)", bundle: .module)
   }
 
   @ViewBuilder var showsElement: some View {
@@ -82,7 +80,7 @@ struct StatsGrouping: View {
   }
 
   @ViewBuilder func count(venues: [Venue]) -> some View {
-    Text("\(venues.count) Venue(s)", bundle: .module, comment: "Venues Count for StatsGrouping.")
+    Text("\(venues.count) Venue(s)", bundle: .module)
   }
 
   @ViewBuilder func element(for venues: [Venue]) -> some View {
@@ -98,7 +96,7 @@ struct StatsGrouping: View {
   }
 
   @ViewBuilder func count(artists: [Artist]) -> some View {
-    Text("\(artists.count) Artist(s)", bundle: .module, comment: "Artists Count for StatsGrouping.")
+    Text("\(artists.count) Artist(s)", bundle: .module)
   }
 
   @ViewBuilder func element(for artists: [Artist]) -> some View {
@@ -174,10 +172,10 @@ struct StatsGrouping: View {
         case .artists:
           element(for: artists)
         case .weekday:
-          let name = String(localized: "Weekdays", bundle: .module, comment: "Weekdays Stats")
+          let name = String(localized: "Weekdays", bundle: .module)
           NavigationLink(name) { WeekdayChart(dates: knownShowDates).navigationTitle(name) }
         case .month:
-          let name = String(localized: "Months", bundle: .module, comment: "Months Stats")
+          let name = String(localized: "Months", bundle: .module)
           NavigationLink(name) { MonthChart(dates: knownShowDates).navigationTitle(name) }
         case .state:
           NavigationLink {
@@ -186,7 +184,7 @@ struct StatsGrouping: View {
             LabeledContent {
               Text(stateCounts.keys.count.formatted())
             } label: {
-              Text("States", bundle: .module, comment: "States Stats")
+              Text("States", bundle: .module)
             }
           }
         }

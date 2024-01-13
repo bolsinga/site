@@ -10,7 +10,7 @@ import XCTest
 @testable import Site
 
 final class PathRestorableUserActivityTests: XCTestCase {
-  let baseURL = Vault.previewData.baseURL
+  let baseURL = vaultPreviewData.baseURL
 
   func testShow() throws {
     let userActivity = NSUserActivity(activityType: "test-type")

@@ -12,12 +12,11 @@ struct TodayList: View {
 
   var body: some View {
     if concerts.isEmpty {
-      Text(
-        "No Shows On This Day", bundle: .module,
-        comment: "Text shown when there are no shows today."
+      ContentUnavailableView(
+        String(localized: "No Shows On This Day", bundle: .module),
+        systemImage: "calendar.badge.exclamationmark",
+        description: Text("Check again tomorrow.", bundle: .module)
       )
-      .font(.title)
-      .foregroundColor(.secondary)
     } else {
       List(concerts) { concert in
         NavigationLink(value: concert) { TodayBlurb(concert: concert) }
@@ -26,18 +25,21 @@ struct TodayList: View {
       .navigationTitle(
         Text(
           "On This Day: \(Date.now.formatted(.dateTime.month(.defaultDigits).day()))",
-          bundle: .module, comment: "On This Day: - placeholder is date"))
+          bundle: .module))
     }
   }
 }
 
-struct TodayList_Previews: PreviewProvider {
-  static var previews: some View {
-    let vaultPreview = Vault.previewData
+#Preview {
+  NavigationStack {
+    TodayList(concerts: vaultPreviewData.concerts)
+      .musicDestinations(vaultPreviewData)
+  }
+}
 
-    NavigationStack {
-      TodayList(concerts: vaultPreview.concerts)
-        .musicDestinations(vaultPreview)
-    }
+#Preview {
+  NavigationStack {
+    TodayList(concerts: [])
+      .musicDestinations(vaultPreviewData)
   }
 }

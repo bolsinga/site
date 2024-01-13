@@ -15,8 +15,6 @@ jobs:
     - name: Switch to Xcode 15.0
       run: sudo xcode-select -s "/Applications/Xcode_15.0.app"
     - name: Build / Test
-      run: swift test -v
-
-# Too many failures building with xcodebuild.
-#    - name: Build (macos, ios)
-#      run: xcodebuild -scheme Site -destination "platform=macOS" -destination "platform=iOS Simulator,name=iPhone 14"
+      run: swift build -v
+    - name: Build iOS / macOS
+      run: xcodebuild -verbose -scheme Site -destination "generic/platform=iOS Simulator" -destination "generic/platform=macOS" -destination "generic/platform=tvOS Simulator"

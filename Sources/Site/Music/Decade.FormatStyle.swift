@@ -28,8 +28,7 @@ extension Decade {
 
 extension Decade.FormatStyle: Foundation.FormatStyle {
   private var unknown: String {
-    return String(
-      localized: "Decade Unknown", bundle: .module, comment: "String for when a Decade is unknown.")
+    return String(localized: "Decade Unknown", bundle: .module)
   }
 
   public func format(_ value: Decade) -> String {
@@ -39,14 +38,12 @@ extension Decade.FormatStyle: Foundation.FormatStyle {
       switch style {
       case .twoDigits:
         return String(
-          localized: "\(Date.FormatStyle.dateTime.year(.twoDigits).format(date))’s",
-          bundle: .module,
-          comment: "Decade.decade format string where the format is a two digit year.")
+          localized: "\(Date.FormatStyle.dateTime.year(.twoDigits).format(date))’s", bundle: .module
+        )
       case .defaultDigits:
         return String(
           localized: "\(Date.FormatStyle.dateTime.year(.defaultDigits).format(date))s",
-          bundle: .module,
-          comment: "Decade.decade format string where the format is a full digits year.")
+          bundle: .module)
       }
     case .unknown:
       return unknown

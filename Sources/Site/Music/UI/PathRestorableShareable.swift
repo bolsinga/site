@@ -29,7 +29,7 @@ extension Concert: PathRestorableShareable {
 
 extension Venue: PathRestorableShareable {
   private var descriptor: String {
-    String(localized: "Shows at \(self.name)", bundle: .module, comment: "Venue shared string")
+    String(localized: "Shows at \(self.name)", bundle: .module)
   }
 
   var subject: Text {
@@ -53,7 +53,7 @@ extension Annum: PathRestorableShareable {
 
 extension Artist: PathRestorableShareable {
   private var descriptor: String {
-    String(localized: "Shows with \(self.name)", bundle: .module, comment: "Artist shared string")
+    String(localized: "Shows with \(self.name)", bundle: .module)
   }
 
   var subject: Text {

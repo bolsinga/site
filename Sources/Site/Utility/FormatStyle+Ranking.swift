@@ -33,9 +33,8 @@ extension Ranking.FormatStyle: Foundation.FormatStyle {
       return value.rank.formatted(.hash)
     case .rankAndCount:
       return String(
-        localized:
-          "\(value.rank.formatted(.hash)) Count: \(value.value.formatted(.number))",
-        bundle: .module, comment: "Ranking.FormatStyle.rankAndCount")
+        localized: "\(value.rank.formatted(.hash)) Count: \(value.value.formatted(.number))",
+        bundle: .module)
     }
   }
 }

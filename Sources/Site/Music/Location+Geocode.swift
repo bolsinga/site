@@ -5,25 +5,19 @@
 //  Created by Greg Bolsinga on 2/27/23.
 //
 
-import Contacts
 import CoreLocation
 import Foundation
 
-extension CNPostalAddress: Geocodable {
-  private enum GeocodeError: Error {
-    case noPlacemark
-  }
-
-  func geocode() async throws -> CLPlacemark {
-    guard let placemark = try await CLGeocoder().geocodePostalAddress(self).first else {
-      throw GeocodeError.noPlacemark
-    }
-    return placemark
-  }
-}
+#if !canImport(Contacts)
+  import MapKit
+#endif
 
 extension Location: AtlasGeocodable {
   public func geocode() async throws -> CLPlacemark {
-    try await postalAddress.geocode()
+    #if canImport(Contacts)
+      try await postalAddress.geocode()
+    #else
+      try await addressString.geocode()
+    #endif
   }
 }

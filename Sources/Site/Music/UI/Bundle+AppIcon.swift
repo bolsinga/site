@@ -9,7 +9,7 @@ import SwiftUI
 
 extension Bundle {
   var appIcon: Image {
-    #if os(iOS)
+    #if os(iOS) || os(tvOS)
       guard let pImage = UIImage(named: "AppIcon") else {
         return Image(systemName: "questionmark.circle")
       }

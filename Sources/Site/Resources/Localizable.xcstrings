@@ -1,0 +1,340 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "#%@" : {
+
+    },
+    "%@ : %@" : {
+
+    },
+    "%@ @ %@" : {
+
+    },
+    "%@ @ %@ : %@" : {
+
+    },
+    "%@ Count: %@" : {
+
+    },
+    "%@, %@" : {
+
+    },
+    "%@." : {
+
+    },
+    "%@’s" : {
+
+    },
+    "%@s" : {
+
+    },
+    "%lld Artist(s)" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Artist"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Artists"
+                }
+              },
+              "zero" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "No Artists"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld Show(s)" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Show"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Shows"
+                }
+              },
+              "zero" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "No Shows"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld Venue(s)" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Venue"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Venues"
+                }
+              },
+              "zero" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "No Venue"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld Year(s)" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Year"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld Years"
+                }
+              },
+              "zero" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "No Years"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "All Shows" : {
+
+    },
+    "Archives" : {
+
+    },
+    "Artist Names" : {
+
+    },
+    "Artists" : {
+
+    },
+    "Check again tomorrow." : {
+
+    },
+    "Comment" : {
+
+    },
+    "Count" : {
+
+    },
+    "Date" : {
+
+    },
+    "Date Unknown" : {
+
+    },
+    "Decade Unknown" : {
+
+    },
+    "Display Shows On This Date" : {
+
+    },
+    "Filter Nearby" : {
+
+    },
+    "First Set" : {
+
+    },
+    "Lineup" : {
+
+    },
+    "Location" : {
+
+    },
+    "Location Disabled" : {
+
+    },
+    "Location Services are disabled." : {
+
+    },
+    "Location Services are not available." : {
+
+    },
+    "Location Unavailable" : {
+
+    },
+    "Month" : {
+
+    },
+    "Months" : {
+
+    },
+    "Nearby Distance" : {
+
+    },
+    "No Shows On This Day" : {
+
+    },
+    "Nothing is nearby. Disable the Location Filter or increase the nearby distance filter." : {
+
+    },
+    "Nothing Nearby" : {
+
+    },
+    "Numeric" : {
+
+    },
+    "On This Day: %@" : {
+
+    },
+    "Punctuation" : {
+
+    },
+    "Rank Unknown" : {
+
+    },
+    "Refresh" : {
+
+    },
+    "Related Artists" : {
+
+    },
+    "Related Venues" : {
+
+    },
+    "Retry" : {
+
+    },
+    "See More About This Show" : {
+
+    },
+    "See Shows At This Venue" : {
+
+    },
+    "See Shows From This Year" : {
+
+    },
+    "See Shows With This Artist" : {
+
+    },
+    "Select An Item" : {
+
+    },
+    "Show Artists" : {
+
+    },
+    "Show Statistics" : {
+
+    },
+    "Show Venues" : {
+
+    },
+    "Show Years" : {
+
+    },
+    "Shows" : {
+
+    },
+    "Shows at %@" : {
+
+    },
+    "Shows from %@" : {
+
+    },
+    "Shows from Unknown Years" : {
+
+    },
+    "Shows Today" : {
+
+    },
+    "Shows with %@" : {
+
+    },
+    "Sort" : {
+
+    },
+    "Sort Alphabetically" : {
+
+    },
+    "Sort By Artist Count" : {
+
+    },
+    "Sort By First Show" : {
+
+    },
+    "Sort By Show Count" : {
+
+    },
+    "Sort By Venue Count" : {
+
+    },
+    "Sort By Year Range" : {
+
+    },
+    "State" : {
+
+    },
+    "States" : {
+
+    },
+    "Stats" : {
+
+    },
+    "Today" : {
+
+    },
+    "Unable to load data." : {
+
+    },
+    "Venue Names" : {
+
+    },
+    "Venues" : {
+
+    },
+    "Weekday" : {
+
+    },
+    "Weekdays" : {
+
+    },
+    "Year Unknown" : {
+
+    }
+  },
+  "version" : "1.0"
+}

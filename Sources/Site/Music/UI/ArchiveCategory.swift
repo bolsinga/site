@@ -17,15 +17,15 @@ public enum ArchiveCategory: String, CaseIterable {
   var localizedString: String {
     switch self {
     case .today:
-      return String(localized: "Today", bundle: .module, comment: "ArchiveCategory Today")
+      return String(localized: "Today", bundle: .module)
     case .stats:
-      return String(localized: "Stats", bundle: .module, comment: "ArchiveCategory Stats")
+      return String(localized: "Stats", bundle: .module)
     case .shows:
-      return String(localized: "Shows", bundle: .module, comment: "ArchiveCategory Shows")
+      return String(localized: "Shows", bundle: .module)
     case .venues:
-      return String(localized: "Venues", bundle: .module, comment: "ArchiveCategory Venues")
+      return String(localized: "Venues", bundle: .module)
     case .artists:
-      return String(localized: "Artists", bundle: .module, comment: "ArchiveCategory Artists")
+      return String(localized: "Artists", bundle: .module)
     }
   }
 
@@ -47,25 +47,15 @@ public enum ArchiveCategory: String, CaseIterable {
   var title: String {
     switch self {
     case .today:
-      return String(
-        localized: "Display Shows On This Date", bundle: .module,
-        comment: "ArchiveCategory.today shared title")
+      return String(localized: "Display Shows On This Date", bundle: .module)
     case .stats:
-      return String(
-        localized: "Show Statistics",
-        bundle: .module, comment: "ArchiveCategory.stats shared title")
+      return String(localized: "Show Statistics", bundle: .module)
     case .shows:
-      return String(
-        localized: "All Shows",
-        bundle: .module, comment: "ArchiveCategory.shows shared title")
+      return String(localized: "All Shows", bundle: .module)
     case .venues:
-      return String(
-        localized: "Show Venues",
-        bundle: .module, comment: "ArchiveCategory.venues shared title")
+      return String(localized: "Show Venues", bundle: .module)
     case .artists:
-      return String(
-        localized: "Show Artists",
-        bundle: .module, comment: "ArchiveCategory.artists shared title")
+      return String(localized: "Show Artists", bundle: .module)
     }
   }
 }

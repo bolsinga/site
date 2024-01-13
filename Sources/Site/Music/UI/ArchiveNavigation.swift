@@ -5,7 +5,6 @@
 //  Created by Greg Bolsinga on 6/13/23.
 //
 
-import Combine
 import Foundation
 import os
 
@@ -13,11 +12,11 @@ extension Logger {
   static let archive = Logger(category: "archive")
 }
 
-final class ArchiveNavigation: ObservableObject {
-  @Published var selectedCategory: ArchiveCategory?
-  @Published var navigationPath: [ArchivePath] = []
+@Observable final class ArchiveNavigation {
+  var selectedCategory: ArchiveCategory?
+  var navigationPath: [ArchivePath] = []
 
-  internal var pendingNavigationPath: [ArchivePath]?
+  @ObservationIgnored internal var pendingNavigationPath: [ArchivePath]?
 
   func restoreNavigation(selectedCategoryStorage: ArchiveCategory?, pathData: Data?) {
     if let selectedCategoryStorage {

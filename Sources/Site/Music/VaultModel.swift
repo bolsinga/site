@@ -5,7 +5,6 @@
 //  Created by Greg Bolsinga on 7/12/23.
 //
 
-import Combine
 @preconcurrency import CoreLocation
 import Foundation
 import os
@@ -14,35 +13,29 @@ extension Logger {
   static let vaultModel = Logger(category: "vaultModel")
 }
 
-enum VaultError: Error {
-  case illegalURL(String)
-}
-
-extension VaultError: LocalizedError {
-  public var errorDescription: String? {
-    switch self {
-    case .illegalURL(let urlString):
-      return "URL (\(urlString)) is not valid."
-    }
-  }
-}
-
 enum LocationAuthorization {
   case allowed
   case restricted  // Locations are not possible.
   case denied  // Locations denied by user.
 }
 
-public final class VaultModel: ObservableObject {
-  let urlString: String
+@Observable public final class VaultModel {
+  public let vault: Vault
 
-  @Published public var vault: Vault?
-  @Published var error: Error?
-  @Published var todayConcerts: [Concert] = []
+  var todayConcerts: [Concert] = []
   private var venuePlacemarks: [Venue.ID: CLPlacemark] = [:]
-  @Published var geocodedVenuesCount = 0
-  @Published var currentLocation: CLLocation?
-  @Published var locationAuthorization = LocationAuthorization.allowed
+  var currentLocation: CLLocation?
+  var locationAuthorization = LocationAuthorization.allowed
+
+  // This is used for Preview only
+  var fakeGeocodingProgress: Double?
+
+  @ObservationIgnored
+  private var dayChangeTask: Task<Void, Never>?
+  @ObservationIgnored
+  private var geocodeTask: Task<Void, Never>?
+  @ObservationIgnored
+  private var locationTask: Task<Void, Never>?
 
   private let locationManager = LocationManager(
     activityType: .other,
@@ -50,46 +43,51 @@ public final class VaultModel: ObservableObject {
     desiredAccuracy: kCLLocationAccuracyHundredMeters,
     access: .inUse)
 
-  public init(urlString: String, vault: Vault? = nil, error: Error? = nil) {
-    self.urlString = urlString
+  @MainActor
+  internal init(
+    _ vault: Vault, executeAsynchronousTasks: Bool = true,
+    fakeLocationAuthorization: LocationAuthorization? = nil, fakeGeocodingProgress: Double? = nil
+  ) {
     self.vault = vault
-    self.error = error
+
+    if let fakeLocationAuthorization {
+      Logger.vaultModel.log("Setting Fake locationAuthorization")
+      self.locationAuthorization = fakeLocationAuthorization
+    }
+
+    if let fakeGeocodingProgress {
+      Logger.vaultModel.log("Setting Fake geocodingProgress")
+      self.fakeGeocodingProgress = fakeGeocodingProgress
+    }
+
+    updateTodayConcerts()
+
+    guard executeAsynchronousTasks else {
+      Logger.vaultModel.log("Ignoring Asynchronous Tasks")
+      return
+    }
+
+    dayChangeTask = Task {
+      await self.monitorDayChanges()
+    }
+
+    geocodeTask = Task {
+      await self.geocodeVenues()
+    }
+
+    locationTask = Task {
+      await self.monitorUserLocation()
+    }
   }
 
-  @MainActor
-  public func load() async {
-    Logger.vaultModel.log("start")
-    defer {
-      Logger.vaultModel.log("end")
-    }
-    do {
-      guard let url = URL(string: urlString) else { throw VaultError.illegalURL(urlString) }
-
-      error = nil
-      vault = try await Vault.load(url: url)
-      updateTodayConcerts()
-      Task {
-        await monitorDayChanges()
-      }
-      Task {
-        await geocodeVenues()
-      }
-      Task {
-        await monitorUserLocation()
-      }
-    } catch {
-      Logger.vaultModel.fault("error: \(error.localizedDescription, privacy: .public)")
-      self.error = error
-    }
+  func cancelTasks() {
+    dayChangeTask?.cancel()
+    geocodeTask?.cancel()
+    locationTask?.cancel()
   }
 
   @MainActor
   private func updateTodayConcerts() {
-    guard let vault else {
-      Logger.vaultModel.log("No Vault to calculate todayConcerts.")
-      return
-    }
-
     todayConcerts = vault.concerts(on: Date.now)
 
     Logger.vaultModel.log("Today Count: \(self.todayConcerts.count, privacy: .public)")
@@ -111,11 +109,6 @@ public final class VaultModel: ObservableObject {
 
   @MainActor
   private func geocodeVenues() async {
-    guard let vault else {
-      Logger.vaultModel.log("No Vault to geocode venues.")
-      return
-    }
-
     Logger.vaultModel.log("start batch geocode")
     defer {
       Logger.vaultModel.log("end batch geocode")
@@ -127,11 +120,18 @@ public final class VaultModel: ObservableObject {
       {
         Logger.vaultModel.log("geocoded: \(venue.id, privacy: .public)")
         venuePlacemarks[venue.id] = placemark
-        geocodedVenuesCount = venuePlacemarks.count
       }
     } catch {
       Logger.vaultModel.error("batch geocode error: \(error, privacy: .public)")
     }
+  }
+
+  var geocodingProgress: Double {
+    if let fakeGeocodingProgress {
+      Logger.vaultModel.log("Fake Geocoding Progress")
+      return fakeGeocodingProgress
+    }
+    return Double(venuePlacemarks.count) / Double(vault.venueDigests.count)
   }
 
   @MainActor
@@ -164,17 +164,50 @@ public final class VaultModel: ObservableObject {
     }
   }
 
-  func concertsNearby(_ distanceThreshold: CLLocationDistance) -> [Concert] {
-    guard let currentLocation else { return [] }
-    return concerts(nearby: currentLocation, distanceThreshold: distanceThreshold)
-  }
-
-  func concerts(nearby location: CLLocation, distanceThreshold: CLLocationDistance) -> [Concert] {
-    guard let vault else {
-      Logger.vaultModel.log("No Vault to calculate nearby Concerts.")
+  private func concertsNearby(_ distanceThreshold: CLLocationDistance) -> [Concert] {
+    guard let currentLocation else {
+      Logger.vaultModel.log("Nearby: No Location")
       return []
     }
+    let nearbyConcerts = concerts(nearby: currentLocation, distanceThreshold: distanceThreshold)
+    Logger.vaultModel.log("Nearby: Concerts: \(nearbyConcerts.count, privacy: .public)")
+    return nearbyConcerts
+  }
 
+  func venueDigestsNearby(_ distanceThreshold: CLLocationDistance) -> [VenueDigest] {
+    let nearbyVenueIDs = Set(concertsNearby(distanceThreshold).compactMap { $0.venue?.id })
+    return vault.venueDigests.filter { nearbyVenueIDs.contains($0.id) }
+  }
+
+  func artistDigestsNearby(_ distanceThreshold: CLLocationDistance) -> [ArtistDigest] {
+    let nearbyArtistIDs = Set(
+      concertsNearby(distanceThreshold).flatMap { $0.artists.map { $0.id } })
+    return vault.artistDigests.filter { nearbyArtistIDs.contains($0.id) }
+  }
+
+  func decadesMapsNearby(_ distanceThreshold: CLLocationDistance) -> [Decade: [Annum: [Concert.ID]]]
+  {
+    let nearbyConcertIDs = Set(concertsNearby(distanceThreshold).map { $0.id })
+    return [Decade: [Annum: [Concert.ID]]](
+      uniqueKeysWithValues: vault.decadesMap.compactMap {
+        let nearbyAnnums = [Annum: [Show.ID]](
+          uniqueKeysWithValues: $0.value.compactMap {
+            let nearbyIDs = $0.value.filter { nearbyConcertIDs.contains($0) }
+            if nearbyIDs.isEmpty {
+              return nil
+            }
+            return ($0.key, nearbyIDs)
+          })
+        if nearbyAnnums.isEmpty {
+          return nil
+        }
+        return ($0.key, nearbyAnnums)
+      })
+  }
+
+  private func concerts(nearby location: CLLocation, distanceThreshold: CLLocationDistance)
+    -> [Concert]
+  {
     return vault.concerts
       .filter { $0.venue != nil }
       .filter { venuePlacemarks[$0.venue!.id] != nil }
@@ -182,5 +215,20 @@ public final class VaultModel: ObservableObject {
         venuePlacemarks[$0.venue!.id]!.nearby(to: location, distanceThreshold: distanceThreshold)
       }
       .sorted { vault.comparator.compare(lhs: $0, rhs: $1) }
+  }
+
+  func filteredDecadesMap(_ nearbyModel: NearbyModel) -> [Decade: [Annum: [Concert.ID]]] {
+    nearbyModel.locationFilter.isNearby
+      ? decadesMapsNearby(nearbyModel.distanceThreshold) : vault.decadesMap
+  }
+
+  func filteredVenueDigests(_ nearbyModel: NearbyModel) -> [VenueDigest] {
+    nearbyModel.locationFilter.isNearby
+      ? venueDigestsNearby(nearbyModel.distanceThreshold) : vault.venueDigests
+  }
+
+  func filteredArtistDigests(_ nearbyModel: NearbyModel) -> [ArtistDigest] {
+    nearbyModel.locationFilter.isNearby
+      ? artistDigestsNearby(nearbyModel.distanceThreshold) : vault.artistDigests
   }
 }

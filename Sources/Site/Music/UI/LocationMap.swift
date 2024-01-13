@@ -5,22 +5,21 @@
 //  Created by Greg Bolsinga on 5/2/23.
 //
 
-import CoreLocation
 import MapKit
 import SwiftUI
 
-extension CLPlacemark: Identifiable {}
-
 struct LocationMap: View {
-  @Binding var placemark: CLPlacemark?
+  let item: MKMapItem?
 
   var body: some View {
     ZStack {
-      if let placemark {
-        LocatableMap(locations: .constant([placemark]))
-          .onTapGesture {
-            MKMapItem(placemark: MKPlacemark(placemark: placemark)).openInMaps()
-          }
+      if let item {
+        Map(
+          initialPosition: .rect(item.paddedRect),
+          interactionModes: MapInteractionModes()
+        ) {
+          Marker(item: item)
+        }
       }
     }
   }
