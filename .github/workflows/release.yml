@@ -15,6 +15,6 @@ jobs:
     - name: Switch to Xcode 15.2
       run: sudo xcode-select -s "/Applications/Xcode_15.2.app"
     - name: Build / Test
-      run: swift build -v
+      run: swift test -v
     - name: Build iOS / macOS
       run: xcodebuild -verbose -scheme Site -destination "generic/platform=iOS Simulator" -destination "generic/platform=macOS" -destination "generic/platform=tvOS Simulator"
