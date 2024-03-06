@@ -8,15 +8,12 @@
 import Foundation
 import os
 
-extension Logger {
-  static let json = Logger(category: "json")
-}
-
 extension Data {
   public func fromJSON<T>() throws -> T where T: Decodable {
-    Logger.json.log("start")
+    let json = Logger(category: "json")
+    json.log("start")
     defer {
-      Logger.json.log("end")
+      json.log("end")
     }
     let decoder = JSONDecoder()
     decoder.dateDecodingStrategy = .iso8601
