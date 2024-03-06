@@ -23,7 +23,7 @@ actor AtlasCache<T: AtlasGeocodable> {
 
   private var staggerOffset = 0.0
   private var cache: [T: Value] = [:]
-  
+
   private let atlasCache = Logger(category: "atlasCache")
 
   internal init(fileName: String = "atlas.json") {

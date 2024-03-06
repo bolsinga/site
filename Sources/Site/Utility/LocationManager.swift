@@ -8,10 +8,6 @@
 import CoreLocation
 import os
 
-extension Logger {
-  static let location = Logger(category: "location")
-}
-
 enum LocationAuthorizationError: Error {
   case restricted  // Locations are not possible.
   case denied  // Locations denied by user.
@@ -47,7 +43,8 @@ actor LocationManager {
   typealias LocationStream = AsyncThrowingStream<CLLocation, Error>
 
   private let manager: CLLocationManager
-  private let delegate = Delegate()
+  private let location = Logger(category: "location")
+  private let delegate: Delegate
   private let access: Access
 
   init(
@@ -63,16 +60,17 @@ actor LocationManager {
     manager.distanceFilter = distanceFilter
     manager.desiredAccuracy = desiredAccuracy
     self.access = access
+    self.delegate = Delegate(location: location)
     manager.delegate = delegate
   }
 
   private func requestAuthorization() async -> CLAuthorizationStatus {
-    Logger.location.log("start authorization - access: \(self.access.rawValue, privacy: .public)")
+    location.log("start authorization - access: \(self.access.rawValue, privacy: .public)")
     defer {
-      Logger.location.log("end authorization")
+      location.log("end authorization")
     }
     guard manager.authorizationStatus == .notDetermined else {
-      Logger.location.log("authorization known")
+      location.log("authorization known")
       return manager.authorizationStatus
     }
 
@@ -94,7 +92,7 @@ actor LocationManager {
   func locationStream() async throws -> LocationStream {
     try await requestAuthorization().isStreamable()
 
-    Logger.location.log("locationStream")
+    location.log("locationStream")
 
     return LocationStream { continuation in
       continuation.onTermination = { _ in
@@ -118,11 +116,19 @@ actor LocationManager {
   private class Delegate: NSObject, CLLocationManagerDelegate {
     typealias AuthorizationContinuation = CheckedContinuation<CLAuthorizationStatus, Never>
 
+    let location: Logger
+
     var authorizationStreamContinuation: AuthorizationContinuation?
     var locationStreamContinuation: LocationStream.Continuation?
 
+    internal init(location: Logger) {
+      self.location = location
+      self.authorizationStreamContinuation = nil
+      self.locationStreamContinuation = nil
+    }
+
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-      Logger.location.log("delegate authorization")
+      location.log("delegate authorization")
       authorizationStreamContinuation?.resume(returning: manager.authorizationStatus)
       authorizationStreamContinuation = nil
     }
@@ -131,17 +137,17 @@ actor LocationManager {
       guard let nsError = error as NSError?, nsError.domain == kCLErrorDomain,
         nsError.code != 0 /* kCLErrorLocationUnknown */
       else {
-        Logger.location.log("ignore unknown location error: \(error, privacy: .public)")
+        location.log("ignore unknown location error: \(error, privacy: .public)")
         return
       }
 
-      Logger.location.log("delegate error: \(error, privacy: .public)")
+      location.log("delegate error: \(error, privacy: .public)")
       locationStreamContinuation?.finish(throwing: error)
       locationStreamContinuation = nil
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-      Logger.location.log("delegate locations: \(locations.count, privacy: .public)")
+      location.log("delegate locations: \(locations.count, privacy: .public)")
 
       guard let continuation = locationStreamContinuation else { return }
 
