@@ -9,10 +9,6 @@
 import Foundation
 import os
 
-extension Logger {
-  static let vaultModel = Logger(category: "vaultModel")
-}
-
 enum LocationAuthorization {
   case allowed
   case restricted  // Locations are not possible.
@@ -43,6 +39,8 @@ enum LocationAuthorization {
     desiredAccuracy: kCLLocationAccuracyHundredMeters,
     access: .inUse)
 
+  private let vaultModel = Logger(category: "vaultModel")
+
   @MainActor
   internal init(
     _ vault: Vault, executeAsynchronousTasks: Bool = true,
@@ -51,19 +49,19 @@ enum LocationAuthorization {
     self.vault = vault
 
     if let fakeLocationAuthorization {
-      Logger.vaultModel.log("Setting Fake locationAuthorization")
+      vaultModel.log("Setting Fake locationAuthorization")
       self.locationAuthorization = fakeLocationAuthorization
     }
 
     if let fakeGeocodingProgress {
-      Logger.vaultModel.log("Setting Fake geocodingProgress")
+      vaultModel.log("Setting Fake geocodingProgress")
       self.fakeGeocodingProgress = fakeGeocodingProgress
     }
 
     updateTodayConcerts()
 
     guard executeAsynchronousTasks else {
-      Logger.vaultModel.log("Ignoring Asynchronous Tasks")
+      vaultModel.log("Ignoring Asynchronous Tasks")
       return
     }
 
@@ -90,45 +88,45 @@ enum LocationAuthorization {
   private func updateTodayConcerts() {
     todayConcerts = vault.concerts(on: Date.now)
 
-    Logger.vaultModel.log("Today Count: \(self.todayConcerts.count, privacy: .public)")
+    vaultModel.log("Today Count: \(self.todayConcerts.count, privacy: .public)")
   }
 
   @MainActor
   private func monitorDayChanges() async {
-    Logger.vaultModel.log("start day monitoring")
+    vaultModel.log("start day monitoring")
     defer {
-      Logger.vaultModel.log("end day monitoring")
+      vaultModel.log("end day monitoring")
     }
     for await _ in NotificationCenter.default.notifications(named: .NSCalendarDayChanged).map({
       $0.name
     }) {
-      Logger.vaultModel.log("day changed")
+      vaultModel.log("day changed")
       updateTodayConcerts()
     }
   }
 
   @MainActor
   private func geocodeVenues() async {
-    Logger.vaultModel.log("start batch geocode")
+    vaultModel.log("start batch geocode")
     defer {
-      Logger.vaultModel.log("end batch geocode")
+      vaultModel.log("end batch geocode")
     }
 
     do {
       for try await (venue, placemark) in BatchGeocode(
         atlas: vault.atlas, geocodables: vault.venueDigests.map { $0.venue })
       {
-        Logger.vaultModel.log("geocoded: \(venue.id, privacy: .public)")
+        vaultModel.log("geocoded: \(venue.id, privacy: .public)")
         venuePlacemarks[venue.id] = placemark
       }
     } catch {
-      Logger.vaultModel.error("batch geocode error: \(error, privacy: .public)")
+      vaultModel.error("batch geocode error: \(error, privacy: .public)")
     }
   }
 
   var geocodingProgress: Double {
     if let fakeGeocodingProgress {
-      Logger.vaultModel.log("Fake Geocoding Progress")
+      vaultModel.log("Fake Geocoding Progress")
       return fakeGeocodingProgress
     }
     return Double(venuePlacemarks.count) / Double(vault.venueDigests.count)
@@ -136,41 +134,41 @@ enum LocationAuthorization {
 
   @MainActor
   private func monitorUserLocation() async {
-    Logger.vaultModel.log("start location monitoring")
+    vaultModel.log("start location monitoring")
     defer {
-      Logger.vaultModel.log("end location monitoring")
+      vaultModel.log("end location monitoring")
     }
 
     do {
       let locationStream = try await locationManager.locationStream()
       do {
-        Logger.vaultModel.log("start locationstream")
+        vaultModel.log("start locationstream")
         defer {
-          Logger.vaultModel.log("end locationstream")
+          vaultModel.log("end locationstream")
         }
         for try await location in locationStream {
-          Logger.vaultModel.log("location received")
+          vaultModel.log("location received")
           currentLocation = location
         }
       } catch {
-        Logger.vaultModel.error("locationstream error: \(error, privacy: .public)")
+        vaultModel.error("locationstream error: \(error, privacy: .public)")
       }
     } catch LocationAuthorizationError.denied {
-      Logger.vaultModel.error("location denied")
+      vaultModel.error("location denied")
       locationAuthorization = .denied
     } catch {
-      Logger.vaultModel.error("location error: \(error, privacy: .public)")
+      vaultModel.error("location error: \(error, privacy: .public)")
       locationAuthorization = .restricted
     }
   }
 
   private func concertsNearby(_ distanceThreshold: CLLocationDistance) -> [Concert] {
     guard let currentLocation else {
-      Logger.vaultModel.log("Nearby: No Location")
+      vaultModel.log("Nearby: No Location")
       return []
     }
     let nearbyConcerts = concerts(nearby: currentLocation, distanceThreshold: distanceThreshold)
-    Logger.vaultModel.log("Nearby: Concerts: \(nearbyConcerts.count, privacy: .public)")
+    vaultModel.log("Nearby: Concerts: \(nearbyConcerts.count, privacy: .public)")
     return nearbyConcerts
   }
 
