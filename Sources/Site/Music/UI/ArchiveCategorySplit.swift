@@ -25,6 +25,8 @@ struct ArchiveCategorySplit: View {
 
   private var vault: Vault { model.vault }
 
+  private let decodeCategoryActivityLogger = Logger(category: "decodeCategoryActivity")
+
   @MainActor
   @ViewBuilder var sidebar: some View {
     List(ArchiveCategory.allCases, id: \.self, selection: $archiveNavigation.selectedCategory) {
@@ -75,9 +77,10 @@ struct ArchiveCategorySplit: View {
     }
     .onContinueUserActivity(ArchiveCategory.activityType) { userActivity in
       do {
-        archiveNavigation.navigate(to: try userActivity.archiveCategory())
+        archiveNavigation.navigate(
+          to: try userActivity.archiveCategory(decodeCategoryActivityLogger))
       } catch {
-        Logger.decodeActivity.error("error: \(error, privacy: .public)")
+        decodeCategoryActivityLogger.error("error: \(error, privacy: .public)")
       }
     }
     .onOpenURL { url in
