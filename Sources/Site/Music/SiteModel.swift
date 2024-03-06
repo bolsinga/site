@@ -8,15 +8,13 @@
 import Foundation
 import os
 
-extension Logger {
-  static let vaultLoader = Logger(category: "vaultLoader")
-}
-
 @Observable public final class SiteModel {
   let urlString: String
 
   public var vaultModel: VaultModel?
   var error: Error?
+
+  private let vaultLoader = Logger(category: "vaultLoader")
 
   public init(urlString: String, vaultModel: VaultModel? = nil, error: Error? = nil) {
     self.urlString = urlString
@@ -26,9 +24,9 @@ extension Logger {
 
   @MainActor
   public func load() async {
-    Logger.vaultLoader.log("start")
+    vaultLoader.log("start")
     defer {
-      Logger.vaultLoader.log("end")
+      vaultLoader.log("end")
     }
     do {
       error = nil
@@ -38,7 +36,7 @@ extension Logger {
       vaultModel?.cancelTasks()
       vaultModel = VaultModel(vault)
     } catch {
-      Logger.vaultLoader.fault("error: \(error.localizedDescription, privacy: .public)")
+      vaultLoader.fault("error: \(error.localizedDescription, privacy: .public)")
       self.error = error
     }
   }
