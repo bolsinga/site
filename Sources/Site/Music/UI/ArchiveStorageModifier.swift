@@ -8,12 +8,9 @@
 import SwiftUI
 import os
 
-extension Logger {
-  static let storage = Logger(category: "storage")
-}
-
 struct ArchiveStorageModifier: ViewModifier {
   let archiveNavigation: ArchiveNavigation
+  private let storage = Logger(category: "storage")
 
   @SceneStorage("selected.category") private var selectedCategoryStorage: String?
   @SceneStorage("navigation.path") private var navigationPathData: Data?
@@ -21,9 +18,9 @@ struct ArchiveStorageModifier: ViewModifier {
   func body(content: Content) -> some View {
     content
       .task {
-        Logger.storage.log("start restore")
+        storage.log("start restore")
         defer {
-          Logger.storage.log("end restore")
+          storage.log("end restore")
         }
         let archiveCategory =
           selectedCategoryStorage != nil ? ArchiveCategory(rawValue: selectedCategoryStorage!) : nil
@@ -31,13 +28,13 @@ struct ArchiveStorageModifier: ViewModifier {
           selectedCategoryStorage: archiveCategory, pathData: navigationPathData)
       }
       .onChange(of: archiveNavigation.selectedCategory) { _, newValue in
-        Logger.storage.log("category: \(newValue?.rawValue ?? "nil", privacy: .public)")
+        storage.log("category: \(newValue?.rawValue ?? "nil", privacy: .public)")
         selectedCategoryStorage = newValue?.rawValue ?? nil
 
         archiveNavigation.restorePendingData()
       }
       .onChange(of: archiveNavigation.navigationPath) { _, newPath in
-        Logger.storage.log(
+        storage.log(
           "path: \(newPath.map { $0.formatted() }.joined(separator: ":"), privacy: .public)")
         navigationPathData = newPath.jsonData
       }
