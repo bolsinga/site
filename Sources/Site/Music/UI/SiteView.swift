@@ -8,12 +8,9 @@
 import SwiftUI
 import os
 
-extension Logger {
-  static let vaultLoad = Logger(category: "vaultLoad")
-}
-
 public struct SiteView: View {
   private var model: SiteModel
+  private let vaultLoad = Logger(category: "vaultLoad")
 
   public init(_ model: SiteModel) {
     self.model = model
@@ -24,9 +21,9 @@ public struct SiteView: View {
       if let vaultModel = model.vaultModel {
         ArchiveCategorySplit(model: vaultModel)
           .refreshable {
-            Logger.vaultLoad.log("start refresh")
+            vaultLoad.log("start refresh")
             defer {
-              Logger.vaultLoad.log("end refresh")
+              vaultLoad.log("end refresh")
             }
             await model.load()
           }
@@ -37,7 +34,7 @@ public struct SiteView: View {
             description: Text("Unable to load data.", bundle: .module))
           Button {
             Task {
-              Logger.vaultLoad.log("User retry")
+              vaultLoad.log("User retry")
               await model.load()
             }
           } label: {
@@ -51,9 +48,9 @@ public struct SiteView: View {
     }.task {
       guard model.vaultModel == nil, model.error == nil else { return }
 
-      Logger.vaultLoad.log("start task")
+      vaultLoad.log("start task")
       defer {
-        Logger.vaultLoad.log("end task")
+        vaultLoad.log("end task")
       }
       await model.load()
     }
