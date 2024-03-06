@@ -8,21 +8,18 @@
 import Foundation
 import os
 
-extension Logger {
-  static let url = Logger(category: "url")
-  static let music = Logger(category: "music")
-}
-
 extension Music {
   public static func load(url: URL) async throws -> Music {
-    Logger.music.log("start")
+    let musicLogger = Logger(category: "music")
+    musicLogger.log("start")
     defer {
-      Logger.music.log("end")
+      musicLogger.log("end")
     }
 
-    Logger.url.log("start: \(url.absoluteString, privacy: .public)")
+    let urlLogger = Logger(category: "url")
+    urlLogger.log("start: \(url.absoluteString, privacy: .public)")
     let (data, _) = try await URLSession.shared.data(from: url)
-    Logger.url.log("end")
+    urlLogger.log("end")
 
     let music: Music = try data.fromJSON()
     return music
