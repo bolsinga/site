@@ -9,10 +9,6 @@ import CoreLocation
 import SwiftUI
 import os
 
-extension Logger {
-  static let link = Logger(category: "link")
-}
-
 struct ArchiveCategorySplit: View {
   var model: VaultModel
 
@@ -85,18 +81,19 @@ struct ArchiveCategorySplit: View {
       }
     }
     .onOpenURL { url in
-      Logger.link.log("url: \(url.absoluteString, privacy: .public)")
+      let link = Logger(category: "link")
+      link.log("url: \(url.absoluteString, privacy: .public)")
       do {
         let archivePath = try ArchivePath(url)
         archiveNavigation.navigate(to: archivePath)
       } catch {
-        Logger.link.error("ArchivePath to URL error: \(error, privacy: .public)")
+        link.error("ArchivePath to URL error: \(error, privacy: .public)")
 
         do {
           let archiveCategory = try ArchiveCategory(url)
           archiveNavigation.navigate(to: archiveCategory)
         } catch {
-          Logger.link.error("ArchiveCategory to URL error: \(error, privacy: .public)")
+          link.error("ArchiveCategory to URL error: \(error, privacy: .public)")
         }
       }
     }
