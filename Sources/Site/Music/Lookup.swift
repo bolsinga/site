@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import os
+@preconcurrency import os
 
 private func createLookup<T: Identifiable>(_ sequence: [T]) -> [T.ID: T] {
   sequence.reduce(into: [:]) { $0[$1.id] = $1 }
