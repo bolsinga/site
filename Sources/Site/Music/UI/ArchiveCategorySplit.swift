@@ -67,10 +67,11 @@ struct ArchiveCategorySplit: View {
     }
     .archiveStorage(archiveNavigation: archiveNavigation)
     .onContinueUserActivity(ArchivePath.activityType) { userActivity in
+      let decodeActivityLogger = Logger(category: "decodeActivity")
       do {
-        archiveNavigation.navigate(to: try userActivity.archivePath())
+        archiveNavigation.navigate(to: try userActivity.archivePath(decodeActivityLogger))
       } catch {
-        Logger.decodeActivity.error("error: \(error, privacy: .public)")
+        decodeActivityLogger.error("error: \(error, privacy: .public)")
       }
     }
     .onContinueUserActivity(ArchiveCategory.activityType) { userActivity in
