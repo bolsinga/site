@@ -74,10 +74,12 @@ struct ArchiveCategorySplit: View {
       }
     }
     .onContinueUserActivity(ArchiveCategory.activityType) { userActivity in
+      let decodeCategoryActivityLogger = Logger(category: "decodeCategoryActivity")
       do {
-        archiveNavigation.navigate(to: try userActivity.archiveCategory())
+        archiveNavigation.navigate(
+          to: try userActivity.archiveCategory(decodeCategoryActivityLogger))
       } catch {
-        Logger.decodeActivity.error("error: \(error, privacy: .public)")
+        decodeCategoryActivityLogger.error("error: \(error, privacy: .public)")
       }
     }
     .onOpenURL { url in
