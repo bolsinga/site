@@ -11,14 +11,13 @@ import os
 
 struct ArchiveCategorySplit: View {
   var model: VaultModel
+  private let decodeCategoryActivityLogger = Logger(category: "decodeCategoryActivity")
 
   @SceneStorage("venue.sort") private var venueSort = VenueSort.alphabetical
   @SceneStorage("artist.sort") private var artistSort = ArtistSort.alphabetical
 
   @State private var archiveNavigation = ArchiveNavigation()
   @State private var nearbyModel: NearbyModel
-
-  private let decodeCategoryActivityLogger = Logger(category: "decodeCategoryActivity")
 
   internal init(model: VaultModel) {
     self.model = model
