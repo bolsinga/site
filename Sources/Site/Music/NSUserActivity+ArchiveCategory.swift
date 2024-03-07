@@ -9,10 +9,6 @@ import Foundation
 import Intents
 import os
 
-extension Logger {
-  public static let updateCategoryActivity = Logger(category: "updateCategoryActivity")
-}
-
 extension NSUserActivity {
   private enum DecodeError: Error {
     case noUserInfo
@@ -24,8 +20,10 @@ extension NSUserActivity {
   internal static let archiveCategoryKey = "archiveCategory"
 
   func update(_ category: ArchiveCategory, url: URL?) {
+    let updateCategoryActivity = Logger(category: "updateCategoryActivity")
+
     let identifier = category.rawValue
-    Logger.updateCategoryActivity.log("advertise: \(identifier, privacy: .public)")
+    updateCategoryActivity.log("advertise: \(identifier, privacy: .public)")
     self.targetContentIdentifier = identifier
 
     self.isEligibleForHandoff = true
@@ -45,7 +43,7 @@ extension NSUserActivity {
     }
 
     if let url {
-      Logger.updateCategoryActivity.log("web: \(url.absoluteString, privacy: .public)")
+      updateCategoryActivity.log("web: \(url.absoluteString, privacy: .public)")
       self.isEligibleForPublicIndexing = true
       self.webpageURL = url
     }
