@@ -40,25 +40,25 @@ extension NSUserActivity {
     self.expirationDate = .now + (60 * 60 * 24)
   }
 
-  func archivePath(_ logger: Logger) throws -> ArchivePath {
-    logger.log("type: \(self.activityType, privacy: .public)")
+  func archivePath(_ logger: Logger? = nil) throws -> ArchivePath {
+    logger?.log("type: \(self.activityType, privacy: .public)")
 
     guard let userInfo = self.userInfo else {
-      logger.error("no userInfo")
+      logger?.error("no userInfo")
       throw DecodeError.noUserInfo
     }
 
     guard let value = userInfo[NSUserActivity.archivePathKey] else {
-      logger.error("no archivePathKey")
+      logger?.error("no archivePathKey")
       throw DecodeError.noArchiveKey
     }
 
     guard let archiveString = value as? String else {
-      logger.error("archivePathKey not String")
+      logger?.error("archivePathKey not String")
       throw DecodeError.archiveKeyIncorrectType
     }
 
-    logger.log("decode: \(archiveString, privacy: .public)")
+    logger?.log("decode: \(archiveString, privacy: .public)")
 
     return try ArchivePath(archiveString)
   }
