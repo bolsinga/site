@@ -11,7 +11,6 @@ import os
 
 struct ArchiveCategorySplit: View {
   var model: VaultModel
-  private let decodeCategoryActivityLogger = Logger(category: "decodeCategoryActivity")
 
   @SceneStorage("venue.sort") private var venueSort = VenueSort.alphabetical
   @SceneStorage("artist.sort") private var artistSort = ArtistSort.alphabetical
@@ -75,6 +74,7 @@ struct ArchiveCategorySplit: View {
       }
     }
     .onContinueUserActivity(ArchiveCategory.activityType) { userActivity in
+      let decodeCategoryActivityLogger = Logger(category: "decodeCategoryActivity")
       do {
         archiveNavigation.navigate(
           to: try userActivity.archiveCategory(decodeCategoryActivityLogger))
