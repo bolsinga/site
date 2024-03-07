@@ -18,14 +18,14 @@ struct ArchiveCategorySplit: View {
   @State private var archiveNavigation = ArchiveNavigation()
   @State private var nearbyModel: NearbyModel
 
+  private let decodeCategoryActivityLogger = Logger(category: "decodeCategoryActivity")
+
   internal init(model: VaultModel) {
     self.model = model
     self.nearbyModel = NearbyModel(vaultModel: model)
   }
 
   private var vault: Vault { model.vault }
-
-  private let decodeCategoryActivityLogger = Logger(category: "decodeCategoryActivity")
 
   @MainActor
   @ViewBuilder var sidebar: some View {
