@@ -8,19 +8,17 @@
 import SwiftUI
 
 #if !os(tvOS)
-  public struct RefreshCommand: Commands {
-    public var model: SiteModel
+  public struct RefreshCommand: Commands, Sendable {
+    let refreshAction: (@Sendable () async -> Void)
 
-    public init(model: SiteModel) {
-      self.model = model
+    public init(refreshAction: (@escaping @Sendable () async -> Void)) {
+      self.refreshAction = refreshAction
     }
 
     public var body: some Commands {
       CommandGroup(after: .newItem) {
         Button {
-          Task {
-            await model.load()
-          }
+          Task { await refreshAction() }
         } label: {
           Text("Refresh", bundle: .module)
         }
