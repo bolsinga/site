@@ -6,11 +6,7 @@
 //
 
 import Foundation
-import os
-
-extension Logger {
-  static let lookup = Logger(category: "lookup")
-}
+@preconcurrency import os
 
 private func createLookup<T: Identifiable>(_ sequence: [T]) -> [T.ID: T] {
   sequence.reduce(into: [:]) { $0[$1.id] = $1 }
@@ -29,6 +25,8 @@ public struct Lookup: Sendable {
   private let artistFirstSetsMap: [Artist.ID: FirstSet]
   private let venueFirstSetsMap: [Venue.ID: FirstSet]
   private let relationMap: [String: [String]]  // Artist/Venue ID : [Artist/Venue ID]
+
+  private let lookup = Logger(category: "lookup")
 
   public init(music: Music) {
     // non-parallel, used for Previews, tests
@@ -128,7 +126,7 @@ public struct Lookup: Sendable {
 
   public func venueForShow(_ show: Show) -> Venue? {
     guard let venue = venueMap[show.venue] else {
-      Logger.lookup.log("Show: \(show.id, privacy: .public) missing venue")
+      lookup.log("Show: \(show.id, privacy: .public) missing venue")
       return nil
     }
     return venue
@@ -138,8 +136,7 @@ public struct Lookup: Sendable {
     var showArtists = [Artist]()
     for id in show.artists {
       guard let artist = artistMap[id] else {
-        Logger.lookup.log(
-          "Show: \(show.id, privacy: .public) missing artist: \(id, privacy: .public)")
+        lookup.log("Show: \(show.id, privacy: .public) missing artist: \(id, privacy: .public)")
         continue
       }
       showArtists.append(artist)

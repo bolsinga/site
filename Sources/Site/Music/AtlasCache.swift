@@ -9,10 +9,6 @@ import CoreLocation
 import Foundation
 import os
 
-extension Logger {
-  static let atlasCache = Logger(category: "atlasCache")
-}
-
 private let expirationOffset = 60.0 * 60.0 * 24.0 * 30.0 * 6.0  // Six months
 private let ExpirationStaggerDuration = 60.0 * 60.0 * 6.0  // Quarter day
 
@@ -28,6 +24,8 @@ actor AtlasCache<T: AtlasGeocodable> {
   private var staggerOffset = 0.0
   private var cache: [T: Value] = [:]
 
+  private let atlasCache = Logger(category: "atlasCache")
+
   internal init(fileName: String = "atlas.json") {
     self.fileName = fileName
 
@@ -37,11 +35,11 @@ actor AtlasCache<T: AtlasGeocodable> {
       self.cache = diskCache.filter { $0.value.expirationDate >= now }  // Include those whose expiration date has not passed .now
 
       if self.cache.count != diskCache.count {
-        Logger.atlasCache.log("removing expired items")
+        atlasCache.log("removing expired items")
         try self.cache.save(fileName: fileName)  // Some expired, so re-write the file.
       }
     } catch {
-      Logger.atlasCache.error("Cache Read Error: \(error, privacy: .public)")
+      atlasCache.error("Cache Read Error: \(error, privacy: .public)")
       self.cache = [:]
     }
   }
@@ -68,7 +66,7 @@ actor AtlasCache<T: AtlasGeocodable> {
       do {
         try cache.save(fileName: fileName)
       } catch {
-        Logger.atlasCache.error("Cache Save Error: \(error, privacy: .public)")
+        atlasCache.error("Cache Save Error: \(error, privacy: .public)")
       }
     }
   }

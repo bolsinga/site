@@ -88,7 +88,7 @@ extension View {
 }
 
 #Preview {
-  Text("Enabled-Geocoding-Allowed")
+  Text(String("Enabled-Geocoding-Allowed"))
     .locationFilter(
       NearbyModel(
         locationFilter: .nearby,
@@ -99,7 +99,7 @@ extension View {
 }
 
 #Preview {
-  Text("Enabled-Geocoding-Allowed-Empty")
+  Text(String("Enabled-Geocoding-Allowed-Empty"))
     .locationFilter(
       NearbyModel(
         locationFilter: .nearby,
@@ -121,7 +121,7 @@ extension View {
 }
 
 #Preview {
-  Text("Enabled-Geocoding-Denied")
+  Text(String("Enabled-Geocoding-Denied"))
     .locationFilter(
       NearbyModel(
         locationFilter: .nearby,
