@@ -8,10 +8,6 @@
 import Foundation
 import os
 
-extension Logger {
-  public static let updateActivity = Logger(category: "updateActivity")
-}
-
 extension NSUserActivity {
   private enum DecodeError: Error {
     case noUserInfo
@@ -22,12 +18,14 @@ extension NSUserActivity {
   internal static let archivePathKey = "archivePath"
 
   func update<T: PathRestorableUserActivity>(_ item: T, url: URL?) {
+    let updateActivity = Logger(category: "updateActivity")
+
     let identifier = item.archivePath.formatted(.json)
-    Logger.updateActivity.log("advertise: \(identifier, privacy: .public)")
+    updateActivity.log("advertise: \(identifier, privacy: .public)")
     self.targetContentIdentifier = identifier
 
     if let url {
-      Logger.updateActivity.log("web: \(url.absoluteString, privacy: .public)")
+      updateActivity.log("web: \(url.absoluteString, privacy: .public)")
       self.isEligibleForPublicIndexing = true
       self.webpageURL = url
     }
