@@ -11,13 +11,13 @@ extension VenueDigest {
   func ranking(for sort: VenueSort) -> Ranking {
     switch sort {
     case .alphabetical, .firstSeen:
-      return Ranking.empty
+      Ranking.empty
     case .showCount:
-      return self.showRank
+      showRank
     case .showYearRange:
-      return self.spanRank
+      spanRank
     case .venueArtistRank:
-      return self.venueArtistRank
+      venueArtistRank
     }
   }
 }
