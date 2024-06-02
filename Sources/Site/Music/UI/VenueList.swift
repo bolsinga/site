@@ -15,19 +15,6 @@ struct VenueList: View {
 
   @State private var searchString: String = ""
 
-  private func rank(for venueDigest: VenueDigest) -> Ranking {
-    switch sort {
-    case .alphabetical, .firstSeen:
-      return Ranking.empty
-    case .showCount:
-      return venueDigest.showRank
-    case .showYearRange:
-      return venueDigest.spanRank
-    case .venueArtistRank:
-      return venueDigest.venueArtistRank
-    }
-  }
-
   @ViewBuilder private func showCount(for venueDigest: VenueDigest) -> some View {
     Text("\(venueDigest.showRank.value) Show(s)", bundle: .module)
   }
@@ -82,7 +69,7 @@ struct VenueList: View {
         items: venueDigests,
         rankingMapBuilder: {
           $0.reduce(into: [Ranking: [VenueDigest]]()) {
-            let ranking = rank(for: $1)
+            let ranking = $1.ranking(for: sort)
             var arr = ($0[ranking] ?? [])
             arr.append($1)
             $0[ranking] = arr
