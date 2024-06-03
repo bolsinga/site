@@ -13,8 +13,6 @@ struct VenueList: View {
 
   @Binding var sort: VenueSort
 
-  @Binding var searchString: String
-
   @ViewBuilder private func showCount(for venueDigest: VenueDigest) -> some View {
     Text("\(venueDigest.showRank.value) Show(s)", bundle: .module)
   }
@@ -38,34 +36,26 @@ struct VenueList: View {
         items: venueDigests,
         rankingMapBuilder: { sectioner.sectionMap(for: $0) },
         itemContentView: { showCount(for: $0) },
-        sectionHeaderView: { $0.representingView },
-        searchString: $searchString
-      )
+        sectionHeaderView: { $0.representingView })
     } else if sort.isFirstSeen {
       RankingList(
         items: venueDigests,
         rankingMapBuilder: { $0.firstSeen },
         rankSorted: PartialDate.compareWithUnknownsMuted(lhs:rhs:),
         itemContentView: { Text($0.firstSet.rank.formatted(.hash)) },
-        sectionHeaderView: { Text($0.formatted(.compact)) },
-        searchString: $searchString)
+        sectionHeaderView: { Text($0.formatted(.compact)) })
     } else {
       RankingList(
         items: venueDigests,
         rankingMapBuilder: { $0.ranked(by: sort) },
         itemContentView: { if sort.isShowYearRange { showCount(for: $0) } },
-        sectionHeaderView: { sectionHeader(for: $0) },
-        searchString: $searchString)
+        sectionHeaderView: { sectionHeader(for: $0) })
     }
   }
 
   var body: some View {
     listElement
       .navigationTitle(Text("Venues", bundle: .module))
-      .searchable(
-        text: $searchString,
-        prompt: String(localized: "Venue Names", bundle: .module)
-      )
       .sortable(algorithm: $sort)
   }
 }
@@ -74,7 +64,7 @@ struct VenueList: View {
   NavigationStack {
     VenueList(
       venueDigests: vaultPreviewData.venueDigests, sectioner: vaultPreviewData.sectioner,
-      sort: .constant(.alphabetical), searchString: .constant("")
+      sort: .constant(.alphabetical)
     )
     .musicDestinations(vaultPreviewData)
   }

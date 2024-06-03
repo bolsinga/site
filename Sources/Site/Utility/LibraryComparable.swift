@@ -21,3 +21,10 @@ extension LibraryComparable {
     librarySortString.removeCommonInitialPunctuation
   }
 }
+
+extension Array where Element: LibraryComparable {
+  func names(filteredBy searchString: String) -> [Element] {
+    guard !searchString.isEmpty else { return self }
+    return self.filter { $0.name.lowercased().contains(searchString.lowercased()) }
+  }
+}
