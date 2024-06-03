@@ -28,4 +28,31 @@ enum ArtistSort: Int, Sorting {
       return String(localized: "Sort By First Show", bundle: .module)
     }
   }
+
+  var isAlphabetical: Bool {
+    switch self {
+    case .alphabetical:
+      true
+    default:
+      false
+    }
+  }
+
+  var isShowYearRange: Bool {
+    switch self {
+    case .showYearRange:
+      true
+    default:
+      false
+    }
+  }
+
+  var isFirstSeen: Bool {
+    switch self {
+    case .firstSeen:
+      true
+    default:
+      false
+    }
+  }
 }

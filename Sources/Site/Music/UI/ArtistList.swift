@@ -33,7 +33,7 @@ struct ArtistList: View {
   }
 
   @ViewBuilder private var listElement: some View {
-    if case .alphabetical = sort {
+    if sort.isAlphabetical {
       LibraryComparableList(
         items: artistDigests,
         sectioner: sectioner,
@@ -41,24 +41,20 @@ struct ArtistList: View {
         sectionHeaderView: { $0.representingView },
         searchString: $searchString
       )
-    } else if case .firstSeen = sort {
+    } else if sort.isFirstSeen {
       RankingList(
         items: artistDigests,
         rankingMapBuilder: { $0.firstSeen },
         rankSorted: PartialDate.compareWithUnknownsMuted(lhs:rhs:),
-        itemContentView: {
-          Text($0.firstSet.rank.formatted(.hash))
-        },
-        sectionHeaderView: {
-          Text($0.formatted(.compact))
-        },
+        itemContentView: { Text($0.firstSet.rank.formatted(.hash)) },
+        sectionHeaderView: { Text($0.formatted(.compact)) },
         searchString: $searchString)
     } else {
       RankingList(
         items: artistDigests,
         rankingMapBuilder: { $0.ranked(by: sort) },
         itemContentView: {
-          if case .showYearRange = sort {
+          if sort.isShowYearRange {
             showCount(for: $0)
           }
         },
