@@ -21,17 +21,8 @@ where T: LibraryComparable, T: Identifiable, T: Hashable, T.ID == String, T: Pat
     return items.filter { $0.name.lowercased().contains(searchString.lowercased()) }
   }
 
-  private var sectionMap: [LibrarySection: [T]] {
-    filteredItems.reduce(into: [LibrarySection: [T]]()) {
-      let section = sectioner.librarySection($1)
-      var arr = ($0[section] ?? [])
-      arr.append($1)
-      $0[section] = arr
-    }
-  }
-
   var body: some View {
-    let sectionMap = sectionMap
+    let sectionMap = sectioner.sectionMap(for: filteredItems)
     List {
       ForEach(sectionMap.keys.sorted(), id: \.self) { section in
         if let items = sectionMap[section] {
