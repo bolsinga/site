@@ -12,8 +12,7 @@ struct ArtistList: View {
   let sectioner: LibrarySectioner
 
   @Binding var sort: ArtistSort
-
-  @State private var searchString: String = ""
+  @Binding var searchString: String
 
   @ViewBuilder private func showCount(for artistDigest: ArtistDigest) -> some View {
     Text("\(artistDigest.showRank.value) Show(s)", bundle: .module)
@@ -78,7 +77,7 @@ struct ArtistList: View {
   NavigationStack {
     ArtistList(
       artistDigests: vaultPreviewData.artistDigests, sectioner: vaultPreviewData.sectioner,
-      sort: .constant(.alphabetical)
+      sort: .constant(.alphabetical), searchString: .constant("")
     )
     .musicDestinations(vaultPreviewData)
   }
