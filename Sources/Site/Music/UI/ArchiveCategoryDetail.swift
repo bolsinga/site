@@ -37,19 +37,23 @@ struct ArchiveCategoryDetail: View {
           ShowYearList(decadesMap: decadesMap)
             .locationFilter(nearbyModel, filteredDataIsEmpty: decadesMap.isEmpty)
         case .venues:
-          let venueDigests = model.filteredVenueDigests(nearbyModel)
-          VenueList(
-            venueDigests: venueDigests, sectioner: vault.sectioner, sort: $venueSort,
-            searchString: $venueSearchString
-          )
-          .locationFilter(nearbyModel, filteredDataIsEmpty: venueDigests.isEmpty)
+          let venueDigests = model.filteredVenueDigests(nearbyModel).names(
+            filteredBy: venueSearchString)
+          VenueList(venueDigests: venueDigests, sectioner: vault.sectioner, sort: $venueSort)
+            .archiveSearchable(
+              searchPrompt: String(localized: "Venue Names", bundle: .module),
+              searchString: $venueSearchString, contentsEmpty: venueDigests.isEmpty
+            )
+            .locationFilter(nearbyModel, filteredDataIsEmpty: venueDigests.isEmpty)
         case .artists:
-          let artistDigests = model.filteredArtistDigests(nearbyModel)
-          ArtistList(
-            artistDigests: artistDigests, sectioner: vault.sectioner, sort: $artistSort,
-            searchString: $artistSearchString
-          )
-          .locationFilter(nearbyModel, filteredDataIsEmpty: artistDigests.isEmpty)
+          let artistDigests = model.filteredArtistDigests(nearbyModel).names(
+            filteredBy: artistSearchString)
+          ArtistList(artistDigests: artistDigests, sectioner: vault.sectioner, sort: $artistSort)
+            .archiveSearchable(
+              searchPrompt: String(localized: "Artist Names", bundle: .module),
+              searchString: $artistSearchString, contentsEmpty: artistDigests.isEmpty
+            )
+            .locationFilter(nearbyModel, filteredDataIsEmpty: artistDigests.isEmpty)
         }
       }
       .shareCategory(category, url: url)

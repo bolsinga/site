@@ -12,7 +12,6 @@ struct ArtistList: View {
   let sectioner: LibrarySectioner
 
   @Binding var sort: ArtistSort
-  @Binding var searchString: String
 
   @ViewBuilder private func showCount(for artistDigest: ArtistDigest) -> some View {
     Text("\(artistDigest.showRank.value) Show(s)", bundle: .module)
@@ -37,17 +36,14 @@ struct ArtistList: View {
         items: artistDigests,
         rankingMapBuilder: { sectioner.sectionMap(for: $0) },
         itemContentView: { showCount(for: $0) },
-        sectionHeaderView: { $0.representingView },
-        searchString: $searchString
-      )
+        sectionHeaderView: { $0.representingView })
     } else if sort.isFirstSeen {
       RankingList(
         items: artistDigests,
         rankingMapBuilder: { $0.firstSeen },
         rankSorted: PartialDate.compareWithUnknownsMuted(lhs:rhs:),
         itemContentView: { Text($0.firstSet.rank.formatted(.hash)) },
-        sectionHeaderView: { Text($0.formatted(.compact)) },
-        searchString: $searchString)
+        sectionHeaderView: { Text($0.formatted(.compact)) })
     } else {
       RankingList(
         items: artistDigests,
@@ -57,18 +53,13 @@ struct ArtistList: View {
             showCount(for: $0)
           }
         },
-        sectionHeaderView: { sectionHeader(for: $0) },
-        searchString: $searchString)
+        sectionHeaderView: { sectionHeader(for: $0) })
     }
   }
 
   var body: some View {
     listElement
       .navigationTitle(Text("Artists", bundle: .module))
-      .searchable(
-        text: $searchString,
-        prompt: String(localized: "Artist Names", bundle: .module)
-      )
       .sortable(algorithm: $sort)
   }
 }
@@ -77,7 +68,7 @@ struct ArtistList: View {
   NavigationStack {
     ArtistList(
       artistDigests: vaultPreviewData.artistDigests, sectioner: vaultPreviewData.sectioner,
-      sort: .constant(.alphabetical), searchString: .constant("")
+      sort: .constant(.alphabetical)
     )
     .musicDestinations(vaultPreviewData)
   }

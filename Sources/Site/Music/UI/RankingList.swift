@@ -15,15 +15,8 @@ where T: LibraryComparable, T: Hashable, T: PathRestorable, R: Comparable, R: Ha
   @ViewBuilder let itemContentView: (T) -> ItemContent
   @ViewBuilder let sectionHeaderView: (R) -> SectionHeader
 
-  @Binding var searchString: String
-
-  private var filteredItems: [T] {
-    guard !searchString.isEmpty else { return items }
-    return items.filter { $0.name.lowercased().contains(searchString.lowercased()) }
-  }
-
   var body: some View {
-    let rankingMap = rankingMapBuilder(filteredItems)
+    let rankingMap = rankingMapBuilder(items)
     List {
       ForEach(rankingMap.keys.sorted(by: rankSorted ?? (<)), id: \.self) { ranking in
         if let items = rankingMap[ranking] {
@@ -44,11 +37,6 @@ where T: LibraryComparable, T: Hashable, T: PathRestorable, R: Comparable, R: Ha
       }
     }
     .listStyle(.plain)
-    .overlay {
-      if !searchString.isEmpty, rankingMap.isEmpty {
-        ContentUnavailableView.search(text: searchString)
-      }
-    }
   }
 }
 
@@ -65,8 +53,7 @@ where T: LibraryComparable, T: Hashable, T: PathRestorable, R: Comparable, R: Ha
       },
       sectionHeaderView: { section in
         Text("Artists")
-      },
-      searchString: .constant("")
+      }
     )
     .navigationTitle("Artists")
     .musicDestinations(vaultPreviewData)
@@ -83,8 +70,7 @@ where T: LibraryComparable, T: Hashable, T: PathRestorable, R: Comparable, R: Ha
       itemContentView: { _ in },
       sectionHeaderView: { section in
         Text("Venues")
-      },
-      searchString: .constant("")
+      }
     )
     .navigationTitle("Venues")
     .musicDestinations(vaultPreviewData)
