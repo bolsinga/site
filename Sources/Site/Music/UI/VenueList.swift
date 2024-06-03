@@ -44,18 +44,7 @@ struct VenueList: View {
     } else if case .firstSeen = sort {
       RankingList(
         items: venueDigests,
-        rankingMapBuilder: {
-          $0.reduce(into: [PartialDate: [(VenueDigest, FirstSet)]]()) {
-            let firstSet = $1.firstSet
-            var arr = ($0[firstSet.date] ?? [])
-            arr.append(($1, firstSet))
-            $0[firstSet.date] = arr
-          }.reduce(into: [PartialDate: [VenueDigest]]()) {
-            $0[$1.key] = $1.value.sorted(by: { lhs, rhs in
-              lhs.1.rank < rhs.1.rank
-            }).map { $0.0 }
-          }
-        },
+        rankingMapBuilder: { $0.firstSeen },
         rankSorted: PartialDate.compareWithUnknownsMuted(lhs:rhs:),
         itemContentView: {
           Text($0.firstSet.rank.formatted(.hash))
@@ -67,14 +56,7 @@ struct VenueList: View {
     } else {
       RankingList(
         items: venueDigests,
-        rankingMapBuilder: {
-          $0.reduce(into: [Ranking: [VenueDigest]]()) {
-            let ranking = $1.ranking(for: sort)
-            var arr = ($0[ranking] ?? [])
-            arr.append($1)
-            $0[ranking] = arr
-          }
-        },
+        rankingMapBuilder: { $0.ranked(by: sort) },
         itemContentView: {
           if case .showYearRange = sort {
             showCount(for: $0)
