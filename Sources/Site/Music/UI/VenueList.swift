@@ -34,9 +34,9 @@ struct VenueList: View {
 
   @ViewBuilder private var listElement: some View {
     if sort.isAlphabetical {
-      LibraryComparableList(
+      RankingList(
         items: venueDigests,
-        sectioner: sectioner,
+        rankingMapBuilder: { sectioner.sectionMap(for: $0) },
         itemContentView: { showCount(for: $0) },
         sectionHeaderView: { $0.representingView },
         searchString: $searchString
