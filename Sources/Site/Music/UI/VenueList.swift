@@ -13,7 +13,7 @@ struct VenueList: View {
 
   @Binding var sort: VenueSort
 
-  @State private var searchString: String = ""
+  @Binding var searchString: String
 
   @ViewBuilder private func showCount(for venueDigest: VenueDigest) -> some View {
     Text("\(venueDigest.showRank.value) Show(s)", bundle: .module)
@@ -74,7 +74,7 @@ struct VenueList: View {
   NavigationStack {
     VenueList(
       venueDigests: vaultPreviewData.venueDigests, sectioner: vaultPreviewData.sectioner,
-      sort: .constant(.alphabetical)
+      sort: .constant(.alphabetical), searchString: .constant("")
     )
     .musicDestinations(vaultPreviewData)
   }

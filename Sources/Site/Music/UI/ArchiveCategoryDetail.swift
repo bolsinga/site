@@ -18,6 +18,9 @@ struct ArchiveCategoryDetail: View {
 
   private var vault: Vault { model.vault }
 
+  @State var artistSearchString: String = ""
+  @State var venueSearchString: String = ""
+
   @MainActor
   @ViewBuilder private var stackElement: some View {
     if let category {
@@ -35,12 +38,16 @@ struct ArchiveCategoryDetail: View {
             .locationFilter(nearbyModel, filteredDataIsEmpty: decadesMap.isEmpty)
         case .venues:
           let venueDigests = model.filteredVenueDigests(nearbyModel)
-          VenueList(venueDigests: venueDigests, sectioner: vault.sectioner, sort: $venueSort)
-            .locationFilter(nearbyModel, filteredDataIsEmpty: venueDigests.isEmpty)
+          VenueList(
+            venueDigests: venueDigests, sectioner: vault.sectioner, sort: $venueSort,
+            searchString: $venueSearchString
+          )
+          .locationFilter(nearbyModel, filteredDataIsEmpty: venueDigests.isEmpty)
         case .artists:
           let artistDigests = model.filteredArtistDigests(nearbyModel)
           ArtistList(
-            artistDigests: artistDigests, sectioner: vault.sectioner, sort: $artistSort
+            artistDigests: artistDigests, sectioner: vault.sectioner, sort: $artistSort,
+            searchString: $artistSearchString
           )
           .locationFilter(nearbyModel, filteredDataIsEmpty: artistDigests.isEmpty)
         }
