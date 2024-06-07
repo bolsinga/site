@@ -41,7 +41,9 @@ struct ArchiveCategoryDetail: View {
             filteredBy: venueSearchString)
           VenueList(
             venueDigests: venueDigests, sectioner: vault.sectioner,
-            title: String(localized: "Venues", bundle: .module), sort: $venueSort
+            title: String(localized: "Venues", bundle: .module),
+            associatedRankName: String(localized: "Sort By Artist Count", bundle: .module),
+            sort: $venueSort
           )
           .archiveSearchable(
             searchPrompt: String(localized: "Venue Names", bundle: .module),
@@ -53,7 +55,9 @@ struct ArchiveCategoryDetail: View {
             filteredBy: artistSearchString)
           ArtistList(
             artistDigests: artistDigests, sectioner: vault.sectioner,
-            title: String(localized: "Artists", bundle: .module), sort: $artistSort
+            title: String(localized: "Artists", bundle: .module),
+            associatedRankName: String(localized: "Sort By Venue Count", bundle: .module),
+            sort: $artistSort
           )
           .archiveSearchable(
             searchPrompt: String(localized: "Artist Names", bundle: .module),
