@@ -7,7 +7,9 @@
 
 import SwiftUI
 
-protocol Sorting: CaseIterable, Hashable where AllCases: RandomAccessCollection {}
+protocol Sorting: CaseIterable, Hashable where AllCases: RandomAccessCollection {
+  var localizedString: String { get }
+}
 
 struct SortModifier<T: Sorting>: ViewModifier {
   @Binding var algorithm: T
