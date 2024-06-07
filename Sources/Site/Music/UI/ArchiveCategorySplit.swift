@@ -12,8 +12,8 @@ import os
 struct ArchiveCategorySplit: View {
   var model: VaultModel
 
-  @SceneStorage("venue.sort") private var venueSort = VenueSort.alphabetical
-  @SceneStorage("artist.sort") private var artistSort = ArtistSort.alphabetical
+  @SceneStorage("venue.sort") private var venueSort = RankingSort.alphabetical
+  @SceneStorage("artist.sort") private var artistSort = RankingSort.alphabetical
 
   @State private var archiveNavigation = ArchiveNavigation()
   @State private var nearbyModel: NearbyModel

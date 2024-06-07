@@ -11,7 +11,7 @@ struct ArtistList: View {
   let artistDigests: [ArtistDigest]
   let sectioner: LibrarySectioner
 
-  @Binding var sort: ArtistSort
+  @Binding var sort: RankingSort
 
   @ViewBuilder private func showCount(for artistDigest: ArtistDigest) -> some View {
     Text("\(artistDigest.showRank.value) Show(s)", bundle: .module)
