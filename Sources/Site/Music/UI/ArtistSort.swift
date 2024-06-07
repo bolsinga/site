@@ -14,21 +14,6 @@ enum ArtistSort: Int, Sorting {
   case venueRank
   case firstSeen
 
-  var localizedString: String {
-    switch self {
-    case .alphabetical:
-      return String(localized: "Sort Alphabetically", bundle: .module)
-    case .showCount:
-      return String(localized: "Sort By Show Count", bundle: .module)
-    case .showYearRange:
-      return String(localized: "Sort By Year Range", bundle: .module)
-    case .venueRank:
-      return String(localized: "Sort By Venue Count", bundle: .module)
-    case .firstSeen:
-      return String(localized: "Sort By First Show", bundle: .module)
-    }
-  }
-
   var isAlphabetical: Bool {
     switch self {
     case .alphabetical:
