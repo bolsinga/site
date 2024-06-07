@@ -11,8 +11,8 @@ import SwiftUI
 struct ArchiveCategoryDetail: View {
   var model: VaultModel
   let category: ArchiveCategory?
-  @Binding var venueSort: VenueSort
-  @Binding var artistSort: ArtistSort
+  @Binding var venueSort: RankingSort
+  @Binding var artistSort: RankingSort
   let isCategoryActive: Bool
   var nearbyModel: NearbyModel
 

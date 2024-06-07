@@ -11,7 +11,7 @@ struct VenueList: View {
   let venueDigests: [VenueDigest]
   let sectioner: LibrarySectioner
 
-  @Binding var sort: VenueSort
+  @Binding var sort: RankingSort
 
   @ViewBuilder private func showCount(for venueDigest: VenueDigest) -> some View {
     Text("\(venueDigest.showRank.value) Show(s)", bundle: .module)

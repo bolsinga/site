@@ -1,5 +1,5 @@
 //
-//  ArtistDigest+ArtistSort.swift
+//  VenueDigest+RankingSort.swift
 //
 //
 //  Created by Greg Bolsinga on 6/2/24.
@@ -7,8 +7,8 @@
 
 import Foundation
 
-extension ArtistDigest {
-  func ranking(for sort: ArtistSort) -> Ranking {
+extension VenueDigest {
+  func ranking(for sort: RankingSort) -> Ranking {
     switch sort {
     case .alphabetical, .firstSeen:
       Ranking.empty
@@ -17,7 +17,7 @@ extension ArtistDigest {
     case .showYearRange:
       spanRank
     case .associatedRank:
-      venueRank
+      venueArtistRank
     }
   }
 }

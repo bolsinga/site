@@ -31,7 +31,7 @@ extension ArtistDigest: LibraryComparable {
 }
 
 extension Array where Element == ArtistDigest {
-  func ranked(by sort: ArtistSort) -> [Ranking: [ArtistDigest]] {
+  func ranked(by sort: RankingSort) -> [Ranking: [ArtistDigest]] {
     self.reduce(into: [Ranking: [ArtistDigest]]()) {
       let ranking = $1.ranking(for: sort)
       var arr = ($0[ranking] ?? [])

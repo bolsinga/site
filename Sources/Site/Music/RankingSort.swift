@@ -1,5 +1,5 @@
 //
-//  VenueSort.swift
+//  RankingSort.swift
 //
 //
 //  Created by Greg Bolsinga on 5/24/23.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum VenueSort: Int, Sorting {
+enum RankingSort: Int, Sorting {
   case alphabetical
   case showCount
   case showYearRange
