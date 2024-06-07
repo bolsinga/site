@@ -60,7 +60,20 @@ struct ArtistList: View {
   var body: some View {
     listElement
       .navigationTitle(Text("Artists", bundle: .module))
-      .sortable(algorithm: $sort)
+      .sortable(algorithm: $sort) {
+        switch $0 {
+        case .alphabetical:
+          return String(localized: "Sort Alphabetically", bundle: .module)
+        case .showCount:
+          return String(localized: "Sort By Show Count", bundle: .module)
+        case .showYearRange:
+          return String(localized: "Sort By Year Range", bundle: .module)
+        case .venueRank:
+          return String(localized: "Sort By Venue Count", bundle: .module)
+        case .firstSeen:
+          return String(localized: "Sort By First Show", bundle: .module)
+        }
+      }
   }
 }
 
