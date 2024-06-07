@@ -56,7 +56,7 @@ struct VenueList: View {
   var body: some View {
     listElement
       .navigationTitle(Text("Venues", bundle: .module))
-      .sortable(algorithm: $sort)
+      .sortable(algorithm: $sort) { $0.localizedString }
   }
 }
 

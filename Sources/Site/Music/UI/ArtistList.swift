@@ -60,7 +60,7 @@ struct ArtistList: View {
   var body: some View {
     listElement
       .navigationTitle(Text("Artists", bundle: .module))
-      .sortable(algorithm: $sort)
+      .sortable(algorithm: $sort) { $0.localizedString }
   }
 }
 
