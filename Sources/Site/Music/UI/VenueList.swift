@@ -10,6 +10,7 @@ import SwiftUI
 struct VenueList: View {
   let venueDigests: [VenueDigest]
   let sectioner: LibrarySectioner
+  let title: String
 
   @Binding var sort: RankingSort
 
@@ -55,7 +56,7 @@ struct VenueList: View {
 
   var body: some View {
     listElement
-      .navigationTitle(Text("Venues", bundle: .module))
+      .navigationTitle(Text(title))
       .sortable(algorithm: $sort) {
         switch $0 {
         case .associatedRank:
@@ -71,7 +72,7 @@ struct VenueList: View {
   NavigationStack {
     VenueList(
       venueDigests: vaultPreviewData.venueDigests, sectioner: vaultPreviewData.sectioner,
-      sort: .constant(.alphabetical)
+      title: "Venues", sort: .constant(.alphabetical)
     )
     .musicDestinations(vaultPreviewData)
   }
