@@ -25,7 +25,7 @@ struct VenueList: View {
       ranking.showsCountView
     case .showYearRange:
       ranking.yearsCountView
-    case .venueArtistRank:
+    case .associatedRank:
       ranking.artistsCountView
     }
   }
@@ -64,7 +64,7 @@ struct VenueList: View {
           return String(localized: "Sort By Show Count", bundle: .module)
         case .showYearRange:
           return String(localized: "Sort By Year Range", bundle: .module)
-        case .venueArtistRank:
+        case .associatedRank:
           return String(localized: "Sort By Artist Count", bundle: .module)
         case .firstSeen:
           return String(localized: "Sort By First Show", bundle: .module)

@@ -11,7 +11,7 @@ enum VenueSort: Int, Sorting {
   case alphabetical
   case showCount
   case showYearRange
-  case venueArtistRank
+  case associatedRank
   case firstSeen
 
   var isAlphabetical: Bool {

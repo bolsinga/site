@@ -16,7 +16,7 @@ extension ArtistDigest {
       showRank
     case .showYearRange:
       spanRank
-    case .venueRank:
+    case .associatedRank:
       venueRank
     }
   }
