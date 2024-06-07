@@ -40,4 +40,19 @@ enum RankingSort: Int, Sorting {
       false
     }
   }
+
+  var localizedString: String {
+    switch self {
+    case .alphabetical:
+      return String(localized: "Sort Alphabetically", bundle: .module)
+    case .showCount:
+      return String(localized: "Sort By Show Count", bundle: .module)
+    case .showYearRange:
+      return String(localized: "Sort By Year Range", bundle: .module)
+    case .associatedRank:
+      return String(localized: "Sort By Associated", bundle: .module)
+    case .firstSeen:
+      return String(localized: "Sort By First Show", bundle: .module)
+    }
+  }
 }
