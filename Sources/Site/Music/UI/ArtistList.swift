@@ -11,6 +11,7 @@ struct ArtistList: View {
   let artistDigests: [ArtistDigest]
   let sectioner: LibrarySectioner
   let title: String
+  let associatedRankName: String
 
   @Binding var sort: RankingSort
 
@@ -64,7 +65,7 @@ struct ArtistList: View {
       .sortable(algorithm: $sort) {
         switch $0 {
         case .associatedRank:
-          return String(localized: "Sort By Venue Count", bundle: .module)
+          return associatedRankName
         default:
           return $0.localizedString
         }
@@ -76,7 +77,7 @@ struct ArtistList: View {
   NavigationStack {
     ArtistList(
       artistDigests: vaultPreviewData.artistDigests, sectioner: vaultPreviewData.sectioner,
-      title: "Artists", sort: .constant(.alphabetical)
+      title: "Artists", associatedRankName: "Sort By Venue Count", sort: .constant(.alphabetical)
     )
     .musicDestinations(vaultPreviewData)
   }
