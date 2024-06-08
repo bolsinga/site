@@ -7,64 +7,17 @@
 
 import SwiftUI
 
-struct ArtistList<SectionHeaderContent: View>: View {
+struct ArtistList: View {
   let artistDigests: [ArtistDigest]
   let sectioner: LibrarySectioner
-  let title: String
-  let associatedRankName: String
-  @ViewBuilder let associatedRankSectionHeader: (Ranking) -> SectionHeaderContent
-
   @Binding var sort: RankingSort
 
-  @ViewBuilder private func showCount(for artistDigest: ArtistDigest) -> some View {
-    Text("\(artistDigest.showRank.value) Show(s)", bundle: .module)
-  }
-
-  @ViewBuilder private var listElement: some View {
-    if sort.isAlphabetical {
-      RankingList(
-        items: artistDigests,
-        rankingMapBuilder: { sectioner.sectionMap(for: $0) },
-        itemContentView: { showCount(for: $0) },
-        sectionHeaderView: { $0.representingView })
-    } else if sort.isFirstSeen {
-      RankingList(
-        items: artistDigests,
-        rankingMapBuilder: { $0.firstSeen },
-        rankSorted: PartialDate.compareWithUnknownsMuted(lhs:rhs:),
-        itemContentView: { Text($0.firstSet.rank.formatted(.hash)) },
-        sectionHeaderView: { Text($0.formatted(.compact)) })
-    } else {
-      RankingList(
-        items: artistDigests,
-        rankingMapBuilder: { $0.ranked(by: sort) },
-        itemContentView: {
-          if sort.isShowYearRange {
-            showCount(for: $0)
-          }
-        },
-        sectionHeaderView: {
-          switch sort {
-          case .associatedRank:
-            associatedRankSectionHeader($0)
-          default:
-            $0.sectionHeader(for: sort)
-          }
-        })
-    }
-  }
-
   var body: some View {
-    listElement
-      .navigationTitle(Text(title))
-      .sortable(algorithm: $sort) {
-        switch $0 {
-        case .associatedRank:
-          return associatedRankName
-        default:
-          return $0.localizedString
-        }
-      }
+    RankableSortList(
+      items: artistDigests, sectioner: sectioner,
+      title: String(localized: "Artists", bundle: .module),
+      associatedRankName: String(localized: "Sort By Venue Count", bundle: .module),
+      associatedRankSectionHeader: { $0.venuesCountView }, sort: $sort)
   }
 }
 
@@ -72,8 +25,7 @@ struct ArtistList<SectionHeaderContent: View>: View {
   NavigationStack {
     ArtistList(
       artistDigests: vaultPreviewData.artistDigests, sectioner: vaultPreviewData.sectioner,
-      title: "Artists", associatedRankName: "Sort By Venue Count",
-      associatedRankSectionHeader: { $0.venuesCountView }, sort: .constant(.alphabetical)
+      sort: .constant(.alphabetical)
     )
     .musicDestinations(vaultPreviewData)
   }

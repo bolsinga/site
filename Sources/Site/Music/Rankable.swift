@@ -9,6 +9,7 @@ import Foundation
 
 protocol Rankable: LibraryComparable, Hashable, PathRestorable {
   var firstSet: FirstSet { get }
+  var showRank: Ranking { get }
   func ranking(for sort: RankingSort) -> Ranking
 }
 
