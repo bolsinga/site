@@ -7,11 +7,12 @@
 
 import SwiftUI
 
-struct ArtistList: View {
+struct ArtistList<SectionHeaderContent: View>: View {
   let artistDigests: [ArtistDigest]
   let sectioner: LibrarySectioner
   let title: String
   let associatedRankName: String
+  @ViewBuilder let associatedRankSectionHeader: (Ranking) -> SectionHeaderContent
 
   @Binding var sort: RankingSort
 
@@ -45,7 +46,7 @@ struct ArtistList: View {
         sectionHeaderView: {
           switch sort {
           case .associatedRank:
-            $0.venuesCountView
+            associatedRankSectionHeader($0)
           default:
             $0.sectionHeader(for: sort)
           }
@@ -71,7 +72,8 @@ struct ArtistList: View {
   NavigationStack {
     ArtistList(
       artistDigests: vaultPreviewData.artistDigests, sectioner: vaultPreviewData.sectioner,
-      title: "Artists", associatedRankName: "Sort By Venue Count", sort: .constant(.alphabetical)
+      title: "Artists", associatedRankName: "Sort By Venue Count",
+      associatedRankSectionHeader: { $0.venuesCountView }, sort: .constant(.alphabetical)
     )
     .musicDestinations(vaultPreviewData)
   }

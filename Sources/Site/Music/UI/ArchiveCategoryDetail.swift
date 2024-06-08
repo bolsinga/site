@@ -43,6 +43,7 @@ struct ArchiveCategoryDetail: View {
             venueDigests: venueDigests, sectioner: vault.sectioner,
             title: String(localized: "Venues", bundle: .module),
             associatedRankName: String(localized: "Sort By Artist Count", bundle: .module),
+            associatedRankSectionHeader: { $0.artistsCountView },
             sort: $venueSort
           )
           .archiveSearchable(
@@ -57,6 +58,7 @@ struct ArchiveCategoryDetail: View {
             artistDigests: artistDigests, sectioner: vault.sectioner,
             title: String(localized: "Artists", bundle: .module),
             associatedRankName: String(localized: "Sort By Venue Count", bundle: .module),
+            associatedRankSectionHeader: { $0.venuesCountView },
             sort: $artistSort
           )
           .archiveSearchable(
