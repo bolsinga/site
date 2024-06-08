@@ -19,19 +19,6 @@ struct ArtistList: View {
     Text("\(artistDigest.showRank.value) Show(s)", bundle: .module)
   }
 
-  @ViewBuilder private func sectionHeader(for ranking: Ranking) -> some View {
-    switch sort {
-    case .alphabetical, .firstSeen:
-      EmptyView()
-    case .showCount:
-      ranking.showsCountView
-    case .showYearRange:
-      ranking.yearsCountView
-    case .associatedRank:
-      ranking.venuesCountView
-    }
-  }
-
   @ViewBuilder private var listElement: some View {
     if sort.isAlphabetical {
       RankingList(
@@ -55,7 +42,14 @@ struct ArtistList: View {
             showCount(for: $0)
           }
         },
-        sectionHeaderView: { sectionHeader(for: $0) })
+        sectionHeaderView: {
+          switch sort {
+          case .associatedRank:
+            $0.venuesCountView
+          default:
+            $0.sectionHeader(for: sort)
+          }
+        })
     }
   }
 
