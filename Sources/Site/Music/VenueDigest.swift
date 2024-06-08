@@ -30,4 +30,4 @@ extension VenueDigest: LibraryComparable {
   }
 }
 
-extension VenueDigest : Rankable {}
+extension VenueDigest: Rankable {}
