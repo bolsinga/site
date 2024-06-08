@@ -30,26 +30,4 @@ extension VenueDigest: LibraryComparable {
   }
 }
 
-extension Array where Element == VenueDigest {
-  func ranked(by sort: RankingSort) -> [Ranking: [VenueDigest]] {
-    self.reduce(into: [Ranking: [VenueDigest]]()) {
-      let ranking = $1.ranking(for: sort)
-      var arr = ($0[ranking] ?? [])
-      arr.append($1)
-      $0[ranking] = arr
-    }
-  }
-
-  var firstSeen: [PartialDate: [VenueDigest]] {
-    self.reduce(into: [PartialDate: [(VenueDigest, FirstSet)]]()) {
-      let firstSet = $1.firstSet
-      var arr = ($0[firstSet.date] ?? [])
-      arr.append(($1, firstSet))
-      $0[firstSet.date] = arr
-    }.reduce(into: [PartialDate: [VenueDigest]]()) {
-      $0[$1.key] = $1.value.sorted(by: { lhs, rhs in
-        lhs.1.rank < rhs.1.rank
-      }).map { $0.0 }
-    }
-  }
-}
+extension VenueDigest : Rankable {}
