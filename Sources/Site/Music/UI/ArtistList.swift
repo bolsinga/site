@@ -11,20 +11,14 @@ struct ArtistList: View {
   let artistDigests: [ArtistDigest]
   let sectioner: LibrarySectioner
   @Binding var sort: RankingSort
-  @Binding var searchString: String
 
   var body: some View {
-    let digests = artistDigests.names(filteredBy: searchString)
     RankableSortList(
-      items: digests, sectioner: sectioner,
+      items: artistDigests, sectioner: sectioner,
       title: String(localized: "Artists", bundle: .module),
       associatedRankName: String(localized: "Sort By Venue Count", bundle: .module),
       associatedRankSectionHeader: { $0.venuesCountView },
-      itemLabelView: { Text($0.name.emphasizedAttributed(matching: searchString)) }, sort: $sort
-    )
-    .archiveSearchable(
-      searchPrompt: String(localized: "Artist Names", bundle: .module),
-      searchString: $searchString, contentsEmpty: digests.isEmpty
+      itemLabelView: { Text($0.name) }, sort: $sort
     )
   }
 }
@@ -33,7 +27,7 @@ struct ArtistList: View {
   NavigationStack {
     ArtistList(
       artistDigests: vaultPreviewData.artistDigests, sectioner: vaultPreviewData.sectioner,
-      sort: .constant(.alphabetical), searchString: .constant("")
+      sort: .constant(.alphabetical)
     )
     .musicDestinations(vaultPreviewData)
   }

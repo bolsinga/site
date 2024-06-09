@@ -104,7 +104,7 @@
               "zero" : {
                 "stringUnit" : {
                   "state" : "translated",
-                  "value" : "No Venue"
+                  "value" : "No Venues"
                 }
               }
             }
@@ -146,7 +146,7 @@
     "Archives" : {
 
     },
-    "Artist Names" : {
+    "Artist or Venue Names" : {
 
     },
     "Artists" : {
@@ -321,9 +321,6 @@
 
     },
     "Unable to load data." : {
-
-    },
-    "Venue Names" : {
 
     },
     "Venues" : {

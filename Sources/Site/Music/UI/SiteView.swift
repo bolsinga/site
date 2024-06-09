@@ -12,6 +12,8 @@ public struct SiteView: View {
   private var model: SiteModel
   private let vaultLoad = Logger(category: "vaultLoad")
 
+  @State private var searchString = ""
+
   public init(_ model: SiteModel) {
     self.model = model
   }
@@ -19,7 +21,7 @@ public struct SiteView: View {
   public var body: some View {
     Group {
       if let vaultModel = model.vaultModel {
-        ArchiveCategorySplit(model: vaultModel)
+        ArchiveCategorySplit(model: vaultModel, searchString: $searchString)
           .refreshable {
             vaultLoad.log("start refresh")
             defer {
@@ -54,6 +56,8 @@ public struct SiteView: View {
       }
       await model.load()
     }
+    .searchable(
+      text: $searchString, prompt: String(localized: "Artist or Venue Names", bundle: .module))
   }
 }
 

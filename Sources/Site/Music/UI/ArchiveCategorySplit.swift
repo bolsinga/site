@@ -18,8 +18,13 @@ struct ArchiveCategorySplit: View {
   @State private var archiveNavigation = ArchiveNavigation()
   @State private var nearbyModel: NearbyModel
 
-  internal init(model: VaultModel) {
+  @Binding var searchString: String
+
+  @Environment(\.isSearching) private var isSearching
+
+  internal init(model: VaultModel, searchString: Binding<String>) {
     self.model = model
+    self._searchString = searchString
     self.nearbyModel = NearbyModel(vaultModel: model)
   }
 
@@ -51,11 +56,19 @@ struct ArchiveCategorySplit: View {
 
   var body: some View {
     NavigationSplitView {
-      sidebar
-        .navigationTitle(
-          Text("Archives", bundle: .module)
+      if isSearching, !searchString.isEmpty {
+        SearchResultsList(
+          artists: vault.artistDigests.names(filteredBy: searchString),
+          venues: vault.venueDigests.names(filteredBy: searchString), searchString: searchString
         )
-        .nearbyDistanceThreshold(nearbyModel)
+        .musicDestinations(vault)
+      } else {
+        sidebar
+          .navigationTitle(
+            Text("Archives", bundle: .module)
+          )
+          .nearbyDistanceThreshold(nearbyModel)
+      }
     } detail: {
       NavigationStack(path: $archiveNavigation.navigationPath) {
         ArchiveCategoryDetail(
