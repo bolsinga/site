@@ -29,4 +29,12 @@ final class EmphasizedMatchingTests: XCTestCase {
     XCTAssertEqual("Gregr".emphasized(matching: "Gr"), "**Gr**egr")
     XCTAssertEqual("GregR".emphasized(matching: "gr"), "**Gr**egR")
   }
+
+  func testNoMatches() throws {
+    XCTAssertEqual("Greg".emphasized(matching: "o"), "Greg")
+  }
+
+  func testEmptyStringMatches() throws {
+    XCTAssertEqual("Greg".emphasized(matching: ""), "Greg")
+  }
 }
