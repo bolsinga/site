@@ -7,12 +7,14 @@
 
 import SwiftUI
 
-struct RankableSortList<T, SectionHeaderContent: View>: View where T: Rankable, T.ID == String {
+struct RankableSortList<T, SectionHeaderContent: View, LabelContent: View>: View
+where T: Rankable, T.ID == String {
   let items: [T]
   let sectioner: LibrarySectioner
   let title: String
   let associatedRankName: String
   @ViewBuilder let associatedRankSectionHeader: (Ranking) -> SectionHeaderContent
+  @ViewBuilder let itemLabelView: ((T) -> LabelContent)
 
   @Binding var sort: RankingSort
 
@@ -26,14 +28,14 @@ struct RankableSortList<T, SectionHeaderContent: View>: View where T: Rankable, 
         items: items,
         rankingMapBuilder: { sectioner.sectionMap(for: $0) },
         itemContentView: { showCount(for: $0) },
-        sectionHeaderView: { $0.representingView })
+        sectionHeaderView: { $0.representingView }, itemLabelView: itemLabelView)
     } else if sort.isFirstSeen {
       RankingList(
         items: items,
         rankingMapBuilder: { $0.firstSeen },
         rankSorted: PartialDate.compareWithUnknownsMuted(lhs:rhs:),
         itemContentView: { Text($0.firstSet.rank.formatted(.hash)) },
-        sectionHeaderView: { Text($0.formatted(.compact)) })
+        sectionHeaderView: { Text($0.formatted(.compact)) }, itemLabelView: itemLabelView)
     } else {
       RankingList(
         items: items,
@@ -46,7 +48,7 @@ struct RankableSortList<T, SectionHeaderContent: View>: View where T: Rankable, 
           default:
             $0.sectionHeader(for: sort)
           }
-        })
+        }, itemLabelView: itemLabelView)
     }
   }
 
@@ -69,7 +71,8 @@ struct RankableSortList<T, SectionHeaderContent: View>: View where T: Rankable, 
     RankableSortList(
       items: vaultPreviewData.venueDigests, sectioner: vaultPreviewData.sectioner,
       title: "Venues", associatedRankName: "Sort By Artist Count",
-      associatedRankSectionHeader: { $0.artistsCountView }, sort: .constant(.alphabetical)
+      associatedRankSectionHeader: { $0.artistsCountView }, itemLabelView: { Text($0.name) },
+      sort: .constant(.alphabetical)
     )
     .musicDestinations(vaultPreviewData)
   }
