@@ -13,15 +13,18 @@ extension String {
     // <a href="url">link</a>
     // --->
     // [link](url)
+    let url = Reference(Substring.self)
+    let link = Reference(Substring.self)
+
     let regex = Regex {
       "<a href=\""
-      Capture {
+      Capture(as: url) {
         ZeroOrMore(.reluctant) {
           .any
         }
       }
       "\">"
-      Capture {
+      Capture(as: link) {
         ZeroOrMore(.reluctant) {
           .any
         }
@@ -31,8 +34,7 @@ extension String {
     .anchorsMatchLineEndings()
 
     return self.replacing(regex) { match in
-      let (_, url, link) = match.output
-      return "[\(link)](\(url))"
+      return "[\(match[link])](\(match[url]))"
     }
   }
 

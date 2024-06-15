@@ -27,11 +27,13 @@ extension String {
   }
 
   internal var removeCommonInitialPunctuation: String {
-    var result = self.removeCommonInitialWords
+    let result = self.removeCommonInitialWords
+
+    let body = Reference(Substring.self)
 
     let regex = Regex {
       ZeroOrMore { .word.inverted }
-      Capture {
+      Capture(as: body) {
         OneOrMore {
           .word
           Optionally {
@@ -42,8 +44,8 @@ extension String {
       ZeroOrMore { .word.inverted }
     }
 
-    if let match = result.wholeMatch(of: regex) {
-      result = String(match.output.1)
+    if let match = try? regex.wholeMatch(in: result) {
+      return String(match[body])
     }
     return result
   }
