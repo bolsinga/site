@@ -24,4 +24,12 @@ extension String {
       return "**\(m)**"
     }
   }
+
+  func emphasizedAttributed(matching fragment: String) -> AttributedString {
+    let markdown = self.emphasized(matching: fragment)
+    guard let emphasized = try? AttributedString(markdown: markdown) else {
+      return AttributedString(self)
+    }
+    return emphasized
+  }
 }
