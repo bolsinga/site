@@ -30,11 +30,7 @@ extension String {
     var result = self.removeCommonInitialWords
 
     let regex = Regex {
-      Optionally {
-        ZeroOrMore {
-          .word.inverted
-        }
-      }
+      ZeroOrMore { .word.inverted }
       Capture {
         OneOrMore {
           .word
@@ -43,11 +39,7 @@ extension String {
           }
         }
       }
-      Optionally {
-        ZeroOrMore {
-          .word.inverted
-        }
-      }
+      ZeroOrMore { .word.inverted }
     }
 
     if let match = result.wholeMatch(of: regex) {
