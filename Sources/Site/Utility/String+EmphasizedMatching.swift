@@ -10,6 +10,8 @@ import RegexBuilder
 
 extension String {
   func emphasized(matching fragment: String) -> String {
+    guard !fragment.isEmpty else { return self }
+
     let regex = Regex {
       Capture {
         fragment
