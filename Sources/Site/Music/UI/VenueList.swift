@@ -19,7 +19,8 @@ struct VenueList: View {
       items: digests, sectioner: sectioner,
       title: String(localized: "Venues", bundle: .module),
       associatedRankName: String(localized: "Sort By Artist Count", bundle: .module),
-      associatedRankSectionHeader: { $0.artistsCountView }, sort: $sort
+      associatedRankSectionHeader: { $0.artistsCountView },
+      itemLabelView: { Text($0.name.emphasizedAttributed(matching: searchString)) }, sort: $sort
     )
     .archiveSearchable(
       searchPrompt: String(localized: "Venue Names", bundle: .module),
