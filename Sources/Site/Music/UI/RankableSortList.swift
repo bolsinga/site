@@ -7,14 +7,12 @@
 
 import SwiftUI
 
-struct RankableSortList<T, SectionHeaderContent: View, LabelContent: View>: View
-where T: Rankable, T.ID == String {
+struct RankableSortList<T, SectionHeaderContent: View>: View where T: Rankable, T.ID == String {
   let items: [T]
   let sectioner: LibrarySectioner
   let title: String
   let associatedRankName: String
   @ViewBuilder let associatedRankSectionHeader: (Ranking) -> SectionHeaderContent
-  @ViewBuilder let itemLabelView: ((T) -> LabelContent)
 
   @Binding var sort: RankingSort
 
@@ -28,14 +26,14 @@ where T: Rankable, T.ID == String {
         items: items,
         rankingMapBuilder: { sectioner.sectionMap(for: $0) },
         itemContentView: { showCount(for: $0) },
-        sectionHeaderView: { $0.representingView }, itemLabelView: itemLabelView)
+        sectionHeaderView: { $0.representingView })
     } else if sort.isFirstSeen {
       RankingList(
         items: items,
         rankingMapBuilder: { $0.firstSeen },
         rankSorted: PartialDate.compareWithUnknownsMuted(lhs:rhs:),
         itemContentView: { Text($0.firstSet.rank.formatted(.hash)) },
-        sectionHeaderView: { Text($0.formatted(.compact)) }, itemLabelView: itemLabelView)
+        sectionHeaderView: { Text($0.formatted(.compact)) })
     } else {
       RankingList(
         items: items,
@@ -48,7 +46,7 @@ where T: Rankable, T.ID == String {
           default:
             $0.sectionHeader(for: sort)
           }
-        }, itemLabelView: itemLabelView)
+        })
     }
   }
 
@@ -71,8 +69,7 @@ where T: Rankable, T.ID == String {
     RankableSortList(
       items: vaultPreviewData.venueDigests, sectioner: vaultPreviewData.sectioner,
       title: "Venues", associatedRankName: "Sort By Artist Count",
-      associatedRankSectionHeader: { $0.artistsCountView }, itemLabelView: { Text($0.name) },
-      sort: .constant(.alphabetical)
+      associatedRankSectionHeader: { $0.artistsCountView }, sort: .constant(.alphabetical)
     )
     .musicDestinations(vaultPreviewData)
   }
