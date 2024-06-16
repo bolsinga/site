@@ -7,14 +7,13 @@
 
 import SwiftUI
 
-struct RankingList<T, R, ItemContent: View, SectionHeader: View, LabelContent: View>: View
+struct RankingList<T, R, ItemContent: View, SectionHeader: View>: View
 where T: LibraryComparable, T: Hashable, T: PathRestorable, R: Comparable, R: Hashable {
   let items: [T]
   let rankingMapBuilder: ([T]) -> [R: [T]]
   var rankSorted: ((R, R) -> Bool)?
   @ViewBuilder let itemContentView: (T) -> ItemContent
   @ViewBuilder let sectionHeaderView: (R) -> SectionHeader
-  @ViewBuilder let itemLabelView: ((T) -> LabelContent)
 
   var body: some View {
     let rankingMap = rankingMapBuilder(items)
@@ -27,7 +26,7 @@ where T: LibraryComparable, T: Hashable, T: PathRestorable, R: Comparable, R: Ha
                 LabeledContent {
                   itemContentView(item)
                 } label: {
-                  itemLabelView(item)
+                  Text(item.name)
                 }
               }
             }
@@ -54,8 +53,7 @@ where T: LibraryComparable, T: Hashable, T: PathRestorable, R: Comparable, R: Ha
       },
       sectionHeaderView: { section in
         Text("Artists")
-      },
-      itemLabelView: { Text($0.name) }
+      }
     )
     .navigationTitle("Artists")
     .musicDestinations(vaultPreviewData)
@@ -72,8 +70,7 @@ where T: LibraryComparable, T: Hashable, T: PathRestorable, R: Comparable, R: Ha
       itemContentView: { _ in },
       sectionHeaderView: { section in
         Text("Venues")
-      },
-      itemLabelView: { Text($0.name) }
+      }
     )
     .navigationTitle("Venues")
     .musicDestinations(vaultPreviewData)
