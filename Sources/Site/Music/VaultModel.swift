@@ -151,9 +151,13 @@ enum LocationAuthorization {
         defer {
           Logger.vaultModel.log("end locationstream")
         }
-        for try await location in locationStream {
-          Logger.vaultModel.log("location received")
-          currentLocation = location
+        for try await update in locationStream {
+          if let location = update.location {
+            Logger.vaultModel.log("location received")
+            currentLocation = location
+          } else {
+            Logger.vaultModel.log("empty location update")
+          }
         }
       } catch {
         Logger.vaultModel.error("locationstream error: \(error, privacy: .public)")
