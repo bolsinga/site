@@ -9,9 +9,9 @@ import CoreLocation
 import Foundation
 
 @Observable final class NearbyModel {
-  var distanceThreshold: CLLocationDistance
-  var locationFilter: LocationFilter
-  var model: VaultModel
+  internal var distanceThreshold: CLLocationDistance
+  internal var locationFilter: LocationFilter
+  private var model: VaultModel
 
   internal init(
     distanceThreshold: CLLocationDistance = 0, locationFilter: LocationFilter = .none,
@@ -22,6 +22,6 @@ import Foundation
     self.model = vaultModel
   }
 
-  var locationAuthorization: LocationAuthorization { model.locationAuthorization }
-  var geocodingProgress: Double { model.geocodingProgress }
+  internal var locationAuthorization: LocationAuthorization { model.locationAuthorization }
+  internal var geocodingProgress: Double { model.geocodingProgress }
 }
