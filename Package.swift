@@ -6,9 +6,9 @@ let package = Package(
   name: "site",
   defaultLocalization: "en",
   platforms: [
-    .macOS(.v14),
-    .iOS(.v17),
-    .tvOS(.v17),
+    .macOS("14.5"),
+    .iOS("17.5"),
+    .tvOS("17.5"),
   ],
   products: [
     .library(name: "Site", targets: ["Site"]),
