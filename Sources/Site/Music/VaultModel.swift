@@ -18,13 +18,13 @@ enum LocationAuthorization {
 @Observable public final class VaultModel {
   public let vault: Vault
 
-  var todayConcerts: [Concert] = []
+  internal var todayConcerts: [Concert] = []
   private var venuePlacemarks: [Venue.ID: CLPlacemark] = [:]
-  var currentLocation: CLLocation?
-  var locationAuthorization = LocationAuthorization.allowed
+  private var currentLocation: CLLocation?
+  internal var locationAuthorization = LocationAuthorization.allowed
 
   // This is used for Preview only
-  var fakeGeocodingProgress: Double?
+  private var fakeGeocodingProgress: Double?
 
   @ObservationIgnored
   private var dayChangeTask: Task<Void, Never>?

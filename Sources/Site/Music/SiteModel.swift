@@ -9,10 +9,10 @@ import Foundation
 import os
 
 @Observable public final class SiteModel {
-  let urlString: String
+  private let urlString: String
 
   public var vaultModel: VaultModel?
-  var error: Error?
+  internal var error: Error?
 
   private let vaultLoader = Logger(category: "vaultLoader")
 

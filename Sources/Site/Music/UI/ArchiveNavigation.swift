@@ -9,8 +9,8 @@ import Foundation
 import os
 
 @Observable final class ArchiveNavigation {
-  var selectedCategory: ArchiveCategory?
-  var navigationPath: [ArchivePath] = []
+  internal var selectedCategory: ArchiveCategory?
+  internal var navigationPath: [ArchivePath] = []
 
   @ObservationIgnored internal var pendingNavigationPath: [ArchivePath]?
 
