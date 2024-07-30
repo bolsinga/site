@@ -9,6 +9,14 @@ import Foundation
 import Intents
 import os
 
+extension Logger {
+  nonisolated(unsafe) static let updateCategoryActivity = Logger(category: "updateCategoryActivity")
+  nonisolated(unsafe) static let decodeCategoryActivity = Logger(category: "decodeCategoryActivity")
+#if swift(>=6.0)
+  #warning("nonisolated(unsafe) unneeded.")
+#endif
+}
+
 extension NSUserActivity {
   private enum DecodeError: Error {
     case noUserInfo
@@ -20,10 +28,8 @@ extension NSUserActivity {
   internal static let archiveCategoryKey = "archiveCategory"
 
   func update(_ category: ArchiveCategory, url: URL?) {
-    let updateCategoryActivity = Logger(category: "updateCategoryActivity")
-
     let identifier = category.rawValue
-    updateCategoryActivity.log("advertise: \(identifier, privacy: .public)")
+    Logger.updateCategoryActivity.log("advertise: \(identifier, privacy: .public)")
     self.targetContentIdentifier = identifier
 
     self.isEligibleForHandoff = true
@@ -43,7 +49,7 @@ extension NSUserActivity {
     }
 
     if let url {
-      updateCategoryActivity.log("web: \(url.absoluteString, privacy: .public)")
+      Logger.updateCategoryActivity.log("web: \(url.absoluteString, privacy: .public)")
       self.isEligibleForPublicIndexing = true
       self.webpageURL = url
     }
@@ -54,25 +60,25 @@ extension NSUserActivity {
     self.expirationDate = .now + (60 * 60 * 24)
   }
 
-  func archiveCategory(_ logger: Logger) throws -> ArchiveCategory {
-    logger.log("type: \(self.activityType, privacy: .public)")
+  func archiveCategory() throws -> ArchiveCategory {
+    Logger.decodeCategoryActivity.log("type: \(self.activityType, privacy: .public)")
 
     guard let userInfo = self.userInfo else {
-      logger.error("no userInfo")
+      Logger.decodeCategoryActivity.error("no userInfo")
       throw DecodeError.noUserInfo
     }
 
     guard let value = userInfo[NSUserActivity.archiveCategoryKey] else {
-      logger.error("no archiveCategoryKey")
+      Logger.decodeCategoryActivity.error("no archiveCategoryKey")
       throw DecodeError.noArchiveKey
     }
 
     guard let archiveCategoryString = value as? String else {
-      logger.error("archiveCategoryKey not String")
+      Logger.decodeCategoryActivity.error("archiveCategoryKey not String")
       throw DecodeError.archiveKeyIncorrectType
     }
 
-    logger.log("decode: \(archiveCategoryString, privacy: .public)")
+    Logger.decodeCategoryActivity.log("decode: \(archiveCategoryString, privacy: .public)")
 
     guard let category = ArchiveCategory(rawValue: archiveCategoryString) else {
       throw DecodeError.invalidArchiveCategoryString

@@ -9,6 +9,13 @@ import CoreLocation
 import SwiftUI
 import os
 
+extension Logger {
+  nonisolated(unsafe) static let link = Logger(category: "link")
+  #if swift(>=6.0)
+    #warning("nonisolated(unsafe) unneeded.")
+  #endif
+}
+
 struct ArchiveCategorySplit: View {
   var model: VaultModel
 
@@ -67,36 +74,32 @@ struct ArchiveCategorySplit: View {
     }
     .archiveStorage(archiveNavigation: archiveNavigation)
     .onContinueUserActivity(ArchivePath.activityType) { userActivity in
-      let decodeActivityLogger = Logger(category: "decodeActivity")
       do {
-        archiveNavigation.navigate(to: try userActivity.archivePath(decodeActivityLogger))
+        archiveNavigation.navigate(to: try userActivity.archivePath())
       } catch {
-        decodeActivityLogger.error("error: \(error, privacy: .public)")
+        Logger.decodeActivity.error("error: \(error, privacy: .public)")
       }
     }
     .onContinueUserActivity(ArchiveCategory.activityType) { userActivity in
-      let decodeCategoryActivityLogger = Logger(category: "decodeCategoryActivity")
       do {
-        archiveNavigation.navigate(
-          to: try userActivity.archiveCategory(decodeCategoryActivityLogger))
+        archiveNavigation.navigate(to: try userActivity.archiveCategory())
       } catch {
-        decodeCategoryActivityLogger.error("error: \(error, privacy: .public)")
+        Logger.decodeActivity.error("error: \(error, privacy: .public)")
       }
     }
     .onOpenURL { url in
-      let link = Logger(category: "link")
-      link.log("url: \(url.absoluteString, privacy: .public)")
+      Logger.link.log("url: \(url.absoluteString, privacy: .public)")
       do {
         let archivePath = try ArchivePath(url)
         archiveNavigation.navigate(to: archivePath)
       } catch {
-        link.error("ArchivePath to URL error: \(error, privacy: .public)")
+        Logger.link.error("ArchivePath to URL error: \(error, privacy: .public)")
 
         do {
           let archiveCategory = try ArchiveCategory(url)
           archiveNavigation.navigate(to: archiveCategory)
         } catch {
-          link.error("ArchiveCategory to URL error: \(error, privacy: .public)")
+          Logger.link.error("ArchiveCategory to URL error: \(error, privacy: .public)")
         }
       }
     }

@@ -8,6 +8,14 @@
 import Foundation
 import os
 
+extension Logger {
+  nonisolated(unsafe) static let updateActivity = Logger(category: "updateActivity")
+  nonisolated(unsafe) static let decodeActivity = Logger(category: "decodeActivity")
+#if swift(>=6.0)
+  #warning("nonisolated(unsafe) unneeded.")
+#endif
+}
+
 extension NSUserActivity {
   private enum DecodeError: Error {
     case noUserInfo
@@ -18,14 +26,12 @@ extension NSUserActivity {
   internal static let archivePathKey = "archivePath"
 
   func update<T: PathRestorableUserActivity>(_ item: T, url: URL?) {
-    let updateActivity = Logger(category: "updateActivity")
-
     let identifier = item.archivePath.formatted(.json)
-    updateActivity.log("advertise: \(identifier, privacy: .public)")
+    Logger.updateActivity.log("advertise: \(identifier, privacy: .public)")
     self.targetContentIdentifier = identifier
 
     if let url {
-      updateActivity.log("web: \(url.absoluteString, privacy: .public)")
+      Logger.updateActivity.log("web: \(url.absoluteString, privacy: .public)")
       self.isEligibleForPublicIndexing = true
       self.webpageURL = url
     }
@@ -38,25 +44,25 @@ extension NSUserActivity {
     self.expirationDate = .now + (60 * 60 * 24)
   }
 
-  func archivePath(_ logger: Logger? = nil) throws -> ArchivePath {
-    logger?.log("type: \(self.activityType, privacy: .public)")
+  func archivePath() throws -> ArchivePath {
+    Logger.decodeActivity.log("type: \(self.activityType, privacy: .public)")
 
     guard let userInfo = self.userInfo else {
-      logger?.error("no userInfo")
+      Logger.decodeActivity.error("no userInfo")
       throw DecodeError.noUserInfo
     }
 
     guard let value = userInfo[NSUserActivity.archivePathKey] else {
-      logger?.error("no archivePathKey")
+      Logger.decodeActivity.error("no archivePathKey")
       throw DecodeError.noArchiveKey
     }
 
     guard let archiveString = value as? String else {
-      logger?.error("archivePathKey not String")
+      Logger.decodeActivity.error("archivePathKey not String")
       throw DecodeError.archiveKeyIncorrectType
     }
 
-    logger?.log("decode: \(archiveString, privacy: .public)")
+    Logger.decodeActivity.log("decode: \(archiveString, privacy: .public)")
 
     return try ArchivePath(archiveString)
   }

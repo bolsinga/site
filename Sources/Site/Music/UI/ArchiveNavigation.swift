@@ -8,13 +8,18 @@
 import Foundation
 import os
 
+extension Logger {
+  nonisolated(unsafe) static let archive = Logger(category: "archive")
+  #if swift(>=6.0)
+    #warning("nonisolated(unsafe) unneeded.")
+  #endif
+}
+
 @Observable final class ArchiveNavigation {
   internal var selectedCategory: ArchiveCategory?
   internal var navigationPath: [ArchivePath] = []
 
   @ObservationIgnored internal var pendingNavigationPath: [ArchivePath]?
-
-  private let archive = Logger(category: "archive")
 
   func restoreNavigation(selectedCategoryStorage: ArchiveCategory?, pathData: Data?) {
     if let selectedCategoryStorage {
@@ -22,7 +27,7 @@ import os
         // Hold onto the loading navigationPath for after the selectedCategory changes.
         var pending = [ArchivePath]()
         pending.jsonData = pathData
-        archive.log(
+        Logger.archive.log(
           "pending save: \(pending.map { $0.formatted() }.joined(separator: ":"), privacy: .public)"
         )
         pendingNavigationPath = pending
@@ -40,7 +45,7 @@ import os
   func restorePendingData() {
     // Change the navigationPath after selectedCategory changes.
     if let pendingNavigationPath {
-      archive.log("pending restore")
+      Logger.archive.log("pending restore")
       navigationPath = pendingNavigationPath
       self.pendingNavigationPath = nil
     }
@@ -48,15 +53,15 @@ import os
 
   func navigate(to path: ArchivePath) {
     guard path != navigationPath.last else {
-      archive.log("already presented: \(path.formatted(), privacy: .public)")
+      Logger.archive.log("already presented: \(path.formatted(), privacy: .public)")
       return
     }
-    archive.log("nav to path: \(path.formatted(), privacy: .public)")
+    Logger.archive.log("nav to path: \(path.formatted(), privacy: .public)")
     navigationPath.append(path)
   }
 
   func navigate(to category: ArchiveCategory?) {
-    archive.log("nav to category: \(category?.rawValue ?? "nil", privacy: .public)")
+    Logger.archive.log("nav to category: \(category?.rawValue ?? "nil", privacy: .public)")
     selectedCategory = category
   }
 }

@@ -8,12 +8,18 @@
 import Foundation
 import os
 
+extension Logger {
+  nonisolated(unsafe) static let json = Logger(category: "json")
+  #if swift(>=6.0)
+    #warning("nonisolated(unsafe) unneeded.")
+  #endif
+}
+
 extension Data {
   public func fromJSON<T>() throws -> T where T: Decodable {
-    let json = Logger(category: "json")
-    json.log("start")
+    Logger.json.log("start")
     defer {
-      json.log("end")
+      Logger.json.log("end")
     }
     let decoder = JSONDecoder()
     decoder.dateDecodingStrategy = .iso8601

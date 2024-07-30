@@ -8,9 +8,15 @@
 import SwiftUI
 import os
 
+extension Logger {
+  nonisolated(unsafe) static let storage = Logger(category: "storage")
+  #if swift(>=6.0)
+    #warning("nonisolated(unsafe) unneeded.")
+  #endif
+}
+
 struct ArchiveStorageModifier: ViewModifier {
   let archiveNavigation: ArchiveNavigation
-  private let storage = Logger(category: "storage")
 
   @SceneStorage("selected.category") private var selectedCategoryStorage: String?
   @SceneStorage("navigation.path") private var navigationPathData: Data?
@@ -18,9 +24,9 @@ struct ArchiveStorageModifier: ViewModifier {
   func body(content: Content) -> some View {
     content
       .task {
-        storage.log("start restore")
+        Logger.storage.log("start restore")
         defer {
-          storage.log("end restore")
+          Logger.storage.log("end restore")
         }
         let archiveCategory =
           selectedCategoryStorage != nil ? ArchiveCategory(rawValue: selectedCategoryStorage!) : nil
@@ -28,13 +34,13 @@ struct ArchiveStorageModifier: ViewModifier {
           selectedCategoryStorage: archiveCategory, pathData: navigationPathData)
       }
       .onChange(of: archiveNavigation.selectedCategory) { _, newValue in
-        storage.log("category: \(newValue?.rawValue ?? "nil", privacy: .public)")
+        Logger.storage.log("category: \(newValue?.rawValue ?? "nil", privacy: .public)")
         selectedCategoryStorage = newValue?.rawValue ?? nil
 
         archiveNavigation.restorePendingData()
       }
       .onChange(of: archiveNavigation.navigationPath) { _, newPath in
-        storage.log(
+        Logger.storage.log(
           "path: \(newPath.map { $0.formatted() }.joined(separator: ":"), privacy: .public)")
         navigationPathData = newPath.jsonData
       }

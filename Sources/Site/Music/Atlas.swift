@@ -9,6 +9,13 @@
 import Foundation
 import os
 
+extension Logger {
+  nonisolated(unsafe) static let atlas = Logger(category: "atlas")
+  #if swift(>=6.0)
+    #warning("nonisolated(unsafe) unneeded.")
+  #endif
+}
+
 enum GeocodeError: Error {
   case noPlacemark
 }
@@ -29,23 +36,22 @@ actor Atlas<T: AtlasGeocodable> {
 
   private var count = 0
   private var waitUntil: ContinuousClock.Instant = .now + Constants.timeUntilReset
-  private let atlas = Logger(category: "atlas")
 
   private func reset() {
-    atlas.log("reset")
+    Logger.atlas.log("reset")
     waitUntil = .now + Constants.timeUntilReset
     count = 0
   }
 
   private func idleAndReset() async throws {
-    atlas.log("idleAndReset")
+    Logger.atlas.log("idleAndReset")
     try await ContinuousClock().sleep(until: waitUntil)
     reset()
   }
 
   public func geocode(_ geocodable: T) async throws -> CLPlacemark {
     if let result = await cache.get(geocodable) {
-      atlas.log("cached result")
+      Logger.atlas.log("cached result")
       return result
     }
 
@@ -55,18 +61,18 @@ actor Atlas<T: AtlasGeocodable> {
   }
 
   private func gatedGeocode(_ geocodable: T) async throws -> CLPlacemark {
-    atlas.log("start gatedGeocode")
+    Logger.atlas.log("start gatedGeocode")
     defer {
-      atlas.log("end gatedGeocode")
+      Logger.atlas.log("end gatedGeocode")
     }
 
     if ContinuousClock.now.duration(to: waitUntil) <= .seconds(0) {
       // wait time expired
-      atlas.log("wait expired")
+      Logger.atlas.log("wait expired")
       reset()
     } else if count != 0, count % Constants.maxRequests == 0 {
       // hit max requests
-      atlas.log("reached max requests")
+      Logger.atlas.log("reached max requests")
       try await idleAndReset()
     }
 
@@ -78,12 +84,12 @@ actor Atlas<T: AtlasGeocodable> {
         return placemark
       } catch let error as NSError {
         if error.code == CLError.network.rawValue, error.domain == kCLErrorDomain {
-          atlas.log("throttle: \(error.localizedDescription, privacy: .public)")
+          Logger.atlas.log("throttle: \(error.localizedDescription, privacy: .public)")
           // throttling error
           try await idleAndReset()
           retry = true
         } else {
-          atlas.error("error: \(error.localizedDescription, privacy: .public)")
+          Logger.atlas.error("error: \(error.localizedDescription, privacy: .public)")
           throw error
         }
       } catch {
