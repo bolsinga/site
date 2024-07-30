@@ -8,13 +8,18 @@
 import Foundation
 import os
 
+extension Logger {
+  nonisolated(unsafe) static let vaultLoader = Logger(category: "vaultLoader")
+#if swift(>=6.0)
+  #warning("nonisolated(unsafe) unneeded.")
+#endif
+}
+
 @Observable public final class SiteModel {
   private let urlString: String
 
   public var vaultModel: VaultModel?
   internal var error: Error?
-
-  private let vaultLoader = Logger(category: "vaultLoader")
 
   public init(urlString: String, vaultModel: VaultModel? = nil, error: Error? = nil) {
     self.urlString = urlString
@@ -24,9 +29,9 @@ import os
 
   @MainActor
   public func load() async {
-    vaultLoader.log("start")
+    Logger.vaultLoader.log("start")
     defer {
-      vaultLoader.log("end")
+      Logger.vaultLoader.log("end")
     }
     do {
       error = nil
@@ -36,7 +41,7 @@ import os
       vaultModel?.cancelTasks()
       vaultModel = VaultModel(vault)
     } catch {
-      vaultLoader.fault("error: \(error.localizedDescription, privacy: .public)")
+      Logger.vaultLoader.fault("error: \(error.localizedDescription, privacy: .public)")
       self.error = error
     }
   }

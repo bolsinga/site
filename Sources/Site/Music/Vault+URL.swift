@@ -8,6 +8,13 @@
 import Foundation
 import os
 
+extension Logger {
+  nonisolated(unsafe) static let vault = Logger(category: "vault")
+  #if swift(>=6.0)
+    #warning("nonisolated(unsafe) unneeded.")
+  #endif
+}
+
 enum VaultError: Error {
   case illegalURL(String)
 }
@@ -29,10 +36,9 @@ extension Vault {
   }
 
   public static func load(url: URL, artistsWithShowsOnly: Bool = true) async throws -> Vault {
-    let vault = Logger(category: "vault")
-    vault.log("start")
+    Logger.vault.log("start")
     defer {
-      vault.log("end")
+      Logger.vault.log("end")
     }
     let music = try await Music.load(url: url)
     return await Vault.create(music: artistsWithShowsOnly ? music.showsOnly : music, url: url)
