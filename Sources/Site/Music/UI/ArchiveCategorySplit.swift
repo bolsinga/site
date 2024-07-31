@@ -19,16 +19,11 @@ extension Logger {
 struct ArchiveCategorySplit: View {
   var model: VaultModel
 
-  @SceneStorage("venue.sort") private var venueSort = RankingSort.alphabetical
-  @SceneStorage("artist.sort") private var artistSort = RankingSort.alphabetical
+  @Binding var venueSort: RankingSort
+  @Binding var artistSort: RankingSort
 
-  @State private var archiveNavigation = ArchiveNavigation()
-  @State private var nearbyModel: NearbyModel
-
-  internal init(model: VaultModel) {
-    self.model = model
-    self.nearbyModel = NearbyModel(vaultModel: model)
-  }
+  @Bindable var archiveNavigation: ArchiveNavigation
+  var nearbyModel: NearbyModel
 
   private var vault: Vault { model.vault }
 
