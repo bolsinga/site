@@ -10,9 +10,9 @@ import os
 
 extension Logger {
   nonisolated(unsafe) static let notification = Logger(category: "notification")
-#if swift(>=6.0)
-  #warning("nonisolated(unsafe) unneeded.")
-#endif
+  #if swift(>=6.0)
+    #warning("nonisolated(unsafe) unneeded.")
+  #endif
 }
 
 struct NotificationModifier: ViewModifier {

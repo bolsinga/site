@@ -10,9 +10,9 @@ import os
 
 extension Logger {
   nonisolated(unsafe) static let lookup = Logger(category: "lookup")
-#if swift(>=6.0)
-  #warning("nonisolated(unsafe) unneeded.")
-#endif
+  #if swift(>=6.0)
+    #warning("nonisolated(unsafe) unneeded.")
+  #endif
 }
 
 private func createLookup<T: Identifiable>(_ sequence: [T]) -> [T.ID: T] {
