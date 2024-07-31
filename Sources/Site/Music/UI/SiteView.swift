@@ -25,14 +25,20 @@ public struct SiteView: View {
   public var body: some View {
     Group {
       if let vaultModel = model.vaultModel {
-        ArchiveCategorySplit(model: vaultModel)
-          .refreshable {
-            Logger.vaultLoad.log("start refresh")
-            defer {
-              Logger.vaultLoad.log("end refresh")
-            }
-            await model.load()
+        Group {
+          #if os(iOS)
+            ArchiveTabView(model: vaultModel)
+          #elseif os(tvOS) || os(macOS)
+            ArchiveCategorySplit(model: vaultModel)
+          #endif
+        }
+        .refreshable {
+          Logger.vaultLoad.log("start refresh")
+          defer {
+            Logger.vaultLoad.log("end refresh")
           }
+          await model.load()
+        }
       } else if let error = model.error {
         VStack(alignment: .center) {
           ContentUnavailableView(
