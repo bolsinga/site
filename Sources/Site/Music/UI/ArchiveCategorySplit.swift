@@ -7,14 +7,6 @@
 
 import CoreLocation
 import SwiftUI
-import os
-
-extension Logger {
-  nonisolated(unsafe) static let link = Logger(category: "link")
-  #if swift(>=6.0)
-    #warning("nonisolated(unsafe) unneeded.")
-  #endif
-}
 
 struct ArchiveCategorySplit: View {
   var model: VaultModel
@@ -70,37 +62,6 @@ struct ArchiveCategorySplit: View {
           venueSort: $venueSort, artistSort: $artistSort,
           isCategoryActive: archiveNavigation.navigationPath.isEmpty,
           nearbyModel: nearbyModel)
-      }
-    }
-    .archiveStorage(archiveNavigation: archiveNavigation)
-    .onContinueUserActivity(ArchivePath.activityType) { userActivity in
-      do {
-        archiveNavigation.navigate(to: try userActivity.archivePath())
-      } catch {
-        Logger.decodeActivity.error("error: \(error, privacy: .public)")
-      }
-    }
-    .onContinueUserActivity(ArchiveCategory.activityType) { userActivity in
-      do {
-        archiveNavigation.navigate(to: try userActivity.archiveCategory())
-      } catch {
-        Logger.decodeActivity.error("error: \(error, privacy: .public)")
-      }
-    }
-    .onOpenURL { url in
-      Logger.link.log("url: \(url.absoluteString, privacy: .public)")
-      do {
-        let archivePath = try ArchivePath(url)
-        archiveNavigation.navigate(to: archivePath)
-      } catch {
-        Logger.link.error("ArchivePath to URL error: \(error, privacy: .public)")
-
-        do {
-          let archiveCategory = try ArchiveCategory(url)
-          archiveNavigation.navigate(to: archiveCategory)
-        } catch {
-          Logger.link.error("ArchiveCategory to URL error: \(error, privacy: .public)")
-        }
       }
     }
   }

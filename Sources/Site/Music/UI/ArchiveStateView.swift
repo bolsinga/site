@@ -6,6 +6,14 @@
 //
 
 import SwiftUI
+import os
+
+extension Logger {
+  nonisolated(unsafe) static let link = Logger(category: "link")
+  #if swift(>=6.0)
+    #warning("nonisolated(unsafe) unneeded.")
+  #endif
+}
 
 struct ArchiveStateView: View {
   var model: VaultModel
@@ -21,7 +29,7 @@ struct ArchiveStateView: View {
     self.nearbyModel = NearbyModel(vaultModel: model)
   }
 
-  var body: some View {
+  @ViewBuilder private var archiveBody: some View {
     #if os(iOS)
       ArchiveTabView(
         model: model, venueSort: $venueSort, artistSort: $artistSort,
@@ -31,6 +39,41 @@ struct ArchiveStateView: View {
         model: model, venueSort: $venueSort, artistSort: $artistSort,
         archiveNavigation: archiveNavigation, nearbyModel: nearbyModel)
     #endif
+  }
+
+  var body: some View {
+    archiveBody
+      .archiveStorage(archiveNavigation: archiveNavigation)
+      .onContinueUserActivity(ArchivePath.activityType) { userActivity in
+        do {
+          archiveNavigation.navigate(to: try userActivity.archivePath())
+        } catch {
+          Logger.decodeActivity.error("error: \(error, privacy: .public)")
+        }
+      }
+      .onContinueUserActivity(ArchiveCategory.activityType) { userActivity in
+        do {
+          archiveNavigation.navigate(to: try userActivity.archiveCategory())
+        } catch {
+          Logger.decodeActivity.error("error: \(error, privacy: .public)")
+        }
+      }
+      .onOpenURL { url in
+        Logger.link.log("url: \(url.absoluteString, privacy: .public)")
+        do {
+          let archivePath = try ArchivePath(url)
+          archiveNavigation.navigate(to: archivePath)
+        } catch {
+          Logger.link.error("ArchivePath to URL error: \(error, privacy: .public)")
+
+          do {
+            let archiveCategory = try ArchiveCategory(url)
+            archiveNavigation.navigate(to: archiveCategory)
+          } catch {
+            Logger.link.error("ArchiveCategory to URL error: \(error, privacy: .public)")
+          }
+        }
+      }
   }
 }
 
