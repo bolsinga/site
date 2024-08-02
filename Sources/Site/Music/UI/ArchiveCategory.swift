@@ -13,6 +13,7 @@ public enum ArchiveCategory: String, CaseIterable {
   case shows
   case venues
   case artists
+  case classic
 
   var localizedString: String {
     switch self {
@@ -26,6 +27,8 @@ public enum ArchiveCategory: String, CaseIterable {
       return String(localized: "Venues", bundle: .module)
     case .artists:
       return String(localized: "Artists", bundle: .module)
+    case .classic:
+      return String(localized: "Classic", bundle: .module)
     }
   }
 
@@ -41,6 +44,8 @@ public enum ArchiveCategory: String, CaseIterable {
       Label(self.localizedString, systemImage: "music.note.house")
     case .artists:
       Label(self.localizedString, systemImage: "music.mic")
+    case .classic:
+      Label(self.localizedString, systemImage: "clock.arrow.circlepath")
     }
   }
 
@@ -56,6 +61,8 @@ public enum ArchiveCategory: String, CaseIterable {
       return String(localized: "Show Venues", bundle: .module)
     case .artists:
       return String(localized: "Show Artists", bundle: .module)
+    case .classic:
+      preconditionFailure()
     }
   }
 }

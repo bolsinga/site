@@ -22,7 +22,7 @@ struct ArchiveTabView: View {
         model: model, venueSort: $venueSort, artistSort: $artistSort,
         archiveNavigation: archiveNavigation, nearbyModel: nearbyModel
       )
-      .tabItem { ArchiveTab.classic.label }
+      .tabItem { ArchiveCategory.classic.label }
     }
   }
 }
