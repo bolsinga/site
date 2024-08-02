@@ -50,6 +50,8 @@ struct ArchiveCategoryDetail: View {
             searchString: $artistSearchString
           )
           .locationFilter(nearbyModel, filteredDataIsEmpty: artistDigests.isEmpty)
+        case .classic:
+          preconditionFailure()
         }
       }
       .shareCategory(category, url: url)

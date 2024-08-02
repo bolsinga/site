@@ -29,7 +29,10 @@ struct ArchiveCategorySplit: View {
 
   @MainActor
   @ViewBuilder var sidebar: some View {
-    List(ArchiveCategory.allCases, id: \.self, selection: $archiveNavigation.selectedCategory) {
+    List(
+      ArchiveCategory.allCases.filter { $0 != .classic }, id: \.self,
+      selection: $archiveNavigation.selectedCategory
+    ) {
       category in
       LabeledContent {
         switch category {
@@ -44,6 +47,8 @@ struct ArchiveCategorySplit: View {
           Text(vault.venueDigests.count.formatted(.number))
         case .artists:
           Text(vault.artistDigests.count.formatted(.number))
+        case .classic:
+          preconditionFailure()
         }
       } label: {
         category.label
