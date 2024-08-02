@@ -15,6 +15,8 @@ public enum ArchiveCategory: String, CaseIterable {
   case artists
   case classic
 
+  static var defaultCategory: ArchiveCategory? { nil }
+
   var localizedString: String {
     switch self {
     case .today:
