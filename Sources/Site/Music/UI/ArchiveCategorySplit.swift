@@ -50,7 +50,9 @@ struct ArchiveCategorySplit: View {
         .navigationTitle(
           Text("Archives", bundle: .module)
         )
-        .nearbyDistanceThreshold(nearbyModel)
+        #if os(macOS)
+          .nearbyDistanceThreshold(nearbyModel)
+        #endif
     } detail: {
       ArchiveCategoryDetail(
         model: model, selectedCategory: selectedCategory, path: $path, venueSort: $venueSort,

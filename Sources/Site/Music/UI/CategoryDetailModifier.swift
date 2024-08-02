@@ -9,6 +9,7 @@ import SwiftUI
 
 struct CategoryDetailModifier: ViewModifier {
   let vault: Vault
+  let nearbyModel: NearbyModel
   let category: ArchiveCategory
   @Binding var path: [ArchivePath]
 
@@ -19,16 +20,21 @@ struct CategoryDetailModifier: ViewModifier {
       content
         .shareActivity(for: category, vault: vault, isActive: isCategoryActive)
         .musicDestinations(vault, path: path)
+        #if !os(macOS)
+          .nearbyDistanceThreshold(nearbyModel)
+        #endif
     }
   }
 }
 
 extension View {
-  func categoryDetail(vault: Vault, category: ArchiveCategory, path: Binding<[ArchivePath]>)
+  func categoryDetail(
+    vault: Vault, nearbyModel: NearbyModel, category: ArchiveCategory, path: Binding<[ArchivePath]>
+  )
     -> some View
   {
     modifier(
       CategoryDetailModifier(
-        vault: vault, category: category, path: path))
+        vault: vault, nearbyModel: nearbyModel, category: category, path: path))
   }
 }
