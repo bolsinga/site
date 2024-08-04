@@ -24,7 +24,6 @@ struct ArchiveCategoryDetail: View {
   @MainActor
   @ViewBuilder private var stackElement: some View {
     if let category {
-      let url = vault.createURL(forCategory: category)
       ZStack {
         switch category {
         case .today:
@@ -54,8 +53,7 @@ struct ArchiveCategoryDetail: View {
           preconditionFailure()
         }
       }
-      .shareCategory(category, url: url)
-      .archiveCategoryUserActivity(category, url: url, isActive: isCategoryActive)
+      .shareActivity(for: category, vault: vault, isActive: isCategoryActive)
     } else {
       Text("Select An Item", bundle: .module)
     }
