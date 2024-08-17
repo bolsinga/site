@@ -17,6 +17,7 @@ struct VenueDetail: View {
   let digest: VenueDigest
   let concertCompare: (Concert, Concert) -> Bool
   let geocode: geocoder?
+  let isPathNavigable: (PathRestorable) -> Bool
 
   @State private var item: MKMapItem? = nil
 
@@ -64,7 +65,9 @@ struct VenueDetail: View {
   @ViewBuilder private var showsElement: some View {
     Section(header: Text("Shows", bundle: .module)) {
       ForEach(digest.concerts.sorted(by: concertCompare)) { concert in
-        NavigationLink(value: concert) { VenueBlurb(concert: concert) }
+        PathRestorableLink(pathRestorable: concert, isPathNavigable: isPathNavigable) {
+          VenueBlurb(concert: concert)
+        }
       }
     }
   }
@@ -73,7 +76,9 @@ struct VenueDetail: View {
     if !digest.related.isEmpty {
       Section(header: Text("Related Venues", bundle: .module)) {
         ForEach(digest.related) { relatedVenue in
-          NavigationLink(relatedVenue.name, value: relatedVenue)
+          PathRestorableLink(
+            pathRestorable: relatedVenue, isPathNavigable: isPathNavigable, title: relatedVenue.name
+          )
         }
       }
     }
@@ -100,7 +105,10 @@ struct VenueDetail: View {
     VenueDetail(
       digest: vaultPreviewData.venueDigests[0],
       concertCompare: vaultPreviewData.comparator.compare(lhs:rhs:),
-      geocode: nil
+      geocode: nil,
+      isPathNavigable: { _ in
+        true
+      }
     )
     .musicDestinations(vaultPreviewData)
   }
