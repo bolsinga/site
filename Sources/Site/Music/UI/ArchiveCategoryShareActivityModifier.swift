@@ -6,6 +6,14 @@
 //
 
 import SwiftUI
+import os
+
+extension Logger {
+  nonisolated(unsafe) static let sharing = Logger(category: "sharing")
+  #if swift(>=6.0)
+    #warning("nonisolated(unsafe) unneeded.")
+  #endif
+}
 
 struct ArchiveCategoryShareActivityModifier: ViewModifier {
   let category: ArchiveCategory
@@ -14,7 +22,11 @@ struct ArchiveCategoryShareActivityModifier: ViewModifier {
 
   func body(content: Content) -> some View {
     let url = vault.createURL(forCategory: category)
-    content
+    Logger.sharing.log(
+      "\(category.rawValue, privacy: .public), active: \(isActive, privacy: .public), url: \(url?.absoluteString ?? "nil", privacy: .public)"
+    )
+    return
+      content
       .shareCategory(category, url: url)
       .archiveCategoryUserActivity(category, url: url, isActive: isActive)
   }
