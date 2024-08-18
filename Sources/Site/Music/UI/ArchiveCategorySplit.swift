@@ -58,10 +58,8 @@ struct ArchiveCategorySplit: View {
     } detail: {
       NavigationStack(path: $archiveNavigation.navigationPath) {
         ArchiveCategoryDetail(
-          model: model, category: archiveNavigation.selectedCategory,
-          venueSort: $venueSort, artistSort: $artistSort,
-          isCategoryActive: archiveNavigation.navigationPath.isEmpty,
-          nearbyModel: nearbyModel)
+          model: model, archiveNavigation: archiveNavigation, venueSort: $venueSort,
+          artistSort: $artistSort, nearbyModel: nearbyModel)
       }
     }
   }

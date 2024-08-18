@@ -10,16 +10,18 @@ import SwiftUI
 
 struct ArchiveCategoryDetail: View {
   var model: VaultModel
-  let category: ArchiveCategory?
+  var archiveNavigation: ArchiveNavigation
   @Binding var venueSort: RankingSort
   @Binding var artistSort: RankingSort
-  let isCategoryActive: Bool
   var nearbyModel: NearbyModel
 
   private var vault: Vault { model.vault }
 
   @State var artistSearchString: String = ""
   @State var venueSearchString: String = ""
+
+  private var category: ArchiveCategory? { archiveNavigation.selectedCategory }
+  private var isCategoryActive: Bool { archiveNavigation.navigationPath.isEmpty }
 
   @MainActor
   @ViewBuilder private var stackElement: some View {
@@ -67,40 +69,45 @@ struct ArchiveCategoryDetail: View {
 
 #Preview {
   let vaultModel = VaultModel(vaultPreviewData, executeAsynchronousTasks: false)
+  let archiveNavigation = ArchiveNavigation(selectedCategory: .today)
+
   return ArchiveCategoryDetail(
-    model: vaultModel, category: .today, venueSort: .constant(.alphabetical),
-    artistSort: .constant(.alphabetical), isCategoryActive: true,
-    nearbyModel: NearbyModel(vaultModel: vaultModel))
+    model: vaultModel, archiveNavigation: archiveNavigation, venueSort: .constant(.alphabetical),
+    artistSort: .constant(.alphabetical), nearbyModel: NearbyModel(vaultModel: vaultModel))
 }
 
 #Preview {
   let vaultModel = VaultModel(vaultPreviewData, executeAsynchronousTasks: false)
+  let archiveNavigation = ArchiveNavigation(selectedCategory: .stats)
+
   return ArchiveCategoryDetail(
-    model: vaultModel, category: .stats, venueSort: .constant(.alphabetical),
-    artistSort: .constant(.alphabetical), isCategoryActive: true,
-    nearbyModel: NearbyModel(vaultModel: vaultModel))
+    model: vaultModel, archiveNavigation: archiveNavigation, venueSort: .constant(.alphabetical),
+    artistSort: .constant(.alphabetical), nearbyModel: NearbyModel(vaultModel: vaultModel))
 }
 
 #Preview {
   let vaultModel = VaultModel(vaultPreviewData, executeAsynchronousTasks: false)
+  let archiveNavigation = ArchiveNavigation(selectedCategory: .shows)
+
   return ArchiveCategoryDetail(
-    model: vaultModel, category: .shows, venueSort: .constant(.alphabetical),
-    artistSort: .constant(.alphabetical), isCategoryActive: true,
-    nearbyModel: NearbyModel(vaultModel: vaultModel))
+    model: vaultModel, archiveNavigation: archiveNavigation, venueSort: .constant(.alphabetical),
+    artistSort: .constant(.alphabetical), nearbyModel: NearbyModel(vaultModel: vaultModel))
 }
 
 #Preview {
   let vaultModel = VaultModel(vaultPreviewData, executeAsynchronousTasks: false)
+  let archiveNavigation = ArchiveNavigation(selectedCategory: .venues)
+
   return ArchiveCategoryDetail(
-    model: vaultModel, category: .venues, venueSort: .constant(.alphabetical),
-    artistSort: .constant(.alphabetical), isCategoryActive: true,
-    nearbyModel: NearbyModel(vaultModel: vaultModel))
+    model: vaultModel, archiveNavigation: archiveNavigation, venueSort: .constant(.alphabetical),
+    artistSort: .constant(.alphabetical), nearbyModel: NearbyModel(vaultModel: vaultModel))
 }
 
 #Preview {
   let vaultModel = VaultModel(vaultPreviewData, executeAsynchronousTasks: false)
+  let archiveNavigation = ArchiveNavigation(selectedCategory: .artists)
+
   return ArchiveCategoryDetail(
-    model: vaultModel, category: .artists, venueSort: .constant(.alphabetical),
-    artistSort: .constant(.alphabetical), isCategoryActive: true,
-    nearbyModel: NearbyModel(vaultModel: vaultModel))
+    model: vaultModel, archiveNavigation: archiveNavigation, venueSort: .constant(.alphabetical),
+    artistSort: .constant(.alphabetical), nearbyModel: NearbyModel(vaultModel: vaultModel))
 }

@@ -17,9 +17,15 @@ extension Logger {
 
 @Observable final class ArchiveNavigation {
   internal var selectedCategory: ArchiveCategory?
-  internal var navigationPath: [ArchivePath] = []
+  internal var navigationPath: [ArchivePath]
 
   @ObservationIgnored internal var pendingNavigationPath: [ArchivePath]?
+
+  internal init(selectedCategory: ArchiveCategory? = nil, navigationPath: [ArchivePath] = []) {
+    self.selectedCategory = selectedCategory
+    self.navigationPath = navigationPath
+    self.pendingNavigationPath = nil
+  }
 
   func restoreNavigation(selectedCategoryStorage: ArchiveCategory?, pathData: Data?) {
     if let selectedCategoryStorage {
