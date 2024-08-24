@@ -10,6 +10,7 @@ import SwiftUI
 struct YearDetail: View {
   let digest: AnnumDigest
   let concertCompare: (Concert, Concert) -> Bool
+  let isPathNavigable: (PathRestorable) -> Bool
 
   private var concerts: [Concert] {
     digest.concerts
@@ -29,7 +30,9 @@ struct YearDetail: View {
     if !concerts.isEmpty {
       Section(header: Text("Shows", bundle: .module)) {
         ForEach(concerts.sorted(by: concertCompare)) { concert in
-          NavigationLink(value: concert) { ConcertBlurb(concert: concert) }
+          PathRestorableLink(pathRestorable: concert, isPathNavigable: isPathNavigable) {
+            ConcertBlurb(concert: concert)
+          }
         }
       }
     }
@@ -53,7 +56,10 @@ struct YearDetail: View {
   NavigationStack {
     YearDetail(
       digest: vaultPreviewData.digest(for: Annum.year(2001)),
-      concertCompare: vaultPreviewData.comparator.compare(lhs:rhs:)
+      concertCompare: vaultPreviewData.comparator.compare(lhs:rhs:),
+      isPathNavigable: { _ in
+        true
+      }
     )
     .musicDestinations(vaultPreviewData)
   }

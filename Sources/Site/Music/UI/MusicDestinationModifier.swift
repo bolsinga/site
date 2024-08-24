@@ -10,6 +10,7 @@ import SwiftUI
 
 struct MusicDestinationModifier: ViewModifier {
   let vault: Vault
+  let isPathNavigable: (PathRestorable) -> Bool
 
   func body(content: Content) -> some View {
     content
@@ -17,28 +18,38 @@ struct MusicDestinationModifier: ViewModifier {
         switch archivePath {
         case .show(let iD):
           if let concert = vault.concertMap[iD] {
-            ShowDetail(concert: concert)
+            ShowDetail(concert: concert, isPathNavigable: isPathNavigable)
           }
         case .venue(let iD):
           if let venueDigest = vault.venueDigestMap[iD] {
-            VenueDetail(digest: venueDigest, concertCompare: vault.comparator.compare(lhs:rhs:)) {
-              try await vault.atlas.geocode($0.venue)
-            }
+            VenueDetail(
+              digest: venueDigest, concertCompare: vault.comparator.compare(lhs:rhs:),
+              geocode: {
+                try await vault.atlas.geocode($0.venue)
+              }, isPathNavigable: isPathNavigable)
           }
         case .artist(let iD):
           if let artistDigest = vault.artistDigestMap[iD] {
-            ArtistDetail(digest: artistDigest, concertCompare: vault.comparator.compare(lhs:rhs:))
+            ArtistDetail(
+              digest: artistDigest, concertCompare: vault.comparator.compare(lhs:rhs:),
+              isPathNavigable: isPathNavigable)
           }
         case .year(let annum):
           YearDetail(
-            digest: vault.digest(for: annum), concertCompare: vault.comparator.compare(lhs:rhs:))
+            digest: vault.digest(for: annum), concertCompare: vault.comparator.compare(lhs:rhs:),
+            isPathNavigable: isPathNavigable)
         }
       }
   }
 }
 
 extension View {
-  func musicDestinations(_ vault: Vault) -> some View {
-    modifier(MusicDestinationModifier(vault: vault))
+  func musicDestinations(_ vault: Vault, navigationPath: [ArchivePath] = []) -> some View {
+    modifier(
+      MusicDestinationModifier(vault: vault) {
+        let archivePath = $0.archivePath
+        // Drop the last path so that when going back the state is correct. Otherwise the '>' will flash on after animating in.
+        return !navigationPath.dropLast().contains { $0 == archivePath }
+      })
   }
 }

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ShowDetail: View {
   let concert: Concert
+  let isPathNavigable: (PathRestorable) -> Bool
 
   private var venueName: String {
     guard let venue = concert.venue else {
@@ -20,7 +21,8 @@ struct ShowDetail: View {
   @ViewBuilder private var lineupElement: some View {
     Section(header: Text("Lineup", bundle: .module)) {
       ForEach(concert.artists) { artist in
-        NavigationLink(artist.name, value: artist)
+        PathRestorableLink(
+          pathRestorable: artist, isPathNavigable: isPathNavigable, title: artist.name)
       }
     }
   }
@@ -65,21 +67,36 @@ struct ShowDetail: View {
 
 #Preview {
   NavigationStack {
-    ShowDetail(concert: vaultPreviewData.concerts[0])
-      .musicDestinations(vaultPreviewData)
+    ShowDetail(
+      concert: vaultPreviewData.concerts[0],
+      isPathNavigable: { _ in
+        true
+      }
+    )
+    .musicDestinations(vaultPreviewData)
   }
 }
 
 #Preview {
   NavigationStack {
-    ShowDetail(concert: vaultPreviewData.concerts[1])
-      .musicDestinations(vaultPreviewData)
+    ShowDetail(
+      concert: vaultPreviewData.concerts[1],
+      isPathNavigable: { _ in
+        true
+      }
+    )
+    .musicDestinations(vaultPreviewData)
   }
 }
 
 #Preview {
   NavigationStack {
-    ShowDetail(concert: vaultPreviewData.concerts[2])
-      .musicDestinations(vaultPreviewData)
+    ShowDetail(
+      concert: vaultPreviewData.concerts[2],
+      isPathNavigable: { _ in
+        true
+      }
+    )
+    .musicDestinations(vaultPreviewData)
   }
 }
