@@ -28,8 +28,10 @@ struct ArchiveStorageModifier: ViewModifier {
         defer {
           Logger.storage.log("end restore")
         }
+
         let archiveCategory =
-          selectedCategoryStorage != nil ? ArchiveCategory(rawValue: selectedCategoryStorage!) : nil
+          selectedCategoryStorage != nil
+          ? ArchiveCategory(rawValue: selectedCategoryStorage!) : .defaultCategory
         archiveNavigation.restoreNavigation(
           selectedCategoryStorage: archiveCategory, pathData: navigationPathData)
       }
