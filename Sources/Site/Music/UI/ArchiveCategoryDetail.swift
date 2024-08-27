@@ -51,8 +51,6 @@ struct ArchiveCategoryDetail: View {
             searchString: $artistSearchString
           )
           .locationFilter(nearbyModel, filteredDataIsEmpty: artistDigests.isEmpty)
-        case .classic:
-          preconditionFailure()
         }
       }
       .shareActivity(for: category, vault: vault, isActive: isCategoryActive)

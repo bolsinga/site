@@ -30,15 +30,9 @@ struct ArchiveStateView: View {
   }
 
   @ViewBuilder private var archiveBody: some View {
-    #if os(iOS)
-      ArchiveTabView(
-        model: model, venueSort: $venueSort, artistSort: $artistSort,
-        archiveNavigation: archiveNavigation, nearbyModel: nearbyModel)
-    #elseif os(tvOS) || os(macOS)
-      ArchiveCategorySplit(
-        model: model, venueSort: $venueSort, artistSort: $artistSort,
-        archiveNavigation: archiveNavigation, nearbyModel: nearbyModel)
-    #endif
+    ArchiveCategorySplit(
+      model: model, venueSort: $venueSort, artistSort: $artistSort,
+      archiveNavigation: archiveNavigation, nearbyModel: nearbyModel)
   }
 
   var body: some View {
