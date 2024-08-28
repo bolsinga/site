@@ -85,6 +85,23 @@ final class ArchiveNavigationTests: XCTestCase {
     XCTAssertNil(ar.pendingNavigationPath)
   }
 
+  func testRestoreNavigation_nilCategoryAndTruePath_existing() throws {
+    let ar = ArchiveNavigation(selectedCategory: .stats, navigationPath: [ArchivePath.venue("vid")])
+    XCTAssertNil(ar.pendingNavigationPath)
+
+    let pathData = [ArchivePath.artist("id")].jsonData
+    ar.restoreNavigation(selectedCategoryStorage: nil, pathData: pathData)
+
+    XCTAssertNotNil(ar.selectedCategory)
+    XCTAssertEqual(ar.selectedCategory!, .stats)
+
+    XCTAssertFalse(ar.navigationPath.isEmpty)
+    XCTAssertNotNil(ar.navigationPath.first)
+    XCTAssertEqual(ar.navigationPath.first!, ArchivePath.artist("id"))
+
+    XCTAssertNil(ar.pendingNavigationPath)
+  }
+
   func testRestoreNavigation_trueCategoryAndNilPath() throws {
     let ar = ArchiveNavigation()
     XCTAssertNil(ar.pendingNavigationPath)
@@ -111,6 +128,22 @@ final class ArchiveNavigationTests: XCTestCase {
 
     XCTAssertTrue(ar.navigationPath.isEmpty)
     XCTAssertNil(ar.navigationPath.first)
+
+    XCTAssertNil(ar.pendingNavigationPath)
+  }
+
+  func testRestoreNavigation_nilCategoryAndNilPath_existing() throws {
+    let ar = ArchiveNavigation(selectedCategory: .stats, navigationPath: [ArchivePath.venue("vid")])
+    XCTAssertNil(ar.pendingNavigationPath)
+
+    ar.restoreNavigation(selectedCategoryStorage: nil, pathData: nil)
+
+    XCTAssertNotNil(ar.selectedCategory)
+    XCTAssertEqual(ar.selectedCategory, .stats)
+
+    XCTAssertFalse(ar.navigationPath.isEmpty)
+    XCTAssertNotNil(ar.navigationPath.first)
+    XCTAssertEqual(ar.navigationPath.first!, ArchivePath.venue("vid"))
 
     XCTAssertNil(ar.pendingNavigationPath)
   }
