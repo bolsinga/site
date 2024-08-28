@@ -78,11 +78,13 @@ final class ArchiveNavigationTests: XCTestCase {
     XCTAssertNil(ar.selectedCategory)
     XCTAssertNotEqual(ar.selectedCategory, .today)
 
-    XCTAssertFalse(ar.navigationPath.isEmpty)
-    XCTAssertNotNil(ar.navigationPath.first)
-    XCTAssertEqual(ar.navigationPath.first!, ArchivePath.artist("id"))
+    XCTAssertNotNil(ar.navigationPath)
+    XCTAssertTrue(ar.navigationPath.isEmpty)
 
-    XCTAssertNil(ar.pendingNavigationPath)
+    XCTAssertNotNil(ar.pendingNavigationPath)
+    XCTAssertEqual(ar.pendingNavigationPath?.count, 1)
+    XCTAssertNotNil(ar.pendingNavigationPath?.first)
+    XCTAssertEqual(ar.pendingNavigationPath?.first!, ArchivePath.artist("id"))
   }
 
   func testRestoreNavigation_nilCategoryAndTruePath_existing() throws {
@@ -92,14 +94,16 @@ final class ArchiveNavigationTests: XCTestCase {
     let pathData = [ArchivePath.artist("id")].jsonData
     ar.restoreNavigation(selectedCategoryStorage: nil, pathData: pathData)
 
-    XCTAssertNotNil(ar.selectedCategory)
-    XCTAssertEqual(ar.selectedCategory!, .stats)
+    XCTAssertNil(ar.selectedCategory)
 
     XCTAssertFalse(ar.navigationPath.isEmpty)
     XCTAssertNotNil(ar.navigationPath.first)
-    XCTAssertEqual(ar.navigationPath.first!, ArchivePath.artist("id"))
+    XCTAssertEqual(ar.navigationPath.first!, ArchivePath.venue("vid"))
 
-    XCTAssertNil(ar.pendingNavigationPath)
+    XCTAssertNotNil(ar.pendingNavigationPath)
+    XCTAssertEqual(ar.pendingNavigationPath?.count, 1)
+    XCTAssertNotNil(ar.pendingNavigationPath?.first)
+    XCTAssertEqual(ar.pendingNavigationPath?.first!, ArchivePath.artist("id"))
   }
 
   func testRestoreNavigation_trueCategoryAndNilPath() throws {
@@ -138,8 +142,7 @@ final class ArchiveNavigationTests: XCTestCase {
 
     ar.restoreNavigation(selectedCategoryStorage: nil, pathData: nil)
 
-    XCTAssertNotNil(ar.selectedCategory)
-    XCTAssertEqual(ar.selectedCategory, .stats)
+    XCTAssertNil(ar.selectedCategory)
 
     XCTAssertFalse(ar.navigationPath.isEmpty)
     XCTAssertNotNil(ar.navigationPath.first)
