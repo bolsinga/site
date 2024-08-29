@@ -28,24 +28,18 @@ extension Logger {
   }
 
   func restoreNavigation(selectedCategoryStorage: ArchiveCategory?, pathData: Data?) {
-    if let selectedCategoryStorage {
-      if let pathData {
-        // Hold onto the loading navigationPath for after the selectedCategory changes.
-        var pending = [ArchivePath]()
-        pending.jsonData = pathData
-        Logger.archive.log(
-          "pending save: \(pending.map { $0.formatted() }.joined(separator: ":"), privacy: .public)"
-        )
-        pendingNavigationPath = pending
-      }
-
-      // Changing the selectedCategory will reset the NavigationStack's navigationPath.
-      selectedCategory = selectedCategoryStorage
-    } else {
-      if let pathData {
-        navigationPath.jsonData = pathData
-      }
+    if let pathData {
+      // Hold onto the loading navigationPath for after the selectedCategory changes.
+      var pending = [ArchivePath]()
+      pending.jsonData = pathData
+      Logger.archive.log(
+        "pending save: \(pending.map { $0.formatted() }.joined(separator: ":"), privacy: .public)"
+      )
+      pendingNavigationPath = pending
     }
+
+    // Changing the selectedCategory will reset the NavigationStack's navigationPath.
+    selectedCategory = selectedCategoryStorage
   }
 
   func restorePendingData() {
