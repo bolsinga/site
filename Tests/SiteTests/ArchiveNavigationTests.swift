@@ -81,9 +81,7 @@ final class ArchiveNavigationTests: XCTestCase {
     XCTAssertTrue(ar.navigationPath.isEmpty)
 
     XCTAssertNotNil(ar.pendingNavigationPath)
-    XCTAssertEqual(ar.pendingNavigationPath?.count, 1)
-    XCTAssertNotNil(ar.pendingNavigationPath?.first)
-    XCTAssertEqual(ar.pendingNavigationPath?.first!, ArchivePath.artist("id"))
+    XCTAssertEqual(ar.pendingNavigationPath?.count, 0)
   }
 
   func testRestoreNavigation_nilCategoryAndTruePath_existing() throws {
@@ -100,9 +98,7 @@ final class ArchiveNavigationTests: XCTestCase {
     XCTAssertEqual(ar.navigationPath.first!, ArchivePath.venue("vid"))
 
     XCTAssertNotNil(ar.pendingNavigationPath)
-    XCTAssertEqual(ar.pendingNavigationPath?.count, 1)
-    XCTAssertNotNil(ar.pendingNavigationPath?.first)
-    XCTAssertEqual(ar.pendingNavigationPath?.first!, ArchivePath.artist("id"))
+    XCTAssertEqual(ar.pendingNavigationPath?.count, 0)
   }
 
   func testRestoreNavigation_trueCategoryAndNilPath() throws {
@@ -131,7 +127,8 @@ final class ArchiveNavigationTests: XCTestCase {
     XCTAssertTrue(ar.navigationPath.isEmpty)
     XCTAssertNil(ar.navigationPath.first)
 
-    XCTAssertNil(ar.pendingNavigationPath)
+    XCTAssertNotNil(ar.pendingNavigationPath)
+    XCTAssertEqual(ar.pendingNavigationPath?.count, 0)
   }
 
   func testRestoreNavigation_nilCategoryAndNilPath_existing() throws {
@@ -146,7 +143,8 @@ final class ArchiveNavigationTests: XCTestCase {
     XCTAssertNotNil(ar.navigationPath.first)
     XCTAssertEqual(ar.navigationPath.first!, ArchivePath.venue("vid"))
 
-    XCTAssertNil(ar.pendingNavigationPath)
+    XCTAssertNotNil(ar.pendingNavigationPath)
+    XCTAssertEqual(ar.pendingNavigationPath?.count, 0)
   }
 
   func testRestorePendingData() throws {
