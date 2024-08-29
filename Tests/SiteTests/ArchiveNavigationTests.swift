@@ -76,7 +76,6 @@ final class ArchiveNavigationTests: XCTestCase {
     ar.restoreNavigation(selectedCategoryStorage: nil, pathData: pathData)
 
     XCTAssertNil(ar.selectedCategory)
-    XCTAssertNotEqual(ar.selectedCategory, .today)
 
     XCTAssertNotNil(ar.navigationPath)
     XCTAssertTrue(ar.navigationPath.isEmpty)
@@ -128,7 +127,6 @@ final class ArchiveNavigationTests: XCTestCase {
     ar.restoreNavigation(selectedCategoryStorage: nil, pathData: nil)
 
     XCTAssertNil(ar.selectedCategory)
-    XCTAssertNotEqual(ar.selectedCategory, .today)
 
     XCTAssertTrue(ar.navigationPath.isEmpty)
     XCTAssertNil(ar.navigationPath.first)
