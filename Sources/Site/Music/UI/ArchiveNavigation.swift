@@ -28,6 +28,12 @@ extension Logger {
   }
 
   func restoreNavigation(selectedCategoryStorage: ArchiveCategory?, pathData: Data?) {
+    guard let selectedCategoryStorage else {
+      selectedCategory = nil
+      pendingNavigationPath = []
+      return
+    }
+
     if let pathData {
       // Hold onto the loading navigationPath for after the selectedCategory changes.
       var pending = [ArchivePath]()
