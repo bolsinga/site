@@ -65,6 +65,13 @@ struct ArchiveCategoryDetail: View {
   }
 }
 
+extension ArchiveNavigation {
+  // Convenience for previews below.
+  fileprivate convenience init(selectedCategory: ArchiveCategory) {
+    self.init(State(category: selectedCategory))
+  }
+}
+
 #Preview {
   let vaultModel = VaultModel(vaultPreviewData, executeAsynchronousTasks: false)
   let archiveNavigation = ArchiveNavigation(selectedCategory: .today)
