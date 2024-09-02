@@ -21,7 +21,7 @@ extension Logger {
 
   @ObservationIgnored internal var pendingNavigationPath: [ArchivePath]?
 
-  internal init(selectedCategory: ArchiveCategory? = nil, navigationPath: [ArchivePath] = []) {
+  internal init(selectedCategory: ArchiveCategory? = .defaultCategory, navigationPath: [ArchivePath] = []) {
     self.selectedCategory = selectedCategory
     self.navigationPath = navigationPath
     self.pendingNavigationPath = nil
