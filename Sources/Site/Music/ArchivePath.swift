@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum ArchivePath: Hashable {
+public enum ArchivePath: Hashable, Sendable {
   case show(Show.ID)
   case venue(Venue.ID)
   case artist(Artist.ID)
