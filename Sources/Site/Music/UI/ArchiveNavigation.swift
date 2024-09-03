@@ -16,46 +16,39 @@ extension Logger {
 }
 
 @Observable final class ArchiveNavigation {
-  internal var selectedCategory: ArchiveCategory?
-  internal var navigationPath: [ArchivePath]
+  struct State: Codable, Equatable, Sendable {
+    let category: ArchiveCategory?
+    let path: [ArchivePath]
 
-  @ObservationIgnored internal var pendingNavigationPath: [ArchivePath]?
-
-  internal init(
-    selectedCategory: ArchiveCategory? = .defaultCategory, navigationPath: [ArchivePath] = []
-  ) {
-    self.selectedCategory = selectedCategory
-    self.navigationPath = navigationPath
-    self.pendingNavigationPath = nil
+    internal init(category: ArchiveCategory? = .defaultCategory, path: [ArchivePath] = []) {
+      self.category = category
+      self.path = path
+    }
   }
 
-  func restoreNavigation(selectedCategoryStorage: ArchiveCategory?, pathData: Data?) {
-    guard let selectedCategoryStorage else {
-      selectedCategory = nil
-      pendingNavigationPath = []
-      return
-    }
+  var state: State
 
-    if let pathData {
-      // Hold onto the loading navigationPath for after the selectedCategory changes.
-      var pending = [ArchivePath]()
-      pending.jsonData = pathData
-      Logger.archive.log(
-        "pending save: \(pending.map { $0.formatted() }.joined(separator: ":"), privacy: .public)"
-      )
-      pendingNavigationPath = pending
-    }
-
-    // Changing the selectedCategory will reset the NavigationStack's navigationPath.
-    selectedCategory = selectedCategoryStorage
+  internal init(_ state: State = State()) {
+    self.state = state
   }
 
-  func restorePendingData() {
-    // Change the navigationPath after selectedCategory changes.
-    if let pendingNavigationPath {
-      Logger.archive.log("pending restore")
-      navigationPath = pendingNavigationPath
-      self.pendingNavigationPath = nil
+  var selectedCategory: ArchiveCategory? {
+    get {
+      return state.category
+    }
+    set {
+      let path = state.path
+      state = State(category: newValue, path: path)
+    }
+  }
+
+  var navigationPath: [ArchivePath] {
+    get {
+      return state.path
+    }
+    set {
+      let category = state.category
+      state = State(category: category, path: newValue)
     }
   }
 
@@ -65,11 +58,29 @@ extension Logger {
       return
     }
     Logger.archive.log("nav to path: \(path.formatted(), privacy: .public)")
-    navigationPath.append(path)
+    var newPath = navigationPath
+    newPath.append(path)
+    navigationPath = newPath
   }
 
   func navigate(to category: ArchiveCategory?) {
     Logger.archive.log("nav to category: \(category?.rawValue ?? "nil", privacy: .public)")
     selectedCategory = category
+  }
+}
+
+extension ArchiveNavigation: RawRepresentable {
+  convenience init?(rawValue: String) {
+    Logger.archive.log("loading: \(rawValue, privacy: .public)")
+    guard let data = rawValue.data(using: .utf8) else { return nil }
+    guard let state = try? JSONDecoder().decode(State.self, from: data) else { return nil }
+    self.init(state)
+  }
+
+  var rawValue: String {
+    guard let data = try? JSONEncoder().encode(state) else { return "" }
+    guard let value = String(data: data, encoding: .utf8) else { return "" }
+    Logger.archive.log("saving: \(value, privacy: .public)")
+    return value
   }
 }

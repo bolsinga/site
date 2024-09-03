@@ -20,8 +20,8 @@ struct ArchiveStateView: View {
 
   @SceneStorage("venue.sort") private var venueSort = RankingSort.alphabetical
   @SceneStorage("artist.sort") private var artistSort = RankingSort.alphabetical
-
-  @State private var archiveNavigation = ArchiveNavigation()
+  @SceneStorage("navigation.state") private var archiveNavigation = ArchiveNavigation()
+  
   @State private var nearbyModel: NearbyModel
 
   internal init(model: VaultModel) {
@@ -37,7 +37,6 @@ struct ArchiveStateView: View {
 
   var body: some View {
     archiveBody
-      .archiveStorage(archiveNavigation: archiveNavigation)
       .onContinueUserActivity(ArchivePath.activityType) { userActivity in
         do {
           archiveNavigation.navigate(to: try userActivity.archivePath())
