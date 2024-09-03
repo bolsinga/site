@@ -22,6 +22,22 @@ final class ArchiveNavigationTests: XCTestCase {
     XCTAssertEqual(ar.selectedCategory, .today)
     XCTAssertTrue(ar.navigationPath.isEmpty)
 
+    ar.navigate(to: .stats)
+    XCTAssertEqual(ar.selectedCategory, .stats)
+    XCTAssertTrue(ar.navigationPath.isEmpty)
+
+    ar.navigate(to: .artists)
+    XCTAssertEqual(ar.selectedCategory, .artists)
+    XCTAssertTrue(ar.navigationPath.isEmpty)
+
+    ar.navigate(to: .venues)
+    XCTAssertEqual(ar.selectedCategory, .venues)
+    XCTAssertTrue(ar.navigationPath.isEmpty)
+
+    ar.navigate(to: .shows)
+    XCTAssertEqual(ar.selectedCategory, .shows)
+    XCTAssertTrue(ar.navigationPath.isEmpty)
+
     #if os(iOS) || os(tvOS)
       ar.navigate(to: nil)
       XCTAssertNil(ar.selectedCategory)
@@ -62,9 +78,35 @@ final class ArchiveNavigationTests: XCTestCase {
     #endif
     XCTAssertEqual(ar.selectedCategory, ArchiveNavigation.State.defaultCategory)
     XCTAssertEqual(ar.navigationPath.count, 1)
+    XCTAssertNotNil(ar.navigationPath.last)
+    XCTAssertEqual(ar.navigationPath.last!, ArchivePath.artist("id"))
 
-    XCTAssertNotNil(ar.navigationPath.first)
-    XCTAssertEqual(ar.navigationPath.first!, ArchivePath.artist("id"))
+    ar.navigate(to: ArchivePath.venue("id"))
+    #if os(iOS) || os(tvOS)
+      XCTAssertNotNil(ar.selectedCategory)
+    #endif
+    XCTAssertEqual(ar.selectedCategory, ArchiveNavigation.State.defaultCategory)
+    XCTAssertEqual(ar.navigationPath.count, 2)
+    XCTAssertNotNil(ar.navigationPath.last)
+    XCTAssertEqual(ar.navigationPath.last!, ArchivePath.venue("id"))
+
+    ar.navigate(to: ArchivePath.show("id"))
+    #if os(iOS) || os(tvOS)
+      XCTAssertNotNil(ar.selectedCategory)
+    #endif
+    XCTAssertEqual(ar.selectedCategory, ArchiveNavigation.State.defaultCategory)
+    XCTAssertEqual(ar.navigationPath.count, 3)
+    XCTAssertNotNil(ar.navigationPath.last)
+    XCTAssertEqual(ar.navigationPath.last!, ArchivePath.show("id"))
+
+    ar.navigate(to: ArchivePath.year(Annum.year(1989)))
+    #if os(iOS) || os(tvOS)
+      XCTAssertNotNil(ar.selectedCategory)
+    #endif
+    XCTAssertEqual(ar.selectedCategory, ArchiveNavigation.State.defaultCategory)
+    XCTAssertEqual(ar.navigationPath.count, 4)
+    XCTAssertNotNil(ar.navigationPath.last)
+    XCTAssertEqual(ar.navigationPath.last!, ArchivePath.year(Annum.year(1989)))
   }
 
   func testNavigateToArchivePath_noDoubles() throws {
