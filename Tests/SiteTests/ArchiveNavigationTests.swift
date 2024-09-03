@@ -12,9 +12,6 @@ import XCTest
 final class ArchiveNavigationTests: XCTestCase {
   func testNavigateToCategory() throws {
     let ar = ArchiveNavigation()
-    typealias DefaultCategory = ArchiveCategory?
-    static var defaultCategory: DefaultCategory { nil }
-
     #if os(iOS) || os(tvOS)
       XCTAssertNil(ar.selectedCategory)
     #elseif os(macOS)
