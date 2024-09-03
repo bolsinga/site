@@ -19,10 +19,10 @@ extension Logger {
   struct State: Codable, Equatable, Sendable {
     #if os(iOS) || os(tvOS)
       typealias DefaultCategory = ArchiveCategory?
-    static var defaultCategory: DefaultCategory { nil }
+      static var defaultCategory: DefaultCategory { nil }
     #elseif os(macOS)
       typealias DefaultCategory = ArchiveCategory
-    static var defaultCategory: DefaultCategory { .today }
+      static var defaultCategory: DefaultCategory { .today }
     #endif
 
     let category: DefaultCategory
