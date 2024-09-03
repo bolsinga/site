@@ -45,8 +45,7 @@ final class ArchiveNavigationTests: XCTestCase {
       XCTAssertNotNil(ar.selectedCategory)
     #endif
     XCTAssertEqual(ar.selectedCategory, .venues)
-    XCTAssertFalse(ar.navigationPath.isEmpty)
-    XCTAssertEqual(ar.navigationPath.first!, Artist(id: "id", name: "name").archivePath)
+    XCTAssertTrue(ar.navigationPath.isEmpty)
   }
 
   func testNavigateToArchivePath() throws {

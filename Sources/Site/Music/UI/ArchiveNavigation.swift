@@ -77,7 +77,7 @@ extension Logger {
     #elseif os(macOS)
       Logger.archive.log("nav to category: \(category.rawValue, privacy: .public)")
     #endif
-    selectedCategory = category
+    state = State(category: category)
   }
 }
 
