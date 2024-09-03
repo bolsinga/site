@@ -10,6 +10,7 @@ import SwiftUI
 struct ShowDetail: View {
   let concert: Concert
   let isPathNavigable: (PathRestorable) -> Bool
+  let isPathActive: (PathRestorable) -> Bool
 
   private var venueName: String {
     guard let venue = concert.venue else {
@@ -60,7 +61,7 @@ struct ShowDetail: View {
       .listStyle(.grouped)
     #endif
     .navigationTitle(venueName)
-    .pathRestorableUserActivityModifier(concert, url: concert.url)
+    .pathRestorableUserActivityModifier(concert, url: concert.url, isPathActive: isPathActive)
     .sharePathRestorable(concert, url: concert.url)
   }
 }
@@ -70,6 +71,9 @@ struct ShowDetail: View {
     ShowDetail(
       concert: vaultPreviewData.concerts[0],
       isPathNavigable: { _ in
+        true
+      },
+      isPathActive: { _ in
         true
       }
     )
@@ -83,6 +87,9 @@ struct ShowDetail: View {
       concert: vaultPreviewData.concerts[1],
       isPathNavigable: { _ in
         true
+      },
+      isPathActive: { _ in
+        true
       }
     )
     .musicDestinations(vaultPreviewData)
@@ -94,6 +101,9 @@ struct ShowDetail: View {
     ShowDetail(
       concert: vaultPreviewData.concerts[2],
       isPathNavigable: { _ in
+        true
+      },
+      isPathActive: { _ in
         true
       }
     )

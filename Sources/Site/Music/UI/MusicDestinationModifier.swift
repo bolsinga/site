@@ -11,6 +11,7 @@ import SwiftUI
 struct MusicDestinationModifier: ViewModifier {
   let vault: Vault
   let isPathNavigable: (PathRestorable) -> Bool
+  let isPathActive: (PathRestorable) -> Bool
 
   func body(content: Content) -> some View {
     content
@@ -18,7 +19,8 @@ struct MusicDestinationModifier: ViewModifier {
         switch archivePath {
         case .show(let iD):
           if let concert = vault.concertMap[iD] {
-            ShowDetail(concert: concert, isPathNavigable: isPathNavigable)
+            ShowDetail(
+              concert: concert, isPathNavigable: isPathNavigable, isPathActive: isPathActive)
           }
         case .venue(let iD):
           if let venueDigest = vault.venueDigestMap[iD] {
@@ -26,18 +28,18 @@ struct MusicDestinationModifier: ViewModifier {
               digest: venueDigest, concertCompare: vault.comparator.compare(lhs:rhs:),
               geocode: {
                 try await vault.atlas.geocode($0.venue)
-              }, isPathNavigable: isPathNavigable)
+              }, isPathNavigable: isPathNavigable, isPathActive: isPathActive)
           }
         case .artist(let iD):
           if let artistDigest = vault.artistDigestMap[iD] {
             ArtistDetail(
               digest: artistDigest, concertCompare: vault.comparator.compare(lhs:rhs:),
-              isPathNavigable: isPathNavigable)
+              isPathNavigable: isPathNavigable, isPathActive: isPathActive)
           }
         case .year(let annum):
           YearDetail(
             digest: vault.digest(for: annum), concertCompare: vault.comparator.compare(lhs:rhs:),
-            isPathNavigable: isPathNavigable)
+            isPathNavigable: isPathNavigable, isPathActive: isPathActive)
         }
       }
   }
@@ -50,6 +52,8 @@ extension View {
         let archivePath = $0.archivePath
         // Drop the last path so that when going back the state is correct. Otherwise the '>' will flash on after animating in.
         return !navigationPath.dropLast().contains { $0 == archivePath }
+      } isPathActive: {
+        navigationPath.last == $0.archivePath
       })
   }
 }
