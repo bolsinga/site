@@ -12,25 +12,39 @@ import XCTest
 final class ArchiveNavigationTests: XCTestCase {
   func testNavigateToCategory() throws {
     let ar = ArchiveNavigation()
-    XCTAssertNil(ar.selectedCategory)
+    #if os(iOS) || os(tvOS)
+      XCTAssertNil(ar.selectedCategory)
+    #elseif os(macOS)
+      XCTAssertEqual(ar.selectedCategory, ArchiveNavigation.State.defaultCategory)
+    #endif
     XCTAssertTrue(ar.navigationPath.isEmpty)
 
     ar.navigate(to: .today)
     XCTAssertEqual(ar.selectedCategory, .today)
     XCTAssertTrue(ar.navigationPath.isEmpty)
 
-    ar.navigate(to: nil)
-    XCTAssertNil(ar.selectedCategory)
-    XCTAssertTrue(ar.navigationPath.isEmpty)
+    #if os(iOS) || os(tvOS)
+      ar.navigate(to: nil)
+      XCTAssertNil(ar.selectedCategory)
+      XCTAssertTrue(ar.navigationPath.isEmpty)
+    #endif
   }
 
   func testNavigateToArchivePath() throws {
     let ar = ArchiveNavigation()
-    XCTAssertNil(ar.selectedCategory)
+    #if os(iOS) || os(tvOS)
+      XCTAssertNil(ar.selectedCategory)
+    #elseif os(macOS)
+      XCTAssertEqual(ar.selectedCategory, ArchiveNavigation.State.defaultCategory)
+    #endif
     XCTAssertTrue(ar.navigationPath.isEmpty)
 
     ar.navigate(to: ArchivePath.artist("id"))
-    XCTAssertNil(ar.selectedCategory)
+    #if os(iOS) || os(tvOS)
+      XCTAssertNil(ar.selectedCategory)
+    #elseif os(macOS)
+      XCTAssertEqual(ar.selectedCategory, ArchiveNavigation.State.defaultCategory)
+    #endif
     XCTAssertEqual(ar.navigationPath.count, 1)
 
     XCTAssertNotNil(ar.navigationPath.first)

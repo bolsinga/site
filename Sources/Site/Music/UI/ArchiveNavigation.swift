@@ -17,10 +17,18 @@ extension Logger {
 
 @Observable final class ArchiveNavigation {
   struct State: Codable, Equatable, Sendable {
-    let category: ArchiveCategory?
+    #if os(iOS) || os(tvOS)
+      typealias DefaultCategory = ArchiveCategory?
+      static var defaultCategory: DefaultCategory { nil }
+    #elseif os(macOS)
+      typealias DefaultCategory = ArchiveCategory
+      static var defaultCategory: DefaultCategory { .today }
+    #endif
+
+    let category: DefaultCategory
     let path: [ArchivePath]
 
-    internal init(category: ArchiveCategory? = .defaultCategory, path: [ArchivePath] = []) {
+    internal init(category: DefaultCategory = defaultCategory, path: [ArchivePath] = []) {
       self.category = category
       self.path = path
     }
@@ -32,7 +40,7 @@ extension Logger {
     self.state = state
   }
 
-  var selectedCategory: ArchiveCategory? {
+  var selectedCategory: State.DefaultCategory {
     get {
       return state.category
     }
@@ -63,8 +71,12 @@ extension Logger {
     navigationPath = newPath
   }
 
-  func navigate(to category: ArchiveCategory?) {
-    Logger.archive.log("nav to category: \(category?.rawValue ?? "nil", privacy: .public)")
+  func navigate(to category: State.DefaultCategory) {
+    #if os(iOS) || os(tvOS)
+      Logger.archive.log("nav to category: \(category?.rawValue ?? "nil", privacy: .public)")
+    #elseif os(macOS)
+      Logger.archive.log("nav to category: \(category.rawValue, privacy: .public)")
+    #endif
     selectedCategory = category
   }
 }
