@@ -11,6 +11,7 @@ struct YearDetail: View {
   let digest: AnnumDigest
   let concertCompare: (Concert, Concert) -> Bool
   let isPathNavigable: (PathRestorable) -> Bool
+  let isPathActive: (PathRestorable) -> Bool
 
   private var concerts: [Concert] {
     digest.concerts
@@ -47,7 +48,7 @@ struct YearDetail: View {
       .listStyle(.grouped)
     #endif
     .navigationTitle(Text(digest.annum.formatted()))
-    .pathRestorableUserActivityModifier(digest.annum, url: digest.url)
+    .pathRestorableUserActivityModifier(digest.annum, url: digest.url, isPathActive: isPathActive)
     .sharePathRestorable(digest.annum, url: digest.url)
   }
 }
@@ -58,6 +59,9 @@ struct YearDetail: View {
       digest: vaultPreviewData.digest(for: Annum.year(2001)),
       concertCompare: vaultPreviewData.comparator.compare(lhs:rhs:),
       isPathNavigable: { _ in
+        true
+      },
+      isPathActive: { _ in
         true
       }
     )
