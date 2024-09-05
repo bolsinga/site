@@ -23,7 +23,7 @@ struct ArchiveCategorySplit: View {
   @ViewBuilder var sidebar: some View {
     List(
       ArchiveCategory.allCases, id: \.self,
-      selection: $archiveNavigation.selectedCategory
+      selection: $archiveNavigation.state.category
     ) {
       category in
       LabeledContent {

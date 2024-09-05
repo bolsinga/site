@@ -40,15 +40,6 @@ extension Logger {
     self.state = state
   }
 
-  var selectedCategory: State.DefaultCategory {
-    get {
-      state.category
-    }
-    set {
-      state.category = newValue
-    }
-  }
-
   var navigationPath: [ArchivePath] {
     get {
       state.path
