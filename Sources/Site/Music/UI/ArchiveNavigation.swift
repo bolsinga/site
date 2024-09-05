@@ -40,24 +40,13 @@ extension Logger {
     self.state = state
   }
 
-  var navigationPath: [ArchivePath] {
-    get {
-      state.path
-    }
-    set {
-      state.path = newValue
-    }
-  }
-
   func navigate(to path: ArchivePath) {
-    guard path != navigationPath.last else {
+    guard path != state.path.last else {
       Logger.archive.log("already presented: \(path.formatted(), privacy: .public)")
       return
     }
     Logger.archive.log("nav to path: \(path.formatted(), privacy: .public)")
-    var newPath = navigationPath
-    newPath.append(path)
-    navigationPath = newPath
+    state.path.append(path)
   }
 
   func navigate(to category: State.DefaultCategory) {

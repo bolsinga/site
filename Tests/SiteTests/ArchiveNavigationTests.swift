@@ -16,32 +16,32 @@ final class ArchiveNavigationTests: XCTestCase {
       XCTAssertNotNil(ar.state.category)
     #endif
     XCTAssertEqual(ar.state.category, ArchiveNavigation.State.defaultCategory)
-    XCTAssertTrue(ar.navigationPath.isEmpty)
+    XCTAssertTrue(ar.state.path.isEmpty)
 
     ar.navigate(to: .today)
     XCTAssertEqual(ar.state.category, .today)
-    XCTAssertTrue(ar.navigationPath.isEmpty)
+    XCTAssertTrue(ar.state.path.isEmpty)
 
     ar.navigate(to: .stats)
     XCTAssertEqual(ar.state.category, .stats)
-    XCTAssertTrue(ar.navigationPath.isEmpty)
+    XCTAssertTrue(ar.state.path.isEmpty)
 
     ar.navigate(to: .artists)
     XCTAssertEqual(ar.state.category, .artists)
-    XCTAssertTrue(ar.navigationPath.isEmpty)
+    XCTAssertTrue(ar.state.path.isEmpty)
 
     ar.navigate(to: .venues)
     XCTAssertEqual(ar.state.category, .venues)
-    XCTAssertTrue(ar.navigationPath.isEmpty)
+    XCTAssertTrue(ar.state.path.isEmpty)
 
     ar.navigate(to: .shows)
     XCTAssertEqual(ar.state.category, .shows)
-    XCTAssertTrue(ar.navigationPath.isEmpty)
+    XCTAssertTrue(ar.state.path.isEmpty)
 
     #if os(iOS) || os(tvOS)
       ar.navigate(to: nil)
       XCTAssertNil(ar.state.category)
-      XCTAssertTrue(ar.navigationPath.isEmpty)
+      XCTAssertTrue(ar.state.path.isEmpty)
     #endif
   }
 
@@ -53,15 +53,15 @@ final class ArchiveNavigationTests: XCTestCase {
       XCTAssertNotNil(ar.state.category)
     #endif
     XCTAssertEqual(ar.state.category, .artists)
-    XCTAssertFalse(ar.navigationPath.isEmpty)
-    XCTAssertEqual(ar.navigationPath.first!, Artist(id: "id", name: "name").archivePath)
+    XCTAssertFalse(ar.state.path.isEmpty)
+    XCTAssertEqual(ar.state.path.first!, Artist(id: "id", name: "name").archivePath)
 
     ar.navigate(to: .venues)
     #if os(iOS) || os(tvOS)
       XCTAssertNotNil(ar.state.category)
     #endif
     XCTAssertEqual(ar.state.category, .venues)
-    XCTAssertTrue(ar.navigationPath.isEmpty)
+    XCTAssertTrue(ar.state.path.isEmpty)
   }
 
   func testNavigateToArchivePath() throws {
@@ -70,67 +70,67 @@ final class ArchiveNavigationTests: XCTestCase {
       XCTAssertNotNil(ar.state.category)
     #endif
     XCTAssertEqual(ar.state.category, ArchiveNavigation.State.defaultCategory)
-    XCTAssertTrue(ar.navigationPath.isEmpty)
+    XCTAssertTrue(ar.state.path.isEmpty)
 
     ar.navigate(to: ArchivePath.artist("id"))
     #if os(iOS) || os(tvOS)
       XCTAssertNotNil(ar.state.category)
     #endif
     XCTAssertEqual(ar.state.category, ArchiveNavigation.State.defaultCategory)
-    XCTAssertEqual(ar.navigationPath.count, 1)
-    XCTAssertNotNil(ar.navigationPath.last)
-    XCTAssertEqual(ar.navigationPath.last!, ArchivePath.artist("id"))
+    XCTAssertEqual(ar.state.path.count, 1)
+    XCTAssertNotNil(ar.state.path.last)
+    XCTAssertEqual(ar.state.path.last!, ArchivePath.artist("id"))
 
     ar.navigate(to: ArchivePath.venue("id"))
     #if os(iOS) || os(tvOS)
       XCTAssertNotNil(ar.state.category)
     #endif
     XCTAssertEqual(ar.state.category, ArchiveNavigation.State.defaultCategory)
-    XCTAssertEqual(ar.navigationPath.count, 2)
-    XCTAssertNotNil(ar.navigationPath.last)
-    XCTAssertEqual(ar.navigationPath.last!, ArchivePath.venue("id"))
+    XCTAssertEqual(ar.state.path.count, 2)
+    XCTAssertNotNil(ar.state.path.last)
+    XCTAssertEqual(ar.state.path.last!, ArchivePath.venue("id"))
 
     ar.navigate(to: ArchivePath.show("id"))
     #if os(iOS) || os(tvOS)
       XCTAssertNotNil(ar.state.category)
     #endif
     XCTAssertEqual(ar.state.category, ArchiveNavigation.State.defaultCategory)
-    XCTAssertEqual(ar.navigationPath.count, 3)
-    XCTAssertNotNil(ar.navigationPath.last)
-    XCTAssertEqual(ar.navigationPath.last!, ArchivePath.show("id"))
+    XCTAssertEqual(ar.state.path.count, 3)
+    XCTAssertNotNil(ar.state.path.last)
+    XCTAssertEqual(ar.state.path.last!, ArchivePath.show("id"))
 
     ar.navigate(to: ArchivePath.year(Annum.year(1989)))
     #if os(iOS) || os(tvOS)
       XCTAssertNotNil(ar.state.category)
     #endif
     XCTAssertEqual(ar.state.category, ArchiveNavigation.State.defaultCategory)
-    XCTAssertEqual(ar.navigationPath.count, 4)
-    XCTAssertNotNil(ar.navigationPath.last)
-    XCTAssertEqual(ar.navigationPath.last!, ArchivePath.year(Annum.year(1989)))
+    XCTAssertEqual(ar.state.path.count, 4)
+    XCTAssertNotNil(ar.state.path.last)
+    XCTAssertEqual(ar.state.path.last!, ArchivePath.year(Annum.year(1989)))
   }
 
   func testNavigateToArchivePath_noDoubles() throws {
     let ar = ArchiveNavigation()
     ar.navigate(to: ArchivePath.artist("id"))
-    XCTAssertEqual(ar.navigationPath.count, 1)
-    XCTAssertEqual(ar.navigationPath.first!, ArchivePath.artist("id"))
+    XCTAssertEqual(ar.state.path.count, 1)
+    XCTAssertEqual(ar.state.path.first!, ArchivePath.artist("id"))
     XCTAssertEqual(ar.state.category, ArchiveNavigation.State.defaultCategory)
 
     ar.navigate(to: ArchivePath.artist("id"))
-    XCTAssertEqual(ar.navigationPath.count, 1)
-    XCTAssertEqual(ar.navigationPath.first!, ArchivePath.artist("id"))
+    XCTAssertEqual(ar.state.path.count, 1)
+    XCTAssertEqual(ar.state.path.first!, ArchivePath.artist("id"))
     XCTAssertEqual(ar.state.category, ArchiveNavigation.State.defaultCategory)
 
     ar.navigate(to: ArchivePath.artist("id-1"))
-    XCTAssertEqual(ar.navigationPath.count, 2)
-    XCTAssertEqual(ar.navigationPath.first!, ArchivePath.artist("id"))
-    XCTAssertEqual(ar.navigationPath.last!, ArchivePath.artist("id-1"))
+    XCTAssertEqual(ar.state.path.count, 2)
+    XCTAssertEqual(ar.state.path.first!, ArchivePath.artist("id"))
+    XCTAssertEqual(ar.state.path.last!, ArchivePath.artist("id-1"))
     XCTAssertEqual(ar.state.category, ArchiveNavigation.State.defaultCategory)
 
     ar.navigate(to: ArchivePath.venue("vid-1"))
-    XCTAssertEqual(ar.navigationPath.count, 3)
-    XCTAssertEqual(ar.navigationPath.first!, ArchivePath.artist("id"))
-    XCTAssertEqual(ar.navigationPath.last!, ArchivePath.venue("vid-1"))
+    XCTAssertEqual(ar.state.path.count, 3)
+    XCTAssertEqual(ar.state.path.first!, ArchivePath.artist("id"))
+    XCTAssertEqual(ar.state.path.last!, ArchivePath.venue("vid-1"))
     XCTAssertEqual(ar.state.category, ArchiveNavigation.State.defaultCategory)
   }
 }

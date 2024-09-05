@@ -54,7 +54,7 @@ struct ArchiveCategorySplit: View {
         )
         .nearbyDistanceThreshold(nearbyModel)
     } detail: {
-      NavigationStack(path: $archiveNavigation.navigationPath) {
+      NavigationStack(path: $archiveNavigation.state.path) {
         ArchiveCategoryDetail(
           model: model, archiveNavigation: archiveNavigation, venueSort: $venueSort,
           artistSort: $artistSort, nearbyModel: nearbyModel)
