@@ -20,7 +20,8 @@ struct ArchiveCategoryDetail: View {
   @State var artistSearchString: String = ""
   @State var venueSearchString: String = ""
 
-  private var category: ArchiveCategory? { archiveNavigation.selectedCategory }
+  // The following property allows this UI code to not know if ArchiveNavigation.State.category is Optional or not.
+  private var category: ArchiveCategory? { archiveNavigation.state.category }
   private var isCategoryActive: Bool { archiveNavigation.navigationPath.isEmpty }
 
   @MainActor
