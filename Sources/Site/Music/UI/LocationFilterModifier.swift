@@ -10,7 +10,7 @@ import SwiftUI
 struct LocationFilterModifier: ViewModifier {
   @SceneStorage("nearby.filter") private var locationFilter = LocationFilter.none
 
-  var model: NearbyModel
+  let model: NearbyModel
   let filteredDataIsEmpty: Bool
   // This is used to prevent @SceneStorage from being used in Previews.
   let loadLocationFilterFromStorage: Bool

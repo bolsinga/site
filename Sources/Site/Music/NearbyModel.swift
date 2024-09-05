@@ -11,7 +11,7 @@ import Foundation
 @Observable final class NearbyModel {
   internal var distanceThreshold: CLLocationDistance
   internal var locationFilter: LocationFilter
-  private var model: VaultModel
+  private let model: VaultModel
 
   internal init(
     distanceThreshold: CLLocationDistance = 0, locationFilter: LocationFilter = .none,

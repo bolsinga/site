@@ -9,11 +9,11 @@ import CoreLocation
 import SwiftUI
 
 struct ArchiveCategoryDetail: View {
-  var model: VaultModel
-  var archiveNavigation: ArchiveNavigation
+  let model: VaultModel
+  let archiveNavigation: ArchiveNavigation
   @Binding var venueSort: RankingSort
   @Binding var artistSort: RankingSort
-  var nearbyModel: NearbyModel
+  let nearbyModel: NearbyModel
 
   private var vault: Vault { model.vault }
 
