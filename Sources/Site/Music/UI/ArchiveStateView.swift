@@ -16,7 +16,7 @@ extension Logger {
 }
 
 struct ArchiveStateView: View {
-  var model: VaultModel
+  let model: VaultModel
 
   @SceneStorage("venue.sort") private var venueSort = RankingSort.alphabetical
   @SceneStorage("artist.sort") private var artistSort = RankingSort.alphabetical

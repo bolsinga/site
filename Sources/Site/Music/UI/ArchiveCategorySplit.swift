@@ -9,13 +9,13 @@ import CoreLocation
 import SwiftUI
 
 struct ArchiveCategorySplit: View {
-  var model: VaultModel
+  let model: VaultModel
 
   @Binding var venueSort: RankingSort
   @Binding var artistSort: RankingSort
 
   @Bindable var archiveNavigation: ArchiveNavigation
-  var nearbyModel: NearbyModel
+  let nearbyModel: NearbyModel
 
   private var vault: Vault { model.vault }
 

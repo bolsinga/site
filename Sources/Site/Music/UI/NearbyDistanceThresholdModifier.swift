@@ -12,7 +12,7 @@ struct NearbyDistanceThresholdModifier: ViewModifier {
   @SceneStorage("nearby.distance") private var nearbyDistanceThreshold: CLLocationDistance =
     16093.44  // 10 miles
 
-  var model: NearbyModel
+  let model: NearbyModel
   @State private var presentDistanceSliderPopover = false
 
   func body(content: Content) -> some View {
