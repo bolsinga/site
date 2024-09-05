@@ -25,8 +25,8 @@ extension Logger {
       static var defaultCategory: DefaultCategory { .today }
     #endif
 
-    let category: DefaultCategory
-    let path: [ArchivePath]
+    var category: DefaultCategory
+    var path: [ArchivePath]
 
     internal init(category: DefaultCategory = defaultCategory, path: [ArchivePath] = []) {
       self.category = category
@@ -42,21 +42,19 @@ extension Logger {
 
   var selectedCategory: State.DefaultCategory {
     get {
-      return state.category
+      state.category
     }
     set {
-      let path = state.path
-      state = State(category: newValue, path: path)
+      state.category = newValue
     }
   }
 
   var navigationPath: [ArchivePath] {
     get {
-      return state.path
+      state.path
     }
     set {
-      let category = state.category
-      state = State(category: category, path: newValue)
+      state.path = newValue
     }
   }
 
