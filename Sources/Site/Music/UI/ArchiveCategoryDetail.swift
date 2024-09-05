@@ -22,7 +22,7 @@ struct ArchiveCategoryDetail: View {
 
   // The following property allows this UI code to not know if ArchiveNavigation.State.category is Optional or not.
   private var category: ArchiveCategory? { archiveNavigation.state.category }
-  private var isCategoryActive: Bool { archiveNavigation.navigationPath.isEmpty }
+  private var isCategoryActive: Bool { archiveNavigation.state.path.isEmpty }
 
   @MainActor
   @ViewBuilder private var stackElement: some View {
@@ -62,7 +62,7 @@ struct ArchiveCategoryDetail: View {
 
   var body: some View {
     stackElement
-      .musicDestinations(vault, path: archiveNavigation.navigationPath)
+      .musicDestinations(vault, path: archiveNavigation.state.path)
   }
 }
 
