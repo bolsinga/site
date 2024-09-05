@@ -122,6 +122,6 @@ struct ArtistDetail: View {
         true
       }
     )
-    .musicDestinations(vaultPreviewData, navigationPath: archiveNavigation.navigationPath)
+    .musicDestinations(vaultPreviewData, path: archiveNavigation.navigationPath)
   }
 }

@@ -62,7 +62,7 @@ struct ArchiveCategoryDetail: View {
 
   var body: some View {
     stackElement
-      .musicDestinations(vault, navigationPath: archiveNavigation.navigationPath)
+      .musicDestinations(vault, path: archiveNavigation.navigationPath)
   }
 }
 
