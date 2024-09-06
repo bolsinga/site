@@ -38,18 +38,18 @@ struct ArchiveStateView: View {
   var body: some View {
     archiveBody
       .onContinueUserActivity(ArchivePath.activityType) { userActivity in
-        do {
-          archiveNavigation.navigate(to: try userActivity.archivePath())
-        } catch {
-          Logger.decodeActivity.error("error: \(error, privacy: .public)")
+        guard let path = userActivity.archivePath else {
+          Logger.decodeActivity.error("no path")
+          return
         }
+        archiveNavigation.navigate(to: path)
       }
       .onContinueUserActivity(ArchiveCategory.activityType) { userActivity in
-        do {
-          archiveNavigation.navigate(to: try userActivity.archiveCategory())
-        } catch {
-          Logger.decodeActivity.error("error: \(error, privacy: .public)")
+        guard let category = userActivity.archiveCategory else {
+          Logger.decodeActivity.error("no category")
+          return
         }
+        archiveNavigation.navigate(to: category)
       }
       .onOpenURL { url in
         Logger.link.log("url: \(url.absoluteString, privacy: .public)")
