@@ -53,17 +53,15 @@ struct ArchiveStateView: View {
       }
       .onOpenURL { url in
         Logger.link.log("url: \(url.absoluteString, privacy: .public)")
-        do {
-          let archivePath = try ArchivePath(url)
+        if let archivePath = try? ArchivePath(url) {
           archiveNavigation.navigate(to: archivePath)
-        } catch {
-          Logger.link.error("ArchivePath to URL error: \(error, privacy: .public)")
+        } else {
+          Logger.link.error("url not path")
 
-          do {
-            let archiveCategory = try ArchiveCategory(url)
+          if let archiveCategory = try? ArchiveCategory(url) {
             archiveNavigation.navigate(to: archiveCategory)
-          } catch {
-            Logger.link.error("ArchiveCategory to URL error: \(error, privacy: .public)")
+          } else {
+            Logger.link.error("url not category")
           }
         }
       }
