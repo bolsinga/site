@@ -18,13 +18,6 @@ extension Logger {
 }
 
 extension NSUserActivity {
-  private enum DecodeError: Error {
-    case noUserInfo
-    case noArchiveKey
-    case archiveKeyIncorrectType
-    case invalidArchiveCategoryString
-  }
-
   internal static let archiveCategoryKey = "archiveCategory"
 
   func update(_ category: ArchiveCategory, url: URL?) {
@@ -60,28 +53,28 @@ extension NSUserActivity {
     self.expirationDate = .now + (60 * 60 * 24)
   }
 
-  func archiveCategory() throws -> ArchiveCategory {
+  var archiveCategory: ArchiveCategory? {
     Logger.decodeCategoryActivity.log("type: \(self.activityType, privacy: .public)")
 
     guard let userInfo = self.userInfo else {
       Logger.decodeCategoryActivity.error("no userInfo")
-      throw DecodeError.noUserInfo
+      return nil
     }
 
     guard let value = userInfo[NSUserActivity.archiveCategoryKey] else {
       Logger.decodeCategoryActivity.error("no archiveCategoryKey")
-      throw DecodeError.noArchiveKey
+      return nil
     }
 
     guard let archiveCategoryString = value as? String else {
       Logger.decodeCategoryActivity.error("archiveCategoryKey not String")
-      throw DecodeError.archiveKeyIncorrectType
+      return nil
     }
 
     Logger.decodeCategoryActivity.log("decode: \(archiveCategoryString, privacy: .public)")
 
     guard let category = ArchiveCategory(rawValue: archiveCategoryString) else {
-      throw DecodeError.invalidArchiveCategoryString
+      return nil
     }
 
     return category
