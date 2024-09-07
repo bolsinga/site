@@ -25,17 +25,3 @@ extension ArchivePath: Codable {
     try self = ArchivePath(container.decode(String.self))
   }
 }
-
-extension Array where Element == ArchivePath {
-  var jsonData: Data? {
-    get {
-      try? JSONEncoder().encode(self)
-    }
-    set {
-      guard let data = newValue,
-        let array = try? JSONDecoder().decode(Self.self, from: data)
-      else { return }
-      self = array
-    }
-  }
-}
