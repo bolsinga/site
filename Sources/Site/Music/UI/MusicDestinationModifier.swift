@@ -48,12 +48,8 @@ struct MusicDestinationModifier: ViewModifier {
 extension View {
   func musicDestinations(_ vault: Vault, path: [ArchivePath] = []) -> some View {
     modifier(
-      MusicDestinationModifier(vault: vault) {
-        let archivePath = $0.archivePath
-        // Drop the last path so that when going back the state is correct. Otherwise the '>' will flash on after animating in.
-        return !path.dropLast().contains { $0 == archivePath }
-      } isPathActive: {
-        path.last == $0.archivePath
-      })
+      MusicDestinationModifier(
+        vault: vault, isPathNavigable: path.isPathNavigable(_:), isPathActive: path.isPathActive(_:)
+      ))
   }
 }
