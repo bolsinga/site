@@ -10,7 +10,8 @@ import SwiftUI
 
 struct ArchiveCategoryDetail: View {
   let model: VaultModel
-  let archiveNavigation: ArchiveNavigation
+  let selectedCategory: ArchiveNavigation.State.DefaultCategory
+  let path: [ArchivePath]
   @Binding var venueSort: RankingSort
   @Binding var artistSort: RankingSort
   let nearbyModel: NearbyModel
@@ -21,8 +22,8 @@ struct ArchiveCategoryDetail: View {
   @State var venueSearchString: String = ""
 
   // The following property allows this UI code to not know if ArchiveNavigation.State.category is Optional or not.
-  private var category: ArchiveCategory? { archiveNavigation.state.category }
-  private var isCategoryActive: Bool { archiveNavigation.state.path.isEmpty }
+  private var category: ArchiveCategory? { selectedCategory }
+  private var isCategoryActive: Bool { path.isEmpty }
 
   @MainActor
   @ViewBuilder private var stackElement: some View {
@@ -62,58 +63,51 @@ struct ArchiveCategoryDetail: View {
 
   var body: some View {
     stackElement
-      .musicDestinations(vault, path: archiveNavigation.state.path)
-  }
-}
-
-extension ArchiveNavigation {
-  // Convenience for previews below.
-  fileprivate convenience init(selectedCategory: ArchiveCategory) {
-    self.init(State(category: selectedCategory))
+      .musicDestinations(vault, path: path)
   }
 }
 
 #Preview {
   let vaultModel = VaultModel(vaultPreviewData, executeAsynchronousTasks: false)
-  let archiveNavigation = ArchiveNavigation(selectedCategory: .today)
 
   return ArchiveCategoryDetail(
-    model: vaultModel, archiveNavigation: archiveNavigation, venueSort: .constant(.alphabetical),
-    artistSort: .constant(.alphabetical), nearbyModel: NearbyModel(vaultModel: vaultModel))
+    model: vaultModel, selectedCategory: .today, path: [],
+    venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
+    nearbyModel: NearbyModel(vaultModel: vaultModel))
 }
 
 #Preview {
   let vaultModel = VaultModel(vaultPreviewData, executeAsynchronousTasks: false)
-  let archiveNavigation = ArchiveNavigation(selectedCategory: .stats)
 
   return ArchiveCategoryDetail(
-    model: vaultModel, archiveNavigation: archiveNavigation, venueSort: .constant(.alphabetical),
-    artistSort: .constant(.alphabetical), nearbyModel: NearbyModel(vaultModel: vaultModel))
+    model: vaultModel, selectedCategory: .stats, path: [],
+    venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
+    nearbyModel: NearbyModel(vaultModel: vaultModel))
 }
 
 #Preview {
   let vaultModel = VaultModel(vaultPreviewData, executeAsynchronousTasks: false)
-  let archiveNavigation = ArchiveNavigation(selectedCategory: .shows)
 
   return ArchiveCategoryDetail(
-    model: vaultModel, archiveNavigation: archiveNavigation, venueSort: .constant(.alphabetical),
-    artistSort: .constant(.alphabetical), nearbyModel: NearbyModel(vaultModel: vaultModel))
+    model: vaultModel, selectedCategory: .shows, path: [],
+    venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
+    nearbyModel: NearbyModel(vaultModel: vaultModel))
 }
 
 #Preview {
   let vaultModel = VaultModel(vaultPreviewData, executeAsynchronousTasks: false)
-  let archiveNavigation = ArchiveNavigation(selectedCategory: .venues)
 
   return ArchiveCategoryDetail(
-    model: vaultModel, archiveNavigation: archiveNavigation, venueSort: .constant(.alphabetical),
-    artistSort: .constant(.alphabetical), nearbyModel: NearbyModel(vaultModel: vaultModel))
+    model: vaultModel, selectedCategory: .venues, path: [],
+    venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
+    nearbyModel: NearbyModel(vaultModel: vaultModel))
 }
 
 #Preview {
   let vaultModel = VaultModel(vaultPreviewData, executeAsynchronousTasks: false)
-  let archiveNavigation = ArchiveNavigation(selectedCategory: .artists)
 
   return ArchiveCategoryDetail(
-    model: vaultModel, archiveNavigation: archiveNavigation, venueSort: .constant(.alphabetical),
-    artistSort: .constant(.alphabetical), nearbyModel: NearbyModel(vaultModel: vaultModel))
+    model: vaultModel, selectedCategory: .artists, path: [],
+    venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
+    nearbyModel: NearbyModel(vaultModel: vaultModel))
 }

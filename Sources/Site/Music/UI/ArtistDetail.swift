@@ -111,8 +111,6 @@ struct ArtistDetail: View {
 
 #Preview {
   let selectedConcert = vaultPreviewData.artistDigests[1].concerts[0]
-  let archiveNavigation = ArchiveNavigation()
-  archiveNavigation.state.path.append(selectedConcert.archivePath)
   return NavigationStack {
     ArtistDetail(
       digest: vaultPreviewData.artistDigests[1],
@@ -122,6 +120,6 @@ struct ArtistDetail: View {
         true
       }
     )
-    .musicDestinations(vaultPreviewData, path: archiveNavigation.state.path)
+    .musicDestinations(vaultPreviewData, path: [selectedConcert.archivePath])
   }
 }

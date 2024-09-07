@@ -14,17 +14,15 @@ struct ArchiveCategorySplit: View {
   @Binding var venueSort: RankingSort
   @Binding var artistSort: RankingSort
 
-  @Bindable var archiveNavigation: ArchiveNavigation
+  @Binding var selectedCategory: ArchiveNavigation.State.DefaultCategory
+  @Binding var path: [ArchivePath]
   let nearbyModel: NearbyModel
 
   private var vault: Vault { model.vault }
 
   @MainActor
   @ViewBuilder var sidebar: some View {
-    List(
-      ArchiveCategory.allCases, id: \.self,
-      selection: $archiveNavigation.state.category
-    ) {
+    List(ArchiveCategory.allCases, id: \.self, selection: $selectedCategory) {
       category in
       LabeledContent {
         switch category {
@@ -54,9 +52,9 @@ struct ArchiveCategorySplit: View {
         )
         .nearbyDistanceThreshold(nearbyModel)
     } detail: {
-      NavigationStack(path: $archiveNavigation.state.path) {
+      NavigationStack(path: $path) {
         ArchiveCategoryDetail(
-          model: model, archiveNavigation: archiveNavigation, venueSort: $venueSort,
+          model: model, selectedCategory: selectedCategory, path: path, venueSort: $venueSort,
           artistSort: $artistSort, nearbyModel: nearbyModel)
       }
     }
