@@ -32,7 +32,6 @@ struct NotificationModifier: ViewModifier {
     content
       .task {
         Logger.notification.log("task: \(name.rawValue, privacy: .public)")
-        mainDeferredAction()
         for await _ in NotificationCenter.default.notifications(named: name).map({ $0.name }) {
           Logger.notification.log("notified: \(name.rawValue, privacy: .public)")
           mainDeferredAction()
@@ -42,10 +41,9 @@ struct NotificationModifier: ViewModifier {
 }
 
 extension View {
-  func onNotification(
-    name: Notification.Name,
-    action: @MainActor @Sendable @escaping () -> Void
-  ) -> some View {
+  func onNotification(name: Notification.Name, action: @MainActor @Sendable @escaping () -> Void)
+    -> some View
+  {
     modifier(NotificationModifier(name: name, action: action))
   }
 }
