@@ -41,7 +41,7 @@ extension Array where Element == Date {
   // (weekday as String, count of that weekday), sorted in week-order using firstWeekday!
   func computeWeekdayCounts(_ firstWeekday: Int) -> [(String, Int)] {
     let sortedWeekdayCounts = weekdayCounts.sorted { $0.key < $1.key }
-    let zeroBasedFirstWeekday = Swift.max(0, firstWeekday - 1)
+    let zeroBasedFirstWeekday = Swift.min(6, Swift.max(0, firstWeekday - 1))
     let weekdayCountsFirstDayOrdered =
       sortedWeekdayCounts[zeroBasedFirstWeekday...] + sortedWeekdayCounts[0..<zeroBasedFirstWeekday]
     return weekdayCountsFirstDayOrdered.map { $0.value }
