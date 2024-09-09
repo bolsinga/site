@@ -17,16 +17,7 @@ extension Logger {
 
 struct NotificationModifier: ViewModifier {
   let name: Notification.Name
-  let action: @MainActor @Sendable () -> Void
-
-  private func mainDeferredAction() {
-    // This Task / @MainActor seems to accomplish a similar DispatchQueue.main.async feel.
-    // Still not clear to me why this is necessary in SwiftUI.
-    Task {
-      Logger.notification.log("main action: \(name.rawValue, privacy: .public)")
-      await action()
-    }
-  }
+  let action: @MainActor () -> Void
 
   func body(content: Content) -> some View {
     content
@@ -34,15 +25,17 @@ struct NotificationModifier: ViewModifier {
         Logger.notification.log("task: \(name.rawValue, privacy: .public)")
         for await _ in NotificationCenter.default.notifications(named: name).map({ $0.name }) {
           Logger.notification.log("notified: \(name.rawValue, privacy: .public)")
-          mainDeferredAction()
+          Task { @MainActor in
+            Logger.notification.log("main action: \(name.rawValue, privacy: .public)")
+            action()
+          }
         }
       }
   }
 }
 
 extension View {
-  func onNotification(name: Notification.Name, action: @MainActor @Sendable @escaping () -> Void)
-    -> some View
+  func onNotification(name: Notification.Name, action: @MainActor @escaping () -> Void) -> some View
   {
     modifier(NotificationModifier(name: name, action: action))
   }
