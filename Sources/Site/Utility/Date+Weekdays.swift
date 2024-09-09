@@ -29,14 +29,18 @@ private var WeekdayAbbreviationsGetter: [Int: (String, Int)] {
 private let WeekdayAbbreviations = WeekdayAbbreviationsGetter
 
 extension Array where Element == Date {
-  // (weekday as String, count of that weekday), sorted in week-order using firstWeekday!
-  func computeWeekdayCounts(_ firstWeekday: Int) -> [(String, Int)] {
-    let weekdayCountMap: [Int: (String, Int)] = self.reduce(into: WeekdayAbbreviations) {  // weekday (1...7) : (weekday String, count)
+  // weekday : (weekday as String, count of that weekday)
+  internal var weekdayCounts: [Int: (String, Int)] {
+    self.reduce(into: WeekdayAbbreviations) {  // weekday (1...7) : (weekday String, count)
       let weekday = Calendar.autoupdatingCurrent.component(.weekday, from: $1)
       let pair = $0[weekday] ?? (WeekdayChartFormat.format($1), 0)
       $0[weekday] = (pair.0, pair.1 + 1)
     }
-    let sortedWeekdayCounts = weekdayCountMap.sorted { $0.key < $1.key }
+  }
+
+  // (weekday as String, count of that weekday), sorted in week-order using firstWeekday!
+  func computeWeekdayCounts(_ firstWeekday: Int) -> [(String, Int)] {
+    let sortedWeekdayCounts = weekdayCounts.sorted { $0.key < $1.key }
     let zeroBasedFirstWeekday = Swift.min(0, firstWeekday - 1)
     let weekdayCountsFirstDayOrdered =
       sortedWeekdayCounts[zeroBasedFirstWeekday...] + sortedWeekdayCounts[0..<zeroBasedFirstWeekday]
