@@ -94,35 +94,16 @@ actor LocationManager {
     }
   }
 
-  func locationStream() async throws -> LocationStream {
+  func locationStream() async throws -> CLLocationUpdate.Updates {
     try await requestAuthorization().isStreamable()
 
-    Logger.location.log("locationStream")
-
-    return LocationStream { continuation in
-      continuation.onTermination = { _ in
-        Task { await self.terminate() }
-      }
-
-      delegate.locationStreamContinuation = continuation
-      #if !os(tvOS)
-        manager.startUpdatingLocation()
-      #else
-        manager.requestLocation()
-      #endif
-    }
-  }
-
-  private func terminate() {
-    delegate.locationStreamContinuation = nil
-    manager.stopUpdatingLocation()
+    return CLLocationUpdate.liveUpdates()
   }
 
   private class Delegate: NSObject, CLLocationManagerDelegate {
     typealias AuthorizationContinuation = CheckedContinuation<CLAuthorizationStatus, Never>
 
     var authorizationStreamContinuation: AuthorizationContinuation?
-    var locationStreamContinuation: LocationStream.Continuation?
 
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
       Logger.location.log("delegate authorization")
@@ -139,18 +120,6 @@ actor LocationManager {
       }
 
       Logger.location.log("delegate error: \(error, privacy: .public)")
-      locationStreamContinuation?.finish(throwing: error)
-      locationStreamContinuation = nil
-    }
-
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-      Logger.location.log("delegate locations: \(locations.count, privacy: .public)")
-
-      guard let continuation = locationStreamContinuation else { return }
-
-      locations.forEach {
-        continuation.yield($0)
-      }
     }
   }
 }
