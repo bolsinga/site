@@ -5,7 +5,7 @@
 //  Created by Greg Bolsinga on 4/6/23.
 //
 
-@preconcurrency import CoreLocation // CLPlacemark not @Sendable
+@preconcurrency import CoreLocation  // CLPlacemark not @Sendable
 import SwiftUI
 
 struct MusicDestinationModifier: ViewModifier {
