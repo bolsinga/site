@@ -121,9 +121,23 @@ final class WeekdayTests: XCTestCase {
     XCTAssertEqual(result[7]!.1, 0)
   }
 
+  //  func testOneSunday_first_invalid_0() throws {
+  //    let result = [date(year: 2024, month: 9, day: 8)].computeWeekdayCounts(0)
+  //    XCTAssertEqual(result.count, 7)
+  //    XCTAssertEqual(result[0].0, "Sun")
+  //    XCTAssertEqual(result[0].1, 1)
+  //    XCTAssertEqual(result[1].1, 0)
+  //    XCTAssertEqual(result[2].1, 0)
+  //    XCTAssertEqual(result[3].1, 0)
+  //    XCTAssertEqual(result[4].1, 0)
+  //    XCTAssertEqual(result[5].1, 0)
+  //    XCTAssertEqual(result[6].1, 0)
+  //  }
+
   func testOneSunday_first_1() throws {
     let result = [date(year: 2024, month: 9, day: 8)].computeWeekdayCounts(1)
     XCTAssertEqual(result.count, 7)
+    XCTAssertEqual(result[0].0, "Sun")
     XCTAssertEqual(result[0].1, 1)
     XCTAssertEqual(result[1].1, 0)
     XCTAssertEqual(result[2].1, 0)
@@ -137,6 +151,7 @@ final class WeekdayTests: XCTestCase {
     // This is incorrect.
     let result = [date(year: 2024, month: 9, day: 8)].computeWeekdayCounts(2)
     XCTAssertEqual(result.count, 7)
+    XCTAssertEqual(result[0].0, "Sun")
     XCTAssertEqual(result[0].1, 1)
     XCTAssertEqual(result[1].1, 0)
     XCTAssertEqual(result[2].1, 0)
@@ -150,6 +165,7 @@ final class WeekdayTests: XCTestCase {
     // This is incorrect.
     let result = [date(year: 2024, month: 9, day: 8)].computeWeekdayCounts(3)
     XCTAssertEqual(result.count, 7)
+    XCTAssertEqual(result[0].0, "Sun")
     XCTAssertEqual(result[0].1, 1)
     XCTAssertEqual(result[1].1, 0)
     XCTAssertEqual(result[2].1, 0)
@@ -163,6 +179,7 @@ final class WeekdayTests: XCTestCase {
     // This is incorrect.
     let result = [date(year: 2024, month: 9, day: 8)].computeWeekdayCounts(4)
     XCTAssertEqual(result.count, 7)
+    XCTAssertEqual(result[0].0, "Sun")
     XCTAssertEqual(result[0].1, 1)
     XCTAssertEqual(result[1].1, 0)
     XCTAssertEqual(result[2].1, 0)
@@ -176,6 +193,7 @@ final class WeekdayTests: XCTestCase {
     // This is incorrect.
     let result = [date(year: 2024, month: 9, day: 8)].computeWeekdayCounts(5)
     XCTAssertEqual(result.count, 7)
+    XCTAssertEqual(result[0].0, "Sun")
     XCTAssertEqual(result[0].1, 1)
     XCTAssertEqual(result[1].1, 0)
     XCTAssertEqual(result[2].1, 0)
@@ -189,6 +207,7 @@ final class WeekdayTests: XCTestCase {
     // This is incorrect.
     let result = [date(year: 2024, month: 9, day: 8)].computeWeekdayCounts(6)
     XCTAssertEqual(result.count, 7)
+    XCTAssertEqual(result[0].0, "Sun")
     XCTAssertEqual(result[0].1, 1)
     XCTAssertEqual(result[1].1, 0)
     XCTAssertEqual(result[2].1, 0)
@@ -202,6 +221,21 @@ final class WeekdayTests: XCTestCase {
     // This is incorrect.
     let result = [date(year: 2024, month: 9, day: 8)].computeWeekdayCounts(7)
     XCTAssertEqual(result.count, 7)
+    XCTAssertEqual(result[0].0, "Sun")
+    XCTAssertEqual(result[0].1, 1)
+    XCTAssertEqual(result[1].1, 0)
+    XCTAssertEqual(result[2].1, 0)
+    XCTAssertEqual(result[3].1, 0)
+    XCTAssertEqual(result[4].1, 0)
+    XCTAssertEqual(result[5].1, 0)
+    XCTAssertEqual(result[6].1, 0)
+  }
+
+  func testOneSunday_first_invalid_8() throws {
+    // This is incorrect.
+    let result = [date(year: 2024, month: 9, day: 8)].computeWeekdayCounts(8)
+    XCTAssertEqual(result.count, 7)
+    XCTAssertEqual(result[0].0, "Sun")
     XCTAssertEqual(result[0].1, 1)
     XCTAssertEqual(result[1].1, 0)
     XCTAssertEqual(result[2].1, 0)
