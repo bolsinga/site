@@ -5,7 +5,7 @@
 //  Created by Greg Bolsinga on 5/3/23.
 //
 
-@preconcurrency import CoreLocation
+@preconcurrency import CoreLocation // CLPlacemark not @Sendable
 import Foundation
 
 struct BatchGeocode<T: AtlasGeocodable>: AsyncSequence {

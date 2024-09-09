@@ -5,7 +5,7 @@
 //  Created by Greg Bolsinga on 2/16/23.
 //
 
-@preconcurrency import CoreLocation
+@preconcurrency import CoreLocation // CLPlacemark not @Sendable
 import MapKit
 import SwiftUI
 
