@@ -226,7 +226,6 @@ final class WeekdayTests: XCTestCase {
   }
 
   func testOneSunday_first_invalid_8() throws {
-    // This is incorrect.
     let result = [date(year: 2024, month: 9, day: 8)].computeWeekdayCounts(8)
     XCTAssertEqual(result.count, 7)
     XCTAssertEqual(result[0].0, "Sat")
