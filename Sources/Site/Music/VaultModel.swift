@@ -5,7 +5,7 @@
 //  Created by Greg Bolsinga on 7/12/23.
 //
 
-@preconcurrency import CoreLocation
+@preconcurrency import CoreLocation // CLPlacemark not @Sendable
 import Foundation
 import os
 
