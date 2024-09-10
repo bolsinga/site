@@ -9,10 +9,7 @@ import SwiftUI
 import os
 
 extension Logger {
-  nonisolated(unsafe) static let vaultLoad = Logger(category: "vaultLoad")
-  #if swift(>=6.0)
-    #warning("nonisolated(unsafe) unneeded.")
-  #endif
+  static let vaultLoad = Logger(category: "vaultLoad")
 }
 
 public struct SiteView: View {

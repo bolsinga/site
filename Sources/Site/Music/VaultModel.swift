@@ -10,10 +10,7 @@ import Foundation
 import os
 
 extension Logger {
-  nonisolated(unsafe) static let vaultModel = Logger(category: "vaultModel")
-  #if swift(>=6.0)
-    #warning("nonisolated(unsafe) unneeded.")
-  #endif
+  static let vaultModel = Logger(category: "vaultModel")
 }
 
 enum LocationAuthorization {

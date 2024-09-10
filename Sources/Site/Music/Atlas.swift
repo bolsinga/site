@@ -10,10 +10,7 @@ import Foundation
 import os
 
 extension Logger {
-  nonisolated(unsafe) static let atlas = Logger(category: "atlas")
-  #if swift(>=6.0)
-    #warning("nonisolated(unsafe) unneeded.")
-  #endif
+  static let atlas = Logger(category: "atlas")
 }
 
 enum GeocodeError: Error {

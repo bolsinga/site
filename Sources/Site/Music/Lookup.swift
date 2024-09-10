@@ -9,10 +9,7 @@ import Foundation
 import os
 
 extension Logger {
-  nonisolated(unsafe) static let lookup = Logger(category: "lookup")
-  #if swift(>=6.0)
-    #warning("nonisolated(unsafe) unneeded.")
-  #endif
+  static let lookup = Logger(category: "lookup")
 }
 
 private func createLookup<T: Identifiable>(_ sequence: [T]) -> [T.ID: T] {

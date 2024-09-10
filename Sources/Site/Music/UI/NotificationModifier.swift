@@ -9,10 +9,7 @@ import SwiftUI
 import os
 
 extension Logger {
-  nonisolated(unsafe) static let notification = Logger(category: "notification")
-  #if swift(>=6.0)
-    #warning("nonisolated(unsafe) unneeded.")
-  #endif
+  static let notification = Logger(category: "notification")
 }
 
 struct NotificationModifier: ViewModifier {
