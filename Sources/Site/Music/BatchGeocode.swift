@@ -5,13 +5,14 @@
 //  Created by Greg Bolsinga on 5/3/23.
 //
 
-#if swift(>=6.0)
-import CoreLocation
-#else
-@preconcurrency import CoreLocation  // CLPlacemark not @Sendable
-#endif
-import SwiftUI
 import Foundation
+import SwiftUI
+
+#if swift(>=6.0)
+  import CoreLocation
+#else
+  @preconcurrency import CoreLocation  // CLPlacemark not @Sendable
+#endif
 
 struct BatchGeocode<T: AtlasGeocodable>: AsyncSequence {
   typealias Element = (T, CLPlacemark)

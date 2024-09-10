@@ -5,14 +5,15 @@
 //  Created by Greg Bolsinga on 7/12/23.
 //
 
-#if swift(>=6.0)
-import CoreLocation
-#else
-@preconcurrency import CoreLocation  // CLPlacemark not @Sendable
-#endif
-import SwiftUI
 import Foundation
+import SwiftUI
 import os
+
+#if swift(>=6.0)
+  import CoreLocation
+#else
+  @preconcurrency import CoreLocation  // CLPlacemark not @Sendable
+#endif
 
 extension Logger {
   nonisolated(unsafe) static let vaultModel = Logger(category: "vaultModel")
