@@ -9,9 +9,10 @@ import CoreLocation
 import os
 
 extension Logger {
-  nonisolated(unsafe) static let location = Logger(category: "location")
   #if swift(>=6.0)
-    #warning("nonisolated(unsafe) unneeded.")
+    static let location = Logger(category: "location")
+  #else
+    nonisolated(unsafe) static let location = Logger(category: "location")
   #endif
 }
 

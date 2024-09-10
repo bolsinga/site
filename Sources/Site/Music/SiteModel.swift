@@ -9,9 +9,10 @@ import Foundation
 import os
 
 extension Logger {
-  nonisolated(unsafe) static let vaultLoader = Logger(category: "vaultLoader")
   #if swift(>=6.0)
-    #warning("nonisolated(unsafe) unneeded.")
+    static let vaultLoader = Logger(category: "vaultLoader")
+  #else
+    nonisolated(unsafe) static let vaultLoader = Logger(category: "vaultLoader")
   #endif
 }
 

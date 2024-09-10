@@ -16,9 +16,10 @@ import os
 #endif
 
 extension Logger {
-  nonisolated(unsafe) static let atlas = Logger(category: "atlas")
   #if swift(>=6.0)
-    #warning("nonisolated(unsafe) unneeded.")
+    static let atlas = Logger(category: "atlas")
+  #else
+    nonisolated(unsafe) static let atlas = Logger(category: "atlas")
   #endif
 }
 

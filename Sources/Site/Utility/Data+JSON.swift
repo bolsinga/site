@@ -9,9 +9,10 @@ import Foundation
 import os
 
 extension Logger {
-  nonisolated(unsafe) static let json = Logger(category: "json")
   #if swift(>=6.0)
-    #warning("nonisolated(unsafe) unneeded.")
+    static let json = Logger(category: "json")
+  #else
+    nonisolated(unsafe) static let json = Logger(category: "json")
   #endif
 }
 

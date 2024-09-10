@@ -9,9 +9,10 @@ import SwiftUI
 import os
 
 extension Logger {
-  nonisolated(unsafe) static let link = Logger(category: "link")
   #if swift(>=6.0)
-    #warning("nonisolated(unsafe) unneeded.")
+    static let link = Logger(category: "link")
+  #else
+    nonisolated(unsafe) static let link = Logger(category: "link")
   #endif
 }
 

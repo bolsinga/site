@@ -9,9 +9,10 @@ import SwiftUI
 import os
 
 extension Logger {
-  nonisolated(unsafe) static let vaultLoad = Logger(category: "vaultLoad")
   #if swift(>=6.0)
-    #warning("nonisolated(unsafe) unneeded.")
+    static let vaultLoad = Logger(category: "vaultLoad")
+  #else
+    nonisolated(unsafe) static let vaultLoad = Logger(category: "vaultLoad")
   #endif
 }
 
