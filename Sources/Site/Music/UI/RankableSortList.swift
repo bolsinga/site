@@ -22,6 +22,7 @@ where T: Rankable, T.ID == String {
     Text("\(venueDigest.showRank.value) Show(s)", bundle: .module)
   }
 
+  @MainActor
   @ViewBuilder private var listElement: some View {
     if sort.isAlphabetical {
       RankingList(
