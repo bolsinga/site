@@ -9,7 +9,10 @@ import Foundation
 import os
 
 extension Logger {
-  static let vaultLoader = Logger(category: "vaultLoader")
+  nonisolated(unsafe) static let vaultLoader = Logger(category: "vaultLoader")
+  #if swift(>=6.0)
+    #warning("nonisolated(unsafe) unneeded.")
+  #endif
 }
 
 @Observable public final class SiteModel {

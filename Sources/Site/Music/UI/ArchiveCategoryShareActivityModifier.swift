@@ -9,7 +9,10 @@ import SwiftUI
 import os
 
 extension Logger {
-  static let sharing = Logger(category: "sharing")
+  nonisolated(unsafe) static let sharing = Logger(category: "sharing")
+  #if swift(>=6.0)
+    #warning("nonisolated(unsafe) unneeded.")
+  #endif
 }
 
 struct ArchiveCategoryShareActivityModifier: ViewModifier {

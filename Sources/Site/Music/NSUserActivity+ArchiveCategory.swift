@@ -10,8 +10,11 @@ import Intents
 import os
 
 extension Logger {
-  static let updateCategoryActivity = Logger(category: "updateCategoryActivity")
-  static let decodeCategoryActivity = Logger(category: "decodeCategoryActivity")
+  nonisolated(unsafe) static let updateCategoryActivity = Logger(category: "updateCategoryActivity")
+  nonisolated(unsafe) static let decodeCategoryActivity = Logger(category: "decodeCategoryActivity")
+  #if swift(>=6.0)
+    #warning("nonisolated(unsafe) unneeded.")
+  #endif
 }
 
 extension NSUserActivity {

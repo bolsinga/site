@@ -9,8 +9,11 @@ import Foundation
 import os
 
 extension Logger {
-  static let url = Logger(category: "url")
-  static let music = Logger(category: "music")
+  nonisolated(unsafe) static let url = Logger(category: "url")
+  nonisolated(unsafe) static let music = Logger(category: "music")
+  #if swift(>=6.0)
+    #warning("nonisolated(unsafe) unneeded.")
+  #endif
 }
 
 extension Music {
