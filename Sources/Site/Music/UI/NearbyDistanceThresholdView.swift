@@ -9,6 +9,7 @@ import CoreLocation
 import SwiftUI
 
 #if !os(tvOS)
+  @MainActor
   struct NearbyDistanceThresholdView: View {
     @Binding var distanceThreshold: CLLocationDistance
     @ViewBuilder var text: () -> Text
