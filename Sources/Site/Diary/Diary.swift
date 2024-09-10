@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Diary: Codable {
+public struct Diary: Codable, Sendable {
   public let timestamp: Date
   public let colophon: [String]
   public let header: [String]

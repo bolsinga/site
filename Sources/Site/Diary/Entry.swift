@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Entry: Codable {
+public struct Entry: Codable, Sendable {
   public let timestamp: Date
   public let title: String?
   public let id: String
