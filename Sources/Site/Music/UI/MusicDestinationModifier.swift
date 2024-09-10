@@ -5,7 +5,11 @@
 //  Created by Greg Bolsinga on 4/6/23.
 //
 
+#if swift(>=6.0)
+import CoreLocation
+#else
 @preconcurrency import CoreLocation  // CLPlacemark not @Sendable
+#endif
 import SwiftUI
 
 struct MusicDestinationModifier: ViewModifier {

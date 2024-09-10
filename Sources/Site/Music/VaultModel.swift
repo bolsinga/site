@@ -5,7 +5,12 @@
 //  Created by Greg Bolsinga on 7/12/23.
 //
 
+#if swift(>=6.0)
+import CoreLocation
+#else
 @preconcurrency import CoreLocation  // CLPlacemark not @Sendable
+#endif
+import SwiftUI
 import Foundation
 import os
 
