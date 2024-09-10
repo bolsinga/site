@@ -9,10 +9,12 @@ import Foundation
 import os
 
 extension Logger {
-  nonisolated(unsafe) static let updateActivity = Logger(category: "updateActivity")
-  nonisolated(unsafe) static let decodeActivity = Logger(category: "decodeActivity")
   #if swift(>=6.0)
-    #warning("nonisolated(unsafe) unneeded.")
+    static let updateActivity = Logger(category: "updateActivity")
+    static let decodeActivity = Logger(category: "decodeActivity")
+  #else
+    nonisolated(unsafe) static let updateActivity = Logger(category: "updateActivity")
+    nonisolated(unsafe) static let decodeActivity = Logger(category: "decodeActivity")
   #endif
 }
 

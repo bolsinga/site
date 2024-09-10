@@ -9,9 +9,10 @@ import Foundation
 import os
 
 extension Logger {
-  nonisolated(unsafe) static let lookup = Logger(category: "lookup")
   #if swift(>=6.0)
-    #warning("nonisolated(unsafe) unneeded.")
+    static let lookup = Logger(category: "lookup")
+  #else
+    nonisolated(unsafe) static let lookup = Logger(category: "lookup")
   #endif
 }
 

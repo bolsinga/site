@@ -16,9 +16,10 @@ import os
 #endif
 
 extension Logger {
-  nonisolated(unsafe) static let vaultModel = Logger(category: "vaultModel")
   #if swift(>=6.0)
-    #warning("nonisolated(unsafe) unneeded.")
+    static let vaultModel = Logger(category: "vaultModel")
+  #else
+    nonisolated(unsafe) static let vaultModel = Logger(category: "vaultModel")
   #endif
 }
 
