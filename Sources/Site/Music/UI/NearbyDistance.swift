@@ -25,8 +25,8 @@ private func createDistanceThresholdFormatter() -> MeasurementFormatter {
   return formatter
 }
 
-let nearbyDistanceValueFormatter = createDistanceValueFormatter()
-let nearbyDistanceThresholdFormatter = createDistanceThresholdFormatter()
+@MainActor let nearbyDistanceValueFormatter = createDistanceValueFormatter()
+@MainActor let nearbyDistanceThresholdFormatter = createDistanceThresholdFormatter()
 
 private let minimumDistanceInMiles = 1609.34  // 1 mile
 private let maximumDistanceInMiles = 160934.4  // 100 miles
