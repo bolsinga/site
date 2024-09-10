@@ -5,9 +5,14 @@
 //  Created by Greg Bolsinga on 2/16/23.
 //
 
-@preconcurrency import CoreLocation  // CLPlacemark not @Sendable
 import MapKit
 import SwiftUI
+
+#if swift(>=6.0)
+  import CoreLocation
+#else
+  @preconcurrency import CoreLocation  // CLPlacemark not @Sendable
+#endif
 
 struct VenueDetail: View {
   typealias geocoder = (VenueDigest) async throws -> CLPlacemark

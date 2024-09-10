@@ -5,9 +5,15 @@
 //  Created by Greg Bolsinga on 5/1/23.
 //
 
-@preconcurrency import CoreLocation  // CLPlacemark not @Sendable
 import Foundation
+import SwiftUI
 import os
+
+#if swift(>=6.0)
+  import CoreLocation
+#else
+  @preconcurrency import CoreLocation  // CLPlacemark not @Sendable
+#endif
 
 extension Logger {
   nonisolated(unsafe) static let atlas = Logger(category: "atlas")
