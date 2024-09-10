@@ -1,4 +1,4 @@
-// swift-tools-version:5.10
+// swift-tools-version:6.0
 
 import PackageDescription
 
@@ -23,7 +23,7 @@ let package = Package(
     .target(
       name: "Site",
       resources: [.process("Resources/Localizable.xcstrings")],
-      swiftSettings: [.enableExperimentalFeature("StrictConcurrency")]),
+      swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]),
     .testTarget(name: "SiteTests", dependencies: ["Site"]),
     .executableTarget(
       name: "site_tool",
