@@ -41,6 +41,7 @@ struct Program: AsyncParsableCommand {
   )
   var jsonDirectoryURL: URL? = nil
 
+  @MainActor
   func run() async throws {
     let diary = try await Diary.load(url: rootURL.appending(path: "diary.json"))
     print("\(diary.title) has \(diary.entries.count) entries.")
