@@ -1,3 +1,4 @@
+// swift-format-ignore-file
 //
 //  VenueDetail.swift
 //
@@ -5,14 +6,14 @@
 //  Created by Greg Bolsinga on 2/16/23.
 //
 
-import MapKit
-import SwiftUI
-
 #if swift(>=6.0)
-  import CoreLocation
+  import CoreLocation // Remove swift-format-ignore-file above.
 #else
   @preconcurrency import CoreLocation  // CLPlacemark not @Sendable
 #endif
+
+import MapKit
+import SwiftUI
 
 struct VenueDetail: View {
   typealias geocoder = (VenueDigest) async throws -> CLPlacemark
