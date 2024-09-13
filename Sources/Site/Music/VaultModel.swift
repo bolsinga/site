@@ -47,9 +47,11 @@ enum LocationAuthorization {
   @ObservationIgnored
   private var locationTask: Task<Void, Never>?
 
+  private static let distanceFilter: CLLocationDistance = 10
+
   private let locationManager = LocationManager(
     activityType: .other,
-    distanceFilter: 10,
+    distanceFilter: distanceFilter,
     desiredAccuracy: kCLLocationAccuracyHundredMeters,
     access: .inUse)
 
@@ -158,13 +160,17 @@ enum LocationAuthorization {
         defer {
           Logger.vaultModel.log("end locationstream")
         }
-        for try await update in locationStream {
-          if let location = update.location {
-            Logger.vaultModel.log("location received")
+        for try await location in locationStream.compactMap({ $0.location }) {
+          guard let curLoc = currentLocation else {
+            Logger.vaultModel.log("location initialized")
             currentLocation = location
-          } else {
-            Logger.vaultModel.log("empty location update")
+            continue
           }
+
+          guard curLoc.distance(from: location) > Self.distanceFilter else { continue }
+
+          Logger.vaultModel.log("location updated")
+          currentLocation = location
         }
       } catch {
         Logger.vaultModel.error("locationstream error: \(error, privacy: .public)")
