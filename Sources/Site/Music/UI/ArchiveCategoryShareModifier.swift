@@ -22,21 +22,21 @@ struct ArchiveCategoryShareModifier: ViewModifier {
   let url: URL?
 
   func body(content: Content) -> some View {
-    content
-      #if os(iOS) || os(macOS)
-        .toolbar {
-          if let url {
+    #if os(tvOS)
+      content  // ShareLink not available on tvOS
+    #else
+      if let url {
+        content
+          .toolbar {
             ShareLink(
               item: url, subject: category.subject, message: category.message,
               preview: SharePreview(
                 category.subject, image: Bundle.main.appIcon))
           }
-        }
-      #elseif os(tvOS)
-          // ShareLink not available on tvOS
-      #else
-          // #warning("ShareLink: unknown OS")
-      #endif
+      } else {
+        content
+      }
+    #endif
   }
 }
 
