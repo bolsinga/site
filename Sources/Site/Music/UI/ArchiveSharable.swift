@@ -1,5 +1,5 @@
 //
-//  PathRestorableShareable.swift
+//  ArchiveSharable.swift
 //
 //
 //  Created by Greg Bolsinga on 8/2/23.
@@ -12,12 +12,12 @@ import SwiftUI
 // When sharing via Mail, subject is as expected, and message is link followed by message text.
 // macos ventura: no subject nor message shown messages nor mail
 
-protocol PathRestorableShareable: PathRestorable {
+protocol ArchiveSharable: PathRestorable {
   var subject: Text { get }
   var message: Text { get }
 }
 
-extension Concert: PathRestorableShareable {
+extension Concert: ArchiveSharable {
   var subject: Text {
     Text(self.formatted(.headlinerAndVenue))
   }
@@ -27,7 +27,7 @@ extension Concert: PathRestorableShareable {
   }
 }
 
-extension Venue: PathRestorableShareable {
+extension Venue: ArchiveSharable {
   private var descriptor: String {
     String(localized: "Shows at \(self.name)", bundle: .module)
   }
@@ -41,7 +41,7 @@ extension Venue: PathRestorableShareable {
   }
 }
 
-extension Annum: PathRestorableShareable {
+extension Annum: ArchiveSharable {
   var subject: Text {
     Text(self.formatted(.shared))
   }
@@ -51,7 +51,7 @@ extension Annum: PathRestorableShareable {
   }
 }
 
-extension Artist: PathRestorableShareable {
+extension Artist: ArchiveSharable {
   private var descriptor: String {
     String(localized: "Shows with \(self.name)", bundle: .module)
   }
