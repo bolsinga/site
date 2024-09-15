@@ -30,8 +30,7 @@ struct ArchiveCategoryShareModifier: ViewModifier {
           .toolbar {
             ShareLink(
               item: url, subject: category.subject, message: category.message,
-              preview: SharePreview(
-                category.subject, image: Bundle.main.appIcon))
+              preview: SharePreview(category.subject, image: Bundle.main.appIcon))
           }
       } else {
         content
