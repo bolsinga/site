@@ -28,7 +28,7 @@ struct ArchiveCategoryShareActivityModifier: ViewModifier {
     )
     return
       content
-      .shareCategory(category, url: url)
+      .archiveShare(category, url: url)
       .archiveCategoryUserActivity(category, url: url, isActive: isActive)
   }
 }
