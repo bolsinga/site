@@ -9,11 +9,7 @@ import Foundation
 import os
 
 extension Logger {
-  #if swift(>=6.0)
-    static let vault = Logger(category: "vault")
-  #else
-    nonisolated(unsafe) static let vault = Logger(category: "vault")
-  #endif
+  static let vault = Logger(category: "vault")
 }
 
 enum VaultError: Error {

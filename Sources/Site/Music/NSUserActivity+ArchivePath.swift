@@ -9,13 +9,8 @@ import Foundation
 import os
 
 extension Logger {
-  #if swift(>=6.0)
-    static let updateActivity = Logger(category: "updateActivity")
-    static let decodeActivity = Logger(category: "decodeActivity")
-  #else
-    nonisolated(unsafe) static let updateActivity = Logger(category: "updateActivity")
-    nonisolated(unsafe) static let decodeActivity = Logger(category: "decodeActivity")
-  #endif
+  static let updateActivity = Logger(category: "updateActivity")
+  static let decodeActivity = Logger(category: "decodeActivity")
 }
 
 extension NSUserActivity {

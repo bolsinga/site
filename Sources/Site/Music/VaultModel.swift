@@ -16,11 +16,7 @@ import os
 #endif
 
 extension Logger {
-  #if swift(>=6.0)
-    static let vaultModel = Logger(category: "vaultModel")
-  #else
-    nonisolated(unsafe) static let vaultModel = Logger(category: "vaultModel")
-  #endif
+  static let vaultModel = Logger(category: "vaultModel")
 }
 
 enum LocationAuthorization {

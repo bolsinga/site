@@ -9,11 +9,7 @@ import SwiftUI
 import os
 
 extension Logger {
-  #if swift(>=6.0)
-    static let link = Logger(category: "link")
-  #else
-    nonisolated(unsafe) static let link = Logger(category: "link")
-  #endif
+  static let link = Logger(category: "link")
 }
 
 struct ArchiveStateView: View {
