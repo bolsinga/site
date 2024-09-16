@@ -101,7 +101,7 @@ struct VenueDetail: View {
     #endif
     .navigationTitle(digest.venue.name)
     .pathRestorableUserActivityModifier(digest.venue, url: digest.url, isPathActive: isPathActive)
-    .sharePathRestorable(digest.venue, url: digest.url)
+    .archiveShare(digest.venue, url: digest.url)
   }
 }
 

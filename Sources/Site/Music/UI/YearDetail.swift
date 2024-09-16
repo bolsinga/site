@@ -49,7 +49,7 @@ struct YearDetail: View {
     #endif
     .navigationTitle(Text(digest.annum.formatted()))
     .pathRestorableUserActivityModifier(digest.annum, url: digest.url, isPathActive: isPathActive)
-    .sharePathRestorable(digest.annum, url: digest.url)
+    .archiveShare(digest.annum, url: digest.url)
   }
 }
 
