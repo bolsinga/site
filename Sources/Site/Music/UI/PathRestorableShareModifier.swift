@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct PathRestorableShareModifier<T: PathRestorableShareable>: ViewModifier {
+struct PathRestorableShareModifier<T: ArchiveSharable>: ViewModifier {
   let item: T
   let url: URL?
 
@@ -30,7 +30,7 @@ struct PathRestorableShareModifier<T: PathRestorableShareable>: ViewModifier {
 }
 
 extension View {
-  func sharePathRestorable<T: PathRestorableShareable>(_ item: T, url: URL?) -> some View {
+  func sharePathRestorable<T: ArchiveSharable>(_ item: T, url: URL?) -> some View {
     modifier(PathRestorableShareModifier(item: item, url: url))
   }
 }
