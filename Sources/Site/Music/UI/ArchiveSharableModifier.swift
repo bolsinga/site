@@ -1,5 +1,5 @@
 //
-//  PathRestorableShareModifier.swift
+//  ArchiveSharableModifier.swift
 //
 //
 //  Created by Greg Bolsinga on 8/2/23.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct PathRestorableShareModifier<T: ArchiveSharable>: ViewModifier {
+struct ArchiveSharableModifier<T: ArchiveSharable>: ViewModifier {
   let item: T
   let url: URL?
 
@@ -31,6 +31,6 @@ struct PathRestorableShareModifier<T: ArchiveSharable>: ViewModifier {
 
 extension View {
   func sharePathRestorable<T: ArchiveSharable>(_ item: T, url: URL?) -> some View {
-    modifier(PathRestorableShareModifier(item: item, url: url))
+    modifier(ArchiveSharableModifier(item: item, url: url))
   }
 }
