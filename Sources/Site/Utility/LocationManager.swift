@@ -9,11 +9,7 @@ import CoreLocation
 import os
 
 extension Logger {
-  #if swift(>=6.0)
-    static let location = Logger(category: "location")
-  #else
-    nonisolated(unsafe) static let location = Logger(category: "location")
-  #endif
+  static let location = Logger(category: "location")
 }
 
 enum LocationAuthorizationError: Error {

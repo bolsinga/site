@@ -9,11 +9,7 @@ import Foundation
 import os
 
 extension Logger {
-  #if swift(>=6.0)
-    static let archive = Logger(category: "archive")
-  #else
-    nonisolated(unsafe) static let archive = Logger(category: "archive")
-  #endif
+  static let archive = Logger(category: "archive")
 }
 
 @Observable final class ArchiveNavigation {

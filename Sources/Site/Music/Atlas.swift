@@ -16,11 +16,7 @@ import os
 #endif
 
 extension Logger {
-  #if swift(>=6.0)
-    static let atlas = Logger(category: "atlas")
-  #else
-    nonisolated(unsafe) static let atlas = Logger(category: "atlas")
-  #endif
+  static let atlas = Logger(category: "atlas")
 }
 
 enum GeocodeError: Error {

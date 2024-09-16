@@ -10,11 +10,7 @@ import Foundation
 import os
 
 extension Logger {
-  #if swift(>=6.0)
-    static let atlasCache = Logger(category: "atlasCache")
-  #else
-    nonisolated(unsafe) static let atlasCache = Logger(category: "atlasCache")
-  #endif
+  static let atlasCache = Logger(category: "atlasCache")
 }
 
 private let expirationOffset = 60.0 * 60.0 * 24.0 * 30.0 * 6.0  // Six months
