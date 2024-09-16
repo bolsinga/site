@@ -64,3 +64,13 @@ extension Artist: ArchiveSharable {
     Text(descriptor)
   }
 }
+
+extension ArchiveCategory: ArchiveSharable {
+  var subject: Text {
+    Text(self.title)
+  }
+
+  var message: Text {
+    Text(self.title)
+  }
+}
