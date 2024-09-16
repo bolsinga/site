@@ -12,7 +12,7 @@ import SwiftUI
 // When sharing via Mail, subject is as expected, and message is link followed by message text.
 // macos ventura: no subject nor message shown messages nor mail
 
-protocol ArchiveSharable: PathRestorable {
+protocol ArchiveSharable {
   var subject: Text { get }
   var message: Text { get }
 }
