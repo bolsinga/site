@@ -5,51 +5,51 @@
 //  Created by Greg Bolsinga on 6/15/24.
 //
 
-import XCTest
+import Testing
 
 @testable import Site
 
-final class EmphasizedMatchingTests: XCTestCase {
-  func testJustOneLetterMatchingWithOneMatch() throws {
-    XCTAssertEqual("Gre".emphasized(matching: "G"), "**G**re")
-    XCTAssertEqual("Gre".emphasized(matching: "g"), "**G**re")
+struct EmphasizedMatchingTests {
+  @Test func justOneLetterMatchingWithOneMatch() {
+    #expect("Gre".emphasized(matching: "G") == "**G**re")
+    #expect("Gre".emphasized(matching: "g") == "**G**re")
   }
 
-  func testJustOneLetterMatchinWithMultipleMatches() throws {
-    XCTAssertEqual("Greg".emphasized(matching: "G"), "**G**reg")
-    XCTAssertEqual("Greg".emphasized(matching: "g"), "**G**reg")
+  @Test func justOneLetterMatchinWithMultipleMatches() {
+    #expect("Greg".emphasized(matching: "G") == "**G**reg")
+    #expect("Greg".emphasized(matching: "g") == "**G**reg")
   }
 
-  func testTwoLettersMatchingWithOneMatch() throws {
-    XCTAssertEqual("Greg".emphasized(matching: "Gr"), "**Gr**eg")
-    XCTAssertEqual("Greg".emphasized(matching: "gr"), "**Gr**eg")
+  @Test func twoLettersMatchingWithOneMatch() {
+    #expect("Greg".emphasized(matching: "Gr") == "**Gr**eg")
+    #expect("Greg".emphasized(matching: "gr") == "**Gr**eg")
   }
 
-  func testTwoLettersMatchingWithMultipleMatches() throws {
-    XCTAssertEqual("Gregr".emphasized(matching: "Gr"), "**Gr**egr")
-    XCTAssertEqual("GregR".emphasized(matching: "gr"), "**Gr**egR")
+  @Test func twoLettersMatchingWithMultipleMatches() {
+    #expect("Gregr".emphasized(matching: "Gr") == "**Gr**egr")
+    #expect("GregR".emphasized(matching: "gr") == "**Gr**egR")
   }
 
-  func testNoMatches() throws {
-    XCTAssertEqual("Greg".emphasized(matching: "o"), "Greg")
+  @Test func noMatches() {
+    #expect("Greg".emphasized(matching: "o") == "Greg")
   }
 
-  func testEmptyStringMatches() throws {
-    XCTAssertEqual("Greg".emphasized(matching: ""), "Greg")
+  @Test func emptyStringMatches() {
+    #expect("Greg".emphasized(matching: "") == "Greg")
   }
 
-  func testEmphasizeRespectingSpacesQuirks() throws {
-    XCTAssertEqual("A".emphasizedRespectingSpacesQuirks, "**A**")
-    XCTAssertEqual(" A".emphasizedRespectingSpacesQuirks, " **A**")
-    XCTAssertEqual("A ".emphasizedRespectingSpacesQuirks, "**A** ")
-    XCTAssertEqual(" A ".emphasizedRespectingSpacesQuirks, " **A** ")
+  @Test func emphasizeRespectingSpacesQuirks() {
+    #expect("A".emphasizedRespectingSpacesQuirks == "**A**")
+    #expect(" A".emphasizedRespectingSpacesQuirks == " **A**")
+    #expect("A ".emphasizedRespectingSpacesQuirks == "**A** ")
+    #expect(" A ".emphasizedRespectingSpacesQuirks == " **A** ")
   }
 
-  func testSpaceStringMatches() throws {
-    XCTAssertEqual("Greg Bolsinga".emphasized(matching: "G"), "**G**reg Bolsinga")
-    XCTAssertEqual("Greg Bolsinga".emphasized(matching: "G "), "Gre**g** Bolsinga")
-    XCTAssertEqual("Greg Bolsinga".emphasized(matching: "G B"), "Gre**g B**olsinga")
-    XCTAssertEqual("Greg Bolsinga".emphasized(matching: " B"), "Greg **B**olsinga")
-    XCTAssertEqual("Greg Bolsinga".emphasized(matching: "B"), "Greg **B**olsinga")
+  @Test func spaceStringMatches() {
+    #expect("Greg Bolsinga".emphasized(matching: "G") == "**G**reg Bolsinga")
+    #expect("Greg Bolsinga".emphasized(matching: "G ") == "Gre**g** Bolsinga")
+    #expect("Greg Bolsinga".emphasized(matching: "G B") == "Gre**g B**olsinga")
+    #expect("Greg Bolsinga".emphasized(matching: " B") == "Greg **B**olsinga")
+    #expect("Greg Bolsinga".emphasized(matching: "B") == "Greg **B**olsinga")
   }
 }

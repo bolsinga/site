@@ -5,14 +5,15 @@
 //  Created by Greg Bolsinga on 6/24/23.
 //
 
-import XCTest
+import Foundation
+import Testing
 
 @testable import Site
 
-final class PathRestorableUserActivityTests: XCTestCase {
+struct PathRestorableUserActivityTests {
   let baseURL = vaultPreviewData.baseURL
 
-  func testShow() throws {
+  @Test func show() throws {
     let userActivity = NSUserActivity(activityType: "test-type")
 
     let concert = Concert(
@@ -21,80 +22,80 @@ final class PathRestorableUserActivityTests: XCTestCase {
       url: URL(string: "https://hey")!)
     userActivity.update(concert, url: concert.url)
 
-    XCTAssertTrue(userActivity.isEligibleForHandoff)
+    #expect(userActivity.isEligibleForHandoff)
 
-    XCTAssertEqual(userActivity.targetContentIdentifier, "sh-sh17")
+    #expect(userActivity.targetContentIdentifier == "sh-sh17")
 
-    XCTAssertTrue(userActivity.isEligibleForSearch)
-    XCTAssertNotNil(userActivity.contentAttributeSet)
+    #expect(userActivity.isEligibleForSearch)
+    #expect(userActivity.contentAttributeSet != nil)
 
-    XCTAssertTrue(userActivity.isEligibleForPublicIndexing)
-    XCTAssertNotNil(userActivity.webpageURL)
+    #expect(userActivity.isEligibleForPublicIndexing)
+    #expect(userActivity.webpageURL != nil)
 
-    XCTAssertEqual(userActivity.archivePath, try ArchivePath("sh-sh17"))
+    #expect(try ArchivePath("sh-sh17") == userActivity.archivePath)
 
-    XCTAssertNotNil(userActivity.expirationDate)
+    #expect(userActivity.expirationDate != nil)
   }
 
-  func testArtist() throws {
+  @Test func artist() throws {
     let userActivity = NSUserActivity(activityType: "test-type")
 
     let artist = Artist(id: "ar0", name: "AR0")
     userActivity.update(artist, url: artist.archivePath.url(using: baseURL))
 
-    XCTAssertTrue(userActivity.isEligibleForHandoff)
+    #expect(userActivity.isEligibleForHandoff)
 
-    XCTAssertEqual(userActivity.targetContentIdentifier, "ar-ar0")
+    #expect(userActivity.targetContentIdentifier == "ar-ar0")
 
-    XCTAssertTrue(userActivity.isEligibleForSearch)
-    XCTAssertNotNil(userActivity.contentAttributeSet)
+    #expect(userActivity.isEligibleForSearch)
+    #expect(userActivity.contentAttributeSet != nil)
 
-    XCTAssertTrue(userActivity.isEligibleForPublicIndexing)
-    XCTAssertNotNil(userActivity.webpageURL)
+    #expect(userActivity.isEligibleForPublicIndexing)
+    #expect(userActivity.webpageURL != nil)
 
-    XCTAssertEqual(userActivity.archivePath, try ArchivePath("ar-ar0"))
+    #expect(try ArchivePath("ar-ar0") == userActivity.archivePath)
   }
 
-  func testVenue() throws {
+  @Test func venue() throws {
     let userActivity = NSUserActivity(activityType: "test-type")
 
     let venue = Venue(id: "v10", location: Location(city: "c", state: "s"), name: "V10")
     userActivity.update(venue, url: venue.archivePath.url(using: baseURL))
 
-    XCTAssertTrue(userActivity.isEligibleForHandoff)
+    #expect(userActivity.isEligibleForHandoff)
 
-    XCTAssertEqual(userActivity.targetContentIdentifier, "v-v10")
+    #expect(userActivity.targetContentIdentifier == "v-v10")
 
-    XCTAssertTrue(userActivity.isEligibleForSearch)
-    XCTAssertNotNil(userActivity.contentAttributeSet)
+    #expect(userActivity.isEligibleForSearch)
+    #expect(userActivity.contentAttributeSet != nil)
 
-    XCTAssertTrue(userActivity.isEligibleForPublicIndexing)
-    XCTAssertNotNil(userActivity.webpageURL)
+    #expect(userActivity.isEligibleForPublicIndexing)
+    #expect(userActivity.webpageURL != nil)
 
-    XCTAssertEqual(userActivity.archivePath, try ArchivePath("v-v10"))
+    #expect(try ArchivePath("v-v10") == userActivity.archivePath)
   }
 
-  func testAnnum() throws {
+  @Test func annum() throws {
     let userActivity = NSUserActivity(activityType: "test-type")
 
     let item = Annum.year(1990)
 
     userActivity.update(item, url: item.archivePath.url(using: baseURL))
 
-    XCTAssertTrue(userActivity.isEligibleForHandoff)
+    #expect(userActivity.isEligibleForHandoff)
 
-    XCTAssertEqual(userActivity.targetContentIdentifier, "y-1990")
+    #expect(userActivity.targetContentIdentifier == "y-1990")
 
-    XCTAssertTrue(userActivity.isEligibleForSearch)
-    XCTAssertNotNil(userActivity.contentAttributeSet)
+    #expect(userActivity.isEligibleForSearch)
+    #expect(userActivity.contentAttributeSet != nil)
 
-    XCTAssertTrue(userActivity.isEligibleForPublicIndexing)
-    XCTAssertNotNil(userActivity.webpageURL)
+    #expect(userActivity.isEligibleForPublicIndexing)
+    #expect(userActivity.webpageURL != nil)
 
-    XCTAssertEqual(userActivity.archivePath, try ArchivePath("y-1990"))
+    #expect(try ArchivePath("y-1990") == userActivity.archivePath)
   }
 
-  func testShow_withURL() throws {
+  @Test func show_withURL() {
     let userActivity = NSUserActivity(activityType: "test-type")
 
     let concert = Concert(
@@ -104,35 +105,35 @@ final class PathRestorableUserActivityTests: XCTestCase {
 
     userActivity.update(concert, url: concert.url)
 
-    XCTAssertTrue(userActivity.isEligibleForPublicIndexing)
-    XCTAssertNotNil(userActivity.webpageURL)
+    #expect(userActivity.isEligibleForPublicIndexing)
+    #expect(userActivity.webpageURL != nil)
   }
 
-  func test_decodeError_noUserInfo() throws {
+  @Test func decodeError_noUserInfo() {
     let userActivity = NSUserActivity(activityType: "test-type")
     userActivity.userInfo = nil
 
-    XCTAssertNil(userActivity.archivePath)
+    #expect(userActivity.archivePath == nil)
   }
 
-  func test_decodeError_emptyUserInfo() throws {
+  @Test func decodeError_emptyUserInfo() {
     let userActivity = NSUserActivity(activityType: "test-type")
     userActivity.userInfo = [:]
 
-    XCTAssertNil(userActivity.archivePath)
+    #expect(userActivity.archivePath == nil)
   }
 
-  func test_decodeError_wrongType() throws {
+  @Test func decodeError_wrongType() {
     let userActivity = NSUserActivity(activityType: "test-type")
     userActivity.userInfo = [NSUserActivity.archivePathKey: 6]
 
-    XCTAssertNil(userActivity.archivePath)
+    #expect(userActivity.archivePath == nil)
   }
 
-  func test_decode() throws {
+  @Test func decode() {
     let userActivity = NSUserActivity(activityType: "test-type")
     userActivity.userInfo = [NSUserActivity.archivePathKey: "y-1988"]
 
-    XCTAssertEqual(userActivity.archivePath, ArchivePath.year(Annum.year(1988)))
+    #expect(userActivity.archivePath == ArchivePath.year(Annum.year(1988)))
   }
 }
