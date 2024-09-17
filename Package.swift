@@ -22,8 +22,7 @@ let package = Package(
   targets: [
     .target(
       name: "Site",
-      resources: [.process("Resources/Localizable.xcstrings")],
-      swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]),
+      resources: [.process("Resources/Localizable.xcstrings")]),
     .testTarget(name: "SiteTests", dependencies: ["Site"]),
     .executableTarget(
       name: "site_tool",
