@@ -5,28 +5,28 @@
 //  Created by Greg Bolsinga on 6/10/23.
 //
 
-import XCTest
+import Testing
 
 @testable import Site
 
-final class AnnumTests: XCTestCase {
-  func testFormat() throws {
-    XCTAssertEqual(Annum.year(1989).formatted(), "1989")
-    XCTAssertEqual(Annum.year(1989).formatted(.year), "1989")
-    XCTAssertEqual(Annum.year(1989).formatted(.json), "1989")
-    XCTAssertEqual(Annum.year(1989).formatted(.urlPath), "1989")
+struct AnnumTests {
+  @Test func format() {
+    #expect(Annum.year(1989).formatted() == "1989")
+    #expect(Annum.year(1989).formatted(.year) == "1989")
+    #expect(Annum.year(1989).formatted(.json) == "1989")
+    #expect(Annum.year(1989).formatted(.urlPath) == "1989")
 
-    XCTAssertEqual(Annum.unknown.formatted(), "Year Unknown")
-    XCTAssertEqual(Annum.unknown.formatted(.year), "Year Unknown")
-    XCTAssertEqual(Annum.unknown.formatted(.json), "unknown")
-    XCTAssertEqual(Annum.unknown.formatted(.urlPath), "other")
+    #expect(Annum.unknown.formatted() == "Year Unknown")
+    #expect(Annum.unknown.formatted(.year) == "Year Unknown")
+    #expect(Annum.unknown.formatted(.json) == "unknown")
+    #expect(Annum.unknown.formatted(.urlPath) == "other")
   }
 
-  func testParse() throws {
-    XCTAssertEqual(try Annum("1989"), Annum.year(1989))
+  @Test func parse() throws {
+    #expect(try Annum("1989") == Annum.year(1989))
 
-    XCTAssertEqual(try Annum(" 1989"), Annum.year(1989))
-    XCTAssertEqual(try Annum("1989 "), Annum.year(1989))
+    #expect(try Annum(" 1989") == Annum.year(1989))
+    #expect(try Annum("1989 ") == Annum.year(1989))
 
     let newlineBefore = """
 
@@ -40,18 +40,18 @@ final class AnnumTests: XCTestCase {
           19
       89
       """
-    XCTAssertThrowsError(try Annum(newlineBefore))
-    XCTAssertThrowsError(try Annum(newlineAfter))
-    XCTAssertThrowsError(try Annum(newlineMiddle))
+    #expect(throws: (any Error).self) { try Annum(newlineBefore) }
+    #expect(throws: (any Error).self) { try Annum(newlineAfter) }
+    #expect(throws: (any Error).self) { try Annum(newlineMiddle) }
 
-    XCTAssertThrowsError(try Annum("z1989"))
-    XCTAssertThrowsError(try Annum("1989z"))
+    #expect(throws: (any Error).self) { try Annum("z1989") }
+    #expect(throws: (any Error).self) { try Annum("1989z") }
 
-    XCTAssertThrowsError(try Annum("zzz"))
-    XCTAssertThrowsError(try Annum("Year Unknown"))
-    XCTAssertEqual(try Annum("unknown"), Annum.unknown)
+    #expect(throws: (any Error).self) { try Annum("zzz") }
+    #expect(throws: (any Error).self) { try Annum("Year Unknown") }
+    #expect(try Annum("unknown") == Annum.unknown)
 
-    XCTAssertThrowsError(try Annum(""))
-    XCTAssertThrowsError(try Annum(" "))
+    #expect(throws: (any Error).self) { try Annum("") }
+    #expect(throws: (any Error).self) { try Annum(" ") }
   }
 }

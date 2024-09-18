@@ -5,44 +5,44 @@
 //  Created by Greg Bolsinga on 4/7/23.
 //
 
-import XCTest
+import Testing
 
 @testable import Site
 
-final class LibrarySectionTests: XCTestCase {
-  func testLibrarySection() throws {
-    XCTAssertEqual("The Chapel".librarySection, .alphabetic("C"))
+struct LibrarySectionTests {
+  @Test func librarySection() {
+    #expect("The Chapel".librarySection == .alphabetic("C"))
 
-    XCTAssertEqual("33 Degrees".librarySection, .numeric)
+    #expect("33 Degrees".librarySection == .numeric)
 
-    XCTAssertEqual("!!!".librarySection, .punctuation)
+    #expect("!!!".librarySection == .punctuation)
   }
 
-  func testComparable() throws {
-    XCTAssertTrue(LibrarySection.alphabetic("A") < .alphabetic("Z"))
-    XCTAssertFalse(LibrarySection.alphabetic("A") > .alphabetic("Z"))
+  @Test func comparable() {
+    #expect(LibrarySection.alphabetic("A") < .alphabetic("Z"))
+    #expect(!(LibrarySection.alphabetic("A") > .alphabetic("Z")))
 
-    XCTAssertTrue(LibrarySection.alphabetic("A") < .numeric)
-    XCTAssertFalse(LibrarySection.alphabetic("A") > .numeric)
+    #expect(LibrarySection.alphabetic("A") < .numeric)
+    #expect(!(LibrarySection.alphabetic("A") > .numeric))
 
-    XCTAssertTrue(LibrarySection.alphabetic("A") < .punctuation)
-    XCTAssertFalse(LibrarySection.alphabetic("A") > .punctuation)
+    #expect(LibrarySection.alphabetic("A") < .punctuation)
+    #expect(!(LibrarySection.alphabetic("A") > .punctuation))
 
-    XCTAssertTrue(LibrarySection.numeric < .punctuation)
-    XCTAssertFalse(LibrarySection.numeric > .punctuation)
+    #expect(LibrarySection.numeric < .punctuation)
+    #expect(!(LibrarySection.numeric > .punctuation))
   }
 
-  func testFormat() throws {
-    XCTAssertEqual(LibrarySection.alphabetic("A").formatted(), "A")
-    XCTAssertEqual(LibrarySection.numeric.formatted(), "Numeric")
-    XCTAssertEqual(LibrarySection.punctuation.formatted(), "Punctuation")
+  @Test func format() {
+    #expect(LibrarySection.alphabetic("A").formatted() == "A")
+    #expect(LibrarySection.numeric.formatted() == "Numeric")
+    #expect(LibrarySection.punctuation.formatted() == "Punctuation")
 
-    XCTAssertEqual(LibrarySection.alphabetic("A").formatted(.long), "A")
-    XCTAssertEqual(LibrarySection.numeric.formatted(.long), "Numeric")
-    XCTAssertEqual(LibrarySection.punctuation.formatted(.long), "Punctuation")
+    #expect(LibrarySection.alphabetic("A").formatted(.long) == "A")
+    #expect(LibrarySection.numeric.formatted(.long) == "Numeric")
+    #expect(LibrarySection.punctuation.formatted(.long) == "Punctuation")
 
-    XCTAssertEqual(LibrarySection.alphabetic("A").formatted(.short), "A")
-    XCTAssertEqual(LibrarySection.numeric.formatted(.short), "#")
-    XCTAssertEqual(LibrarySection.punctuation.formatted(.short), "!")
+    #expect(LibrarySection.alphabetic("A").formatted(.short) == "A")
+    #expect(LibrarySection.numeric.formatted(.short) == "#")
+    #expect(LibrarySection.punctuation.formatted(.short) == "!")
   }
 }

@@ -5,48 +5,48 @@
 //  Created by Greg Bolsinga on 6/10/23.
 //
 
-import XCTest
+import Foundation
+import Testing
 
 @testable import Site
 
-final class ArchivePathTests: XCTestCase {
-  func testFormat() throws {
-    XCTAssertEqual(ArchivePath.show("someIdentifier").formatted(), "sh-someIdentifier")
-    XCTAssertEqual(ArchivePath.venue("someIdentifier").formatted(), "v-someIdentifier")
-    XCTAssertEqual(ArchivePath.artist("someIdentifier").formatted(), "ar-someIdentifier")
-    XCTAssertEqual(ArchivePath.year(Annum.year(1989)).formatted(), "y-1989")
-    XCTAssertEqual(ArchivePath.year(Annum.unknown).formatted(), "y-unknown")
+struct ArchivePathTests {
+  @Test func format() {
+    #expect(ArchivePath.show("someIdentifier").formatted() == "sh-someIdentifier")
+    #expect(ArchivePath.venue("someIdentifier").formatted() == "v-someIdentifier")
+    #expect(ArchivePath.artist("someIdentifier").formatted() == "ar-someIdentifier")
+    #expect(ArchivePath.year(Annum.year(1989)).formatted() == "y-1989")
+    #expect(ArchivePath.year(Annum.unknown).formatted() == "y-unknown")
   }
 
-  func testURLPathFormat() throws {
-    XCTAssertEqual(
-      ArchivePath.show("someIdentifier").formatted(.urlPath), "/dates/someIdentifier.html")
-    XCTAssertEqual(
-      ArchivePath.venue("someIdentifier").formatted(.urlPath), "/venues/someIdentifier.html")
-    XCTAssertEqual(
-      ArchivePath.artist("someIdentifier").formatted(.urlPath), "/bands/someIdentifier.html")
-    XCTAssertEqual(ArchivePath.year(Annum.year(1989)).formatted(.urlPath), "/dates/1989.html")
-    XCTAssertEqual(ArchivePath.year(Annum.unknown).formatted(.urlPath), "/dates/other.html")
+  @Test func uRLPathFormat() {
+    #expect(ArchivePath.show("someIdentifier").formatted(.urlPath) == "/dates/someIdentifier.html")
+    #expect(
+      ArchivePath.venue("someIdentifier").formatted(.urlPath) == "/venues/someIdentifier.html")
+    #expect(
+      ArchivePath.artist("someIdentifier").formatted(.urlPath) == "/bands/someIdentifier.html")
+    #expect(ArchivePath.year(Annum.year(1989)).formatted(.urlPath) == "/dates/1989.html")
+    #expect(ArchivePath.year(Annum.unknown).formatted(.urlPath) == "/dates/other.html")
   }
 
-  func testParse() throws {
-    XCTAssertEqual(try ArchivePath("y-1989"), ArchivePath.year(Annum.year(1989)))
-    XCTAssertEqual(try ArchivePath("y-unknown"), ArchivePath.year(Annum.unknown))
-    XCTAssertThrowsError(try ArchivePath("y-ZZZ"))
+  @Test func parse() throws {
+    #expect(try ArchivePath("y-1989") == ArchivePath.year(Annum.year(1989)))
+    #expect(try ArchivePath("y-unknown") == ArchivePath.year(Annum.unknown))
+    #expect(throws: (any Error).self) { try ArchivePath("y-ZZZ") }
 
-    XCTAssertEqual(try ArchivePath(" y-1989"), ArchivePath.year(Annum.year(1989)))
-    XCTAssertEqual(try ArchivePath("y-1989 "), ArchivePath.year(Annum.year(1989)))
+    #expect(try ArchivePath(" y-1989") == ArchivePath.year(Annum.year(1989)))
+    #expect(try ArchivePath("y-1989 ") == ArchivePath.year(Annum.year(1989)))
 
-    XCTAssertEqual(try ArchivePath("sh-someIdentifier"), ArchivePath.show("someIdentifier"))
-    XCTAssertEqual(try ArchivePath("v-someIdentifier"), ArchivePath.venue("someIdentifier"))
-    XCTAssertEqual(try ArchivePath("ar-someIdentifier"), ArchivePath.artist("someIdentifier"))
+    #expect(try ArchivePath("sh-someIdentifier") == ArchivePath.show("someIdentifier"))
+    #expect(try ArchivePath("v-someIdentifier") == ArchivePath.venue("someIdentifier"))
+    #expect(try ArchivePath("ar-someIdentifier") == ArchivePath.artist("someIdentifier"))
 
-    XCTAssertThrowsError(try ArchivePath("a-someIdentifier"))
-    XCTAssertThrowsError(try ArchivePath("av-someIdentifier"))
+    #expect(throws: (any Error).self) { try ArchivePath("a-someIdentifier") }
+    #expect(throws: (any Error).self) { try ArchivePath("av-someIdentifier") }
 
-    XCTAssertEqual(
-      try ArchivePath("ar-id-WithSeparatorWithinIt"), ArchivePath.artist("id-WithSeparatorWithinIt")
-    )
+    #expect(
+      try ArchivePath("ar-id-WithSeparatorWithinIt")
+        == ArchivePath.artist("id-WithSeparatorWithinIt"))
 
     let newlineBefore = """
 
@@ -60,75 +60,91 @@ final class ArchivePathTests: XCTestCase {
           y-19
       89
       """
-    XCTAssertThrowsError(try ArchivePath(newlineBefore))
-    XCTAssertThrowsError(try ArchivePath(newlineAfter))
-    XCTAssertThrowsError(try ArchivePath(newlineMiddle))
+    #expect(throws: (any Error).self) { try ArchivePath(newlineBefore) }
+    #expect(throws: (any Error).self) { try ArchivePath(newlineAfter) }
+    #expect(throws: (any Error).self) { try ArchivePath(newlineMiddle) }
 
-    XCTAssertThrowsError(try ArchivePath("z1989"))
-    XCTAssertThrowsError(try ArchivePath("1989z"))
+    #expect(throws: (any Error).self) { try ArchivePath("z1989") }
+    #expect(throws: (any Error).self) { try ArchivePath("1989z") }
 
-    XCTAssertThrowsError(try ArchivePath("zzz"))
+    #expect(throws: (any Error).self) { try ArchivePath("zzz") }
 
-    XCTAssertThrowsError(try ArchivePath(""))
-    XCTAssertThrowsError(try ArchivePath(" "))
+    #expect(throws: (any Error).self) { try ArchivePath("") }
+    #expect(throws: (any Error).self) { try ArchivePath(" ") }
   }
 
-  func testURLFormat() throws {
-    XCTAssertEqual(
-      try ArchivePath(URL(string: "https://www.example.com/bands/ar852.html")!),
-      ArchivePath.artist("ar852"))
-    XCTAssertEqual(
-      try ArchivePath(URL(string: "https://www.example.com/venues/v852.html")!),
-      ArchivePath.venue("v852"))
-    XCTAssertEqual(
-      try ArchivePath(URL(string: "https://www.example.com/dates/sh852.html")!),
-      ArchivePath.show("sh852"))
+  @Test func uRLFormat() throws {
+    #expect(
+      try ArchivePath(URL(string: "https://www.example.com/bands/ar852.html")!)
+        == ArchivePath.artist("ar852"))
+    #expect(
+      try ArchivePath(URL(string: "https://www.example.com/venues/v852.html")!)
+        == ArchivePath.venue("v852"))
+    #expect(
+      try ArchivePath(URL(string: "https://www.example.com/dates/sh852.html")!)
+        == ArchivePath.show("sh852"))
 
-    XCTAssertEqual(
-      try ArchivePath(URL(string: "https://www.example.com/bands/Z.html#ar852")!),
-      ArchivePath.artist("ar852"))
-    XCTAssertEqual(
-      try ArchivePath(URL(string: "https://www.example.com/venues/Z.html#v852")!),
-      ArchivePath.venue("v852"))
-    XCTAssertEqual(
-      try ArchivePath(URL(string: "https://www.example.com/dates/Z.html#sh852")!),
-      ArchivePath.show("sh852"))
+    #expect(
+      try ArchivePath(URL(string: "https://www.example.com/bands/Z.html#ar852")!)
+        == ArchivePath.artist("ar852"))
+    #expect(
+      try ArchivePath(URL(string: "https://www.example.com/venues/Z.html#v852")!)
+        == ArchivePath.venue("v852"))
+    #expect(
+      try ArchivePath(URL(string: "https://www.example.com/dates/Z.html#sh852")!)
+        == ArchivePath.show("sh852"))
 
-    XCTAssertThrowsError(
-      try ArchivePath(URL(string: "https://www.example.com/bands/v852.html")!))
-    XCTAssertThrowsError(
-      try ArchivePath(URL(string: "https://www.example.com/venues/ar852.html")!))
-    XCTAssertThrowsError(
-      try ArchivePath(URL(string: "https://www.example.com/dates/ar852.html")!))
+    #expect(throws: (any Error).self) {
+      try ArchivePath(URL(string: "https://www.example.com/bands/v852.html")!)
+    }
+    #expect(throws: (any Error).self) {
+      try ArchivePath(URL(string: "https://www.example.com/venues/ar852.html")!)
+    }
+    #expect(throws: (any Error).self) {
+      try ArchivePath(URL(string: "https://www.example.com/dates/ar852.html")!)
+    }
 
-    XCTAssertThrowsError(
-      try ArchivePath(URL(string: "https://www.example.com/bands/status.html")!))
-    XCTAssertThrowsError(
-      try ArchivePath(URL(string: "https://www.example.com/venues/stats.html")!))
-    XCTAssertThrowsError(
-      try ArchivePath(URL(string: "https://www.example.com/dates/stats.html")!))
+    #expect(throws: (any Error).self) {
+      try ArchivePath(URL(string: "https://www.example.com/bands/status.html")!)
+    }
+    #expect(throws: (any Error).self) {
+      try ArchivePath(URL(string: "https://www.example.com/venues/stats.html")!)
+    }
+    #expect(throws: (any Error).self) {
+      try ArchivePath(URL(string: "https://www.example.com/dates/stats.html")!)
+    }
 
-    XCTAssertThrowsError(
-      try ArchivePath(URL(string: "https://www.example.com/datess/Z.html#ar852")!))
-    XCTAssertThrowsError(try ArchivePath(URL(string: "https://www.example.com/bands/Z.html#v852")!))
-    XCTAssertThrowsError(
-      try ArchivePath(URL(string: "https://www.example.com/venues/Z.html#sh852")!))
+    #expect(throws: (any Error).self) {
+      try ArchivePath(URL(string: "https://www.example.com/datess/Z.html#ar852")!)
+    }
+    #expect(throws: (any Error).self) {
+      try ArchivePath(URL(string: "https://www.example.com/bands/Z.html#v852")!)
+    }
+    #expect(throws: (any Error).self) {
+      try ArchivePath(URL(string: "https://www.example.com/venues/Z.html#sh852")!)
+    }
 
-    XCTAssertThrowsError(
-      try ArchivePath(URL(string: "https://www.example.com/venues/L.html#ar852")!))
-    XCTAssertThrowsError(try ArchivePath(URL(string: "https://www.example.com/venues/ar852")!))
-    XCTAssertThrowsError(
-      try ArchivePath(URL(string: "https://www.example.com/archives/ar852.html")!))
-    XCTAssertThrowsError(try ArchivePath(URL(string: "https://www.example.com/bands/")!))
-    XCTAssertThrowsError(try ArchivePath(URL(string: "https://www.example.com/")!))
-    XCTAssertThrowsError(try ArchivePath(URL(string: "http://www.example.com/")!))
+    #expect(throws: (any Error).self) {
+      try ArchivePath(URL(string: "https://www.example.com/venues/L.html#ar852")!)
+    }
+    #expect(throws: (any Error).self) {
+      try ArchivePath(URL(string: "https://www.example.com/venues/ar852")!)
+    }
+    #expect(throws: (any Error).self) {
+      try ArchivePath(URL(string: "https://www.example.com/archives/ar852.html")!)
+    }
+    #expect(throws: (any Error).self) {
+      try ArchivePath(URL(string: "https://www.example.com/bands/")!)
+    }
+    #expect(throws: (any Error).self) { try ArchivePath(URL(string: "https://www.example.com/")!) }
+    #expect(throws: (any Error).self) { try ArchivePath(URL(string: "http://www.example.com/")!) }
   }
 
-  func testArchiveCategories() throws {
-    XCTAssertEqual(try ArchivePath.artist("blah").category(), ArchiveCategory.artists)
-    XCTAssertEqual(try ArchivePath.venue("blah").category(), ArchiveCategory.venues)
-    XCTAssertEqual(try ArchivePath.show("blah").category(), ArchiveCategory.shows)
-    XCTAssertThrowsError(try ArchivePath.year(.year(1989)).category())
-    XCTAssertThrowsError(try ArchivePath.year(.unknown).category())
+  @Test func archiveCategories() throws {
+    #expect(try ArchivePath.artist("blah").category() == ArchiveCategory.artists)
+    #expect(try ArchivePath.venue("blah").category() == ArchiveCategory.venues)
+    #expect(try ArchivePath.show("blah").category() == ArchiveCategory.shows)
+    #expect(throws: (any Error).self) { try ArchivePath.year(.year(1989)).category() }
+    #expect(throws: (any Error).self) { try ArchivePath.year(.unknown).category() }
   }
 }

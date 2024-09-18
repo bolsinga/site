@@ -5,236 +5,237 @@
 //  Created by Greg Bolsinga on 9/8/24.
 //
 
-import XCTest
+import Foundation
+import Testing
 
 @testable import Site
 
-final class WeekdayTests: XCTestCase {
+struct WeekdayTests {
   func date(year: Int, month: Int, day: Int) -> Date {
     let dateComponents = DateComponents(
       calendar: Calendar.autoupdatingCurrent, year: year, month: month, day: day)
     return dateComponents.date!
   }
 
-  func testOneSunday() throws {
+  @Test func oneSunday() {
     let result = [date(year: 2024, month: 9, day: 8)].weekdayCounts
-    XCTAssertEqual(result.count, 7)
-    XCTAssertNil(result[0])
-    XCTAssertEqual(result[1]!.1, 1)
-    XCTAssertEqual(result[2]!.1, 0)
-    XCTAssertEqual(result[3]!.1, 0)
-    XCTAssertEqual(result[4]!.1, 0)
-    XCTAssertEqual(result[5]!.1, 0)
-    XCTAssertEqual(result[6]!.1, 0)
-    XCTAssertEqual(result[7]!.1, 0)
+    #expect(result.count == 7)
+    #expect(result[0] == nil)
+    #expect(result[1]!.1 == 1)
+    #expect(result[2]!.1 == 0)
+    #expect(result[3]!.1 == 0)
+    #expect(result[4]!.1 == 0)
+    #expect(result[5]!.1 == 0)
+    #expect(result[6]!.1 == 0)
+    #expect(result[7]!.1 == 0)
   }
 
-  func testOneMonday() throws {
+  @Test func oneMonday() {
     let result = [date(year: 2024, month: 9, day: 9)].weekdayCounts
-    XCTAssertEqual(result.count, 7)
-    XCTAssertNil(result[0])
-    XCTAssertEqual(result[1]!.1, 0)
-    XCTAssertEqual(result[2]!.1, 1)
-    XCTAssertEqual(result[3]!.1, 0)
-    XCTAssertEqual(result[4]!.1, 0)
-    XCTAssertEqual(result[5]!.1, 0)
-    XCTAssertEqual(result[6]!.1, 0)
-    XCTAssertEqual(result[7]!.1, 0)
+    #expect(result.count == 7)
+    #expect(result[0] == nil)
+    #expect(result[1]!.1 == 0)
+    #expect(result[2]!.1 == 1)
+    #expect(result[3]!.1 == 0)
+    #expect(result[4]!.1 == 0)
+    #expect(result[5]!.1 == 0)
+    #expect(result[6]!.1 == 0)
+    #expect(result[7]!.1 == 0)
   }
 
-  func testOneTuesday() throws {
+  @Test func oneTuesday() {
     let result = [date(year: 2024, month: 9, day: 10)].weekdayCounts
-    XCTAssertEqual(result.count, 7)
-    XCTAssertNil(result[0])
-    XCTAssertEqual(result[1]!.1, 0)
-    XCTAssertEqual(result[2]!.1, 0)
-    XCTAssertEqual(result[3]!.1, 1)
-    XCTAssertEqual(result[4]!.1, 0)
-    XCTAssertEqual(result[5]!.1, 0)
-    XCTAssertEqual(result[6]!.1, 0)
-    XCTAssertEqual(result[7]!.1, 0)
+    #expect(result.count == 7)
+    #expect(result[0] == nil)
+    #expect(result[1]!.1 == 0)
+    #expect(result[2]!.1 == 0)
+    #expect(result[3]!.1 == 1)
+    #expect(result[4]!.1 == 0)
+    #expect(result[5]!.1 == 0)
+    #expect(result[6]!.1 == 0)
+    #expect(result[7]!.1 == 0)
   }
 
-  func testOneWednesday() throws {
+  @Test func oneWednesday() {
     let result = [date(year: 2024, month: 9, day: 11)].weekdayCounts
-    XCTAssertEqual(result.count, 7)
-    XCTAssertNil(result[0])
-    XCTAssertEqual(result[1]!.1, 0)
-    XCTAssertEqual(result[2]!.1, 0)
-    XCTAssertEqual(result[3]!.1, 0)
-    XCTAssertEqual(result[4]!.1, 1)
-    XCTAssertEqual(result[5]!.1, 0)
-    XCTAssertEqual(result[6]!.1, 0)
-    XCTAssertEqual(result[7]!.1, 0)
+    #expect(result.count == 7)
+    #expect(result[0] == nil)
+    #expect(result[1]!.1 == 0)
+    #expect(result[2]!.1 == 0)
+    #expect(result[3]!.1 == 0)
+    #expect(result[4]!.1 == 1)
+    #expect(result[5]!.1 == 0)
+    #expect(result[6]!.1 == 0)
+    #expect(result[7]!.1 == 0)
   }
 
-  func testOneThursday() throws {
+  @Test func oneThursday() {
     let result = [date(year: 2024, month: 9, day: 12)].weekdayCounts
-    XCTAssertEqual(result.count, 7)
-    XCTAssertNil(result[0])
-    XCTAssertEqual(result[1]!.1, 0)
-    XCTAssertEqual(result[2]!.1, 0)
-    XCTAssertEqual(result[3]!.1, 0)
-    XCTAssertEqual(result[4]!.1, 0)
-    XCTAssertEqual(result[5]!.1, 1)
-    XCTAssertEqual(result[6]!.1, 0)
-    XCTAssertEqual(result[7]!.1, 0)
+    #expect(result.count == 7)
+    #expect(result[0] == nil)
+    #expect(result[1]!.1 == 0)
+    #expect(result[2]!.1 == 0)
+    #expect(result[3]!.1 == 0)
+    #expect(result[4]!.1 == 0)
+    #expect(result[5]!.1 == 1)
+    #expect(result[6]!.1 == 0)
+    #expect(result[7]!.1 == 0)
   }
 
-  func testOneFriday() throws {
+  @Test func oneFriday() {
     let result = [date(year: 2024, month: 9, day: 13)].weekdayCounts
-    XCTAssertEqual(result.count, 7)
-    XCTAssertNil(result[0])
-    XCTAssertEqual(result[1]!.1, 0)
-    XCTAssertEqual(result[2]!.1, 0)
-    XCTAssertEqual(result[3]!.1, 0)
-    XCTAssertEqual(result[4]!.1, 0)
-    XCTAssertEqual(result[5]!.1, 0)
-    XCTAssertEqual(result[6]!.1, 1)
-    XCTAssertEqual(result[7]!.1, 0)
+    #expect(result.count == 7)
+    #expect(result[0] == nil)
+    #expect(result[1]!.1 == 0)
+    #expect(result[2]!.1 == 0)
+    #expect(result[3]!.1 == 0)
+    #expect(result[4]!.1 == 0)
+    #expect(result[5]!.1 == 0)
+    #expect(result[6]!.1 == 1)
+    #expect(result[7]!.1 == 0)
   }
 
-  func testOneSaturday() throws {
+  @Test func oneSaturday() {
     let result = [date(year: 2024, month: 9, day: 14)].weekdayCounts
-    XCTAssertEqual(result.count, 7)
-    XCTAssertNil(result[0])
-    XCTAssertEqual(result[1]!.1, 0)
-    XCTAssertEqual(result[2]!.1, 0)
-    XCTAssertEqual(result[3]!.1, 0)
-    XCTAssertEqual(result[4]!.1, 0)
-    XCTAssertEqual(result[5]!.1, 0)
-    XCTAssertEqual(result[6]!.1, 0)
-    XCTAssertEqual(result[7]!.1, 1)
+    #expect(result.count == 7)
+    #expect(result[0] == nil)
+    #expect(result[1]!.1 == 0)
+    #expect(result[2]!.1 == 0)
+    #expect(result[3]!.1 == 0)
+    #expect(result[4]!.1 == 0)
+    #expect(result[5]!.1 == 0)
+    #expect(result[6]!.1 == 0)
+    #expect(result[7]!.1 == 1)
   }
 
-  func testTwoMonday() throws {
+  @Test func twoMonday() {
     let result = [date(year: 2024, month: 9, day: 9), date(year: 2024, month: 9, day: 16)]
       .weekdayCounts
-    XCTAssertEqual(result.count, 7)
-    XCTAssertNil(result[0])
-    XCTAssertEqual(result[1]!.1, 0)
-    XCTAssertEqual(result[2]!.1, 2)
-    XCTAssertEqual(result[3]!.1, 0)
-    XCTAssertEqual(result[4]!.1, 0)
-    XCTAssertEqual(result[5]!.1, 0)
-    XCTAssertEqual(result[6]!.1, 0)
-    XCTAssertEqual(result[7]!.1, 0)
+    #expect(result.count == 7)
+    #expect(result[0] == nil)
+    #expect(result[1]!.1 == 0)
+    #expect(result[2]!.1 == 2)
+    #expect(result[3]!.1 == 0)
+    #expect(result[4]!.1 == 0)
+    #expect(result[5]!.1 == 0)
+    #expect(result[6]!.1 == 0)
+    #expect(result[7]!.1 == 0)
   }
 
-  func testOneSunday_first_invalid_0() throws {
+  @Test func oneSunday_first_invalid_0() {
     let result = [date(year: 2024, month: 9, day: 8)].computeWeekdayCounts(0)
-    XCTAssertEqual(result.count, 7)
-    XCTAssertEqual(result[0].0, "Sun")
-    XCTAssertEqual(result[0].1, 1)
-    XCTAssertEqual(result[1].1, 0)
-    XCTAssertEqual(result[2].1, 0)
-    XCTAssertEqual(result[3].1, 0)
-    XCTAssertEqual(result[4].1, 0)
-    XCTAssertEqual(result[5].1, 0)
-    XCTAssertEqual(result[6].1, 0)
+    #expect(result.count == 7)
+    #expect(result[0].0 == "Sun")
+    #expect(result[0].1 == 1)
+    #expect(result[1].1 == 0)
+    #expect(result[2].1 == 0)
+    #expect(result[3].1 == 0)
+    #expect(result[4].1 == 0)
+    #expect(result[5].1 == 0)
+    #expect(result[6].1 == 0)
   }
 
-  func testOneSunday_first_1() throws {
+  @Test func oneSunday_first_1() {
     let result = [date(year: 2024, month: 9, day: 8)].computeWeekdayCounts(1)
-    XCTAssertEqual(result.count, 7)
-    XCTAssertEqual(result[0].0, "Sun")
-    XCTAssertEqual(result[0].1, 1)
-    XCTAssertEqual(result[1].1, 0)
-    XCTAssertEqual(result[2].1, 0)
-    XCTAssertEqual(result[3].1, 0)
-    XCTAssertEqual(result[4].1, 0)
-    XCTAssertEqual(result[5].1, 0)
-    XCTAssertEqual(result[6].1, 0)
+    #expect(result.count == 7)
+    #expect(result[0].0 == "Sun")
+    #expect(result[0].1 == 1)
+    #expect(result[1].1 == 0)
+    #expect(result[2].1 == 0)
+    #expect(result[3].1 == 0)
+    #expect(result[4].1 == 0)
+    #expect(result[5].1 == 0)
+    #expect(result[6].1 == 0)
   }
 
-  func testOneSunday_first_2() throws {
+  @Test func oneSunday_first_2() {
     let result = [date(year: 2024, month: 9, day: 8)].computeWeekdayCounts(2)
-    XCTAssertEqual(result.count, 7)
-    XCTAssertEqual(result[0].0, "Mon")
-    XCTAssertEqual(result[0].1, 0)
-    XCTAssertEqual(result[1].1, 0)
-    XCTAssertEqual(result[2].1, 0)
-    XCTAssertEqual(result[3].1, 0)
-    XCTAssertEqual(result[4].1, 0)
-    XCTAssertEqual(result[5].1, 0)
-    XCTAssertEqual(result[6].1, 1)
+    #expect(result.count == 7)
+    #expect(result[0].0 == "Mon")
+    #expect(result[0].1 == 0)
+    #expect(result[1].1 == 0)
+    #expect(result[2].1 == 0)
+    #expect(result[3].1 == 0)
+    #expect(result[4].1 == 0)
+    #expect(result[5].1 == 0)
+    #expect(result[6].1 == 1)
   }
 
-  func testOneSunday_first_3() throws {
+  @Test func oneSunday_first_3() {
     let result = [date(year: 2024, month: 9, day: 8)].computeWeekdayCounts(3)
-    XCTAssertEqual(result.count, 7)
-    XCTAssertEqual(result[0].0, "Tue")
-    XCTAssertEqual(result[0].1, 0)
-    XCTAssertEqual(result[1].1, 0)
-    XCTAssertEqual(result[2].1, 0)
-    XCTAssertEqual(result[3].1, 0)
-    XCTAssertEqual(result[4].1, 0)
-    XCTAssertEqual(result[5].1, 1)
-    XCTAssertEqual(result[6].1, 0)
+    #expect(result.count == 7)
+    #expect(result[0].0 == "Tue")
+    #expect(result[0].1 == 0)
+    #expect(result[1].1 == 0)
+    #expect(result[2].1 == 0)
+    #expect(result[3].1 == 0)
+    #expect(result[4].1 == 0)
+    #expect(result[5].1 == 1)
+    #expect(result[6].1 == 0)
   }
 
-  func testOneSunday_first_4() throws {
+  @Test func oneSunday_first_4() {
     let result = [date(year: 2024, month: 9, day: 8)].computeWeekdayCounts(4)
-    XCTAssertEqual(result.count, 7)
-    XCTAssertEqual(result[0].0, "Wed")
-    XCTAssertEqual(result[0].1, 0)
-    XCTAssertEqual(result[1].1, 0)
-    XCTAssertEqual(result[2].1, 0)
-    XCTAssertEqual(result[3].1, 0)
-    XCTAssertEqual(result[4].1, 1)
-    XCTAssertEqual(result[5].1, 0)
-    XCTAssertEqual(result[6].1, 0)
+    #expect(result.count == 7)
+    #expect(result[0].0 == "Wed")
+    #expect(result[0].1 == 0)
+    #expect(result[1].1 == 0)
+    #expect(result[2].1 == 0)
+    #expect(result[3].1 == 0)
+    #expect(result[4].1 == 1)
+    #expect(result[5].1 == 0)
+    #expect(result[6].1 == 0)
   }
 
-  func testOneSunday_first_5() throws {
+  @Test func oneSunday_first_5() {
     let result = [date(year: 2024, month: 9, day: 8)].computeWeekdayCounts(5)
-    XCTAssertEqual(result.count, 7)
-    XCTAssertEqual(result[0].0, "Thu")
-    XCTAssertEqual(result[0].1, 0)
-    XCTAssertEqual(result[1].1, 0)
-    XCTAssertEqual(result[2].1, 0)
-    XCTAssertEqual(result[3].1, 1)
-    XCTAssertEqual(result[4].1, 0)
-    XCTAssertEqual(result[5].1, 0)
-    XCTAssertEqual(result[6].1, 0)
+    #expect(result.count == 7)
+    #expect(result[0].0 == "Thu")
+    #expect(result[0].1 == 0)
+    #expect(result[1].1 == 0)
+    #expect(result[2].1 == 0)
+    #expect(result[3].1 == 1)
+    #expect(result[4].1 == 0)
+    #expect(result[5].1 == 0)
+    #expect(result[6].1 == 0)
   }
 
-  func testOneSunday_first_6() throws {
+  @Test func oneSunday_first_6() {
     let result = [date(year: 2024, month: 9, day: 8)].computeWeekdayCounts(6)
-    XCTAssertEqual(result.count, 7)
-    XCTAssertEqual(result[0].0, "Fri")
-    XCTAssertEqual(result[0].1, 0)
-    XCTAssertEqual(result[1].1, 0)
-    XCTAssertEqual(result[2].1, 1)
-    XCTAssertEqual(result[3].1, 0)
-    XCTAssertEqual(result[4].1, 0)
-    XCTAssertEqual(result[5].1, 0)
-    XCTAssertEqual(result[6].1, 0)
+    #expect(result.count == 7)
+    #expect(result[0].0 == "Fri")
+    #expect(result[0].1 == 0)
+    #expect(result[1].1 == 0)
+    #expect(result[2].1 == 1)
+    #expect(result[3].1 == 0)
+    #expect(result[4].1 == 0)
+    #expect(result[5].1 == 0)
+    #expect(result[6].1 == 0)
   }
 
-  func testOneSunday_first_7() throws {
+  @Test func oneSunday_first_7() {
     let result = [date(year: 2024, month: 9, day: 8)].computeWeekdayCounts(7)
-    XCTAssertEqual(result.count, 7)
-    XCTAssertEqual(result[0].0, "Sat")
-    XCTAssertEqual(result[0].1, 0)
-    XCTAssertEqual(result[1].1, 1)
-    XCTAssertEqual(result[2].1, 0)
-    XCTAssertEqual(result[3].1, 0)
-    XCTAssertEqual(result[4].1, 0)
-    XCTAssertEqual(result[5].1, 0)
-    XCTAssertEqual(result[6].1, 0)
+    #expect(result.count == 7)
+    #expect(result[0].0 == "Sat")
+    #expect(result[0].1 == 0)
+    #expect(result[1].1 == 1)
+    #expect(result[2].1 == 0)
+    #expect(result[3].1 == 0)
+    #expect(result[4].1 == 0)
+    #expect(result[5].1 == 0)
+    #expect(result[6].1 == 0)
   }
 
-  func testOneSunday_first_invalid_8() throws {
+  @Test func oneSunday_first_invalid_8() {
     let result = [date(year: 2024, month: 9, day: 8)].computeWeekdayCounts(8)
-    XCTAssertEqual(result.count, 7)
-    XCTAssertEqual(result[0].0, "Sat")
-    XCTAssertEqual(result[0].1, 0)
-    XCTAssertEqual(result[1].1, 1)
-    XCTAssertEqual(result[2].1, 0)
-    XCTAssertEqual(result[3].1, 0)
-    XCTAssertEqual(result[4].1, 0)
-    XCTAssertEqual(result[5].1, 0)
-    XCTAssertEqual(result[6].1, 0)
+    #expect(result.count == 7)
+    #expect(result[0].0 == "Sat")
+    #expect(result[0].1 == 0)
+    #expect(result[1].1 == 1)
+    #expect(result[2].1 == 0)
+    #expect(result[3].1 == 0)
+    #expect(result[4].1 == 0)
+    #expect(result[5].1 == 0)
+    #expect(result[6].1 == 0)
   }
 }
