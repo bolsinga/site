@@ -7,7 +7,6 @@
 
 import CoreLocation
 import Foundation
-import SwiftUI
 
 struct BatchGeocode<T: AtlasGeocodable>: AsyncSequence {
   typealias Element = (T, CLPlacemark)

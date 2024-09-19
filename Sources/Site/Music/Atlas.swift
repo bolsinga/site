@@ -7,7 +7,6 @@
 
 import CoreLocation
 import Foundation
-import SwiftUI
 import os
 
 extension Logger {
