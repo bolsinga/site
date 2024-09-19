@@ -7,18 +7,39 @@
 
 import SwiftUI
 
-extension Bundle {
-  var appIcon: Image {
+extension Image {
+  fileprivate static var fallbackAppIcon: Image {
+    Image(systemName: "questionmark.circle")
+  }
+
+  fileprivate static func appIcon(named: String?) -> Image {
+    guard let named else { return Self.fallbackAppIcon }
     #if os(iOS) || os(tvOS)
-      guard let pImage = UIImage(named: "AppIcon") else {
-        return Image(systemName: "questionmark.circle")
-      }
+      guard let pImage = UIImage(named: named) else { return Self.fallbackAppIcon }
       return Image(uiImage: pImage)
-    #elseif os(macOS)
-      guard let pImage = NSImage(named: "AppIcon") else {
-        return Image(systemName: "questionmark.circle")
-      }
+    #else
+      guard let pImage = NSImage(named: named) else { return Self.fallbackAppIcon }
       return Image(nsImage: pImage)
     #endif
+  }
+}
+
+extension Bundle {
+  private var appIconName: String? {
+    #if os(iOS) || os(tvOS)
+      guard
+        let icons = self.object(forInfoDictionaryKey: "CFBundleIcons") as? [String: Any],
+        let primaryIcon = icons["CFBundlePrimaryIcon"] as? [String: Any],
+        let iconFiles = primaryIcon["CFBundleIconFiles"] as? [String],
+        let iconFileName = iconFiles.last
+      else { return nil }
+      return iconFileName
+    #else
+      "AppIcon"
+    #endif
+  }
+
+  var appIcon: Image {
+    Image.appIcon(named: appIconName)
   }
 }
