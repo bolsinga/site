@@ -29,8 +29,8 @@ struct ArchiveStateView: View {
   @ViewBuilder private var archiveBody: some View {
     ArchiveCategorySplit(
       model: model, venueSort: $venueSort, artistSort: $artistSort,
-      selectedCategory: $archiveNavigation.state.category,
-      path: $archiveNavigation.state.path, nearbyModel: nearbyModel)
+      selectedCategory: $archiveNavigation.category,
+      path: $archiveNavigation.path, nearbyModel: nearbyModel)
   }
 
   var body: some View {
