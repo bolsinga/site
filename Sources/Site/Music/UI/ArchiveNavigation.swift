@@ -23,11 +23,14 @@ extension Logger {
     #endif
 
     var category: DefaultCategory
-    var path: [ArchivePath]
+    var categoryPaths: [ArchiveCategory: [ArchivePath]]
 
-    internal init(category: DefaultCategory = defaultCategory, path: [ArchivePath] = []) {
+    internal init(
+      category: DefaultCategory = defaultCategory,
+      categoryPaths: [ArchiveCategory: [ArchivePath]] = [:]
+    ) {
       self.category = category
-      self.path = path
+      self.categoryPaths = categoryPaths
     }
   }
 
@@ -48,10 +51,16 @@ extension Logger {
 
   var path: [ArchivePath] {
     get {
-      state.path
+      #if os(iOS) || os(tvOS)
+        guard let category = state.category else { return [] }
+      #endif
+      return state.categoryPaths[category] ?? []
     }
     set {
-      state.path = newValue
+      #if os(iOS) || os(tvOS)
+        guard let category = state.category else { return }
+      #endif
+      state.categoryPaths[category] = newValue
     }
   }
 
