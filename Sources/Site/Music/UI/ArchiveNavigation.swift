@@ -31,10 +31,28 @@ extension Logger {
     }
   }
 
-  var state: State
+  private var state: State
 
   internal init(_ state: State = State()) {
     self.state = state
+  }
+
+  var category: ArchiveNavigation.State.DefaultCategory {
+    get {
+      state.category
+    }
+    set {
+      state.category = newValue
+    }
+  }
+
+  var path: [ArchivePath] {
+    get {
+      state.path
+    }
+    set {
+      state.path = newValue
+    }
   }
 
   func navigate(to path: ArchivePath) {
