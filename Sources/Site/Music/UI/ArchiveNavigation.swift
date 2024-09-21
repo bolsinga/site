@@ -56,12 +56,12 @@ extension Logger {
   }
 
   func navigate(to path: ArchivePath) {
-    guard path != state.path.last else {
+    guard path != self.path.last else {
       Logger.archive.log("already presented: \(path.formatted(), privacy: .public)")
       return
     }
     Logger.archive.log("nav to path: \(path.formatted(), privacy: .public)")
-    state.path.append(path)
+    self.path.append(path)
   }
 
   func navigate(to category: State.DefaultCategory) {
