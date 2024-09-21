@@ -21,7 +21,7 @@ struct ArchiveCategorySplit: View {
   private var vault: Vault { model.vault }
 
   @MainActor
-  @ViewBuilder var sidebar: some View {
+  @ViewBuilder private var sidebar: some View {
     List(ArchiveCategory.allCases, id: \.self, selection: $selectedCategory) {
       category in
       LabeledContent {
