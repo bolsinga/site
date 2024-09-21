@@ -11,7 +11,7 @@ import SwiftUI
 struct ArchiveCategoryDetail: View {
   let model: VaultModel
   let selectedCategory: ArchiveNavigation.State.DefaultCategory
-  let path: [ArchivePath]
+  @Binding var path: [ArchivePath]
   @Binding var venueSort: RankingSort
   @Binding var artistSort: RankingSort
   let nearbyModel: NearbyModel
@@ -23,10 +23,8 @@ struct ArchiveCategoryDetail: View {
 
   // The following property allows this UI code to not know if ArchiveNavigation.State.category is Optional or not.
   private var category: ArchiveCategory? { selectedCategory }
-  private var isCategoryActive: Bool { path.isEmpty }
 
-  @MainActor
-  @ViewBuilder private var stackElement: some View {
+  var body: some View {
     if let category {
       ZStack {
         switch category {
@@ -55,23 +53,18 @@ struct ArchiveCategoryDetail: View {
           .locationFilter(nearbyModel, filteredDataIsEmpty: artistDigests.isEmpty)
         }
       }
-      .shareActivity(for: category, vault: vault, isActive: isCategoryActive)
+      .categoryDetail(vault: vault, category: category, path: $path)
     } else {
       Text("Select An Item", bundle: .module)
     }
   }
-
-  var body: some View {
-    stackElement
-      .musicDestinations(vault, path: path)
-  }
 }
 
 #Preview {
   let vaultModel = VaultModel(vaultPreviewData, executeAsynchronousTasks: false)
 
   return ArchiveCategoryDetail(
-    model: vaultModel, selectedCategory: .today, path: [],
+    model: vaultModel, selectedCategory: .today, path: .constant([]),
     venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
     nearbyModel: NearbyModel(vaultModel: vaultModel))
 }
@@ -80,7 +73,7 @@ struct ArchiveCategoryDetail: View {
   let vaultModel = VaultModel(vaultPreviewData, executeAsynchronousTasks: false)
 
   return ArchiveCategoryDetail(
-    model: vaultModel, selectedCategory: .stats, path: [],
+    model: vaultModel, selectedCategory: .stats, path: .constant([]),
     venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
     nearbyModel: NearbyModel(vaultModel: vaultModel))
 }
@@ -89,7 +82,7 @@ struct ArchiveCategoryDetail: View {
   let vaultModel = VaultModel(vaultPreviewData, executeAsynchronousTasks: false)
 
   return ArchiveCategoryDetail(
-    model: vaultModel, selectedCategory: .shows, path: [],
+    model: vaultModel, selectedCategory: .shows, path: .constant([]),
     venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
     nearbyModel: NearbyModel(vaultModel: vaultModel))
 }
@@ -98,7 +91,7 @@ struct ArchiveCategoryDetail: View {
   let vaultModel = VaultModel(vaultPreviewData, executeAsynchronousTasks: false)
 
   return ArchiveCategoryDetail(
-    model: vaultModel, selectedCategory: .venues, path: [],
+    model: vaultModel, selectedCategory: .venues, path: .constant([]),
     venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
     nearbyModel: NearbyModel(vaultModel: vaultModel))
 }
@@ -107,7 +100,7 @@ struct ArchiveCategoryDetail: View {
   let vaultModel = VaultModel(vaultPreviewData, executeAsynchronousTasks: false)
 
   return ArchiveCategoryDetail(
-    model: vaultModel, selectedCategory: .artists, path: [],
+    model: vaultModel, selectedCategory: .artists, path: .constant([]),
     venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
     nearbyModel: NearbyModel(vaultModel: vaultModel))
 }

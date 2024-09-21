@@ -52,11 +52,9 @@ struct ArchiveCategorySplit: View {
         )
         .nearbyDistanceThreshold(nearbyModel)
     } detail: {
-      NavigationStack(path: $path) {
-        ArchiveCategoryDetail(
-          model: model, selectedCategory: selectedCategory, path: path, venueSort: $venueSort,
-          artistSort: $artistSort, nearbyModel: nearbyModel)
-      }
+      ArchiveCategoryDetail(
+        model: model, selectedCategory: selectedCategory, path: $path, venueSort: $venueSort,
+        artistSort: $artistSort, nearbyModel: nearbyModel)
     }
   }
 }
