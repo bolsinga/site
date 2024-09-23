@@ -11,10 +11,11 @@ import SwiftUI
 struct ArchiveCategoryDetail: View {
   let model: VaultModel
   let selectedCategory: ArchiveNavigation.State.DefaultCategory
-  @Binding var path: [ArchivePath]
   @Binding var venueSort: RankingSort
   @Binding var artistSort: RankingSort
   let nearbyModel: NearbyModel
+  // Pass in the ArchiveCategory for now, so the logic does not need to handle optional values.
+  let path: (ArchiveCategory) -> Binding<[ArchivePath]>
 
   private var vault: Vault { model.vault }
 
@@ -53,7 +54,7 @@ struct ArchiveCategoryDetail: View {
           .locationFilter(nearbyModel, filteredDataIsEmpty: artistDigests.isEmpty)
         }
       }
-      .categoryDetail(vault: vault, category: category, path: $path)
+      .categoryDetail(vault: vault, category: category, path: path(category))
     } else {
       Text("Select An Item", bundle: .module)
     }
@@ -65,9 +66,9 @@ extension ArchiveCategoryDetail {
   init(withPreviewCategory category: ArchiveCategory) {
     let vaultModel = VaultModel(vaultPreviewData, executeAsynchronousTasks: false)
     self.init(
-      model: vaultModel, selectedCategory: category, path: .constant([]),
-      venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
-      nearbyModel: NearbyModel(vaultModel: vaultModel))
+      model: vaultModel, selectedCategory: category, venueSort: .constant(.alphabetical),
+      artistSort: .constant(.alphabetical), nearbyModel: NearbyModel(vaultModel: vaultModel)
+    ) { _ in .constant([]) }
   }
 }
 
