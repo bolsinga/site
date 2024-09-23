@@ -60,47 +60,33 @@ struct ArchiveCategoryDetail: View {
   }
 }
 
-#Preview {
-  let vaultModel = VaultModel(vaultPreviewData, executeAsynchronousTasks: false)
-
-  return ArchiveCategoryDetail(
-    model: vaultModel, selectedCategory: .today, path: .constant([]),
-    venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
-    nearbyModel: NearbyModel(vaultModel: vaultModel))
+// Preview only extension
+extension ArchiveCategoryDetail {
+  init(_ category: ArchiveCategory) {
+    let vaultModel = VaultModel(vaultPreviewData, executeAsynchronousTasks: false)
+    self.init(
+      model: vaultModel, selectedCategory: category, path: .constant([]),
+      venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
+      nearbyModel: NearbyModel(vaultModel: vaultModel))
+  }
 }
 
 #Preview {
-  let vaultModel = VaultModel(vaultPreviewData, executeAsynchronousTasks: false)
-
-  return ArchiveCategoryDetail(
-    model: vaultModel, selectedCategory: .stats, path: .constant([]),
-    venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
-    nearbyModel: NearbyModel(vaultModel: vaultModel))
+  ArchiveCategoryDetail(.today)
 }
 
 #Preview {
-  let vaultModel = VaultModel(vaultPreviewData, executeAsynchronousTasks: false)
-
-  return ArchiveCategoryDetail(
-    model: vaultModel, selectedCategory: .shows, path: .constant([]),
-    venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
-    nearbyModel: NearbyModel(vaultModel: vaultModel))
+  ArchiveCategoryDetail(.stats)
 }
 
 #Preview {
-  let vaultModel = VaultModel(vaultPreviewData, executeAsynchronousTasks: false)
-
-  return ArchiveCategoryDetail(
-    model: vaultModel, selectedCategory: .venues, path: .constant([]),
-    venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
-    nearbyModel: NearbyModel(vaultModel: vaultModel))
+  ArchiveCategoryDetail(.shows)
 }
 
 #Preview {
-  let vaultModel = VaultModel(vaultPreviewData, executeAsynchronousTasks: false)
+  ArchiveCategoryDetail(.venues)
+}
 
-  return ArchiveCategoryDetail(
-    model: vaultModel, selectedCategory: .artists, path: .constant([]),
-    venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
-    nearbyModel: NearbyModel(vaultModel: vaultModel))
+#Preview {
+  ArchiveCategoryDetail(.artists)
 }
