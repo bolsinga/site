@@ -62,7 +62,7 @@ struct ArchiveCategoryDetail: View {
 
 // Preview only extension
 extension ArchiveCategoryDetail {
-  init(_ category: ArchiveCategory) {
+  init(withPreviewCategory category: ArchiveCategory) {
     let vaultModel = VaultModel(vaultPreviewData, executeAsynchronousTasks: false)
     self.init(
       model: vaultModel, selectedCategory: category, path: .constant([]),
@@ -72,21 +72,21 @@ extension ArchiveCategoryDetail {
 }
 
 #Preview {
-  ArchiveCategoryDetail(.today)
+  ArchiveCategoryDetail(withPreviewCategory: .today)
 }
 
 #Preview {
-  ArchiveCategoryDetail(.stats)
+  ArchiveCategoryDetail(withPreviewCategory: .stats)
 }
 
 #Preview {
-  ArchiveCategoryDetail(.shows)
+  ArchiveCategoryDetail(withPreviewCategory: .shows)
 }
 
 #Preview {
-  ArchiveCategoryDetail(.venues)
+  ArchiveCategoryDetail(withPreviewCategory: .venues)
 }
 
 #Preview {
-  ArchiveCategoryDetail(.artists)
+  ArchiveCategoryDetail(withPreviewCategory: .artists)
 }
