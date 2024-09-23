@@ -30,28 +30,19 @@ struct ArchiveCategoryDetail: View {
       ZStack {
         switch category {
         case .today:
-          TodayList(concerts: model.todayConcerts)
+          TodaySummary(model: model)
         case .stats:
-          List { StatsGrouping(concerts: vault.concerts, displayArchiveCategoryCounts: false) }
-            .navigationTitle(Text(category.localizedString))
+          StatsSummary(vault: vault)
         case .shows:
-          let decadesMap = model.filteredDecadesMap(nearbyModel)
-          ShowYearList(decadesMap: decadesMap)
-            .locationFilter(nearbyModel, filteredDataIsEmpty: decadesMap.isEmpty)
+          ShowsSummary(model: model, nearbyModel: nearbyModel)
         case .venues:
-          let venueDigests = model.filteredVenueDigests(nearbyModel)
-          VenueList(
-            venueDigests: venueDigests, sectioner: vault.sectioner, sort: $venueSort,
-            searchString: $venueSearchString
-          )
-          .locationFilter(nearbyModel, filteredDataIsEmpty: venueDigests.isEmpty)
+          VenuesSummary(
+            model: model, nearbyModel: nearbyModel, sort: $venueSort,
+            searchString: $venueSearchString)
         case .artists:
-          let artistDigests = model.filteredArtistDigests(nearbyModel)
-          ArtistList(
-            artistDigests: artistDigests, sectioner: vault.sectioner, sort: $artistSort,
-            searchString: $artistSearchString
-          )
-          .locationFilter(nearbyModel, filteredDataIsEmpty: artistDigests.isEmpty)
+          ArtistsSummary(
+            model: model, nearbyModel: nearbyModel, sort: $artistSort,
+            searchString: $artistSearchString)
         }
       }
       .categoryDetail(vault: vault, category: category, path: path(category))
