@@ -48,7 +48,8 @@ struct ArchiveNavigationTests {
   @Test func navigateToCategory_existingPath() {
     let ar = ArchiveNavigation(
       ArchiveNavigation.State(
-        category: .artists, path: [Artist(id: "id", name: "name").archivePath]))
+        category: .artists, categoryPaths: [.artists: [Artist(id: "id", name: "name").archivePath]])
+    )
     #if os(iOS) || os(tvOS)
       #expect(ar.category != nil)
     #endif
