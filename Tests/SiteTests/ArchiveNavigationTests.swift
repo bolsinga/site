@@ -63,6 +63,13 @@ struct ArchiveNavigationTests {
     #endif
     #expect(ar.category == .venues)
     #expect(ar.path.isEmpty)
+
+    ar.navigate(to: .artists)
+    #if os(iOS) || os(tvOS)
+      #expect(ar.category != nil)
+    #endif
+    #expect(ar.category == .artists)
+    #expect(ar.path.isEmpty)
   }
 
   @Test func navigateToArchivePath() {
