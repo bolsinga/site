@@ -13,12 +13,10 @@ struct CategoryDetailModifier: ViewModifier {
   let category: ArchiveCategory
   @Binding var path: [ArchivePath]
 
-  private var isCategoryActive: Bool { path.isEmpty }
-
   func body(content: Content) -> some View {
     NavigationStack(path: $path) {
       content
-        .shareActivity(for: category, vault: vault, isActive: isCategoryActive)
+        .shareActivity(for: category, vault: vault)
         .musicDestinations(vault, path: path)
         #if !os(macOS)
           .nearbyDistanceThreshold(nearbyModel)
@@ -30,11 +28,9 @@ struct CategoryDetailModifier: ViewModifier {
 extension View {
   func categoryDetail(
     vault: Vault, nearbyModel: NearbyModel, category: ArchiveCategory, path: Binding<[ArchivePath]>
-  )
-    -> some View
-  {
+  ) -> some View {
     modifier(
-      CategoryDetailModifier(
-        vault: vault, nearbyModel: nearbyModel, category: category, path: path))
+      CategoryDetailModifier(vault: vault, nearbyModel: nearbyModel, category: category, path: path)
+    )
   }
 }
