@@ -6,9 +6,14 @@
 //
 
 import SwiftUI
+import os
 
 extension ArchiveCategory {
   static let activityType = "gdb.SiteApp.view-archiveCategory"
+}
+
+extension Logger {
+  fileprivate static let categoryActivity = Logger(category: "categoryActivity")
 }
 
 struct ArchiveCategoryUserActivityModifier: ViewModifier {
@@ -17,7 +22,10 @@ struct ArchiveCategoryUserActivityModifier: ViewModifier {
   let isActive: Bool
 
   func body(content: Content) -> some View {
-    content
+    Logger.categoryActivity.log(
+      "\(category.rawValue, privacy: .public) active: \(isActive, privacy: .public)")
+    return
+      content
       .userActivity(ArchiveCategory.activityType, isActive: isActive) { userActivity in
         userActivity.update(category, url: url)
       }
