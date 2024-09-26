@@ -9,7 +9,7 @@ import SwiftUI
 import os
 
 extension Logger {
-  fileprivate static let link = Logger(category: "link")
+  fileprivate static let externalEvent = Logger(category: "externalEvent")
 }
 
 struct ArchiveStateView: View {
@@ -36,30 +36,36 @@ struct ArchiveStateView: View {
   var body: some View {
     archiveBody
       .onContinueUserActivity(ArchivePath.activityType) { userActivity in
+        Logger.externalEvent.log(
+          "onContinueUserActivity: \(ArchivePath.activityType, privacy: .public)")
+
         guard let path = userActivity.archivePath else {
-          Logger.decodeActivity.error("no path")
+          Logger.externalEvent.error("no path")
           return
         }
         archiveNavigation.navigate(to: path)
       }
       .onContinueUserActivity(ArchiveCategory.activityType) { userActivity in
+        Logger.externalEvent.log(
+          "onContinueUserActivity: \(ArchiveCategory.activityType, privacy: .public)")
+
         guard let category = userActivity.archiveCategory else {
-          Logger.decodeActivity.error("no category")
+          Logger.externalEvent.error("no category")
           return
         }
         archiveNavigation.navigate(to: category)
       }
       .onOpenURL { url in
-        Logger.link.log("url: \(url.absoluteString, privacy: .public)")
+        Logger.externalEvent.log("onOpenURL: \(url.absoluteString, privacy: .public)")
         if let archivePath = try? ArchivePath(url) {
           archiveNavigation.navigate(to: archivePath)
         } else {
-          Logger.link.error("url not path")
+          Logger.externalEvent.error("url not path")
 
           if let archiveCategory = try? ArchiveCategory(url) {
             archiveNavigation.navigate(to: archiveCategory)
           } else {
-            Logger.link.error("url not category")
+            Logger.externalEvent.error("url not category")
           }
         }
       }

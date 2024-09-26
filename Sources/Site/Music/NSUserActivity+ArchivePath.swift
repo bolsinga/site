@@ -10,7 +10,7 @@ import os
 
 extension Logger {
   fileprivate static let updateActivity = Logger(category: "updateActivity")
-  static let decodeActivity = Logger(category: "decodeActivity")
+  fileprivate static let decodeActivity = Logger(category: "decodeActivity")
 }
 
 extension NSUserActivity {
