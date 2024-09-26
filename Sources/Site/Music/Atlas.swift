@@ -10,7 +10,7 @@ import Foundation
 import os
 
 extension Logger {
-  static let atlas = Logger(category: "atlas")
+  fileprivate static let atlas = Logger(category: "atlas")
 }
 
 enum GeocodeError: Error {

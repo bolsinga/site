@@ -10,7 +10,7 @@ import Foundation
 import os
 
 extension Logger {
-  static let vaultModel = Logger(category: "vaultModel")
+  fileprivate static let vaultModel = Logger(category: "vaultModel")
 }
 
 enum LocationAuthorization {

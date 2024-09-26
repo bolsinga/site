@@ -9,7 +9,7 @@ import Foundation
 import os
 
 extension Logger {
-  static let archive = Logger(category: "archive")
+  fileprivate static let archive = Logger(category: "archive")
 }
 
 @Observable final class ArchiveNavigation {

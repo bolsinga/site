@@ -9,7 +9,7 @@ import Foundation
 import os
 
 extension Logger {
-  static let updateActivity = Logger(category: "updateActivity")
+  fileprivate static let updateActivity = Logger(category: "updateActivity")
   static let decodeActivity = Logger(category: "decodeActivity")
 }
 

@@ -9,7 +9,7 @@ import SwiftUI
 import os
 
 extension Logger {
-  static let notification = Logger(category: "notification")
+  fileprivate static let notification = Logger(category: "notification")
 }
 
 struct NotificationModifier: ViewModifier {

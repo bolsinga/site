@@ -9,7 +9,7 @@ import SwiftUI
 import os
 
 extension Logger {
-  static let link = Logger(category: "link")
+  fileprivate static let link = Logger(category: "link")
 }
 
 struct ArchiveStateView: View {

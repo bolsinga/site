@@ -9,7 +9,7 @@ import CoreLocation
 import os
 
 extension Logger {
-  static let location = Logger(category: "location")
+  fileprivate static let location = Logger(category: "location")
 }
 
 enum LocationAuthorizationError: Error {

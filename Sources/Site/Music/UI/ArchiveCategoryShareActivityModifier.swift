@@ -9,7 +9,7 @@ import SwiftUI
 import os
 
 extension Logger {
-  static let sharing = Logger(category: "sharing")
+  fileprivate static let sharing = Logger(category: "sharing")
 }
 
 struct ArchiveCategoryShareActivityModifier: ViewModifier {

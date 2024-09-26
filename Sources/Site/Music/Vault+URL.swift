@@ -9,7 +9,7 @@ import Foundation
 import os
 
 extension Logger {
-  static let vault = Logger(category: "vault")
+  fileprivate static let vault = Logger(category: "vault")
 }
 
 enum VaultError: Error {
