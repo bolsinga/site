@@ -10,7 +10,7 @@ import Foundation
 import os
 
 extension Logger {
-  static let atlasCache = Logger(category: "atlasCache")
+  fileprivate static let atlasCache = Logger(category: "atlasCache")
 }
 
 private let expirationOffset = 60.0 * 60.0 * 24.0 * 30.0 * 6.0  // Six months

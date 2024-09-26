@@ -10,8 +10,8 @@ import Intents
 import os
 
 extension Logger {
-  static let updateCategoryActivity = Logger(category: "updateCategoryActivity")
-  static let decodeCategoryActivity = Logger(category: "decodeCategoryActivity")
+  fileprivate static let updateCategoryActivity = Logger(category: "updateCategoryActivity")
+  fileprivate static let decodeCategoryActivity = Logger(category: "decodeCategoryActivity")
 }
 
 extension NSUserActivity {

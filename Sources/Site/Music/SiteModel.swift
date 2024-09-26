@@ -9,7 +9,7 @@ import Foundation
 import os
 
 extension Logger {
-  static let vaultLoader = Logger(category: "vaultLoader")
+  fileprivate static let vaultLoader = Logger(category: "vaultLoader")
 }
 
 @Observable public final class SiteModel {

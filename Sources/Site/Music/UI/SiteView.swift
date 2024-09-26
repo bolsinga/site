@@ -9,7 +9,7 @@ import SwiftUI
 import os
 
 extension Logger {
-  static let vaultLoad = Logger(category: "vaultLoad")
+  fileprivate static let vaultLoad = Logger(category: "vaultLoad")
 }
 
 public struct SiteView: View {

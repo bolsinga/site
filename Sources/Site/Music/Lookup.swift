@@ -9,7 +9,7 @@ import Foundation
 import os
 
 extension Logger {
-  static let lookup = Logger(category: "lookup")
+  fileprivate static let lookup = Logger(category: "lookup")
 }
 
 private func createLookup<T: Identifiable>(_ sequence: [T]) -> [T.ID: T] {

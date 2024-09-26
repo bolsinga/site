@@ -9,8 +9,8 @@ import Foundation
 import os
 
 extension Logger {
-  static let url = Logger(category: "url")
-  static let music = Logger(category: "music")
+  fileprivate static let url = Logger(category: "url")
+  fileprivate static let music = Logger(category: "music")
 }
 
 extension Music {
