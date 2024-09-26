@@ -12,6 +12,10 @@ extension ArchivePath {
   static let activityType = "gdb.SiteApp.view-archivePath"
 }
 
+extension Logger {
+  fileprivate static let pathActivity = Logger(category: "pathActivity")
+}
+
 protocol PathRestorableUserActivity: PathRestorable {
   func updateActivity(_ userActivity: NSUserActivity)
 }
@@ -22,8 +26,13 @@ struct PathRestorableUserActivityModifier<T: PathRestorableUserActivity>: ViewMo
   let isPathActive: (PathRestorable) -> Bool
 
   func body(content: Content) -> some View {
-    content
-      .userActivity(ArchivePath.activityType, isActive: isPathActive(item)) { userActivity in
+    let isActive = isPathActive(item)
+    Logger.pathActivity.log(
+      "\(item.archivePath.formatted(.json), privacy: .public) active: \(isActive, privacy: .public)"
+    )
+    return
+      content
+      .userActivity(ArchivePath.activityType, isActive: isActive) { userActivity in
         userActivity.update(item, url: url)
       }
   }
