@@ -157,9 +157,10 @@ enum LocationAuthorization {
             continue
           }
 
-          guard curLoc.distance(from: location) > Self.distanceFilter else { continue }
+          let distance = curLoc.distance(from: location)
+          guard distance > Self.distanceFilter else { continue }
 
-          Logger.vaultModel.log("location updated")
+          Logger.vaultModel.log("location updated. distance: \(distance, privacy: .public)")
           currentLocation = location
         }
       } catch {
