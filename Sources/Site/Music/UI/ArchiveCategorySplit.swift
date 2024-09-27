@@ -20,6 +20,10 @@ struct ArchiveCategorySplit: View {
 
   private var vault: Vault { model.vault }
 
+  private func isActivityActive(for category: ArchiveCategory) -> Bool {
+    (category == selectedCategory) && path.isEmpty
+  }
+
   @MainActor
   @ViewBuilder private var sidebar: some View {
     List(ArchiveCategory.allCases, id: \.self, selection: $selectedCategory) {
@@ -41,6 +45,8 @@ struct ArchiveCategorySplit: View {
       } label: {
         category.label
       }
+      .archiveCategoryUserActivity(
+        category, url: vault.categoryURLMap[category], isActive: isActivityActive(for: category))
     }
   }
 
