@@ -7,17 +7,6 @@
 
 import Foundation
 
-extension ArchiveCategory {
-  fileprivate var isURLSharable: Bool {
-    switch self {
-    case .today, .stats:
-      return false
-    case .shows, .venues, .artists:
-      return true
-    }
-  }
-}
-
 public struct Vault: Sendable {
   internal let comparator: LibraryComparator
   internal let sectioner: LibrarySectioner
@@ -33,6 +22,8 @@ public struct Vault: Sendable {
   internal let venueDigestMap: [Venue.ID: VenueDigest]
 
   let decadesMap: [Decade: [Annum: [Show.ID]]]
+
+  let categoryURLMap: [ArchiveCategory: URL]
 
   public init(music: Music, url: URL? = nil) {
     // non-parallel, used for previews, tests
@@ -77,6 +68,11 @@ public struct Vault: Sendable {
     self.venueDigestMap = self.venueDigests.reduce(into: [:]) { $0[$1.venue.id] = $1 }
 
     self.decadesMap = decadesMap
+
+    self.categoryURLMap = {
+      guard let baseURL else { return [:] }
+      return ArchiveCategory.urls(baseURL: baseURL)
+    }()
   }
 
   public static func create(music: Music, url: URL) async -> Vault {
@@ -113,17 +109,6 @@ public struct Vault: Sendable {
       decadesMap: await decadesMap)
 
     return v
-  }
-
-  func createURL(forCategory category: ArchiveCategory) -> URL? {
-    guard let baseURL else {
-      return nil
-    }
-    guard category.isURLSharable else { return nil }
-
-    var urlComponents = URLComponents(url: baseURL, resolvingAgainstBaseURL: false)
-    urlComponents?.path = category.formatted(.urlPath)
-    return urlComponents?.url
   }
 
   func concerts(on date: Date) -> [Concert] {
