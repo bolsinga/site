@@ -7,18 +7,6 @@
 
 import Foundation
 
-extension URL {
-  var baseURL: URL? {
-    let urlComponents = URLComponents(url: self, resolvingAgainstBaseURL: false)
-
-    var newUrlComponents = URLComponents()
-    newUrlComponents.host = urlComponents?.host
-    newUrlComponents.scheme = urlComponents?.scheme
-
-    return newUrlComponents.url
-  }
-}
-
 extension ArchiveCategory {
   fileprivate var isURLSharable: Bool {
     switch self {
