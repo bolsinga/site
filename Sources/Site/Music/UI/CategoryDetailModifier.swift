@@ -17,7 +17,6 @@ struct CategoryDetailModifier: ViewModifier {
     NavigationStack(path: $path) {
       content
         .archiveShare(category, url: vault.categoryURLMap[category])
-        .shareActivity(for: category, vault: vault)
         .musicDestinations(vault, path: path)
         #if !os(macOS)
           .nearbyDistanceThreshold(nearbyModel)
