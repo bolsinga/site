@@ -19,6 +19,17 @@ extension URL {
   }
 }
 
+extension ArchiveCategory {
+  fileprivate var isURLSharable: Bool {
+    switch self {
+    case .today, .stats:
+      return false
+    case .shows, .venues, .artists:
+      return true
+    }
+  }
+}
+
 public struct Vault: Sendable {
   internal let comparator: LibraryComparator
   internal let sectioner: LibrarySectioner
@@ -120,9 +131,8 @@ public struct Vault: Sendable {
     guard let baseURL else {
       return nil
     }
-    guard category != .today, category != .stats else {
-      return nil
-    }
+    guard category.isURLSharable else { return nil }
+
     var urlComponents = URLComponents(url: baseURL, resolvingAgainstBaseURL: false)
     urlComponents?.path = category.formatted(.urlPath)
     return urlComponents?.url
