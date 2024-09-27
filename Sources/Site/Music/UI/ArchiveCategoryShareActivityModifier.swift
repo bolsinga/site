@@ -18,7 +18,7 @@ struct ArchiveCategoryShareActivityModifier: ViewModifier {
   let isActive: Bool
 
   func body(content: Content) -> some View {
-    let url = vault.createURL(forCategory: category)
+    let url = vault.categoryURLMap[category]
     Logger.sharing.log(
       "\(category.rawValue, privacy: .public), active: \(isActive, privacy: .public), url: \(url?.absoluteString ?? "nil", privacy: .public)"
     )
