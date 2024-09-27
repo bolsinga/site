@@ -16,7 +16,7 @@ struct CategoryDetailModifier: ViewModifier {
   func body(content: Content) -> some View {
     NavigationStack(path: $path) {
       content
-        .shareActivity(for: category, vault: vault)
+        .archiveShare(category, url: vault.categoryURLMap[category])
         .musicDestinations(vault, path: path)
         #if !os(macOS)
           .nearbyDistanceThreshold(nearbyModel)
