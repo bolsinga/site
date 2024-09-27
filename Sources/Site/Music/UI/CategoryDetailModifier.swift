@@ -16,6 +16,7 @@ struct CategoryDetailModifier: ViewModifier {
   func body(content: Content) -> some View {
     NavigationStack(path: $path) {
       content
+        .archiveShare(category, url: vault.categoryURLMap[category])
         .shareActivity(for: category, vault: vault)
         .musicDestinations(vault, path: path)
         #if !os(macOS)
