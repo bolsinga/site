@@ -141,4 +141,34 @@ struct ArchiveNavigationTests {
     #expect(ar.path.last! == ArchivePath.venue("vid-1"))
     #expect(ar.category == ArchiveNavigation.State.defaultCategory)
   }
+
+  @Test
+  func userActivity_default_noPath() throws {
+    let ar = ArchiveNavigation()
+
+    #if os(iOS) || os(tvOS)
+      try #require(ArchiveNavigation.State.defaultCategory != nil)
+      #expect(ar.userActivityActive(for: ArchiveNavigation.State.defaultCategory!))
+    #else
+      #expect(ar.userActivityActive(for: ArchiveNavigation.State.defaultCategory))
+    #endif
+  }
+
+  @Test(
+    "userActivity - Category", arguments: ArchiveCategory.allCases,
+    [[], [ArchivePath.artist("id")]])
+  func userActivity(category: ArchiveCategory, path: [ArchivePath]) {
+    let ar = ArchiveNavigation(
+      ArchiveNavigation.State(category: category, categoryPaths: [category: path]))
+
+    if path.isEmpty {
+      #expect(ar.userActivityActive(for: category))
+    } else {
+      #expect(!ar.userActivityActive(for: category))
+    }
+
+    ArchiveCategory.allCases.filter { $0 != category }.forEach {
+      #expect(!ar.userActivityActive(for: $0))
+    }
+  }
 }
