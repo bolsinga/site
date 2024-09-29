@@ -23,7 +23,7 @@ protocol PathRestorableUserActivity: PathRestorable {
 struct PathRestorableUserActivityModifier<T: PathRestorableUserActivity>: ViewModifier {
   let item: T
   let url: URL?
-  let isPathActive: (PathRestorable) -> Bool
+  let isPathActive: (T) -> Bool
 
   func body(content: Content) -> some View {
     let isActive = isPathActive(item)
