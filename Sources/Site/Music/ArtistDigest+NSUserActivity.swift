@@ -1,5 +1,5 @@
 //
-//  Annum+NSUserActivity.swift
+//  ArtistDigest+NSUserActivity.swift
 //
 //
 //  Created by Greg Bolsinga on 6/21/23.
@@ -8,15 +8,16 @@
 import CoreSpotlight
 import Foundation
 
-extension Annum: PathRestorableUserActivity {
+extension ArtistDigest: PathRestorableUserActivity {
   func updateActivity(_ userActivity: NSUserActivity) {
     userActivity.isEligibleForHandoff = true
 
     userActivity.isEligibleForSearch = true
-    userActivity.title = self.formatted()
+    userActivity.title = self.name
     #if !os(tvOS)
       let attributes = CSSearchableItemAttributeSet(contentType: .content)
-      attributes.contentDescription = String(localized: "See Shows From This Year", bundle: .module)
+      attributes.contentDescription = String(
+        localized: "See Shows With This Artist", bundle: .module)
       userActivity.contentAttributeSet = attributes
     #endif
   }

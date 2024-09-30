@@ -48,7 +48,7 @@ struct YearDetail: View {
       .listStyle(.grouped)
     #endif
     .navigationTitle(Text(digest.annum.formatted()))
-    .pathRestorableUserActivityModifier(digest.annum, url: digest.url, isPathActive: isPathActive)
+    .pathRestorableUserActivityModifier(digest, url: digest.url, isPathActive: isPathActive)
     .archiveShare(digest.annum, url: digest.url)
   }
 }
