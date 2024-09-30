@@ -69,6 +69,8 @@ struct ArchiveStateView: View {
           }
         }
       }
+      .advertiseUserActivity(
+        for: archiveNavigation, urlForCategory: { model.vault.categoryURLMap[$0] })
   }
 }
 
