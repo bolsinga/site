@@ -37,7 +37,8 @@ struct ArchiveNavigationUserActivityModifier: ViewModifier {
       )
     #elseif os(macOS)
       Logger.navigationUserActivity.log(
-        "\(userActivityCategory.rawValue, privacy: .public) active: \(isCategoryActive, privacy: .public)")
+        "\(userActivityCategory.rawValue, privacy: .public) active: \(isCategoryActive, privacy: .public)"
+      )
     #endif
 
     return
