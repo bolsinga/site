@@ -14,7 +14,7 @@ extension Array where Element == ArchivePath {
     return !self.dropLast().contains { $0 == archivePath }
   }
 
-  func isPathActive(_ pathRestorable: PathRestorable) -> Bool {
-    self.last == pathRestorable.archivePath
+  func isPathActive(_ archivePath: ArchivePath) -> Bool {
+    self.last == archivePath
   }
 }

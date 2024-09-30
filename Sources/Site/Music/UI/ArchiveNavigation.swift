@@ -94,6 +94,10 @@ extension Logger {
     // category is active if its path is empty
     return path.isEmpty
   }
+
+  func userActivityActive(for path: ArchivePath) -> Bool {
+    self.path.isPathActive(path)
+  }
 }
 
 extension ArchiveNavigation: RawRepresentable {
