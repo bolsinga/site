@@ -72,7 +72,7 @@ struct ArtistDetail: View {
       .listStyle(.grouped)
     #endif
     .navigationTitle(digest.artist.name)
-    .pathRestorableUserActivityModifier(digest.artist, url: digest.url, isPathActive: isPathActive)
+    .pathRestorableUserActivityModifier(digest, url: digest.url, isPathActive: isPathActive)
     .archiveShare(digest.artist, url: digest.url)
   }
 }

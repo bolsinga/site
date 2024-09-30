@@ -31,6 +31,10 @@ extension Annum: PathRestorable {
   var archivePath: ArchivePath { .year(self) }
 }
 
+extension AnnumDigest: PathRestorable {
+  var archivePath: ArchivePath { annum.archivePath }
+}
+
 extension Show: PathRestorable {
   var archivePath: ArchivePath { .show(id) }
 }

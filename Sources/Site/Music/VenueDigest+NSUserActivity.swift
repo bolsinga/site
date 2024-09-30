@@ -1,5 +1,5 @@
 //
-//  Venue+NSUserActivity.swift
+//  VenueDigest+NSUserActivity.swift
 //
 //
 //  Created by Greg Bolsinga on 6/21/23.
@@ -8,7 +8,7 @@
 import CoreSpotlight
 import Foundation
 
-extension Venue: PathRestorableUserActivity {
+extension VenueDigest: PathRestorableUserActivity {
   func updateActivity(_ userActivity: NSUserActivity) {
     userActivity.isEligibleForHandoff = true
 
