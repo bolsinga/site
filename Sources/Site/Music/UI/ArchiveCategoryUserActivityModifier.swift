@@ -16,12 +16,13 @@ extension Logger {
   fileprivate static let categoryActivity = Logger(category: "categoryActivity")
 }
 
-struct ArchiveCategoryUserActivityModifier: ViewModifier {
-  let category: ArchiveCategory
-  let url: URL?
-  let isActive: (ArchiveCategory) -> Bool
+struct ArchiveCategoryUserActivityModifier<T: RawRepresentable<String>>: ViewModifier {
+  let category: T
+  let url: (T) -> URL?
+  let isActive: (T) -> Bool
 
   func body(content: Content) -> some View {
+    let url = url(category)
     let isActive = isActive(category)
     Logger.categoryActivity.log(
       "\(category.rawValue, privacy: .public) active: \(isActive, privacy: .public)")
@@ -34,8 +35,9 @@ struct ArchiveCategoryUserActivityModifier: ViewModifier {
 }
 
 extension View {
-  func archiveCategoryUserActivity(
-    _ category: ArchiveCategory, url: URL?, isActive: @escaping ((ArchiveCategory) -> Bool)
+  func archiveCategoryUserActivity<T: RawRepresentable<String>>(
+    _ category: T, url: @escaping (T) -> URL?,
+    isActive: @escaping ((T) -> Bool)
   ) -> some View {
     modifier(ArchiveCategoryUserActivityModifier(category: category, url: url, isActive: isActive))
   }
