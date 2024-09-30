@@ -43,8 +43,6 @@ struct ArchiveCategorySplit: View {
       } label: {
         category.label
       }
-      .archiveCategoryUserActivity(
-        category, url: { vault.categoryURLMap[$0] }, isActive: isCategoryActive)
     }
   }
 
