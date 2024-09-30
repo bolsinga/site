@@ -17,12 +17,12 @@ extension Logger {
 }
 
 protocol PathRestorableUserActivity: PathRestorable {
+  var url: URL? { get }
   func updateActivity(_ userActivity: NSUserActivity)
 }
 
 struct PathRestorableUserActivityModifier<T: PathRestorableUserActivity>: ViewModifier {
   let item: T
-  let url: URL?
   let isPathActive: (T) -> Bool
 
   func body(content: Content) -> some View {
@@ -33,17 +33,15 @@ struct PathRestorableUserActivityModifier<T: PathRestorableUserActivity>: ViewMo
     return
       content
       .userActivity(ArchivePath.activityType, isActive: isActive) { userActivity in
-        userActivity.update(item, url: url)
+        userActivity.update(item)
       }
   }
 }
 
 extension View {
   func pathRestorableUserActivityModifier<T: PathRestorableUserActivity>(
-    _ item: T, url: URL?, isPathActive: @escaping ((PathRestorable) -> Bool)
-  )
-    -> some View
-  {
-    modifier(PathRestorableUserActivityModifier(item: item, url: url, isPathActive: isPathActive))
+    _ item: T, isPathActive: @escaping ((PathRestorable) -> Bool)
+  ) -> some View {
+    modifier(PathRestorableUserActivityModifier(item: item, isPathActive: isPathActive))
   }
 }
