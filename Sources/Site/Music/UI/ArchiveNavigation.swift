@@ -81,6 +81,19 @@ extension Logger {
     #endif
     state = State(category: category)
   }
+
+  func userActivityActive(for category: ArchiveCategory) -> Bool {
+    guard category == self.category else {
+      // category is not the same as selected category.
+      return false
+    }
+    guard let path = state.categoryPaths[category] else {
+      // category same, but path is nil
+      return true
+    }
+    // category is active if its path is empty
+    return path.isEmpty
+  }
 }
 
 extension ArchiveNavigation: RawRepresentable {

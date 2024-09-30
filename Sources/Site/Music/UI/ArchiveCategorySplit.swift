@@ -18,11 +18,9 @@ struct ArchiveCategorySplit: View {
   @Binding var path: [ArchivePath]
   let nearbyModel: NearbyModel
 
-  private var vault: Vault { model.vault }
+  let isCategoryActive: (ArchiveCategory) -> Bool
 
-  private func isActivityActive(for category: ArchiveCategory) -> Bool {
-    (category == selectedCategory) && path.isEmpty
-  }
+  private var vault: Vault { model.vault }
 
   @MainActor
   @ViewBuilder private var sidebar: some View {
@@ -46,7 +44,7 @@ struct ArchiveCategorySplit: View {
         category.label
       }
       .archiveCategoryUserActivity(
-        category, url: vault.categoryURLMap[category], isActive: isActivityActive(for: category))
+        category, url: vault.categoryURLMap[category], isActive: isCategoryActive)
     }
   }
 
