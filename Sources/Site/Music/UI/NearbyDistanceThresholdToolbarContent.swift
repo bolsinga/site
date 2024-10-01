@@ -7,36 +7,38 @@
 
 import SwiftUI
 
-struct NearbyDistanceThresholdToolbarContent: ToolbarContent {
-  let placement: ToolbarItemPlacement
-  let model: NearbyModel
+#if !os(tvOS)
+  struct NearbyDistanceThresholdToolbarContent: ToolbarContent {
+    let placement: ToolbarItemPlacement
+    let model: NearbyModel
 
-  @State private var presentDistanceSliderPopover = false
+    @State private var presentDistanceSliderPopover = false
 
-  internal init(placement: ToolbarItemPlacement = .primaryAction, model: NearbyModel) {
-    self.placement = placement
-    self.model = model
-  }
+    internal init(placement: ToolbarItemPlacement = .primaryAction, model: NearbyModel) {
+      self.placement = placement
+      self.model = model
+    }
 
-  var body: some ToolbarContent {
-    ToolbarItem(placement: placement) {
-      @Bindable var model = model
-      let labelText = Text("Nearby Distance", bundle: .module)
-      Button {
-        presentDistanceSliderPopover = true
-      } label: {
-        Label {
-          labelText
-        } icon: {
-          Image(systemName: "gear")
+    var body: some ToolbarContent {
+      ToolbarItem(placement: placement) {
+        @Bindable var model = model
+        let labelText = Text("Nearby Distance", bundle: .module)
+        Button {
+          presentDistanceSliderPopover = true
+        } label: {
+          Label {
+            labelText
+          } icon: {
+            Image(systemName: "gear")
+          }
         }
-      }
-      .popover(isPresented: $presentDistanceSliderPopover) {
-        NearbyDistanceThresholdView(distanceThreshold: $model.distanceThreshold) {
-          labelText
+        .popover(isPresented: $presentDistanceSliderPopover) {
+          NearbyDistanceThresholdView(distanceThreshold: $model.distanceThreshold) {
+            labelText
+          }
+          .presentationCompactAdaptation(.popover)
         }
-        .presentationCompactAdaptation(.popover)
       }
     }
   }
-}
+#endif
