@@ -60,7 +60,7 @@ struct ShowDetail: View {
       .listStyle(.grouped)
     #endif
     .navigationTitle(venueName)
-    .archiveShare(concert, url: concert.url)
+    .archiveShare(concert)
   }
 }
 

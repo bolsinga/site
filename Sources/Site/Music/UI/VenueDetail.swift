@@ -93,7 +93,7 @@ struct VenueDetail: View {
       .listStyle(.grouped)
     #endif
     .navigationTitle(digest.venue.name)
-    .archiveShare(digest, url: digest.url)
+    .archiveShare(digest)
   }
 }
 

@@ -32,6 +32,10 @@ struct ArchiveSharableModifier<T: ArchiveSharable>: ViewModifier {
 }
 
 extension View {
+  func archiveShare<T: ArchiveSharable & Linkable>(_ item: T) -> some View {
+    modifier(ArchiveSharableModifier(item: item, url: item.url))
+  }
+
   func archiveShare<T: ArchiveSharable>(_ item: T, url: URL?) -> some View {
     modifier(ArchiveSharableModifier(item: item, url: url))
   }
