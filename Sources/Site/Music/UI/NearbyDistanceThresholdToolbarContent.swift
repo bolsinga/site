@@ -8,12 +8,18 @@
 import SwiftUI
 
 struct NearbyDistanceThresholdToolbarContent: ToolbarContent {
+  let placement: ToolbarItemPlacement
   let model: NearbyModel
 
   @State private var presentDistanceSliderPopover = false
 
+  internal init(placement: ToolbarItemPlacement = .primaryAction, model: NearbyModel) {
+    self.placement = placement
+    self.model = model
+  }
+
   var body: some ToolbarContent {
-    ToolbarItem(placement: .primaryAction) {
+    ToolbarItem(placement: placement) {
       @Bindable var model = model
       let labelText = Text("Nearby Distance", bundle: .module)
       Button {
