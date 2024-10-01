@@ -70,7 +70,13 @@ struct ArchiveStateView: View {
         }
       }
       .advertiseUserActivity(
-        for: archiveNavigation, urlForCategory: { model.vault.categoryURLMap[$0] }
+        for: archiveNavigation,
+        urlForCategory: { category in
+          #if os(iOS) || os(tvOS)
+            guard let category else { return nil }
+          #endif
+          return model.vault.categoryURLMap[category]
+        }
       ) { model.vault.pathUserActivity(for: $0) }
   }
 }
