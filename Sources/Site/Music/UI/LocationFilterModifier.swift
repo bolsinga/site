@@ -59,13 +59,7 @@ struct LocationFilterModifier: ViewModifier {
       }
       content
     }
-    .toolbar {
-      ToolbarItem(placement: .primaryAction) {
-        Toggle(
-          String(localized: "Filter Nearby", bundle: .module),
-          systemImage: "location.circle", isOn: $bindableModel.locationFilter.toggle)
-      }
-    }
+    .toolbar { LocationFilterToolbarContent(isOn: $bindableModel.locationFilter.toggle) }
     .task {
       guard loadLocationFilterFromStorage else { return }
       model.locationFilter = locationFilter

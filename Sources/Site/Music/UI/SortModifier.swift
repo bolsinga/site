@@ -18,24 +18,8 @@ struct SortModifier<T: Sorting>: ViewModifier {
   func body(content: Content) -> some View {
     content
       .toolbar {
-        ToolbarItem(placement: .primaryAction) {
-          let sortText = Text("Sort", bundle: .module)
-          Menu {
-            Picker(selection: $algorithm) {
-              ForEach(T.allCases, id: \.self) { category in
-                Text(algorithmNameBuilder(category)).tag(category)
-              }
-            } label: {
-              sortText
-            }
-          } label: {
-            Label {
-              sortText
-            } icon: {
-              Image(systemName: "line.3.horizontal.decrease.circle")
-            }
-          }
-        }
+        SortModifierToolbarContent(
+          algorithm: $algorithm, algorithmNameBuilder: algorithmNameBuilder)
       }
   }
 }
