@@ -71,7 +71,7 @@ struct ArtistDetail: View {
       .listStyle(.grouped)
     #endif
     .navigationTitle(digest.artist.name)
-    .archiveShare(digest.artist, url: digest.url)
+    .archiveShare(digest, url: digest.url)
   }
 }
 

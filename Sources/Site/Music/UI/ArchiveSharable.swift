@@ -27,7 +27,7 @@ extension Concert: ArchiveSharable {
   }
 }
 
-extension Venue: ArchiveSharable {
+extension VenueDigest: ArchiveSharable {
   private var descriptor: String {
     String(localized: "Shows at \(self.name)", bundle: .module)
   }
@@ -41,17 +41,17 @@ extension Venue: ArchiveSharable {
   }
 }
 
-extension Annum: ArchiveSharable {
+extension AnnumDigest: ArchiveSharable {
   var subject: Text {
-    Text(self.formatted(.shared))
+    Text(annum.formatted(.shared))
   }
 
   var message: Text {
-    Text(self.formatted(.shared))
+    Text(annum.formatted(.shared))
   }
 }
 
-extension Artist: ArchiveSharable {
+extension ArtistDigest: ArchiveSharable {
   private var descriptor: String {
     String(localized: "Shows with \(self.name)", bundle: .module)
   }

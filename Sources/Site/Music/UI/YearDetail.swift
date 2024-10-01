@@ -47,7 +47,7 @@ struct YearDetail: View {
       .listStyle(.grouped)
     #endif
     .navigationTitle(Text(digest.annum.formatted()))
-    .archiveShare(digest.annum, url: digest.url)
+    .archiveShare(digest, url: digest.url)
   }
 }
 
