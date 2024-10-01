@@ -70,7 +70,8 @@ struct ArchiveStateView: View {
         }
       }
       .advertiseUserActivity(
-        for: archiveNavigation, urlForCategory: { model.vault.categoryURLMap[$0] })
+        for: archiveNavigation, urlForCategory: { model.vault.categoryURLMap[$0] }
+      ) { model.vault.pathUserActivity(for: $0) }
   }
 }
 

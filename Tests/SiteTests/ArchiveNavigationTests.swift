@@ -171,4 +171,19 @@ struct ArchiveNavigationTests {
       #expect(!ar.userActivityActive(for: $0))
     }
   }
+
+  @Test("userActivity - Path", arguments: [[], [ArchivePath.artist("id")]])
+  func userActivity(path: [ArchivePath]) {
+    let ar = ArchiveNavigation(
+      ArchiveNavigation.State(
+        category: .today,
+        categoryPaths: [.today: path]))
+
+    #expect(!ar.userActivityActive(for: ArchivePath.venue("id")))
+    if path.isEmpty {
+      #expect(!ar.userActivityActive(for: ArchivePath.artist("id")))
+    } else {
+      #expect(ar.userActivityActive(for: ArchivePath.artist("id")))
+    }
+  }
 }

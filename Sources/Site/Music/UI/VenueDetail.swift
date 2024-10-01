@@ -16,7 +16,6 @@ struct VenueDetail: View {
   let concertCompare: (Concert, Concert) -> Bool
   let geocode: geocoder?
   let isPathNavigable: (PathRestorable) -> Bool
-  let isPathActive: (PathRestorable) -> Bool
 
   @State private var item: MKMapItem? = nil
 
@@ -94,7 +93,6 @@ struct VenueDetail: View {
       .listStyle(.grouped)
     #endif
     .navigationTitle(digest.venue.name)
-    .pathRestorableUserActivityModifier(digest, isPathActive: isPathActive)
     .archiveShare(digest.venue, url: digest.url)
   }
 }
@@ -106,9 +104,6 @@ struct VenueDetail: View {
       concertCompare: vaultPreviewData.comparator.compare(lhs:rhs:),
       geocode: nil,
       isPathNavigable: { _ in
-        true
-      },
-      isPathActive: { _ in
         true
       }
     )

@@ -11,7 +11,6 @@ struct ArtistDetail: View {
   let digest: ArtistDigest
   let concertCompare: (Concert, Concert) -> Bool
   let isPathNavigable: (PathRestorable) -> Bool
-  let isPathActive: (PathRestorable) -> Bool
 
   @ViewBuilder private var firstSetElement: some View {
     HStack {
@@ -72,7 +71,6 @@ struct ArtistDetail: View {
       .listStyle(.grouped)
     #endif
     .navigationTitle(digest.artist.name)
-    .pathRestorableUserActivityModifier(digest, isPathActive: isPathActive)
     .archiveShare(digest.artist, url: digest.url)
   }
 }
@@ -83,9 +81,6 @@ struct ArtistDetail: View {
       digest: vaultPreviewData.artistDigests[0],
       concertCompare: vaultPreviewData.comparator.compare(lhs:rhs:),
       isPathNavigable: { _ in
-        true
-      },
-      isPathActive: { _ in
         true
       }
     )
@@ -99,9 +94,6 @@ struct ArtistDetail: View {
       digest: vaultPreviewData.artistDigests[1],
       concertCompare: vaultPreviewData.comparator.compare(lhs:rhs:),
       isPathNavigable: { _ in
-        true
-      },
-      isPathActive: { _ in
         true
       }
     )
@@ -115,10 +107,7 @@ struct ArtistDetail: View {
     ArtistDetail(
       digest: vaultPreviewData.artistDigests[1],
       concertCompare: vaultPreviewData.comparator.compare(lhs:rhs:),
-      isPathNavigable: { $0.archivePath != selectedConcert.archivePath },
-      isPathActive: { _ in
-        true
-      }
+      isPathNavigable: { $0.archivePath != selectedConcert.archivePath }
     )
     .musicDestinations(vaultPreviewData, path: [selectedConcert.archivePath])
   }
