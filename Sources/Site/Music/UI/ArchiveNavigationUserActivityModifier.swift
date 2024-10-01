@@ -20,8 +20,7 @@ extension Logger {
   fileprivate static let navigationUserActivity = Logger(category: "navigationUserActivity")
 }
 
-protocol PathRestorableUserActivity: PathRestorable {
-  var url: URL? { get }
+protocol PathRestorableUserActivity: Linkable, PathRestorable {
   func updateActivity(_ userActivity: NSUserActivity)
 }
 
