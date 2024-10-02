@@ -14,6 +14,14 @@ public enum ArchiveCategory: String, CaseIterable, Codable, Sendable {
   case venues
   case artists
 
+  #if os(iOS) || os(tvOS)
+    typealias DefaultCategory = ArchiveCategory?
+    static var defaultCategory: DefaultCategory { .today }
+  #elseif os(macOS)
+    typealias DefaultCategory = ArchiveCategory
+    static var defaultCategory: DefaultCategory { .today }
+  #endif
+
   var localizedString: String {
     switch self {
     case .today:

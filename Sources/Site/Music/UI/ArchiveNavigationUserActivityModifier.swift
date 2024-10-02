@@ -26,11 +26,10 @@ protocol PathRestorableUserActivity: Linkable, PathRestorable {
 
 struct ArchiveNavigationUserActivityModifier: ViewModifier {
   let archiveNavigation: ArchiveNavigation
-  let urlForCategory: (ArchiveNavigation.State.DefaultCategory) -> URL?
+  let urlForCategory: (ArchiveCategory.DefaultCategory) -> URL?
   let activityForPath: (ArchivePath) -> PathRestorableUserActivity?
 
-  @State private var userActivityCategory: ArchiveNavigation.State.DefaultCategory =
-    ArchiveNavigation.State.defaultCategory
+  @State private var userActivityCategory: ArchiveCategory.DefaultCategory = .defaultCategory
   @State private var userActivityPath: [ArchivePath] = []
 
   func body(content: Content) -> some View {
@@ -91,7 +90,7 @@ struct ArchiveNavigationUserActivityModifier: ViewModifier {
 extension View {
   func advertiseUserActivity(
     for archiveNavigation: ArchiveNavigation,
-    urlForCategory: @escaping (ArchiveNavigation.State.DefaultCategory) -> URL?,
+    urlForCategory: @escaping (ArchiveCategory.DefaultCategory) -> URL?,
     activityForPath: @escaping (ArchivePath) -> PathRestorableUserActivity?
   ) -> some View {
     modifier(

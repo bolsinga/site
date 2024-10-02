@@ -10,7 +10,7 @@ import SwiftUI
 
 struct ArchiveCategoryDetail: View {
   let model: VaultModel
-  let selectedCategory: ArchiveNavigation.State.DefaultCategory
+  let selectedCategory: ArchiveCategory.DefaultCategory
   @Binding var path: [ArchivePath]
   @Binding var venueSort: RankingSort
   @Binding var artistSort: RankingSort
