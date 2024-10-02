@@ -12,8 +12,6 @@ struct LocationFilterModifier: ViewModifier {
 
   let model: NearbyModel
   let filteredDataIsEmpty: Bool
-  // This is used to prevent @SceneStorage from being used in Previews.
-  let loadLocationFilterFromStorage: Bool
 
   func body(content: Content) -> some View {
     @Bindable var bindableModel = model
@@ -25,7 +23,6 @@ struct LocationFilterModifier: ViewModifier {
     }
     .toolbar { LocationFilterToolbarContent(isOn: $bindableModel.locationFilter.toggle) }
     .task {
-      guard loadLocationFilterFromStorage else { return }
       model.locationFilter = locationFilter
     }
     .onChange(of: model.locationFilter) { _, newValue in
@@ -35,12 +32,7 @@ struct LocationFilterModifier: ViewModifier {
 }
 
 extension View {
-  func locationFilter(
-    _ model: NearbyModel, filteredDataIsEmpty: Bool, loadLocationFilterFromStorage: Bool = true
-  ) -> some View {
-    modifier(
-      LocationFilterModifier(
-        model: model, filteredDataIsEmpty: filteredDataIsEmpty,
-        loadLocationFilterFromStorage: loadLocationFilterFromStorage))
+  func locationFilter(_ model: NearbyModel, filteredDataIsEmpty: Bool) -> some View {
+    modifier(LocationFilterModifier(model: model, filteredDataIsEmpty: filteredDataIsEmpty))
   }
 }
