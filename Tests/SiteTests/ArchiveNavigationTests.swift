@@ -15,7 +15,7 @@ struct ArchiveNavigationTests {
     #if os(iOS) || os(tvOS)
       #expect(ar.category != nil)
     #endif
-    #expect(ar.category == ArchiveNavigation.State.defaultCategory)
+    #expect(ar.category == .defaultCategory)
     #expect(ar.path.isEmpty)
 
     ar.navigate(to: .today)
@@ -77,14 +77,14 @@ struct ArchiveNavigationTests {
     #if os(iOS) || os(tvOS)
       #expect(ar.category != nil)
     #endif
-    #expect(ar.category == ArchiveNavigation.State.defaultCategory)
+    #expect(ar.category == .defaultCategory)
     #expect(ar.path.isEmpty)
 
     ar.navigate(to: ArchivePath.artist("id"))
     #if os(iOS) || os(tvOS)
       #expect(ar.category != nil)
     #endif
-    #expect(ar.category == ArchiveNavigation.State.defaultCategory)
+    #expect(ar.category == .defaultCategory)
     #expect(ar.path.count == 1)
     #expect(ar.path.last != nil)
     #expect(ar.path.last! == ArchivePath.artist("id"))
@@ -93,7 +93,7 @@ struct ArchiveNavigationTests {
     #if os(iOS) || os(tvOS)
       #expect(ar.category != nil)
     #endif
-    #expect(ar.category == ArchiveNavigation.State.defaultCategory)
+    #expect(ar.category == .defaultCategory)
     #expect(ar.path.count == 2)
     #expect(ar.path.last != nil)
     #expect(ar.path.last! == ArchivePath.venue("id"))
@@ -102,7 +102,7 @@ struct ArchiveNavigationTests {
     #if os(iOS) || os(tvOS)
       #expect(ar.category != nil)
     #endif
-    #expect(ar.category == ArchiveNavigation.State.defaultCategory)
+    #expect(ar.category == .defaultCategory)
     #expect(ar.path.count == 3)
     #expect(ar.path.last != nil)
     #expect(ar.path.last! == ArchivePath.show("id"))
@@ -111,7 +111,7 @@ struct ArchiveNavigationTests {
     #if os(iOS) || os(tvOS)
       #expect(ar.category != nil)
     #endif
-    #expect(ar.category == ArchiveNavigation.State.defaultCategory)
+    #expect(ar.category == .defaultCategory)
     #expect(ar.path.count == 4)
     #expect(ar.path.last != nil)
     #expect(ar.path.last! == ArchivePath.year(Annum.year(1989)))
@@ -122,24 +122,24 @@ struct ArchiveNavigationTests {
     ar.navigate(to: ArchivePath.artist("id"))
     #expect(ar.path.count == 1)
     #expect(ar.path.first! == ArchivePath.artist("id"))
-    #expect(ar.category == ArchiveNavigation.State.defaultCategory)
+    #expect(ar.category == .defaultCategory)
 
     ar.navigate(to: ArchivePath.artist("id"))
     #expect(ar.path.count == 1)
     #expect(ar.path.first! == ArchivePath.artist("id"))
-    #expect(ar.category == ArchiveNavigation.State.defaultCategory)
+    #expect(ar.category == .defaultCategory)
 
     ar.navigate(to: ArchivePath.artist("id-1"))
     #expect(ar.path.count == 2)
     #expect(ar.path.first! == ArchivePath.artist("id"))
     #expect(ar.path.last! == ArchivePath.artist("id-1"))
-    #expect(ar.category == ArchiveNavigation.State.defaultCategory)
+    #expect(ar.category == .defaultCategory)
 
     ar.navigate(to: ArchivePath.venue("vid-1"))
     #expect(ar.path.count == 3)
     #expect(ar.path.first! == ArchivePath.artist("id"))
     #expect(ar.path.last! == ArchivePath.venue("vid-1"))
-    #expect(ar.category == ArchiveNavigation.State.defaultCategory)
+    #expect(ar.category == .defaultCategory)
   }
 
   @Test
@@ -147,10 +147,10 @@ struct ArchiveNavigationTests {
     let ar = ArchiveNavigation()
 
     #if os(iOS) || os(tvOS)
-      try #require(ArchiveNavigation.State.defaultCategory != nil)
-      #expect(ar.userActivityActive(for: ArchiveNavigation.State.defaultCategory!))
+      try #require(ArchiveCategory.defaultCategory != nil)
+      #expect(ar.userActivityActive(for: .defaultCategory!))
     #else
-      #expect(ar.userActivityActive(for: ArchiveNavigation.State.defaultCategory))
+      #expect(ar.userActivityActive(for: .defaultCategory))
     #endif
   }
 

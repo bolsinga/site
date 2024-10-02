@@ -14,7 +14,7 @@ struct ArchiveCategorySplit: View {
   @Binding var venueSort: RankingSort
   @Binding var artistSort: RankingSort
 
-  @Binding var selectedCategory: ArchiveNavigation.State.DefaultCategory
+  @Binding var selectedCategory: ArchiveCategory.DefaultCategory
   @Binding var path: [ArchivePath]
   let nearbyModel: NearbyModel
 
