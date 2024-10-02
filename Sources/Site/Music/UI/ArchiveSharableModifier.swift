@@ -17,13 +17,7 @@ struct ArchiveSharableModifier<T: ArchiveSharable>: ViewModifier {
     #else
       if let url, let item {
         content
-          .toolbar {
-            ToolbarItem(placement: .primaryAction) {
-              ShareLink(
-                item: url, subject: item.subject, message: item.message,
-                preview: SharePreview(item.subject, image: Bundle.main.appIcon))
-            }
-          }
+          .toolbar { ArchiveSharableToolbar(item: item, url: url) }
       } else {
         content
       }

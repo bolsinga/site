@@ -13,32 +13,11 @@ struct NearbyDistanceThresholdModifier: ViewModifier {
     16093.44  // 10 miles
 
   let model: NearbyModel
-  @State private var presentDistanceSliderPopover = false
 
   func body(content: Content) -> some View {
     content
       #if !os(tvOS)
-        .toolbar {
-          ToolbarItem(placement: .primaryAction) {
-            @Bindable var model = model
-            let labelText = Text("Nearby Distance", bundle: .module)
-            Button {
-              presentDistanceSliderPopover = true
-            } label: {
-              Label {
-                labelText
-              } icon: {
-                Image(systemName: "gear")
-              }
-            }
-            .popover(isPresented: $presentDistanceSliderPopover) {
-              NearbyDistanceThresholdView(distanceThreshold: $model.distanceThreshold) {
-                labelText
-              }
-              .presentationCompactAdaptation(.popover)
-            }
-          }
-        }
+        .toolbar { NearbyDistanceThresholdToolbarContent(model: model) }
       #endif
       .task {
         model.distanceThreshold = nearbyDistanceThreshold
