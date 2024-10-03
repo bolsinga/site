@@ -11,9 +11,9 @@ protocol Sorting: CaseIterable, Hashable where AllCases: RandomAccessCollection 
   var localizedString: String { get }
 }
 
-struct SortModifier<T: Sorting>: ViewModifier {
-  @Binding var algorithm: T
-  let algorithmNameBuilder: (T) -> String
+struct SortModifier: ViewModifier {
+  @Binding var algorithm: RankingSort
+  let algorithmNameBuilder: (RankingSort) -> String
 
   func body(content: Content) -> some View {
     content
@@ -25,7 +25,9 @@ struct SortModifier<T: Sorting>: ViewModifier {
 }
 
 extension View {
-  func sortable<T: Sorting>(algorithm: Binding<T>, algorithmNameBuilder: @escaping (T) -> String)
+  func sortable(
+    algorithm: Binding<RankingSort>, algorithmNameBuilder: @escaping (RankingSort) -> String
+  )
     -> some View
   {
     modifier(SortModifier(algorithm: algorithm, algorithmNameBuilder: algorithmNameBuilder))
