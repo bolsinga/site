@@ -8,14 +8,15 @@
 import SwiftUI
 
 struct NearbyLocationView: View {
-  let model: NearbyModel
+  let locationAuthorization: LocationAuthorization
+  let geocodingProgress: Double
   let filteredDataIsEmpty: Bool
 
   var body: some View {
-    switch model.locationAuthorization {
+    switch locationAuthorization {
     case .allowed:
-      if model.geocodingProgress < 1.0 {
-        ProgressView(value: model.geocodingProgress)
+      if geocodingProgress < 1.0 {
+        ProgressView(value: geocodingProgress)
           .progressViewStyle(.circular)
           .tint(.accentColor)
           #if os(macOS)
@@ -50,36 +51,20 @@ struct NearbyLocationView: View {
 
 #Preview("Enabled-Geocoding-Allowed") {
   NearbyLocationView(
-    model: NearbyModel(
-      locationFilter: .nearby,
-      vaultModel: VaultModel(
-        vaultPreviewData, executeAsynchronousTasks: false, fakeLocationAuthorization: .allowed,
-        fakeGeocodingProgress: 0)), filteredDataIsEmpty: true)
+    locationAuthorization: .allowed, geocodingProgress: 0, filteredDataIsEmpty: true)
 }
 
 #Preview("Enabled-Geocoding-Allowed-Empty") {
   NearbyLocationView(
-    model: NearbyModel(
-      locationFilter: .nearby,
-      vaultModel: VaultModel(
-        vaultPreviewData, executeAsynchronousTasks: false, fakeLocationAuthorization: .allowed,
-        fakeGeocodingProgress: 1)), filteredDataIsEmpty: true)
+    locationAuthorization: .allowed, geocodingProgress: 1, filteredDataIsEmpty: true)
 }
 
 #Preview("Enabled-Geocoding-Restricted") {
   NearbyLocationView(
-    model: NearbyModel(
-      locationFilter: .nearby,
-      vaultModel: VaultModel(
-        vaultPreviewData, executeAsynchronousTasks: false, fakeLocationAuthorization: .restricted,
-        fakeGeocodingProgress: 0)), filteredDataIsEmpty: false)
+    locationAuthorization: .restricted, geocodingProgress: 0, filteredDataIsEmpty: false)
 }
 
 #Preview("Enabled-Geocoding-Denied") {
   NearbyLocationView(
-    model: NearbyModel(
-      locationFilter: .nearby,
-      vaultModel: VaultModel(
-        vaultPreviewData, executeAsynchronousTasks: false, fakeLocationAuthorization: .denied,
-        fakeGeocodingProgress: 1)), filteredDataIsEmpty: false)
+    locationAuthorization: .denied, geocodingProgress: 1, filteredDataIsEmpty: false)
 }

@@ -17,7 +17,9 @@ struct LocationFilterModifier: ViewModifier {
     @Bindable var bindableModel = model
     VStack {
       if model.locationFilter.isNearby {
-        NearbyLocationView(model: model, filteredDataIsEmpty: filteredDataIsEmpty)
+        NearbyLocationView(
+          locationAuthorization: model.locationAuthorization,
+          geocodingProgress: model.geocodingProgress, filteredDataIsEmpty: filteredDataIsEmpty)
       }
       content
     }
