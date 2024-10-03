@@ -21,13 +21,14 @@ struct VenuesSummary: View {
       venueDigests: venueDigests, sectioner: vault.sectioner, sort: $sort,
       searchString: $searchString
     )
-    .locationFilter(nearbyModel, filteredDataIsEmpty: venueDigests.isEmpty)
+    .locationFilter(
+      nearbyModel, locationAuthorization: model.locationAuthorization,
+      geocodingProgress: model.geocodingProgress, filteredDataIsEmpty: venueDigests.isEmpty)
   }
 }
 
 #Preview {
-  let vaultModel = VaultModel(vaultPreviewData, executeAsynchronousTasks: false)
   VenuesSummary(
-    model: vaultModel, nearbyModel: NearbyModel(vaultModel: vaultModel),
-    sort: .constant(.alphabetical), searchString: .constant(""))
+    model: VaultModel(vaultPreviewData, executeAsynchronousTasks: false),
+    nearbyModel: NearbyModel(), sort: .constant(.alphabetical), searchString: .constant(""))
 }
