@@ -21,13 +21,14 @@ struct ArtistsSummary: View {
       artistDigests: artistDigests, sectioner: vault.sectioner, sort: $sort,
       searchString: $searchString
     )
-    .locationFilter(nearbyModel, filteredDataIsEmpty: artistDigests.isEmpty)
+    .locationFilter(
+      nearbyModel, locationAuthorization: model.locationAuthorization,
+      geocodingProgress: model.geocodingProgress, filteredDataIsEmpty: artistDigests.isEmpty)
   }
 }
 
 #Preview {
-  let vaultModel = VaultModel(vaultPreviewData, executeAsynchronousTasks: false)
   ArtistsSummary(
-    model: vaultModel, nearbyModel: NearbyModel(vaultModel: vaultModel),
-    sort: .constant(.alphabetical), searchString: .constant(""))
+    model: VaultModel(vaultPreviewData, executeAsynchronousTasks: false),
+    nearbyModel: NearbyModel(), sort: .constant(.alphabetical), searchString: .constant(""))
 }

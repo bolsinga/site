@@ -14,11 +14,14 @@ struct ShowsSummary: View {
   var body: some View {
     let decadesMap = model.filteredDecadesMap(nearbyModel)
     ShowYearList(decadesMap: decadesMap)
-      .locationFilter(nearbyModel, filteredDataIsEmpty: decadesMap.isEmpty)
+      .locationFilter(
+        nearbyModel, locationAuthorization: model.locationAuthorization,
+        geocodingProgress: model.geocodingProgress, filteredDataIsEmpty: decadesMap.isEmpty)
   }
 }
 
 #Preview {
-  let vaultModel = VaultModel(vaultPreviewData, executeAsynchronousTasks: false)
-  return ShowsSummary(model: vaultModel, nearbyModel: NearbyModel(vaultModel: vaultModel))
+  ShowsSummary(
+    model: VaultModel(vaultPreviewData, executeAsynchronousTasks: false), nearbyModel: NearbyModel()
+  )
 }

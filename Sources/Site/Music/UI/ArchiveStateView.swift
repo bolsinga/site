@@ -19,12 +19,7 @@ struct ArchiveStateView: View {
   @SceneStorage("artist.sort") private var artistSort = RankingSort.alphabetical
   @SceneStorage("navigation.state") private var archiveNavigation = ArchiveNavigation()
 
-  @State private var nearbyModel: NearbyModel
-
-  internal init(model: VaultModel) {
-    self.model = model
-    self.nearbyModel = NearbyModel(vaultModel: model)
-  }
+  @State private var nearbyModel: NearbyModel = NearbyModel()
 
   @ViewBuilder private var archiveBody: some View {
     ArchiveCategorySplit(

@@ -54,11 +54,11 @@ struct ArchiveCategoryDetail: View {
 // Preview only extension
 extension ArchiveCategoryDetail {
   init(withPreviewCategory category: ArchiveCategory) {
-    let vaultModel = VaultModel(vaultPreviewData, executeAsynchronousTasks: false)
     self.init(
-      model: vaultModel, selectedCategory: category, path: .constant([]),
+      model: VaultModel(vaultPreviewData, executeAsynchronousTasks: false),
+      selectedCategory: category, path: .constant([]),
       venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
-      nearbyModel: NearbyModel(vaultModel: vaultModel))
+      nearbyModel: NearbyModel())
   }
 }
 

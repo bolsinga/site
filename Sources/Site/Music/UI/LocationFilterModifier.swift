@@ -11,6 +11,8 @@ struct LocationFilterModifier: ViewModifier {
   @SceneStorage("nearby.filter") private var locationFilter = LocationFilter.none
 
   let model: NearbyModel
+  let locationAuthorization: LocationAuthorization
+  let geocodingProgress: Double
   let filteredDataIsEmpty: Bool
 
   func body(content: Content) -> some View {
@@ -18,8 +20,8 @@ struct LocationFilterModifier: ViewModifier {
     VStack {
       if model.locationFilter.isNearby {
         NearbyLocationView(
-          locationAuthorization: model.locationAuthorization,
-          geocodingProgress: model.geocodingProgress, filteredDataIsEmpty: filteredDataIsEmpty)
+          locationAuthorization: locationAuthorization, geocodingProgress: geocodingProgress,
+          filteredDataIsEmpty: filteredDataIsEmpty)
       }
       content
     }
@@ -34,7 +36,13 @@ struct LocationFilterModifier: ViewModifier {
 }
 
 extension View {
-  func locationFilter(_ model: NearbyModel, filteredDataIsEmpty: Bool) -> some View {
-    modifier(LocationFilterModifier(model: model, filteredDataIsEmpty: filteredDataIsEmpty))
+  func locationFilter(
+    _ model: NearbyModel, locationAuthorization: LocationAuthorization, geocodingProgress: Double,
+    filteredDataIsEmpty: Bool
+  ) -> some View {
+    modifier(
+      LocationFilterModifier(
+        model: model, locationAuthorization: locationAuthorization,
+        geocodingProgress: geocodingProgress, filteredDataIsEmpty: filteredDataIsEmpty))
   }
 }
