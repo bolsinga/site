@@ -7,14 +7,14 @@
 
 import SwiftUI
 
-struct SortModifierToolbarContent<T: Sorting>: ToolbarContent {
+struct SortModifierToolbarContent: ToolbarContent {
   let placement: ToolbarItemPlacement
-  @Binding var algorithm: T
-  let algorithmNameBuilder: (T) -> String
+  @Binding var algorithm: RankingSort
+  let algorithmNameBuilder: (RankingSort) -> String
 
   internal init(
-    placement: ToolbarItemPlacement = .primaryAction, algorithm: Binding<T>,
-    algorithmNameBuilder: @escaping (T) -> String
+    placement: ToolbarItemPlacement = .primaryAction, algorithm: Binding<RankingSort>,
+    algorithmNameBuilder: @escaping (RankingSort) -> String
   ) {
     self.placement = placement
     self._algorithm = algorithm
@@ -26,7 +26,7 @@ struct SortModifierToolbarContent<T: Sorting>: ToolbarContent {
       let sortText = Text("Sort", bundle: .module)
       Menu {
         Picker(selection: $algorithm) {
-          ForEach(T.allCases, id: \.self) { category in
+          ForEach(RankingSort.allCases, id: \.self) { category in
             Text(algorithmNameBuilder(category)).tag(category)
           }
         } label: {
