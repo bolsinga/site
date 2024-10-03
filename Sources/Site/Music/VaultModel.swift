@@ -47,15 +47,9 @@ enum LocationAuthorization {
 
   @MainActor
   internal init(
-    _ vault: Vault, executeAsynchronousTasks: Bool = true,
-    fakeLocationAuthorization: LocationAuthorization? = nil, fakeGeocodingProgress: Double? = nil
+    _ vault: Vault, executeAsynchronousTasks: Bool = true, fakeGeocodingProgress: Double? = nil
   ) {
     self.vault = vault
-
-    if let fakeLocationAuthorization {
-      Logger.vaultModel.log("Setting Fake locationAuthorization")
-      self.locationAuthorization = fakeLocationAuthorization
-    }
 
     if let fakeGeocodingProgress {
       Logger.vaultModel.log("Setting Fake geocodingProgress")
