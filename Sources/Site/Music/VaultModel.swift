@@ -27,9 +27,6 @@ enum LocationAuthorization {
   private var currentLocation: CLLocation?
   internal var locationAuthorization = LocationAuthorization.allowed
 
-  // This is used for Preview only
-  private var fakeGeocodingProgress: Double?
-
   @ObservationIgnored
   private var dayChangeTask: Task<Void, Never>?
   @ObservationIgnored
@@ -46,15 +43,8 @@ enum LocationAuthorization {
     access: .inUse)
 
   @MainActor
-  internal init(
-    _ vault: Vault, executeAsynchronousTasks: Bool = true, fakeGeocodingProgress: Double? = nil
-  ) {
+  internal init(_ vault: Vault, executeAsynchronousTasks: Bool = true) {
     self.vault = vault
-
-    if let fakeGeocodingProgress {
-      Logger.vaultModel.log("Setting Fake geocodingProgress")
-      self.fakeGeocodingProgress = fakeGeocodingProgress
-    }
 
     updateTodayConcerts()
 
@@ -123,11 +113,7 @@ enum LocationAuthorization {
   }
 
   var geocodingProgress: Double {
-    if let fakeGeocodingProgress {
-      Logger.vaultModel.log("Fake Geocoding Progress")
-      return fakeGeocodingProgress
-    }
-    return Double(venuePlacemarks.count) / Double(vault.venueDigests.count)
+    Double(venuePlacemarks.count) / Double(vault.venueDigests.count)
   }
 
   @MainActor
