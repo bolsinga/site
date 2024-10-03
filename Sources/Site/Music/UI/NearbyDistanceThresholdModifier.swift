@@ -9,9 +9,6 @@ import CoreLocation
 import SwiftUI
 
 struct NearbyDistanceThresholdModifier: ViewModifier {
-  @SceneStorage("nearby.distance") private var nearbyDistanceThreshold: CLLocationDistance =
-    16093.44  // 10 miles
-
   let model: NearbyModel
 
   func body(content: Content) -> some View {
@@ -19,12 +16,6 @@ struct NearbyDistanceThresholdModifier: ViewModifier {
       #if !os(tvOS)
         .toolbar { NearbyDistanceThresholdToolbarContent(model: model) }
       #endif
-      .task {
-        model.distanceThreshold = nearbyDistanceThreshold
-      }
-      .onChange(of: model.distanceThreshold) { _, newValue in
-        nearbyDistanceThreshold = newValue
-      }
   }
 }
 

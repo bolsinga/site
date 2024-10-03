@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum LocationFilter: Int {
+enum LocationFilter: Int, Codable {
   case none
   case nearby
 

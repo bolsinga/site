@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct LocationFilterModifier: ViewModifier {
-  @SceneStorage("nearby.filter") private var locationFilter = LocationFilter.none
-
   let model: NearbyModel
   let locationAuthorization: LocationAuthorization
   let geocodingProgress: Double
@@ -26,12 +24,6 @@ struct LocationFilterModifier: ViewModifier {
       content
     }
     .toolbar { LocationFilterToolbarContent(isOn: $bindableModel.locationFilter.toggle) }
-    .task {
-      model.locationFilter = locationFilter
-    }
-    .onChange(of: model.locationFilter) { _, newValue in
-      locationFilter = newValue
-    }
   }
 }
 
