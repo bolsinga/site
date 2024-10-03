@@ -32,20 +32,21 @@ struct ArchiveNavigationUserActivityModifier: ViewModifier {
   @State private var userActivityCategory: ArchiveCategory.DefaultCategory = .defaultCategory
   @State private var userActivityPath: [ArchivePath] = []
 
-  func body(content: Content) -> some View {
-    let isCategoryActive = {
-      #if os(iOS) || os(tvOS)
-        guard let userActivityCategory else { return false }
-      #endif
-      return archiveNavigation.userActivityActive(for: userActivityCategory)
-    }()
+  private var isCategoryActive: Bool {
+    #if os(iOS) || os(tvOS)
+      guard let userActivityCategory else { return false }
+    #endif
+    return archiveNavigation.userActivityActive(for: userActivityCategory)
+  }
 
-    let isPathActive =
-      !isCategoryActive
-      && {
-        guard let lastPath = userActivityPath.last else { return false }
-        return archiveNavigation.userActivityActive(for: lastPath)
-      }()
+  private var isPathActive: Bool {
+    guard let lastPath = userActivityPath.last else { return false }
+    return archiveNavigation.userActivityActive(for: lastPath)
+  }
+
+  func body(content: Content) -> some View {
+    let isCategoryActive = isCategoryActive
+    let isPathActive = !isCategoryActive && isPathActive
 
     #if os(iOS) || os(tvOS)
       Logger.navigationUserActivity.log(
