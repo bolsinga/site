@@ -18,17 +18,25 @@ enum ArchiveActivity: Equatable {
 
 extension ArchiveActivity {
   var isCategory: Bool {
-    if case .category(_) = self {
-      return true
+    category != nil
+  }
+
+  var category: ArchiveCategory? {
+    if case .category(let archiveCategory) = self {
+      return archiveCategory
     }
-    return false
+    return nil
   }
 
   var isPath: Bool {
-    if case .path(_) = self {
-      return true
+    path != nil
+  }
+
+  var path: ArchivePath? {
+    if case .path(let archivePath) = self {
+      return archivePath
     }
-    return false
+    return nil
   }
 }
 
