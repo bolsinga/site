@@ -161,11 +161,8 @@ struct ArchiveNavigationTests {
     let ar = ArchiveNavigation(
       ArchiveNavigation.State(category: category, categoryPaths: [category: path]))
 
-    if path.isEmpty {
-      #expect(ar.userActivityActive(for: category))
-    } else {
-      #expect(!ar.userActivityActive(for: category))
-    }
+    #expect(path.isEmpty || !ar.userActivityActive(for: category))
+    #expect(!path.isEmpty || ar.userActivityActive(for: category))
 
     ArchiveCategory.allCases.filter { $0 != category }.forEach {
       #expect(!ar.userActivityActive(for: $0))
@@ -180,10 +177,8 @@ struct ArchiveNavigationTests {
         categoryPaths: [.today: path]))
 
     #expect(!ar.userActivityActive(for: ArchivePath.venue("id")))
-    if path.isEmpty {
-      #expect(!ar.userActivityActive(for: ArchivePath.artist("id")))
-    } else {
-      #expect(ar.userActivityActive(for: ArchivePath.artist("id")))
-    }
+
+    #expect(path.isEmpty || ar.userActivityActive(for: ArchivePath.artist("id")))
+    #expect(!path.isEmpty || !ar.userActivityActive(for: ArchivePath.artist("id")))
   }
 }
