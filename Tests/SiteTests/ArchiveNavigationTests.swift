@@ -9,6 +9,29 @@ import Testing
 
 @testable import Site
 
+extension ArchiveActivity {
+  var isNone: Bool {
+    if case .none = self {
+      return true
+    }
+    return false
+  }
+
+  func matches(category: ArchiveCategory) -> Bool {
+    if case let .category(cat) = self {
+      return cat == category
+    }
+    return false
+  }
+
+  func matches(path: ArchivePath) -> Bool {
+    if case let .path(ap) = self {
+      return ap == path
+    }
+    return false
+  }
+}
+
 struct ArchiveNavigationTests {
   @Test func navigateToCategory() {
     let ar = ArchiveNavigation()

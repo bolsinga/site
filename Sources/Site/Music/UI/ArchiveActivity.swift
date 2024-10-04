@@ -17,13 +17,6 @@ enum ArchiveActivity: Equatable {
 }
 
 extension ArchiveActivity {
-  var isNone: Bool {
-    if case .none = self {
-      return true
-    }
-    return false
-  }
-
   var isCategory: Bool {
     if case .category(_) = self {
       return true
@@ -34,20 +27,6 @@ extension ArchiveActivity {
   var isPath: Bool {
     if case .path(_) = self {
       return true
-    }
-    return false
-  }
-
-  func matches(category: ArchiveCategory) -> Bool {
-    if case let .category(cat) = self {
-      return cat == category
-    }
-    return false
-  }
-
-  func matches(path: ArchivePath) -> Bool {
-    if case let .path(ap) = self {
-      return ap == path
     }
     return false
   }
