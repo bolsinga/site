@@ -40,25 +40,17 @@ struct ArchiveNavigationUserActivityModifier: ViewModifier {
         activity = newValue
       }
       .userActivity(ArchiveCategory.activityType, isActive: activity.isCategory) { userActivity in
-        switch activity {
-        case .none, .path(_):
-          return
-        case .category(let archiveCategory):
-          Logger.navigationUserActivity.log(
-            "update category \(archiveCategory.rawValue, privacy: .public)")
-          userActivity.update(archiveCategory, url: urlForCategory(archiveCategory))
-        }
+        guard let category = activity.category else { return }
+
+        Logger.navigationUserActivity.log("update category \(category.rawValue, privacy: .public)")
+        userActivity.update(category, url: urlForCategory(category))
       }
       .userActivity(ArchivePath.activityType, isActive: activity.isPath) { userActivity in
-        switch activity {
-        case .none, .category(_):
-          return
-        case .path(let archivePath):
-          Logger.navigationUserActivity.log(
-            "update path \(archivePath.formatted(.json), privacy: .public)")
-          guard let pathUserActivity = activityForPath(archivePath) else { return }
-          userActivity.update(pathUserActivity)
-        }
+        guard let path = activity.path else { return }
+
+        Logger.navigationUserActivity.log("update path \(path.formatted(.json), privacy: .public)")
+        guard let pathUserActivity = activityForPath(path) else { return }
+        userActivity.update(pathUserActivity)
       }
   }
 }
