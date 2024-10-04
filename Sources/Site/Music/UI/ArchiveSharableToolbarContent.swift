@@ -1,5 +1,5 @@
 //
-//  ArchiveSharableToolbar.swift
+//  ArchiveSharableToolbarContent.swift
 //  site
 //
 //  Created by Greg Bolsinga on 10/1/24.
@@ -8,7 +8,7 @@
 import SwiftUI
 
 #if !os(tvOS)
-  struct ArchiveSharableToolbar<T: ArchiveSharable>: ToolbarContent {
+  struct ArchiveSharableToolbarContent<T: ArchiveSharable>: ToolbarContent {
     let placement: ToolbarItemPlacement
     let item: T
     let url: URL
