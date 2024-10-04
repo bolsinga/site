@@ -13,8 +13,4 @@ extension Array where Element == ArchivePath {
     // Drop the last path so that when going back the state is correct. Otherwise the '>' will flash on after animating in.
     return !self.dropLast().contains { $0 == archivePath }
   }
-
-  func isPathActive(_ archivePath: ArchivePath) -> Bool {
-    self.last == archivePath
-  }
 }

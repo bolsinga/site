@@ -29,61 +29,36 @@ struct ArchiveNavigationUserActivityModifier: ViewModifier {
   let urlForCategory: (ArchiveCategory.DefaultCategory) -> URL?
   let activityForPath: (ArchivePath) -> PathRestorableUserActivity?
 
-  @State private var userActivityCategory: ArchiveCategory.DefaultCategory = .defaultCategory
-  @State private var userActivityPath: [ArchivePath] = []
-
-  private var isCategoryActive: Bool {
-    #if os(iOS) || os(tvOS)
-      guard let userActivityCategory else { return false }
-    #endif
-    return archiveNavigation.userActivityActive(for: userActivityCategory)
-  }
-
-  private var isPathActive: Bool {
-    guard let lastPath = userActivityPath.last else { return false }
-    return archiveNavigation.userActivityActive(for: lastPath)
-  }
+  @State private var activity = ArchiveActivity.none
 
   func body(content: Content) -> some View {
-    let isCategoryActive = isCategoryActive
-    let isPathActive = !isCategoryActive && isPathActive
-
-    #if os(iOS) || os(tvOS)
-      Logger.navigationUserActivity.log(
-        "\(userActivityCategory?.rawValue ?? "nil", privacy: .public): \(isCategoryActive, privacy: .public) \(userActivityPath, privacy: .public): \(isPathActive)"
-      )
-    #elseif os(macOS)
-      Logger.navigationUserActivity.log(
-        "\(userActivityCategory.rawValue, privacy: .public): \(isCategoryActive, privacy: .public) \(userActivityPath, privacy: .public): \(isPathActive)"
-      )
-    #endif
-
+    Logger.navigationUserActivity.log("activity: \(activity, privacy: .public)")
     return
       content
-      .onAppear {
-        userActivityCategory = archiveNavigation.category
-        userActivityPath = archiveNavigation.path
+      .onAppear { activity = archiveNavigation.activity }
+      .onChange(of: archiveNavigation.activity) { _, newValue in
+        activity = newValue
       }
-      .onChange(of: archiveNavigation.category) { _, newValue in
-        userActivityCategory = newValue
+      .userActivity(ArchiveCategory.activityType, isActive: activity.isCategory) { userActivity in
+        switch activity {
+        case .none, .path(_):
+          return
+        case .category(let archiveCategory):
+          Logger.navigationUserActivity.log(
+            "update category \(archiveCategory.rawValue, privacy: .public)")
+          userActivity.update(archiveCategory, url: urlForCategory(archiveCategory))
+        }
       }
-      .onChange(of: archiveNavigation.path) { _, newValue in
-        userActivityPath = newValue
-      }
-      .userActivity(ArchiveCategory.activityType, isActive: isCategoryActive) { userActivity in
-        #if os(iOS) || os(tvOS)
-          guard let userActivityCategory else { return }
-        #endif
-        Logger.navigationUserActivity.log(
-          "update category \(userActivityCategory.rawValue, privacy: .public)")
-        userActivity.update(userActivityCategory, url: urlForCategory(userActivityCategory))
-      }
-      .userActivity(ArchivePath.activityType, isActive: isPathActive) { userActivity in
-        guard let lastPath = userActivityPath.last else { return }
-        Logger.navigationUserActivity.log(
-          "update path \(lastPath.formatted(.json), privacy: .public)")
-        guard let pathUserActivity = activityForPath(lastPath) else { return }
-        userActivity.update(pathUserActivity)
+      .userActivity(ArchivePath.activityType, isActive: activity.isPath) { userActivity in
+        switch activity {
+        case .none, .category(_):
+          return
+        case .path(let archivePath):
+          Logger.navigationUserActivity.log(
+            "update path \(archivePath.formatted(.json), privacy: .public)")
+          guard let pathUserActivity = activityForPath(archivePath) else { return }
+          userActivity.update(pathUserActivity)
+        }
       }
   }
 }

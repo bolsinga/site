@@ -74,21 +74,12 @@ extension Logger {
     state = State(category: category)
   }
 
-  func userActivityActive(for category: ArchiveCategory) -> Bool {
-    guard category == self.category else {
-      // category is not the same as selected category.
-      return false
-    }
-    guard let path = state.categoryPaths[category] else {
-      // category same, but path is nil
-      return true
-    }
-    // category is active if its path is empty
-    return path.isEmpty
-  }
-
-  func userActivityActive(for path: ArchivePath) -> Bool {
-    self.path.isPathActive(path)
+  var activity: ArchiveActivity {
+    #if os(iOS) || os(tvOS)
+      guard let category = state.category else { return .none }
+    #endif
+    guard !path.isEmpty, let last = path.last else { return .category(category) }
+    return .path(last)
   }
 }
 

@@ -142,43 +142,50 @@ struct ArchiveNavigationTests {
     #expect(ar.category == .defaultCategory)
   }
 
-  @Test
-  func userActivity_default_noPath() throws {
+  #if os(iOS) || os(tvOS)
+    @Test("Activity - nil")
+    func activityNone() throws {
+      let ar = ArchiveNavigation(ArchiveNavigation.State(category: nil))
+      let activity = ar.activity
+
+      #expect(activity.isNone)
+      #expect(!activity.isCategory)
+      #expect(!activity.isPath)
+    }
+  #endif
+
+  @Test("Activity - DefaultCategory")
+  func activityDefault() throws {
     let ar = ArchiveNavigation()
+    let activity = ar.activity
+
+    #expect(!activity.isNone)
+    #expect(activity.isCategory)
+    #expect(!activity.isPath)
 
     #if os(iOS) || os(tvOS)
       try #require(ArchiveCategory.defaultCategory != nil)
-      #expect(ar.userActivityActive(for: .defaultCategory!))
+      #expect(activity.matches(category: .defaultCategory!))
     #else
-      #expect(ar.userActivityActive(for: .defaultCategory))
+      #expect(activity.matches(category: .defaultCategory))
     #endif
   }
 
-  @Test(
-    "userActivity - Category", arguments: ArchiveCategory.allCases,
-    [[], [ArchivePath.artist("id")]])
-  func userActivity(category: ArchiveCategory, path: [ArchivePath]) {
+  @Test("Activity", arguments: ArchiveCategory.allCases, [[], [ArchivePath.artist("id")]])
+  func activity(category: ArchiveCategory, path: [ArchivePath]) {
     let ar = ArchiveNavigation(
       ArchiveNavigation.State(category: category, categoryPaths: [category: path]))
+    let activity = ar.activity
 
-    #expect(path.isEmpty || !ar.userActivityActive(for: category))
-    #expect(!path.isEmpty || ar.userActivityActive(for: category))
+    #expect(!activity.isNone)
+    #expect(activity.isCategory || !path.isEmpty)
+    #expect(activity.isPath || path.isEmpty)
 
-    ArchiveCategory.allCases.filter { $0 != category }.forEach {
-      #expect(!ar.userActivityActive(for: $0))
+    #expect(activity.matches(category: category) || !path.isEmpty)
+    #expect(activity.matches(path: ArchivePath.artist("id")) || path.isEmpty)
+
+    ArchiveCategory.allCases.filter { $0 != category }.forEach { categoryCase in
+      #expect(!activity.matches(category: categoryCase))
     }
-  }
-
-  @Test("userActivity - Path", arguments: [[], [ArchivePath.artist("id")]])
-  func userActivity(path: [ArchivePath]) {
-    let ar = ArchiveNavigation(
-      ArchiveNavigation.State(
-        category: .today,
-        categoryPaths: [.today: path]))
-
-    #expect(!ar.userActivityActive(for: ArchivePath.venue("id")))
-
-    #expect(path.isEmpty || ar.userActivityActive(for: ArchivePath.artist("id")))
-    #expect(!path.isEmpty || !ar.userActivityActive(for: ArchivePath.artist("id")))
   }
 }
