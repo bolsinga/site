@@ -18,8 +18,6 @@ struct ArchiveCategorySplit: View {
   @Binding var path: [ArchivePath]
   let nearbyModel: NearbyModel
 
-  let isCategoryActive: (ArchiveCategory) -> Bool
-
   private var vault: Vault { model.vault }
 
   @MainActor
