@@ -8,12 +8,13 @@
 import SwiftUI
 
 #if !os(tvOS)
-  struct ArchiveSharableToolbarContent<T: ArchiveSharable>: ToolbarContent {
+  struct ArchiveSharableToolbarContent: ToolbarContent {
     let placement: ToolbarItemPlacement
-    let item: T
+    let item: ArchiveSharable
     let url: URL
 
-    internal init(placement: ToolbarItemPlacement = .primaryAction, item: T, url: URL) {
+    internal init(placement: ToolbarItemPlacement = .primaryAction, item: ArchiveSharable, url: URL)
+    {
       self.placement = placement
       self.item = item
       self.url = url
