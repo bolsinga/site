@@ -44,7 +44,7 @@ struct ArchiveCategoryDetail: View {
             searchString: $artistSearchString)
         }
       }
-      .categoryDetail(vault: vault, nearbyModel: nearbyModel, category: category, path: $path)
+      .categoryDetail(vault: vault, category: category, path: $path)
     } else {
       Text("Select An Item", bundle: .module)
     }
