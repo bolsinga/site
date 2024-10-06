@@ -15,15 +15,15 @@ struct LocationFilterModifier: ViewModifier {
 
   func body(content: Content) -> some View {
     @Bindable var bindableModel = model
-    VStack {
-      if model.locationFilter.isNearby {
-        NearbyLocationView(
-          locationAuthorization: locationAuthorization, geocodingProgress: geocodingProgress,
-          filteredDataIsEmpty: filteredDataIsEmpty)
+    content
+      .overlay {
+        if model.locationFilter.isNearby {
+          NearbyLocationView(
+            locationAuthorization: locationAuthorization, geocodingProgress: geocodingProgress,
+            filteredDataIsEmpty: filteredDataIsEmpty)
+        }
       }
-      content
-    }
-    .toolbar { LocationFilterToolbarContent(isOn: $bindableModel.locationFilter.toggle) }
+      .toolbar { LocationFilterToolbarContent(isOn: $bindableModel.locationFilter.toggle) }
   }
 }
 
