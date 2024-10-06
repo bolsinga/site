@@ -5,7 +5,7 @@
 //  Created by Greg Bolsinga on 8/2/23.
 //
 
-import SwiftUI
+import Foundation
 
 // iOS Only:
 // When sharing via Messages, link is shared followed by the message text.
@@ -13,54 +13,26 @@ import SwiftUI
 // macos ventura: no subject nor message shown messages nor mail
 
 protocol ArchiveSharable {
-  var subject: Text { get }
-  var message: Text { get }
+  var subject: String { get }
+  var message: String { get }
 }
 
 extension Concert: ArchiveSharable {
-  var subject: Text {
-    Text(self.formatted(.headlinerAndVenue))
-  }
-
-  var message: Text {
-    Text(self.formatted(.full))
-  }
+  var subject: String { self.formatted(.headlinerAndVenue) }
+  var message: String { self.formatted(.full) }
 }
 
 extension VenueDigest: ArchiveSharable {
-  private var descriptor: String {
-    String(localized: "Shows at \(self.name)", bundle: .module)
-  }
-
-  var subject: Text {
-    Text(descriptor)
-  }
-
-  var message: Text {
-    Text(descriptor)
-  }
+  var subject: String { String(localized: "Shows at \(self.name)", bundle: .module) }
+  var message: String { subject }
 }
 
 extension AnnumDigest: ArchiveSharable {
-  var subject: Text {
-    Text(annum.formatted(.shared))
-  }
-
-  var message: Text {
-    Text(annum.formatted(.shared))
-  }
+  var subject: String { annum.formatted(.shared) }
+  var message: String { subject }
 }
 
 extension ArtistDigest: ArchiveSharable {
-  private var descriptor: String {
-    String(localized: "Shows with \(self.name)", bundle: .module)
-  }
-
-  var subject: Text {
-    Text(descriptor)
-  }
-
-  var message: Text {
-    Text(descriptor)
-  }
+  var subject: String { String(localized: "Shows with \(self.name)", bundle: .module) }
+  var message: String { subject }
 }

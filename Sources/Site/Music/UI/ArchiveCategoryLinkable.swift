@@ -11,7 +11,7 @@ struct ArchiveCategoryLinkable: ArchiveSharable, Linkable {
   let vault: Vault
   let category: ArchiveCategory
 
-  var subject: Text { Text(category.title) }
-  var message: Text { subject }
+  var subject: String { category.title }
+  var message: String { subject }
   var url: URL? { vault.categoryURLMap[category] }
 }
