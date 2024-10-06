@@ -27,7 +27,7 @@ extension NSUserActivity {
     self.title = category.title
 
     #if !os(tvOS)
-      self.persistentIdentifier = category.rawValue
+      self.persistentIdentifier = identifier
     #endif
     if category == .today {
       #if os(iOS)
