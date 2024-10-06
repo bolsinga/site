@@ -7,10 +7,6 @@
 
 import SwiftUI
 
-protocol Sorting: CaseIterable, Hashable where AllCases: RandomAccessCollection {
-  var localizedString: String { get }
-}
-
 struct SortModifier: ViewModifier {
   @Binding var algorithm: RankingSort
   let algorithmNameBuilder: (RankingSort) -> String
