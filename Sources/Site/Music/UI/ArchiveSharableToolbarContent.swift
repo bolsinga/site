@@ -23,8 +23,8 @@ import SwiftUI
     var body: some ToolbarContent {
       ToolbarItem(placement: placement) {
         ShareLink(
-          item: url, subject: item.subject, message: item.message,
-          preview: SharePreview(item.subject, image: Bundle.main.appIcon))
+          item: url, subject: Text(item.subject), message: Text(item.message),
+          preview: SharePreview(Text(item.subject), image: Bundle.main.appIcon))
       }
     }
   }
