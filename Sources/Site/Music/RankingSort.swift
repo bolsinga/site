@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum RankingSort: Int, Sorting {
+enum RankingSort: Int, CaseIterable {
   case alphabetical
   case showCount
   case showYearRange
