@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ArchiveSharableModifier<T: ArchiveSharable & Linkable>: ViewModifier {
+struct ArchiveSharableModifier<T: ArchiveSharable>: ViewModifier {
   let item: T?
 
   func body(content: Content) -> some View {
@@ -25,7 +25,7 @@ struct ArchiveSharableModifier<T: ArchiveSharable & Linkable>: ViewModifier {
 }
 
 extension View {
-  func archiveShare<T: ArchiveSharable & Linkable>(_ item: T?) -> some View {
+  func archiveShare<T: ArchiveSharable>(_ item: T?) -> some View {
     modifier(ArchiveSharableModifier(item: item))
   }
 }

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ArchiveCategoryLinkable: ArchiveSharable, Linkable {
+struct ArchiveCategoryLinkable: ArchiveSharable {
   let vault: Vault
   let category: ArchiveCategory
 
