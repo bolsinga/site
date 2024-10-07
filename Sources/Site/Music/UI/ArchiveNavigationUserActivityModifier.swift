@@ -25,20 +25,14 @@ protocol PathRestorableUserActivity: Linkable, PathRestorable {
 }
 
 struct ArchiveNavigationUserActivityModifier: ViewModifier {
-  let archiveNavigation: ArchiveNavigation
+  @Binding var activity: ArchiveActivity
   let urlForCategory: (ArchiveCategory.DefaultCategory) -> URL?
   let activityForPath: (ArchivePath) -> PathRestorableUserActivity?
-
-  @State private var activity = ArchiveActivity.none
 
   func body(content: Content) -> some View {
     Logger.navigationUserActivity.log("activity: \(activity, privacy: .public)")
     return
       content
-      .onAppear { activity = archiveNavigation.activity }
-      .onChange(of: archiveNavigation.activity) { _, newValue in
-        activity = newValue
-      }
       .userActivity(ArchiveCategory.activityType, isActive: activity.isCategory) { userActivity in
         guard let category = activity.category else { return }
 
@@ -57,13 +51,12 @@ struct ArchiveNavigationUserActivityModifier: ViewModifier {
 
 extension View {
   func advertiseUserActivity(
-    for archiveNavigation: ArchiveNavigation,
+    for activity: Binding<ArchiveActivity>,
     urlForCategory: @escaping (ArchiveCategory.DefaultCategory) -> URL?,
     activityForPath: @escaping (ArchivePath) -> PathRestorableUserActivity?
   ) -> some View {
     modifier(
       ArchiveNavigationUserActivityModifier(
-        archiveNavigation: archiveNavigation, urlForCategory: urlForCategory,
-        activityForPath: activityForPath))
+        activity: activity, urlForCategory: urlForCategory, activityForPath: activityForPath))
   }
 }
