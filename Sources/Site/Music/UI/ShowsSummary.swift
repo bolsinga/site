@@ -14,9 +14,12 @@ struct ShowsSummary: View {
   var body: some View {
     let decadesMap = model.filteredDecadesMap(nearbyModel)
     ShowYearList(decadesMap: decadesMap)
-      .locationFilter(
-        nearbyModel, locationAuthorization: model.locationAuthorization,
-        geocodingProgress: model.geocodingProgress, filteredDataIsEmpty: decadesMap.isEmpty)
+      .nearbyLocation(
+        locationFilter: nearbyModel.locationFilter,
+        locationAuthorization: model.locationAuthorization,
+        geocodingProgress: model.geocodingProgress, filteredDataIsEmpty: decadesMap.isEmpty
+      )
+      .locationFilter(nearbyModel)
   }
 }
 

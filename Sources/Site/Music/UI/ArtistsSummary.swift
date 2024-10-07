@@ -21,9 +21,12 @@ struct ArtistsSummary: View {
       artistDigests: artistDigests, sectioner: vault.sectioner, sort: $sort,
       searchString: $searchString
     )
-    .locationFilter(
-      nearbyModel, locationAuthorization: model.locationAuthorization,
-      geocodingProgress: model.geocodingProgress, filteredDataIsEmpty: artistDigests.isEmpty)
+    .nearbyLocation(
+      locationFilter: nearbyModel.locationFilter,
+      locationAuthorization: model.locationAuthorization,
+      geocodingProgress: model.geocodingProgress, filteredDataIsEmpty: artistDigests.isEmpty
+    )
+    .locationFilter(nearbyModel)
   }
 }
 
