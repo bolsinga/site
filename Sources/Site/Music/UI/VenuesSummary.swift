@@ -21,9 +21,12 @@ struct VenuesSummary: View {
       venueDigests: venueDigests, sectioner: vault.sectioner, sort: $sort,
       searchString: $searchString
     )
-    .locationFilter(
-      nearbyModel, locationAuthorization: model.locationAuthorization,
-      geocodingProgress: model.geocodingProgress, filteredDataIsEmpty: venueDigests.isEmpty)
+    .nearbyLocation(
+      locationFilter: nearbyModel.locationFilter,
+      locationAuthorization: model.locationAuthorization,
+      geocodingProgress: model.geocodingProgress, filteredDataIsEmpty: venueDigests.isEmpty
+    )
+    .locationFilter(nearbyModel)
   }
 }
 
