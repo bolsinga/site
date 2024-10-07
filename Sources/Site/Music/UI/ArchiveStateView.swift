@@ -20,6 +20,8 @@ struct ArchiveStateView: View {
   @SceneStorage("navigation.state") private var archiveNavigation = ArchiveNavigation()
   @SceneStorage("nearby.state") private var nearbyModel = NearbyModel()
 
+  @State private var activity = ArchiveActivity.none
+
   @ViewBuilder private var archiveBody: some View {
     ArchiveCategorySplit(
       model: model, venueSort: $venueSort, artistSort: $artistSort,
@@ -29,6 +31,10 @@ struct ArchiveStateView: View {
 
   var body: some View {
     archiveBody
+      .onAppear { activity = archiveNavigation.activity }
+      .onChange(of: archiveNavigation.activity) { _, newValue in
+        activity = newValue
+      }
       .onContinueUserActivity(ArchivePath.activityType) { userActivity in
         Logger.externalEvent.log(
           "onContinueUserActivity: \(ArchivePath.activityType, privacy: .public)")
@@ -64,7 +70,7 @@ struct ArchiveStateView: View {
         }
       }
       .advertiseUserActivity(
-        for: archiveNavigation,
+        for: $activity,
         urlForCategory: { category in
           #if os(iOS) || os(tvOS)
             guard let category else { return nil }
