@@ -70,7 +70,7 @@ struct ArchiveStateView: View {
         }
       }
       .advertiseUserActivity(
-        for: $activity,
+        for: activity,
         urlForCategory: { category in
           #if os(iOS) || os(tvOS)
             guard let category else { return nil }
