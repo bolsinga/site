@@ -13,9 +13,7 @@ struct NearbyDistanceThresholdModifier: ViewModifier {
 
   func body(content: Content) -> some View {
     content
-      #if !os(tvOS)
-        .toolbar { NearbyDistanceThresholdToolbarContent(model: model) }
-      #endif
+      .toolbar { NearbyDistanceThresholdToolbarContent(model: model) }
   }
 }
 

@@ -11,16 +11,12 @@ struct ArchiveSharableModifier<T: ArchiveSharable>: ViewModifier {
   let item: T?
 
   func body(content: Content) -> some View {
-    #if os(tvOS)
-      content  // ShareLink not available on tvOS
-    #else
-      if let item, let url = item.url {
-        content
-          .toolbar { ArchiveSharableToolbarContent(item: item, url: url) }
-      } else {
-        content
-      }
-    #endif
+    if let item, let url = item.url {
+      content
+        .toolbar { ArchiveSharableToolbarContent(item: item, url: url) }
+    } else {
+      content
+    }
   }
 }
 
