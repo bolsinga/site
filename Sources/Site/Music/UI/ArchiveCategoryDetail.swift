@@ -33,7 +33,7 @@ struct ArchiveCategoryDetail: View {
           ($artistSort, $artistSearchString)
         }
       )
-      .categoryDetail(vault: vault, category: category, path: $path)
+      .categoryDetail(vault: model.vault, category: category, path: $path)
     } else {
       Text("Select An Item", bundle: .module)
     }
