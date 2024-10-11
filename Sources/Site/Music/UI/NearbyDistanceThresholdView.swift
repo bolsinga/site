@@ -8,24 +8,24 @@
 import CoreLocation
 import SwiftUI
 
-#if !os(tvOS)
-  @MainActor
-  struct NearbyDistanceThresholdView: View {
-    @Binding var distanceThreshold: CLLocationDistance
-    @ViewBuilder var text: () -> Text
+@MainActor
+struct NearbyDistanceThresholdView: View {
+  @Binding var distanceThreshold: CLLocationDistance
+  @ViewBuilder var text: () -> Text
 
-    private var distanceThresholdMeasurementString: String {
-      nearbyDistanceThresholdFormatter.string(
-        from: Measurement(value: distanceThreshold, unit: UnitLength.meters))
-    }
+  private var distanceThresholdMeasurementString: String {
+    nearbyDistanceThresholdFormatter.string(
+      from: Measurement(value: distanceThreshold, unit: UnitLength.meters))
+  }
 
-    private func distanceValueString(_ distance: CLLocationDistance) -> String {
-      nearbyDistanceValueFormatter.string(
-        from: Measurement(value: distance, unit: UnitLength.meters))
-    }
+  private func distanceValueString(_ distance: CLLocationDistance) -> String {
+    nearbyDistanceValueFormatter.string(
+      from: Measurement(value: distance, unit: UnitLength.meters))
+  }
 
-    var body: some View {
-      VStack {
+  var body: some View {
+    VStack {
+      #if !os(tvOS)
         Slider(
           value: $distanceThreshold, in: minimumNearbyDistance...maximumNearbyDistance,
           step: nearbyDistanceStep
@@ -44,17 +44,17 @@ import SwiftUI
             Image(systemName: "plus.circle")
           }
         }
-        Text(distanceThresholdMeasurementString)
-      }
-      .frame(width: 300)
-      .padding([.leading, .trailing], 10)
+      #endif
+      Text(distanceThresholdMeasurementString)
     }
+    .frame(width: 300)
+    .padding([.leading, .trailing], 10)
   }
+}
 
-  #Preview {
-    NearbyDistanceThresholdView(distanceThreshold: .constant(100.0)) {
-      let v = "Nearby Distance"
-      Text(v)
-    }
+#Preview {
+  NearbyDistanceThresholdView(distanceThreshold: .constant(100.0)) {
+    let v = "Nearby Distance"
+    Text(v)
   }
-#endif
+}
