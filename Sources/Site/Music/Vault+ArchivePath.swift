@@ -8,7 +8,9 @@
 import Foundation
 
 extension Vault {
-  func pathUserActivity(for path: ArchivePath) -> PathRestorableUserActivity? {
+  func restorableSharableLinkable(for path: ArchivePath) -> (
+    PathRestorableUserActivity & ArchiveSharable
+  )? {
     switch path {
     case .show(let iD):
       return concertMap[iD]

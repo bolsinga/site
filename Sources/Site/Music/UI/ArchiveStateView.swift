@@ -77,7 +77,7 @@ struct ArchiveStateView: View {
           #endif
           return model.vault.categoryURLMap[category]
         }
-      ) { model.vault.pathUserActivity(for: $0) }
+      ) { model.vault.restorableSharableLinkable(for: $0) }
   }
 }
 
