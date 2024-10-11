@@ -22,22 +22,45 @@ struct ArchiveCategoryDetail: View {
   // The following property allows this UI code to not know if ArchiveNavigation.State.category is Optional or not.
   private var category: ArchiveCategory? { selectedCategory }
 
+  private func sortableData(_ category: ArchiveCategory) -> (
+    sort: Binding<RankingSort>, associatedRankName: String
+  )? {
+    switch category {
+    case .today, .stats, .shows:
+      nil
+    case .venues:
+      ($venueSort, String(localized: "Sort By Artist Count", bundle: .module))
+    case .artists:
+      ($artistSort, String(localized: "Sort By Venue Count", bundle: .module))
+    }
+  }
+
   var body: some View {
     if let category {
       NavigationStack(path: $path) {
         category.summary(
           model: model, nearbyModel: nearbyModel,
           venueSortSearch: {
-            ($venueSort, $venueSearchString)
+            (venueSort, $venueSearchString)
           },
           artistSortSearch: {
-            ($artistSort, $artistSearchString)
+            (artistSort, $artistSearchString)
           }
         )
         .toolbar {
           if category.isLocationFilterable {
             @Bindable var bindableNearbyModel = nearbyModel
             LocationFilterToolbarContent(isOn: $bindableNearbyModel.locationFilter.toggle)
+          }
+          if let sortableData = sortableData(category) {
+            SortModifierToolbarContent(algorithm: sortableData.sort) {
+              switch $0 {
+              case .associatedRank:
+                return sortableData.associatedRankName
+              default:
+                return $0.localizedString
+              }
+            }
           }
           ArchiveSharableToolbarContent(
             item: ArchiveCategoryLinkable(vault: model.vault, category: category))

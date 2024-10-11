@@ -10,13 +10,13 @@ import SwiftUI
 struct VenuesSummary: View {
   let model: VaultModel
   let nearbyModel: NearbyModel
-  @Binding var sort: RankingSort
+  let sort: RankingSort
   @Binding var searchString: String
 
   var body: some View {
     let venueDigests = model.filteredVenueDigests(nearbyModel)
     VenueList(
-      venueDigests: venueDigests, sectioner: model.vault.sectioner, sort: $sort,
+      venueDigests: venueDigests, sectioner: model.vault.sectioner, sort: sort,
       searchString: $searchString
     )
     .nearbyLocation(
@@ -30,5 +30,5 @@ struct VenuesSummary: View {
 #Preview {
   VenuesSummary(
     model: VaultModel(vaultPreviewData, executeAsynchronousTasks: false),
-    nearbyModel: NearbyModel(), sort: .constant(.alphabetical), searchString: .constant(""))
+    nearbyModel: NearbyModel(), sort: .alphabetical, searchString: .constant(""))
 }
