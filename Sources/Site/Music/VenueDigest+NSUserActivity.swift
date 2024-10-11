@@ -5,7 +5,6 @@
 //  Created by Greg Bolsinga on 6/21/23.
 //
 
-import CoreSpotlight
 import Foundation
 
 extension VenueDigest: PathRestorableUserActivity {
@@ -14,10 +13,7 @@ extension VenueDigest: PathRestorableUserActivity {
 
     userActivity.isEligibleForSearch = true
     userActivity.title = self.name
-    #if !os(tvOS)
-      let attributes = CSSearchableItemAttributeSet(contentType: .content)
-      attributes.contentDescription = String(localized: "See Shows At This Venue", bundle: .module)
-      userActivity.contentAttributeSet = attributes
-    #endif
+    userActivity.addSearchableContent(
+      description: String(localized: "See Shows At This Venue", bundle: .module))
   }
 }
