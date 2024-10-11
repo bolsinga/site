@@ -24,16 +24,19 @@ struct ArchiveCategoryDetail: View {
 
   var body: some View {
     if let category {
-      category.summary(
-        model: model, nearbyModel: nearbyModel,
-        venueSortSearch: {
-          ($venueSort, $venueSearchString)
-        },
-        artistSortSearch: {
-          ($artistSort, $artistSearchString)
-        }
-      )
-      .categoryDetail(vault: model.vault, category: category, path: $path)
+      NavigationStack(path: $path) {
+        category.summary(
+          model: model, nearbyModel: nearbyModel,
+          venueSortSearch: {
+            ($venueSort, $venueSearchString)
+          },
+          artistSortSearch: {
+            ($artistSort, $artistSearchString)
+          }
+        )
+        .archiveShare(ArchiveCategoryLinkable(vault: model.vault, category: category))
+        .musicDestinations(model.vault, path: path)
+      }
     } else {
       Text("Select An Item", bundle: .module)
     }
