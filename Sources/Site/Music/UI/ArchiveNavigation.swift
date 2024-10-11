@@ -43,13 +43,13 @@ extension Logger {
 
   var path: [ArchivePath] {
     get {
-      #if os(iOS) || os(tvOS)
+      #if DEFAULT_CATEGORY_OPTIONAL
         guard let category = state.category else { return [] }
       #endif
       return state.categoryPaths[category] ?? []
     }
     set {
-      #if os(iOS) || os(tvOS)
+      #if DEFAULT_CATEGORY_OPTIONAL
         guard let category = state.category else { return }
       #endif
       state.categoryPaths[category] = newValue
@@ -66,16 +66,16 @@ extension Logger {
   }
 
   func navigate(to category: ArchiveCategory.DefaultCategory) {
-    #if os(iOS) || os(tvOS)
+    #if DEFAULT_CATEGORY_OPTIONAL
       Logger.archive.log("nav to category: \(category?.rawValue ?? "nil", privacy: .public)")
-    #elseif os(macOS)
+    #else
       Logger.archive.log("nav to category: \(category.rawValue, privacy: .public)")
     #endif
     state = State(category: category)
   }
 
   var activity: ArchiveActivity {
-    #if os(iOS) || os(tvOS)
+    #if DEFAULT_CATEGORY_OPTIONAL
       guard let category = state.category else { return .none }
     #endif
     guard !path.isEmpty, let last = path.last else { return .category(category) }
