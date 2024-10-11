@@ -13,12 +13,10 @@ struct VenuesSummary: View {
   @Binding var sort: RankingSort
   @Binding var searchString: String
 
-  private var vault: Vault { model.vault }
-
   var body: some View {
     let venueDigests = model.filteredVenueDigests(nearbyModel)
     VenueList(
-      venueDigests: venueDigests, sectioner: vault.sectioner, sort: $sort,
+      venueDigests: venueDigests, sectioner: model.vault.sectioner, sort: $sort,
       searchString: $searchString
     )
     .nearbyLocation(
