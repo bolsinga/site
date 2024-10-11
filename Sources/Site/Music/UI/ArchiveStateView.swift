@@ -72,7 +72,7 @@ struct ArchiveStateView: View {
       .advertiseUserActivity(
         for: activity,
         urlForCategory: { category in
-          #if os(iOS) || os(tvOS)
+          #if DEFAULT_CATEGORY_OPTIONAL
             guard let category else { return nil }
           #endif
           return model.vault.categoryURLMap[category]

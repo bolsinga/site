@@ -35,7 +35,7 @@ extension ArchiveActivity {
 struct ArchiveNavigationTests {
   @Test func navigateToCategory() {
     let ar = ArchiveNavigation()
-    #if os(iOS) || os(tvOS)
+    #if DEFAULT_CATEGORY_OPTIONAL
       #expect(ar.category != nil)
     #endif
     #expect(ar.category == .defaultCategory)
@@ -61,7 +61,7 @@ struct ArchiveNavigationTests {
     #expect(ar.category == .shows)
     #expect(ar.path.isEmpty)
 
-    #if os(iOS) || os(tvOS)
+    #if DEFAULT_CATEGORY_OPTIONAL
       ar.navigate(to: nil)
       #expect(ar.category == nil)
       #expect(ar.path.isEmpty)
@@ -73,7 +73,7 @@ struct ArchiveNavigationTests {
       ArchiveNavigation.State(
         category: .artists, categoryPaths: [.artists: [Artist(id: "id", name: "name").archivePath]])
     )
-    #if os(iOS) || os(tvOS)
+    #if DEFAULT_CATEGORY_OPTIONAL
       #expect(ar.category != nil)
     #endif
     #expect(ar.category == .artists)
@@ -81,14 +81,14 @@ struct ArchiveNavigationTests {
     #expect(ar.path.first! == Artist(id: "id", name: "name").archivePath)
 
     ar.navigate(to: .venues)
-    #if os(iOS) || os(tvOS)
+    #if DEFAULT_CATEGORY_OPTIONAL
       #expect(ar.category != nil)
     #endif
     #expect(ar.category == .venues)
     #expect(ar.path.isEmpty)
 
     ar.navigate(to: .artists)
-    #if os(iOS) || os(tvOS)
+    #if DEFAULT_CATEGORY_OPTIONAL
       #expect(ar.category != nil)
     #endif
     #expect(ar.category == .artists)
@@ -97,14 +97,14 @@ struct ArchiveNavigationTests {
 
   @Test func navigateToArchivePath() {
     let ar = ArchiveNavigation()
-    #if os(iOS) || os(tvOS)
+    #if DEFAULT_CATEGORY_OPTIONAL
       #expect(ar.category != nil)
     #endif
     #expect(ar.category == .defaultCategory)
     #expect(ar.path.isEmpty)
 
     ar.navigate(to: ArchivePath.artist("id"))
-    #if os(iOS) || os(tvOS)
+    #if DEFAULT_CATEGORY_OPTIONAL
       #expect(ar.category != nil)
     #endif
     #expect(ar.category == .defaultCategory)
@@ -113,7 +113,7 @@ struct ArchiveNavigationTests {
     #expect(ar.path.last! == ArchivePath.artist("id"))
 
     ar.navigate(to: ArchivePath.venue("id"))
-    #if os(iOS) || os(tvOS)
+    #if DEFAULT_CATEGORY_OPTIONAL
       #expect(ar.category != nil)
     #endif
     #expect(ar.category == .defaultCategory)
@@ -122,7 +122,7 @@ struct ArchiveNavigationTests {
     #expect(ar.path.last! == ArchivePath.venue("id"))
 
     ar.navigate(to: ArchivePath.show("id"))
-    #if os(iOS) || os(tvOS)
+    #if DEFAULT_CATEGORY_OPTIONAL
       #expect(ar.category != nil)
     #endif
     #expect(ar.category == .defaultCategory)
@@ -131,7 +131,7 @@ struct ArchiveNavigationTests {
     #expect(ar.path.last! == ArchivePath.show("id"))
 
     ar.navigate(to: ArchivePath.year(Annum.year(1989)))
-    #if os(iOS) || os(tvOS)
+    #if DEFAULT_CATEGORY_OPTIONAL
       #expect(ar.category != nil)
     #endif
     #expect(ar.category == .defaultCategory)
@@ -165,7 +165,7 @@ struct ArchiveNavigationTests {
     #expect(ar.category == .defaultCategory)
   }
 
-  #if os(iOS) || os(tvOS)
+  #if DEFAULT_CATEGORY_OPTIONAL
     @Test("Activity - nil")
     func activityNone() throws {
       let ar = ArchiveNavigation(ArchiveNavigation.State(category: nil))
@@ -186,7 +186,7 @@ struct ArchiveNavigationTests {
     #expect(activity.isCategory)
     #expect(!activity.isPath)
 
-    #if os(iOS) || os(tvOS)
+    #if DEFAULT_CATEGORY_OPTIONAL
       try #require(ArchiveCategory.defaultCategory != nil)
       #expect(activity.matches(category: .defaultCategory!))
     #else
