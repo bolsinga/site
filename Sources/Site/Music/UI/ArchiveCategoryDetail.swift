@@ -16,8 +16,6 @@ struct ArchiveCategoryDetail: View {
   @Binding var artistSort: RankingSort
   let nearbyModel: NearbyModel
 
-  private var vault: Vault { model.vault }
-
   @State var artistSearchString: String = ""
   @State var venueSearchString: String = ""
 

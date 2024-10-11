@@ -13,12 +13,10 @@ struct ArtistsSummary: View {
   @Binding var sort: RankingSort
   @Binding var searchString: String
 
-  private var vault: Vault { model.vault }
-
   var body: some View {
     let artistDigests = model.filteredArtistDigests(nearbyModel)
     ArtistList(
-      artistDigests: artistDigests, sectioner: vault.sectioner, sort: $sort,
+      artistDigests: artistDigests, sectioner: model.vault.sectioner, sort: $sort,
       searchString: $searchString
     )
     .nearbyLocation(
