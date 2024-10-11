@@ -24,24 +24,15 @@ struct ArchiveCategoryDetail: View {
 
   var body: some View {
     if let category {
-      ZStack {
-        switch category {
-        case .today:
-          TodaySummary(model: model)
-        case .stats:
-          StatsSummary(vault: model.vault)
-        case .shows:
-          ShowsSummary(model: model, nearbyModel: nearbyModel)
-        case .venues:
-          VenuesSummary(
-            model: model, nearbyModel: nearbyModel, sort: $venueSort,
-            searchString: $venueSearchString)
-        case .artists:
-          ArtistsSummary(
-            model: model, nearbyModel: nearbyModel, sort: $artistSort,
-            searchString: $artistSearchString)
+      category.summary(
+        model: model, nearbyModel: nearbyModel,
+        venueSortSearch: {
+          ($venueSort, $venueSearchString)
+        },
+        artistSortSearch: {
+          ($artistSort, $artistSearchString)
         }
-      }
+      )
       .categoryDetail(vault: model.vault, category: category, path: $path)
     } else {
       Text("Select An Item", bundle: .module)
