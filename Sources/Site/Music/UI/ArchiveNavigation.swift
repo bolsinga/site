@@ -68,7 +68,7 @@ extension Logger {
   func navigate(to category: ArchiveCategory.DefaultCategory) {
     #if DEFAULT_CATEGORY_OPTIONAL
       Logger.archive.log("nav to category: \(category?.rawValue ?? "nil", privacy: .public)")
-    #elseif os(macOS)
+    #else
       Logger.archive.log("nav to category: \(category.rawValue, privacy: .public)")
     #endif
     state = State(category: category)
