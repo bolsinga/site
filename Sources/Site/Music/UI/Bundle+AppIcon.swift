@@ -14,7 +14,7 @@ extension Image {
 
   fileprivate static func appIcon(named: String?) -> Image {
     guard let named else { return Self.fallbackAppIcon }
-    #if os(iOS) || os(tvOS)
+    #if canImport(UIKit)
       guard let pImage = UIImage(named: named) else { return Self.fallbackAppIcon }
       return Image(uiImage: pImage)
     #else
