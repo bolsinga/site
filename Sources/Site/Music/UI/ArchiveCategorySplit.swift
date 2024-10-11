@@ -18,8 +18,6 @@ struct ArchiveCategorySplit: View {
   @Binding var path: [ArchivePath]
   let nearbyModel: NearbyModel
 
-  private var vault: Vault { model.vault }
-
   @MainActor
   @ViewBuilder private var sidebar: some View {
     List(ArchiveCategory.allCases, id: \.self, selection: $selectedCategory) {
@@ -32,11 +30,11 @@ struct ArchiveCategorySplit: View {
         case .stats:
           EmptyView()
         case .shows:
-          Text(vault.concerts.count.formatted(.number))
+          Text(model.vault.concerts.count.formatted(.number))
         case .venues:
-          Text(vault.venueDigests.count.formatted(.number))
+          Text(model.vault.venueDigests.count.formatted(.number))
         case .artists:
-          Text(vault.artistDigests.count.formatted(.number))
+          Text(model.vault.artistDigests.count.formatted(.number))
         }
       } label: {
         category.label

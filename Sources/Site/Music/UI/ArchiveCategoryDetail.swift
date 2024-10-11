@@ -16,8 +16,6 @@ struct ArchiveCategoryDetail: View {
   @Binding var artistSort: RankingSort
   let nearbyModel: NearbyModel
 
-  private var vault: Vault { model.vault }
-
   @State var artistSearchString: String = ""
   @State var venueSearchString: String = ""
 
@@ -31,7 +29,7 @@ struct ArchiveCategoryDetail: View {
         case .today:
           TodaySummary(model: model)
         case .stats:
-          StatsSummary(vault: vault)
+          StatsSummary(vault: model.vault)
         case .shows:
           ShowsSummary(model: model, nearbyModel: nearbyModel)
         case .venues:
@@ -44,7 +42,7 @@ struct ArchiveCategoryDetail: View {
             searchString: $artistSearchString)
         }
       }
-      .categoryDetail(vault: vault, category: category, path: $path)
+      .categoryDetail(vault: model.vault, category: category, path: $path)
     } else {
       Text("Select An Item", bundle: .module)
     }
