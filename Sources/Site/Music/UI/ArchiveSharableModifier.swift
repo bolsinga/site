@@ -11,12 +11,8 @@ struct ArchiveSharableModifier<T: ArchiveSharable>: ViewModifier {
   let item: T?
 
   func body(content: Content) -> some View {
-    if let item, let url = item.url {
-      content
-        .toolbar { ArchiveSharableToolbarContent(item: item, url: url) }
-    } else {
-      content
-    }
+    content
+      .toolbar { ArchiveSharableToolbarContent(item: item) }
   }
 }
 
