@@ -24,7 +24,6 @@ struct VenuesSummary: View {
       locationAuthorization: model.locationAuthorization,
       geocodingProgress: model.geocodingProgress, filteredDataIsEmpty: venueDigests.isEmpty
     )
-    .locationFilter(nearbyModel)
   }
 }
 
