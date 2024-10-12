@@ -35,6 +35,10 @@ struct ArchiveCategoryDetail: View {
           }
         )
         .toolbar {
+          if category.isLocationFilterable {
+            @Bindable var bindableNearbyModel = nearbyModel
+            LocationFilterToolbarContent(isOn: $bindableNearbyModel.locationFilter.toggle)
+          }
           ArchiveSharableToolbarContent(
             item: ArchiveCategoryLinkable(vault: model.vault, category: category))
         }

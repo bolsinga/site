@@ -24,7 +24,6 @@ struct ArtistsSummary: View {
       locationAuthorization: model.locationAuthorization,
       geocodingProgress: model.geocodingProgress, filteredDataIsEmpty: artistDigests.isEmpty
     )
-    .locationFilter(nearbyModel)
   }
 }
 

@@ -19,7 +19,6 @@ struct ShowsSummary: View {
         locationAuthorization: model.locationAuthorization,
         geocodingProgress: model.geocodingProgress, filteredDataIsEmpty: decadesMap.isEmpty
       )
-      .locationFilter(nearbyModel)
   }
 }
 
