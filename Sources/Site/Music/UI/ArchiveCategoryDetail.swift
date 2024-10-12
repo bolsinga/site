@@ -75,7 +75,7 @@ struct ArchiveCategoryDetail: View {
 
 // Preview only extension
 extension ArchiveCategoryDetail {
-  init(withPreviewCategory category: ArchiveCategory) {
+  init(withPreviewCategory category: ArchiveCategory.DefaultCategory) {
     self.init(
       model: VaultModel(vaultPreviewData, executeAsynchronousTasks: false),
       selectedCategory: category, path: .constant([]),
@@ -103,3 +103,9 @@ extension ArchiveCategoryDetail {
 #Preview {
   ArchiveCategoryDetail(withPreviewCategory: .artists)
 }
+
+#if DEFAULT_CATEGORY_OPTIONAL
+  #Preview {
+    ArchiveCategoryDetail(withPreviewCategory: nil)
+  }
+#endif
