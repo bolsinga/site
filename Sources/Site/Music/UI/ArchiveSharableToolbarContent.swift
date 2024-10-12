@@ -9,15 +9,15 @@ import SwiftUI
 
 struct ArchiveSharableToolbarContent<T: ArchiveSharable>: ToolbarContent {
   let placement: ToolbarItemPlacement
-  let item: T?
+  let item: T
 
-  internal init(placement: ToolbarItemPlacement = .primaryAction, item: T?) {
+  internal init(placement: ToolbarItemPlacement = .primaryAction, item: T) {
     self.placement = placement
     self.item = item
   }
 
   var body: some ToolbarContent {
-    if let item, let url = item.url {
+    if let url = item.url {
       ToolbarItem(placement: placement) {
         #if !os(tvOS)
           ShareLink(

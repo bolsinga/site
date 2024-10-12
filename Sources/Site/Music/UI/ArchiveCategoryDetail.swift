@@ -34,7 +34,10 @@ struct ArchiveCategoryDetail: View {
             ($artistSort, $artistSearchString)
           }
         )
-        .archiveShare(ArchiveCategoryLinkable(vault: model.vault, category: category))
+        .toolbar {
+          ArchiveSharableToolbarContent(
+            item: ArchiveCategoryLinkable(vault: model.vault, category: category))
+        }
         .musicDestinations(model.vault, path: path)
       }
     } else {
