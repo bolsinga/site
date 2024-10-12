@@ -10,7 +10,7 @@ import SwiftUI
 struct VenueList: View {
   let venueDigests: [VenueDigest]
   let sectioner: LibrarySectioner
-  @Binding var sort: RankingSort
+  let sort: RankingSort
   @Binding var searchString: String
 
   var body: some View {
@@ -18,9 +18,8 @@ struct VenueList: View {
     RankableSortList(
       items: digests, sectioner: sectioner,
       title: String(localized: "Venues", bundle: .module),
-      associatedRankName: String(localized: "Sort By Artist Count", bundle: .module),
       associatedRankSectionHeader: { $0.artistsCountView },
-      itemLabelView: { Text($0.name.emphasizedAttributed(matching: searchString)) }, sort: $sort
+      itemLabelView: { Text($0.name.emphasizedAttributed(matching: searchString)) }, sort: sort
     )
     .archiveSearchable(
       searchPrompt: String(localized: "Venue Names", bundle: .module),
@@ -33,7 +32,7 @@ struct VenueList: View {
   NavigationStack {
     VenueList(
       venueDigests: vaultPreviewData.venueDigests, sectioner: vaultPreviewData.sectioner,
-      sort: .constant(.alphabetical), searchString: .constant("")
+      sort: .alphabetical, searchString: .constant("")
     )
     .musicDestinations(vaultPreviewData)
   }

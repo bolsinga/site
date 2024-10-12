@@ -8,7 +8,7 @@
 import SwiftUI
 
 extension ArchiveCategory {
-  typealias SortSearch = (sort: Binding<RankingSort>, search: Binding<String>)
+  typealias SortSearch = (sort: RankingSort, search: Binding<String>)
 
   @MainActor
   @ViewBuilder func summary(

@@ -12,11 +12,10 @@ where T: Rankable, T.ID == String {
   let items: [T]
   let sectioner: LibrarySectioner
   let title: String
-  let associatedRankName: String
   @ViewBuilder let associatedRankSectionHeader: (Ranking) -> SectionHeaderContent
   @ViewBuilder let itemLabelView: ((T) -> LabelContent)
 
-  @Binding var sort: RankingSort
+  let sort: RankingSort
 
   @ViewBuilder private func showCount(for venueDigest: T) -> some View {
     Text("\(venueDigest.showRank.value) Show(s)", bundle: .module)
@@ -56,14 +55,6 @@ where T: Rankable, T.ID == String {
   var body: some View {
     listElement
       .navigationTitle(Text(title))
-      .sortable(algorithm: $sort) {
-        switch $0 {
-        case .associatedRank:
-          return associatedRankName
-        default:
-          return $0.localizedString
-        }
-      }
   }
 }
 
@@ -71,9 +62,8 @@ where T: Rankable, T.ID == String {
   NavigationStack {
     RankableSortList(
       items: vaultPreviewData.venueDigests, sectioner: vaultPreviewData.sectioner,
-      title: "Venues", associatedRankName: "Sort By Artist Count",
-      associatedRankSectionHeader: { $0.artistsCountView }, itemLabelView: { Text($0.name) },
-      sort: .constant(.alphabetical)
+      title: "Venues", associatedRankSectionHeader: { $0.artistsCountView },
+      itemLabelView: { Text($0.name) }, sort: .alphabetical
     )
     .musicDestinations(vaultPreviewData)
   }
