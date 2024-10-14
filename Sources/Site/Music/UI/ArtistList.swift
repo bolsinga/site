@@ -29,11 +29,8 @@ struct ArtistList: View {
 }
 
 #Preview {
-  NavigationStack {
-    ArtistList(
-      artistDigests: vaultPreviewData.artistDigests, sectioner: vaultPreviewData.sectioner,
-      sort: .alphabetical, searchString: .constant("")
-    )
-    .musicDestinations(vaultPreviewData)
-  }
+  ArtistList(
+    artistDigests: vaultPreviewData.artistDigests, sectioner: vaultPreviewData.sectioner,
+    sort: .alphabetical, searchString: .constant("")
+  )
 }

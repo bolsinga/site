@@ -29,11 +29,8 @@ struct VenueList: View {
 }
 
 #Preview {
-  NavigationStack {
-    VenueList(
-      venueDigests: vaultPreviewData.venueDigests, sectioner: vaultPreviewData.sectioner,
-      sort: .alphabetical, searchString: .constant("")
-    )
-    .musicDestinations(vaultPreviewData)
-  }
+  VenueList(
+    venueDigests: vaultPreviewData.venueDigests, sectioner: vaultPreviewData.sectioner,
+    sort: .alphabetical, searchString: .constant("")
+  )
 }

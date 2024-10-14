@@ -60,7 +60,9 @@ struct ArchiveCategoryStack: View {
         ArchiveSharableToolbarContent(
           item: ArchiveCategoryLinkable(vault: model.vault, category: category))
       }
-      .musicDestinations(model.vault, path: path)
+      .navigationDestination(for: ArchivePath.self) {
+        $0.destination(vault: model.vault, isPathNavigable: path.isPathNavigable(_:))
+      }
     }
   }
 }

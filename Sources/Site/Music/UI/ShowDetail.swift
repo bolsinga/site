@@ -65,37 +65,28 @@ struct ShowDetail: View {
 }
 
 #Preview {
-  NavigationStack {
-    ShowDetail(
-      concert: vaultPreviewData.concerts[0],
-      isPathNavigable: { _ in
-        true
-      }
-    )
-    .musicDestinations(vaultPreviewData)
-  }
+  ShowDetail(
+    concert: vaultPreviewData.concerts[0],
+    isPathNavigable: { _ in
+      true
+    }
+  )
 }
 
 #Preview {
-  NavigationStack {
-    ShowDetail(
-      concert: vaultPreviewData.concerts[1],
-      isPathNavigable: { _ in
-        true
-      }
-    )
-    .musicDestinations(vaultPreviewData)
-  }
+  ShowDetail(
+    concert: vaultPreviewData.concerts[1],
+    isPathNavigable: { _ in
+      true
+    }
+  )
 }
 
 #Preview {
-  NavigationStack {
-    ShowDetail(
-      concert: vaultPreviewData.concerts[2],
-      isPathNavigable: { _ in
-        true
-      }
-    )
-    .musicDestinations(vaultPreviewData)
-  }
+  ShowDetail(
+    concert: vaultPreviewData.concerts[2],
+    isPathNavigable: { _ in
+      true
+    }
+  )
 }

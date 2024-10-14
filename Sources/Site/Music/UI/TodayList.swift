@@ -31,15 +31,9 @@ struct TodayList: View {
 }
 
 #Preview {
-  NavigationStack {
-    TodayList(concerts: vaultPreviewData.concerts)
-      .musicDestinations(vaultPreviewData)
-  }
+  TodayList(concerts: vaultPreviewData.concerts)
 }
 
 #Preview {
-  NavigationStack {
-    TodayList(concerts: [])
-      .musicDestinations(vaultPreviewData)
-  }
+  TodayList(concerts: [])
 }

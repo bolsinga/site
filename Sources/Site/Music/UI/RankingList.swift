@@ -42,40 +42,32 @@ where T: LibraryComparable, T: Hashable, T: PathRestorable, R: Comparable, R: Ha
 }
 
 #Preview {
-  NavigationStack {
-    RankingList(
-      items: vaultPreviewData.artistDigests,
-      rankingMapBuilder: { artists in
-        return [Ranking(rank: .rank(1), value: 3): artists]
-      },
-      rankSorted: >,
-      itemContentView: { _ in
-        Text(3.formatted(.number))
-      },
-      sectionHeaderView: { section in
-        Text("Artists")
-      },
-      itemLabelView: { Text($0.name) }
-    )
-    .navigationTitle("Artists")
-    .musicDestinations(vaultPreviewData)
-  }
+  RankingList(
+    items: vaultPreviewData.artistDigests,
+    rankingMapBuilder: { artists in
+      return [Ranking(rank: .rank(1), value: 3): artists]
+    },
+    rankSorted: >,
+    itemContentView: { _ in
+      Text(3.formatted(.number))
+    },
+    sectionHeaderView: { section in
+      Text("Artists")
+    },
+    itemLabelView: { Text($0.name) }
+  )
 }
 
 #Preview {
-  NavigationStack {
-    RankingList(
-      items: vaultPreviewData.venueDigests,
-      rankingMapBuilder: { artists in
-        return [Ranking(rank: .rank(1), value: 3): artists]
-      },
-      itemContentView: { _ in },
-      sectionHeaderView: { section in
-        Text("Venues")
-      },
-      itemLabelView: { Text($0.name) }
-    )
-    .navigationTitle("Venues")
-    .musicDestinations(vaultPreviewData)
-  }
+  RankingList(
+    items: vaultPreviewData.venueDigests,
+    rankingMapBuilder: { artists in
+      return [Ranking(rank: .rank(1), value: 3): artists]
+    },
+    itemContentView: { _ in },
+    sectionHeaderView: { section in
+      Text("Venues")
+    },
+    itemLabelView: { Text($0.name) }
+  )
 }

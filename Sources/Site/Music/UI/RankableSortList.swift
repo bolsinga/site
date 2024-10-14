@@ -59,12 +59,9 @@ where T: Rankable, T.ID == String {
 }
 
 #Preview {
-  NavigationStack {
-    RankableSortList(
-      items: vaultPreviewData.venueDigests, sectioner: vaultPreviewData.sectioner,
-      title: "Venues", associatedRankSectionHeader: { $0.artistsCountView },
-      itemLabelView: { Text($0.name) }, sort: .alphabetical
-    )
-    .musicDestinations(vaultPreviewData)
-  }
+  RankableSortList(
+    items: vaultPreviewData.venueDigests, sectioner: vaultPreviewData.sectioner,
+    title: "Venues", associatedRankSectionHeader: { $0.artistsCountView },
+    itemLabelView: { Text($0.name) }, sort: .alphabetical
+  )
 }

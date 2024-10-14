@@ -98,15 +98,12 @@ struct VenueDetail: View {
 }
 
 #Preview {
-  NavigationStack {
-    VenueDetail(
-      digest: vaultPreviewData.venueDigests[0],
-      concertCompare: vaultPreviewData.comparator.compare(lhs:rhs:),
-      geocode: nil,
-      isPathNavigable: { _ in
-        true
-      }
-    )
-    .musicDestinations(vaultPreviewData)
-  }
+  VenueDetail(
+    digest: vaultPreviewData.venueDigests[0],
+    concertCompare: vaultPreviewData.comparator.compare(lhs:rhs:),
+    geocode: nil,
+    isPathNavigable: { _ in
+      true
+    }
+  )
 }

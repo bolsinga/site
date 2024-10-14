@@ -52,14 +52,11 @@ struct YearDetail: View {
 }
 
 #Preview {
-  NavigationStack {
-    YearDetail(
-      digest: vaultPreviewData.digest(for: Annum.year(2001)),
-      concertCompare: vaultPreviewData.comparator.compare(lhs:rhs:),
-      isPathNavigable: { _ in
-        true
-      }
-    )
-    .musicDestinations(vaultPreviewData)
-  }
+  YearDetail(
+    digest: vaultPreviewData.digest(for: Annum.year(2001)),
+    concertCompare: vaultPreviewData.comparator.compare(lhs:rhs:),
+    isPathNavigable: { _ in
+      true
+    }
+  )
 }
