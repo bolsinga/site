@@ -34,8 +34,5 @@ struct ShowYearList: View {
 }
 
 #Preview {
-  NavigationStack {
-    ShowYearList(decadesMap: vaultPreviewData.decadesMap)
-      .musicDestinations(vaultPreviewData)
-  }
+  ShowYearList(decadesMap: vaultPreviewData.decadesMap)
 }

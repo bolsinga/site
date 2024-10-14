@@ -76,39 +76,30 @@ struct ArtistDetail: View {
 }
 
 #Preview {
-  NavigationStack {
-    ArtistDetail(
-      digest: vaultPreviewData.artistDigests[0],
-      concertCompare: vaultPreviewData.comparator.compare(lhs:rhs:),
-      isPathNavigable: { _ in
-        true
-      }
-    )
-    .musicDestinations(vaultPreviewData)
-  }
+  ArtistDetail(
+    digest: vaultPreviewData.artistDigests[0],
+    concertCompare: vaultPreviewData.comparator.compare(lhs:rhs:),
+    isPathNavigable: { _ in
+      true
+    }
+  )
 }
 
 #Preview {
-  NavigationStack {
-    ArtistDetail(
-      digest: vaultPreviewData.artistDigests[1],
-      concertCompare: vaultPreviewData.comparator.compare(lhs:rhs:),
-      isPathNavigable: { _ in
-        true
-      }
-    )
-    .musicDestinations(vaultPreviewData)
-  }
+  ArtistDetail(
+    digest: vaultPreviewData.artistDigests[1],
+    concertCompare: vaultPreviewData.comparator.compare(lhs:rhs:),
+    isPathNavigable: { _ in
+      false
+    }
+  )
 }
 
 #Preview {
   let selectedConcert = vaultPreviewData.artistDigests[1].concerts[0]
-  return NavigationStack {
-    ArtistDetail(
-      digest: vaultPreviewData.artistDigests[1],
-      concertCompare: vaultPreviewData.comparator.compare(lhs:rhs:),
-      isPathNavigable: { $0.archivePath != selectedConcert.archivePath }
-    )
-    .musicDestinations(vaultPreviewData, path: [selectedConcert.archivePath])
-  }
+  return ArtistDetail(
+    digest: vaultPreviewData.artistDigests[1],
+    concertCompare: vaultPreviewData.comparator.compare(lhs:rhs:),
+    isPathNavigable: { $0.archivePath != selectedConcert.archivePath }
+  )
 }
