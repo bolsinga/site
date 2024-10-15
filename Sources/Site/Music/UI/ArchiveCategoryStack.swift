@@ -18,48 +18,12 @@ struct ArchiveCategoryStack: View {
   @State var artistSearchString: String = ""
   @State var venueSearchString: String = ""
 
-  private func sortableData(_ category: ArchiveCategory) -> (
-    sort: Binding<RankingSort>, associatedRankName: String
-  )? {
-    switch category {
-    case .today, .stats, .shows:
-      nil
-    case .venues:
-      ($venueSort, String(localized: "Sort By Artist Count", bundle: .module))
-    case .artists:
-      ($artistSort, String(localized: "Sort By Venue Count", bundle: .module))
-    }
-  }
-
   var body: some View {
     NavigationStack(path: $path) {
-      category.summary(
-        model: model, nearbyModel: nearbyModel,
-        venueSortSearch: {
-          (venueSort, $venueSearchString)
-        },
-        artistSortSearch: {
-          (artistSort, $artistSearchString)
-        }
+      ArchiveCategoryRoot(
+        model: model, category: category, venueSort: $venueSort, artistSort: $artistSort,
+        nearbyModel: nearbyModel
       )
-      .toolbar {
-        if category.isLocationFilterable {
-          @Bindable var bindableNearbyModel = nearbyModel
-          LocationFilterToolbarContent(isOn: $bindableNearbyModel.locationFilter.toggle)
-        }
-        if let sortableData = sortableData(category) {
-          SortModifierToolbarContent(algorithm: sortableData.sort) {
-            switch $0 {
-            case .associatedRank:
-              return sortableData.associatedRankName
-            default:
-              return $0.localizedString
-            }
-          }
-        }
-        ArchiveSharableToolbarContent(
-          item: ArchiveCategoryLinkable(vault: model.vault, category: category))
-      }
       .navigationDestination(for: ArchivePath.self) {
         $0.destination(vault: model.vault, isPathNavigable: path.isPathNavigable(_:))
       }
