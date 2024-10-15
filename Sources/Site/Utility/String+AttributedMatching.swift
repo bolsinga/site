@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import SwiftUI
 
 extension String {
   func emphasizedAttributed(matching fragment: String) -> AttributedString {
@@ -15,15 +14,5 @@ extension String {
       return AttributedString(self)
     }
     return emphasized
-  }
-}
-
-#Preview {
-  VStack {
-    Text("Greg Bolsinga".emphasizedAttributed(matching: "G"))
-    Text("Greg Bolsinga".emphasizedAttributed(matching: "G "))
-    Text("Greg Bolsinga".emphasizedAttributed(matching: "G B"))
-    Text("Greg Bolsinga".emphasizedAttributed(matching: " B"))
-    Text("Greg Bolsinga".emphasizedAttributed(matching: "B"))
   }
 }
