@@ -75,11 +75,16 @@ extension Logger {
   }
 
   var activity: ArchiveActivity {
-    #if DEFAULT_CATEGORY_OPTIONAL
-      guard let category = state.category else { return .none }
-    #endif
-    guard !path.isEmpty, let last = path.last else { return .category(category) }
-    return .path(last)
+    let result: ArchiveActivity = {
+      #if DEFAULT_CATEGORY_OPTIONAL
+        guard let category = state.category else { return .none }
+      #endif
+      guard !path.isEmpty, let last = path.last else { return .category(category) }
+      return .path(last)
+    }()
+    Logger.archive.log(
+      "activity: \(result, privacy: .public) path: \(self.rawValue, privacy: .public)")
+    return result
   }
 }
 
