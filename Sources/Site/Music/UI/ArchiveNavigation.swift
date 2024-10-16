@@ -92,7 +92,9 @@ extension ArchiveNavigation: RawRepresentable {
   }
 
   var rawValue: String {
-    guard let data = try? JSONEncoder().encode(state) else { return "" }
+    let encoder = JSONEncoder()
+    encoder.outputFormatting = [.sortedKeys]
+    guard let data = try? encoder.encode(state) else { return "" }
     guard let value = String(data: data, encoding: .utf8) else { return "" }
     Logger.archive.log("saving: \(value, privacy: .public)")
     return value
