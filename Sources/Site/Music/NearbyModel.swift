@@ -28,6 +28,21 @@ extension Logger {
       self.distanceThreshold = distanceThreshold
       self.locationFilter = locationFilter
     }
+
+    internal init?(jsonString: String) {
+      guard let data = jsonString.data(using: .utf8),
+        let state = try? JSONDecoder().decode(State.self, from: data)
+      else { return nil }
+      self = state
+    }
+
+    var jsonString: String {
+      let encoder = JSONEncoder()
+      encoder.outputFormatting = [.sortedKeys]
+      guard let data = try? encoder.encode(self), let value = String(data: data, encoding: .utf8)
+      else { return "" }
+      return value
+    }
   }
 
   private var state: State
@@ -58,14 +73,12 @@ extension Logger {
 extension NearbyModel: RawRepresentable {
   convenience init?(rawValue: String) {
     Logger.nearby.log("loading: \(rawValue, privacy: .public)")
-    guard let data = rawValue.data(using: .utf8) else { return nil }
-    guard let state = try? JSONDecoder().decode(State.self, from: data) else { return nil }
+    guard let state = State(jsonString: rawValue) else { return nil }
     self.init(state)
   }
 
   var rawValue: String {
-    guard let data = try? JSONEncoder().encode(state) else { return "" }
-    guard let value = String(data: data, encoding: .utf8) else { return "" }
+    let value = state.jsonString
     Logger.nearby.log("saving: \(value, privacy: .public)")
     return value
   }
