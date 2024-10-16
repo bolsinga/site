@@ -79,7 +79,7 @@ extension Logger {
       #if DEFAULT_CATEGORY_OPTIONAL
         guard let category = state.category else { return .none }
       #endif
-      guard !path.isEmpty, let last = path.last else { return .category(category) }
+      guard let last = path.last else { return .category(category) }
       return .path(last)
     }()
     Logger.archive.log(
