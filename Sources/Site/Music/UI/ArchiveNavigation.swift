@@ -12,7 +12,7 @@ extension Logger {
   fileprivate static let archive = Logger(category: "archive")
 }
 
-@Observable final class ArchiveNavigation {
+@Observable final class ArchiveNavigation: CustomStringConvertible {
   struct State: Codable, Equatable, Sendable {
     var category: ArchiveCategory.DefaultCategory
     var categoryPaths: [ArchiveCategory: [ArchivePath]]
@@ -24,6 +24,21 @@ extension Logger {
       self.category = category
       self.categoryPaths = categoryPaths
     }
+
+    internal init?(jsonString: String) {
+      guard let data = jsonString.data(using: .utf8),
+        let state = try? JSONDecoder().decode(State.self, from: data)
+      else { return nil }
+      self = state
+    }
+
+    var jsonString: String {
+      let encoder = JSONEncoder()
+      encoder.outputFormatting = [.sortedKeys]
+      guard let data = try? encoder.encode(self), let value = String(data: data, encoding: .utf8)
+      else { return "" }
+      return value
+    }
   }
 
   private var state: State
@@ -31,6 +46,8 @@ extension Logger {
   internal init(_ state: State = State()) {
     self.state = state
   }
+
+  var description: String { state.jsonString }
 
   var category: ArchiveCategory.DefaultCategory {
     get {
@@ -83,7 +100,7 @@ extension Logger {
       return .path(last)
     }()
     Logger.archive.log(
-      "activity: \(result, privacy: .public) path: \(self.rawValue, privacy: .public)")
+      "activity: \(result, privacy: .public) path: \(self, privacy: .public)")
     return result
   }
 }
@@ -91,16 +108,12 @@ extension Logger {
 extension ArchiveNavigation: RawRepresentable {
   convenience init?(rawValue: String) {
     Logger.archive.log("loading: \(rawValue, privacy: .public)")
-    guard let data = rawValue.data(using: .utf8) else { return nil }
-    guard let state = try? JSONDecoder().decode(State.self, from: data) else { return nil }
+    guard let state = State(jsonString: rawValue) else { return nil }
     self.init(state)
   }
 
   var rawValue: String {
-    let encoder = JSONEncoder()
-    encoder.outputFormatting = [.sortedKeys]
-    guard let data = try? encoder.encode(state) else { return "" }
-    guard let value = String(data: data, encoding: .utf8) else { return "" }
+    let value = state.jsonString
     Logger.archive.log("saving: \(value, privacy: .public)")
     return value
   }
