@@ -13,7 +13,7 @@ extension Logger {
 }
 
 @Observable final class ArchiveNavigation {
-  struct State: Codable, Equatable, Sendable {
+  private struct State: Codable, Equatable, Sendable {
     var category: ArchiveCategory.DefaultCategory
     var categoryPaths: [ArchiveCategory: [ArchivePath]]
 
@@ -28,7 +28,11 @@ extension Logger {
 
   private var state: State
 
-  internal init(_ state: State = State()) {
+  internal convenience init() {
+    self.init(State())
+  }
+
+  private init(_ state: State) {
     self.state = state
   }
 
