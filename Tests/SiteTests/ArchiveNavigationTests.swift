@@ -9,6 +9,13 @@ import Testing
 
 @testable import Site
 
+extension ArchiveCategory {
+  var isStats: Bool {
+    if case .stats = self { return true }
+    return false
+  }
+}
+
 extension ArchiveActivity {
   var isNone: Bool {
     if case .none = self {
@@ -194,7 +201,9 @@ struct ArchiveNavigationTests {
     #endif
   }
 
-  @Test("Activity", arguments: ArchiveCategory.allCases, [[], [ArchivePath.artist("id")]])
+  static let nonStatsCategories = ArchiveCategory.allCases.filter { !($0.isStats) }
+
+  @Test("Activity", arguments: nonStatsCategories, [[], [ArchivePath.artist("id")]])
   func activity(category: ArchiveCategory, path: [ArchivePath]) {
     let ar = ArchiveNavigation(
       ArchiveNavigation.State(category: category, categoryPaths: [category: path]))
@@ -206,6 +215,24 @@ struct ArchiveNavigationTests {
 
     #expect(activity.matches(category: category) || !path.isEmpty)
     #expect(activity.matches(path: ArchivePath.artist("id")) || path.isEmpty)
+
+    ArchiveCategory.allCases.filter { $0 != category }.forEach { categoryCase in
+      #expect(!activity.matches(category: categoryCase))
+    }
+  }
+
+  @Test("Activity - Stats", arguments: [ArchiveCategory.stats], [[], [ArchivePath.artist("id")]])
+  func activity_stats(category: ArchiveCategory, path: [ArchivePath]) {
+    let ar = ArchiveNavigation(
+      ArchiveNavigation.State(category: category, categoryPaths: [category: path]))
+    let activity = ar.activity
+
+    #expect(!activity.isNone)
+    #expect(activity.isCategory)
+    #expect(!activity.isPath)
+
+    #expect(activity.matches(category: category))
+    #expect(!activity.matches(path: ArchivePath.artist("id")))
 
     ArchiveCategory.allCases.filter { $0 != category }.forEach { categoryCase in
       #expect(!activity.matches(category: categoryCase))

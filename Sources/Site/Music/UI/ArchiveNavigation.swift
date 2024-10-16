@@ -12,6 +12,13 @@ extension Logger {
   fileprivate static let archive = Logger(category: "archive")
 }
 
+extension ArchiveCategory {
+  fileprivate var hasCategoryPath: Bool {
+    if case .stats = self { return false }
+    return true
+  }
+}
+
 @Observable final class ArchiveNavigation: CustomStringConvertible {
   struct State: Codable, Equatable, Sendable {
     var category: ArchiveCategory.DefaultCategory
@@ -39,12 +46,16 @@ extension Logger {
       else { return "" }
       return value
     }
+
+    fileprivate var pruned: State {
+      State(category: category, categoryPaths: categoryPaths.filter { $0.key.hasCategoryPath })
+    }
   }
 
   private var state: State
 
   internal init(_ state: State = State()) {
-    self.state = state
+    self.state = state.pruned
   }
 
   var description: String { state.jsonString }
