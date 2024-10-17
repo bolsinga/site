@@ -10,6 +10,7 @@ import SwiftUI
 struct ArchiveCategoryRoot: View {
   let model: VaultModel
   let category: ArchiveCategory
+  let statsDisplayArchiveCategoryCounts: Bool
   @Binding var venueSort: RankingSort
   @Binding var artistSort: RankingSort
   let nearbyModel: NearbyModel
@@ -33,12 +34,9 @@ struct ArchiveCategoryRoot: View {
   var body: some View {
     category.summary(
       model: model, nearbyModel: nearbyModel,
-      venueSortSearch: {
-        (venueSort, $venueSearchString)
-      },
-      artistSortSearch: {
-        (artistSort, $artistSearchString)
-      }
+      statsDisplayArchiveCategoryCounts: statsDisplayArchiveCategoryCounts,
+      venueSortSearch: { (venueSort, $venueSearchString) },
+      artistSortSearch: { (artistSort, $artistSearchString) }
     )
     .toolbar {
       if category.isLocationFilterable {
@@ -66,7 +64,8 @@ extension ArchiveCategoryRoot {
   init(withPreviewCategory category: ArchiveCategory) {
     self.init(
       model: VaultModel(vaultPreviewData, executeAsynchronousTasks: false),
-      category: category, venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
+      category: category, statsDisplayArchiveCategoryCounts: false,
+      venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
       nearbyModel: NearbyModel())
   }
 }

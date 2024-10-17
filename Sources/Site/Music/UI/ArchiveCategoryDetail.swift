@@ -25,8 +25,8 @@ struct ArchiveCategoryDetail: View {
   var body: some View {
     if let category {
       ArchiveCategoryStack(
-        model: model, category: category, path: $path, venueSort: $venueSort,
-        artistSort: $artistSort, nearbyModel: nearbyModel)
+        model: model, category: category, statsDisplayArchiveCategoryCounts: false, path: $path,
+        venueSort: $venueSort, artistSort: $artistSort, nearbyModel: nearbyModel)
     } else {
       Text("Select An Item", bundle: .module)
     }
