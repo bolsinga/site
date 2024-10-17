@@ -16,9 +16,6 @@ struct ArchiveCategoryStack: View {
   @Binding var artistSort: RankingSort
   let nearbyModel: NearbyModel
 
-  @State var artistSearchString: String = ""
-  @State var venueSearchString: String = ""
-
   var body: some View {
     NavigationStack(path: $path) {
       ArchiveCategoryRoot(

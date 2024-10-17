@@ -16,9 +16,6 @@ struct ArchiveCategoryDetail: View {
   @Binding var artistSort: RankingSort
   let nearbyModel: NearbyModel
 
-  @State var artistSearchString: String = ""
-  @State var venueSearchString: String = ""
-
   // The following property allows this UI code to not know if ArchiveNavigation.State.category is Optional or not.
   private var category: ArchiveCategory? { selectedCategory }
 

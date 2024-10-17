@@ -15,8 +15,8 @@ struct ArchiveCategoryRoot: View {
   @Binding var artistSort: RankingSort
   let nearbyModel: NearbyModel
 
-  @State var artistSearchString: String = ""
-  @State var venueSearchString: String = ""
+  @State private var artistSearchString: String = ""
+  @State private var venueSearchString: String = ""
 
   private func sortableData(_ category: ArchiveCategory) -> (
     sort: Binding<RankingSort>, associatedRankName: String
