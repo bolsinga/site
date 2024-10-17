@@ -84,7 +84,7 @@ extension Logger {
     }
   }
 
-  private var state: State
+  var state: State
 
   @ObservationIgnored
   private let useDispatchMainWorkaround: Bool  // Disable for testing (so changes occur immediately).

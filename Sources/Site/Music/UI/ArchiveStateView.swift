@@ -18,10 +18,23 @@ struct ArchiveStateView: View {
   @State private var activity = ArchiveActivity.none
 
   @ViewBuilder private var archiveBody: some View {
-    ArchiveCategorySplit(
+    ArchiveTabView(
       model: model, venueSort: $venueSort, artistSort: $artistSort,
-      selectedCategory: $archiveNavigation.category, path: $archiveNavigation.path,
-      nearbyModel: nearbyModel)
+      selectedCategory: $archiveNavigation.category,
+      pathForCategory: {
+        switch $0 {
+        case .today:
+          return $archiveNavigation.state.todayPath
+        case .stats, .settings:
+          return .constant([])
+        case .shows:
+          return $archiveNavigation.state.showsPath
+        case .venues:
+          return $archiveNavigation.state.venuesPath
+        case .artists:
+          return $archiveNavigation.state.artistsPath
+        }
+      }, nearbyModel: nearbyModel)
   }
 
   var body: some View {
