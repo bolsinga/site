@@ -141,9 +141,10 @@ extension ArchiveCategory {
       Logger.archive.log("nav to category: \(category.rawValue, privacy: .public)")
     #endif
     self.category = category
-    if let category {
-      setPath(for: category, [])
-    }
+    #if DEFAULT_CATEGORY_OPTIONAL
+      guard let category = category else { return }
+    #endif
+    setPath(for: category, [])
   }
 
   var activity: ArchiveActivity {
