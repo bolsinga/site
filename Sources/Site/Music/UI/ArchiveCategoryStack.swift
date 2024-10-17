@@ -10,6 +10,7 @@ import SwiftUI
 struct ArchiveCategoryStack: View {
   let model: VaultModel
   let category: ArchiveCategory
+  let statsDisplayArchiveCategoryCounts: Bool
   @Binding var path: [ArchivePath]
   @Binding var venueSort: RankingSort
   @Binding var artistSort: RankingSort
@@ -21,8 +22,9 @@ struct ArchiveCategoryStack: View {
   var body: some View {
     NavigationStack(path: $path) {
       ArchiveCategoryRoot(
-        model: model, category: category, venueSort: $venueSort, artistSort: $artistSort,
-        nearbyModel: nearbyModel
+        model: model, category: category,
+        statsDisplayArchiveCategoryCounts: statsDisplayArchiveCategoryCounts, venueSort: $venueSort,
+        artistSort: $artistSort, nearbyModel: nearbyModel
       )
       .navigationDestination(for: ArchivePath.self) {
         $0.destination(vault: model.vault, isPathNavigable: path.isPathNavigable(_:))
@@ -36,7 +38,8 @@ extension ArchiveCategoryStack {
   init(withPreviewCategory category: ArchiveCategory) {
     self.init(
       model: VaultModel(vaultPreviewData, executeAsynchronousTasks: false),
-      category: category, path: .constant([]), venueSort: .constant(.alphabetical),
+      category: category, statsDisplayArchiveCategoryCounts: false, path: .constant([]),
+      venueSort: .constant(.alphabetical),
       artistSort: .constant(.alphabetical), nearbyModel: NearbyModel())
   }
 }
