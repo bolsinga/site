@@ -42,9 +42,7 @@ extension ArchiveActivity {
 struct ArchiveNavigationTests {
   @Test func navigateToCategory() {
     let ar = ArchiveNavigation()
-    #if DEFAULT_CATEGORY_OPTIONAL
-      #expect(ar.category != nil)
-    #endif
+    #expect(ar.category != nil)
     #expect(ar.category == .defaultCategory)
     #expect(ar.path.isEmpty)
 
@@ -68,11 +66,9 @@ struct ArchiveNavigationTests {
     #expect(ar.category == .shows)
     #expect(ar.path.isEmpty)
 
-    #if DEFAULT_CATEGORY_OPTIONAL
-      ar.navigate(to: nil)
-      #expect(ar.category == nil)
-      #expect(ar.path.isEmpty)
-    #endif
+    ar.navigate(to: nil)
+    #expect(ar.category == nil)
+    #expect(ar.path.isEmpty)
   }
 
   @Test func navigateToCategory_existingPath() {
@@ -80,67 +76,51 @@ struct ArchiveNavigationTests {
       ArchiveNavigation.State(
         category: .artists, categoryPaths: [.artists: [Artist(id: "id", name: "name").archivePath]])
     )
-    #if DEFAULT_CATEGORY_OPTIONAL
-      #expect(ar.category != nil)
-    #endif
+    #expect(ar.category != nil)
     #expect(ar.category == .artists)
     #expect(!ar.path.isEmpty)
     #expect(ar.path.first! == Artist(id: "id", name: "name").archivePath)
 
     ar.navigate(to: .venues)
-    #if DEFAULT_CATEGORY_OPTIONAL
-      #expect(ar.category != nil)
-    #endif
+    #expect(ar.category != nil)
     #expect(ar.category == .venues)
     #expect(ar.path.isEmpty)
 
     ar.navigate(to: .artists)
-    #if DEFAULT_CATEGORY_OPTIONAL
-      #expect(ar.category != nil)
-    #endif
+    #expect(ar.category != nil)
     #expect(ar.category == .artists)
     #expect(ar.path.isEmpty)
   }
 
   @Test func navigateToArchivePath() {
     let ar = ArchiveNavigation()
-    #if DEFAULT_CATEGORY_OPTIONAL
-      #expect(ar.category != nil)
-    #endif
+    #expect(ar.category != nil)
     #expect(ar.category == .defaultCategory)
     #expect(ar.path.isEmpty)
 
     ar.navigate(to: ArchivePath.artist("id"))
-    #if DEFAULT_CATEGORY_OPTIONAL
-      #expect(ar.category != nil)
-    #endif
+    #expect(ar.category != nil)
     #expect(ar.category == .defaultCategory)
     #expect(ar.path.count == 1)
     #expect(ar.path.last != nil)
     #expect(ar.path.last! == ArchivePath.artist("id"))
 
     ar.navigate(to: ArchivePath.venue("id"))
-    #if DEFAULT_CATEGORY_OPTIONAL
-      #expect(ar.category != nil)
-    #endif
+    #expect(ar.category != nil)
     #expect(ar.category == .defaultCategory)
     #expect(ar.path.count == 2)
     #expect(ar.path.last != nil)
     #expect(ar.path.last! == ArchivePath.venue("id"))
 
     ar.navigate(to: ArchivePath.show("id"))
-    #if DEFAULT_CATEGORY_OPTIONAL
-      #expect(ar.category != nil)
-    #endif
+    #expect(ar.category != nil)
     #expect(ar.category == .defaultCategory)
     #expect(ar.path.count == 3)
     #expect(ar.path.last != nil)
     #expect(ar.path.last! == ArchivePath.show("id"))
 
     ar.navigate(to: ArchivePath.year(Annum.year(1989)))
-    #if DEFAULT_CATEGORY_OPTIONAL
-      #expect(ar.category != nil)
-    #endif
+    #expect(ar.category != nil)
     #expect(ar.category == .defaultCategory)
     #expect(ar.path.count == 4)
     #expect(ar.path.last != nil)
@@ -172,17 +152,15 @@ struct ArchiveNavigationTests {
     #expect(ar.category == .defaultCategory)
   }
 
-  #if DEFAULT_CATEGORY_OPTIONAL
-    @Test("Activity - nil")
-    func activityNone() throws {
-      let ar = ArchiveNavigation(ArchiveNavigation.State(category: nil))
-      let activity = ar.activity
+  @Test("Activity - nil")
+  func activityNone() throws {
+    let ar = ArchiveNavigation(ArchiveNavigation.State(category: nil))
+    let activity = ar.activity
 
-      #expect(activity.isNone)
-      #expect(!activity.isCategory)
-      #expect(!activity.isPath)
-    }
-  #endif
+    #expect(activity.isNone)
+    #expect(!activity.isCategory)
+    #expect(!activity.isPath)
+  }
 
   @Test("Activity - DefaultCategory")
   func activityDefault() throws {
@@ -193,12 +171,8 @@ struct ArchiveNavigationTests {
     #expect(activity.isCategory)
     #expect(!activity.isPath)
 
-    #if DEFAULT_CATEGORY_OPTIONAL
-      try #require(ArchiveCategory.defaultCategory != nil)
-      #expect(activity.matches(category: .defaultCategory!))
-    #else
-      #expect(activity.matches(category: .defaultCategory))
-    #endif
+    try #require(ArchiveCategory? != nil)
+    #expect(activity.matches(category: .defaultCategory!))
   }
 
   static let nonStatsCategories = ArchiveCategory.allCases.filter { !($0.isStats) }

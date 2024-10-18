@@ -10,14 +10,11 @@ import SwiftUI
 
 struct ArchiveCategoryDetail: View {
   let model: VaultModel
-  let selectedCategory: ArchiveCategory.DefaultCategory
+  let category: ArchiveCategory?
   @Binding var path: [ArchivePath]
   @Binding var venueSort: RankingSort
   @Binding var artistSort: RankingSort
   let nearbyModel: NearbyModel
-
-  // The following property allows this UI code to not know if ArchiveNavigation.State.category is Optional or not.
-  private var category: ArchiveCategory? { selectedCategory }
 
   var body: some View {
     if let category {
@@ -32,11 +29,11 @@ struct ArchiveCategoryDetail: View {
 
 // Preview only extension
 extension ArchiveCategoryDetail {
-  init(withPreviewCategory category: ArchiveCategory.DefaultCategory) {
+  init(withPreviewCategory category: ArchiveCategory?) {
     self.init(
       model: VaultModel(vaultPreviewData, executeAsynchronousTasks: false),
-      selectedCategory: category, path: .constant([]),
-      venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
+      category: category, path: .constant([]), venueSort: .constant(.alphabetical),
+      artistSort: .constant(.alphabetical),
       nearbyModel: NearbyModel())
   }
 }
@@ -61,8 +58,6 @@ extension ArchiveCategoryDetail {
   ArchiveCategoryDetail(withPreviewCategory: .artists)
 }
 
-#if DEFAULT_CATEGORY_OPTIONAL
-  #Preview {
-    ArchiveCategoryDetail(withPreviewCategory: nil)
-  }
-#endif
+#Preview {
+  ArchiveCategoryDetail(withPreviewCategory: nil)
+}

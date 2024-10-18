@@ -22,13 +22,9 @@ let package = Package(
   targets: [
     .target(
       name: "Site",
-      resources: [.process("Resources/Localizable.xcstrings")],
-      swiftSettings: [
-        .define("DEFAULT_CATEGORY_OPTIONAL", .when(platforms: [.iOS, .tvOS]))
-      ]),
+      resources: [.process("Resources/Localizable.xcstrings")]),
     .testTarget(
-      name: "SiteTests", dependencies: ["Site"],
-      swiftSettings: [.define("DEFAULT_CATEGORY_OPTIONAL", .when(platforms: [.iOS, .tvOS]))]),
+      name: "SiteTests", dependencies: ["Site"]),
     .executableTarget(
       name: "site_tool",
       dependencies: [
