@@ -39,6 +39,19 @@ extension ArchiveActivity {
   }
 }
 
+extension ArchiveNavigation.State {
+  init(category: ArchiveCategory?, categoryPaths: [ArchiveCategory: [ArchivePath]]) {
+    let todayPath = categoryPaths[.today] ?? []
+    let showsPath = categoryPaths[.shows] ?? []
+    let venuesPath = categoryPaths[.venues] ?? []
+    let artistsPath = categoryPaths[.artists] ?? []
+
+    self.init(
+      category: category, todayPath: todayPath, showsPath: showsPath, venuesPath: venuesPath,
+      artistsPath: artistsPath)
+  }
+}
+
 struct ArchiveNavigationTests {
   @Test func navigateToCategory() {
     let ar = ArchiveNavigation()
@@ -154,7 +167,7 @@ struct ArchiveNavigationTests {
 
   @Test("Activity - nil")
   func activityNone() throws {
-    let ar = ArchiveNavigation(ArchiveNavigation.State(category: nil))
+    let ar = ArchiveNavigation(ArchiveNavigation.State(category: nil, categoryPaths: [:]))
     let activity = ar.activity
 
     #expect(activity.isNone)

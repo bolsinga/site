@@ -22,17 +22,24 @@ extension ArchiveCategory {
 @Observable final class ArchiveNavigation: CustomStringConvertible {
   struct State: Codable, Equatable, Sendable {
     var category: ArchiveCategory?
-    var categoryPaths: [ArchiveCategory: [ArchivePath]]
 
-    internal init(
-      category: ArchiveCategory? = .defaultCategory,
-      categoryPaths: [ArchiveCategory: [ArchivePath]] = [:]
+    var todayPath: [ArchivePath]
+    var showsPath: [ArchivePath]
+    var venuesPath: [ArchivePath]
+    var artistsPath: [ArchivePath]
+
+    init(
+      category: ArchiveCategory? = .defaultCategory, todayPath: [ArchivePath] = [],
+      showsPath: [ArchivePath] = [], venuesPath: [ArchivePath] = [], artistsPath: [ArchivePath] = []
     ) {
       self.category = category
-      self.categoryPaths = categoryPaths
+      self.todayPath = todayPath
+      self.showsPath = showsPath
+      self.venuesPath = venuesPath
+      self.artistsPath = artistsPath
     }
 
-    internal init?(jsonString: String) {
+    init?(jsonString: String) {
       guard let data = jsonString.data(using: .utf8),
         let state = try? JSONDecoder().decode(State.self, from: data)
       else { return nil }
@@ -46,78 +53,56 @@ extension ArchiveCategory {
       else { return "" }
       return value
     }
-
-    fileprivate var pruned: State {
-      State(category: category, categoryPaths: categoryPaths.filter { $0.key.hasCategoryPath })
-    }
-
-    fileprivate func path(for category: ArchiveCategory) -> [ArchivePath] {
-      categoryPaths[category] ?? []
-    }
   }
 
-  var category: ArchiveCategory?
+  private var state: State
 
-  var todayPath: [ArchivePath]
-  var showsPath: [ArchivePath]
-  var venuesPath: [ArchivePath]
-  var artistsPath: [ArchivePath]
-
-  internal init(_ state: State = State()) {
-    self.category = state.category
-
-    self.todayPath = state.path(for: .today)
-    self.showsPath = state.path(for: .shows)
-    self.venuesPath = state.path(for: .venues)
-    self.artistsPath = state.path(for: .artists)
+  init(_ state: State = State()) {
+    self.state = state
   }
 
   @ObservationIgnored
-  var description: String { state().jsonString }
+  var description: String { state.jsonString }
 
-  private func path(for category: ArchiveCategory) -> [ArchivePath] {
-    switch category {
-    case .today:
-      todayPath
-    case .stats:
-      []
-    case .shows:
-      showsPath
-    case .venues:
-      venuesPath
-    case .artists:
-      artistsPath
+  var category: ArchiveCategory? {
+    get {
+      state.category
     }
-  }
-
-  private func setPath(for category: ArchiveCategory, _ path: [ArchivePath]) {
-    switch category {
-    case .today:
-      todayPath = path
-    case .stats:
-      break
-    case .shows:
-      showsPath = path
-    case .venues:
-      venuesPath = path
-    case .artists:
-      artistsPath = path
+    set {
+      state.category = newValue
     }
-  }
-
-  private func state() -> State {
-    let categoryPaths = ArchiveCategory.allCases.reduce(into: [:]) { $0[$1] = path(for: $1) }
-    return State(category: category, categoryPaths: categoryPaths)
   }
 
   var path: [ArchivePath] {
     get {
       guard let category = category else { return [] }
-      return path(for: category)
+      switch category {
+      case .today:
+        return state.todayPath
+      case .stats:
+        return []
+      case .shows:
+        return state.showsPath
+      case .venues:
+        return state.venuesPath
+      case .artists:
+        return state.artistsPath
+      }
     }
     set {
       guard let category = category else { return }
-      setPath(for: category, newValue)
+      switch category {
+      case .today:
+        state.todayPath = newValue
+      case .stats:
+        break
+      case .shows:
+        state.showsPath = newValue
+      case .venues:
+        state.venuesPath = newValue
+      case .artists:
+        state.artistsPath = newValue
+      }
     }
   }
 
@@ -132,9 +117,7 @@ extension ArchiveCategory {
 
   func navigate(to category: ArchiveCategory?) {
     Logger.archive.log("nav to category: \(category?.rawValue ?? "nil", privacy: .public)")
-    self.category = category
-    guard let category = category else { return }
-    setPath(for: category, [])
+    self.state = State(category: category)
   }
 
   var activity: ArchiveActivity {
@@ -157,7 +140,7 @@ extension ArchiveNavigation: RawRepresentable {
   }
 
   var rawValue: String {
-    let value = state().jsonString
+    let value = state.jsonString
     Logger.archive.log("saving: \(value, privacy: .public)")
     return value
   }
