@@ -10,9 +10,10 @@ import Testing
 @testable import Site
 
 extension ArchiveCategory {
-  var isStats: Bool {
-    if case .stats = self { return true }
-    return false
+  var isRegularActivity: Bool {
+    if case .stats = self { return false }
+    if case .settings = self { return false }
+    return true
   }
 }
 
@@ -188,9 +189,9 @@ struct ArchiveNavigationTests {
     #expect(activity.matches(category: .defaultCategory!))
   }
 
-  static let nonStatsCategories = ArchiveCategory.allCases.filter { !($0.isStats) }
+  static let regularActivities = ArchiveCategory.allCases.filter { $0.isRegularActivity }
 
-  @Test("Activity", arguments: nonStatsCategories, [[], [ArchivePath.artist("id")]])
+  @Test("Activity", arguments: regularActivities, [[], [ArchivePath.artist("id")]])
   func activity(category: ArchiveCategory, path: [ArchivePath]) {
     let ar = ArchiveNavigation(
       ArchiveNavigation.State(category: category, categoryPaths: [category: path]))
@@ -208,7 +209,9 @@ struct ArchiveNavigationTests {
     }
   }
 
-  @Test("Activity - Stats", arguments: [ArchiveCategory.stats], [[], [ArchivePath.artist("id")]])
+  static let irregularActivities = ArchiveCategory.allCases.filter { !$0.isRegularActivity }
+
+  @Test("Activity - Irregular", arguments: irregularActivities, [[], [ArchivePath.artist("id")]])
   func activity_stats(category: ArchiveCategory, path: [ArchivePath]) {
     let ar = ArchiveNavigation(
       ArchiveNavigation.State(category: category, categoryPaths: [category: path]))
