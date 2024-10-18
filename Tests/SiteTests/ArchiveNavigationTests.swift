@@ -171,7 +171,7 @@ struct ArchiveNavigationTests {
     #expect(activity.isCategory)
     #expect(!activity.isPath)
 
-    try #require(ArchiveCategory? != nil)
+    try #require(ArchiveCategory.defaultCategory != nil)
     #expect(activity.matches(category: .defaultCategory!))
   }
 
