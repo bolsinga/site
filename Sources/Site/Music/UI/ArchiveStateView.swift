@@ -72,9 +72,7 @@ struct ArchiveStateView: View {
       .advertiseUserActivity(
         for: activity,
         urlForCategory: { category in
-          #if DEFAULT_CATEGORY_OPTIONAL
-            guard let category else { return nil }
-          #endif
+          guard let category else { return nil }
           return model.vault.categoryURLMap[category]
         }
       ) { model.vault.restorableSharableLinkable(for: $0) }

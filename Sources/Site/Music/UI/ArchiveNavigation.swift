@@ -21,11 +21,11 @@ extension ArchiveCategory {
 
 @Observable final class ArchiveNavigation: CustomStringConvertible {
   struct State: Codable, Equatable, Sendable {
-    var category: ArchiveCategory.DefaultCategory
+    var category: ArchiveCategory?
     var categoryPaths: [ArchiveCategory: [ArchivePath]]
 
     internal init(
-      category: ArchiveCategory.DefaultCategory = .defaultCategory,
+      category: ArchiveCategory? = .defaultCategory,
       categoryPaths: [ArchiveCategory: [ArchivePath]] = [:]
     ) {
       self.category = category
@@ -56,7 +56,7 @@ extension ArchiveCategory {
     }
   }
 
-  var category: ArchiveCategory.DefaultCategory
+  var category: ArchiveCategory?
 
   var todayPath: [ArchivePath]
   var showsPath: [ArchivePath]
@@ -112,15 +112,11 @@ extension ArchiveCategory {
 
   var path: [ArchivePath] {
     get {
-      #if DEFAULT_CATEGORY_OPTIONAL
-        guard let category = category else { return [] }
-      #endif
+      guard let category = category else { return [] }
       return path(for: category)
     }
     set {
-      #if DEFAULT_CATEGORY_OPTIONAL
-        guard let category = category else { return }
-      #endif
+      guard let category = category else { return }
       setPath(for: category, newValue)
     }
   }
@@ -134,24 +130,16 @@ extension ArchiveCategory {
     self.path.append(path)
   }
 
-  func navigate(to category: ArchiveCategory.DefaultCategory) {
-    #if DEFAULT_CATEGORY_OPTIONAL
-      Logger.archive.log("nav to category: \(category?.rawValue ?? "nil", privacy: .public)")
-    #else
-      Logger.archive.log("nav to category: \(category.rawValue, privacy: .public)")
-    #endif
+  func navigate(to category: ArchiveCategory?) {
+    Logger.archive.log("nav to category: \(category?.rawValue ?? "nil", privacy: .public)")
     self.category = category
-    #if DEFAULT_CATEGORY_OPTIONAL
-      guard let category = category else { return }
-    #endif
+    guard let category = category else { return }
     setPath(for: category, [])
   }
 
   var activity: ArchiveActivity {
     let result: ArchiveActivity = {
-      #if DEFAULT_CATEGORY_OPTIONAL
-        guard let category = category else { return .none }
-      #endif
+      guard let category = category else { return .none }
       guard let last = path.last else { return .category(category) }
       return .path(last)
     }()

@@ -14,7 +14,7 @@ struct ArchiveCategorySplit: View {
   @Binding var venueSort: RankingSort
   @Binding var artistSort: RankingSort
 
-  @Binding var selectedCategory: ArchiveCategory.DefaultCategory
+  @Binding var selectedCategory: ArchiveCategory?
   @Binding var path: [ArchivePath]
   let nearbyModel: NearbyModel
 
@@ -51,7 +51,7 @@ struct ArchiveCategorySplit: View {
         .toolbar { NearbyDistanceThresholdToolbarContent(model: nearbyModel) }
     } detail: {
       ArchiveCategoryDetail(
-        model: model, selectedCategory: selectedCategory, path: $path, venueSort: $venueSort,
+        model: model, category: selectedCategory, path: $path, venueSort: $venueSort,
         artistSort: $artistSort, nearbyModel: nearbyModel)
     }
   }
