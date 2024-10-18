@@ -33,6 +33,8 @@ extension ArchiveCategory {
       ArtistsSummary(
         model: model, nearbyModel: nearbyModel, sort: sortSearch.sort,
         searchString: sortSearch.search)
+    case .settings:
+      SettingsView(nearbyModel: nearbyModel)
     }
   }
 }

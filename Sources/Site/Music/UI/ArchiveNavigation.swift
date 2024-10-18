@@ -79,7 +79,7 @@ extension ArchiveCategory {
       switch category {
       case .today:
         return state.todayPath
-      case .stats:
+      case .stats, .settings:
         return []
       case .shows:
         return state.showsPath
@@ -94,7 +94,7 @@ extension ArchiveCategory {
       switch category {
       case .today:
         state.todayPath = newValue
-      case .stats:
+      case .stats, .settings:
         break
       case .shows:
         state.showsPath = newValue

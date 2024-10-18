@@ -35,6 +35,8 @@ struct ArchiveCategorySplit: View {
           Text(model.vault.venueDigests.count.formatted(.number))
         case .artists:
           Text(model.vault.artistDigests.count.formatted(.number))
+        case .settings:
+          EmptyView()
         }
       } label: {
         category.label
@@ -48,7 +50,6 @@ struct ArchiveCategorySplit: View {
         .navigationTitle(
           Text("Archives", bundle: .module)
         )
-        .toolbar { NearbyDistanceThresholdToolbarContent(model: nearbyModel) }
     } detail: {
       ArchiveCategoryDetail(
         model: model, category: selectedCategory, path: $path, venueSort: $venueSort,
