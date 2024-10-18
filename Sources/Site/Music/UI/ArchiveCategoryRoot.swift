@@ -22,7 +22,7 @@ struct ArchiveCategoryRoot: View {
     sort: Binding<RankingSort>, associatedRankName: String
   )? {
     switch category {
-    case .today, .stats, .shows:
+    case .today, .stats, .shows, .settings:
       nil
     case .venues:
       ($venueSort, String(localized: "Sort By Artist Count", bundle: .module))

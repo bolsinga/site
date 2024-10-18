@@ -10,7 +10,7 @@ import Foundation
 extension ArchiveCategory {
   fileprivate var isURLSharable: Bool {
     switch self {
-    case .today, .stats:
+    case .today, .stats, .settings:
       return false
     case .shows, .venues, .artists:
       return true

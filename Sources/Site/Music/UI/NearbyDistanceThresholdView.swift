@@ -11,7 +11,6 @@ import SwiftUI
 @MainActor
 struct NearbyDistanceThresholdView: View {
   @Binding var distanceThreshold: CLLocationDistance
-  @ViewBuilder var text: () -> Text
 
   private var distanceThresholdMeasurementString: String {
     nearbyDistanceThresholdFormatter.string(
@@ -30,7 +29,6 @@ struct NearbyDistanceThresholdView: View {
           value: $distanceThreshold, in: minimumNearbyDistance...maximumNearbyDistance,
           step: nearbyDistanceStep
         ) {
-          text()
         } minimumValueLabel: {
           Label {
             Text(distanceValueString(minimumNearbyDistance))
@@ -53,8 +51,5 @@ struct NearbyDistanceThresholdView: View {
 }
 
 #Preview {
-  NearbyDistanceThresholdView(distanceThreshold: .constant(100.0)) {
-    let v = "Nearby Distance"
-    Text(v)
-  }
+  NearbyDistanceThresholdView(distanceThreshold: .constant(100.0))
 }
