@@ -12,13 +12,6 @@ extension Logger {
   fileprivate static let archive = Logger(category: "archive")
 }
 
-extension ArchiveCategory {
-  fileprivate var hasCategoryPath: Bool {
-    if case .stats = self { return false }
-    return true
-  }
-}
-
 @Observable final class ArchiveNavigation: CustomStringConvertible {
   struct State: Codable, Equatable, Sendable {
     var category: ArchiveCategory?
