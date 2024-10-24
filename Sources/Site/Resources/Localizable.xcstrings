@@ -188,10 +188,10 @@
     "Location Disabled" : {
 
     },
-    "Location Services are disabled." : {
+    "Location Services are disabled. Disable the Location Filter." : {
 
     },
-    "Location Services are not available." : {
+    "Location Services are not available. Disable the Location Filter." : {
 
     },
     "Location Unavailable" : {
