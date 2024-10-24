@@ -45,8 +45,6 @@ struct NearbyDistanceThresholdView: View {
       #endif
       Text(distanceThresholdMeasurementString)
     }
-    .frame(width: 300)
-    .padding([.leading, .trailing], 10)
   }
 }
 
