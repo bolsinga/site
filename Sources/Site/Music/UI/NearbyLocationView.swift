@@ -37,14 +37,12 @@ struct NearbyLocationView: View {
         systemImage: "location.slash.circle",
         description: Text("Location Services are disabled.", bundle: .module)
       )
-      .frame(height: 200)
     case .denied:
       ContentUnavailableView(
         String(localized: "Location Unavailable", bundle: .module),
         systemImage: "location.slash.circle",
         description: Text("Location Services are not available.", bundle: .module)
       )
-      .frame(height: 200)
     }
   }
 }
