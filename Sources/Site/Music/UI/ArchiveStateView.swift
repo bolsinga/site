@@ -6,11 +6,6 @@
 //
 
 import SwiftUI
-import os
-
-extension Logger {
-  fileprivate static let externalEvent = Logger(category: "externalEvent")
-}
 
 struct ArchiveStateView: View {
   let model: VaultModel
@@ -35,40 +30,11 @@ struct ArchiveStateView: View {
       .onChange(of: archiveNavigation.activity) { _, newValue in
         activity = newValue
       }
-      .onContinueUserActivity(ArchivePath.activityType) { userActivity in
-        Logger.externalEvent.log(
-          "onContinueUserActivity: \(ArchivePath.activityType, privacy: .public)")
-
-        guard let path = userActivity.archivePath else {
-          Logger.externalEvent.error("no path")
-          return
-        }
-        archiveNavigation.navigate(to: path)
+      .onContinueUserActivity(ArchivePath.activityType) { archiveNavigation.pathActivity($0) }
+      .onContinueUserActivity(ArchiveCategory.activityType) {
+        archiveNavigation.categoryActivity($0)
       }
-      .onContinueUserActivity(ArchiveCategory.activityType) { userActivity in
-        Logger.externalEvent.log(
-          "onContinueUserActivity: \(ArchiveCategory.activityType, privacy: .public)")
-
-        guard let category = userActivity.archiveCategory else {
-          Logger.externalEvent.error("no category")
-          return
-        }
-        archiveNavigation.navigate(to: category)
-      }
-      .onOpenURL { url in
-        Logger.externalEvent.log("onOpenURL: \(url.absoluteString, privacy: .public)")
-        if let archivePath = try? ArchivePath(url) {
-          archiveNavigation.navigate(to: archivePath)
-        } else {
-          Logger.externalEvent.error("url not path")
-
-          if let archiveCategory = try? ArchiveCategory(url) {
-            archiveNavigation.navigate(to: archiveCategory)
-          } else {
-            Logger.externalEvent.error("url not category")
-          }
-        }
-      }
+      .onOpenURL { archiveNavigation.openURL($0) }
       .advertiseUserActivity(
         for: activity,
         urlForCategory: { category in
