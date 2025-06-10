@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  NSError+Throttle.swift
 //  site
 //
 //  Created by Greg Bolsinga on 6/10/25.
