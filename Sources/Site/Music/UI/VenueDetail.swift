@@ -5,12 +5,11 @@
 //  Created by Greg Bolsinga on 2/16/23.
 //
 
-import CoreLocation
 import MapKit
 import SwiftUI
 
 struct VenueDetail: View {
-  typealias geocoder = (VenueDigest) async throws -> CLPlacemark
+  typealias geocoder = (VenueDigest) async throws -> Placemark
 
   let digest: VenueDigest
   let concertCompare: (Concert, Concert) -> Bool
@@ -35,7 +34,7 @@ struct VenueDetail: View {
         .task(id: digest) {
           guard let geocode else { return }
           do {
-            item = MKMapItem(placemark: MKPlacemark(placemark: try await geocode(digest)))
+            item = MKMapItem(placemark: MKPlacemark(placemark: try await geocode(digest).placemark))
           } catch {}
         }
         #if !os(tvOS)

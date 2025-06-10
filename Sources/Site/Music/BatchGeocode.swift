@@ -5,11 +5,10 @@
 //  Created by Greg Bolsinga on 5/3/23.
 //
 
-import CoreLocation
 import Foundation
 
 struct BatchGeocode<T: AtlasGeocodable>: AsyncSequence {
-  typealias Element = (T, CLPlacemark)
+  typealias Element = (T, T.Place)
 
   let atlas: Atlas<T>
   let geocodables: [T]

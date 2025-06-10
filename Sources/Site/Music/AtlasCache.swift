@@ -5,7 +5,6 @@
 //  Created by Greg Bolsinga on 9/22/23.
 //
 
-import CoreLocation
 import Foundation
 import os
 
@@ -16,10 +15,9 @@ extension Logger {
 private let expirationOffset = 60.0 * 60.0 * 24.0 * 30.0 * 6.0  // Six months
 private let ExpirationStaggerDuration = 60.0 * 60.0 * 6.0  // Quarter day
 
-actor AtlasCache<T: AtlasGeocodable> {
+actor AtlasCache<T: AtlasGeocodable> where T.Place: Sendable {
   struct Value: Codable {
-    @NSCodingCodable
-    var placemark: CLPlacemark
+    var placemark: T.Place
     let expirationDate: Date
   }
 
@@ -46,11 +44,11 @@ actor AtlasCache<T: AtlasGeocodable> {
     }
   }
 
-  func get(_ item: T) -> CLPlacemark? { self[item] }
+  func get(_ item: T) -> T.Place? { self[item] }
 
-  func add(_ item: T, value: CLPlacemark) { self[item] = value }
+  func add(_ item: T, value: T.Place) { self[item] = value }
 
-  private subscript(index: T) -> CLPlacemark? {
+  private subscript(index: T) -> T.Place? {
     get {
       cache[index]?.placemark
     }

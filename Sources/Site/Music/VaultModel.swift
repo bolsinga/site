@@ -23,7 +23,7 @@ enum LocationAuthorization {
   public let vault: Vault
 
   internal var todayConcerts: [Concert] = []
-  private var venuePlacemarks: [Venue.ID: CLPlacemark] = [:]
+  private var venuePlacemarks: [Venue.ID: Placemark] = [:]
   private var currentLocation: CLLocation?
   internal var locationAuthorization = LocationAuthorization.allowed
 
