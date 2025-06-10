@@ -8,16 +8,41 @@
 import CoreLocation
 import Foundation
 
-#if !canImport(Contacts)
-  import MapKit
+#if canImport(Contacts)
+  import Contacts
 #endif
 
 extension Location: AtlasGeocodable {
+  #if canImport(Contacts)
+    private var postalAddress: CNPostalAddress {
+      let pAddress = CNMutablePostalAddress()
+      pAddress.city = city
+      pAddress.state = state
+      if let street {
+        pAddress.street = street
+      }
+      return pAddress
+    }
+
+    var addressString: String {
+      // Note this requests access to Contacts, despite this not reading any contacts.
+      CNPostalAddressFormatter().string(from: postalAddress)
+    }
+  #else
+    var addressString: String {
+      let cityState = "\(city) \(state)"
+      if let street {
+        return "\(street)\n\(cityState)"
+      }
+      return cityState
+    }
+  #endif
+
   public func geocode() async throws -> CLPlacemark {
     #if canImport(Contacts)
-      try await postalAddress.geocode()
+      try await geocodePostalAddress(self.postalAddress)
     #else
-      try await addressString.geocode()
+      try await geocodeAddressString(addressString)
     #endif
   }
 }
