@@ -5,7 +5,6 @@
 //  Created by Greg Bolsinga on 5/21/23.
 //
 
-import CoreLocation
 import SwiftUI
 
 struct ArchiveCategorySplit: View {

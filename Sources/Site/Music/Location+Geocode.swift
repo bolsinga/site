@@ -5,7 +5,6 @@
 //  Created by Greg Bolsinga on 2/27/23.
 //
 
-import CoreLocation
 import Foundation
 
 #if canImport(Contacts)
