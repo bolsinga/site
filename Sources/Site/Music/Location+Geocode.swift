@@ -38,7 +38,7 @@ extension Location {
     }
   #endif
 
-  public func geocode() async throws -> CLPlacemark {
+  func geocode() async throws -> Placemark {
     #if canImport(Contacts)
       try await geocodePostalAddress(self.postalAddress)
     #else

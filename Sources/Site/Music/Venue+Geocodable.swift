@@ -9,7 +9,7 @@ import CoreLocation
 import Foundation
 
 extension Venue: AtlasGeocodable {
-  func geocode() async throws -> CLPlacemark {
+  func geocode() async throws -> Placemark {
     try await location.geocode()
   }
 }

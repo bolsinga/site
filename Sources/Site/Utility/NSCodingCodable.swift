@@ -8,7 +8,7 @@
 import Foundation
 
 @propertyWrapper
-struct NSCodingCodable<T: NSObject & NSCoding>: Codable {
+struct NSCodingCodable<T: NSObject & NSCoding & Sendable>: Codable {
   enum NSCodingCodableError: Error {
     case decodeFailure
   }

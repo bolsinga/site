@@ -14,10 +14,12 @@ extension Logger {
 }
 
 protocol Geocodable {
-  func geocode() async throws -> CLPlacemark
+  associatedtype Place
+  func geocode() async throws -> Place
 }
 
-protocol AtlasGeocodable: Geocodable, Codable, Equatable, Hashable, Sendable {}
+protocol AtlasGeocodable: Geocodable, Codable, Equatable, Hashable, Sendable
+where Place: Codable & Sendable {}
 
 private enum Constants {
   static let maxRequests = 50
@@ -42,7 +44,7 @@ actor Atlas<T: AtlasGeocodable> {
     reset()
   }
 
-  public func geocode(_ geocodable: T) async throws -> CLPlacemark {
+  public func geocode(_ geocodable: T) async throws -> T.Place {
     if let result = await cache.get(geocodable) {
       Logger.atlas.log("cached result")
       return result
@@ -53,7 +55,7 @@ actor Atlas<T: AtlasGeocodable> {
     return result
   }
 
-  private func gatedGeocode(_ geocodable: T) async throws -> CLPlacemark {
+  private func gatedGeocode(_ geocodable: T) async throws -> T.Place {
     Logger.atlas.log("start gatedGeocode")
     defer {
       Logger.atlas.log("end gatedGeocode")
