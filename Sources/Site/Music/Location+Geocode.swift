@@ -12,7 +12,7 @@ import Foundation
   import Contacts
 #endif
 
-extension Location: AtlasGeocodable {
+extension Location {
   #if canImport(Contacts)
     private var postalAddress: CNPostalAddress {
       let pAddress = CNMutablePostalAddress()
