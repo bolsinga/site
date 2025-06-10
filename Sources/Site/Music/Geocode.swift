@@ -7,7 +7,7 @@
 
 import CoreLocation
 
-enum GeocodeError: Error {
+private enum GeocodeError: Error {
   case noPlacemark
 }
 
