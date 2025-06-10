@@ -76,7 +76,7 @@ actor Atlas<T: AtlasGeocodable> {
         count += 1
         return placemark
       } catch let error as NSError {
-        if error.code == CLError.network.rawValue, error.domain == kCLErrorDomain {
+        if error.isGeocodingThrottledError {
           Logger.atlas.log("throttle: \(error.localizedDescription, privacy: .public)")
           // throttling error
           try await idleAndReset()
