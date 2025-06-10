@@ -29,7 +29,7 @@ extension Location: AtlasGeocodable {
       CNPostalAddressFormatter().string(from: postalAddress)
     }
   #else
-    private var addressString: String {
+    var addressString: String {
       let cityState = "\(city) \(state)"
       if let street {
         return "\(street)\n\(cityState)"
