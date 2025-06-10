@@ -5,7 +5,6 @@
 //  Created by Greg Bolsinga on 9/13/23.
 //
 
-import CoreLocation
 import Foundation
 
 extension Venue: AtlasGeocodable {
