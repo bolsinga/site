@@ -15,7 +15,7 @@ extension Logger {
 private let expirationOffset = 60.0 * 60.0 * 24.0 * 30.0 * 6.0  // Six months
 private let ExpirationStaggerDuration = 60.0 * 60.0 * 6.0  // Quarter day
 
-actor AtlasCache<T: AtlasGeocodable> where T.Place: Sendable {
+actor AtlasCache<T: AtlasGeocodable> {
   struct Value: Codable {
     var placemark: T.Place
     let expirationDate: Date
