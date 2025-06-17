@@ -26,7 +26,7 @@ where T: Rankable, T.ID == String {
     if sort.isAlphabetical {
       RankingList(
         items: items,
-        rankingMapBuilder: { sectioner.sectionMap(for: $0) },
+        rankingMapBuilder: { sectioner.sectionMap(for: $0) }, rankSorted: <,
         itemContentView: { showCount(for: $0) },
         sectionHeaderView: { $0.representingView }, itemLabelView: itemLabelView)
     } else if sort.isFirstSeen {
@@ -39,7 +39,7 @@ where T: Rankable, T.ID == String {
     } else {
       RankingList(
         items: items,
-        rankingMapBuilder: { $0.ranked(by: sort) },
+        rankingMapBuilder: { $0.ranked(by: sort) }, rankSorted: <,
         itemContentView: { if sort.isShowYearRange { showCount(for: $0) } },
         sectionHeaderView: {
           switch sort {
