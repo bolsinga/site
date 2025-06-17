@@ -14,8 +14,8 @@ jobs:
     - uses: actions/checkout@v4
     - name: sw_vers
       run: sw_vers
-    - name: Switch to Xcode 26.0
-      run: sudo xcode-select -s "/Applications/Xcode_26.0.app"
+    - name: Switch to Xcode 26 Beta
+      run: sudo xcode-select -s "/Applications/Xcode_26_beta.app/Contents/Developer"
     - name: Show SDKs
       run: xcodebuild -showsdks
     - name: Build / Test
