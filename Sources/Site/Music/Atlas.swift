@@ -44,13 +44,13 @@ actor Atlas<T: AtlasGeocodable> {
   }
 
   public func geocode(_ geocodable: T) async throws -> T.Place {
-    if let result = await cache.get(geocodable) {
+    if let result = cache.get(geocodable) {
       Logger.atlas.log("cached result")
       return result
     }
 
     let result = try await gatedGeocode(geocodable)
-    await cache.add(geocodable, value: result)
+    cache.add(geocodable, value: result)
     return result
   }
 
