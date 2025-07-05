@@ -14,18 +14,24 @@ jobs:
     - uses: actions/checkout@v4
     - name: sw_vers
       run: sw_vers
+    - name: Available Xcodes
+      run: ls /Applications | grep Xcode
     - name: Switch to Xcode 26 Beta
       run: sudo xcode-select -s "/Applications/Xcode_26_beta.app/Contents/Developer"
     - name: Xcode - Accept License
       run: sudo xcodebuild -license accept
     - name: Xcode - First Launch
       run: xcodebuild -runFirstLaunch
+    - name: Xcode Version
+      run: xcodebuild -version
     - name: Install iOS
       run: xcodebuild -downloadPlatform iOS
     - name: Install tvOS
       run: xcodebuild -downloadPlatform tvOS
     - name: Show SDKs
       run: xcodebuild -showsdks
+    - name: Show Destinations
+      run: xcodebuild -scheme Site -showdestinations
     - name: Build / Test
       run: swift test -v -Xswiftc -warnings-as-errors
     - name: Build iOS / macOS / tvOS
