@@ -16,6 +16,10 @@ jobs:
       run: sw_vers
     - name: Switch to Xcode 26 Beta
       run: sudo xcode-select -s "/Applications/Xcode_26_beta.app/Contents/Developer"
+    - name: Xcode - Accept License
+      run: xcodebuild -license accept
+    - name: Xcode - First Launch
+      run: xcodebuild -runFirstLaunch
     - name: Install iOS
       run: xcodebuild -downloadPlatform iOS
     - name: Install tvOS
