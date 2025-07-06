@@ -16,6 +16,15 @@ struct SettingsView: View {
         @Bindable var nb = nearbyModel
         NearbyDistanceThresholdView(distanceThreshold: $nb.distanceThreshold)
       }
+      #if !os(macOS)
+        Section(header: Text("About", bundle: .module)) {
+          LabeledContent {
+            Text(packageVersion)
+          } label: {
+            Text("Version", bundle: .module)
+          }
+        }
+      #endif
     }
   }
 }

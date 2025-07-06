@@ -17,12 +17,14 @@ let package = Package(
     .executable(name: "next_id", targets: ["next_id"]),
   ],
   dependencies: [
-    .package(url: "https://github.com/apple/swift-argument-parser", from: "1.5.0")
+    .package(url: "https://github.com/apple/swift-argument-parser", from: "1.5.0"),
+    .package(url: "https://github.com/bolsinga/PackageBuildInfo", branch: "main"),
   ],
   targets: [
     .target(
       name: "Site",
-      resources: [.process("Resources/Localizable.xcstrings")]),
+      resources: [.process("Resources/Localizable.xcstrings")],
+      plugins: [.plugin(name: "PackageBuildInfoPlugin", package: "PackageBuildInfo")]),
     .testTarget(
       name: "SiteTests", dependencies: ["Site"]),
     .executableTarget(
