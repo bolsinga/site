@@ -19,7 +19,7 @@ struct SettingsView: View {
       #if !os(macOS)
         Section(header: Text("About", bundle: .module)) {
           LabeledContent {
-            Text(packageVersion)
+            Text(PackageBuild.info.version)
           } label: {
             Text("Version", bundle: .module)
           }
