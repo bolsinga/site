@@ -140,6 +140,9 @@
         }
       }
     },
+    "About" : {
+
+    },
     "All Shows" : {
 
     },
@@ -330,6 +333,9 @@
 
     },
     "Venues" : {
+
+    },
+    "Version" : {
 
     },
     "Weekday" : {

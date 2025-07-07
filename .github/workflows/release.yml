@@ -35,4 +35,4 @@ jobs:
     - name: Build / Test
       run: swift test -v -Xswiftc -warnings-as-errors
     - name: Build iOS / macOS / tvOS
-      run: xcodebuild -verbose -scheme Site -destination "generic/platform=iOS Simulator" -destination "generic/platform=macOS" -destination "generic/platform=tvOS Simulator"
+      run: xcodebuild -verbose -skipPackagePluginValidation -scheme Site -destination "generic/platform=iOS Simulator" -destination "generic/platform=macOS" -destination "generic/platform=tvOS Simulator"
