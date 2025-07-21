@@ -16,12 +16,19 @@ struct ArchiveCategoryDetail: View {
   let nearbyModel: NearbyModel
 
   var body: some View {
-    if let category {
-      ArchiveCategoryStack(
-        model: model, category: category, statsDisplayArchiveCategoryCounts: false, path: $path,
-        venueSort: $venueSort, artistSort: $artistSort, nearbyModel: nearbyModel)
-    } else {
-      Text("Select An Item", bundle: .module)
+    NavigationStack(path: $path) {
+      if let category {
+        ArchiveCategoryRoot(
+          model: model, category: category,
+          statsDisplayArchiveCategoryCounts: false, venueSort: $venueSort,
+          artistSort: $artistSort, nearbyModel: nearbyModel
+        )
+        .navigationDestination(for: ArchivePath.self) {
+          $0.destination(vault: model.vault, isPathNavigable: path.isPathNavigable(_:))
+        }
+      } else {
+        Text("Select An Item", bundle: .module)
+      }
     }
   }
 }
