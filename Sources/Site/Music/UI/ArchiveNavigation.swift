@@ -12,7 +12,7 @@ extension Logger {
   fileprivate static let archive = Logger(category: "archive")
 }
 
-@Observable final class ArchiveNavigation: CustomStringConvertible {
+@MainActor @Observable final class ArchiveNavigation {
   struct State: Codable, Equatable, Sendable {
     var category: ArchiveCategory?
 
@@ -125,7 +125,19 @@ extension Logger {
   }
 }
 
-extension ArchiveNavigation: RawRepresentable {
+#if swift(>=6.2)
+  extension ArchiveNavigation: @MainActor CustomStringConvertible {}
+#else
+  extension ArchiveNavigation: @preconcurrency CustomStringConvertible {}
+#endif
+
+#if swift(>=6.2)
+  extension ArchiveNavigation: @MainActor RawRepresentable {}
+#else
+  extension ArchiveNavigation: @preconcurrency RawRepresentable {}
+#endif
+
+extension ArchiveNavigation {
   convenience init?(rawValue: String) {
     Logger.archive.log("loading: \(rawValue, privacy: .public)")
     guard let state = State(jsonString: rawValue) else { return nil }
