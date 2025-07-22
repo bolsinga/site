@@ -53,6 +53,10 @@ extension ArchiveNavigation.State {
   }
 }
 
+let regularActivities = ArchiveCategory.allCases.filter { $0.isRegularActivity }
+let irregularActivities = ArchiveCategory.allCases.filter { !$0.isRegularActivity }
+
+@MainActor
 struct ArchiveNavigationTests {
   @Test func navigateToCategory() {
     let ar = ArchiveNavigation()
@@ -189,8 +193,6 @@ struct ArchiveNavigationTests {
     #expect(activity.matches(category: .defaultCategory!))
   }
 
-  static let regularActivities = ArchiveCategory.allCases.filter { $0.isRegularActivity }
-
   @Test("Activity", arguments: regularActivities, [[], [ArchivePath.artist("id")]])
   func activity(category: ArchiveCategory, path: [ArchivePath]) {
     let ar = ArchiveNavigation(
@@ -208,8 +210,6 @@ struct ArchiveNavigationTests {
       #expect(!activity.matches(category: categoryCase))
     }
   }
-
-  static let irregularActivities = ArchiveCategory.allCases.filter { !$0.isRegularActivity }
 
   @Test("Activity - Irregular", arguments: irregularActivities, [[], [ArchivePath.artist("id")]])
   func activity_stats(category: ArchiveCategory, path: [ArchivePath]) {
