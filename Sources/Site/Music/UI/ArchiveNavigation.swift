@@ -12,7 +12,10 @@ extension Logger {
   fileprivate static let archive = Logger(category: "archive")
 }
 
-@Observable final class ArchiveNavigation: CustomStringConvertible {
+#if swift(>=6.2)
+  #warning("Update below to use @MainActor annoation instead of @preconcurrency")
+#endif
+@MainActor @Observable final class ArchiveNavigation: @preconcurrency CustomStringConvertible {
   struct State: Codable, Equatable, Sendable {
     var category: ArchiveCategory?
 
@@ -125,7 +128,10 @@ extension Logger {
   }
 }
 
-extension ArchiveNavigation: RawRepresentable {
+#if swift(>=6.2)
+  #warning("Update below to use @MainActor annoation instead of @preconcurrency")
+#endif
+extension ArchiveNavigation: @preconcurrency RawRepresentable {
   convenience init?(rawValue: String) {
     Logger.archive.log("loading: \(rawValue, privacy: .public)")
     guard let state = State(jsonString: rawValue) else { return nil }
