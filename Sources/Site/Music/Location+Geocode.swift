@@ -22,26 +22,38 @@ extension Location: Geocodable {
       }
       return pAddress
     }
+  #endif
 
-    var addressString: String {
-      // Note this requests access to Contacts, despite this not reading any contacts.
-      CNPostalAddressFormatter().string(from: postalAddress)
-    }
-  #else
-    var addressString: String {
-      let cityState = "\(city) \(state)"
+  var addressString: String {
+    if #available(iOS 26, macOS 26, tvOS 26, *) {
+      let cityState = "\(city), \(state)"
       if let street {
         return "\(street)\n\(cityState)"
       }
       return cityState
+    } else {
+      #if canImport(Contacts)
+        // Note this requests access to Contacts, despite this not reading any contacts.
+        return CNPostalAddressFormatter().string(from: postalAddress)
+      #else
+        let cityState = "\(city) \(state)"
+        if let street {
+          return "\(street)\n\(cityState)"
+        }
+        return cityState
+      #endif
     }
-  #endif
+  }
 
   func geocode() async throws -> Placemark {
-    #if canImport(Contacts)
-      try await postalAddress.geocode()
-    #else
+    if #available(iOS 26, macOS 26, tvOS 26, *) {
       try await addressString.geocode()
-    #endif
+    } else {
+      #if canImport(Contacts)
+        try await postalAddress.geocode()
+      #else
+        try await addressString.geocode()
+      #endif
+    }
   }
 }
