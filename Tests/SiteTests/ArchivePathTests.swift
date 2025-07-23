@@ -141,10 +141,10 @@ struct ArchivePathTests {
   }
 
   @Test func archiveCategories() throws {
-    #expect(try ArchivePath.artist("blah").category() == ArchiveCategory.artists)
-    #expect(try ArchivePath.venue("blah").category() == ArchiveCategory.venues)
-    #expect(try ArchivePath.show("blah").category() == ArchiveCategory.shows)
-    #expect(throws: (any Error).self) { try ArchivePath.year(.year(1989)).category() }
-    #expect(throws: (any Error).self) { try ArchivePath.year(.unknown).category() }
+    #expect(ArchivePath.artist("blah").category == ArchiveCategory.artists)
+    #expect(ArchivePath.venue("blah").category == ArchiveCategory.venues)
+    #expect(ArchivePath.show("blah").category == ArchiveCategory.shows)
+    #expect(ArchivePath.year(.year(1989)).category == ArchiveCategory.shows)
+    #expect(ArchivePath.year(.unknown).category == ArchiveCategory.shows)
   }
 }

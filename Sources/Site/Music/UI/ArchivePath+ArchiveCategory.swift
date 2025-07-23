@@ -8,20 +8,14 @@
 import Foundation
 
 extension ArchivePath {
-  enum CategoryError: Error {
-    case invalidCategory
-  }
-
-  func category() throws -> ArchiveCategory {
+  var category: ArchiveCategory {
     switch self {
-    case .show(_):
+    case .show(_), .year(_):
       return .shows
     case .venue(_):
       return .venues
     case .artist(_):
       return .artists
-    case .year(_):
-      throw CategoryError.invalidCategory
     }
   }
 }

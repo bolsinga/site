@@ -53,6 +53,18 @@ extension ArchiveNavigation.State {
   }
 }
 
+extension ArchiveNavigation {
+  convenience init(category: ArchiveCategory?, categoryPaths: [ArchiveCategory: [ArchivePath]]) {
+    self.init(
+      ArchiveNavigation.State(category: category, categoryPaths: categoryPaths),
+      useDispatchMainWorkaround: false)
+  }
+
+  convenience init() {
+    self.init(useDispatchMainWorkaround: false)
+  }
+}
+
 let regularActivities = ArchiveCategory.allCases.filter { $0.isRegularActivity }
 let irregularActivities = ArchiveCategory.allCases.filter { !$0.isRegularActivity }
 
@@ -91,9 +103,7 @@ struct ArchiveNavigationTests {
 
   @Test func navigateToCategory_existingPath() {
     let ar = ArchiveNavigation(
-      ArchiveNavigation.State(
-        category: .artists, categoryPaths: [.artists: [Artist(id: "id", name: "name").archivePath]])
-    )
+      category: .artists, categoryPaths: [.artists: [Artist(id: "id", name: "name").archivePath]])
     #expect(ar.category != nil)
     #expect(ar.category == .artists)
     #expect(!ar.path.isEmpty)
@@ -118,29 +128,29 @@ struct ArchiveNavigationTests {
 
     ar.navigate(to: ArchivePath.artist("id"))
     #expect(ar.category != nil)
-    #expect(ar.category == .defaultCategory)
+    #expect(ar.category == .artists)
     #expect(ar.path.count == 1)
     #expect(ar.path.last != nil)
     #expect(ar.path.last! == ArchivePath.artist("id"))
 
     ar.navigate(to: ArchivePath.venue("id"))
     #expect(ar.category != nil)
-    #expect(ar.category == .defaultCategory)
-    #expect(ar.path.count == 2)
+    #expect(ar.category == .venues)
+    #expect(ar.path.count == 1)
     #expect(ar.path.last != nil)
     #expect(ar.path.last! == ArchivePath.venue("id"))
 
     ar.navigate(to: ArchivePath.show("id"))
     #expect(ar.category != nil)
-    #expect(ar.category == .defaultCategory)
-    #expect(ar.path.count == 3)
+    #expect(ar.category == .shows)
+    #expect(ar.path.count == 1)
     #expect(ar.path.last != nil)
     #expect(ar.path.last! == ArchivePath.show("id"))
 
     ar.navigate(to: ArchivePath.year(Annum.year(1989)))
     #expect(ar.category != nil)
-    #expect(ar.category == .defaultCategory)
-    #expect(ar.path.count == 4)
+    #expect(ar.category == .shows)
+    #expect(ar.path.count == 1)
     #expect(ar.path.last != nil)
     #expect(ar.path.last! == ArchivePath.year(Annum.year(1989)))
   }
@@ -150,29 +160,27 @@ struct ArchiveNavigationTests {
     ar.navigate(to: ArchivePath.artist("id"))
     #expect(ar.path.count == 1)
     #expect(ar.path.first! == ArchivePath.artist("id"))
-    #expect(ar.category == .defaultCategory)
+    #expect(ar.category == .artists)
 
     ar.navigate(to: ArchivePath.artist("id"))
     #expect(ar.path.count == 1)
     #expect(ar.path.first! == ArchivePath.artist("id"))
-    #expect(ar.category == .defaultCategory)
+    #expect(ar.category == .artists)
 
     ar.navigate(to: ArchivePath.artist("id-1"))
-    #expect(ar.path.count == 2)
-    #expect(ar.path.first! == ArchivePath.artist("id"))
-    #expect(ar.path.last! == ArchivePath.artist("id-1"))
-    #expect(ar.category == .defaultCategory)
+    #expect(ar.path.count == 1)
+    #expect(ar.path.first! == ArchivePath.artist("id-1"))
+    #expect(ar.category == .artists)
 
     ar.navigate(to: ArchivePath.venue("vid-1"))
-    #expect(ar.path.count == 3)
-    #expect(ar.path.first! == ArchivePath.artist("id"))
-    #expect(ar.path.last! == ArchivePath.venue("vid-1"))
-    #expect(ar.category == .defaultCategory)
+    #expect(ar.path.count == 1)
+    #expect(ar.path.first! == ArchivePath.venue("vid-1"))
+    #expect(ar.category == .venues)
   }
 
   @Test("Activity - nil")
   func activityNone() throws {
-    let ar = ArchiveNavigation(ArchiveNavigation.State(category: nil, categoryPaths: [:]))
+    let ar = ArchiveNavigation(category: nil, categoryPaths: [:])
     let activity = ar.activity
 
     #expect(activity.isNone)
@@ -195,8 +203,7 @@ struct ArchiveNavigationTests {
 
   @Test("Activity", arguments: regularActivities, [[], [ArchivePath.artist("id")]])
   func activity(category: ArchiveCategory, path: [ArchivePath]) {
-    let ar = ArchiveNavigation(
-      ArchiveNavigation.State(category: category, categoryPaths: [category: path]))
+    let ar = ArchiveNavigation(category: category, categoryPaths: [category: path])
     let activity = ar.activity
 
     #expect(!activity.isNone)
@@ -213,8 +220,7 @@ struct ArchiveNavigationTests {
 
   @Test("Activity - Irregular", arguments: irregularActivities, [[], [ArchivePath.artist("id")]])
   func activity_stats(category: ArchiveCategory, path: [ArchivePath]) {
-    let ar = ArchiveNavigation(
-      ArchiveNavigation.State(category: category, categoryPaths: [category: path]))
+    let ar = ArchiveNavigation(category: category, categoryPaths: [category: path])
     let activity = ar.activity
 
     #expect(!activity.isNone)
