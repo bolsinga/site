@@ -5,6 +5,7 @@
 //  Created by Greg Bolsinga on 10/11/24.
 //
 
+import MapKit
 import SwiftUI
 
 extension ArchivePath {
@@ -21,7 +22,10 @@ extension ArchivePath {
       if let venueDigest = vault.venueDigestMap[iD] {
         VenueDetail(
           digest: venueDigest, concertCompare: vault.comparator.compare(lhs:rhs:),
-          geocode: { try await vault.atlas.geocode($0.venue) }, isPathNavigable: isPathNavigable
+          geocode: {
+            MKMapItem(
+              placemark: MKPlacemark(placemark: try await vault.atlas.geocode($0.venue).placemark))
+          }, isPathNavigable: isPathNavigable
         )
       }
     case .artist(let iD):
