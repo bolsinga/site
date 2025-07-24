@@ -6,6 +6,11 @@
 //
 
 import CoreLocation
+import MapKit
+
+private enum PlacemarkError: Error {
+  case noIdentifier
+}
 
 private enum Keys: String, CodingKey {
   case latitude
@@ -35,11 +40,19 @@ enum Placemark: Codable {
   }
 
   case coordinate(CLLocationCoordinate2D)
+  case identifier(String)
 
-  var location: CLLocation {
+  func mapItem(for venue: Venue) async throws -> MKMapItem {
     switch self {
     case .coordinate(let coordinate):
-      CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
+      return MKMapItem(
+        venue: venue,
+        location: CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude))
+    case .identifier(let string):
+      guard let mapIdentifier = MKMapItem.Identifier(rawValue: string) else {
+        throw PlacemarkError.noIdentifier
+      }
+      return try await MKMapItemRequest(mapItemIdentifier: mapIdentifier).mapItem
     }
   }
 }
@@ -49,6 +62,8 @@ extension Placemark: CustomStringConvertible {
     switch self {
     case .coordinate(let coordinate):
       "\(coordinate)"
+    case .identifier(let string):
+      string
     }
   }
 }
