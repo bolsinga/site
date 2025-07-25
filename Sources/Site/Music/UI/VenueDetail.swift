@@ -20,8 +20,6 @@ struct VenueDetail: View {
   let geocode: geocoder?
   let isPathNavigable: (PathRestorable) -> Bool
 
-  @State private var item: MKMapItem? = nil
-
   @ViewBuilder private var firstSetElement: some View {
     HStack {
       Text("First Set", bundle: .module)
