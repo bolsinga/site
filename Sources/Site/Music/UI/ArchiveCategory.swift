@@ -34,21 +34,25 @@ public enum ArchiveCategory: String, CaseIterable, Codable, Sendable {
     }
   }
 
-  @ViewBuilder var label: some View {
+  var systemImage: String {
     switch self {
     case .today:
-      Label(self.localizedString, systemImage: "calendar.circle")
+      "calendar.circle"
     case .stats:
-      Label(self.localizedString, systemImage: "chart.bar")
+      "chart.bar"
     case .shows:
-      Label(self.localizedString, systemImage: "person.and.background.dotted")
+      "person.and.background.dotted"
     case .venues:
-      Label(self.localizedString, systemImage: "music.note.house")
+      "music.note.house"
     case .artists:
-      Label(self.localizedString, systemImage: "music.mic")
+      "music.mic"
     case .settings:
-      Label(self.localizedString, systemImage: "gear")
+      "gear"
     }
+  }
+
+  @ViewBuilder var label: some View {
+    Label(localizedString, systemImage: systemImage)
   }
 
   var title: String {
