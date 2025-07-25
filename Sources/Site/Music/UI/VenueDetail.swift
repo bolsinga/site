@@ -5,23 +5,20 @@
 //  Created by Greg Bolsinga on 2/16/23.
 //
 
+import MapKit
 import SwiftUI
 
-#if swift(>=6.2)
-  import MapKit
-#else
-  @preconcurrency import MapKit
-#endif
+private enum VenueDetailGeocodeError: Error {
+  case noGeocoder
+}
 
 struct VenueDetail: View {
-  typealias geocoder = (VenueDigest) async throws -> MKMapItem
+  typealias geocoder = @MainActor (VenueDigest) async throws -> MKMapItem
 
   let digest: VenueDigest
   let concertCompare: (Concert, Concert) -> Bool
   let geocode: geocoder?
   let isPathNavigable: (PathRestorable) -> Bool
-
-  @State private var item: MKMapItem? = nil
 
   @ViewBuilder private var firstSetElement: some View {
     HStack {
@@ -31,24 +28,15 @@ struct VenueDetail: View {
     }
   }
 
-  @MainActor
   @ViewBuilder private var locationElement: some View {
     Section(header: Text("Location", bundle: .module)) {
       AddressView(location: digest.venue.location)
-      LocationMap(item: item)
-        .task(id: digest) {
-          guard let geocode else { return }
-          do {
-            item = try await geocode(digest)
-          } catch {}
+      LocationMap(identifier: digest) {
+        guard let geocode else {
+          throw VenueDetailGeocodeError.noGeocoder
         }
-        #if !os(tvOS)
-          .onTapGesture {
-            guard let item else { return }
-            item.openInMaps()
-          }
-        #endif
-        .frame(minHeight: 300)
+        return try await geocode(digest)
+      }
     }
   }
 
@@ -101,11 +89,25 @@ struct VenueDetail: View {
   }
 }
 
-#Preview {
+#Preview("Error") {
   VenueDetail(
     digest: vaultPreviewData.venueDigests[0],
     concertCompare: vaultPreviewData.comparator.compare(lhs:rhs:),
     geocode: nil,
+    isPathNavigable: { _ in
+      true
+    }
+  )
+}
+
+#Preview("Current Location after 10 seconds") {
+  VenueDetail(
+    digest: vaultPreviewData.venueDigests[0],
+    concertCompare: vaultPreviewData.comparator.compare(lhs:rhs:),
+    geocode: { _ in
+      try await ContinuousClock().sleep(until: .now + Duration.seconds(10))
+      return MKMapItem.forCurrentLocation()
+    },
     isPathNavigable: { _ in
       true
     }
