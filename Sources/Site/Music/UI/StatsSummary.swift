@@ -16,7 +16,6 @@ struct StatsSummary: View {
       StatsGrouping(
         concerts: vault.concerts, displayArchiveCategoryCounts: displayArchiveCategoryCounts)
     }
-    .navigationTitle(Text(ArchiveCategory.stats.localizedString))
   }
 }
 
