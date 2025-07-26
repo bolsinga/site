@@ -11,9 +11,10 @@ struct AddressView: View {
   let location: Location
 
   var body: some View {
-    HStack(alignment: .bottom) {
+    HStack(alignment: .center) {
       Text(location.addressString)
       if let web = location.web {
+        Spacer()
         Link(destination: web) {
           Image(systemName: "safari")
         }.help(web.absoluteString)
