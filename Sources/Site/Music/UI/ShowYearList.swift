@@ -29,7 +29,6 @@ struct ShowYearList: View {
       }
     }
     .listStyle(.plain)
-    .navigationTitle(Text("Show Years", bundle: .module))
   }
 }
 

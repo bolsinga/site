@@ -11,7 +11,6 @@ struct RankableSortList<T, SectionHeaderContent: View, LabelContent: View>: View
 where T: Rankable, T.ID == String {
   let items: [T]
   let sectioner: LibrarySectioner
-  let title: String
   @ViewBuilder let associatedRankSectionHeader: (Ranking) -> SectionHeaderContent
   @ViewBuilder let itemLabelView: ((T) -> LabelContent)
 
@@ -54,14 +53,13 @@ where T: Rankable, T.ID == String {
 
   var body: some View {
     listElement
-      .navigationTitle(Text(title))
   }
 }
 
 #Preview {
   RankableSortList(
     items: vaultPreviewData.venueDigests, sectioner: vaultPreviewData.sectioner,
-    title: "Venues", associatedRankSectionHeader: { $0.artistsCountView },
+    associatedRankSectionHeader: { $0.artistsCountView },
     itemLabelView: { Text($0.name) }, sort: .alphabetical
   )
 }
