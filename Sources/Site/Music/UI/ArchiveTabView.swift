@@ -34,7 +34,7 @@ struct ArchiveTabView: View {
   @Binding var venueSort: RankingSort
   @Binding var artistSort: RankingSort
 
-  @Binding var selectedCategory: ArchiveCategory?
+  @Binding var selectedCategory: ArchiveCategory
   let pathForCategory: (ArchiveCategory) -> Binding<[ArchivePath]>
   let nearbyModel: NearbyModel
 

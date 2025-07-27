@@ -15,7 +15,7 @@ public enum ArchiveCategory: String, CaseIterable, Codable, Sendable {
   case artists
   case settings
 
-  static var defaultCategory: ArchiveCategory? { .today }
+  static var defaultCategory: ArchiveCategory { .today }
 
   var localizedString: String {
     switch self {
