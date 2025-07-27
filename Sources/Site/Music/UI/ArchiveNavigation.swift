@@ -177,7 +177,7 @@ extension Logger {
   }
 
   func navigate(to category: ArchiveCategory) {
-    Logger.archive.log("nav to category: \(category.rawValue ?? "nil", privacy: .public)")
+    Logger.archive.log("nav to category: \(category.rawValue, privacy: .public)")
     self.update(state: State(category: category))
   }
 
