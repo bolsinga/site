@@ -15,7 +15,7 @@ extension Logger {
 
 @MainActor @Observable final class ArchiveNavigation {
   struct State: Codable, Equatable, Sendable {
-    var category: ArchiveCategory?
+    var category: ArchiveCategory
 
     var todayPath: [ArchivePath]
     var showsPath: [ArchivePath]
@@ -23,7 +23,7 @@ extension Logger {
     var artistsPath: [ArchivePath]
 
     init(
-      category: ArchiveCategory? = .defaultCategory, todayPath: [ArchivePath] = [],
+      category: ArchiveCategory = .defaultCategory, todayPath: [ArchivePath] = [],
       showsPath: [ArchivePath] = [], venuesPath: [ArchivePath] = [], artistsPath: [ArchivePath] = []
     ) {
       self.category = category
@@ -97,7 +97,7 @@ extension Logger {
   @ObservationIgnored
   var description: String { state.jsonString }
 
-  var category: ArchiveCategory? {
+  var category: ArchiveCategory {
     get {
       state.category
     }
@@ -108,7 +108,6 @@ extension Logger {
 
   var path: [ArchivePath] {
     get {
-      guard let category = category else { return [] }
       switch category {
       case .today:
         return state.todayPath
@@ -123,7 +122,6 @@ extension Logger {
       }
     }
     set {
-      guard let category = category else { return }
       switch category {
       case .today:
         state.todayPath = newValue
@@ -178,14 +176,13 @@ extension Logger {
     self.update(state: State(path: path))
   }
 
-  func navigate(to category: ArchiveCategory?) {
-    Logger.archive.log("nav to category: \(category?.rawValue ?? "nil", privacy: .public)")
+  func navigate(to category: ArchiveCategory) {
+    Logger.archive.log("nav to category: \(category.rawValue ?? "nil", privacy: .public)")
     self.update(state: State(category: category))
   }
 
   var activity: ArchiveActivity {
     let result: ArchiveActivity = {
-      guard let category = category else { return .none }
       guard let last = path.last else { return .category(category) }
       return .path(last)
     }()
