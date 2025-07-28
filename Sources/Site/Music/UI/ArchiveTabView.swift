@@ -34,6 +34,7 @@ private enum ArchiveTab: CaseIterable {
   case artists
   case stats
   case settings
+  case search
 
   static var `default`: Self { ArchiveCategory.defaultCategory.tab }
 
@@ -60,6 +61,8 @@ private enum ArchiveTab: CaseIterable {
       .stats
     case .settings:
       .settings
+    case .search:
+      .search
     }
   }
 }
@@ -80,7 +83,7 @@ extension ArchiveCategory {
     case .settings:
       .settings
     case .search:
-      .settings  // TODO: Add the search tab.
+      .search
     }
   }
 }
@@ -94,6 +97,18 @@ struct ArchiveTabView: View {
   @Binding var selectedCategory: ArchiveCategory
   let pathForCategory: (ArchiveCategory) -> Binding<[ArchivePath]>
   let reloadModel: @MainActor () async -> Void
+  let navigateToPath: (ArchivePath) -> Void
+
+  @State var searchString: String = ""
+
+  @ViewBuilder private var searchTabContent: some View {
+    NavigationStack {
+      ArchiveCrossSearchContainer(searchString: $searchString, navigateToPath: navigateToPath)
+        .searchable(
+          text: $searchString,
+          prompt: String(localized: "Artist or Venue Name", bundle: .module))
+    }
+  }
 
   @State private var selectedTab = ArchiveTab.default
   @State private var showsMode = ShowsMode.default
@@ -102,16 +117,28 @@ struct ArchiveTabView: View {
     TabView(selection: $selectedTab) {
       ForEach(ArchiveTab.ordered, id: \.self) { tab in
         let category = tab.category
-        Tab(category.localizedString, systemImage: category.systemImage, value: tab) {
-          ArchiveCategoryStack(
-            category: category, showsMode: $showsMode, path: pathForCategory(category),
-            venueSort: $venueSort,
-            artistSort: $artistSort, reloadModel: reloadModel)
+        if tab != .search {
+          Tab(category.localizedString, systemImage: category.systemImage, value: tab) {
+            ArchiveCategoryStack(
+              category: category, showsMode: $showsMode, path: pathForCategory(category),
+              venueSort: $venueSort,
+              artistSort: $artistSort, reloadModel: reloadModel)
+          }
+          #if !os(tvOS)
+            .badge(category.badge(model))
+          #endif
+        } else {
+          #if os(macOS) && swift(<6.2)
+            Tab(
+              String(localized: "Search", bundle: .module), systemImage: category.systemImage,
+              value: tab
+            ) { searchTabContent }
+          #else
+            Tab(value: tab, role: .search) { searchTabContent }
+          #endif
         }
-        #if !os(tvOS)
-          .badge(category.badge(model))
-        #endif
       }
+
     }
     .onAppear {
       selectedTab = selectedCategory.tab
@@ -148,6 +175,8 @@ struct ArchiveTabView: View {
           .stats
         case .settings:
           .settings
+        case .search:
+          .search
         }
       }()
     }
@@ -169,6 +198,10 @@ struct ArchiveTabView: View {
 #Preview(traits: .modifier(NearbyPreviewModifer()), .modifier(VaultPreviewModifier())) {
   ArchiveTabView(
     venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
-    selectedCategory: .constant(.today), pathForCategory: { _ in .constant([]) }
-  ) {}
+    selectedCategory: .constant(.today)
+  ) { _ in
+    .constant([])
+  } reloadModel: {
+  } navigateToPath: { _ in
+  }
 }
