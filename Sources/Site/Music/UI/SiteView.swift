@@ -22,7 +22,8 @@ public struct SiteView: View {
   public var body: some View {
     Group {
       if let vaultModel = model.vaultModel {
-        ArchiveStateView(model: vaultModel)
+        ArchiveStateView()
+          .environment(vaultModel)
           .refreshable {
             Logger.vaultLoad.log("start refresh")
             defer {

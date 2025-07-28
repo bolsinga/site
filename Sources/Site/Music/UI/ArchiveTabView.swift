@@ -29,7 +29,7 @@ extension ArchiveCategory {
 }
 
 struct ArchiveTabView: View {
-  let model: VaultModel
+  @Environment(VaultModel.self) var model
 
   @Binding var venueSort: RankingSort
   @Binding var artistSort: RankingSort
@@ -43,9 +43,9 @@ struct ArchiveTabView: View {
       ForEach(ArchiveCategory.tagOrder, id: \.self) { category in
         Tab(category.localizedString, systemImage: category.systemImage, value: category) {
           ArchiveCategoryStack(
-            model: model, category: category, statsDisplayArchiveCategoryCounts: false,
-            path: pathForCategory(category),
-            venueSort: $venueSort, artistSort: $artistSort, nearbyModel: nearbyModel)
+            category: category, statsDisplayArchiveCategoryCounts: false,
+            path: pathForCategory(category), venueSort: $venueSort, artistSort: $artistSort,
+            nearbyModel: nearbyModel)
         }
         #if !os(tvOS)
           .badge(category.badge(model))
@@ -58,8 +58,9 @@ struct ArchiveTabView: View {
 
 #Preview {
   ArchiveTabView(
-    model: VaultModel(vaultPreviewData, executeAsynchronousTasks: false),
     venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
     selectedCategory: .constant(.today), pathForCategory: { _ in .constant([]) },
-    nearbyModel: NearbyModel())
+    nearbyModel: NearbyModel()
+  )
+  .environment(VaultModel(vaultPreviewData, executeAsynchronousTasks: false))
 }

@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct VenuesSummary: View {
-  let model: VaultModel
+  @Environment(VaultModel.self) var model
+
   let nearbyModel: NearbyModel
   let sort: RankingSort
   @Binding var searchString: String
@@ -28,7 +29,6 @@ struct VenuesSummary: View {
 }
 
 #Preview {
-  VenuesSummary(
-    model: VaultModel(vaultPreviewData, executeAsynchronousTasks: false),
-    nearbyModel: NearbyModel(), sort: .alphabetical, searchString: .constant(""))
+  VenuesSummary(nearbyModel: NearbyModel(), sort: .alphabetical, searchString: .constant(""))
+    .environment(VaultModel(vaultPreviewData, executeAsynchronousTasks: false))
 }
