@@ -13,7 +13,7 @@ extension Logger {
 }
 
 public struct SiteView: View {
-  private var model: SiteModel
+  private let model: SiteModel
 
   public init(_ model: SiteModel) {
     self.model = model
