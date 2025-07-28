@@ -38,9 +38,6 @@ struct ArchiveTabView: View {
   let pathForCategory: (ArchiveCategory) -> Binding<[ArchivePath]>
   let nearbyModel: NearbyModel
 
-  @State var venueSearchString: String = ""
-  @State var artistSearchString: String = ""
-
   var body: some View {
     TabView(selection: $selectedCategory) {
       ForEach(ArchiveCategory.tagOrder, id: \.self) { category in
