@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ArchiveStateView: View {
-  let model: VaultModel
+  @Environment(VaultModel.self) var model
 
   @SceneStorage("venue.sort") private var venueSort = RankingSort.alphabetical
   @SceneStorage("artist.sort") private var artistSort = RankingSort.alphabetical
@@ -19,7 +19,7 @@ struct ArchiveStateView: View {
 
   @ViewBuilder private var archiveBody: some View {
     ArchiveTabView(
-      model: model, venueSort: $venueSort, artistSort: $artistSort,
+      venueSort: $venueSort, artistSort: $artistSort,
       selectedCategory: $archiveNavigation.category,
       pathForCategory: {
         switch $0 {
@@ -55,5 +55,6 @@ struct ArchiveStateView: View {
 }
 
 #Preview {
-  ArchiveStateView(model: VaultModel(vaultPreviewData, executeAsynchronousTasks: false))
+  ArchiveStateView()
+    .environment(VaultModel(vaultPreviewData, executeAsynchronousTasks: false))
 }

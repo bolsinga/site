@@ -12,27 +12,24 @@ extension ArchiveCategory {
 
   @MainActor
   @ViewBuilder func summary(
-    model: VaultModel, nearbyModel: NearbyModel, statsDisplayArchiveCategoryCounts: Bool,
+    nearbyModel: NearbyModel, statsDisplayArchiveCategoryCounts: Bool,
     venueSortSearch: () -> SortSearch, artistSortSearch: () -> SortSearch
   ) -> some View {
     switch self {
     case .today:
-      TodaySummary(model: model)
+      TodaySummary()
     case .stats:
-      StatsSummary(
-        vault: model.vault, displayArchiveCategoryCounts: statsDisplayArchiveCategoryCounts)
+      StatsSummary(displayArchiveCategoryCounts: statsDisplayArchiveCategoryCounts)
     case .shows:
-      ShowsSummary(model: model, nearbyModel: nearbyModel)
+      ShowsSummary(nearbyModel: nearbyModel)
     case .venues:
       let sortSearch = venueSortSearch()
       VenuesSummary(
-        model: model, nearbyModel: nearbyModel, sort: sortSearch.sort,
-        searchString: sortSearch.search)
+        nearbyModel: nearbyModel, sort: sortSearch.sort, searchString: sortSearch.search)
     case .artists:
       let sortSearch = artistSortSearch()
       ArtistsSummary(
-        model: model, nearbyModel: nearbyModel, sort: sortSearch.sort,
-        searchString: sortSearch.search)
+        nearbyModel: nearbyModel, sort: sortSearch.sort, searchString: sortSearch.search)
     case .settings:
       SettingsView(nearbyModel: nearbyModel)
     }

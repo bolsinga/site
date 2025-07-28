@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct ArchiveCategoryRoot: View {
-  let model: VaultModel
+  @Environment(VaultModel.self) var model
+
   let category: ArchiveCategory
   let statsDisplayArchiveCategoryCounts: Bool
   @Binding var venueSort: RankingSort
@@ -33,7 +34,7 @@ struct ArchiveCategoryRoot: View {
 
   var body: some View {
     category.summary(
-      model: model, nearbyModel: nearbyModel,
+      nearbyModel: nearbyModel,
       statsDisplayArchiveCategoryCounts: statsDisplayArchiveCategoryCounts,
       venueSortSearch: { (venueSort, $venueSearchString) },
       artistSortSearch: { (artistSort, $artistSearchString) }
@@ -63,7 +64,6 @@ struct ArchiveCategoryRoot: View {
 extension ArchiveCategoryRoot {
   init(withPreviewCategory category: ArchiveCategory) {
     self.init(
-      model: VaultModel(vaultPreviewData, executeAsynchronousTasks: false),
       category: category, statsDisplayArchiveCategoryCounts: false,
       venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
       nearbyModel: NearbyModel())
@@ -72,20 +72,25 @@ extension ArchiveCategoryRoot {
 
 #Preview {
   ArchiveCategoryRoot(withPreviewCategory: .today)
+    .environment(VaultModel(vaultPreviewData, executeAsynchronousTasks: false))
 }
 
 #Preview {
   ArchiveCategoryRoot(withPreviewCategory: .stats)
+    .environment(VaultModel(vaultPreviewData, executeAsynchronousTasks: false))
 }
 
 #Preview {
   ArchiveCategoryRoot(withPreviewCategory: .shows)
+    .environment(VaultModel(vaultPreviewData, executeAsynchronousTasks: false))
 }
 
 #Preview {
   ArchiveCategoryRoot(withPreviewCategory: .venues)
+    .environment(VaultModel(vaultPreviewData, executeAsynchronousTasks: false))
 }
 
 #Preview {
   ArchiveCategoryRoot(withPreviewCategory: .artists)
+    .environment(VaultModel(vaultPreviewData, executeAsynchronousTasks: false))
 }

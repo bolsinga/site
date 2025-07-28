@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct ShowsSummary: View {
-  let model: VaultModel
+  @Environment(VaultModel.self) var model
+
   let nearbyModel: NearbyModel
 
   var body: some View {
@@ -23,7 +24,6 @@ struct ShowsSummary: View {
 }
 
 #Preview {
-  ShowsSummary(
-    model: VaultModel(vaultPreviewData, executeAsynchronousTasks: false), nearbyModel: NearbyModel()
-  )
+  ShowsSummary(nearbyModel: NearbyModel())
+    .environment(VaultModel(vaultPreviewData, executeAsynchronousTasks: false))
 }
