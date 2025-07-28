@@ -9,12 +9,12 @@ import SwiftUI
 
 struct ArchiveCategoryRoot: View {
   @Environment(VaultModel.self) var model
+  @Environment(NearbyModel.self) var nearbyModel
 
   let category: ArchiveCategory
   let statsDisplayArchiveCategoryCounts: Bool
   @Binding var venueSort: RankingSort
   @Binding var artistSort: RankingSort
-  let nearbyModel: NearbyModel
 
   @State private var artistSearchString: String = ""
   @State private var venueSearchString: String = ""
@@ -34,7 +34,6 @@ struct ArchiveCategoryRoot: View {
 
   var body: some View {
     category.summary(
-      nearbyModel: nearbyModel,
       statsDisplayArchiveCategoryCounts: statsDisplayArchiveCategoryCounts,
       venueSortSearch: { (venueSort, $venueSearchString) },
       artistSortSearch: { (artistSort, $artistSearchString) }
@@ -65,32 +64,36 @@ extension ArchiveCategoryRoot {
   init(withPreviewCategory category: ArchiveCategory) {
     self.init(
       category: category, statsDisplayArchiveCategoryCounts: false,
-      venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
-      nearbyModel: NearbyModel())
+      venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical))
   }
 }
 
 #Preview {
   ArchiveCategoryRoot(withPreviewCategory: .today)
     .environment(VaultModel(vaultPreviewData, executeAsynchronousTasks: false))
+    .environment(NearbyModel())
 }
 
 #Preview {
   ArchiveCategoryRoot(withPreviewCategory: .stats)
     .environment(VaultModel(vaultPreviewData, executeAsynchronousTasks: false))
+    .environment(NearbyModel())
 }
 
 #Preview {
   ArchiveCategoryRoot(withPreviewCategory: .shows)
     .environment(VaultModel(vaultPreviewData, executeAsynchronousTasks: false))
+    .environment(NearbyModel())
 }
 
 #Preview {
   ArchiveCategoryRoot(withPreviewCategory: .venues)
     .environment(VaultModel(vaultPreviewData, executeAsynchronousTasks: false))
+    .environment(NearbyModel())
 }
 
 #Preview {
   ArchiveCategoryRoot(withPreviewCategory: .artists)
     .environment(VaultModel(vaultPreviewData, executeAsynchronousTasks: false))
+    .environment(NearbyModel())
 }
