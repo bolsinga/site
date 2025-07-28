@@ -36,7 +36,6 @@ struct ArchiveTabView: View {
 
   @Binding var selectedCategory: ArchiveCategory
   let pathForCategory: (ArchiveCategory) -> Binding<[ArchivePath]>
-  let nearbyModel: NearbyModel
 
   var body: some View {
     TabView(selection: $selectedCategory) {
@@ -44,8 +43,7 @@ struct ArchiveTabView: View {
         Tab(category.localizedString, systemImage: category.systemImage, value: category) {
           ArchiveCategoryStack(
             category: category, statsDisplayArchiveCategoryCounts: false,
-            path: pathForCategory(category), venueSort: $venueSort, artistSort: $artistSort,
-            nearbyModel: nearbyModel)
+            path: pathForCategory(category), venueSort: $venueSort, artistSort: $artistSort)
         }
         #if !os(tvOS)
           .badge(category.badge(model))
@@ -59,8 +57,8 @@ struct ArchiveTabView: View {
 #Preview {
   ArchiveTabView(
     venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
-    selectedCategory: .constant(.today), pathForCategory: { _ in .constant([]) },
-    nearbyModel: NearbyModel()
+    selectedCategory: .constant(.today), pathForCategory: { _ in .constant([]) }
   )
   .environment(VaultModel(vaultPreviewData, executeAsynchronousTasks: false))
+  .environment(NearbyModel())
 }

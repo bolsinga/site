@@ -34,7 +34,9 @@ struct ArchiveStateView: View {
         case .artists:
           return $archiveNavigation.state.artistsPath
         }
-      }, nearbyModel: nearbyModel)
+      }
+    )
+    .environment(nearbyModel)
   }
 
   var body: some View {

@@ -15,13 +15,12 @@ struct ArchiveCategoryStack: View {
   @Binding var path: [ArchivePath]
   @Binding var venueSort: RankingSort
   @Binding var artistSort: RankingSort
-  let nearbyModel: NearbyModel
 
   var body: some View {
     NavigationStack(path: $path) {
       ArchiveCategoryRoot(
         category: category, statsDisplayArchiveCategoryCounts: statsDisplayArchiveCategoryCounts,
-        venueSort: $venueSort, artistSort: $artistSort, nearbyModel: nearbyModel
+        venueSort: $venueSort, artistSort: $artistSort
       )
       .navigationDestination(for: ArchivePath.self) {
         $0.destination(vault: model.vault, isPathNavigable: path.isPathNavigable(_:))
@@ -36,7 +35,7 @@ extension ArchiveCategoryStack {
     self.init(
       category: category, statsDisplayArchiveCategoryCounts: false, path: .constant([]),
       venueSort: .constant(.alphabetical),
-      artistSort: .constant(.alphabetical), nearbyModel: NearbyModel())
+      artistSort: .constant(.alphabetical))
   }
 }
 

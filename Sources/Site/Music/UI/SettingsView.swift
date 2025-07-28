@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SettingsView: View {
-  let nearbyModel: NearbyModel
+  @Environment(NearbyModel.self) var nearbyModel
 
   var body: some View {
     Form {
@@ -30,5 +30,6 @@ struct SettingsView: View {
 }
 
 #Preview {
-  SettingsView(nearbyModel: NearbyModel())
+  SettingsView()
+    .environment(NearbyModel())
 }

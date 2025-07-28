@@ -9,8 +9,7 @@ import SwiftUI
 
 struct ShowsSummary: View {
   @Environment(VaultModel.self) var model
-
-  let nearbyModel: NearbyModel
+  @Environment(NearbyModel.self) var nearbyModel
 
   var body: some View {
     let decadesMap = model.filteredDecadesMap(nearbyModel)
@@ -24,6 +23,7 @@ struct ShowsSummary: View {
 }
 
 #Preview {
-  ShowsSummary(nearbyModel: NearbyModel())
+  ShowsSummary()
     .environment(VaultModel(vaultPreviewData, executeAsynchronousTasks: false))
+    .environment(NearbyModel())
 }
