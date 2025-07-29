@@ -11,7 +11,7 @@ import Testing
 @testable import Site
 
 struct PathRestorableUserActivityTests {
-  let baseURL = URL(string:  "https://www.example.com/")!
+  let baseURL = URL(string: "https://www.example.com/")!
 
   @Test func show() throws {
     let userActivity = NSUserActivity(activityType: "test-type")
