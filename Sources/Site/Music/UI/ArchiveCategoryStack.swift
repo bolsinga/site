@@ -42,24 +42,29 @@ extension ArchiveCategoryStack {
 #Preview {
   ArchiveCategoryStack(withPreviewCategory: .today)
     .environment(VaultModel(vaultPreviewData, executeAsynchronousTasks: false))
+    .environment(NearbyModel())
 }
 
 #Preview {
   ArchiveCategoryStack(withPreviewCategory: .stats)
     .environment(VaultModel(vaultPreviewData, executeAsynchronousTasks: false))
+    .environment(NearbyModel())
 }
 
 #Preview {
   ArchiveCategoryStack(withPreviewCategory: .shows)
     .environment(VaultModel(vaultPreviewData, executeAsynchronousTasks: false))
+    .environment(NearbyModel())
 }
 
 #Preview {
   ArchiveCategoryStack(withPreviewCategory: .venues)
     .environment(VaultModel(vaultPreviewData, executeAsynchronousTasks: false))
+    .environment(NearbyModel())
 }
 
 #Preview {
   ArchiveCategoryStack(withPreviewCategory: .artists)
     .environment(VaultModel(vaultPreviewData, executeAsynchronousTasks: false))
+    .environment(NearbyModel())
 }
