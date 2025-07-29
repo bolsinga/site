@@ -56,7 +56,6 @@ struct ArchiveStateView: View {
   }
 }
 
-#Preview {
+#Preview(traits: .modifier(VaultPreviewModifier())) {
   ArchiveStateView()
-    .environment(VaultModel(vaultPreviewData, executeAsynchronousTasks: false))
 }

@@ -20,12 +20,10 @@ struct StatsSummary: View {
   }
 }
 
-#Preview {
+#Preview(traits: .modifier(VaultPreviewModifier())) {
   StatsSummary(displayArchiveCategoryCounts: false)
-    .environment(VaultModel(vaultPreviewData, executeAsynchronousTasks: false))
 }
 
-#Preview {
+#Preview(traits: .modifier(VaultPreviewModifier())) {
   StatsSummary(displayArchiveCategoryCounts: true)
-    .environment(VaultModel(vaultPreviewData, executeAsynchronousTasks: false))
 }

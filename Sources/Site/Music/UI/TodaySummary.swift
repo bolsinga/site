@@ -15,7 +15,6 @@ struct TodaySummary: View {
   }
 }
 
-#Preview {
+#Preview(traits: .modifier(VaultPreviewModifier())) {
   TodaySummary()
-    .environment(VaultModel(vaultPreviewData, executeAsynchronousTasks: false))
 }

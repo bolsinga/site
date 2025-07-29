@@ -24,7 +24,6 @@ struct VenuesSummary: View {
   }
 }
 
-#Preview(traits: .modifier(NearbyPreviewModifer())) {
+#Preview(traits: .modifier(NearbyPreviewModifer()), .modifier(VaultPreviewModifier())) {
   VenuesSummary(sort: .alphabetical, searchString: .constant(""))
-    .environment(VaultModel(vaultPreviewData, executeAsynchronousTasks: false))
 }
