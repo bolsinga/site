@@ -8,31 +8,25 @@
 import SwiftUI
 
 struct NearbyLocationModifier: ViewModifier {
-  let locationFilter: LocationFilter
-  let locationAuthorization: LocationAuthorization
-  let geocodingProgress: Double
+  @Environment(VaultModel.self) var model
+  @Environment(NearbyModel.self) var nearbyModel
+
   let filteredDataIsEmpty: Bool
 
   func body(content: Content) -> some View {
     content
       .overlay {
-        if locationFilter.isNearby {
+        if nearbyModel.locationFilter.isNearby {
           NearbyLocationView(
-            locationAuthorization: locationAuthorization, geocodingProgress: geocodingProgress,
-            filteredDataIsEmpty: filteredDataIsEmpty)
+            locationAuthorization: model.locationAuthorization,
+            geocodingProgress: model.geocodingProgress, filteredDataIsEmpty: filteredDataIsEmpty)
         }
       }
   }
 }
 
 extension View {
-  func nearbyLocation(
-    locationFilter: LocationFilter, locationAuthorization: LocationAuthorization,
-    geocodingProgress: Double, filteredDataIsEmpty: Bool
-  ) -> some View {
-    modifier(
-      NearbyLocationModifier(
-        locationFilter: locationFilter, locationAuthorization: locationAuthorization,
-        geocodingProgress: geocodingProgress, filteredDataIsEmpty: filteredDataIsEmpty))
+  func nearbyLocation(filteredDataIsEmpty: Bool) -> some View {
+    modifier(NearbyLocationModifier(filteredDataIsEmpty: filteredDataIsEmpty))
   }
 }
