@@ -75,31 +75,34 @@ struct ArtistDetail: View {
   }
 }
 
-#Preview {
+#Preview(traits: .modifier(VaultPreviewModifier())) {
+  @Previewable @Environment(VaultModel.self) var model
   ArtistDetail(
-    digest: vaultPreviewData.artistDigests[0],
-    concertCompare: vaultPreviewData.comparator.compare(lhs:rhs:),
+    digest: model.vault.artistDigests[0],
+    concertCompare: model.vault.comparator.compare(lhs:rhs:),
     isPathNavigable: { _ in
       true
     }
   )
 }
 
-#Preview {
+#Preview(traits: .modifier(VaultPreviewModifier())) {
+  @Previewable @Environment(VaultModel.self) var model
   ArtistDetail(
-    digest: vaultPreviewData.artistDigests[1],
-    concertCompare: vaultPreviewData.comparator.compare(lhs:rhs:),
+    digest: model.vault.artistDigests[1],
+    concertCompare: model.vault.comparator.compare(lhs:rhs:),
     isPathNavigable: { _ in
       false
     }
   )
 }
 
-#Preview {
-  let selectedConcert = vaultPreviewData.artistDigests[1].concerts[0]
+#Preview(traits: .modifier(VaultPreviewModifier())) {
+  @Previewable @Environment(VaultModel.self) var model
+  let selectedConcert = model.vault.artistDigests[1].concerts[0]
   return ArtistDetail(
-    digest: vaultPreviewData.artistDigests[1],
-    concertCompare: vaultPreviewData.comparator.compare(lhs:rhs:),
+    digest: model.vault.artistDigests[1],
+    concertCompare: model.vault.comparator.compare(lhs:rhs:),
     isPathNavigable: { $0.archivePath != selectedConcert.archivePath }
   )
 }

@@ -80,9 +80,10 @@ public struct SiteView: View {
   SiteView(SiteModel(urlString: "https://www.example.com"))
 }
 
-#Preview {
+#Preview(traits: .modifier(VaultPreviewModifier())) {
+  @Previewable @Environment(VaultModel.self) var model
   SiteView(
     SiteModel(
       urlString: "https://www.example.com",
-      vaultModel: VaultModel(vaultPreviewData, executeAsynchronousTasks: false)))
+      vaultModel: model))
 }

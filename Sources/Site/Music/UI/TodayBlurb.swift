@@ -39,14 +39,17 @@ struct TodayBlurb: View {
   }
 }
 
-#Preview {
-  TodayBlurb(concert: vaultPreviewData.concerts[0])
+#Preview(traits: .modifier(VaultPreviewModifier())) {
+  @Previewable @Environment(VaultModel.self) var model
+  TodayBlurb(concert: model.vault.concerts[0])
 }
 
-#Preview {
-  TodayBlurb(concert: vaultPreviewData.concerts[1])
+#Preview(traits: .modifier(VaultPreviewModifier())) {
+  @Previewable @Environment(VaultModel.self) var model
+  TodayBlurb(concert: model.vault.concerts[1])
 }
 
-#Preview {
-  TodayBlurb(concert: vaultPreviewData.concerts[2])
+#Preview(traits: .modifier(VaultPreviewModifier())) {
+  @Previewable @Environment(VaultModel.self) var model
+  TodayBlurb(concert: model.vault.concerts[2])
 }
