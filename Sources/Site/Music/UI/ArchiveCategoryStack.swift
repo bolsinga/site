@@ -39,32 +39,27 @@ extension ArchiveCategoryStack {
   }
 }
 
-#Preview {
+#Preview(traits: .modifier(NearbyPreviewModifer())) {
   ArchiveCategoryStack(withPreviewCategory: .today)
     .environment(VaultModel(vaultPreviewData, executeAsynchronousTasks: false))
-    .environment(NearbyModel())
 }
 
-#Preview {
+#Preview(traits: .modifier(NearbyPreviewModifer())) {
   ArchiveCategoryStack(withPreviewCategory: .stats)
     .environment(VaultModel(vaultPreviewData, executeAsynchronousTasks: false))
-    .environment(NearbyModel())
 }
 
-#Preview {
+#Preview(traits: .modifier(NearbyPreviewModifer())) {
   ArchiveCategoryStack(withPreviewCategory: .shows)
     .environment(VaultModel(vaultPreviewData, executeAsynchronousTasks: false))
-    .environment(NearbyModel())
 }
 
-#Preview {
+#Preview(traits: .modifier(NearbyPreviewModifer())) {
   ArchiveCategoryStack(withPreviewCategory: .venues)
     .environment(VaultModel(vaultPreviewData, executeAsynchronousTasks: false))
-    .environment(NearbyModel())
 }
 
-#Preview {
+#Preview(traits: .modifier(NearbyPreviewModifer())) {
   ArchiveCategoryStack(withPreviewCategory: .artists)
     .environment(VaultModel(vaultPreviewData, executeAsynchronousTasks: false))
-    .environment(NearbyModel())
 }

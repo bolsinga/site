@@ -24,8 +24,7 @@ struct ArtistsSummary: View {
   }
 }
 
-#Preview {
+#Preview(traits: .modifier(NearbyPreviewModifer())) {
   ArtistsSummary(sort: .alphabetical, searchString: .constant(""))
     .environment(VaultModel(vaultPreviewData, executeAsynchronousTasks: false))
-    .environment(NearbyModel())
 }

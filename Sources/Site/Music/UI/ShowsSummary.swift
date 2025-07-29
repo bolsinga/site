@@ -18,8 +18,7 @@ struct ShowsSummary: View {
   }
 }
 
-#Preview {
+#Preview(traits: .modifier(NearbyPreviewModifer())) {
   ShowsSummary()
     .environment(VaultModel(vaultPreviewData, executeAsynchronousTasks: false))
-    .environment(NearbyModel())
 }

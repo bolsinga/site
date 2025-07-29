@@ -68,32 +68,27 @@ extension ArchiveCategoryRoot {
   }
 }
 
-#Preview {
+#Preview(traits: .modifier(NearbyPreviewModifer())) {
   ArchiveCategoryRoot(withPreviewCategory: .today)
     .environment(VaultModel(vaultPreviewData, executeAsynchronousTasks: false))
-    .environment(NearbyModel())
 }
 
-#Preview {
+#Preview(traits: .modifier(NearbyPreviewModifer())) {
   ArchiveCategoryRoot(withPreviewCategory: .stats)
     .environment(VaultModel(vaultPreviewData, executeAsynchronousTasks: false))
-    .environment(NearbyModel())
 }
 
-#Preview {
+#Preview(traits: .modifier(NearbyPreviewModifer())) {
   ArchiveCategoryRoot(withPreviewCategory: .shows)
     .environment(VaultModel(vaultPreviewData, executeAsynchronousTasks: false))
-    .environment(NearbyModel())
 }
 
-#Preview {
+#Preview(traits: .modifier(NearbyPreviewModifer())) {
   ArchiveCategoryRoot(withPreviewCategory: .venues)
     .environment(VaultModel(vaultPreviewData, executeAsynchronousTasks: false))
-    .environment(NearbyModel())
 }
 
-#Preview {
+#Preview(traits: .modifier(NearbyPreviewModifer())) {
   ArchiveCategoryRoot(withPreviewCategory: .artists)
     .environment(VaultModel(vaultPreviewData, executeAsynchronousTasks: false))
-    .environment(NearbyModel())
 }
