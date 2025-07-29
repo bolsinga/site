@@ -54,10 +54,9 @@ struct ArchiveTabView: View {
   }
 }
 
-#Preview(traits: .modifier(NearbyPreviewModifer())) {
+#Preview(traits: .modifier(NearbyPreviewModifer()), .modifier(VaultPreviewModifier())) {
   ArchiveTabView(
     venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
     selectedCategory: .constant(.today), pathForCategory: { _ in .constant([]) }
   )
-  .environment(VaultModel(vaultPreviewData, executeAsynchronousTasks: false))
 }

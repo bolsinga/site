@@ -39,27 +39,22 @@ extension ArchiveCategoryStack {
   }
 }
 
-#Preview(traits: .modifier(NearbyPreviewModifer())) {
+#Preview(traits: .modifier(NearbyPreviewModifer()), .modifier(VaultPreviewModifier())) {
   ArchiveCategoryStack(withPreviewCategory: .today)
-    .environment(VaultModel(vaultPreviewData, executeAsynchronousTasks: false))
 }
 
-#Preview(traits: .modifier(NearbyPreviewModifer())) {
+#Preview(traits: .modifier(NearbyPreviewModifer()), .modifier(VaultPreviewModifier())) {
   ArchiveCategoryStack(withPreviewCategory: .stats)
-    .environment(VaultModel(vaultPreviewData, executeAsynchronousTasks: false))
 }
 
-#Preview(traits: .modifier(NearbyPreviewModifer())) {
+#Preview(traits: .modifier(NearbyPreviewModifer()), .modifier(VaultPreviewModifier())) {
   ArchiveCategoryStack(withPreviewCategory: .shows)
-    .environment(VaultModel(vaultPreviewData, executeAsynchronousTasks: false))
 }
 
-#Preview(traits: .modifier(NearbyPreviewModifer())) {
+#Preview(traits: .modifier(NearbyPreviewModifer()), .modifier(VaultPreviewModifier())) {
   ArchiveCategoryStack(withPreviewCategory: .venues)
-    .environment(VaultModel(vaultPreviewData, executeAsynchronousTasks: false))
 }
 
-#Preview(traits: .modifier(NearbyPreviewModifer())) {
+#Preview(traits: .modifier(NearbyPreviewModifer()), .modifier(VaultPreviewModifier())) {
   ArchiveCategoryStack(withPreviewCategory: .artists)
-    .environment(VaultModel(vaultPreviewData, executeAsynchronousTasks: false))
 }
