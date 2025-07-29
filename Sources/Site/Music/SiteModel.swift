@@ -25,7 +25,7 @@ extension Logger {
   }
 
   @MainActor
-  public func load() async {
+  public func load(executeAsynchronousTasks: Bool = true) async {
     Logger.vaultLoader.log("start")
     defer {
       Logger.vaultLoader.log("end")
@@ -36,7 +36,7 @@ extension Logger {
       let vault = try await Vault.load(urlString)
 
       vaultModel?.cancelTasks()
-      vaultModel = VaultModel(vault)
+      vaultModel = VaultModel(vault, executeAsynchronousTasks: executeAsynchronousTasks)
     } catch {
       Logger.vaultLoader.fault("error: \(error.localizedDescription, privacy: .public)")
       self.error = error

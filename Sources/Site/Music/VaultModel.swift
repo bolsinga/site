@@ -43,7 +43,7 @@ enum LocationAuthorization {
     access: .inUse)
 
   @MainActor
-  internal init(_ vault: Vault, executeAsynchronousTasks: Bool = true) {
+  internal init(_ vault: Vault, executeAsynchronousTasks: Bool) {
     self.vault = vault
 
     updateTodayConcerts()
