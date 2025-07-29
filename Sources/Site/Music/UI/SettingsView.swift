@@ -29,7 +29,6 @@ struct SettingsView: View {
   }
 }
 
-#Preview {
+#Preview(traits: .modifier(NearbyPreviewModifer())) {
   SettingsView()
-    .environment(NearbyModel())
 }
