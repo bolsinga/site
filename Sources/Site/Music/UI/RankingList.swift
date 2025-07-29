@@ -41,9 +41,10 @@ where T: LibraryComparable, T: Hashable, T: PathRestorable, R: Comparable, R: Ha
   }
 }
 
-#Preview {
+#Preview(traits: .modifier(VaultPreviewModifier())) {
+  @Previewable @Environment(VaultModel.self) var model
   RankingList(
-    items: vaultPreviewData.artistDigests,
+    items: model.vault.artistDigests,
     rankingMapBuilder: { artists in
       return [Ranking(rank: .rank(1), value: 3): artists]
     },
@@ -58,9 +59,10 @@ where T: LibraryComparable, T: Hashable, T: PathRestorable, R: Comparable, R: Ha
   )
 }
 
-#Preview {
+#Preview(traits: .modifier(VaultPreviewModifier())) {
+  @Previewable @Environment(VaultModel.self) var model
   RankingList(
-    items: vaultPreviewData.venueDigests,
+    items: model.vault.venueDigests,
     rankingMapBuilder: { artists in
       return [Ranking(rank: .rank(1), value: 3): artists]
     }, rankSorted: <,

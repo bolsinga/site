@@ -34,14 +34,17 @@ struct VenueBlurb: View {
   }
 }
 
-#Preview {
-  VenueBlurb(concert: vaultPreviewData.concerts[0])
+#Preview(traits: .modifier(VaultPreviewModifier())) {
+  @Previewable @Environment(VaultModel.self) var model
+  VenueBlurb(concert: model.vault.concerts[0])
 }
 
-#Preview {
-  VenueBlurb(concert: vaultPreviewData.concerts[1])
+#Preview(traits: .modifier(VaultPreviewModifier())) {
+  @Previewable @Environment(VaultModel.self) var model
+  VenueBlurb(concert: model.vault.concerts[1])
 }
 
-#Preview {
-  VenueBlurb(concert: vaultPreviewData.concerts[2])
+#Preview(traits: .modifier(VaultPreviewModifier())) {
+  @Previewable @Environment(VaultModel.self) var model
+  VenueBlurb(concert: model.vault.concerts[2])
 }

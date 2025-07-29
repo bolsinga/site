@@ -30,8 +30,9 @@ struct TodayList: View {
   }
 }
 
-#Preview {
-  TodayList(concerts: vaultPreviewData.concerts)
+#Preview(traits: .modifier(VaultPreviewModifier())) {
+  @Previewable @Environment(VaultModel.self) var model
+  TodayList(concerts: model.vault.concerts)
 }
 
 #Preview {

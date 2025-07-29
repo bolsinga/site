@@ -89,10 +89,11 @@ struct VenueDetail: View {
   }
 }
 
-#Preview("Error") {
+#Preview("Error", traits: .modifier(VaultPreviewModifier())) {
+  @Previewable @Environment(VaultModel.self) var model
   VenueDetail(
-    digest: vaultPreviewData.venueDigests[0],
-    concertCompare: vaultPreviewData.comparator.compare(lhs:rhs:),
+    digest: model.vault.venueDigests[0],
+    concertCompare: model.vault.comparator.compare(lhs:rhs:),
     geocode: nil,
     isPathNavigable: { _ in
       true
@@ -100,10 +101,11 @@ struct VenueDetail: View {
   )
 }
 
-#Preview("Current Location after 10 seconds") {
+#Preview("Current Location after 10 seconds", traits: .modifier(VaultPreviewModifier())) {
+  @Previewable @Environment(VaultModel.self) var model
   VenueDetail(
-    digest: vaultPreviewData.venueDigests[0],
-    concertCompare: vaultPreviewData.comparator.compare(lhs:rhs:),
+    digest: model.vault.venueDigests[0],
+    concertCompare: model.vault.comparator.compare(lhs:rhs:),
     geocode: { _ in
       try await ContinuousClock().sleep(until: .now + Duration.seconds(10))
       return MKMapItem.forCurrentLocation()

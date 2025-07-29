@@ -56,9 +56,10 @@ where T: Rankable, T.ID == String {
   }
 }
 
-#Preview {
+#Preview(traits: .modifier(VaultPreviewModifier())) {
+  @Previewable @Environment(VaultModel.self) var model
   RankableSortList(
-    items: vaultPreviewData.venueDigests, sectioner: vaultPreviewData.sectioner,
+    items: model.vault.venueDigests, sectioner: model.vault.sectioner,
     associatedRankSectionHeader: { $0.artistsCountView },
     itemLabelView: { Text($0.name) }, sort: .alphabetical
   )
