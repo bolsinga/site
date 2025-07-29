@@ -8,12 +8,23 @@
 import SwiftUI
 import os
 
-extension Logger {
-  fileprivate static let vaultLoad = Logger(category: "vaultLoad")
-}
+#if swift(>=6.2) || !targetEnvironment(simulator)
+  extension Logger {
+    fileprivate static let vaultLoad = Logger(category: "vaultLoad")
+  }
+#else
+  struct PreviewLoggerWorkaround {
+    func log(_ string: String) {}
+  }
+#endif
 
 public struct SiteView: View {
   private let model: SiteModel
+  #if swift(>=6.2) || !targetEnvironment(simulator)
+    private let logger: Logger? = Logger.vaultLoad
+  #else
+    private let logger: PreviewLoggerWorkaround? = PreviewLoggerWorkaround()
+  #endif
 
   public init(_ model: SiteModel) {
     self.model = model
@@ -25,9 +36,9 @@ public struct SiteView: View {
         ArchiveStateView()
           .environment(vaultModel)
           .refreshable {
-            Logger.vaultLoad.log("start refresh")
+            logger?.log("start refresh")
             defer {
-              Logger.vaultLoad.log("end refresh")
+              logger?.log("end refresh")
             }
             await model.load()
           }
@@ -38,7 +49,7 @@ public struct SiteView: View {
             description: Text("Unable to load data.", bundle: .module))
           Button {
             Task {
-              Logger.vaultLoad.log("User retry")
+              logger?.log("User retry")
               await model.load()
             }
           } label: {
@@ -52,9 +63,9 @@ public struct SiteView: View {
     }.task {
       guard model.vaultModel == nil, model.error == nil else { return }
 
-      Logger.vaultLoad.log("start task")
+      logger?.log("start task")
       defer {
-        Logger.vaultLoad.log("end task")
+        logger?.log("end task")
       }
       await model.load()
     }
