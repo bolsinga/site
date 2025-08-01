@@ -9,14 +9,14 @@ import SwiftUI
 
 struct NearbyLocationModifier: ViewModifier {
   @Environment(VaultModel.self) var model
-  @Environment(NearbyModel.self) var nearbyModel
+  @AppStorage("nearby.filter") private var nearbyFilter = defaultLocationFilter
 
   let filteredDataIsEmpty: Bool
 
   func body(content: Content) -> some View {
     content
       .overlay {
-        if nearbyModel.locationFilter.isNearby {
+        if nearbyFilter.isNearby {
           NearbyLocationView(
             locationAuthorization: model.locationAuthorization,
             geocodingProgress: model.geocodingProgress, filteredDataIsEmpty: filteredDataIsEmpty)

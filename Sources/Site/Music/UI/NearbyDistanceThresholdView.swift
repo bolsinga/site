@@ -45,6 +45,9 @@ struct NearbyDistanceThresholdView: View {
       #endif
       Text(distanceThresholdMeasurementString)
     }
+    #if os(macOS)
+      .frame(maxWidth: 300)
+    #endif
   }
 }
 

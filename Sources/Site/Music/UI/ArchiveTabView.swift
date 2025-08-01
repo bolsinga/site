@@ -19,12 +19,20 @@ extension ArchiveCategory {
     }
   }
 
+  fileprivate static var trailingTabs: [ArchiveCategory] {
+    #if os(macOS)
+      [.stats]
+    #else
+      [.stats, .settings]
+    #endif
+  }
+
   fileprivate static var tagOrder: [ArchiveCategory] {
     allCases.filter {
       if case .stats = $0 { return false }
       if case .settings = $0 { return false }
       return true
-    } + [.stats, .settings]
+    } + trailingTabs
   }
 }
 
@@ -54,7 +62,7 @@ struct ArchiveTabView: View {
   }
 }
 
-#Preview(traits: .modifier(NearbyPreviewModifer()), .modifier(VaultPreviewModifier())) {
+#Preview(traits: .modifier(VaultPreviewModifier())) {
   ArchiveTabView(
     venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
     selectedCategory: .constant(.today), pathForCategory: { _ in .constant([]) }
