@@ -7,32 +7,21 @@
 
 import SwiftUI
 
-#if canImport(UIKit)
-  import UIKit
-
-  extension UIDevice {
-    fileprivate var showSettingsInTabView: Bool {
-      // Ideally this could check if the TabView was able to show a sidebar.
-      userInterfaceIdiom != .phone
-    }
-  }
-
-  @MainActor
-  private var showSettingsInTabView: Bool {
-    UIDevice.current.showSettingsInTabView
-  }
-#else
-  private let showSettingsInTabView = false
-#endif
-
 extension ArchiveCategory {
+  @MainActor
   fileprivate func badge(_ model: VaultModel) -> Text? {
     let count = model.todayConcerts.count
     guard count > 0 else { return nil }
     switch self {
     case .today:
       return Text(String(count))
-    case .stats, .shows, .venues, .artists, .settings:
+    case .shows:
+      if combineTodayAndShowSummary {
+        return Text(String(count))
+      } else {
+        return nil
+      }
+    case .stats, .venues, .artists, .settings:
       return nil
     }
   }
@@ -49,6 +38,7 @@ extension ArchiveCategory {
   @MainActor
   fileprivate static var tagOrder: [ArchiveCategory] {
     allCases.filter {
+      if case .today = $0 { return !combineTodayAndShowSummary }
       if case .stats = $0 { return false }
       if case .settings = $0 { return false }
       return true

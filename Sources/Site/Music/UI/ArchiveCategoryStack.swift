@@ -29,7 +29,11 @@ struct ArchiveCategoryStack: View {
     case .stats:
       StatsSummary()
     case .shows:
-      ShowsSummary()
+      if combineTodayAndShowSummary {
+        DaysShowsSummary()
+      } else {
+        ShowsSummary()
+      }
     case .venues:
       VenuesSummary(sort: venueSort, searchString: $venueSearchString)
     case .artists:
