@@ -9,17 +9,16 @@ import SwiftUI
 
 struct ShowsSummary: View {
   @Environment(VaultModel.self) var model
+  @Environment(NearbyModel.self) var nearbyModel
   @AppStorage("nearby.distance") private var nearbyDistance = defaultNearbyDistanceThreshold
-  @AppStorage("nearby.filter") private var nearbyFilter = LocationFilter.default
 
   var body: some View {
-    let decadesMap = model.filteredDecadesMap(
-      locationFilter: nearbyFilter, distanceThreshold: nearbyDistance)
+    let decadesMap = model.filteredDecadesMap(nearbyModel, distanceThreshold: nearbyDistance)
     ShowYearList(decadesMap: decadesMap)
       .nearbyLocation(filteredDataIsEmpty: decadesMap.isEmpty)
   }
 }
 
-#Preview(traits: .modifier(VaultPreviewModifier())) {
+#Preview(traits: .modifier(NearbyPreviewModifer()), .modifier(VaultPreviewModifier())) {
   ShowsSummary()
 }

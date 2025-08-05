@@ -9,15 +9,14 @@ import SwiftUI
 
 struct ArtistsSummary: View {
   @Environment(VaultModel.self) var model
+  @Environment(NearbyModel.self) var nearbyModel
   @AppStorage("nearby.distance") private var nearbyDistance = defaultNearbyDistanceThreshold
-  @AppStorage("nearby.filter") private var nearbyFilter = LocationFilter.default
 
   let sort: RankingSort
   @Binding var searchString: String
 
   var body: some View {
-    let artistDigests = model.filteredArtistDigests(
-      locationFilter: nearbyFilter, distanceThreshold: nearbyDistance)
+    let artistDigests = model.filteredArtistDigests(nearbyModel, distanceThreshold: nearbyDistance)
     ArtistList(
       artistDigests: artistDigests, sectioner: model.vault.sectioner, sort: sort,
       searchString: $searchString
@@ -26,6 +25,6 @@ struct ArtistsSummary: View {
   }
 }
 
-#Preview(traits: .modifier(VaultPreviewModifier())) {
+#Preview(traits: .modifier(NearbyPreviewModifer()), .modifier(VaultPreviewModifier())) {
   ArtistsSummary(sort: .alphabetical, searchString: .constant(""))
 }

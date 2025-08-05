@@ -13,6 +13,7 @@ struct ArchiveStateView: View {
   @SceneStorage("venue.sort") private var venueSort = RankingSort.alphabetical
   @SceneStorage("artist.sort") private var artistSort = RankingSort.alphabetical
   @SceneStorage("navigation.state") private var archiveNavigation = ArchiveNavigation()
+  @SceneStorage("nearby.state") private var nearbyModel = NearbyModel()
 
   @State private var activity = ArchiveActivity.category(.defaultCategory)
 
@@ -35,6 +36,7 @@ struct ArchiveStateView: View {
         }
       }
     )
+    .environment(nearbyModel)
   }
 
   var body: some View {

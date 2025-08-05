@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ArchiveCategoryRoot: View {
   @Environment(VaultModel.self) var model
-  @AppStorage("nearby.filter") private var nearbyFilter = LocationFilter.default
+  @Environment(NearbyModel.self) var nearbyModel
 
   let category: ArchiveCategory
   let statsDisplayArchiveCategoryCounts: Bool
@@ -40,7 +40,8 @@ struct ArchiveCategoryRoot: View {
     )
     .toolbar {
       if category.isLocationFilterable {
-        LocationFilterToolbarContent(isOn: $nearbyFilter.toggle)
+        @Bindable var bindableNearbyModel = nearbyModel
+        LocationFilterToolbarContent(isOn: $bindableNearbyModel.locationFilter.toggle)
       }
       if let sortableData = sortableData(category) {
         SortModifierToolbarContent(algorithm: sortableData.sort) {
@@ -67,22 +68,22 @@ extension ArchiveCategoryRoot {
   }
 }
 
-#Preview(traits: .modifier(VaultPreviewModifier())) {
+#Preview(traits: .modifier(NearbyPreviewModifer()), .modifier(VaultPreviewModifier())) {
   ArchiveCategoryRoot(withPreviewCategory: .today)
 }
 
-#Preview(traits: .modifier(VaultPreviewModifier())) {
+#Preview(traits: .modifier(NearbyPreviewModifer()), .modifier(VaultPreviewModifier())) {
   ArchiveCategoryRoot(withPreviewCategory: .stats)
 }
 
-#Preview(traits: .modifier(VaultPreviewModifier())) {
+#Preview(traits: .modifier(NearbyPreviewModifer()), .modifier(VaultPreviewModifier())) {
   ArchiveCategoryRoot(withPreviewCategory: .shows)
 }
 
-#Preview(traits: .modifier(VaultPreviewModifier())) {
+#Preview(traits: .modifier(NearbyPreviewModifer()), .modifier(VaultPreviewModifier())) {
   ArchiveCategoryRoot(withPreviewCategory: .venues)
 }
 
-#Preview(traits: .modifier(VaultPreviewModifier())) {
+#Preview(traits: .modifier(NearbyPreviewModifer()), .modifier(VaultPreviewModifier())) {
   ArchiveCategoryRoot(withPreviewCategory: .artists)
 }

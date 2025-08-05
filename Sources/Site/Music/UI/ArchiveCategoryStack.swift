@@ -39,22 +39,22 @@ extension ArchiveCategoryStack {
   }
 }
 
-#Preview(traits: .modifier(VaultPreviewModifier())) {
+#Preview(traits: .modifier(NearbyPreviewModifer()), .modifier(VaultPreviewModifier())) {
   ArchiveCategoryStack(withPreviewCategory: .today)
 }
 
-#Preview(traits: .modifier(VaultPreviewModifier())) {
+#Preview(traits: .modifier(NearbyPreviewModifer()), .modifier(VaultPreviewModifier())) {
   ArchiveCategoryStack(withPreviewCategory: .stats)
 }
 
-#Preview(traits: .modifier(VaultPreviewModifier())) {
+#Preview(traits: .modifier(NearbyPreviewModifer()), .modifier(VaultPreviewModifier())) {
   ArchiveCategoryStack(withPreviewCategory: .shows)
 }
 
-#Preview(traits: .modifier(VaultPreviewModifier())) {
+#Preview(traits: .modifier(NearbyPreviewModifer()), .modifier(VaultPreviewModifier())) {
   ArchiveCategoryStack(withPreviewCategory: .venues)
 }
 
-#Preview(traits: .modifier(VaultPreviewModifier())) {
+#Preview(traits: .modifier(NearbyPreviewModifer()), .modifier(VaultPreviewModifier())) {
   ArchiveCategoryStack(withPreviewCategory: .artists)
 }

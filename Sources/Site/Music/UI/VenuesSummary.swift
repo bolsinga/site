@@ -9,15 +9,14 @@ import SwiftUI
 
 struct VenuesSummary: View {
   @Environment(VaultModel.self) var model
+  @Environment(NearbyModel.self) var nearbyModel
   @AppStorage("nearby.distance") private var nearbyDistance = defaultNearbyDistanceThreshold
-  @AppStorage("nearby.filter") private var nearbyFilter = LocationFilter.default
 
   let sort: RankingSort
   @Binding var searchString: String
 
   var body: some View {
-    let venueDigests = model.filteredVenueDigests(
-      locationFilter: nearbyFilter, distanceThreshold: nearbyDistance)
+    let venueDigests = model.filteredVenueDigests(nearbyModel, distanceThreshold: nearbyDistance)
     VenueList(
       venueDigests: venueDigests, sectioner: model.vault.sectioner, sort: sort,
       searchString: $searchString
@@ -26,6 +25,6 @@ struct VenuesSummary: View {
   }
 }
 
-#Preview(traits: .modifier(VaultPreviewModifier())) {
+#Preview(traits: .modifier(NearbyPreviewModifer()), .modifier(VaultPreviewModifier())) {
   VenuesSummary(sort: .alphabetical, searchString: .constant(""))
 }

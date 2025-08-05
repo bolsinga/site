@@ -208,21 +208,22 @@ enum LocationAuthorization {
       .sorted { vault.comparator.compare(lhs: $0, rhs: $1) }
   }
 
-  func filteredDecadesMap(locationFilter: LocationFilter, distanceThreshold: CLLocationDistance)
+  func filteredDecadesMap(_ nearbyModel: NearbyModel, distanceThreshold: CLLocationDistance)
     -> [Decade: [Annum: [Concert.ID]]]
   {
-    locationFilter.isNearby ? decadesMapsNearby(distanceThreshold) : vault.decadesMap
+    nearbyModel.locationFilter.isNearby ? decadesMapsNearby(distanceThreshold) : vault.decadesMap
   }
 
-  func filteredVenueDigests(locationFilter: LocationFilter, distanceThreshold: CLLocationDistance)
+  func filteredVenueDigests(_ nearbyModel: NearbyModel, distanceThreshold: CLLocationDistance)
     -> [VenueDigest]
   {
-    locationFilter.isNearby ? venueDigestsNearby(distanceThreshold) : vault.venueDigests
+    nearbyModel.locationFilter.isNearby ? venueDigestsNearby(distanceThreshold) : vault.venueDigests
   }
 
-  func filteredArtistDigests(locationFilter: LocationFilter, distanceThreshold: CLLocationDistance)
+  func filteredArtistDigests(_ nearbyModel: NearbyModel, distanceThreshold: CLLocationDistance)
     -> [ArtistDigest]
   {
-    locationFilter.isNearby ? artistDigestsNearby(distanceThreshold) : vault.artistDigests
+    nearbyModel.locationFilter.isNearby
+      ? artistDigestsNearby(distanceThreshold) : vault.artistDigests
   }
 }
