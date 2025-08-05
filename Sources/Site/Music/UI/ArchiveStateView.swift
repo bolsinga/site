@@ -13,8 +13,6 @@ struct ArchiveStateView: View {
   @SceneStorage("venue.sort") private var venueSort = RankingSort.alphabetical
   @SceneStorage("artist.sort") private var artistSort = RankingSort.alphabetical
   @SceneStorage("navigation.state") private var archiveNavigation = ArchiveNavigation()
-  @AppStorage("nearby.distance") private var nearbyDistance = defaultNearbyDistanceThreshold
-  @AppStorage("nearby.filter") private var nearbyFilter = defaultLocationFilter
 
   @State private var activity = ArchiveActivity.category(.defaultCategory)
 
