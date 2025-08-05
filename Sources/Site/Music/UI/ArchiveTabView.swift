@@ -44,6 +44,7 @@ struct ArchiveTabView: View {
 
   @Binding var selectedCategory: ArchiveCategory
   let pathForCategory: (ArchiveCategory) -> Binding<[ArchivePath]>
+  let reloadModel: @MainActor () async -> Void
 
   var body: some View {
     TabView(selection: $selectedCategory) {
@@ -51,7 +52,8 @@ struct ArchiveTabView: View {
         Tab(category.localizedString, systemImage: category.systemImage, value: category) {
           ArchiveCategoryStack(
             category: category, statsDisplayArchiveCategoryCounts: false,
-            path: pathForCategory(category), venueSort: $venueSort, artistSort: $artistSort)
+            path: pathForCategory(category), venueSort: $venueSort, artistSort: $artistSort,
+            reloadModel: reloadModel)
         }
         #if !os(tvOS)
           .badge(category.badge(model))
@@ -66,5 +68,5 @@ struct ArchiveTabView: View {
   ArchiveTabView(
     venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
     selectedCategory: .constant(.today), pathForCategory: { _ in .constant([]) }
-  )
+  ) {}
 }

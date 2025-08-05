@@ -16,6 +16,8 @@ struct ArchiveCategoryRoot: View {
   @Binding var venueSort: RankingSort
   @Binding var artistSort: RankingSort
 
+  let reloadModel: @MainActor () async -> Void
+
   @State private var artistSearchString: String = ""
   @State private var venueSearchString: String = ""
 
@@ -38,6 +40,7 @@ struct ArchiveCategoryRoot: View {
       venueSortSearch: { (venueSort, $venueSearchString) },
       artistSortSearch: { (artistSort, $artistSearchString) }
     )
+    .refreshable { await reloadModel() }
     .toolbar {
       if category.isLocationFilterable {
         @Bindable var bindableNearbyModel = nearbyModel
@@ -64,7 +67,7 @@ extension ArchiveCategoryRoot {
   init(withPreviewCategory category: ArchiveCategory) {
     self.init(
       category: category, statsDisplayArchiveCategoryCounts: false,
-      venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical))
+      venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical), reloadModel: {})
   }
 }
 
