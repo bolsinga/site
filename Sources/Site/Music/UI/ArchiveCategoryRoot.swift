@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ArchiveCategoryRoot: View {
   @Environment(VaultModel.self) var model
-  @AppStorage("nearby.filter") private var nearbyFilter = defaultLocationFilter
+  @AppStorage("nearby.filter") private var nearbyFilter = LocationFilter.default
 
   let category: ArchiveCategory
   let statsDisplayArchiveCategoryCounts: Bool

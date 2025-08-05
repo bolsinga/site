@@ -9,7 +9,7 @@ import SwiftUI
 
 struct NearbyLocationModifier: ViewModifier {
   @Environment(VaultModel.self) var model
-  @AppStorage("nearby.filter") private var nearbyFilter = defaultLocationFilter
+  @AppStorage("nearby.filter") private var nearbyFilter = LocationFilter.default
 
   let filteredDataIsEmpty: Bool
 

@@ -11,6 +11,8 @@ enum LocationFilter: Int, Codable {
   case none
   case nearby
 
+  static var `default`: Self { .none }
+
   var isNearby: Bool {
     switch self {
     case .none:

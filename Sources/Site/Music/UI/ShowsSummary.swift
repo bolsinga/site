@@ -10,7 +10,7 @@ import SwiftUI
 struct ShowsSummary: View {
   @Environment(VaultModel.self) var model
   @AppStorage("nearby.distance") private var nearbyDistance = defaultNearbyDistanceThreshold
-  @AppStorage("nearby.filter") private var nearbyFilter = defaultLocationFilter
+  @AppStorage("nearby.filter") private var nearbyFilter = LocationFilter.default
 
   var body: some View {
     let decadesMap = model.filteredDecadesMap(

@@ -8,5 +8,4 @@
 import CoreLocation
 import Foundation
 
-let defaultLocationFilter = LocationFilter.none
 let defaultNearbyDistanceThreshold: CLLocationDistance = 16093.44  // 10 miles
