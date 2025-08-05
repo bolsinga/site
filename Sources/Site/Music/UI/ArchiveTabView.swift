@@ -19,14 +19,20 @@ extension ArchiveCategory {
     }
   }
 
+  @MainActor
   fileprivate static var trailingTabs: [ArchiveCategory] {
     #if os(macOS)
       [.stats]
     #else
-      [.stats, .settings]
+      if showSettingsInTabView {
+        [.stats, .settings]
+      } else {
+        [.stats]
+      }
     #endif
   }
 
+  @MainActor
   fileprivate static var tagOrder: [ArchiveCategory] {
     allCases.filter {
       if case .stats = $0 { return false }

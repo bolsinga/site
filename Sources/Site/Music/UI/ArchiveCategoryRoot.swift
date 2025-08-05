@@ -9,7 +9,6 @@ import SwiftUI
 
 struct ArchiveCategoryRoot: View {
   @Environment(VaultModel.self) var model
-  @Environment(NearbyModel.self) var nearbyModel
 
   let category: ArchiveCategory
   let statsDisplayArchiveCategoryCounts: Bool
@@ -20,6 +19,8 @@ struct ArchiveCategoryRoot: View {
 
   @State private var artistSearchString: String = ""
   @State private var venueSearchString: String = ""
+
+  @State private var showNearbyDistanceSettings: Bool = false
 
   private func sortableData(_ category: ArchiveCategory) -> (
     sort: Binding<RankingSort>, associatedRankName: String
@@ -43,8 +44,7 @@ struct ArchiveCategoryRoot: View {
     .refreshable { await reloadModel() }
     .toolbar {
       if category.isLocationFilterable {
-        @Bindable var bindableNearbyModel = nearbyModel
-        LocationFilterToolbarContent(isOn: $bindableNearbyModel.locationFilter.toggle)
+        LocationFilterToolbarContent { showNearbyDistanceSettings = true }
       }
       if let sortableData = sortableData(category) {
         SortModifierToolbarContent(algorithm: sortableData.sort) {
@@ -59,6 +59,7 @@ struct ArchiveCategoryRoot: View {
       ArchiveSharableToolbarContent(
         item: ArchiveCategoryLinkable(vault: model.vault, category: category))
     }
+    .sheet(isPresented: $showNearbyDistanceSettings) { SettingsView() }
   }
 }
 
