@@ -43,14 +43,14 @@ struct ArchiveCategoryStack: View {
     NavigationStack(path: $path) {
       summary
         .refreshable { await reloadModel() }
+        .sheet(isPresented: $showNearbyDistanceSettings) { SettingsView() }
+        .navigationDestination(for: ArchivePath.self) {
+          $0.destination(vault: model.vault, isPathNavigable: path.isPathNavigable(_:))
+        }
         .toolbar {
           ArchiveCategoryToolbarContent(
             category: category, venueSort: $venueSort, artistSort: $artistSort,
             showNearbyDistanceSettings: $showNearbyDistanceSettings)
-        }
-        .sheet(isPresented: $showNearbyDistanceSettings) { SettingsView() }
-        .navigationDestination(for: ArchivePath.self) {
-          $0.destination(vault: model.vault, isPathNavigable: path.isPathNavigable(_:))
         }
     }
   }
