@@ -33,15 +33,14 @@ public struct SiteView: View {
   public var body: some View {
     Group {
       if let vaultModel = model.vaultModel {
-        ArchiveStateView()
-          .environment(vaultModel)
-          .refreshable {
-            logger?.log("start refresh")
-            defer {
-              logger?.log("end refresh")
-            }
-            await model.load()
+        ArchiveStateView {
+          logger?.log("start refresh")
+          defer {
+            logger?.log("end refresh")
           }
+          await model.load()
+        }
+        .environment(vaultModel)
       } else if let error = model.error {
         VStack(alignment: .center) {
           ContentUnavailableView(

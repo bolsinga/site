@@ -17,6 +17,8 @@ struct ArchiveStateView: View {
 
   @State private var activity = ArchiveActivity.category(.defaultCategory)
 
+  let reloadModel: @MainActor () async -> Void
+
   @ViewBuilder private var archiveBody: some View {
     ArchiveTabView(
       venueSort: $venueSort, artistSort: $artistSort,
@@ -34,7 +36,7 @@ struct ArchiveStateView: View {
         case .artists:
           return $archiveNavigation.state.artistsPath
         }
-      }
+      }, reloadModel: reloadModel
     )
     .environment(nearbyModel)
   }
@@ -57,5 +59,5 @@ struct ArchiveStateView: View {
 }
 
 #Preview(traits: .modifier(VaultPreviewModifier())) {
-  ArchiveStateView()
+  ArchiveStateView {}
 }
