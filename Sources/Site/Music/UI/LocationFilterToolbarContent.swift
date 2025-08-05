@@ -9,18 +9,54 @@ import SwiftUI
 
 struct LocationFilterToolbarContent: ToolbarContent {
   let placement: ToolbarItemPlacement
-  @Binding var isOn: Bool
+  @Environment(NearbyModel.self) var nearbyModel
+  let editNearbyDistanceAction: @MainActor () -> Void
 
-  internal init(placement: ToolbarItemPlacement = .primaryAction, isOn: Binding<Bool>) {
+  internal init(
+    placement: ToolbarItemPlacement = .primaryAction,
+    editNearbyDistanceAction: @escaping @MainActor () -> Void
+  ) {
     self.placement = placement
-    self._isOn = isOn
+    self.editNearbyDistanceAction = editNearbyDistanceAction
+  }
+
+  @ViewBuilder private var nearbyToggle: some View {
+    @Bindable var bindableNearbyModel = nearbyModel
+    Toggle(
+      String(localized: "Filter Nearby", bundle: .module), systemImage: "location.circle",
+      isOn: $bindableNearbyModel.locationFilter.toggle)
+  }
+
+  @ViewBuilder private var nearbySettingsMenu: some View {
+    Menu {
+      Button {
+        editNearbyDistanceAction()
+      } label: {
+        Label(
+          String(localized: "Edit Nearby Distance", bundle: .module),
+          systemImage: ArchiveCategory.settings.systemImage)
+      }
+    } label: {
+      Label(
+        String(localized: "Filter Nearby", bundle: .module),
+        systemImage: nearbyModel.locationFilter.isNearby
+          ? "location.circle.fill" : "location.circle")
+    } primaryAction: {
+      nearbyModel.locationFilter.toggle.toggle()
+    }
   }
 
   var body: some ToolbarContent {
     ToolbarItem(placement: placement) {
-      Toggle(
-        String(localized: "Filter Nearby", bundle: .module), systemImage: "location.circle",
-        isOn: $isOn)
+      #if os(macOS)
+        nearbyToggle
+      #else
+        if showSettingsInTabView {
+          nearbyToggle
+        } else {
+          nearbySettingsMenu
+        }
+      #endif
     }
   }
 }
