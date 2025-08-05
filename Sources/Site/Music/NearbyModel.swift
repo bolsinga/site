@@ -15,17 +15,9 @@ extension Logger {
 
 @Observable final class NearbyModel {
   struct State: Codable, Equatable, Sendable {
-    static let defaultFilter = LocationFilter.none
-    static let defaultNearbyDistanceThreshold: CLLocationDistance = 16093.44  // 10 miles
-
-    var distanceThreshold: CLLocationDistance
     var locationFilter: LocationFilter
 
-    init(
-      distanceThreshold: CLLocationDistance = defaultNearbyDistanceThreshold,
-      locationFilter: LocationFilter = defaultFilter
-    ) {
-      self.distanceThreshold = distanceThreshold
+    init(locationFilter: LocationFilter = .default) {
       self.locationFilter = locationFilter
     }
 
@@ -49,15 +41,6 @@ extension Logger {
 
   internal init(_ state: State = State()) {
     self.state = state
-  }
-
-  var distanceThreshold: CLLocationDistance {
-    get {
-      state.distanceThreshold
-    }
-    set {
-      state.distanceThreshold = newValue
-    }
   }
 
   var locationFilter: LocationFilter {
