@@ -10,20 +10,14 @@ import SwiftUI
 struct StatsSummary: View {
   @Environment(VaultModel.self) var model
 
-  let displayArchiveCategoryCounts: Bool
-
   var body: some View {
     List {
       StatsGrouping(
-        concerts: model.vault.concerts, displayArchiveCategoryCounts: displayArchiveCategoryCounts)
+        concerts: model.vault.concerts, displayArchiveCategoryCounts: true)
     }
   }
 }
 
 #Preview(traits: .modifier(VaultPreviewModifier())) {
-  StatsSummary(displayArchiveCategoryCounts: false)
-}
-
-#Preview(traits: .modifier(VaultPreviewModifier())) {
-  StatsSummary(displayArchiveCategoryCounts: true)
+  StatsSummary()
 }
