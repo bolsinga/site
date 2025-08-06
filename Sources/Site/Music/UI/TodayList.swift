@@ -36,7 +36,7 @@ struct TodayList: View {
 
 #Preview(traits: .modifier(VaultPreviewModifier())) {
   @Previewable @Environment(VaultModel.self) var model
-  TodayList(concerts: model.vault.concerts)
+  TodayList(concerts: model.vault.concerts.filter { !$0.show.date.isUnknown })
 }
 
 #Preview {
