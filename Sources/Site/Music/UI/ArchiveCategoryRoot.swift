@@ -21,18 +21,32 @@ struct ArchiveCategoryRoot: View {
 
   @State private var showNearbyDistanceSettings: Bool = false
 
-  var body: some View {
-    category.summary(
-      venueSortSearch: { (venueSort, $venueSearchString) },
-      artistSortSearch: { (artistSort, $artistSearchString) }
-    )
-    .refreshable { await reloadModel() }
-    .toolbar {
-      ArchiveCategoryToolbarContent(
-        category: category, venueSort: $venueSort, artistSort: $artistSort,
-        showNearbyDistanceSettings: $showNearbyDistanceSettings)
+  @ViewBuilder private var summary: some View {
+    switch category {
+    case .today:
+      TodaySummary()
+    case .stats:
+      StatsSummary()
+    case .shows:
+      ShowsSummary()
+    case .venues:
+      VenuesSummary(sort: venueSort, searchString: $venueSearchString)
+    case .artists:
+      ArtistsSummary(sort: artistSort, searchString: $artistSearchString)
+    case .settings:
+      SettingsView()
     }
-    .sheet(isPresented: $showNearbyDistanceSettings) { SettingsView() }
+  }
+
+  var body: some View {
+    summary
+      .refreshable { await reloadModel() }
+      .toolbar {
+        ArchiveCategoryToolbarContent(
+          category: category, venueSort: $venueSort, artistSort: $artistSort,
+          showNearbyDistanceSettings: $showNearbyDistanceSettings)
+      }
+      .sheet(isPresented: $showNearbyDistanceSettings) { SettingsView() }
   }
 }
 
