@@ -17,14 +17,41 @@ struct ArchiveCategoryStack: View {
 
   let reloadModel: @MainActor () async -> Void
 
+  @State private var artistSearchString: String = ""
+  @State private var venueSearchString: String = ""
+
+  @State private var showNearbyDistanceSettings: Bool = false
+
+  @ViewBuilder private var summary: some View {
+    switch category {
+    case .today:
+      TodaySummary()
+    case .stats:
+      StatsSummary()
+    case .shows:
+      ShowsSummary()
+    case .venues:
+      VenuesSummary(sort: venueSort, searchString: $venueSearchString)
+    case .artists:
+      ArtistsSummary(sort: artistSort, searchString: $artistSearchString)
+    case .settings:
+      SettingsView()
+    }
+  }
+
   var body: some View {
     NavigationStack(path: $path) {
-      ArchiveCategoryRoot(
-        category: category, venueSort: $venueSort, artistSort: $artistSort, reloadModel: reloadModel
-      )
-      .navigationDestination(for: ArchivePath.self) {
-        $0.destination(vault: model.vault, isPathNavigable: path.isPathNavigable(_:))
-      }
+      summary
+        .refreshable { await reloadModel() }
+        .toolbar {
+          ArchiveCategoryToolbarContent(
+            category: category, venueSort: $venueSort, artistSort: $artistSort,
+            showNearbyDistanceSettings: $showNearbyDistanceSettings)
+        }
+        .sheet(isPresented: $showNearbyDistanceSettings) { SettingsView() }
+        .navigationDestination(for: ArchivePath.self) {
+          $0.destination(vault: model.vault, isPathNavigable: path.isPathNavigable(_:))
+        }
     }
   }
 }
