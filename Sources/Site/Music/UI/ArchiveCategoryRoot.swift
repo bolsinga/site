@@ -21,19 +21,6 @@ struct ArchiveCategoryRoot: View {
 
   @State private var showNearbyDistanceSettings: Bool = false
 
-  private func sortableData(_ category: ArchiveCategory) -> (
-    sort: Binding<RankingSort>, associatedRankName: String
-  )? {
-    switch category {
-    case .today, .stats, .shows, .settings:
-      nil
-    case .venues:
-      ($venueSort, String(localized: "Sort By Artist Count", bundle: .module))
-    case .artists:
-      ($artistSort, String(localized: "Sort By Venue Count", bundle: .module))
-    }
-  }
-
   var body: some View {
     category.summary(
       venueSortSearch: { (venueSort, $venueSearchString) },
@@ -41,21 +28,9 @@ struct ArchiveCategoryRoot: View {
     )
     .refreshable { await reloadModel() }
     .toolbar {
-      if category.isLocationFilterable {
-        LocationFilterToolbarContent { showNearbyDistanceSettings = true }
-      }
-      if let sortableData = sortableData(category) {
-        SortModifierToolbarContent(algorithm: sortableData.sort) {
-          switch $0 {
-          case .associatedRank:
-            return sortableData.associatedRankName
-          default:
-            return $0.localizedString
-          }
-        }
-      }
-      ArchiveSharableToolbarContent(
-        item: ArchiveCategoryLinkable(vault: model.vault, category: category))
+      ArchiveCategoryToolbarContent(
+        category: category, venueSort: $venueSort, artistSort: $artistSort,
+        showNearbyDistanceSettings: $showNearbyDistanceSettings)
     }
     .sheet(isPresented: $showNearbyDistanceSettings) { SettingsView() }
   }
