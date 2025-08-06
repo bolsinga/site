@@ -11,7 +11,6 @@ struct ArchiveCategoryRoot: View {
   @Environment(VaultModel.self) var model
 
   let category: ArchiveCategory
-  let statsDisplayArchiveCategoryCounts: Bool
   @Binding var venueSort: RankingSort
   @Binding var artistSort: RankingSort
 
@@ -37,7 +36,6 @@ struct ArchiveCategoryRoot: View {
 
   var body: some View {
     category.summary(
-      statsDisplayArchiveCategoryCounts: statsDisplayArchiveCategoryCounts,
       venueSortSearch: { (venueSort, $venueSearchString) },
       artistSortSearch: { (artistSort, $artistSearchString) }
     )
@@ -67,8 +65,8 @@ struct ArchiveCategoryRoot: View {
 extension ArchiveCategoryRoot {
   init(withPreviewCategory category: ArchiveCategory) {
     self.init(
-      category: category, statsDisplayArchiveCategoryCounts: false,
-      venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical), reloadModel: {})
+      category: category, venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
+      reloadModel: {})
   }
 }
 

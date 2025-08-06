@@ -11,7 +11,6 @@ struct ArchiveCategoryStack: View {
   @Environment(VaultModel.self) var model
 
   let category: ArchiveCategory
-  let statsDisplayArchiveCategoryCounts: Bool
   @Binding var path: [ArchivePath]
   @Binding var venueSort: RankingSort
   @Binding var artistSort: RankingSort
@@ -21,8 +20,7 @@ struct ArchiveCategoryStack: View {
   var body: some View {
     NavigationStack(path: $path) {
       ArchiveCategoryRoot(
-        category: category, statsDisplayArchiveCategoryCounts: statsDisplayArchiveCategoryCounts,
-        venueSort: $venueSort, artistSort: $artistSort, reloadModel: reloadModel
+        category: category, venueSort: $venueSort, artistSort: $artistSort, reloadModel: reloadModel
       )
       .navigationDestination(for: ArchivePath.self) {
         $0.destination(vault: model.vault, isPathNavigable: path.isPathNavigable(_:))
@@ -35,8 +33,7 @@ struct ArchiveCategoryStack: View {
 extension ArchiveCategoryStack {
   init(withPreviewCategory category: ArchiveCategory) {
     self.init(
-      category: category, statsDisplayArchiveCategoryCounts: false, path: .constant([]),
-      venueSort: .constant(.alphabetical),
+      category: category, path: .constant([]), venueSort: .constant(.alphabetical),
       artistSort: .constant(.alphabetical), reloadModel: {})
   }
 }

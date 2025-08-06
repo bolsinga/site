@@ -57,9 +57,8 @@ struct ArchiveTabView: View {
       ForEach(ArchiveCategory.tagOrder, id: \.self) { category in
         Tab(category.localizedString, systemImage: category.systemImage, value: category) {
           ArchiveCategoryStack(
-            category: category, statsDisplayArchiveCategoryCounts: false,
-            path: pathForCategory(category), venueSort: $venueSort, artistSort: $artistSort,
-            reloadModel: reloadModel)
+            category: category, path: pathForCategory(category), venueSort: $venueSort,
+            artistSort: $artistSort, reloadModel: reloadModel)
         }
         #if !os(tvOS)
           .badge(category.badge(model))

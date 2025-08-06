@@ -11,15 +11,14 @@ extension ArchiveCategory {
   typealias SortSearch = (sort: RankingSort, search: Binding<String>)
 
   @MainActor
-  @ViewBuilder func summary(
-    statsDisplayArchiveCategoryCounts: Bool, venueSortSearch: () -> SortSearch,
-    artistSortSearch: () -> SortSearch
-  ) -> some View {
+  @ViewBuilder func summary(venueSortSearch: () -> SortSearch, artistSortSearch: () -> SortSearch)
+    -> some View
+  {
     switch self {
     case .today:
       TodaySummary()
     case .stats:
-      StatsSummary(displayArchiveCategoryCounts: statsDisplayArchiveCategoryCounts)
+      StatsSummary()
     case .shows:
       ShowsSummary()
     case .venues:
