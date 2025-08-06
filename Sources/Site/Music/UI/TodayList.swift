@@ -18,18 +18,14 @@ struct TodayList: View {
         description: Text("Check again tomorrow.", bundle: .module)
       )
     } else {
-      Section {
-        List(concerts) { concert in
-          NavigationLink(value: concert) { TodayBlurb(concert: concert) }
-        }
-        .listStyle(.plain)
-      } header: {
+      List(concerts) { concert in
+        NavigationLink(value: concert) { TodayBlurb(concert: concert) }
+      }
+      .listStyle(.plain)
+      .navigationTitle(
         Text(
           "On This Day: \(Date.now.formatted(.dateTime.month(.defaultDigits).day()))",
-          bundle: .module
-        )
-        .font(.title)
-      }
+          bundle: .module))
     }
   }
 }
