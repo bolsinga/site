@@ -7,6 +7,24 @@
 
 import SwiftUI
 
+#if canImport(UIKit)
+  import UIKit
+
+  extension UIDevice {
+    fileprivate var showSettingsInTabView: Bool {
+      // Ideally this could check if the TabView was able to show a sidebar.
+      userInterfaceIdiom != .phone
+    }
+  }
+
+  @MainActor
+  private var showSettingsInTabView: Bool {
+    UIDevice.current.showSettingsInTabView
+  }
+#else
+  private let showSettingsInTabView = false
+#endif
+
 extension ArchiveCategory {
   fileprivate func badge(_ model: VaultModel) -> Text? {
     let count = model.todayConcerts.count
@@ -21,15 +39,11 @@ extension ArchiveCategory {
 
   @MainActor
   fileprivate static var trailingTabs: [ArchiveCategory] {
-    #if os(macOS)
+    if showSettingsInTabView {
+      [.stats, .settings]
+    } else {
       [.stats]
-    #else
-      if showSettingsInTabView {
-        [.stats, .settings]
-      } else {
-        [.stats]
-      }
-    #endif
+    }
   }
 
   @MainActor

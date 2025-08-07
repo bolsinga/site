@@ -7,6 +7,23 @@
 
 import SwiftUI
 
+#if canImport(UIKit)
+  import UIKit
+
+  extension UIDevice {
+    fileprivate var showLocationFilterSettingsMenu: Bool {
+      userInterfaceIdiom == .phone
+    }
+  }
+
+  @MainActor
+  private var showLocationFilterSettingsMenu: Bool {
+    UIDevice.current.showLocationFilterSettingsMenu
+  }
+#else
+  private let showLocationFilterSettingsMenu = false
+#endif
+
 struct LocationFilterToolbarContent: ToolbarContent {
   let placement: ToolbarItemPlacement
   @Environment(NearbyModel.self) var nearbyModel
@@ -48,15 +65,11 @@ struct LocationFilterToolbarContent: ToolbarContent {
 
   var body: some ToolbarContent {
     ToolbarItem(placement: placement) {
-      #if os(macOS)
+      if showLocationFilterSettingsMenu {
+        nearbySettingsMenu
+      } else {
         nearbyToggle
-      #else
-        if showSettingsInTabView {
-          nearbyToggle
-        } else {
-          nearbySettingsMenu
-        }
-      #endif
+      }
     }
   }
 }
