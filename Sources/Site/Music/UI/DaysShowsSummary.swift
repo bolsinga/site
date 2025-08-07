@@ -8,25 +8,11 @@
 import SwiftUI
 
 struct DaysShowsSummary: View {
-  private enum Mode: CaseIterable {
-    case ordinal
-    case grouped
-
-    var systemImage: String {
-      switch self {
-      case .ordinal:
-        "calendar"
-      case .grouped:
-        "list.bullet"
-      }
-    }
-  }
-
-  @State private var mode = Self.Mode.ordinal
+  @Binding var mode: ShowsMode
 
   var body: some View {
     Picker(selection: $mode) {
-      ForEach(Mode.allCases, id: \.self) {
+      ForEach(ShowsMode.allCases, id: \.self) {
         Image(systemName: $0.systemImage)
       }
     } label: {
@@ -42,6 +28,10 @@ struct DaysShowsSummary: View {
   }
 }
 
-#Preview(traits: .modifier(VaultPreviewModifier()), .modifier(NearbyPreviewModifer())) {
-  DaysShowsSummary()
+#Preview("Ordinal", traits: .modifier(VaultPreviewModifier()), .modifier(NearbyPreviewModifer())) {
+  DaysShowsSummary(mode: .constant(.ordinal))
+}
+
+#Preview("Grouped", traits: .modifier(VaultPreviewModifier()), .modifier(NearbyPreviewModifer())) {
+  DaysShowsSummary(mode: .constant(.grouped))
 }

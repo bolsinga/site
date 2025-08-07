@@ -11,6 +11,7 @@ struct ArchiveCategoryStack: View {
   @Environment(VaultModel.self) var model
 
   let category: ArchiveCategory
+  @Binding var showsMode: ShowsMode
   @Binding var path: [ArchivePath]
   @Binding var venueSort: RankingSort
   @Binding var artistSort: RankingSort
@@ -30,7 +31,7 @@ struct ArchiveCategoryStack: View {
       StatsSummary()
     case .shows:
       if combineTodayAndShowSummary {
-        DaysShowsSummary()
+        DaysShowsSummary(mode: $showsMode)
       } else {
         ShowsSummary()
       }
@@ -64,7 +65,8 @@ struct ArchiveCategoryStack: View {
 extension ArchiveCategoryStack {
   init(withPreviewCategory category: ArchiveCategory) {
     self.init(
-      category: category, path: .constant([]), venueSort: .constant(.alphabetical),
+      category: category, showsMode: .constant(.ordinal), path: .constant([]),
+      venueSort: .constant(.alphabetical),
       artistSort: .constant(.alphabetical), reloadModel: {})
   }
 }
