@@ -25,24 +25,61 @@ extension ArchiveCategory {
       return nil
     }
   }
+}
+
+private enum ArchiveTab: CaseIterable {
+  case today
+  case shows
+  case venues
+  case artists
+  case stats
+  case settings
+
+  static var `default`: Self { ArchiveCategory.defaultCategory.tab }
 
   @MainActor
-  fileprivate static var trailingTabs: [ArchiveCategory] {
-    if showSettingsInTabView {
-      [.stats, .settings]
-    } else {
-      [.stats]
+  static var ordered: [ArchiveTab] {
+    allCases.filter {
+      if case .today = $0 { return !combineTodayAndShowSummary }
+      if case .settings = $0 { return showSettingsInTabView }
+      return true
     }
   }
 
-  @MainActor
-  fileprivate static var tagOrder: [ArchiveCategory] {
-    allCases.filter {
-      if case .today = $0 { return !combineTodayAndShowSummary }
-      if case .stats = $0 { return false }
-      if case .settings = $0 { return false }
-      return true
-    } + trailingTabs
+  var category: ArchiveCategory {
+    switch self {
+    case .today:
+      .today
+    case .shows:
+      .shows
+    case .venues:
+      .venues
+    case .artists:
+      .artists
+    case .stats:
+      .stats
+    case .settings:
+      .settings
+    }
+  }
+}
+
+extension ArchiveCategory {
+  fileprivate var tab: ArchiveTab {
+    switch self {
+    case .today:
+      .today
+    case .stats:
+      .stats
+    case .shows:
+      .shows
+    case .venues:
+      .venues
+    case .artists:
+      .artists
+    case .settings:
+      .settings
+    }
   }
 }
 
@@ -56,17 +93,68 @@ struct ArchiveTabView: View {
   let pathForCategory: (ArchiveCategory) -> Binding<[ArchivePath]>
   let reloadModel: @MainActor () async -> Void
 
+  @State private var selectedTab = ArchiveTab.default
+  @State private var showsMode = ShowsMode.default
+
   var body: some View {
-    TabView(selection: $selectedCategory) {
-      ForEach(ArchiveCategory.tagOrder, id: \.self) { category in
-        Tab(category.localizedString, systemImage: category.systemImage, value: category) {
+    TabView(selection: $selectedTab) {
+      ForEach(ArchiveTab.ordered, id: \.self) { tab in
+        let category = tab.category
+        Tab(category.localizedString, systemImage: category.systemImage, value: tab) {
           ArchiveCategoryStack(
-            category: category, path: pathForCategory(category), venueSort: $venueSort,
+            category: category, showsMode: $showsMode, path: pathForCategory(category),
+            venueSort: $venueSort,
             artistSort: $artistSort, reloadModel: reloadModel)
         }
         #if !os(tvOS)
           .badge(category.badge(model))
         #endif
+      }
+    }
+    .onAppear {
+      selectedTab = selectedCategory.tab
+      switch selectedCategory {
+      case .today:
+        showsMode = .ordinal
+      case .shows:
+        showsMode = .grouped
+      case .stats, .venues, .artists, .settings:
+        break
+      }
+    }
+    .onChange(of: selectedTab) { _, newValue in
+      selectedCategory = {
+        switch newValue {
+        case .today:
+          .today
+        case .shows:
+          if combineTodayAndShowSummary {
+            switch showsMode {
+            case .ordinal:
+              .today
+            case .grouped:
+              .shows
+            }
+          } else {
+            .shows
+          }
+        case .venues:
+          .venues
+        case .artists:
+          .artists
+        case .stats:
+          .stats
+        case .settings:
+          .settings
+        }
+      }()
+    }
+    .onChange(of: showsMode) { _, newValue in
+      switch newValue {
+      case .ordinal:
+        selectedCategory = .today
+      case .grouped:
+        selectedCategory = .shows
       }
     }
     .tabViewStyle(.sidebarAdaptable)
