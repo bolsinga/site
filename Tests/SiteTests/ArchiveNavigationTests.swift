@@ -186,4 +186,26 @@ struct ArchiveNavigationTests {
       #expect(!activity.matches(category: categoryCase))
     }
   }
+
+  @Test func maintainCategoryPaths() {
+    let ar = ArchiveNavigation()
+
+    ar.navigate(to: ArchivePath.artist("id"))
+    #expect(ar.category == .artists)
+    #expect(ar.path.count == 1)
+    #expect(ar.path.last != nil)
+    #expect(ar.path.last! == ArchivePath.artist("id"))
+    #expect(ar.state.artistsPath == ar.path)
+
+    ar.navigate(to: ArchivePath.venue("id"))
+    #expect(ar.category == .venues)
+    #expect(ar.path.count == 1)
+    #expect(ar.path.last != nil)
+    #expect(ar.path.last! == ArchivePath.venue("id"))
+    #expect(ar.state.venuesPath == ar.path)
+
+    #expect(ar.state.artistsPath.count == 1)
+    #expect(ar.state.artistsPath.last != nil)
+    #expect(ar.state.artistsPath.last! == ArchivePath.artist("id"))
+  }
 }

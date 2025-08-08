@@ -82,6 +82,31 @@ extension Logger {
       }
       return samePaths(for: other) ? .category : .both
     }
+
+    func update(with other: State) -> State {
+      switch other.category {
+      case .today:
+        State(
+          category: other.category, todayPath: other.todayPath, showsPath: showsPath,
+          venuesPath: venuesPath, artistsPath: artistsPath)
+      case .shows:
+        State(
+          category: other.category, todayPath: todayPath, showsPath: other.showsPath,
+          venuesPath: venuesPath, artistsPath: artistsPath)
+      case .venues:
+        State(
+          category: other.category, todayPath: todayPath, showsPath: showsPath,
+          venuesPath: other.venuesPath, artistsPath: artistsPath)
+      case .artists:
+        State(
+          category: other.category, todayPath: todayPath, showsPath: showsPath,
+          venuesPath: venuesPath, artistsPath: other.artistsPath)
+      case .stats, .settings, .search:
+        State(
+          category: other.category, todayPath: todayPath, showsPath: showsPath,
+          venuesPath: venuesPath, artistsPath: artistsPath)
+      }
+    }
   }
 
   var state: State
@@ -142,7 +167,7 @@ extension Logger {
     case .none:
       break
     case .category, .path:
-      self.state = other
+      self.state = self.state.update(with: other)
     case .both:
       // Without this workaround, changing the category will update the UI
       //  such that the path is cleared after the first property changes.
@@ -152,17 +177,17 @@ extension Logger {
         var t = Transaction()
         t.disablesAnimations = true
         withTransaction(t) {
-          self.state = State(category: other.category)
+          self.state = self.state.update(with: State(category: other.category))
         }
         // Make the path change on the next turn of the RunLoop
         //  with an animation.
         DispatchQueue.main.async {
           // NOTE: This DispatchQueue.main is the reason why this class is
           //  @MainActor. If this is removed in the future, remove the annotation too.
-          self.state = other
+          self.state = self.state.update(with: other)
         }
       } else {
-        self.state = other
+        self.state = self.state.update(with: other)
       }
     }
   }
