@@ -14,6 +14,7 @@ public enum ArchiveCategory: String, CaseIterable, Codable, Sendable {
   case venues
   case artists
   case settings
+  case search
 
   static var defaultCategory: ArchiveCategory { .today }
 
@@ -31,6 +32,8 @@ public enum ArchiveCategory: String, CaseIterable, Codable, Sendable {
       return String(localized: "Artists", bundle: .module)
     case .settings:
       return String(localized: "Settings", bundle: .module)
+    case .search:
+      return String(localized: "Search", bundle: .module)
     }
   }
 
@@ -48,6 +51,8 @@ public enum ArchiveCategory: String, CaseIterable, Codable, Sendable {
       "music.mic"
     case .settings:
       "gear"
+    case .search:
+      "magnifyingglass"
     }
   }
 
@@ -69,6 +74,8 @@ public enum ArchiveCategory: String, CaseIterable, Codable, Sendable {
       return String(localized: "Show Artists", bundle: .module)
     case .settings:
       return String(localized: "Settings", bundle: .module)
+    case .search:
+      return localizedString
     }
   }
 }

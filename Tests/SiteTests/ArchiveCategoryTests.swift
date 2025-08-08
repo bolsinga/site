@@ -12,7 +12,7 @@ import Testing
 
 let categoryPaths = [
   "/dates/today.html", "/stats.html", "/dates/stats.html", "/venues/stats.html",
-  "/bands/stats.html", "",
+  "/bands/stats.html", "", "",
 ]
 
 struct ArchiveCategoryTests {

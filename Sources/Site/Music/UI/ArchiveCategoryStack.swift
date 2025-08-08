@@ -47,6 +47,8 @@ struct ArchiveCategoryStack: View {
       ArtistsSummary(sort: artistSort, searchString: $artistSearchString)
     case .settings:
       SettingsView()
+    case .search:
+      EmptyView()
     }
   }
 

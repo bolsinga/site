@@ -8,7 +8,7 @@
 extension ArchiveCategory {
   var isLocationFilterable: Bool {
     switch self {
-    case .today, .stats, .settings:
+    case .today, .stats, .settings, .search:
       false
     case .shows, .venues, .artists:
       true

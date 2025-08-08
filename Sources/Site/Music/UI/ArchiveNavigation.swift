@@ -53,7 +53,7 @@ extension Logger {
       switch category {
       case .today:
         self.init(category: category, todayPath: [path])
-      case .stats, .settings:
+      case .stats, .settings, .search:
         self.init(category: category)
       case .shows:
         self.init(category: category, showsPath: [path])
@@ -111,7 +111,7 @@ extension Logger {
       switch category {
       case .today:
         return state.todayPath
-      case .stats, .settings:
+      case .stats, .settings, .search:
         return []
       case .shows:
         return state.showsPath
@@ -125,7 +125,7 @@ extension Logger {
       switch category {
       case .today:
         state.todayPath = newValue
-      case .stats, .settings:
+      case .stats, .settings, .search:
         break
       case .shows:
         state.showsPath = newValue
