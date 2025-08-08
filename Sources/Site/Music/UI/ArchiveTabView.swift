@@ -159,6 +159,9 @@ struct ArchiveTabView: View {
         selectedCategory = .shows
       }
     }
+    .onChange(of: selectedCategory) { _, newValue in
+      selectedTab = newValue.tab
+    }
     .tabViewStyle(.sidebarAdaptable)
   }
 }
