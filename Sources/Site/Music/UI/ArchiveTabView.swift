@@ -21,7 +21,7 @@ extension ArchiveCategory {
       } else {
         return nil
       }
-    case .stats, .venues, .artists, .settings:
+    case .stats, .venues, .artists, .settings, .search:
       return nil
     }
   }
@@ -79,6 +79,8 @@ extension ArchiveCategory {
       .artists
     case .settings:
       .settings
+    case .search:
+      .settings  // TODO: Add the search tab.
     }
   }
 }
@@ -118,7 +120,7 @@ struct ArchiveTabView: View {
         showsMode = .ordinal
       case .shows:
         showsMode = .grouped
-      case .stats, .venues, .artists, .settings:
+      case .stats, .venues, .artists, .settings, .search:
         break
       }
     }

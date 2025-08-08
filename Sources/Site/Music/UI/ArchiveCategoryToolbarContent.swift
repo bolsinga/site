@@ -30,7 +30,7 @@ struct ArchiveCategoryToolbarContent: ToolbarContent {
     sort: Binding<RankingSort>, associatedRankName: String
   )? {
     switch category {
-    case .today, .stats, .shows, .settings:
+    case .today, .stats, .shows, .settings, .search:
       nil
     case .venues:
       ($venueSort, String(localized: "Sort By Artist Count", bundle: .module))
