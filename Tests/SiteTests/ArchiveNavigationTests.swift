@@ -63,29 +63,14 @@ let irregularActivities = ArchiveCategory.allCases.filter { !$0.isRegularActivit
 
 @MainActor
 struct ArchiveNavigationTests {
-  @Test func navigateToCategory() {
+  @Test("Navigate To Category", arguments: ArchiveCategory.allCases)
+  func navigateToCategory(category: ArchiveCategory) {
     let ar = ArchiveNavigation()
     #expect(ar.category == .defaultCategory)
     #expect(ar.path.isEmpty)
 
-    ar.navigate(to: .today)
-    #expect(ar.category == .today)
-    #expect(ar.path.isEmpty)
-
-    ar.navigate(to: .stats)
-    #expect(ar.category == .stats)
-    #expect(ar.path.isEmpty)
-
-    ar.navigate(to: .artists)
-    #expect(ar.category == .artists)
-    #expect(ar.path.isEmpty)
-
-    ar.navigate(to: .venues)
-    #expect(ar.category == .venues)
-    #expect(ar.path.isEmpty)
-
-    ar.navigate(to: .shows)
-    #expect(ar.category == .shows)
+    ar.navigate(to: category)
+    #expect(ar.category == category)
     #expect(ar.path.isEmpty)
   }
 

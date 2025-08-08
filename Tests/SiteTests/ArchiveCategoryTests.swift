@@ -11,12 +11,16 @@ import Testing
 @testable import Site
 
 struct ArchiveCategoryTests {
-  @Test func format() {
-    #expect(ArchiveCategory.today.formatted(.urlPath) == "/dates/today.html")
-    #expect(ArchiveCategory.stats.formatted(.urlPath) == "/stats.html")
-    #expect(ArchiveCategory.shows.formatted(.urlPath) == "/dates/stats.html")
-    #expect(ArchiveCategory.venues.formatted(.urlPath) == "/venues/stats.html")
-    #expect(ArchiveCategory.artists.formatted(.urlPath) == "/bands/stats.html")
+  @Test(
+    "Category URLs",
+    arguments: zip(
+      ArchiveCategory.allCases,
+      [
+        "/dates/today.html", "/stats.html", "/dates/stats.html", "/venues/stats.html",
+        "/bands/stats.html", "",
+      ]))
+  func format(category: ArchiveCategory, path: String) {
+    #expect(category.formatted(.urlPath) == path)
   }
 
   @Test func parseURLFormat() throws {
