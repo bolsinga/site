@@ -7,6 +7,12 @@
 
 import SwiftUI
 
+extension ShowsMode {
+  fileprivate var supportsToolbar: Bool {
+    self == .grouped
+  }
+}
+
 struct ArchiveCategoryStack: View {
   @Environment(VaultModel.self) var model
 
@@ -53,9 +59,11 @@ struct ArchiveCategoryStack: View {
           $0.destination(vault: model.vault, isPathNavigable: path.isPathNavigable(_:))
         }
         .toolbar {
-          ArchiveCategoryToolbarContent(
-            category: category, venueSort: $venueSort, artistSort: $artistSort,
-            showNearbyDistanceSettings: $showNearbyDistanceSettings)
+          if !combineTodayAndShowSummary || showsMode.supportsToolbar {
+            ArchiveCategoryToolbarContent(
+              category: category, venueSort: $venueSort, artistSort: $artistSort,
+              showNearbyDistanceSettings: $showNearbyDistanceSettings)
+          }
         }
     }
   }
