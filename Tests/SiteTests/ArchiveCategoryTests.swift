@@ -10,13 +10,19 @@ import Testing
 
 @testable import Site
 
+let categoryPaths = [
+  "/dates/today.html", "/stats.html", "/dates/stats.html", "/venues/stats.html",
+  "/bands/stats.html", "",
+]
+
 struct ArchiveCategoryTests {
-  @Test func format() {
-    #expect(ArchiveCategory.today.formatted(.urlPath) == "/dates/today.html")
-    #expect(ArchiveCategory.stats.formatted(.urlPath) == "/stats.html")
-    #expect(ArchiveCategory.shows.formatted(.urlPath) == "/dates/stats.html")
-    #expect(ArchiveCategory.venues.formatted(.urlPath) == "/venues/stats.html")
-    #expect(ArchiveCategory.artists.formatted(.urlPath) == "/bands/stats.html")
+  @Test func verifyPaths() {
+    #expect(ArchiveCategory.allCases.count == categoryPaths.count)
+  }
+
+  @Test("Category Paths", arguments: zip(ArchiveCategory.allCases, categoryPaths))
+  func format(category: ArchiveCategory, path: String) {
+    #expect(category.formatted(.urlPath) == path)
   }
 
   @Test func parseURLFormat() throws {
