@@ -23,8 +23,8 @@ extension LibraryComparable {
 }
 
 extension Array where Element: LibraryComparable {
-  func names(filteredBy searchString: String) -> [Element] {
-    guard !searchString.isEmpty else { return self }
+  func names(filteredBy searchString: String, additive: Bool = false) -> [Element] {
+    guard !searchString.isEmpty else { return additive ? [] : self }
     return self.filter { $0.name.lowercased().contains(searchString.lowercased()) }
   }
 }

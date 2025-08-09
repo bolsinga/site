@@ -37,7 +37,7 @@ struct ArchiveStateView: View {
           return $archiveNavigation.state.artistsPath
         }
       }, reloadModel: reloadModel
-    )
+    ) { archiveNavigation.navigate(to: $0) }
     .environment(nearbyModel)
   }
 
