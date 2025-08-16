@@ -15,7 +15,7 @@ private struct SearchResultButton: View {
     HStack {
       name
       Spacer()
-      Image(systemName: "arrowshape.turn.up.right")
+      Image(systemName: "arrow.up.right.square.fill")
     }
     .contentShape(.rect)
     .accessibility(addTraits: .isButton)
