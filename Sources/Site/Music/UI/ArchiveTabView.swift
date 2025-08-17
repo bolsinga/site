@@ -100,13 +100,22 @@ struct ArchiveTabView: View {
   let navigateToPath: (ArchivePath) -> Void
 
   @State var searchString: String = ""
+  @State var scope: ArchiveScope = .all
 
   @ViewBuilder private var searchTabContent: some View {
     NavigationStack {
-      ArchiveCrossSearchContainer(searchString: $searchString, navigateToPath: navigateToPath)
-        .searchable(
-          text: $searchString,
-          prompt: String(localized: "Artist or Venue Name", bundle: .module))
+      ArchiveCrossSearchContainer(
+        searchString: $searchString, scope: $scope, navigateToPath: navigateToPath
+      )
+      .searchable(
+        text: $searchString,
+        prompt: String(localized: "Artist or Venue Name", bundle: .module)
+      )
+      .searchScopes($scope) {
+        ForEach(ArchiveScope.allCases, id: \.self) {
+          Text($0.localizedString).tag($0)
+        }
+      }
     }
   }
 
