@@ -143,8 +143,14 @@
     "About" : {
 
     },
+    "All" : {
+      "comment" : "ArchiveScope.all"
+    },
     "All Shows" : {
 
+    },
+    "Artist" : {
+      "comment" : "ArchiveScope.artist"
     },
     "Artist Names" : {
 
@@ -337,6 +343,9 @@
     },
     "Unable to load data." : {
 
+    },
+    "Venue" : {
+      "comment" : "ArchiveScope.venue"
     },
     "Venue Names" : {
 

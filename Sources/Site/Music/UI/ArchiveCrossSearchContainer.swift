@@ -11,11 +11,13 @@ struct ArchiveCrossSearchContainer: View {
   @Environment(\.isSearching) private var isSearching
 
   @Binding var searchString: String
+  @Binding var scope: ArchiveScope
   let navigateToPath: (ArchivePath) -> Void
 
   var body: some View {
     if isSearching {
-      ArchiveCrossSearchView(searchString: $searchString, navigateToPath: navigateToPath)
+      ArchiveCrossSearchView(
+        searchString: $searchString, scope: $scope, navigateToPath: navigateToPath)
     }
   }
 }

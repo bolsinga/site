@@ -29,16 +29,27 @@ struct ArchiveCrossSearchView: View {
   @AppStorage("nearby.distance") private var nearbyDistance = defaultNearbyDistanceThreshold
 
   @Binding var searchString: String
+  @Binding var scope: ArchiveScope
   let navigateToPath: (ArchivePath) -> Void
 
   private var artistDigests: [ArtistDigest] {
-    model.filteredArtistDigests(nearbyModel, distanceThreshold: nearbyDistance).names(
-      filteredBy: searchString, additive: true)
+    switch scope {
+    case .venue:
+      []
+    case .all, .artist:
+      model.filteredArtistDigests(nearbyModel, distanceThreshold: nearbyDistance).names(
+        filteredBy: searchString, additive: true)
+    }
   }
 
   private var venueDigests: [VenueDigest] {
-    model.filteredVenueDigests(nearbyModel, distanceThreshold: nearbyDistance).names(
-      filteredBy: searchString, additive: true)
+    switch scope {
+    case .all, .venue:
+      model.filteredVenueDigests(nearbyModel, distanceThreshold: nearbyDistance).names(
+        filteredBy: searchString, additive: true)
+    case .artist:
+      []
+    }
   }
 
   var body: some View {
@@ -79,20 +90,62 @@ struct ArchiveCrossSearchView: View {
 }
 
 #Preview(
-  "Empty Search String", traits: .modifier(VaultPreviewModifier()),
+  "Empty Search String - All", traits: .modifier(VaultPreviewModifier()),
   .modifier(NearbyPreviewModifer())
 ) {
-  ArchiveCrossSearchView(searchString: .constant("")) { _ in }
+  ArchiveCrossSearchView(searchString: .constant(""), scope: .constant(.all)) { _ in }
 }
 
 #Preview(
-  "Matching Search String", traits: .modifier(VaultPreviewModifier()),
+  "Matching Search String - All", traits: .modifier(VaultPreviewModifier()),
   .modifier(NearbyPreviewModifer())
 ) {
-  ArchiveCrossSearchView(searchString: .constant("art")) { _ in }
+  ArchiveCrossSearchView(searchString: .constant("art"), scope: .constant(.all)) { _ in }
 }
 
-#Preview("No Matches", traits: .modifier(VaultPreviewModifier()), .modifier(NearbyPreviewModifer()))
-{
-  ArchiveCrossSearchView(searchString: .constant("zzzzzzzzz")) { _ in }
+#Preview(
+  "No Matches - All", traits: .modifier(VaultPreviewModifier()), .modifier(NearbyPreviewModifer())
+) {
+  ArchiveCrossSearchView(searchString: .constant("zzzzzzzzz"), scope: .constant(.all)) { _ in }
+}
+
+#Preview(
+  "Empty Search String - Artist", traits: .modifier(VaultPreviewModifier()),
+  .modifier(NearbyPreviewModifer())
+) {
+  ArchiveCrossSearchView(searchString: .constant(""), scope: .constant(.artist)) { _ in }
+}
+
+#Preview(
+  "Matching Search String - Artist", traits: .modifier(VaultPreviewModifier()),
+  .modifier(NearbyPreviewModifer())
+) {
+  ArchiveCrossSearchView(searchString: .constant("art"), scope: .constant(.artist)) { _ in }
+}
+
+#Preview(
+  "No Matches - Artist", traits: .modifier(VaultPreviewModifier()),
+  .modifier(NearbyPreviewModifer())
+) {
+  ArchiveCrossSearchView(searchString: .constant("zzzzzzzzz"), scope: .constant(.artist)) { _ in }
+}
+
+#Preview(
+  "Empty Search String - Venue", traits: .modifier(VaultPreviewModifier()),
+  .modifier(NearbyPreviewModifer())
+) {
+  ArchiveCrossSearchView(searchString: .constant(""), scope: .constant(.venue)) { _ in }
+}
+
+#Preview(
+  "Matching Search String - Venue", traits: .modifier(VaultPreviewModifier()),
+  .modifier(NearbyPreviewModifer())
+) {
+  ArchiveCrossSearchView(searchString: .constant("art"), scope: .constant(.venue)) { _ in }
+}
+
+#Preview(
+  "No Matches - Venue", traits: .modifier(VaultPreviewModifier()), .modifier(NearbyPreviewModifer())
+) {
+  ArchiveCrossSearchView(searchString: .constant("zzzzzzzzz"), scope: .constant(.venue)) { _ in }
 }
