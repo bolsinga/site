@@ -15,8 +15,6 @@ struct ArchiveStateView: View {
   @SceneStorage("navigation.state") private var archiveNavigation = ArchiveNavigation()
   @SceneStorage("nearby.state") private var nearbyModel = NearbyModel()
 
-  @State private var activity = ArchiveActivity.category(.defaultCategory)
-
   let reloadModel: @MainActor () async -> Void
 
   @ViewBuilder private var archiveBody: some View {
@@ -43,16 +41,14 @@ struct ArchiveStateView: View {
 
   var body: some View {
     archiveBody
-      .onAppear { activity = archiveNavigation.activity }
-      .onChange(of: archiveNavigation.activity) { _, newValue in
-        activity = newValue
-      }
       .onContinueUserActivity(ArchivePath.activityType) { archiveNavigation.pathActivity($0) }
       .onContinueUserActivity(ArchiveCategory.activityType) {
         archiveNavigation.categoryActivity($0)
       }
       .onOpenURL { archiveNavigation.openURL($0) }
-      .advertiseUserActivity(for: activity, urlForCategory: { model.vault.categoryURLMap[$0] }) {
+      .advertiseUserActivity(
+        for: archiveNavigation.activity, urlForCategory: { model.vault.categoryURLMap[$0] }
+      ) {
         model.vault.restorableSharableLinkable(for: $0)
       }
   }
