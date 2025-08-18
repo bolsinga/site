@@ -118,6 +118,7 @@ struct ArchiveTabView: View {
           Text($0.localizedString).tag($0)
         }
       }
+      .navigationTitle(Text(ArchiveCategory.search.localizedString))
     }
   }
 
