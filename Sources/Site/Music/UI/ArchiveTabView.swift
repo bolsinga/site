@@ -90,6 +90,7 @@ extension ArchiveCategory {
 
 struct ArchiveTabView: View {
   @Environment(VaultModel.self) var model
+  @SceneStorage("shows.mode") private var showsMode = ShowsMode.default
 
   @Binding var venueSort: RankingSort
   @Binding var artistSort: RankingSort
@@ -99,8 +100,9 @@ struct ArchiveTabView: View {
   let reloadModel: @MainActor () async -> Void
   let navigateToPath: (ArchivePath) -> Void
 
-  @State var searchString: String = ""
-  @State var scope: ArchiveScope = .all
+  @State private var searchString: String = ""
+  @State private var scope: ArchiveScope = .all
+  @State private var selectedTab = ArchiveTab.default
 
   @ViewBuilder private var searchTabContent: some View {
     NavigationStack {
@@ -118,9 +120,6 @@ struct ArchiveTabView: View {
       }
     }
   }
-
-  @State private var selectedTab = ArchiveTab.default
-  @State private var showsMode = ShowsMode.default
 
   var body: some View {
     TabView(selection: $selectedTab) {
