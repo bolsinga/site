@@ -20,7 +20,7 @@ struct ArchiveStateView: View {
   @ViewBuilder private var archiveBody: some View {
     ArchiveTabView(
       venueSort: $venueSort, artistSort: $artistSort,
-      selectedCategory: $archiveNavigation.category,
+      activeCategory: $archiveNavigation.category,
       pathForCategory: {
         switch $0 {
         case .today:

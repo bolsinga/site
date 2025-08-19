@@ -207,7 +207,7 @@ struct ArchiveTabView: View {
 #Preview(traits: .modifier(NearbyPreviewModifer()), .modifier(VaultPreviewModifier())) {
   ArchiveTabView(
     venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
-    selectedCategory: .constant(.today)
+    activeCategory: .constant(.today)
   ) { _ in
     .constant([])
   } reloadModel: {
