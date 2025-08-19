@@ -8,26 +8,17 @@
 import SwiftUI
 
 struct StatsSummary: View {
-  let vault: Vault
-  let displayArchiveCategoryCounts: Bool
+  @Environment(VaultModel.self) var model
 
   var body: some View {
     List {
       StatsGrouping(
-        concerts: vault.concerts, displayArchiveCategoryCounts: displayArchiveCategoryCounts)
+        concerts: model.vault.concerts, displayArchiveCategoryCounts: true)
     }
     .navigationTitle(Text(ArchiveCategory.stats.localizedString))
   }
 }
 
-#Preview {
-  StatsSummary(
-    vault: VaultModel(vaultPreviewData, executeAsynchronousTasks: false).vault,
-    displayArchiveCategoryCounts: false)
-}
-
-#Preview {
-  StatsSummary(
-    vault: VaultModel(vaultPreviewData, executeAsynchronousTasks: false).vault,
-    displayArchiveCategoryCounts: true)
+#Preview(traits: .modifier(VaultPreviewModifier())) {
+  StatsSummary()
 }

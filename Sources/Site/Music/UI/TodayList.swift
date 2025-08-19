@@ -17,6 +17,7 @@ struct TodayList: View {
         systemImage: "calendar.badge.exclamationmark",
         description: Text("Check again tomorrow.", bundle: .module)
       )
+      .navigationTitle(Text("On This Day", bundle: .module))
     } else {
       List(concerts) { concert in
         NavigationLink(value: concert) { TodayBlurb(concert: concert) }
@@ -30,8 +31,9 @@ struct TodayList: View {
   }
 }
 
-#Preview {
-  TodayList(concerts: vaultPreviewData.concerts)
+#Preview(traits: .modifier(VaultPreviewModifier())) {
+  @Previewable @Environment(VaultModel.self) var model
+  TodayList(concerts: model.vault.concerts.filter { !$0.show.date.isUnknown })
 }
 
 #Preview {

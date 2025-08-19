@@ -43,7 +43,7 @@ enum LocationAuthorization {
     access: .inUse)
 
   @MainActor
-  internal init(_ vault: Vault, executeAsynchronousTasks: Bool = true) {
+  internal init(_ vault: Vault, executeAsynchronousTasks: Bool) {
     self.vault = vault
 
     updateTodayConcerts()
@@ -208,18 +208,22 @@ enum LocationAuthorization {
       .sorted { vault.comparator.compare(lhs: $0, rhs: $1) }
   }
 
-  func filteredDecadesMap(_ nearbyModel: NearbyModel) -> [Decade: [Annum: [Concert.ID]]] {
-    nearbyModel.locationFilter.isNearby
-      ? decadesMapsNearby(nearbyModel.distanceThreshold) : vault.decadesMap
+  func filteredDecadesMap(_ nearbyModel: NearbyModel, distanceThreshold: CLLocationDistance)
+    -> [Decade: [Annum: [Concert.ID]]]
+  {
+    nearbyModel.locationFilter.isNearby ? decadesMapsNearby(distanceThreshold) : vault.decadesMap
   }
 
-  func filteredVenueDigests(_ nearbyModel: NearbyModel) -> [VenueDigest] {
-    nearbyModel.locationFilter.isNearby
-      ? venueDigestsNearby(nearbyModel.distanceThreshold) : vault.venueDigests
+  func filteredVenueDigests(_ nearbyModel: NearbyModel, distanceThreshold: CLLocationDistance)
+    -> [VenueDigest]
+  {
+    nearbyModel.locationFilter.isNearby ? venueDigestsNearby(distanceThreshold) : vault.venueDigests
   }
 
-  func filteredArtistDigests(_ nearbyModel: NearbyModel) -> [ArtistDigest] {
+  func filteredArtistDigests(_ nearbyModel: NearbyModel, distanceThreshold: CLLocationDistance)
+    -> [ArtistDigest]
+  {
     nearbyModel.locationFilter.isNearby
-      ? artistDigestsNearby(nearbyModel.distanceThreshold) : vault.artistDigests
+      ? artistDigestsNearby(distanceThreshold) : vault.artistDigests
   }
 }

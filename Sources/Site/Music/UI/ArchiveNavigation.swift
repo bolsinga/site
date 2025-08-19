@@ -15,7 +15,7 @@ extension Logger {
 
 @MainActor @Observable final class ArchiveNavigation {
   struct State: Codable, Equatable, Sendable {
-    var category: ArchiveCategory?
+    var category: ArchiveCategory
 
     var todayPath: [ArchivePath]
     var showsPath: [ArchivePath]
@@ -23,7 +23,7 @@ extension Logger {
     var artistsPath: [ArchivePath]
 
     init(
-      category: ArchiveCategory? = .defaultCategory, todayPath: [ArchivePath] = [],
+      category: ArchiveCategory = .defaultCategory, todayPath: [ArchivePath] = [],
       showsPath: [ArchivePath] = [], venuesPath: [ArchivePath] = [], artistsPath: [ArchivePath] = []
     ) {
       self.category = category
@@ -53,7 +53,7 @@ extension Logger {
       switch category {
       case .today:
         self.init(category: category, todayPath: [path])
-      case .stats, .settings:
+      case .stats, .settings, .search:
         self.init(category: category)
       case .shows:
         self.init(category: category, showsPath: [path])
@@ -82,9 +82,34 @@ extension Logger {
       }
       return samePaths(for: other) ? .category : .both
     }
+
+    func update(with other: State) -> State {
+      switch other.category {
+      case .today:
+        State(
+          category: other.category, todayPath: other.todayPath, showsPath: showsPath,
+          venuesPath: venuesPath, artistsPath: artistsPath)
+      case .shows:
+        State(
+          category: other.category, todayPath: todayPath, showsPath: other.showsPath,
+          venuesPath: venuesPath, artistsPath: artistsPath)
+      case .venues:
+        State(
+          category: other.category, todayPath: todayPath, showsPath: showsPath,
+          venuesPath: other.venuesPath, artistsPath: artistsPath)
+      case .artists:
+        State(
+          category: other.category, todayPath: todayPath, showsPath: showsPath,
+          venuesPath: venuesPath, artistsPath: other.artistsPath)
+      case .stats, .settings, .search:
+        State(
+          category: other.category, todayPath: todayPath, showsPath: showsPath,
+          venuesPath: venuesPath, artistsPath: artistsPath)
+      }
+    }
   }
 
-  private var state: State
+  var state: State
 
   @ObservationIgnored
   private let useDispatchMainWorkaround: Bool  // Disable for testing (so changes occur immediately).
@@ -97,7 +122,7 @@ extension Logger {
   @ObservationIgnored
   var description: String { state.jsonString }
 
-  var category: ArchiveCategory? {
+  var category: ArchiveCategory {
     get {
       state.category
     }
@@ -108,11 +133,10 @@ extension Logger {
 
   var path: [ArchivePath] {
     get {
-      guard let category = category else { return [] }
       switch category {
       case .today:
         return state.todayPath
-      case .stats, .settings:
+      case .stats, .settings, .search:
         return []
       case .shows:
         return state.showsPath
@@ -123,11 +147,10 @@ extension Logger {
       }
     }
     set {
-      guard let category = category else { return }
       switch category {
       case .today:
         state.todayPath = newValue
-      case .stats, .settings:
+      case .stats, .settings, .search:
         break
       case .shows:
         state.showsPath = newValue
@@ -144,7 +167,7 @@ extension Logger {
     case .none:
       break
     case .category, .path:
-      self.state = other
+      self.state = self.state.update(with: other)
     case .both:
       // Without this workaround, changing the category will update the UI
       //  such that the path is cleared after the first property changes.
@@ -154,17 +177,17 @@ extension Logger {
         var t = Transaction()
         t.disablesAnimations = true
         withTransaction(t) {
-          self.state = State(category: other.category)
+          self.state = self.state.update(with: State(category: other.category))
         }
         // Make the path change on the next turn of the RunLoop
         //  with an animation.
         DispatchQueue.main.async {
           // NOTE: This DispatchQueue.main is the reason why this class is
           //  @MainActor. If this is removed in the future, remove the annotation too.
-          self.state = other
+          self.state = self.state.update(with: other)
         }
       } else {
-        self.state = other
+        self.state = self.state.update(with: other)
       }
     }
   }
@@ -178,14 +201,13 @@ extension Logger {
     self.update(state: State(path: path))
   }
 
-  func navigate(to category: ArchiveCategory?) {
-    Logger.archive.log("nav to category: \(category?.rawValue ?? "nil", privacy: .public)")
+  func navigate(to category: ArchiveCategory) {
+    Logger.archive.log("nav to category: \(category.rawValue, privacy: .public)")
     self.update(state: State(category: category))
   }
 
   var activity: ArchiveActivity {
     let result: ArchiveActivity = {
-      guard let category = category else { return .none }
       guard let last = path.last else { return .category(category) }
       return .path(last)
     }()

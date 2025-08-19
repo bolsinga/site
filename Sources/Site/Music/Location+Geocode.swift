@@ -11,7 +11,7 @@ import Foundation
   import Contacts
 #endif
 
-extension Location {
+extension Location: Geocodable {
   #if canImport(Contacts)
     private var postalAddress: CNPostalAddress {
       let pAddress = CNMutablePostalAddress()
@@ -39,9 +39,9 @@ extension Location {
 
   func geocode() async throws -> Placemark {
     #if canImport(Contacts)
-      try await geocodePostalAddress(self.postalAddress)
+      try await postalAddress.geocode()
     #else
-      try await geocodeAddressString(addressString)
+      try await addressString.geocode()
     #endif
   }
 }

@@ -8,12 +8,13 @@
 import SwiftUI
 
 struct TodaySummary: View {
-  let model: VaultModel
+  @Environment(VaultModel.self) var model
+
   var body: some View {
     TodayList(concerts: model.todayConcerts)
   }
 }
 
-#Preview {
-  TodaySummary(model: VaultModel(vaultPreviewData, executeAsynchronousTasks: false))
+#Preview(traits: .modifier(VaultPreviewModifier())) {
+  TodaySummary()
 }

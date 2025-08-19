@@ -14,8 +14,9 @@ public enum ArchiveCategory: String, CaseIterable, Codable, Sendable {
   case venues
   case artists
   case settings
+  case search
 
-  static var defaultCategory: ArchiveCategory? { .today }
+  static var defaultCategory: ArchiveCategory { .today }
 
   var localizedString: String {
     switch self {
@@ -31,24 +32,32 @@ public enum ArchiveCategory: String, CaseIterable, Codable, Sendable {
       return String(localized: "Artists", bundle: .module)
     case .settings:
       return String(localized: "Settings", bundle: .module)
+    case .search:
+      return String(localized: "Search", bundle: .module)
+    }
+  }
+
+  var systemImage: String {
+    switch self {
+    case .today:
+      "calendar.circle"
+    case .stats:
+      "chart.bar"
+    case .shows:
+      "person.and.background.dotted"
+    case .venues:
+      "music.note.house"
+    case .artists:
+      "music.mic"
+    case .settings:
+      "gear"
+    case .search:
+      "magnifyingglass"
     }
   }
 
   @ViewBuilder var label: some View {
-    switch self {
-    case .today:
-      Label(self.localizedString, systemImage: "calendar.circle")
-    case .stats:
-      Label(self.localizedString, systemImage: "chart.bar")
-    case .shows:
-      Label(self.localizedString, systemImage: "person.and.background.dotted")
-    case .venues:
-      Label(self.localizedString, systemImage: "music.note.house")
-    case .artists:
-      Label(self.localizedString, systemImage: "music.mic")
-    case .settings:
-      Label(self.localizedString, systemImage: "gear")
-    }
+    Label(localizedString, systemImage: systemImage)
   }
 
   var title: String {
@@ -65,6 +74,8 @@ public enum ArchiveCategory: String, CaseIterable, Codable, Sendable {
       return String(localized: "Show Artists", bundle: .module)
     case .settings:
       return String(localized: "Settings", bundle: .module)
+    case .search:
+      return localizedString
     }
   }
 }

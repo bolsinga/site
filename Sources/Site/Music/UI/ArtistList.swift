@@ -28,9 +28,10 @@ struct ArtistList: View {
   }
 }
 
-#Preview {
+#Preview(traits: .modifier(VaultPreviewModifier())) {
+  @Previewable @Environment(VaultModel.self) var model
   ArtistList(
-    artistDigests: vaultPreviewData.artistDigests, sectioner: vaultPreviewData.sectioner,
+    artistDigests: model.vault.artistDigests, sectioner: model.vault.sectioner,
     sort: .alphabetical, searchString: .constant("")
   )
 }

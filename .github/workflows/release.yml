@@ -11,13 +11,13 @@ jobs:
     runs-on: macos-15
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: sw_vers
       run: sw_vers
     - name: Available Xcodes
       run: ls /Applications | grep Xcode
     - name: Switch to Xcode 26 Beta
-      run: sudo xcode-select -s "/Applications/Xcode_26_beta.app/Contents/Developer"
+      run: sudo xcode-select -s "/Applications/Xcode_26.0.app/Contents/Developer"
     - name: Xcode - Accept License
       run: sudo xcodebuild -license accept
     - name: Xcode - First Launch

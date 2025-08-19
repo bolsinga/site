@@ -8,27 +8,23 @@
 import SwiftUI
 
 struct ArtistsSummary: View {
-  let model: VaultModel
-  let nearbyModel: NearbyModel
+  @Environment(VaultModel.self) var model
+  @Environment(NearbyModel.self) var nearbyModel
+  @AppStorage("nearby.distance") private var nearbyDistance = defaultNearbyDistanceThreshold
+
   let sort: RankingSort
   @Binding var searchString: String
 
   var body: some View {
-    let artistDigests = model.filteredArtistDigests(nearbyModel)
+    let artistDigests = model.filteredArtistDigests(nearbyModel, distanceThreshold: nearbyDistance)
     ArtistList(
       artistDigests: artistDigests, sectioner: model.vault.sectioner, sort: sort,
       searchString: $searchString
     )
-    .nearbyLocation(
-      locationFilter: nearbyModel.locationFilter,
-      locationAuthorization: model.locationAuthorization,
-      geocodingProgress: model.geocodingProgress, filteredDataIsEmpty: artistDigests.isEmpty
-    )
+    .nearbyLocation(filteredDataIsEmpty: artistDigests.isEmpty)
   }
 }
 
-#Preview {
-  ArtistsSummary(
-    model: VaultModel(vaultPreviewData, executeAsynchronousTasks: false),
-    nearbyModel: NearbyModel(), sort: .alphabetical, searchString: .constant(""))
+#Preview(traits: .modifier(NearbyPreviewModifer()), .modifier(VaultPreviewModifier())) {
+  ArtistsSummary(sort: .alphabetical, searchString: .constant(""))
 }

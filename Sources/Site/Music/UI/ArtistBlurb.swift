@@ -22,14 +22,17 @@ struct ArtistBlurb: View {
   }
 }
 
-#Preview {
-  ArtistBlurb(concert: vaultPreviewData.concerts[0])
+#Preview(traits: .modifier(VaultPreviewModifier())) {
+  @Previewable @Environment(VaultModel.self) var model
+  ArtistBlurb(concert: model.vault.concerts[0])
 }
 
-#Preview {
-  ArtistBlurb(concert: vaultPreviewData.concerts[1])
+#Preview(traits: .modifier(VaultPreviewModifier())) {
+  @Previewable @Environment(VaultModel.self) var model
+  ArtistBlurb(concert: model.vault.concerts[1])
 }
 
-#Preview {
-  ArtistBlurb(concert: vaultPreviewData.concerts[2])
+#Preview(traits: .modifier(VaultPreviewModifier())) {
+  @Previewable @Environment(VaultModel.self) var model
+  ArtistBlurb(concert: model.vault.concerts[2])
 }

@@ -11,9 +11,10 @@ struct AddressView: View {
   let location: Location
 
   var body: some View {
-    HStack(alignment: .bottom) {
+    HStack(alignment: .center) {
       Text(location.addressString)
       if let web = location.web {
+        Spacer()
         Link(destination: web) {
           Image(systemName: "safari")
         }.help(web.absoluteString)
@@ -22,8 +23,9 @@ struct AddressView: View {
   }
 }
 
-#Preview {
-  AddressView(location: vaultPreviewData.venueDigests[0].venue.location)
+#Preview(traits: .modifier(VaultPreviewModifier())) {
+  @Previewable @Environment(VaultModel.self) var model
+  AddressView(location: model.vault.venueDigests[0].venue.location)
 }
 
 #Preview {

@@ -143,13 +143,19 @@
     "About" : {
 
     },
+    "All" : {
+      "comment" : "ArchiveScope.all"
+    },
     "All Shows" : {
 
     },
-    "Archives" : {
-
+    "Artist" : {
+      "comment" : "ArchiveScope.artist"
     },
     "Artist Names" : {
+
+    },
+    "Artist or Venue Name" : {
 
     },
     "Artists" : {
@@ -174,6 +180,9 @@
 
     },
     "Display Shows On This Date" : {
+
+    },
+    "Edit Nearby Distance" : {
 
     },
     "Filter Nearby" : {
@@ -221,6 +230,9 @@
     "Numeric" : {
 
     },
+    "On This Day" : {
+
+    },
     "On This Day: %@" : {
 
     },
@@ -242,6 +254,9 @@
     "Retry" : {
 
     },
+    "Search" : {
+
+    },
     "See More About This Show" : {
 
     },
@@ -252,9 +267,6 @@
 
     },
     "See Shows With This Artist" : {
-
-    },
-    "Select An Item" : {
 
     },
     "Settings" : {
@@ -326,8 +338,14 @@
     "Today" : {
 
     },
+    "Unable to determine map location." : {
+
+    },
     "Unable to load data." : {
 
+    },
+    "Venue" : {
+      "comment" : "ArchiveScope.venue"
     },
     "Venue Names" : {
 

@@ -8,12 +8,23 @@
 import SwiftUI
 import os
 
-extension Logger {
-  fileprivate static let vaultLoad = Logger(category: "vaultLoad")
-}
+#if swift(>=6.2) || !targetEnvironment(simulator)
+  extension Logger {
+    fileprivate static let vaultLoad = Logger(category: "vaultLoad")
+  }
+#else
+  struct PreviewLoggerWorkaround {
+    func log(_ string: String) {}
+  }
+#endif
 
 public struct SiteView: View {
-  private var model: SiteModel
+  private let model: SiteModel
+  #if swift(>=6.2) || !targetEnvironment(simulator)
+    private let logger: Logger? = Logger.vaultLoad
+  #else
+    private let logger: PreviewLoggerWorkaround? = PreviewLoggerWorkaround()
+  #endif
 
   public init(_ model: SiteModel) {
     self.model = model
@@ -22,14 +33,14 @@ public struct SiteView: View {
   public var body: some View {
     Group {
       if let vaultModel = model.vaultModel {
-        ArchiveStateView(model: vaultModel)
-          .refreshable {
-            Logger.vaultLoad.log("start refresh")
-            defer {
-              Logger.vaultLoad.log("end refresh")
-            }
-            await model.load()
+        ArchiveStateView {
+          logger?.log("start refresh")
+          defer {
+            logger?.log("end refresh")
           }
+          await model.load()
+        }
+        .environment(vaultModel)
       } else if let error = model.error {
         VStack(alignment: .center) {
           ContentUnavailableView(
@@ -37,7 +48,7 @@ public struct SiteView: View {
             description: Text("Unable to load data.", bundle: .module))
           Button {
             Task {
-              Logger.vaultLoad.log("User retry")
+              logger?.log("User retry")
               await model.load()
             }
           } label: {
@@ -51,9 +62,9 @@ public struct SiteView: View {
     }.task {
       guard model.vaultModel == nil, model.error == nil else { return }
 
-      Logger.vaultLoad.log("start task")
+      logger?.log("start task")
       defer {
-        Logger.vaultLoad.log("end task")
+        logger?.log("end task")
       }
       await model.load()
     }
@@ -68,9 +79,10 @@ public struct SiteView: View {
   SiteView(SiteModel(urlString: "https://www.example.com"))
 }
 
-#Preview {
+#Preview(traits: .modifier(VaultPreviewModifier())) {
+  @Previewable @Environment(VaultModel.self) var model
   SiteView(
     SiteModel(
       urlString: "https://www.example.com",
-      vaultModel: VaultModel(vaultPreviewData, executeAsynchronousTasks: false)))
+      vaultModel: model))
 }

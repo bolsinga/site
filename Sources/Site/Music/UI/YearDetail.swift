@@ -51,10 +51,11 @@ struct YearDetail: View {
   }
 }
 
-#Preview {
+#Preview(traits: .modifier(VaultPreviewModifier())) {
+  @Previewable @Environment(VaultModel.self) var model
   YearDetail(
-    digest: vaultPreviewData.digest(for: Annum.year(2001)),
-    concertCompare: vaultPreviewData.comparator.compare(lhs:rhs:),
+    digest: model.vault.digest(for: Annum.year(2001)),
+    concertCompare: model.vault.comparator.compare(lhs:rhs:),
     isPathNavigable: { _ in
       true
     }

@@ -64,27 +64,30 @@ struct ShowDetail: View {
   }
 }
 
-#Preview {
+#Preview(traits: .modifier(VaultPreviewModifier())) {
+  @Previewable @Environment(VaultModel.self) var model
   ShowDetail(
-    concert: vaultPreviewData.concerts[0],
+    concert: model.vault.concerts[0],
     isPathNavigable: { _ in
       true
     }
   )
 }
 
-#Preview {
+#Preview(traits: .modifier(VaultPreviewModifier())) {
+  @Previewable @Environment(VaultModel.self) var model
   ShowDetail(
-    concert: vaultPreviewData.concerts[1],
+    concert: model.vault.concerts[1],
     isPathNavigable: { _ in
       true
     }
   )
 }
 
-#Preview {
+#Preview(traits: .modifier(VaultPreviewModifier())) {
+  @Previewable @Environment(VaultModel.self) var model
   ShowDetail(
-    concert: vaultPreviewData.concerts[2],
+    concert: model.vault.concerts[2],
     isPathNavigable: { _ in
       true
     }

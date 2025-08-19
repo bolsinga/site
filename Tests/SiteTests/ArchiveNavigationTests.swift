@@ -13,18 +13,12 @@ extension ArchiveCategory {
   var isRegularActivity: Bool {
     if case .stats = self { return false }
     if case .settings = self { return false }
+    if case .search = self { return false }
     return true
   }
 }
 
 extension ArchiveActivity {
-  var isNone: Bool {
-    if case .none = self {
-      return true
-    }
-    return false
-  }
-
   func matches(category: ArchiveCategory) -> Bool {
     if case let .category(cat) = self {
       return cat == category
@@ -41,7 +35,7 @@ extension ArchiveActivity {
 }
 
 extension ArchiveNavigation.State {
-  init(category: ArchiveCategory?, categoryPaths: [ArchiveCategory: [ArchivePath]]) {
+  init(category: ArchiveCategory, categoryPaths: [ArchiveCategory: [ArchivePath]]) {
     let todayPath = categoryPaths[.today] ?? []
     let showsPath = categoryPaths[.shows] ?? []
     let venuesPath = categoryPaths[.venues] ?? []
@@ -54,7 +48,7 @@ extension ArchiveNavigation.State {
 }
 
 extension ArchiveNavigation {
-  convenience init(category: ArchiveCategory?, categoryPaths: [ArchiveCategory: [ArchivePath]]) {
+  convenience init(category: ArchiveCategory, categoryPaths: [ArchiveCategory: [ArchivePath]]) {
     self.init(
       ArchiveNavigation.State(category: category, categoryPaths: categoryPaths),
       useDispatchMainWorkaround: false)
@@ -70,85 +64,57 @@ let irregularActivities = ArchiveCategory.allCases.filter { !$0.isRegularActivit
 
 @MainActor
 struct ArchiveNavigationTests {
-  @Test func navigateToCategory() {
+  @Test("Navigate To Category", arguments: ArchiveCategory.allCases)
+  func navigateToCategory(category: ArchiveCategory) {
     let ar = ArchiveNavigation()
-    #expect(ar.category != nil)
     #expect(ar.category == .defaultCategory)
     #expect(ar.path.isEmpty)
 
-    ar.navigate(to: .today)
-    #expect(ar.category == .today)
-    #expect(ar.path.isEmpty)
-
-    ar.navigate(to: .stats)
-    #expect(ar.category == .stats)
-    #expect(ar.path.isEmpty)
-
-    ar.navigate(to: .artists)
-    #expect(ar.category == .artists)
-    #expect(ar.path.isEmpty)
-
-    ar.navigate(to: .venues)
-    #expect(ar.category == .venues)
-    #expect(ar.path.isEmpty)
-
-    ar.navigate(to: .shows)
-    #expect(ar.category == .shows)
-    #expect(ar.path.isEmpty)
-
-    ar.navigate(to: nil)
-    #expect(ar.category == nil)
+    ar.navigate(to: category)
+    #expect(ar.category == category)
     #expect(ar.path.isEmpty)
   }
 
   @Test func navigateToCategory_existingPath() {
     let ar = ArchiveNavigation(
       category: .artists, categoryPaths: [.artists: [Artist(id: "id", name: "name").archivePath]])
-    #expect(ar.category != nil)
     #expect(ar.category == .artists)
     #expect(!ar.path.isEmpty)
     #expect(ar.path.first! == Artist(id: "id", name: "name").archivePath)
 
     ar.navigate(to: .venues)
-    #expect(ar.category != nil)
     #expect(ar.category == .venues)
     #expect(ar.path.isEmpty)
 
     ar.navigate(to: .artists)
-    #expect(ar.category != nil)
     #expect(ar.category == .artists)
     #expect(ar.path.isEmpty)
   }
 
   @Test func navigateToArchivePath() {
     let ar = ArchiveNavigation()
-    #expect(ar.category != nil)
     #expect(ar.category == .defaultCategory)
     #expect(ar.path.isEmpty)
 
     ar.navigate(to: ArchivePath.artist("id"))
-    #expect(ar.category != nil)
     #expect(ar.category == .artists)
     #expect(ar.path.count == 1)
     #expect(ar.path.last != nil)
     #expect(ar.path.last! == ArchivePath.artist("id"))
 
     ar.navigate(to: ArchivePath.venue("id"))
-    #expect(ar.category != nil)
     #expect(ar.category == .venues)
     #expect(ar.path.count == 1)
     #expect(ar.path.last != nil)
     #expect(ar.path.last! == ArchivePath.venue("id"))
 
     ar.navigate(to: ArchivePath.show("id"))
-    #expect(ar.category != nil)
     #expect(ar.category == .shows)
     #expect(ar.path.count == 1)
     #expect(ar.path.last != nil)
     #expect(ar.path.last! == ArchivePath.show("id"))
 
     ar.navigate(to: ArchivePath.year(Annum.year(1989)))
-    #expect(ar.category != nil)
     #expect(ar.category == .shows)
     #expect(ar.path.count == 1)
     #expect(ar.path.last != nil)
@@ -178,27 +144,15 @@ struct ArchiveNavigationTests {
     #expect(ar.category == .venues)
   }
 
-  @Test("Activity - nil")
-  func activityNone() throws {
-    let ar = ArchiveNavigation(category: nil, categoryPaths: [:])
-    let activity = ar.activity
-
-    #expect(activity.isNone)
-    #expect(!activity.isCategory)
-    #expect(!activity.isPath)
-  }
-
   @Test("Activity - DefaultCategory")
   func activityDefault() throws {
     let ar = ArchiveNavigation()
     let activity = ar.activity
 
-    #expect(!activity.isNone)
     #expect(activity.isCategory)
     #expect(!activity.isPath)
 
-    try #require(ArchiveCategory.defaultCategory != nil)
-    #expect(activity.matches(category: .defaultCategory!))
+    #expect(activity.matches(category: .defaultCategory))
   }
 
   @Test("Activity", arguments: regularActivities, [[], [ArchivePath.artist("id")]])
@@ -206,7 +160,6 @@ struct ArchiveNavigationTests {
     let ar = ArchiveNavigation(category: category, categoryPaths: [category: path])
     let activity = ar.activity
 
-    #expect(!activity.isNone)
     #expect(activity.isCategory || !path.isEmpty)
     #expect(activity.isPath || path.isEmpty)
 
@@ -223,7 +176,6 @@ struct ArchiveNavigationTests {
     let ar = ArchiveNavigation(category: category, categoryPaths: [category: path])
     let activity = ar.activity
 
-    #expect(!activity.isNone)
     #expect(activity.isCategory)
     #expect(!activity.isPath)
 
@@ -233,5 +185,27 @@ struct ArchiveNavigationTests {
     ArchiveCategory.allCases.filter { $0 != category }.forEach { categoryCase in
       #expect(!activity.matches(category: categoryCase))
     }
+  }
+
+  @Test func maintainCategoryPaths() {
+    let ar = ArchiveNavigation()
+
+    ar.navigate(to: ArchivePath.artist("id"))
+    #expect(ar.category == .artists)
+    #expect(ar.path.count == 1)
+    #expect(ar.path.last != nil)
+    #expect(ar.path.last! == ArchivePath.artist("id"))
+    #expect(ar.state.artistsPath == ar.path)
+
+    ar.navigate(to: ArchivePath.venue("id"))
+    #expect(ar.category == .venues)
+    #expect(ar.path.count == 1)
+    #expect(ar.path.last != nil)
+    #expect(ar.path.last! == ArchivePath.venue("id"))
+    #expect(ar.state.venuesPath == ar.path)
+
+    #expect(ar.state.artistsPath.count == 1)
+    #expect(ar.state.artistsPath.last != nil)
+    #expect(ar.state.artistsPath.last! == ArchivePath.artist("id"))
   }
 }

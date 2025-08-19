@@ -8,27 +8,23 @@
 import SwiftUI
 
 struct VenuesSummary: View {
-  let model: VaultModel
-  let nearbyModel: NearbyModel
+  @Environment(VaultModel.self) var model
+  @Environment(NearbyModel.self) var nearbyModel
+  @AppStorage("nearby.distance") private var nearbyDistance = defaultNearbyDistanceThreshold
+
   let sort: RankingSort
   @Binding var searchString: String
 
   var body: some View {
-    let venueDigests = model.filteredVenueDigests(nearbyModel)
+    let venueDigests = model.filteredVenueDigests(nearbyModel, distanceThreshold: nearbyDistance)
     VenueList(
       venueDigests: venueDigests, sectioner: model.vault.sectioner, sort: sort,
       searchString: $searchString
     )
-    .nearbyLocation(
-      locationFilter: nearbyModel.locationFilter,
-      locationAuthorization: model.locationAuthorization,
-      geocodingProgress: model.geocodingProgress, filteredDataIsEmpty: venueDigests.isEmpty
-    )
+    .nearbyLocation(filteredDataIsEmpty: venueDigests.isEmpty)
   }
 }
 
-#Preview {
-  VenuesSummary(
-    model: VaultModel(vaultPreviewData, executeAsynchronousTasks: false),
-    nearbyModel: NearbyModel(), sort: .alphabetical, searchString: .constant(""))
+#Preview(traits: .modifier(NearbyPreviewModifer()), .modifier(VaultPreviewModifier())) {
+  VenuesSummary(sort: .alphabetical, searchString: .constant(""))
 }

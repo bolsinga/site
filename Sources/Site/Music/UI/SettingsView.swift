@@ -7,14 +7,15 @@
 
 import SwiftUI
 
-struct SettingsView: View {
-  let nearbyModel: NearbyModel
+public struct SettingsView: View {
+  public init() {}
 
-  var body: some View {
+  @AppStorage("nearby.distance") private var nearbyDistance = defaultNearbyDistanceThreshold
+
+  public var body: some View {
     Form {
       Section(header: Text("Nearby Distance", bundle: .module)) {
-        @Bindable var nb = nearbyModel
-        NearbyDistanceThresholdView(distanceThreshold: $nb.distanceThreshold)
+        NearbyDistanceThresholdView(distanceThreshold: $nearbyDistance)
       }
       #if !os(macOS)
         Section(header: Text("About", bundle: .module)) {
@@ -30,5 +31,5 @@ struct SettingsView: View {
 }
 
 #Preview {
-  SettingsView(nearbyModel: NearbyModel())
+  SettingsView()
 }
