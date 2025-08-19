@@ -9,10 +9,10 @@ import SwiftUI
 
 public enum ArchiveCategory: String, CaseIterable, Codable, Sendable {
   case today
-  case stats
   case shows
   case venues
   case artists
+  case stats
   case settings
   case search
 
