@@ -28,7 +28,7 @@ extension ArchiveCategory {
 
   @MainActor
   static var ordered: [ArchiveCategory] {
-    [.today, .shows, .venues, .artists, .stats, .settings, .search].filter {
+    allCases.filter {
       if case .today = $0 { return !combineTodayAndShowSummary }
       if case .settings = $0 { return showSettingsInTabView }
       return true
