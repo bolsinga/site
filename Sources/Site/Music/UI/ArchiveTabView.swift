@@ -95,7 +95,7 @@ struct ArchiveTabView: View {
   @Binding var venueSort: RankingSort
   @Binding var artistSort: RankingSort
 
-  @Binding var selectedCategory: ArchiveCategory
+  @Binding var activeCategory: ArchiveCategory
   let pathForCategory: (ArchiveCategory) -> Binding<[ArchivePath]>
   let reloadModel: @MainActor () async -> Void
   let navigateToPath: (ArchivePath) -> Void
@@ -150,8 +150,8 @@ struct ArchiveTabView: View {
 
     }
     .onAppear {
-      selectedTab = selectedCategory.tab
-      switch selectedCategory {
+      selectedTab = activeCategory.tab
+      switch activeCategory {
       case .today:
         showsMode = .ordinal
       case .shows:
@@ -161,7 +161,7 @@ struct ArchiveTabView: View {
       }
     }
     .onChange(of: selectedTab) { _, newValue in
-      selectedCategory = {
+      activeCategory = {
         switch newValue {
         case .today:
           .today
@@ -192,12 +192,12 @@ struct ArchiveTabView: View {
     .onChange(of: showsMode) { _, newValue in
       switch newValue {
       case .ordinal:
-        selectedCategory = .today
+        activeCategory = .today
       case .grouped:
-        selectedCategory = .shows
+        activeCategory = .shows
       }
     }
-    .onChange(of: selectedCategory) { _, newValue in
+    .onChange(of: activeCategory) { _, newValue in
       selectedTab = newValue.tab
     }
     .tabViewStyle(.sidebarAdaptable)
