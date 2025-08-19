@@ -151,10 +151,11 @@ struct ArchiveTabView: View {
 }
 
 #Preview(traits: .modifier(NearbyPreviewModifer()), .modifier(VaultPreviewModifier())) {
-  ArchiveTabView(
-    venueSort: .constant(.alphabetical), artistSort: .constant(.alphabetical),
-    activeCategory: .constant(.today)
-  ) { _ in
+  @Previewable @State var venueSort = RankingSort.alphabetical
+  @Previewable @State var artistSort = RankingSort.alphabetical
+  @Previewable @State var category = ArchiveCategory.defaultCategory
+
+  ArchiveTabView(venueSort: $venueSort, artistSort: $artistSort, activeCategory: $category) { _ in
     .constant([])
   } reloadModel: {
   } navigateToPath: { _ in
