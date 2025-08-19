@@ -11,8 +11,8 @@ import Testing
 @testable import Site
 
 let categoryPaths = [
-  "/dates/today.html", "/stats.html", "/dates/stats.html", "/venues/stats.html",
-  "/bands/stats.html", "", "",
+  "/dates/today.html", "/dates/stats.html", "/venues/stats.html", "/bands/stats.html",
+  "/stats.html", "", "",
 ]
 
 struct ArchiveCategoryTests {
