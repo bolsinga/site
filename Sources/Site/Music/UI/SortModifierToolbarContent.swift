@@ -8,21 +8,11 @@
 import SwiftUI
 
 struct SortModifierToolbarContent: ToolbarContent {
-  let placement: ToolbarItemPlacement
   @Binding var algorithm: RankingSort
   let algorithmNameBuilder: (RankingSort) -> String
 
-  internal init(
-    placement: ToolbarItemPlacement = .primaryAction, algorithm: Binding<RankingSort>,
-    algorithmNameBuilder: @escaping (RankingSort) -> String
-  ) {
-    self.placement = placement
-    self._algorithm = algorithm
-    self.algorithmNameBuilder = algorithmNameBuilder
-  }
-
   var body: some ToolbarContent {
-    ToolbarItem(placement: placement) {
+    ToolbarItem(placement: .primaryAction) {
       let sortText = Text("Sort", bundle: .module)
       Menu {
         Picker(selection: $algorithm) {

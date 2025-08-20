@@ -14,17 +14,7 @@ struct ArchiveCategoryToolbarContent: ToolbarContent {
 
   @Binding var venueSort: RankingSort
   @Binding var artistSort: RankingSort
-  @Binding private var showNearbyDistanceSettings: Bool
-
-  internal init(
-    category: ArchiveCategory, venueSort: Binding<RankingSort>, artistSort: Binding<RankingSort>,
-    showNearbyDistanceSettings: Binding<Bool>
-  ) {
-    self.category = category
-    self._venueSort = venueSort
-    self._artistSort = artistSort
-    self._showNearbyDistanceSettings = showNearbyDistanceSettings
-  }
+  @Binding var showNearbyDistanceSettings: Bool
 
   private func sortableData(_ category: ArchiveCategory) -> (
     sort: Binding<RankingSort>, associatedRankName: String
