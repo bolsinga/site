@@ -29,6 +29,15 @@ struct ArchiveCategoryStack: View {
 
   @State private var showNearbyDistanceSettings: Bool = false
 
+  private var showToolbar: Bool {
+    switch category {
+    case .today, .venues, .artists, .stats, .settings, .search:
+      true
+    case .shows:
+      !combineTodayAndShowSummary || showsMode.supportsToolbar
+    }
+  }
+
   @ViewBuilder private var summary: some View {
     switch category {
     case .today:
@@ -61,7 +70,7 @@ struct ArchiveCategoryStack: View {
           $0.destination(vault: model.vault, isPathNavigable: path.isPathNavigable(_:))
         }
         .toolbar {
-          if !combineTodayAndShowSummary || showsMode.supportsToolbar {
+          if showToolbar {
             ArchiveCategoryToolbarContent(
               category: category, venueSort: $venueSort, artistSort: $artistSort,
               showNearbyDistanceSettings: $showNearbyDistanceSettings)
