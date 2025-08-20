@@ -25,6 +25,19 @@ extension Decade: Comparable {
       return true
     }
   }
+
+  public static func compareDescendingUnknownLast(lhs: Decade, rhs: Decade) -> Bool {
+    switch (lhs, rhs) {
+    case (.decade(let lh), .decade(let rh)):
+      return lh > rh
+    case (.unknown, .unknown):
+      return false
+    case (.unknown, .decade(_)):
+      return false
+    case (.decade(_), .unknown):
+      return true
+    }
+  }
 }
 
 extension Int {

@@ -40,4 +40,23 @@ struct DecadeTests {
     #expect(PartialDate().decade.formatted(.defaultDigits) == "Decade Unknown")
     #expect(PartialDate().decade.formatted(.twoDigits) == "Decade Unknown")
   }
+
+  @Test func order() throws {
+    let outOfOrder = [Decade.decade(1989), Decade.unknown, Decade.decade(2025)]
+
+    #expect(Decade.decade(1989) < Decade.decade(2025))
+    #expect(Decade.decade(2025) > Decade.decade(1989))
+    #expect(Decade.decade(1989) < Decade.unknown)
+    #expect(Decade.unknown > Decade.decade(1989))
+
+    #expect(outOfOrder.sorted() == [Decade.decade(1989), Decade.decade(2025), Decade.unknown])
+    #expect(
+      outOfOrder.sorted { $0 < $1 } == [Decade.decade(1989), Decade.decade(2025), Decade.unknown])
+    #expect(
+      outOfOrder.sorted { $0 > $1 } == [Decade.unknown, Decade.decade(2025), Decade.decade(1989)])
+    #expect(
+      outOfOrder.sorted(by: Decade.compareDescendingUnknownLast(lhs:rhs:)) == [
+        Decade.decade(2025), Decade.decade(1989), Decade.unknown,
+      ])
+  }
 }
