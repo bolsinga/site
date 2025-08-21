@@ -16,7 +16,7 @@ extension Dictionary where Key == Annum, Value == [Concert.ID] {
 struct ShowYearList: View {
   let decadesMap: [Decade: [Annum: [Concert.ID]]]
 
-  @State private var descending: Bool = false
+  @SceneStorage("shows.sort.descending") private var descending: Bool = false
 
   var body: some View {
     List {
