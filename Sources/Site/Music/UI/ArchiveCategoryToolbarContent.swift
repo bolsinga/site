@@ -30,9 +30,6 @@ struct ArchiveCategoryToolbarContent: ToolbarContent {
   }
 
   var body: some ToolbarContent {
-    if category.isLocationFilterable {
-      LocationFilterToolbarContent { showNearbyDistanceSettings = true }
-    }
     if let sortableData = sortableData(category) {
       SortModifierToolbarContent(algorithm: sortableData.sort) {
         switch $0 {
@@ -42,6 +39,9 @@ struct ArchiveCategoryToolbarContent: ToolbarContent {
           return $0.localizedString
         }
       }
+    }
+    if category.isLocationFilterable {
+      LocationFilterToolbarContent { showNearbyDistanceSettings = true }
     }
     ArchiveSharableToolbarContent(
       item: ArchiveCategoryLinkable(vault: model.vault, category: category))
