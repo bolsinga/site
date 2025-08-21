@@ -9,7 +9,7 @@ import SwiftUI
 
 extension Dictionary where Key == Annum, Value == [Concert.ID] {
   fileprivate var showCount: Int {
-    self.values.compactMap { $0.count }.reduce(0, { $0 + $1 })
+    values.compactMap { $0.count }.reduce(0, { $0 + $1 })
   }
 }
 
