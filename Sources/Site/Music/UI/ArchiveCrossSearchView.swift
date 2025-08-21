@@ -58,7 +58,7 @@ struct ArchiveCrossSearchView: View {
     } else {
       List {
         if !artistDigests.isEmpty {
-          Section(header: Text("Artists")) {
+          Section(header: Text(ArchiveCategory.artists.localizedString)) {
             ForEach(artistDigests) { item in
               SearchResultButton(name: Text(item.name.emphasizedAttributed(matching: searchString)))
               {
@@ -69,7 +69,7 @@ struct ArchiveCrossSearchView: View {
         }
 
         if !venueDigests.isEmpty {
-          Section(header: Text("Venues")) {
+          Section(header: Text(ArchiveCategory.venues.localizedString)) {
             ForEach(venueDigests) { item in
               SearchResultButton(name: Text(item.name.emphasizedAttributed(matching: searchString)))
               {
