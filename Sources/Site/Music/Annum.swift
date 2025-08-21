@@ -25,6 +25,19 @@ extension Annum: Comparable {
       return true
     }
   }
+
+  public static func compareDescendingUnknownLast(lhs: Annum, rhs: Annum) -> Bool {
+    switch (lhs, rhs) {
+    case (.year(let lh), .year(let rh)):
+      return lh > rh
+    case (.unknown, .unknown):
+      return false
+    case (.unknown, .year(_)):
+      return false
+    case (.year(_), .unknown):
+      return true
+    }
+  }
 }
 
 extension Int {
