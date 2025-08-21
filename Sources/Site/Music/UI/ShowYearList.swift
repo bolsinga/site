@@ -7,6 +7,12 @@
 
 import SwiftUI
 
+extension Dictionary where Key == Annum, Value == [Concert.ID] {
+  fileprivate var showCount: Int {
+    values.compactMap { $0.count }.reduce(0, { $0 + $1 })
+  }
+}
+
 struct ShowYearList: View {
   let decadesMap: [Decade: [Annum: [Concert.ID]]]
 
@@ -34,7 +40,12 @@ struct ShowYearList: View {
             }
           }
         } header: {
-          Text(decade.formatted(.defaultDigits))
+          LabeledContent {
+            Text(String(localized: "\(decadeMap.showCount) Show(s)", bundle: .module))
+              .font(.footnote)
+          } label: {
+            Text(decade.formatted(.defaultDigits))
+          }
         }
       }
     }
