@@ -5,7 +5,7 @@
 //  Created by Greg Bolsinga on 4/10/23.
 //
 
-import SwiftUI
+import Foundation
 
 public enum ArchiveCategory: String, CaseIterable, Codable, Sendable {
   case today
@@ -54,10 +54,6 @@ public enum ArchiveCategory: String, CaseIterable, Codable, Sendable {
     case .search:
       "magnifyingglass"
     }
-  }
-
-  @ViewBuilder var label: some View {
-    Label(localizedString, systemImage: systemImage)
   }
 
   var title: String {
