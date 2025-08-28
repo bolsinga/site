@@ -12,6 +12,8 @@ let package = Package(
   ],
   products: [
     .library(name: "Site", targets: ["Site"]),
+    .library(name: "Utilities", targets: ["Utilities"]),
+    .library(name: "DiaryData", targets: ["DiaryData"]),
     .executable(name: "site_tool", targets: ["site_tool"]),
     .executable(name: "site_associated_domains", targets: ["site_associated_domains"]),
     .executable(name: "next_id", targets: ["next_id"]),
@@ -23,14 +25,25 @@ let package = Package(
   targets: [
     .target(
       name: "Site",
+      dependencies: [.byName(name: "Utilities")],
       resources: [.process("Resources/Localizable.xcstrings")],
       plugins: [.plugin(name: "PackageBuildInfoPlugin", package: "PackageBuildInfo")]),
+
+    .target(
+      name: "Utilities",
+      plugins: [.plugin(name: "PackageBuildInfoPlugin", package: "PackageBuildInfo")]),
+
+    .target(
+      name: "DiaryData",
+      dependencies: [.byName(name: "Utilities")]),
+
     .testTarget(
       name: "SiteTests", dependencies: ["Site"]),
     .executableTarget(
       name: "site_tool",
       dependencies: [
         .byName(name: "Site"),
+        .byName(name: "DiaryData"),
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
       ]),
     .executableTarget(

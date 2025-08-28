@@ -6,6 +6,7 @@
 //
 
 import ArgumentParser
+import DiaryData
 import Foundation
 import Site
 
