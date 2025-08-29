@@ -10,6 +10,6 @@ import os
 
 extension Logger {
   public init(category: String) {
-    self.init(subsystem: Bundle.module.bundleIdentifier ?? "unknown", category: category)
+    self.init(subsystem: PackageBuild.info.moduleName, category: category)
   }
 }
