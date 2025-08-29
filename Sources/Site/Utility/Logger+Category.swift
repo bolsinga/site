@@ -8,8 +8,14 @@
 import Foundation
 import os
 
+extension PackageBuild {
+  fileprivate var subsystem: String {
+    "\(packageName).\(moduleName)"
+  }
+}
+
 extension Logger {
   public init(category: String) {
-    self.init(subsystem: PackageBuild.info.moduleName, category: category)
+    self.init(subsystem: PackageBuild.info.subsystem, category: category)
   }
 }
