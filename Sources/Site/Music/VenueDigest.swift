@@ -11,7 +11,7 @@ public struct VenueDigest: Equatable, Hashable, Identifiable, Sendable {
   public var id: Venue.ID { venue.id }
 
   public let venue: Venue
-  let url: URL?
+  public let url: URL?
   let concerts: [Concert]
   let related: [Venue]
   let firstSet: FirstSet

@@ -7,6 +7,6 @@
 
 import Foundation
 
-protocol Linkable {
+public protocol Linkable {
   var url: URL? { get }
 }
