@@ -11,6 +11,11 @@ public struct Ranking: Comparable, Hashable, Sendable {
   public let rank: Rank
   public let value: Int
 
+  public init(rank: Rank, value: Int) {
+    self.rank = rank
+    self.value = value
+  }
+
   public static var empty: Ranking {
     Ranking(rank: .unknown, value: 0)
   }
