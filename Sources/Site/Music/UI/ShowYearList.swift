@@ -7,15 +7,31 @@
 
 import SwiftUI
 
+extension Dictionary where Key == Annum, Value == [Concert.ID] {
+  fileprivate var showCount: Int {
+    values.compactMap { $0.count }.reduce(0, { $0 + $1 })
+  }
+}
+
 struct ShowYearList: View {
   let decadesMap: [Decade: [Annum: [Concert.ID]]]
 
+  @SceneStorage("shows.sort.descending") private var descending: Bool = false
+
   var body: some View {
     List {
-      ForEach(decadesMap.keys.sorted(), id: \.self) { decade in
+      ForEach(
+        decadesMap.keys.sorted { lhs, rhs in
+          descending ? Decade.compareDescendingUnknownLast(lhs: lhs, rhs: rhs) : lhs < rhs
+        }, id: \.self
+      ) { decade in
         let decadeMap = decadesMap[decade] ?? [:]
         Section {
-          ForEach(decadeMap.keys.sorted(), id: \.self) { annum in
+          ForEach(
+            decadeMap.keys.sorted { lhs, rhs in
+              descending ? Annum.compareDescendingUnknownLast(lhs: lhs, rhs: rhs) : lhs < rhs
+            }, id: \.self
+          ) { annum in
             let concerts = decadeMap[annum] ?? []
             NavigationLink(value: annum) {
               LabeledContent(
@@ -24,16 +40,34 @@ struct ShowYearList: View {
             }
           }
         } header: {
-          Text(decade.formatted(.defaultDigits))
+          LabeledContent {
+            Text(String(localized: "\(decadeMap.showCount) Show(s)", bundle: .module))
+              .font(.footnote)
+          } label: {
+            Text(decade.formatted(.defaultDigits))
+          }
         }
       }
     }
     .listStyle(.plain)
     .navigationTitle(Text("Show Years", bundle: .module))
+    .toolbar {
+      ToolbarItem {
+        Toggle(isOn: $descending) {
+          Label {
+            Text("Sort", bundle: .module)
+          } icon: {
+            Image(systemName: "line.3.horizontal.decrease.circle")
+          }
+        }
+      }
+    }
   }
 }
 
 #Preview(traits: .modifier(VaultPreviewModifier())) {
   @Previewable @Environment(VaultModel.self) var model
-  ShowYearList(decadesMap: model.vault.decadesMap)
+  NavigationStack {
+    ShowYearList(decadesMap: model.vault.decadesMap)
+  }
 }

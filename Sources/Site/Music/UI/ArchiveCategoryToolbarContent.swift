@@ -14,17 +14,7 @@ struct ArchiveCategoryToolbarContent: ToolbarContent {
 
   @Binding var venueSort: RankingSort
   @Binding var artistSort: RankingSort
-  @Binding private var showNearbyDistanceSettings: Bool
-
-  internal init(
-    category: ArchiveCategory, venueSort: Binding<RankingSort>, artistSort: Binding<RankingSort>,
-    showNearbyDistanceSettings: Binding<Bool>
-  ) {
-    self.category = category
-    self._venueSort = venueSort
-    self._artistSort = artistSort
-    self._showNearbyDistanceSettings = showNearbyDistanceSettings
-  }
+  @Binding var showNearbyDistanceSettings: Bool
 
   private func sortableData(_ category: ArchiveCategory) -> (
     sort: Binding<RankingSort>, associatedRankName: String
@@ -40,9 +30,6 @@ struct ArchiveCategoryToolbarContent: ToolbarContent {
   }
 
   var body: some ToolbarContent {
-    if category.isLocationFilterable {
-      LocationFilterToolbarContent { showNearbyDistanceSettings = true }
-    }
     if let sortableData = sortableData(category) {
       SortModifierToolbarContent(algorithm: sortableData.sort) {
         switch $0 {
@@ -52,6 +39,9 @@ struct ArchiveCategoryToolbarContent: ToolbarContent {
           return $0.localizedString
         }
       }
+    }
+    if category.isLocationFilterable {
+      LocationFilterToolbarContent { showNearbyDistanceSettings = true }
     }
     ArchiveSharableToolbarContent(
       item: ArchiveCategoryLinkable(vault: model.vault, category: category))

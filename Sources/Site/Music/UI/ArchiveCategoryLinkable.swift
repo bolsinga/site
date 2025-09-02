@@ -5,7 +5,7 @@
 //  Created by Greg Bolsinga on 10/5/24.
 //
 
-import SwiftUI
+import Foundation
 
 struct ArchiveCategoryLinkable: ArchiveSharable {
   let vault: Vault

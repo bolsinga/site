@@ -11,7 +11,7 @@ public struct ArtistDigest: Equatable, Hashable, Identifiable, Sendable {
   public var id: Artist.ID { artist.id }
 
   public let artist: Artist
-  let url: URL?
+  public let url: URL?
   public let concerts: [Concert]
   let related: [Artist]
   let firstSet: FirstSet

@@ -17,7 +17,7 @@ struct VenueList: View {
     let digests = venueDigests.names(filteredBy: searchString)
     RankableSortList(
       items: digests, sectioner: sectioner,
-      title: String(localized: "Venues", bundle: .module),
+      title: ArchiveCategory.venues.localizedString,
       associatedRankSectionHeader: { $0.artistsCountView },
       itemLabelView: { Text($0.name.emphasizedAttributed(matching: searchString)) }, sort: sort
     )
