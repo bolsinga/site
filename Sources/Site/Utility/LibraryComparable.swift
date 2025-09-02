@@ -13,17 +13,17 @@ public protocol LibraryComparable: Identifiable {
 }
 
 extension LibraryComparable {
-  var librarySortString: String {
+  public var librarySortString: String {
     sortname ?? name
   }
 
-  var librarySortToken: String {
+  public var librarySortToken: String {
     librarySortString.removeCommonInitialPunctuation
   }
 }
 
 extension Array where Element: LibraryComparable {
-  func names(filteredBy searchString: String, additive: Bool = false) -> [Element] {
+  public func names(filteredBy searchString: String, additive: Bool = false) -> [Element] {
     guard !searchString.isEmpty else { return additive ? [] : self }
     return self.filter { $0.name.lowercased().contains(searchString.lowercased()) }
   }
