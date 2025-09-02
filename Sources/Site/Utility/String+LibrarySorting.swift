@@ -26,7 +26,7 @@ extension String {
     return String(result)
   }
 
-  internal var removeCommonInitialPunctuation: String {
+  public var removeCommonInitialPunctuation: String {
     let result = self.removeCommonInitialWords
 
     let body = Reference(Substring.self)
