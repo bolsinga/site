@@ -13,5 +13,5 @@ public struct Concert: Equatable, Hashable, Identifiable, Sendable {
   public let show: Show
   public let venue: Venue?
   public let artists: [Artist]
-  let url: URL?
+  public let url: URL?
 }
