@@ -7,7 +7,7 @@
 
 import Foundation
 
-func compareOptional<T: Comparable>(lhs: T?, rhs: T?, equalAction: (() -> Bool)? = nil)
+public func compareOptional<T: Comparable>(lhs: T?, rhs: T?, equalAction: (() -> Bool)? = nil)
   -> Bool
 {
   if let lhs, let rhs {
