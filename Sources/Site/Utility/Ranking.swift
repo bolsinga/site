@@ -10,7 +10,7 @@ import Foundation
 public struct Ranking: Comparable, Hashable, Sendable {
   public let rank: Rank
   public let value: Int
-  
+
   public static var empty: Ranking {
     Ranking(rank: .unknown, value: 0)
   }
