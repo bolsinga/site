@@ -20,5 +20,3 @@ public struct Artist: Codable, Equatable, Hashable, Identifiable, Sendable {
     self.sortname = sortname
   }
 }
-
-extension Artist: LibraryComparable {}
