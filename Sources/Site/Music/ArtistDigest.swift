@@ -20,14 +20,4 @@ public struct ArtistDigest: Equatable, Hashable, Identifiable, Sendable {
   let venueRank: Ranking
 }
 
-extension ArtistDigest: LibraryComparable {
-  public var sortname: String? {
-    artist.sortname
-  }
-
-  public var name: String {
-    artist.name
-  }
-}
-
 extension ArtistDigest: Rankable {}

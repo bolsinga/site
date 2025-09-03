@@ -20,5 +20,3 @@ public struct Venue: Codable, Equatable, Hashable, Identifiable, Sendable {
     self.sortname = sortname
   }
 }
-
-extension Venue: LibraryComparable {}
