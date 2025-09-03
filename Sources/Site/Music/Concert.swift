@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MusicData
 
 public struct Concert: Equatable, Hashable, Identifiable, Sendable {
   public var id: Show.ID { show.id }

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MusicData
 
 extension Vault {
   public var nextShowID: Show.ID {

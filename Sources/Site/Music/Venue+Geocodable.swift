@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MusicData
 
 extension Venue: AtlasGeocodable {
   func geocode() async throws -> Placemark {

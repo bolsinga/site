@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MusicData
 
 public enum ArchivePath: Hashable, Sendable {
   case show(Show.ID)

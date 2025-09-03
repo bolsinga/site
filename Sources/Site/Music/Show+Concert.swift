@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MusicData
 
 extension Show {
   func concert(baseURL: URL?, lookup: Lookup, comparator: (Concert, Concert) -> Bool) -> Concert {

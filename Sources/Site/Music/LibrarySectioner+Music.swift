@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MusicData
 
 extension LibrarySectioner {
   static func create(music: Music) async -> LibrarySectioner {

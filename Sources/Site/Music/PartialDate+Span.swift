@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MusicData
 
 extension Sequence<PartialDate> {
   var yearSpan: Int {
