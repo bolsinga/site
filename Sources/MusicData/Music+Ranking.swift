@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import MusicData
 
 extension Music {
   var artistRankings: [Artist.ID: Ranking] {

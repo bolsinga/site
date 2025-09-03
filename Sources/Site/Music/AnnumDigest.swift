@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MusicData
 
 struct AnnumDigest {
   let annum: Annum

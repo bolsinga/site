@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MusicData
 
 extension ArchivePath.FormatStyle {
   public struct ParseStrategy: Foundation.ParseStrategy {

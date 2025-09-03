@@ -6,10 +6,9 @@
 //
 
 import Foundation
-import MusicData
 
 extension Sequence<PartialDate> {
-  var yearSpan: Int {
+  public var yearSpan: Int {
     let uniqueDates = Set(self)
     guard !uniqueDates.isEmpty else { return 0 }
     guard uniqueDates.count > 1 else { return 1 }

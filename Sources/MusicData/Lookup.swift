@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import MusicData
 import Utilities
 import os
 
@@ -27,7 +26,7 @@ public struct Lookup: Sendable {
   private let venueShowSpanRankingMap: [Venue.ID: Ranking]
   private let artistVenueRankingMap: [Artist.ID: Ranking]
   private let venueArtistRankingMap: [Venue.ID: Ranking]
-  let decadesMap: [Decade: [Annum: [Show.ID]]]
+  public let decadesMap: [Decade: [Annum: [Show.ID]]]
   private let artistFirstSetsMap: [Artist.ID: FirstSet]
   private let venueFirstSetsMap: [Venue.ID: FirstSet]
   private let relationMap: [String: [String]]  // Artist/Venue ID : [Artist/Venue ID]
@@ -156,43 +155,43 @@ public struct Lookup: Sendable {
     return nil
   }
 
-  func showRank(artist: Artist) -> Ranking {
+  public func showRank(artist: Artist) -> Ranking {
     artistRankingMap[artist.id] ?? Ranking.empty
   }
 
-  func venueRank(venue: Venue) -> Ranking {
+  public func venueRank(venue: Venue) -> Ranking {
     venueRankingMap[venue.id] ?? Ranking.empty
   }
 
-  func spanRank(artist: Artist) -> Ranking {
+  public func spanRank(artist: Artist) -> Ranking {
     artistShowSpanRankingMap[artist.id] ?? Ranking.empty
   }
 
-  func spanRank(venue: Venue) -> Ranking {
+  public func spanRank(venue: Venue) -> Ranking {
     venueShowSpanRankingMap[venue.id] ?? Ranking.empty
   }
 
-  func artistVenueRank(artist: Artist) -> Ranking {
+  public func artistVenueRank(artist: Artist) -> Ranking {
     artistVenueRankingMap[artist.id] ?? Ranking.empty
   }
 
-  func venueArtistRank(venue: Venue) -> Ranking {
+  public func venueArtistRank(venue: Venue) -> Ranking {
     venueArtistRankingMap[venue.id] ?? Ranking.empty
   }
 
-  func firstSet(artist: Artist) -> FirstSet {
+  public func firstSet(artist: Artist) -> FirstSet {
     return artistFirstSetsMap[artist.id] ?? FirstSet.empty
   }
 
-  func firstSet(venue: Venue) -> FirstSet {
+  public func firstSet(venue: Venue) -> FirstSet {
     return venueFirstSetsMap[venue.id] ?? FirstSet.empty
   }
 
-  func related(_ item: Venue) -> [Venue] {
+  public func related(_ item: Venue) -> [Venue] {
     relationMap[item.id]?.compactMap { venueMap[$0] } ?? []
   }
 
-  func related(_ item: Artist) -> [Artist] {
+  public func related(_ item: Artist) -> [Artist] {
     relationMap[item.id]?.compactMap { artistMap[$0] } ?? []
   }
 }

@@ -41,7 +41,11 @@ let package = Package(
       name: "DiaryData",
       dependencies: [.byName(name: "Utilities")]),
 
-    .target(name: "MusicData"),
+    .target(
+      name: "MusicData",
+      dependencies: [.byName(name: "Utilities")]),
+    .testTarget(
+      name: "MusicDataTests", dependencies: ["MusicData"]),
 
     .testTarget(
       name: "SiteTests", dependencies: ["Site"]),

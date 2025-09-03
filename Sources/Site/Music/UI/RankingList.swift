@@ -5,6 +5,7 @@
 //  Created by Greg Bolsinga on 6/3/23.
 //
 
+import MusicData
 import SwiftUI
 
 struct RankingList<T, R, ItemContent: View, SectionHeader: View, LabelContent: View>: View
