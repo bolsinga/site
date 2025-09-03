@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MusicData
 
 extension PartialDate {
   public var date: Date? {

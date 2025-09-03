@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MusicData
 
 struct FirstSet: Equatable, Hashable, Sendable {
   let rank: Rank

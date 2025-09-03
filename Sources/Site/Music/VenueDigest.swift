@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MusicData
 
 public struct VenueDigest: Equatable, Hashable, Identifiable, Sendable {
   public var id: Venue.ID { venue.id }

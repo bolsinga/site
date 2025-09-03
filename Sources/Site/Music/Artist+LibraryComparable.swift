@@ -6,5 +6,6 @@
 //
 
 import Foundation
+import MusicData
 
 extension Artist: LibraryComparable {}

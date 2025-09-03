@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MusicData
 
 extension Venue {
   public struct FormatStyle: Codable, Equatable, Hashable {

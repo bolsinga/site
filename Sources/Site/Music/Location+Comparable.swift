@@ -5,6 +5,8 @@
 //  Created by Greg Bolsinga on 9/3/25.
 //
 
+import MusicData
+
 extension Location: Comparable {
   public static func < (lhs: Location, rhs: Location) -> Bool {
     if lhs.state == rhs.state {

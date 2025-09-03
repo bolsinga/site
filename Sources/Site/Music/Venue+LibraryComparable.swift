@@ -6,5 +6,6 @@
 //
 
 import Foundation
+import MusicData
 
 extension Venue: LibraryComparable {}

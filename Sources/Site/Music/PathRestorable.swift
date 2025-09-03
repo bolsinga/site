@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MusicData
 
 protocol PathRestorable {
   var archivePath: ArchivePath { get }

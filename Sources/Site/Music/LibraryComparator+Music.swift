@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MusicData
 
 extension LibraryComparator {
   static func create(music: Music) async -> LibraryComparator {

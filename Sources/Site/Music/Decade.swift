@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MusicData
 
 public enum Decade: Equatable, Hashable, Sendable {
   case decade(Int)
