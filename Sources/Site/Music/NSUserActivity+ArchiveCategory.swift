@@ -7,6 +7,7 @@
 
 import Foundation
 import Intents
+import Utilities
 import os
 
 extension Logger {

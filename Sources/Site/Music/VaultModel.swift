@@ -7,6 +7,7 @@
 
 import CoreLocation
 import Foundation
+import Utilities
 import os
 
 extension Logger {

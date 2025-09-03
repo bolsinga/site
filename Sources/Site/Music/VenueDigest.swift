@@ -20,14 +20,4 @@ public struct VenueDigest: Equatable, Hashable, Identifiable, Sendable {
   let venueArtistRank: Ranking
 }
 
-extension VenueDigest: LibraryComparable {
-  public var sortname: String? {
-    venue.sortname
-  }
-
-  public var name: String {
-    venue.name
-  }
-}
-
 extension VenueDigest: Rankable {}
