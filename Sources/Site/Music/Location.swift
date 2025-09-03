@@ -20,15 +20,3 @@ public struct Location: Codable, Equatable, Hashable, Sendable {
     self.state = state
   }
 }
-
-extension Location: Comparable {
-  public static func < (lhs: Location, rhs: Location) -> Bool {
-    if lhs.state == rhs.state {
-      if lhs.city == rhs.city {
-        return compareOptional(lhs: lhs.street, rhs: rhs.street)
-      }
-      return lhs.city < rhs.city
-    }
-    return lhs.state < rhs.state
-  }
-}
