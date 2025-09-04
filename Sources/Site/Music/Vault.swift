@@ -75,7 +75,6 @@ public struct Vault: Sendable {
 
   public static func create(music: Music, url: URL) async -> Vault {
     async let asyncBaseURL = url.baseURL
-    //    async let asyncAtlas = Atlas<Venue>()
     async let asyncLookup = await Lookup.create(music: music)
     async let asyncComparator = await LibraryComparator.create(music: music)
     async let sectioner = await LibrarySectioner.create(music: music)
