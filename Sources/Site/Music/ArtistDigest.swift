@@ -20,5 +20,3 @@ public struct ArtistDigest: Equatable, Hashable, Identifiable, Sendable {
   let showRank: Ranking
   let venueRank: Ranking
 }
-
-extension ArtistDigest: Rankable {}
