@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Utilities
 
 extension LibraryComparator {
   public func compare(lhs: Concert, rhs: Concert) -> Bool {

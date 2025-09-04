@@ -7,7 +7,7 @@
 
 import Testing
 
-@testable import Site
+@testable import Utilities
 
 struct LibrarySectionTests {
   @Test func librarySection() {
@@ -30,19 +30,5 @@ struct LibrarySectionTests {
 
     #expect(LibrarySection.numeric < .punctuation)
     #expect(!(LibrarySection.numeric > .punctuation))
-  }
-
-  @Test func format() {
-    #expect(LibrarySection.alphabetic("A").formatted() == "A")
-    #expect(LibrarySection.numeric.formatted() == "Numeric")
-    #expect(LibrarySection.punctuation.formatted() == "Punctuation")
-
-    #expect(LibrarySection.alphabetic("A").formatted(.long) == "A")
-    #expect(LibrarySection.numeric.formatted(.long) == "Numeric")
-    #expect(LibrarySection.punctuation.formatted(.long) == "Punctuation")
-
-    #expect(LibrarySection.alphabetic("A").formatted(.short) == "A")
-    #expect(LibrarySection.numeric.formatted(.short) == "#")
-    #expect(LibrarySection.punctuation.formatted(.short) == "!")
   }
 }

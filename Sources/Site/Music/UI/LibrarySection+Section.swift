@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Utilities
 
 extension LibrarySection {
   @ViewBuilder var representingView: some View {

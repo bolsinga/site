@@ -7,6 +7,7 @@
 
 import MusicData
 import SwiftUI
+import Utilities
 
 struct RankingList<T, R, ItemContent: View, SectionHeader: View, LabelContent: View>: View
 where T: LibraryComparable, T: Hashable, T: PathRestorable, R: Comparable, R: Hashable {

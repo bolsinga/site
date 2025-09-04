@@ -7,6 +7,7 @@
 
 import Foundation
 import MusicData
+import Utilities
 
 public struct Vault: Sendable {
   internal let comparator: LibraryComparator
