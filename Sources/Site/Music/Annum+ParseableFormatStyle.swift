@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MusicData
 
 extension Annum.FormatStyle {
   public struct ParseStrategy: Foundation.ParseStrategy {

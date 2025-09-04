@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import MusicData
 
 extension PartialDate {
   public var date: Date? {
@@ -15,7 +14,7 @@ extension PartialDate {
     return dateComponents.date
   }
 
-  internal var isUnknown: Bool {
+  public var isUnknown: Bool {
     if year == nil, month == nil, day == nil {
       return true
     }

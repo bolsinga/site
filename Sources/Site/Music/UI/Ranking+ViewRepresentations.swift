@@ -5,6 +5,7 @@
 //  Created by Greg Bolsinga on 5/24/23.
 //
 
+import MusicData
 import SwiftUI
 
 extension Ranking {

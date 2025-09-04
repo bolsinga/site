@@ -5,23 +5,12 @@
 //  Created by Greg Bolsinga on 6/10/23.
 //
 
+import MusicData
 import Testing
 
 @testable import Site
 
 struct AnnumTests {
-  @Test func format() {
-    #expect(Annum.year(1989).formatted() == "1989")
-    #expect(Annum.year(1989).formatted(.year) == "1989")
-    #expect(Annum.year(1989).formatted(.json) == "1989")
-    #expect(Annum.year(1989).formatted(.urlPath) == "1989")
-
-    #expect(Annum.unknown.formatted() == "Year Unknown")
-    #expect(Annum.unknown.formatted(.year) == "Year Unknown")
-    #expect(Annum.unknown.formatted(.json) == "unknown")
-    #expect(Annum.unknown.formatted(.urlPath) == "other")
-  }
-
   @Test func parse() throws {
     #expect(try Annum("1989") == Annum.year(1989))
 

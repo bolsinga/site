@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import MusicData
 
 public enum Decade: Equatable, Hashable, Sendable {
   case decade(Int)
@@ -42,13 +41,13 @@ extension Decade: Comparable {
 }
 
 extension Int {
-  var decade: Decade {
+  public var decade: Decade {
     .decade((self / 10) * 10)
   }
 }
 
 extension Date {
-  var decade: Decade {
+  public var decade: Decade {
     let comps = Calendar.autoupdatingCurrent.dateComponents([.year], from: self)
     guard let year = comps.year else { return .unknown }
     return year.decade
@@ -56,7 +55,7 @@ extension Date {
 }
 
 extension PartialDate {
-  var decade: Decade {
+  public var decade: Decade {
     guard year != nil else { return .unknown }
     guard let date else { return .unknown }
     return date.decade

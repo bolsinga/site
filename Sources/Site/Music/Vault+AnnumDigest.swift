@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MusicData
 
 extension Vault {
   func digest(for annum: Annum) -> AnnumDigest {

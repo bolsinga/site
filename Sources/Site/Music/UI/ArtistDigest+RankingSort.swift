@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MusicData
 
 extension ArtistDigest {
   func ranking(for sort: RankingSort) -> Ranking {
