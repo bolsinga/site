@@ -44,6 +44,6 @@ struct ArchiveCategoryToolbarContent: ToolbarContent {
       LocationFilterToolbarContent { showNearbyDistanceSettings = true }
     }
     ArchiveSharableToolbarContent(
-      item: ArchiveCategoryLinkable(vault: model.vault, category: category))
+      item: ArchiveCategoryLinkable(category: category, url: model.categoryURLMap[category]))
   }
 }
