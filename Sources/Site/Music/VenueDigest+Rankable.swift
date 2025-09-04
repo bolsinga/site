@@ -6,5 +6,6 @@
 //
 
 import Foundation
+import MusicData
 
 extension VenueDigest: Rankable {}

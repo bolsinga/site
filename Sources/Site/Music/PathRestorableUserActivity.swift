@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MusicData
 
 protocol PathRestorableUserActivity: Linkable, PathRestorable {
   func updateActivity(_ userActivity: NSUserActivity)

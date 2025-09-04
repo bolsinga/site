@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MusicData
 
 extension ArchivePath {
   func url(using baseURL: URL?) -> URL? {

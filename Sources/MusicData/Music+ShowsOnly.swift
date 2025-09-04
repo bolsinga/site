@@ -6,10 +6,9 @@
 //
 
 import Foundation
-import MusicData
 
 extension Music {
-  var showsOnly: Music {
+  public var showsOnly: Music {
     let artistIDsWithShows = Set(self.shows.flatMap { $0.artists })
 
     let artistIDsWithoutShows = Set(self.artists.map { $0.id }).subtracting(artistIDsWithShows)

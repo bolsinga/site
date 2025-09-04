@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MusicData
 
 extension AnnumDigest: PathRestorableUserActivity {
   func updateActivity(_ userActivity: NSUserActivity) {

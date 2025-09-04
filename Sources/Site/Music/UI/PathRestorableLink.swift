@@ -5,6 +5,7 @@
 //  Created by Greg Bolsinga on 8/22/24.
 //
 
+import MusicData
 import SwiftUI
 
 struct PathRestorableLink<Label>: View where Label: View {
