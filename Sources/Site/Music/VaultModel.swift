@@ -47,9 +47,15 @@ enum LocationAuthorization {
 
   private let atlas = Atlas<Venue>()
 
+  let categoryURLMap: [ArchiveCategory: URL]
+
   @MainActor
   internal init(_ vault: Vault, executeAsynchronousTasks: Bool) {
     self.vault = vault
+    self.categoryURLMap = {
+      guard let baseURL = vault.baseURL else { return [:] }
+      return ArchiveCategory.urls(baseURL: baseURL)
+    }()
 
     updateTodayConcerts()
 

@@ -23,8 +23,6 @@ public struct Vault: Sendable {
 
   let decadesMap: [Decade: [Annum: [Show.ID]]]
 
-  let categoryURLMap: [ArchiveCategory: URL]
-
   public init(music: Music, url: URL? = nil) {
     // non-parallel, used for previews, tests
     let lookup = Lookup(music: music)
@@ -66,11 +64,6 @@ public struct Vault: Sendable {
     self.venueDigestMap = self.venueDigests.reduce(into: [:]) { $0[$1.venue.id] = $1 }
 
     self.decadesMap = decadesMap
-
-    self.categoryURLMap = {
-      guard let baseURL else { return [:] }
-      return ArchiveCategory.urls(baseURL: baseURL)
-    }()
   }
 
   public static func create(music: Music, url: URL) async -> Vault {

@@ -8,10 +8,9 @@
 import Foundation
 
 struct ArchiveCategoryLinkable: ArchiveSharable {
-  let vault: Vault
   let category: ArchiveCategory
+  let url: URL?
 
   var subject: String { category.title }
   var message: String { subject }
-  var url: URL? { vault.categoryURLMap[category] }
 }
