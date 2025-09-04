@@ -36,6 +36,8 @@ let package = Package(
     .target(
       name: "Utilities",
       plugins: [.plugin(name: "PackageBuildInfoPlugin", package: "PackageBuildInfo")]),
+    .testTarget(
+      name: "UtilitiesTests", dependencies: ["Utilities"]),
 
     .target(
       name: "DiaryData",

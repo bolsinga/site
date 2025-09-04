@@ -7,7 +7,7 @@
 
 import Testing
 
-@testable import Site
+@testable import Utilities
 
 struct LibraryComparatorTests {
   let comparator = LibraryComparator()

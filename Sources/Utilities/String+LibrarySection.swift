@@ -8,7 +8,7 @@
 import Foundation
 
 extension String {
-  internal var librarySection: LibrarySection {
+  public var librarySection: LibrarySection {
     let pfx = self.removeCommonInitialPunctuation.prefix(1)
     if let first = pfx.first {
       if first.isNumber {

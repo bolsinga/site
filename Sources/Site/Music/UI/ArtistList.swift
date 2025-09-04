@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Utilities
 
 struct ArtistList: View {
   let artistDigests: [ArtistDigest]
