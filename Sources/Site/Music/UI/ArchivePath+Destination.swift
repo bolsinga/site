@@ -11,7 +11,10 @@ import SwiftUI
 
 extension ArchivePath {
   @MainActor
-  @ViewBuilder func destination(vault: Vault, isPathNavigable: @escaping (PathRestorable) -> Bool)
+  @ViewBuilder func destination(
+    vault: Vault, isPathNavigable: @escaping (PathRestorable) -> Bool,
+    geocoder: @escaping @MainActor (VenueDigest) async throws -> MKMapItem
+  )
     -> some View
   {
     switch self {
@@ -23,10 +26,7 @@ extension ArchivePath {
       if let venueDigest = vault.venueDigestMap[iD] {
         VenueDetail(
           digest: venueDigest, concertCompare: vault.comparator.compare(lhs:rhs:),
-          geocode: {
-            MKMapItem(
-              placemark: MKPlacemark(placemark: try await vault.atlas.geocode($0.venue).placemark))
-          }, isPathNavigable: isPathNavigable
+          geocode: geocoder, isPathNavigable: isPathNavigable
         )
       }
     case .artist(let iD):

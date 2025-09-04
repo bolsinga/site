@@ -5,11 +5,20 @@
 //  Created by Greg Bolsinga on 10/11/24.
 //
 
+import MapKit
 import SwiftUI
 
 extension ShowsMode {
   fileprivate var supportsToolbar: Bool {
     self == .grouped
+  }
+}
+
+extension VaultModel {
+  @MainActor
+  fileprivate func geocode(_ digest: VenueDigest) async throws -> MKMapItem {
+    MKMapItem(
+      placemark: MKPlacemark(placemark: try await vault.atlas.geocode(digest.venue).placemark))
   }
 }
 
@@ -67,7 +76,9 @@ struct ArchiveCategoryStack: View {
         .refreshable { await reloadModel() }
         .sheet(isPresented: $showNearbyDistanceSettings) { SettingsView() }
         .navigationDestination(for: ArchivePath.self) {
-          $0.destination(vault: model.vault, isPathNavigable: path.isPathNavigable(_:))
+          $0.destination(
+            vault: model.vault, isPathNavigable: path.isPathNavigable(_:),
+            geocoder: { try await model.geocode($0) })
         }
         .toolbar {
           if showToolbar {
