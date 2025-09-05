@@ -6,10 +6,9 @@
 //
 
 import Foundation
-import MusicData
 import Testing
 
-@testable import Site
+@testable import MusicData
 
 struct ArchivePathCategoryTests {
   @Test func archiveCategories() throws {
