@@ -37,22 +37,27 @@ extension Concert.FormatStyle: Foundation.FormatStyle {
       if let venue {
         return String(
           localized: "\(artists) @ \(venue.name) : \(value.show.date.formatted(.compact))",
-          bundle: .module)
+          bundle: .module, comment: "full.venue")
       } else {
         return String(
-          localized: "\(artists) : \(value.show.date.formatted(.compact))", bundle: .module)
+          localized: "\(artists) : \(value.show.date.formatted(.compact))", bundle: .module,
+          comment: "full.no.venue")
       }
     case .artistsAndVenue:
       let artists = value.artists.map { $0.name }.joined(separator: ", ")
       if let venue {
-        return String(localized: "\(artists) @ \(venue.name)", bundle: .module)
+        return String(
+          localized: "\(artists) @ \(venue.name)", bundle: .module,
+          comment: "artistAndVenue.no.venue")
       } else {
         return artists
       }
     case .headlinerAndVenue:
       let headliner = value.artists.first?.name ?? ""
       if let venue {
-        return String(localized: "\(headliner), \(venue.name)", bundle: .module)
+        return String(
+          localized: "\(headliner), \(venue.name)", bundle: .module,
+          comment: "headlinerAndVenue.no.venue")
       } else {
         return headliner
       }

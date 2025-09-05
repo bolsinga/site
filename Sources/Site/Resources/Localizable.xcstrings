@@ -2,25 +2,25 @@
   "sourceLanguage" : "en",
   "strings" : {
     "#%@" : {
-
+      "comment" : "rank.hash"
     },
     "%@ : %@" : {
-
+      "comment" : "full.no.venue"
     },
     "%@ @ %@" : {
-
+      "comment" : "artistAndVenue.no.venue"
     },
     "%@ @ %@ : %@" : {
-
+      "comment" : "full.venue"
     },
     "%@ Count: %@" : {
-
+      "comment" : "ranking.rankAndCount"
     },
     "%@, %@" : {
-
+      "comment" : "headlinerAndVenue.no.venue"
     },
     "%@." : {
-
+      "comment" : "rank.dotted"
     },
     "%lld Artist(s)" : {
       "localizations" : {
