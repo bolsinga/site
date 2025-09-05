@@ -119,7 +119,7 @@ extension ArchiveCategory {
 }
 
 extension ArchiveCategory {
-  init(_ url: URL) throws {
+  public init(_ url: URL) throws {
     self = try ArchiveCategory.FormatStyle().urlParseStrategy.parse(url)
   }
 

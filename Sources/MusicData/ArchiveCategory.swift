@@ -16,9 +16,9 @@ public enum ArchiveCategory: String, CaseIterable, Codable, Sendable {
   case settings
   case search
 
-  static var defaultCategory: ArchiveCategory { .today }
+  public static var defaultCategory: ArchiveCategory { .today }
 
-  var localizedString: String {
+  public var localizedString: String {
     switch self {
     case .today:
       return String(localized: "Today", bundle: .module)
@@ -37,7 +37,7 @@ public enum ArchiveCategory: String, CaseIterable, Codable, Sendable {
     }
   }
 
-  var systemImage: String {
+  public var systemImage: String {
     switch self {
     case .today:
       "calendar.circle"
@@ -56,7 +56,7 @@ public enum ArchiveCategory: String, CaseIterable, Codable, Sendable {
     }
   }
 
-  var title: String {
+  public var title: String {
     switch self {
     case .today:
       return String(localized: "Display Shows On This Date", bundle: .module)

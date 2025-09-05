@@ -23,7 +23,7 @@ extension ArchiveCategory {
     return urlComponents?.url
   }
 
-  static func urls(rootURL: URL) -> [ArchiveCategory: URL] {
+  public static func urls(rootURL: URL) -> [ArchiveCategory: URL] {
     self.allCases.filter { $0.isURLSharable }.reduce(into: [ArchiveCategory: URL]()) {
       guard let url = $1.url(rootURL: rootURL) else { return }
       $0[$1] = url

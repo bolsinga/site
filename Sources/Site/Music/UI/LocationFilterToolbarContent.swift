@@ -5,6 +5,7 @@
 //  Created by Greg Bolsinga on 10/1/24.
 //
 
+import MusicData
 import SwiftUI
 
 #if canImport(UIKit)

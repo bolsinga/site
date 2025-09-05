@@ -6,10 +6,9 @@
 //
 
 import Foundation
-import MusicData
 
 extension ArchivePath {
-  var category: ArchiveCategory {
+  public var category: ArchiveCategory {
     switch self {
     case .show(_), .year(_):
       return .shows
