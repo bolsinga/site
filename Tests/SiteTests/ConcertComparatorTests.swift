@@ -24,7 +24,7 @@ struct ConcertComparatorTests {
     Vault(
       music: Music(
         albums: [], artists: artists, relations: [], shows: shows, songs: [], timestamp: Date(),
-        venues: venues))
+        venues: venues), url: URL(string: "https://www.example.com/")!)!
   }
 
   @Test func differentDates() {

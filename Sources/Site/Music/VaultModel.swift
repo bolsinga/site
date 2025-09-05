@@ -53,8 +53,7 @@ enum LocationAuthorization {
   internal init(_ vault: Vault, executeAsynchronousTasks: Bool) {
     self.vault = vault
     self.categoryURLMap = {
-      guard let baseURL = vault.baseURL else { return [:] }
-      return ArchiveCategory.urls(baseURL: baseURL)
+      return ArchiveCategory.urls(rootURL: vault.rootURL)
     }()
 
     updateTodayConcerts()
