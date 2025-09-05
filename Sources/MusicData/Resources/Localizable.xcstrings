@@ -51,16 +51,52 @@
     "%@s" : {
       "comment" : "defaultDigits"
     },
+    "All Shows" : {
+
+    },
+    "Artists" : {
+
+    },
     "Date Unknown" : {
 
     },
     "Decade Unknown" : {
 
     },
+    "Display Shows On This Date" : {
+
+    },
+    "Search" : {
+
+    },
+    "Settings" : {
+
+    },
+    "Show Artists" : {
+
+    },
+    "Show Statistics" : {
+
+    },
+    "Show Venues" : {
+
+    },
+    "Shows" : {
+
+    },
     "Shows from %@" : {
 
     },
     "Shows from Unknown Years" : {
+
+    },
+    "Stats" : {
+
+    },
+    "Today" : {
+
+    },
+    "Venues" : {
 
     },
     "Year Unknown" : {

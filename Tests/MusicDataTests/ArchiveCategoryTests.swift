@@ -8,7 +8,7 @@
 import Foundation
 import Testing
 
-@testable import Site
+@testable import MusicData
 
 let categoryPaths = [
   "/dates/today.html", "/dates/stats.html", "/venues/stats.html", "/bands/stats.html",
