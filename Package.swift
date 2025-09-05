@@ -56,7 +56,6 @@ let package = Package(
     .executableTarget(
       name: "site_tool",
       dependencies: [
-        .byName(name: "Site"),
         .byName(name: "DiaryData"),
         .byName(name: "MusicData"),
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
