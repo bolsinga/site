@@ -8,7 +8,7 @@
 import MusicData
 
 extension ArchiveCategory {
-  public var isLocationFilterable: Bool {
+  var isLocationFilterable: Bool {
     switch self {
     case .today, .stats, .settings, .search:
       false
