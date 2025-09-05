@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import MusicData
 import Utilities
 import os
 
@@ -26,7 +25,7 @@ extension URL {
   }
 }
 
-enum VaultError: Error {
+public enum VaultError: Error {
   case illegalURL(String)
   case noRootURL(String)
 }
