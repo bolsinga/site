@@ -8,7 +8,7 @@
 import Foundation
 
 extension ArchiveCategory {
-  fileprivate var isURLSharable: Bool {
+  var isURLSharable: Bool {
     switch self {
     case .today, .stats, .settings, .search:
       return false
@@ -17,16 +17,9 @@ extension ArchiveCategory {
     }
   }
 
-  fileprivate func url(rootURL: URL) -> URL? {
+  func url(rootURL: URL) -> URL? {
     var urlComponents = URLComponents(url: rootURL, resolvingAgainstBaseURL: false)
     urlComponents?.path = self.formatted(.urlPath)
     return urlComponents?.url
-  }
-
-  public static func urls(rootURL: URL) -> [ArchiveCategory: URL] {
-    self.allCases.filter { $0.isURLSharable }.reduce(into: [ArchiveCategory: URL]()) {
-      guard let url = $1.url(rootURL: rootURL) else { return }
-      $0[$1] = url
-    }
   }
 }
