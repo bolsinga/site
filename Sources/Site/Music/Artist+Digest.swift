@@ -10,11 +10,11 @@ import MusicData
 
 extension Artist {
   func digest(
-    concerts: [Concert], baseURL: URL?, lookup: Lookup, comparator: (Concert, Concert) -> Bool
+    concerts: [Concert], rootURL: URL, lookup: Lookup, comparator: (Concert, Concert) -> Bool
   ) -> ArtistDigest {
     ArtistDigest(
       artist: self,
-      url: self.archivePath.url(using: baseURL),
+      url: self.archivePath.url(using: rootURL),
       concerts: concerts.filter { $0.show.artists.contains(id) }.sorted(by: comparator),
       related: lookup.related(self),
       firstSet: lookup.firstSet(artist: self),
@@ -26,12 +26,12 @@ extension Artist {
 
 extension Array where Element == Artist {
   func digests(
-    concerts: [Concert], baseURL: URL?, lookup: Lookup, comparator: (Concert, Concert) -> Bool
+    concerts: [Concert], rootURL: URL, lookup: Lookup, comparator: (Concert, Concert) -> Bool
   )
     -> [ArtistDigest]
   {
     self.map {
-      $0.digest(concerts: concerts, baseURL: baseURL, lookup: lookup, comparator: comparator)
+      $0.digest(concerts: concerts, rootURL: rootURL, lookup: lookup, comparator: comparator)
     }
   }
 }

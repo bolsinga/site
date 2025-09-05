@@ -17,15 +17,15 @@ extension ArchiveCategory {
     }
   }
 
-  fileprivate func url(baseURL: URL) -> URL? {
-    var urlComponents = URLComponents(url: baseURL, resolvingAgainstBaseURL: false)
+  fileprivate func url(rootURL: URL) -> URL? {
+    var urlComponents = URLComponents(url: rootURL, resolvingAgainstBaseURL: false)
     urlComponents?.path = self.formatted(.urlPath)
     return urlComponents?.url
   }
 
-  static func urls(baseURL: URL) -> [ArchiveCategory: URL] {
+  static func urls(rootURL: URL) -> [ArchiveCategory: URL] {
     self.allCases.filter { $0.isURLSharable }.reduce(into: [ArchiveCategory: URL]()) {
-      guard let url = $1.url(baseURL: baseURL) else { return }
+      guard let url = $1.url(rootURL: rootURL) else { return }
       $0[$1] = url
     }
   }
