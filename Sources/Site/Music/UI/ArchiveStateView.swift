@@ -5,6 +5,7 @@
 //  Created by Greg Bolsinga on 7/31/24.
 //
 
+import MusicData
 import SwiftUI
 
 struct ArchiveStateView: View {
@@ -47,7 +48,7 @@ struct ArchiveStateView: View {
       }
       .onOpenURL { archiveNavigation.openURL($0) }
       .advertiseUserActivity(
-        for: archiveNavigation.activity, urlForCategory: { model.vault.categoryURLMap[$0] }
+        for: archiveNavigation.activity, urlForCategory: { model.categoryURLMap[$0] }
       ) {
         model.vault.restorableSharableLinkable(for: $0)
       }

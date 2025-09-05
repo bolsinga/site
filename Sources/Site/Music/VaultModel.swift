@@ -7,6 +7,8 @@
 
 import CoreLocation
 import Foundation
+import MapKit
+import MusicData
 import Utilities
 import os
 
@@ -43,9 +45,17 @@ enum LocationAuthorization {
     desiredAccuracy: kCLLocationAccuracyHundredMeters,
     access: .inUse)
 
+  private let atlas = Atlas<Venue>()
+
+  let categoryURLMap: [ArchiveCategory: URL]
+
   @MainActor
   internal init(_ vault: Vault, executeAsynchronousTasks: Bool) {
     self.vault = vault
+    self.categoryURLMap = {
+      guard let baseURL = vault.baseURL else { return [:] }
+      return ArchiveCategory.urls(baseURL: baseURL)
+    }()
 
     updateTodayConcerts()
 
@@ -103,7 +113,7 @@ enum LocationAuthorization {
 
     do {
       for try await (venue, placemark) in BatchGeocode(
-        atlas: vault.atlas, geocodables: vault.venueDigests.map { $0.venue })
+        atlas: atlas, geocodables: vault.venueDigests.map { $0.venue })
       {
         Logger.vaultModel.log("geocoded: \(venue.id, privacy: .public)")
         venuePlacemarks[venue.id] = placemark
@@ -226,5 +236,10 @@ enum LocationAuthorization {
   {
     nearbyModel.locationFilter.isNearby
       ? artistDigestsNearby(distanceThreshold) : vault.artistDigests
+  }
+
+  @MainActor
+  func geocode(_ venue: Venue) async throws -> MKMapItem {
+    MKMapItem(placemark: MKPlacemark(placemark: try await atlas.geocode(venue).placemark))
   }
 }

@@ -5,6 +5,7 @@
 //  Created by Greg Bolsinga on 10/11/24.
 //
 
+import MusicData
 import SwiftUI
 
 extension ShowsMode {
@@ -67,7 +68,9 @@ struct ArchiveCategoryStack: View {
         .refreshable { await reloadModel() }
         .sheet(isPresented: $showNearbyDistanceSettings) { SettingsView() }
         .navigationDestination(for: ArchivePath.self) {
-          $0.destination(vault: model.vault, isPathNavigable: path.isPathNavigable(_:))
+          $0.destination(
+            vault: model.vault, isPathNavigable: path.isPathNavigable(_:),
+            geocoder: { try await model.geocode($0.venue) })
         }
         .toolbar {
           if showToolbar {

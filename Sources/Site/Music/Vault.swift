@@ -6,11 +6,12 @@
 //
 
 import Foundation
+import MusicData
+import Utilities
 
 public struct Vault: Sendable {
   internal let comparator: LibraryComparator
   internal let sectioner: LibrarySectioner
-  internal let atlas: Atlas<Venue>
   internal let baseURL: URL?
   public let concerts: [Concert]
   public let concertMap: [Concert.ID: Concert]
@@ -23,14 +24,11 @@ public struct Vault: Sendable {
 
   let decadesMap: [Decade: [Annum: [Show.ID]]]
 
-  let categoryURLMap: [ArchiveCategory: URL]
-
   public init(music: Music, url: URL? = nil) {
     // non-parallel, used for previews, tests
     let lookup = Lookup(music: music)
     let comparator = LibraryComparator()
     let baseURL = url?.baseURL
-    let atlas = Atlas<Venue>()
 
     let concerts = music.shows.concerts(
       baseURL: baseURL, lookup: lookup, comparator: comparator.compare(lhs:rhs:))
@@ -43,19 +41,18 @@ public struct Vault: Sendable {
     let decadesMap = lookup.decadesMap
 
     self.init(
-      comparator: comparator, sectioner: LibrarySectioner(), atlas: atlas, baseURL: baseURL,
+      comparator: comparator, sectioner: LibrarySectioner(), baseURL: baseURL,
       concerts: concerts, artistDigests: artistDigests, venueDigests: venueDigests,
       decadesMap: decadesMap)
   }
 
   internal init(
-    comparator: LibraryComparator, sectioner: LibrarySectioner, atlas: Atlas<Venue>,
+    comparator: LibraryComparator, sectioner: LibrarySectioner,
     baseURL: URL?, concerts: [Concert], artistDigests: [ArtistDigest], venueDigests: [VenueDigest],
     decadesMap: [Decade: [Annum: [Show.ID]]]
   ) {
     self.comparator = comparator
     self.sectioner = sectioner
-    self.atlas = atlas
     self.baseURL = baseURL
 
     self.concerts = concerts
@@ -68,16 +65,10 @@ public struct Vault: Sendable {
     self.venueDigestMap = self.venueDigests.reduce(into: [:]) { $0[$1.venue.id] = $1 }
 
     self.decadesMap = decadesMap
-
-    self.categoryURLMap = {
-      guard let baseURL else { return [:] }
-      return ArchiveCategory.urls(baseURL: baseURL)
-    }()
   }
 
   public static func create(music: Music, url: URL) async -> Vault {
     async let asyncBaseURL = url.baseURL
-    async let asyncAtlas = Atlas<Venue>()
     async let asyncLookup = await Lookup.create(music: music)
     async let asyncComparator = await LibraryComparator.create(music: music)
     async let sectioner = await LibrarySectioner.create(music: music)
@@ -97,14 +88,12 @@ public struct Vault: Sendable {
       concerts: concerts, baseURL: baseURL, lookup: lookup, comparator: comparator.compare(lhs:rhs:)
     )
 
-    let atlas = await asyncAtlas
-
     async let venueDigests = music.venues.digests(
       concerts: concerts, baseURL: baseURL, lookup: lookup, comparator: comparator.compare(lhs:rhs:)
     )
 
     let v = Vault(
-      comparator: comparator, sectioner: await sectioner, atlas: atlas, baseURL: baseURL,
+      comparator: comparator, sectioner: await sectioner, baseURL: baseURL,
       concerts: concerts, artistDigests: await artistDigests, venueDigests: await venueDigests,
       decadesMap: await decadesMap)
 

@@ -14,6 +14,7 @@ let package = Package(
     .library(name: "Site", targets: ["Site"]),
     .library(name: "Utilities", targets: ["Utilities"]),
     .library(name: "DiaryData", targets: ["DiaryData"]),
+    .library(name: "MusicData", targets: ["MusicData"]),
     .executable(name: "site_tool", targets: ["site_tool"]),
     .executable(name: "site_associated_domains", targets: ["site_associated_domains"]),
     .executable(name: "next_id", targets: ["next_id"]),
@@ -25,17 +26,28 @@ let package = Package(
   targets: [
     .target(
       name: "Site",
-      dependencies: [.byName(name: "Utilities")],
+      dependencies: [
+        .byName(name: "MusicData"),
+        .byName(name: "Utilities"),
+      ],
       resources: [.process("Resources/Localizable.xcstrings")],
       plugins: [.plugin(name: "PackageBuildInfoPlugin", package: "PackageBuildInfo")]),
 
     .target(
       name: "Utilities",
       plugins: [.plugin(name: "PackageBuildInfoPlugin", package: "PackageBuildInfo")]),
+    .testTarget(
+      name: "UtilitiesTests", dependencies: ["Utilities"]),
 
     .target(
       name: "DiaryData",
       dependencies: [.byName(name: "Utilities")]),
+
+    .target(
+      name: "MusicData",
+      dependencies: [.byName(name: "Utilities")]),
+    .testTarget(
+      name: "MusicDataTests", dependencies: ["MusicData"]),
 
     .testTarget(
       name: "SiteTests", dependencies: ["Site"]),
@@ -44,6 +56,7 @@ let package = Package(
       dependencies: [
         .byName(name: "Site"),
         .byName(name: "DiaryData"),
+        .byName(name: "MusicData"),
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
       ]),
     .executableTarget(

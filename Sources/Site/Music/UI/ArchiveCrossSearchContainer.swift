@@ -5,6 +5,7 @@
 //  Created by Greg Bolsinga on 7/30/25.
 //
 
+import MusicData
 import SwiftUI
 
 struct ArchiveCrossSearchContainer: View {

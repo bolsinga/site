@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MusicData
 
 enum ArchiveActivity: Equatable {
   /// Just a category is selected.

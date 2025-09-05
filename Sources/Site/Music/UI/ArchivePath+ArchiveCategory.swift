@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MusicData
 
 extension ArchivePath {
   var category: ArchiveCategory {
