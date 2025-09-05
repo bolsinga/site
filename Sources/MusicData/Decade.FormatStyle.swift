@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import MusicData
 
 extension Decade {
   public struct FormatStyle: Codable, Equatable, Hashable {
@@ -39,12 +38,13 @@ extension Decade.FormatStyle: Foundation.FormatStyle {
       switch style {
       case .twoDigits:
         return String(
-          localized: "\(Date.FormatStyle.dateTime.year(.twoDigits).format(date))’s", bundle: .module
+          localized: "\(Date.FormatStyle.dateTime.year(.twoDigits).format(date))’s",
+          bundle: .module, comment: "twoDigits"
         )
       case .defaultDigits:
         return String(
           localized: "\(Date.FormatStyle.dateTime.year(.defaultDigits).format(date))s",
-          bundle: .module)
+          bundle: .module, comment: "defaultDigits")
       }
     case .unknown:
       return unknown

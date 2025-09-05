@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import MusicData
 
 extension ArchivePath: Codable {
   public func encode(to encoder: Encoder) throws {

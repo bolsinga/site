@@ -12,7 +12,7 @@ import Testing
 @testable import Site
 
 struct PathRestorableUserActivityTests {
-  let baseURL = URL(string: "https://www.example.com/")!
+  let rootURL = URL(string: "https://www.example.com/")!
 
   @Test func show() throws {
     let userActivity = NSUserActivity(activityType: "test-type")
@@ -43,7 +43,7 @@ struct PathRestorableUserActivityTests {
 
     let artist = Artist(id: "ar0", name: "AR0")
     let digest = ArtistDigest(
-      artist: artist, url: artist.archivePath.url(using: baseURL), concerts: [], related: [],
+      artist: artist, url: artist.archivePath.url(using: rootURL), concerts: [], related: [],
       firstSet: .empty, spanRank: .empty, showRank: .empty, venueRank: .empty)
     userActivity.update(digest)
 
@@ -65,7 +65,7 @@ struct PathRestorableUserActivityTests {
 
     let venue = Venue(id: "v10", location: Location(city: "c", state: "s"), name: "V10")
     let digest = VenueDigest(
-      venue: venue, url: venue.archivePath.url(using: baseURL), concerts: [], related: [],
+      venue: venue, url: venue.archivePath.url(using: rootURL), concerts: [], related: [],
       firstSet: .empty, spanRank: .empty, showRank: .empty, venueArtistRank: .empty)
     userActivity.update(digest)
 
@@ -86,7 +86,7 @@ struct PathRestorableUserActivityTests {
     let userActivity = NSUserActivity(activityType: "test-type")
 
     let item = Annum.year(1990)
-    let digest = AnnumDigest(annum: item, url: item.archivePath.url(using: baseURL), concerts: [])
+    let digest = AnnumDigest(annum: item, url: item.archivePath.url(using: rootURL), concerts: [])
 
     userActivity.update(digest)
 

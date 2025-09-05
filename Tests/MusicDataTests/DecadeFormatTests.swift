@@ -5,10 +5,9 @@
 //  Created by Greg Bolsinga on 5/26/23.
 //
 
-import MusicData
 import Testing
 
-@testable import Site
+@testable import MusicData
 
 struct DecadeFormatTests {
   @Test func formats() {

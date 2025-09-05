@@ -8,7 +8,8 @@
 import ArgumentParser
 import DiaryData
 import Foundation
-import Site
+import MusicData
+import Utilities
 
 @main
 struct Program: AsyncParsableCommand {
@@ -49,10 +50,7 @@ struct Program: AsyncParsableCommand {
 
     try jsonDirectoryURL?.appending(path: "diary.json").writeJSON(diary)
 
-    let model = SiteModel(urlString: rootURL.appending(path: "music.json").absoluteString)
-    await model.load(executeAsynchronousTasks: false)
-    guard let vaultModel = model.vaultModel else { throw ProgramError.noVaultModel }
-    let vault = vaultModel.vault
+    let vault = try await Vault.load(rootURL.appending(path: "music.json").absoluteString)
 
     let concerts = vault.concerts
     let artistDigests = vault.artistDigests

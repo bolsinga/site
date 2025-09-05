@@ -6,14 +6,10 @@
 //
 
 import Foundation
-import MusicData
 
 extension ArchivePath {
-  func url(using baseURL: URL?) -> URL? {
-    guard let baseURL else {
-      return nil
-    }
-    var urlComponents = URLComponents(url: baseURL, resolvingAgainstBaseURL: false)
+  public func url(using rootURL: URL) -> URL? {
+    var urlComponents = URLComponents(url: rootURL, resolvingAgainstBaseURL: false)
     urlComponents?.path = self.formatted(.urlPath)
     return urlComponents?.url
   }

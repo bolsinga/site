@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import MusicData
 import Utilities
 import os
 
@@ -14,8 +13,21 @@ extension Logger {
   fileprivate static let vault = Logger(category: "vault")
 }
 
-enum VaultError: Error {
+extension URL {
+  fileprivate var rootURL: URL? {
+    let urlComponents = URLComponents(url: self, resolvingAgainstBaseURL: false)
+
+    var newUrlComponents = URLComponents()
+    newUrlComponents.host = urlComponents?.host
+    newUrlComponents.scheme = urlComponents?.scheme
+
+    return newUrlComponents.url
+  }
+}
+
+public enum VaultError: Error {
   case illegalURL(String)
+  case noRootURL(String)
 }
 
 extension VaultError: LocalizedError {
@@ -23,6 +35,8 @@ extension VaultError: LocalizedError {
     switch self {
     case .illegalURL(let urlString):
       return "URL (\(urlString)) is not valid."
+    case .noRootURL(let urlString):
+      return "URL (\(urlString)) cannot create root URL."
     }
   }
 }
@@ -40,6 +54,9 @@ extension Vault {
       Logger.vault.log("end")
     }
     let music = try await Music.load(url: url)
-    return await Vault.create(music: artistsWithShowsOnly ? music.showsOnly : music, url: url)
+
+    guard let rootURL = url.rootURL else { throw VaultError.noRootURL(url.absoluteString) }
+
+    return await Vault.create(music: artistsWithShowsOnly ? music.showsOnly : music, url: rootURL)
   }
 }

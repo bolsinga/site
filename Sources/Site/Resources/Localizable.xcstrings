@@ -2,31 +2,13 @@
   "sourceLanguage" : "en",
   "strings" : {
     "#%@" : {
-
-    },
-    "%@ : %@" : {
-
-    },
-    "%@ @ %@" : {
-
-    },
-    "%@ @ %@ : %@" : {
-
+      "comment" : "rank.hash"
     },
     "%@ Count: %@" : {
-
-    },
-    "%@, %@" : {
-
+      "comment" : "ranking.rankAndCount"
     },
     "%@." : {
-
-    },
-    "%@’s" : {
-
-    },
-    "%@s" : {
-
+      "comment" : "rank.dotted"
     },
     "%lld Artist(s)" : {
       "localizations" : {
@@ -173,12 +155,6 @@
     "Date" : {
 
     },
-    "Date Unknown" : {
-
-    },
-    "Decade Unknown" : {
-
-    },
     "Display Shows On This Date" : {
 
     },
@@ -290,12 +266,6 @@
     "Shows at %@" : {
 
     },
-    "Shows from %@" : {
-
-    },
-    "Shows from Unknown Years" : {
-
-    },
     "Shows Today" : {
 
     },
@@ -360,9 +330,6 @@
 
     },
     "Weekdays" : {
-
-    },
-    "Year Unknown" : {
 
     }
   },

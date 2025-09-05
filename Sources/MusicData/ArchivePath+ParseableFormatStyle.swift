@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import MusicData
 
 extension ArchivePath.FormatStyle {
   public struct ParseStrategy: Foundation.ParseStrategy {
@@ -140,7 +139,7 @@ extension ArchivePath.FormatStyle: ParseableFormatStyle {
 }
 
 extension ArchivePath {
-  init(_ string: String) throws {
+  public init(_ string: String) throws {
     self = try ArchivePath.FormatStyle().parseStrategy.parse(string)
   }
 
@@ -153,7 +152,7 @@ extension ArchivePath {
 }
 
 extension ArchivePath {
-  init(_ url: URL) throws {
+  public init(_ url: URL) throws {
     self = try ArchivePath.FormatStyle().urlParseStrategy.parse(url)
   }
 
