@@ -52,9 +52,7 @@ enum LocationAuthorization {
   @MainActor
   internal init(_ vault: Vault, executeAsynchronousTasks: Bool) {
     self.vault = vault
-    self.categoryURLMap = {
-      return ArchiveCategory.urls(rootURL: vault.rootURL)
-    }()
+    self.categoryURLMap = ArchiveCategory.urls(rootURL: vault.rootURL)
 
     updateTodayConcerts()
 
