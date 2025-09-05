@@ -2,10 +2,10 @@
   "sourceLanguage" : "en",
   "strings" : {
     "%@’s" : {
-
+      "comment" : "twoDigits"
     },
     "%@s" : {
-
+      "comment" : "defaultDigits"
     },
     "Date Unknown" : {
 
