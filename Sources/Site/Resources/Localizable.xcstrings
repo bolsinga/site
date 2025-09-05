@@ -5,19 +5,19 @@
 
     },
     "%@ : %@" : {
-
+      "comment" : "full.no.venue"
     },
     "%@ @ %@" : {
-
+      "comment" : "artistAndVenue.no.venue"
     },
     "%@ @ %@ : %@" : {
-
+      "comment" : "full.venue"
     },
     "%@ Count: %@" : {
 
     },
     "%@, %@" : {
-
+      "comment" : "headlinerAndVenue.no.venue"
     },
     "%@." : {
 
