@@ -5,6 +5,7 @@
 //  Created by Greg Bolsinga on 5/12/23.
 //
 
+import MusicData
 import SwiftUI
 
 struct VenueBlurb: View {

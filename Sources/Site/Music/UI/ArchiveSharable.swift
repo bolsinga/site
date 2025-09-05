@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MusicData
 
 // iOS Only:
 // When sharing via Messages, link is shared followed by the message text.

@@ -1,19 +1,12 @@
 //
-//  ArchivePath.swift
+//  ArchivePath+Codable.swift
+//  site
 //
-//
-//  Created by Greg Bolsinga on 6/10/23.
+//  Created by Greg Bolsinga on 9/4/25.
 //
 
 import Foundation
 import MusicData
-
-public enum ArchivePath: Hashable, Sendable {
-  case show(Show.ID)
-  case venue(Venue.ID)
-  case artist(Artist.ID)
-  case year(Annum)
-}
 
 extension ArchivePath: Codable {
   public func encode(to encoder: Encoder) throws {
