@@ -1,16 +1,15 @@
 //
-//  AnnumTests.swift
+//  AnnumFormatTests.swift
 //
 //
 //  Created by Greg Bolsinga on 6/10/23.
 //
 
-import MusicData
 import Testing
 
-@testable import Site
+@testable import MusicData
 
-struct AnnumTests {
+struct AnnumFormatTests {
   @Test func parse() throws {
     #expect(try Annum("1989") == Annum.year(1989))
 

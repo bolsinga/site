@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import MusicData
 
 extension ArchivePath {
   public static let showPrefix = "sh"

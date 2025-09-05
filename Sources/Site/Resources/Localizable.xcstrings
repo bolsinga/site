@@ -22,12 +22,6 @@
     "%@." : {
 
     },
-    "%@’s" : {
-
-    },
-    "%@s" : {
-
-    },
     "%lld Artist(s)" : {
       "localizations" : {
         "en" : {
@@ -173,12 +167,6 @@
     "Date" : {
 
     },
-    "Date Unknown" : {
-
-    },
-    "Decade Unknown" : {
-
-    },
     "Display Shows On This Date" : {
 
     },
@@ -290,12 +278,6 @@
     "Shows at %@" : {
 
     },
-    "Shows from %@" : {
-
-    },
-    "Shows from Unknown Years" : {
-
-    },
     "Shows Today" : {
 
     },
@@ -360,9 +342,6 @@
 
     },
     "Weekdays" : {
-
-    },
-    "Year Unknown" : {
 
     }
   },

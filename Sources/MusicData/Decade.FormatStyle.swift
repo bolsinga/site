@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import MusicData
 
 extension Decade {
   public struct FormatStyle: Codable, Equatable, Hashable {
