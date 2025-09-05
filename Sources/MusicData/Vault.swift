@@ -6,23 +6,22 @@
 //
 
 import Foundation
-import MusicData
 import Utilities
 
 public struct Vault: Sendable {
-  internal let comparator: LibraryComparator
-  internal let sectioner: LibrarySectioner
-  internal let rootURL: URL
+  public let comparator: LibraryComparator
+  public let sectioner: LibrarySectioner
+  public let rootURL: URL
   public let concerts: [Concert]
   public let concertMap: [Concert.ID: Concert]
 
   public let artistDigests: [ArtistDigest]
-  internal let artistDigestMap: [Artist.ID: ArtistDigest]
+  public let artistDigestMap: [Artist.ID: ArtistDigest]
 
   public let venueDigests: [VenueDigest]
-  internal let venueDigestMap: [Venue.ID: VenueDigest]
+  public let venueDigestMap: [Venue.ID: VenueDigest]
 
-  let decadesMap: [Decade: [Annum: [Show.ID]]]
+  public let decadesMap: [Decade: [Annum: [Show.ID]]]
 
   public init(music: Music, url: URL) {
     // non-parallel, used for previews, tests
@@ -97,7 +96,7 @@ public struct Vault: Sendable {
     return v
   }
 
-  func concerts(on date: Date) -> [Concert] {
+  public func concerts(on date: Date) -> [Concert] {
     return concerts.filter { $0.show.date.day != nil }
       .filter { $0.show.date.month != nil }
       .filter {

@@ -6,11 +6,10 @@
 //
 
 import Foundation
-import MusicData
 
 extension Vault {
-  func digest(for annum: Annum) -> AnnumDigest {
-    return AnnumDigest(
+  public func digest(for annum: Annum) -> AnnumDigest {
+    AnnumDigest(
       annum: annum, url: annum.archivePath.url(using: rootURL), concerts: concerts(during: annum))
   }
 }

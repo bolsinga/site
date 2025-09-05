@@ -69,7 +69,7 @@ let package = Package(
     .executableTarget(
       name: "next_id",
       dependencies: [
-        .byName(name: "Site"),
+        .byName(name: "MusicData"),
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
       ]),
   ]
