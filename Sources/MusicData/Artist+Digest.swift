@@ -8,7 +8,7 @@
 import Foundation
 
 extension Artist {
-  func digest(
+  fileprivate func digest(
     concerts: [Concert], rootURL: URL, lookup: Lookup, comparator: (Concert, Concert) -> Bool
   ) -> ArtistDigest {
     ArtistDigest(
