@@ -1,0 +1,27 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%@’s" : {
+
+    },
+    "%@s" : {
+
+    },
+    "Date Unknown" : {
+
+    },
+    "Decade Unknown" : {
+
+    },
+    "Shows from %@" : {
+
+    },
+    "Shows from Unknown Years" : {
+
+    },
+    "Year Unknown" : {
+
+    }
+  },
+  "version" : "1.0"
+}

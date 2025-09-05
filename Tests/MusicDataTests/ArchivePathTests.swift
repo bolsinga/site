@@ -6,10 +6,9 @@
 //
 
 import Foundation
-import MusicData
 import Testing
 
-@testable import Site
+@testable import MusicData
 
 struct ArchivePathTests {
   @Test func format() {
@@ -139,13 +138,5 @@ struct ArchivePathTests {
     }
     #expect(throws: (any Error).self) { try ArchivePath(URL(string: "https://www.example.com/")!) }
     #expect(throws: (any Error).self) { try ArchivePath(URL(string: "http://www.example.com/")!) }
-  }
-
-  @Test func archiveCategories() throws {
-    #expect(ArchivePath.artist("blah").category == ArchiveCategory.artists)
-    #expect(ArchivePath.venue("blah").category == ArchiveCategory.venues)
-    #expect(ArchivePath.show("blah").category == ArchiveCategory.shows)
-    #expect(ArchivePath.year(.year(1989)).category == ArchiveCategory.shows)
-    #expect(ArchivePath.year(.unknown).category == ArchiveCategory.shows)
   }
 }

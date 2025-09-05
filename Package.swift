@@ -45,7 +45,9 @@ let package = Package(
 
     .target(
       name: "MusicData",
-      dependencies: [.byName(name: "Utilities")]),
+      dependencies: [.byName(name: "Utilities")],
+      resources: [.process("Resources/Localizable.xcstrings")],
+    ),
     .testTarget(
       name: "MusicDataTests", dependencies: ["MusicData"]),
 

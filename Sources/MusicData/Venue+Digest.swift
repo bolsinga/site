@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import MusicData
 
 extension Venue {
   func digest(
@@ -25,7 +24,7 @@ extension Venue {
 }
 
 extension Array where Element == Venue {
-  func digests(
+  public func digests(
     concerts: [Concert], rootURL: URL, lookup: Lookup, comparator: (Concert, Concert) -> Bool
   ) -> [VenueDigest] {
     self.map {
