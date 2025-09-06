@@ -23,6 +23,8 @@ public struct Vault: Sendable {
 
   public let decadesMap: [Decade: [Annum: [Show.ID]]]
 
+  private let categoryURLLookup: [ArchiveCategory: URL]
+
   public init(music: Music, url: URL) {
     // non-parallel, used for previews, tests
     let lookup = Lookup(music: music)
@@ -63,6 +65,11 @@ public struct Vault: Sendable {
     self.venueDigestMap = self.venueDigests.reduce(into: [:]) { $0[$1.venue.id] = $1 }
 
     self.decadesMap = decadesMap
+
+    self.categoryURLLookup = ArchiveCategory.allCases.reduce(into: [ArchiveCategory: URL]()) {
+      guard let url = $1.url(rootURL: rootURL) else { return }
+      $0[$1] = url
+    }
   }
 
   public static func create(music: Music, url: URL) async -> Vault {
@@ -113,5 +120,14 @@ public struct Vault: Sendable {
       result += concerts.filter { $0.id == id }
     }
     return result.sorted { comparator.compare(lhs: $0, rhs: $1) }
+  }
+
+  /// The URL for this category. Works in the app, always. May not have a equivalent on the web.
+  public func url(for category: ArchiveCategory) -> URL? {
+    categoryURLLookup[category]
+  }
+
+  public func sharableURL(for category: ArchiveCategory) -> URL? {
+    category.isURLSharable ? url(for: category) : nil
   }
 }
