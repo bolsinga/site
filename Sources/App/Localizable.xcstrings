@@ -4,11 +4,69 @@
     "#%@" : {
       "comment" : "rank.hash"
     },
+    "%@ : %@" : {
+      "comment" : "full.no.venue",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ : %2$@"
+          }
+        }
+      }
+    },
+    "%@ @ %@" : {
+      "comment" : "artistAndVenue.no.venue",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ @ %2$@"
+          }
+        }
+      }
+    },
+    "%@ @ %@ : %@" : {
+      "comment" : "full.venue",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ @ %2$@ : %3$@"
+          }
+        }
+      }
+    },
     "%@ Count: %@" : {
-      "comment" : "ranking.rankAndCount"
+      "comment" : "ranking.rankAndCount",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ Count: %2$@"
+          }
+        }
+      }
+    },
+    "%@, %@" : {
+      "comment" : "headlinerAndVenue.no.venue",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@, %2$@"
+          }
+        }
+      }
     },
     "%@." : {
       "comment" : "rank.dotted"
+    },
+    "%@’s" : {
+      "comment" : "twoDigits"
+    },
+    "%@s" : {
+      "comment" : "defaultDigits"
     },
     "%lld Artist(s)" : {
       "localizations" : {
@@ -128,6 +186,9 @@
     "All" : {
       "comment" : "ArchiveScope.all"
     },
+    "All Shows" : {
+
+    },
     "Artist" : {
       "comment" : "ArchiveScope.artist"
     },
@@ -135,6 +196,9 @@
 
     },
     "Artist or Venue Name" : {
+
+    },
+    "Artists" : {
 
     },
     "Check again tomorrow." : {
@@ -147,6 +211,15 @@
 
     },
     "Date" : {
+
+    },
+    "Date Unknown" : {
+
+    },
+    "Decade Unknown" : {
+
+    },
+    "Display Shows On This Date" : {
 
     },
     "Edit Nearby Distance" : {
@@ -221,6 +294,9 @@
     "Retry" : {
 
     },
+    "Search" : {
+
+    },
     "See More About This Show" : {
 
     },
@@ -233,6 +309,18 @@
     "See Shows With This Artist" : {
 
     },
+    "Settings" : {
+
+    },
+    "Show Artists" : {
+
+    },
+    "Show Statistics" : {
+
+    },
+    "Show Venues" : {
+
+    },
     "Show Years" : {
 
     },
@@ -240,6 +328,12 @@
 
     },
     "Shows at %@" : {
+
+    },
+    "Shows from %@" : {
+
+    },
+    "Shows from Unknown Years" : {
 
     },
     "Shows Today" : {
@@ -278,6 +372,12 @@
     "States" : {
 
     },
+    "Stats" : {
+
+    },
+    "Today" : {
+
+    },
     "Unable to determine map location." : {
 
     },
@@ -290,6 +390,9 @@
     "Venue Names" : {
 
     },
+    "Venues" : {
+
+    },
     "Version" : {
 
     },
@@ -297,6 +400,9 @@
 
     },
     "Weekdays" : {
+
+    },
+    "Year Unknown" : {
 
     }
   },
