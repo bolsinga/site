@@ -35,12 +35,12 @@ extension LibrarySection.FormatStyle: Foundation.FormatStyle {
       if case .short = style {
         return "#"
       }
-      return String(localized: "Numeric", bundle: .module)
+      return String(localized: "Numeric")
     case .punctuation:
       if case .short = style {
         return "!"
       }
-      return String(localized: "Punctuation", bundle: .module)
+      return String(localized: "Punctuation")
     }
   }
 }

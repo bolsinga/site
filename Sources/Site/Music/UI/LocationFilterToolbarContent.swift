@@ -40,7 +40,7 @@ struct LocationFilterToolbarContent: ToolbarContent {
   @ViewBuilder private var nearbyToggle: some View {
     @Bindable var bindableNearbyModel = nearbyModel
     Toggle(
-      String(localized: "Filter Nearby", bundle: .module), systemImage: "location.circle",
+      String(localized: "Filter Nearby"), systemImage: "location.circle",
       isOn: $bindableNearbyModel.locationFilter.toggle)
   }
 
@@ -50,12 +50,12 @@ struct LocationFilterToolbarContent: ToolbarContent {
         editNearbyDistanceAction()
       } label: {
         Label(
-          String(localized: "Edit Nearby Distance", bundle: .module),
+          String(localized: "Edit Nearby Distance"),
           systemImage: ArchiveCategory.settings.systemImage)
       }
     } label: {
       Label(
-        String(localized: "Filter Nearby", bundle: .module),
+        String(localized: "Filter Nearby"),
         systemImage: nearbyModel.locationFilter.isNearby
           ? "location.circle.fill" : "location.circle")
     } primaryAction: {

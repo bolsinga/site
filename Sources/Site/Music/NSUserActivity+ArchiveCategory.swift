@@ -34,7 +34,7 @@ extension NSUserActivity {
         self.isEligibleForPrediction = true
       #endif
       #if !os(tvOS)
-        self.suggestedInvocationPhrase = String(localized: "Shows Today", bundle: .module)
+        self.suggestedInvocationPhrase = String(localized: "Shows Today")
       #endif
     }
 

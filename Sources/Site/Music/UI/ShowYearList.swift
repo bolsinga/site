@@ -36,12 +36,12 @@ struct ShowYearList: View {
             NavigationLink(value: annum) {
               LabeledContent(
                 annum.formatted(),
-                value: String(localized: "\(concerts.count) Show(s)", bundle: .module))
+                value: String(localized: "\(concerts.count) Show(s)"))
             }
           }
         } header: {
           LabeledContent {
-            Text(String(localized: "\(decadeMap.showCount) Show(s)", bundle: .module))
+            Text(String(localized: "\(decadeMap.showCount) Show(s)"))
               .font(.footnote)
           } label: {
             Text(decade.formatted(.defaultDigits))
@@ -50,12 +50,12 @@ struct ShowYearList: View {
       }
     }
     .listStyle(.plain)
-    .navigationTitle(Text("Show Years", bundle: .module))
+    .navigationTitle(Text("Show Years"))
     .toolbar {
       ToolbarItem {
         Toggle(isOn: $descending) {
           Label {
-            Text("Sort", bundle: .module)
+            Text("Sort")
           } icon: {
             Image(systemName: "line.3.horizontal.decrease.circle")
           }

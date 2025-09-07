@@ -28,7 +28,7 @@ extension Rank {
 
 extension Rank.FormatStyle: Foundation.FormatStyle {
   private var unknownLocalized: String {
-    return String(localized: "Rank Unknown", bundle: .module)
+    return String(localized: "Rank Unknown")
   }
 
   public func format(_ value: Rank) -> String {
@@ -37,11 +37,11 @@ extension Rank.FormatStyle: Foundation.FormatStyle {
       switch style {
       case .hash:
         return String(
-          localized: "#\(rank.formatted(.number.grouping(.never)))", bundle: .module,
+          localized: "#\(rank.formatted(.number.grouping(.never)))",
           comment: "rank.hash")
       case .dotted:
         return String(
-          localized: "\(rank.formatted(.number.grouping(.never))).", bundle: .module,
+          localized: "\(rank.formatted(.number.grouping(.never))).",
           comment: "rank.dotted")
       }
     case .unknown:

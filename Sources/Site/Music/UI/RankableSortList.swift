@@ -18,7 +18,7 @@ where T: Rankable, T.ID == String {
   let sort: RankingSort
 
   @ViewBuilder private func showCount(for venueDigest: T) -> some View {
-    Text("\(venueDigest.showRank.value) Show(s)", bundle: .module)
+    Text("\(venueDigest.showRank.value) Show(s)")
   }
 
   @MainActor

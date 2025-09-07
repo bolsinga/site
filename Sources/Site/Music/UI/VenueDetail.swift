@@ -22,14 +22,14 @@ struct VenueDetail: View {
 
   @ViewBuilder private var firstSetElement: some View {
     HStack {
-      Text("First Set", bundle: .module)
+      Text("First Set")
       Spacer()
       Text(digest.firstSet.rank.formatted())
     }
   }
 
   @ViewBuilder private var locationElement: some View {
-    Section(header: Text("Location", bundle: .module)) {
+    Section(header: Text("Location")) {
       AddressView(location: digest.venue.location)
       LocationMap(identifier: digest) {
         guard let geocode else {
@@ -53,7 +53,7 @@ struct VenueDetail: View {
   }
 
   @ViewBuilder private var showsElement: some View {
-    Section(header: Text("Shows", bundle: .module)) {
+    Section(header: Text("Shows")) {
       ForEach(digest.concerts.sorted(by: concertCompare)) { concert in
         PathRestorableLink(pathRestorable: concert, isPathNavigable: isPathNavigable) {
           VenueBlurb(concert: concert)
@@ -64,7 +64,7 @@ struct VenueDetail: View {
 
   @ViewBuilder private var relatedsElement: some View {
     if !digest.related.isEmpty {
-      Section(header: Text("Related Venues", bundle: .module)) {
+      Section(header: Text("Related Venues")) {
         ForEach(digest.related) { relatedVenue in
           PathRestorableLink(
             pathRestorable: relatedVenue, isPathNavigable: isPathNavigable, title: relatedVenue.name

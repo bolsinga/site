@@ -14,6 +14,6 @@ extension VenueDigest: PathRestorableUserActivity {
     userActivity.isEligibleForSearch = true
     userActivity.title = self.name
     userActivity.addSearchableContent(
-      description: String(localized: "See Shows At This Venue", bundle: .module))
+      description: String(localized: "See Shows At This Venue"))
   }
 }

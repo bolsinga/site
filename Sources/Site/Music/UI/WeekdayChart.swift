@@ -17,8 +17,8 @@ struct WeekdayChart: View {
     let weekdayCounts = dates.computeWeekdayCounts(firstWeekday)
     Chart(weekdayCounts, id: \.0) { item in
       BarMark(
-        x: .value(Text("Weekday", bundle: .module), item.0),
-        y: .value(Text("Count", bundle: .module), item.1)
+        x: .value(Text("Weekday"), item.0),
+        y: .value(Text("Count"), item.1)
       )
       .annotation(position: .top) {
         if item.1 > 0 {

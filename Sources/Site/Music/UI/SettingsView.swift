@@ -14,15 +14,15 @@ public struct SettingsView: View {
 
   public var body: some View {
     Form {
-      Section(header: Text("Nearby Distance", bundle: .module)) {
+      Section(header: Text("Nearby Distance")) {
         NearbyDistanceThresholdView(distanceThreshold: $nearbyDistance)
       }
       #if !os(macOS)
-        Section(header: Text("About", bundle: .module)) {
+        Section(header: Text("About")) {
           LabeledContent {
             Text(PackageBuild.info.version)
           } label: {
-            Text("Version", bundle: .module)
+            Text("Version")
           }
         }
       #endif

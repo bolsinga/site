@@ -13,11 +13,11 @@ struct TodayList: View {
   var body: some View {
     if concerts.isEmpty {
       ContentUnavailableView(
-        String(localized: "No Shows On This Day", bundle: .module),
+        String(localized: "No Shows On This Day"),
         systemImage: "calendar.badge.exclamationmark",
-        description: Text("Check again tomorrow.", bundle: .module)
+        description: Text("Check again tomorrow.")
       )
-      .navigationTitle(Text("On This Day", bundle: .module))
+      .navigationTitle(Text("On This Day"))
     } else {
       List(concerts) { concert in
         NavigationLink(value: concert) { TodayBlurb(concert: concert) }
@@ -25,8 +25,7 @@ struct TodayList: View {
       .listStyle(.plain)
       .navigationTitle(
         Text(
-          "On This Day: \(Date.now.formatted(.dateTime.month(.defaultDigits).day()))",
-          bundle: .module))
+          "On This Day: \(Date.now.formatted(.dateTime.month(.defaultDigits).day()))"))
     }
   }
 }

@@ -14,6 +14,6 @@ extension Concert: PathRestorableUserActivity {
     userActivity.isEligibleForSearch = true
     userActivity.title = self.formatted(.headlinerAndVenue)
     userActivity.addSearchableContent(
-      description: String(localized: "See More About This Show", bundle: .module))
+      description: String(localized: "See More About This Show"))
   }
 }

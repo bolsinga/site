@@ -22,7 +22,7 @@ struct VenueList: View {
       itemLabelView: { Text($0.name.emphasizedAttributed(matching: searchString)) }, sort: sort
     )
     .archiveSearchable(
-      searchPrompt: String(localized: "Venue Names", bundle: .module),
+      searchPrompt: String(localized: "Venue Names"),
       searchString: $searchString, contentsEmpty: digests.isEmpty
     )
   }

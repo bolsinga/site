@@ -23,9 +23,9 @@ struct ArchiveCategoryToolbarContent: ToolbarContent {
     case .today, .stats, .shows, .settings, .search:
       nil
     case .venues:
-      ($venueSort, String(localized: "Sort By Artist Count", bundle: .module))
+      ($venueSort, String(localized: "Sort By Artist Count"))
     case .artists:
-      ($artistSort, String(localized: "Sort By Venue Count", bundle: .module))
+      ($artistSort, String(localized: "Sort By Venue Count"))
     }
   }
 

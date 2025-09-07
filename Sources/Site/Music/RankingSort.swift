@@ -44,15 +44,15 @@ enum RankingSort: Int, CaseIterable {
   var localizedString: String {
     switch self {
     case .alphabetical:
-      return String(localized: "Sort Alphabetically", bundle: .module)
+      return String(localized: "Sort Alphabetically")
     case .showCount:
-      return String(localized: "Sort By Show Count", bundle: .module)
+      return String(localized: "Sort By Show Count")
     case .showYearRange:
-      return String(localized: "Sort By Year Range", bundle: .module)
+      return String(localized: "Sort By Year Range")
     case .associatedRank:
-      return String(localized: "Sort By Associated", bundle: .module)
+      return String(localized: "Sort By Associated")
     case .firstSeen:
-      return String(localized: "Sort By First Show", bundle: .module)
+      return String(localized: "Sort By First Show")
     }
   }
 }

@@ -19,7 +19,7 @@ struct ShowDetail: View {
   }
 
   @ViewBuilder private var lineupElement: some View {
-    Section(header: Text("Lineup", bundle: .module)) {
+    Section(header: Text("Lineup")) {
       ForEach(concert.artists) { artist in
         PathRestorableLink(
           pathRestorable: artist, isPathNavigable: isPathNavigable, title: artist.name)
@@ -28,7 +28,7 @@ struct ShowDetail: View {
   }
 
   @ViewBuilder private var dateElement: some View {
-    Section(header: Text("Date", bundle: .module)) {
+    Section(header: Text("Date")) {
       let show = concert.show
       if !show.date.isUnknown, let date = show.date.date {
         LabeledContent {
@@ -44,7 +44,7 @@ struct ShowDetail: View {
 
   @ViewBuilder private var commentElement: some View {
     if let comment = concert.show.comment {
-      Section(header: Text("Comment", bundle: .module)) {
+      Section(header: Text("Comment")) {
         Text(comment.asAttributedString)
       }
     }
