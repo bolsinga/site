@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Utilities
 
 extension LibrarySection {
   struct FormatStyle: Codable, Equatable, Hashable {

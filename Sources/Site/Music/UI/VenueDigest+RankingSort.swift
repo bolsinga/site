@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import MusicData
 
 extension VenueDigest {
   func ranking(for sort: RankingSort) -> Ranking {

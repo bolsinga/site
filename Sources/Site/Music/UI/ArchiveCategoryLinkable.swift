@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import MusicData
 
 struct ArchiveCategoryLinkable: ArchiveSharable {
   let category: ArchiveCategory

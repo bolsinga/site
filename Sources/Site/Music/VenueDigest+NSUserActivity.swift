@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import MusicData
 
 extension VenueDigest: PathRestorableUserActivity {
   func updateActivity(_ userActivity: NSUserActivity) {

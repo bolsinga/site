@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Utilities
 
 public struct Vault: Sendable {
   public let comparator: LibraryComparator

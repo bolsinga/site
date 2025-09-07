@@ -6,8 +6,6 @@
 //
 
 import Foundation
-import MusicData
-import Utilities
 
 protocol Rankable: LibraryComparable, Hashable, PathRestorable {
   var firstSet: FirstSet { get }

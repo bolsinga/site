@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import MusicData
 
 extension Vault {
   func restorableSharableLinkable(for path: ArchivePath) -> PathRestorableUserActivity? {

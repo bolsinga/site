@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import MusicData
 
 extension ArtistDigest: PathRestorableUserActivity {
   func updateActivity(_ userActivity: NSUserActivity) {

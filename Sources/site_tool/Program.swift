@@ -8,8 +8,6 @@
 import ArgumentParser
 import DiaryData
 import Foundation
-import MusicData
-import Utilities
 
 @main
 struct Program: AsyncParsableCommand {

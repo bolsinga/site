@@ -6,7 +6,6 @@
 //
 
 import MapKit
-import MusicData
 import SwiftUI
 
 private enum VenueDetailGeocodeError: Error {

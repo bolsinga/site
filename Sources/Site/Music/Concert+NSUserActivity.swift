@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import MusicData
 
 extension Concert: PathRestorableUserActivity {
   func updateActivity(_ userActivity: NSUserActivity) {

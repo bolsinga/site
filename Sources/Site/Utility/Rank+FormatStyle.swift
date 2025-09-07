@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import MusicData
 
 extension Rank {
   public struct FormatStyle: Codable, Equatable, Hashable {

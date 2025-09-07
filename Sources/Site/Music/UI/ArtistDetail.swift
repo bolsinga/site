@@ -5,7 +5,6 @@
 //  Created by Greg Bolsinga on 2/18/23.
 //
 
-import MusicData
 import SwiftUI
 
 struct ArtistDetail: View {
