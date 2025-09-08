@@ -290,7 +290,6 @@
 				FE9910DC2AC205A70054D229 /* Config.xcconfig */,
 				FEB4827E2E6E471D0043057D /* Sources */,
 				FEE0AECD2E6E74F5005CE1AB /* Tests */,
-				FEB489B32E6E6FC10043057D /* Frameworks */,
 				FE5360FE29CE82CA00618099 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -305,13 +304,6 @@
 				FEE0AECC2E6E74F5005CE1AB /* Tests.xctest */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		FEB489B32E6E6FC10043057D /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
