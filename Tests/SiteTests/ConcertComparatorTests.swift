@@ -6,10 +6,9 @@
 //
 
 import Foundation
-import MusicData
 import Testing
 
-@testable import Site
+@testable import SiteApp
 
 struct ConcertComparatorTests {
   let date = PartialDate(year: 1996, month: 12, day: 15)

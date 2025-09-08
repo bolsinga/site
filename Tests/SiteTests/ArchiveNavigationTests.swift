@@ -5,10 +5,9 @@
 //  Created by Greg Bolsinga on 6/24/23.
 //
 
-import MusicData
 import Testing
 
-@testable import Site
+@testable import SiteApp
 
 extension ArchiveCategory {
   var isRegularActivity: Bool {

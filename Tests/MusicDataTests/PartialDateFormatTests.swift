@@ -7,7 +7,7 @@
 
 import Testing
 
-@testable import MusicData
+@testable import SiteApp
 
 struct PartialDateFormatTests {
   @Test func format() {
