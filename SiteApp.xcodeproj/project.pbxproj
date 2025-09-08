@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		FEB4895E2E6E6E8F0043057D /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = FEB4895D2E6E6E8F0043057D /* ArgumentParser */; };
 		FEB489B52E6E6FC10043057D /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = FEB489B42E6E6FC10043057D /* ArgumentParser */; };
+		FEB48A082E6E70E20043057D /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = FEB48A072E6E70E20043057D /* ArgumentParser */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -30,6 +31,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
+		FEB489B82E6E70800043057D /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +47,7 @@
 		FE9910DC2AC205A70054D229 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		FEB486502E6E6D740043057D /* site_tool */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = site_tool; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEB489AA2E6E6F960043057D /* site_associated_domains */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = site_associated_domains; sourceTree = BUILT_PRODUCTS_DIR; };
+		FEB489BA2E6E70800043057D /* next_id */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = next_id; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -138,10 +149,85 @@
 			);
 			target = FEB489A92E6E6F960043057D /* site_associated_domains */;
 		};
+		FEB489C22E6E70920043057D /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				MusicData/Album.swift,
+				MusicData/Annum.swift,
+				"MusicData/Annum+FormatStyle.swift",
+				"MusicData/Annum+ParseableFormatStyle.swift",
+				MusicData/AnnumDigest.swift,
+				MusicData/ArchiveCategory.swift,
+				"MusicData/ArchiveCategory+FormatStyle.swift",
+				"MusicData/ArchiveCategory+ParseableFormatStyle.swift",
+				"MusicData/ArchiveCategory+URL.swift",
+				MusicData/ArchivePath.swift,
+				"MusicData/ArchivePath+ArchiveCategory.swift",
+				"MusicData/ArchivePath+Codable.swift",
+				"MusicData/ArchivePath+FormatStyle.swift",
+				"MusicData/ArchivePath+ParseableFormatStyle.swift",
+				"MusicData/ArchivePath+PathRestorable.swift",
+				"MusicData/ArchivePath+URL.swift",
+				MusicData/Artist.swift,
+				"MusicData/Artist+Digest.swift",
+				"MusicData/Artist+LibraryComparable.swift",
+				MusicData/ArtistDigest.swift,
+				"MusicData/ArtistDigest+LibraryComparable.swift",
+				MusicData/Concert.swift,
+				"MusicData/Concert+FormatStyle.swift",
+				MusicData/Decade.FormatStyle.swift,
+				MusicData/Decade.swift,
+				MusicData/FirstSet.swift,
+				"MusicData/LibraryComparator+Concert.swift",
+				"MusicData/LibraryComparator+Music.swift",
+				"MusicData/LibrarySectioner+Music.swift",
+				MusicData/Location.swift,
+				"MusicData/Location+Comparable.swift",
+				"MusicData/Location+FormatStyle.swift",
+				MusicData/Lookup.swift,
+				MusicData/Music.swift,
+				"MusicData/Music+Ranking.swift",
+				"MusicData/Music+ShowsOnly.swift",
+				"MusicData/Music+URL.swift",
+				MusicData/PartialDate.swift,
+				"MusicData/PartialDate+Date.swift",
+				"MusicData/PartialDate+FormatStyle.swift",
+				"MusicData/PartialDate+Span.swift",
+				MusicData/PathRestorable.swift,
+				MusicData/Rank.swift,
+				MusicData/Ranking.swift,
+				MusicData/Relation.swift,
+				MusicData/Show.swift,
+				"MusicData/Show+Concert.swift",
+				MusicData/Song.swift,
+				MusicData/Vault.swift,
+				"MusicData/Vault+AnnumDigest.swift",
+				"MusicData/Vault+NextID.swift",
+				"MusicData/Vault+URL.swift",
+				MusicData/Venue.swift,
+				"MusicData/Venue+Digest.swift",
+				"MusicData/Venue+FormatStyle.swift",
+				"MusicData/Venue+LibraryComparable.swift",
+				MusicData/VenueDigest.swift,
+				"MusicData/VenueDigest+LibraryComparable.swift",
+				next_id/Program.swift,
+				Utilities/CompareOptional.swift,
+				"Utilities/Data+JSON.swift",
+				Utilities/LibraryComparable.swift,
+				Utilities/LibraryComparator.swift,
+				Utilities/LibrarySection.swift,
+				Utilities/LibrarySectioner.swift,
+				"Utilities/Logger+Category.swift",
+				"Utilities/String+LibrarySection.swift",
+				"Utilities/String+LibrarySorting.swift",
+				"Utilities/URL+JSON.swift",
+			);
+			target = FEB489B92E6E70800043057D /* next_id */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		FEB4827E2E6E471D0043057D /* Sources */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (FEB4833A2E6E476D0043057D /* PBXFileSystemSynchronizedBuildFileExceptionSet */, FEB486582E6E6DBC0043057D /* PBXFileSystemSynchronizedBuildFileExceptionSet */, FEB489B22E6E6FAE0043057D /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Sources; sourceTree = "<group>"; };
+		FEB4827E2E6E471D0043057D /* Sources */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (FEB4833A2E6E476D0043057D /* PBXFileSystemSynchronizedBuildFileExceptionSet */, FEB486582E6E6DBC0043057D /* PBXFileSystemSynchronizedBuildFileExceptionSet */, FEB489B22E6E6FAE0043057D /* PBXFileSystemSynchronizedBuildFileExceptionSet */, FEB489C22E6E70920043057D /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Sources; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -168,6 +254,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		FEB489B72E6E70800043057D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FEB48A082E6E70E20043057D /* ArgumentParser in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -187,6 +281,7 @@
 				FE5360FD29CE82CA00618099 /* SiteApp.app */,
 				FEB486502E6E6D740043057D /* site_tool */,
 				FEB489AA2E6E6F960043057D /* site_associated_domains */,
+				FEB489BA2E6E70800043057D /* next_id */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -263,6 +358,26 @@
 			productReference = FEB489AA2E6E6F960043057D /* site_associated_domains */;
 			productType = "com.apple.product-type.tool";
 		};
+		FEB489B92E6E70800043057D /* next_id */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FEB489BE2E6E70800043057D /* Build configuration list for PBXNativeTarget "next_id" */;
+			buildPhases = (
+				FEB489B62E6E70800043057D /* Sources */,
+				FEB489B72E6E70800043057D /* Frameworks */,
+				FEB489B82E6E70800043057D /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = next_id;
+			packageProductDependencies = (
+				FEB48A072E6E70E20043057D /* ArgumentParser */,
+			);
+			productName = next_id;
+			productReference = FEB489BA2E6E70800043057D /* next_id */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -280,6 +395,9 @@
 						CreatedOnToolsVersion = 16.4;
 					};
 					FEB489A92E6E6F960043057D = {
+						CreatedOnToolsVersion = 16.4;
+					};
+					FEB489B92E6E70800043057D = {
 						CreatedOnToolsVersion = 16.4;
 					};
 				};
@@ -303,6 +421,7 @@
 				FE5360FC29CE82CA00618099 /* SiteApp */,
 				FEB4864F2E6E6D740043057D /* site_tool */,
 				FEB489A92E6E6F960043057D /* site_associated_domains */,
+				FEB489B92E6E70800043057D /* next_id */,
 			);
 		};
 /* End PBXProject section */
@@ -333,6 +452,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		FEB489A62E6E6F960043057D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FEB489B62E6E70800043057D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -617,6 +743,37 @@
 			};
 			name = Release;
 		};
+		FEB489BF2E6E70800043057D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = D3F44CA7F4;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		FEB489C02E6E70800043057D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = D3F44CA7F4;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -656,6 +813,15 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		FEB489BE2E6E70800043057D /* Build configuration list for PBXNativeTarget "next_id" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FEB489BF2E6E70800043057D /* Debug */,
+				FEB489C02E6E70800043057D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
@@ -676,6 +842,11 @@
 			productName = ArgumentParser;
 		};
 		FEB489B42E6E6FC10043057D /* ArgumentParser */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FEB4895C2E6E6E8F0043057D /* XCRemoteSwiftPackageReference "swift-argument-parser" */;
+			productName = ArgumentParser;
+		};
+		FEB48A072E6E70E20043057D /* ArgumentParser */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = FEB4895C2E6E6E8F0043057D /* XCRemoteSwiftPackageReference "swift-argument-parser" */;
 			productName = ArgumentParser;
