@@ -7,6 +7,25 @@
 
 import SwiftUI
 
+extension Bundle {
+  fileprivate var buildNumber: String {
+    guard let value = object(forInfoDictionaryKey: "CFBundleVersion"), let vers = value as? String
+    else { return "Unknown" }
+    return vers
+  }
+
+  fileprivate var shortVersion: String {
+    guard let value = object(forInfoDictionaryKey: "CFBundleShortVersionString"),
+      let vers = value as? String
+    else { return "Unknown" }
+    return vers
+  }
+
+  fileprivate var version: String {
+    "\(shortVersion) (\(buildNumber))"
+  }
+}
+
 public struct SettingsView: View {
   public init() {}
 
@@ -20,7 +39,7 @@ public struct SettingsView: View {
       #if !os(macOS)
         Section(header: Text("About")) {
           LabeledContent {
-            Text(PackageBuild.info.version)
+            Text(Bundle.main.version)
           } label: {
             Text("Version")
           }
