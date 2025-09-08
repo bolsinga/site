@@ -8,10 +8,20 @@
 
 /* Begin PBXBuildFile section */
 		FEB4895E2E6E6E8F0043057D /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = FEB4895D2E6E6E8F0043057D /* ArgumentParser */; };
+		FEB489B52E6E6FC10043057D /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = FEB489B42E6E6FC10043057D /* ArgumentParser */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		FEB4864E2E6E6D740043057D /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		FEB489A82E6E6F960043057D /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = /usr/share/man/man1/;
@@ -26,6 +36,7 @@
 		FE5360FD29CE82CA00618099 /* SiteApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SiteApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE9910DC2AC205A70054D229 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		FEB486502E6E6D740043057D /* site_tool */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = site_tool; sourceTree = BUILT_PRODUCTS_DIR; };
+		FEB489AA2E6E6F960043057D /* site_associated_domains */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = site_associated_domains; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -120,10 +131,17 @@
 			);
 			target = FEB4864F2E6E6D740043057D /* site_tool */;
 		};
+		FEB489B22E6E6FAE0043057D /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				site_associated_domains/Program.swift,
+			);
+			target = FEB489A92E6E6F960043057D /* site_associated_domains */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		FEB4827E2E6E471D0043057D /* Sources */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (FEB4833A2E6E476D0043057D /* PBXFileSystemSynchronizedBuildFileExceptionSet */, FEB486582E6E6DBC0043057D /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Sources; sourceTree = "<group>"; };
+		FEB4827E2E6E471D0043057D /* Sources */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (FEB4833A2E6E476D0043057D /* PBXFileSystemSynchronizedBuildFileExceptionSet */, FEB486582E6E6DBC0043057D /* PBXFileSystemSynchronizedBuildFileExceptionSet */, FEB489B22E6E6FAE0043057D /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Sources; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,6 +160,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		FEB489A72E6E6F960043057D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FEB489B52E6E6FC10043057D /* ArgumentParser in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -150,6 +176,7 @@
 			children = (
 				FE9910DC2AC205A70054D229 /* Config.xcconfig */,
 				FEB4827E2E6E471D0043057D /* Sources */,
+				FEB489B32E6E6FC10043057D /* Frameworks */,
 				FE5360FE29CE82CA00618099 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -159,8 +186,16 @@
 			children = (
 				FE5360FD29CE82CA00618099 /* SiteApp.app */,
 				FEB486502E6E6D740043057D /* site_tool */,
+				FEB489AA2E6E6F960043057D /* site_associated_domains */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		FEB489B32E6E6FC10043057D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -208,6 +243,26 @@
 			productReference = FEB486502E6E6D740043057D /* site_tool */;
 			productType = "com.apple.product-type.tool";
 		};
+		FEB489A92E6E6F960043057D /* site_associated_domains */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FEB489AE2E6E6F960043057D /* Build configuration list for PBXNativeTarget "site_associated_domains" */;
+			buildPhases = (
+				FEB489A62E6E6F960043057D /* Sources */,
+				FEB489A72E6E6F960043057D /* Frameworks */,
+				FEB489A82E6E6F960043057D /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = site_associated_domains;
+			packageProductDependencies = (
+				FEB489B42E6E6FC10043057D /* ArgumentParser */,
+			);
+			productName = site_associated_domains;
+			productReference = FEB489AA2E6E6F960043057D /* site_associated_domains */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -222,6 +277,9 @@
 						CreatedOnToolsVersion = 14.2;
 					};
 					FEB4864F2E6E6D740043057D = {
+						CreatedOnToolsVersion = 16.4;
+					};
+					FEB489A92E6E6F960043057D = {
 						CreatedOnToolsVersion = 16.4;
 					};
 				};
@@ -244,6 +302,7 @@
 			targets = (
 				FE5360FC29CE82CA00618099 /* SiteApp */,
 				FEB4864F2E6E6D740043057D /* site_tool */,
+				FEB489A92E6E6F960043057D /* site_associated_domains */,
 			);
 		};
 /* End PBXProject section */
@@ -267,6 +326,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		FEB4864C2E6E6D740043057D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FEB489A62E6E6F960043057D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -520,6 +586,37 @@
 			};
 			name = Release;
 		};
+		FEB489AF2E6E6F960043057D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = D3F44CA7F4;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		FEB489B02E6E6F960043057D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = D3F44CA7F4;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -550,6 +647,15 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		FEB489AE2E6E6F960043057D /* Build configuration list for PBXNativeTarget "site_associated_domains" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FEB489AF2E6E6F960043057D /* Debug */,
+				FEB489B02E6E6F960043057D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
@@ -565,6 +671,11 @@
 
 /* Begin XCSwiftPackageProductDependency section */
 		FEB4895D2E6E6E8F0043057D /* ArgumentParser */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FEB4895C2E6E6E8F0043057D /* XCRemoteSwiftPackageReference "swift-argument-parser" */;
+			productName = ArgumentParser;
+		};
+		FEB489B42E6E6FC10043057D /* ArgumentParser */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = FEB4895C2E6E6E8F0043057D /* XCRemoteSwiftPackageReference "swift-argument-parser" */;
 			productName = ArgumentParser;
