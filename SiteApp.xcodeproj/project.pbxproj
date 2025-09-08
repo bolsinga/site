@@ -6,9 +6,26 @@
 	objectVersion = 70;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		FEB4895E2E6E6E8F0043057D /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = FEB4895D2E6E6E8F0043057D /* ArgumentParser */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		FEB4864E2E6E6D740043057D /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		FE5360FD29CE82CA00618099 /* SiteApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SiteApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE9910DC2AC205A70054D229 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		FEB486502E6E6D740043057D /* site_tool */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = site_tool; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -16,16 +33,97 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				App/Info.plist,
+				DiaryData/Diary.swift,
+				"DiaryData/Diary+URL.swift",
+				DiaryData/Entry.swift,
 				next_id/Program.swift,
 				site_associated_domains/Program.swift,
 				site_tool/Program.swift,
 			);
 			target = FE5360FC29CE82CA00618099 /* SiteApp */;
 		};
+		FEB486582E6E6DBC0043057D /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				DiaryData/Diary.swift,
+				"DiaryData/Diary+URL.swift",
+				DiaryData/Entry.swift,
+				MusicData/Album.swift,
+				MusicData/Annum.swift,
+				"MusicData/Annum+FormatStyle.swift",
+				"MusicData/Annum+ParseableFormatStyle.swift",
+				MusicData/AnnumDigest.swift,
+				MusicData/ArchiveCategory.swift,
+				"MusicData/ArchiveCategory+FormatStyle.swift",
+				"MusicData/ArchiveCategory+ParseableFormatStyle.swift",
+				"MusicData/ArchiveCategory+URL.swift",
+				MusicData/ArchivePath.swift,
+				"MusicData/ArchivePath+ArchiveCategory.swift",
+				"MusicData/ArchivePath+Codable.swift",
+				"MusicData/ArchivePath+FormatStyle.swift",
+				"MusicData/ArchivePath+ParseableFormatStyle.swift",
+				"MusicData/ArchivePath+PathRestorable.swift",
+				"MusicData/ArchivePath+URL.swift",
+				MusicData/Artist.swift,
+				"MusicData/Artist+Digest.swift",
+				"MusicData/Artist+LibraryComparable.swift",
+				MusicData/ArtistDigest.swift,
+				"MusicData/ArtistDigest+LibraryComparable.swift",
+				MusicData/Concert.swift,
+				"MusicData/Concert+FormatStyle.swift",
+				MusicData/Decade.FormatStyle.swift,
+				MusicData/Decade.swift,
+				MusicData/FirstSet.swift,
+				"MusicData/LibraryComparator+Concert.swift",
+				"MusicData/LibraryComparator+Music.swift",
+				"MusicData/LibrarySectioner+Music.swift",
+				MusicData/Location.swift,
+				"MusicData/Location+Comparable.swift",
+				"MusicData/Location+FormatStyle.swift",
+				MusicData/Lookup.swift,
+				MusicData/Music.swift,
+				"MusicData/Music+Ranking.swift",
+				"MusicData/Music+ShowsOnly.swift",
+				"MusicData/Music+URL.swift",
+				MusicData/PartialDate.swift,
+				"MusicData/PartialDate+Date.swift",
+				"MusicData/PartialDate+FormatStyle.swift",
+				"MusicData/PartialDate+Span.swift",
+				MusicData/PathRestorable.swift,
+				MusicData/Rank.swift,
+				MusicData/Ranking.swift,
+				MusicData/Relation.swift,
+				MusicData/Show.swift,
+				"MusicData/Show+Concert.swift",
+				MusicData/Song.swift,
+				MusicData/Vault.swift,
+				"MusicData/Vault+AnnumDigest.swift",
+				"MusicData/Vault+NextID.swift",
+				"MusicData/Vault+URL.swift",
+				MusicData/Venue.swift,
+				"MusicData/Venue+Digest.swift",
+				"MusicData/Venue+FormatStyle.swift",
+				"MusicData/Venue+LibraryComparable.swift",
+				MusicData/VenueDigest.swift,
+				"MusicData/VenueDigest+LibraryComparable.swift",
+				site_tool/Program.swift,
+				Utilities/CompareOptional.swift,
+				"Utilities/Data+JSON.swift",
+				Utilities/LibraryComparable.swift,
+				Utilities/LibraryComparator.swift,
+				Utilities/LibrarySection.swift,
+				Utilities/LibrarySectioner.swift,
+				"Utilities/Logger+Category.swift",
+				"Utilities/String+LibrarySection.swift",
+				"Utilities/String+LibrarySorting.swift",
+				"Utilities/URL+JSON.swift",
+			);
+			target = FEB4864F2E6E6D740043057D /* site_tool */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		FEB4827E2E6E471D0043057D /* Sources */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (FEB4833A2E6E476D0043057D /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Sources; sourceTree = "<group>"; };
+		FEB4827E2E6E471D0043057D /* Sources */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (FEB4833A2E6E476D0043057D /* PBXFileSystemSynchronizedBuildFileExceptionSet */, FEB486582E6E6DBC0043057D /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Sources; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -33,6 +131,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FEB4864D2E6E6D740043057D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FEB4895E2E6E6E8F0043057D /* ArgumentParser in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -52,6 +158,7 @@
 			isa = PBXGroup;
 			children = (
 				FE5360FD29CE82CA00618099 /* SiteApp.app */,
+				FEB486502E6E6D740043057D /* site_tool */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -81,6 +188,26 @@
 			productReference = FE5360FD29CE82CA00618099 /* SiteApp.app */;
 			productType = "com.apple.product-type.application";
 		};
+		FEB4864F2E6E6D740043057D /* site_tool */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FEB486562E6E6D740043057D /* Build configuration list for PBXNativeTarget "site_tool" */;
+			buildPhases = (
+				FEB4864C2E6E6D740043057D /* Sources */,
+				FEB4864D2E6E6D740043057D /* Frameworks */,
+				FEB4864E2E6E6D740043057D /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = site_tool;
+			packageProductDependencies = (
+				FEB4895D2E6E6E8F0043057D /* ArgumentParser */,
+			);
+			productName = site_tool;
+			productReference = FEB486502E6E6D740043057D /* site_tool */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -88,11 +215,14 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1420;
+				LastSwiftUpdateCheck = 1640;
 				LastUpgradeCheck = 1640;
 				TargetAttributes = {
 					FE5360FC29CE82CA00618099 = {
 						CreatedOnToolsVersion = 14.2;
+					};
+					FEB4864F2E6E6D740043057D = {
+						CreatedOnToolsVersion = 16.4;
 					};
 				};
 			};
@@ -106,12 +236,14 @@
 			);
 			mainGroup = FE5360F429CE82CA00618099;
 			packageReferences = (
+				FEB4895C2E6E6E8F0043057D /* XCRemoteSwiftPackageReference "swift-argument-parser" */,
 			);
 			productRefGroup = FE5360FE29CE82CA00618099 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				FE5360FC29CE82CA00618099 /* SiteApp */,
+				FEB4864F2E6E6D740043057D /* site_tool */,
 			);
 		};
 /* End PBXProject section */
@@ -128,6 +260,13 @@
 
 /* Begin PBXSourcesBuildPhase section */
 		FE5360F929CE82CA00618099 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FEB4864C2E6E6D740043057D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -350,6 +489,37 @@
 			};
 			name = Release;
 		};
+		FEB486542E6E6D740043057D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = D3F44CA7F4;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		FEB486552E6E6D740043057D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = D3F44CA7F4;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -371,7 +541,35 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		FEB486562E6E6D740043057D /* Build configuration list for PBXNativeTarget "site_tool" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FEB486542E6E6D740043057D /* Debug */,
+				FEB486552E6E6D740043057D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		FEB4895C2E6E6E8F0043057D /* XCRemoteSwiftPackageReference "swift-argument-parser" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-argument-parser.git";
+			requirement = {
+				kind = exactVersion;
+				version = 1.6.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		FEB4895D2E6E6E8F0043057D /* ArgumentParser */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FEB4895C2E6E6E8F0043057D /* XCRemoteSwiftPackageReference "swift-argument-parser" */;
+			productName = ArgumentParser;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = FE5360F529CE82CA00618099 /* Project object */;
 }

@@ -6,7 +6,6 @@
 //
 
 import ArgumentParser
-import DiaryData
 import Foundation
 
 @main
