@@ -39,8 +39,8 @@ extension ArchiveCategory {
 
 struct ArchiveTabView: View {
   @Environment(VaultModel.self) var model
-  @SceneStorage("shows.mode") private var showsMode = ShowsMode.default
 
+  @Binding var showsMode: ShowsMode
   @Binding var venueSort: RankingSort
   @Binding var artistSort: RankingSort
 
@@ -98,14 +98,6 @@ struct ArchiveTabView: View {
     }
     .onAppear {
       selectedTab = activeCategory
-      switch activeCategory {
-      case .today:
-        showsMode = .ordinal
-      case .shows:
-        showsMode = .grouped
-      case .stats, .venues, .artists, .settings, .search:
-        break
-      }
     }
     .onChange(of: selectedTab) { _, newValue in
       activeCategory = {
@@ -136,14 +128,6 @@ struct ArchiveTabView: View {
         }
       }()
     }
-    .onChange(of: showsMode) { _, newValue in
-      switch newValue {
-      case .ordinal:
-        activeCategory = .today
-      case .grouped:
-        activeCategory = .shows
-      }
-    }
     .onChange(of: activeCategory) { _, newValue in
       selectedTab = newValue
     }
@@ -152,11 +136,14 @@ struct ArchiveTabView: View {
 }
 
 #Preview(traits: .modifier(NearbyPreviewModifer()), .modifier(VaultPreviewModifier())) {
+  @Previewable @State var showsMode = ShowsMode.grouped
   @Previewable @State var venueSort = RankingSort.alphabetical
   @Previewable @State var artistSort = RankingSort.alphabetical
   @Previewable @State var category = ArchiveCategory.defaultCategory
 
-  ArchiveTabView(venueSort: $venueSort, artistSort: $artistSort, activeCategory: $category) { _ in
+  ArchiveTabView(
+    showsMode: $showsMode, venueSort: $venueSort, artistSort: $artistSort, activeCategory: $category
+  ) { _ in
     .constant([])
   } reloadModel: {
   } navigateToPath: { _ in

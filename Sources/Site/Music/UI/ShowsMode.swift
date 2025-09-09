@@ -5,7 +5,7 @@
 //  Created by Greg Bolsinga on 8/7/25.
 //
 
-enum ShowsMode: Int, CaseIterable {
+enum ShowsMode: Int, CaseIterable, Codable, Sendable {
   /// Shows Today Only.
   case ordinal
 

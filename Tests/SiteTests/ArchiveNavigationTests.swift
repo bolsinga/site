@@ -63,6 +63,10 @@ extension ArchiveNavigation {
 let regularActivities = ArchiveCategory.allCases.filter { $0.isRegularActivity }
 let irregularActivities = ArchiveCategory.allCases.filter { !$0.isRegularActivity }
 
+let categoryModes = [
+  ArchiveCategory.today: ShowsMode.ordinal, ArchiveCategory.shows: ShowsMode.grouped,
+]
+
 @MainActor
 struct ArchiveNavigationTests {
   @Test(
@@ -253,5 +257,26 @@ struct ArchiveNavigationTests {
       ArchiveNavigation.State(category: .today).change(
         for: ArchiveNavigation.State(category: .artists, todayPath: [ArchivePath.artist("id")]))
         == .assignWithWorkaround)
+    #expect(
+      ArchiveNavigation.State(mode: .ordinal).change(for: ArchiveNavigation.State(mode: .grouped))
+        == .assign)
+    #expect(
+      ArchiveNavigation.State(mode: .ordinal).change(
+        for: ArchiveNavigation.State(mode: .grouped, showsPath: [ArchivePath.artist("id")]))
+        == .assignWithWorkaround)
+  }
+
+  @Test("Test Navigate To ShowMode", arguments: zip(categoryModes.keys, categoryModes.values))
+  func testNavigateCategoryMode(category: ArchiveCategory, mode: ShowsMode) {
+    let ar = ArchiveNavigation()
+    ar.navigate(to: category)
+    #expect(ar.mode == mode)
+  }
+
+  @Test("Test Change ShowMode", arguments: zip(categoryModes.values, categoryModes.keys))
+  func testChangeMode(mode: ShowsMode, category: ArchiveCategory) {
+    let ar = ArchiveNavigation()
+    ar.mode = mode
+    #expect(ar.category == category)
   }
 }
