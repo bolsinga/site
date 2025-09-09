@@ -65,10 +65,12 @@ let irregularActivities = ArchiveCategory.allCases.filter { !$0.isRegularActivit
 
 @MainActor
 struct ArchiveNavigationTests {
-  @Test("Navigate To Category", arguments: ArchiveCategory.allCases)
-  func navigateToCategory(category: ArchiveCategory) {
-    let ar = ArchiveNavigation()
-    #expect(ar.category == .defaultCategory)
+  @Test(
+    "Navigate To Category", arguments: ArchiveCategory.allCases, ArchiveCategory.allCases.reversed()
+  )
+  func navigateToCategory(category: ArchiveCategory, initialCategory: ArchiveCategory) {
+    let ar = ArchiveNavigation(category: initialCategory, categoryPaths: [:])
+    #expect(ar.category == initialCategory)
     #expect(ar.path.isEmpty)
 
     ar.navigate(to: category)
@@ -208,5 +210,62 @@ struct ArchiveNavigationTests {
     #expect(ar.state.artistsPath.count == 1)
     #expect(ar.state.artistsPath.last != nil)
     #expect(ar.state.artistsPath.last! == ArchivePath.artist("id"))
+  }
+
+  @Test("Set To Category", arguments: ArchiveCategory.allCases)
+  func setCategory(category: ArchiveCategory) {
+    let ar = ArchiveNavigation()
+
+    ar.category = category
+    #expect(ar.category == category)
+  }
+
+  @Test func changePaths() {
+    let ar = ArchiveNavigation()
+
+    ar.category = .today
+    ar.path = [ArchivePath.artist("id")]
+    #expect(ar.path == [ArchivePath.artist("id")])
+
+    ar.category = .shows
+    ar.path = [ArchivePath.artist("id")]
+    #expect(ar.path == [ArchivePath.artist("id")])
+
+    ar.category = .venues
+    ar.path = [ArchivePath.artist("id")]
+    #expect(ar.path == [ArchivePath.artist("id")])
+
+    ar.category = .artists
+    ar.path = [ArchivePath.artist("id")]
+    #expect(ar.path == [ArchivePath.artist("id")])
+
+    ar.category = .stats
+    ar.path = [ArchivePath.artist("id")]
+    #expect(ar.path.isEmpty)
+
+    ar.category = .settings
+    ar.path = [ArchivePath.artist("id")]
+    #expect(ar.path.isEmpty)
+
+    ar.category = .search
+    ar.path = [ArchivePath.artist("id")]
+    #expect(ar.path.isEmpty)
+  }
+
+  @Test func stateChanges() {
+    #expect(
+      ArchiveNavigation.State(category: .today).change(
+        for: ArchiveNavigation.State(category: .today)) == .none)
+    #expect(
+      ArchiveNavigation.State(category: .today).change(
+        for: ArchiveNavigation.State(category: .artists)) == .category)
+    #expect(
+      ArchiveNavigation.State(category: .today).change(
+        for: ArchiveNavigation.State(category: .today, todayPath: [ArchivePath.artist("id")]))
+        == .path)
+    #expect(
+      ArchiveNavigation.State(category: .today).change(
+        for: ArchiveNavigation.State(category: .artists, todayPath: [ArchivePath.artist("id")]))
+        == .both)
   }
 }
