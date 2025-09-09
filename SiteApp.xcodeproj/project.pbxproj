@@ -58,6 +58,7 @@
 		FEB486502E6E6D740043057D /* site_tool */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = site_tool; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEB489AA2E6E6F960043057D /* site_associated_domains */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = site_associated_domains; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEB489BA2E6E70800043057D /* next_id */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = next_id; sourceTree = BUILT_PRODUCTS_DIR; };
+		FEC1720F2E70F1E800E8EFC8 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		FEE0AECC2E6E74F5005CE1AB /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -288,6 +289,7 @@
 			isa = PBXGroup;
 			children = (
 				FE9910DC2AC205A70054D229 /* Config.xcconfig */,
+				FEC1720F2E70F1E800E8EFC8 /* README.md */,
 				FEB4827E2E6E471D0043057D /* Sources */,
 				FEE0AECD2E6E74F5005CE1AB /* Tests */,
 				FE5360FE29CE82CA00618099 /* Products */,
