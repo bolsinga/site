@@ -43,8 +43,8 @@ extension ArchiveNavigation.State {
     let artistsPath = categoryPaths[.artists] ?? []
 
     self.init(
-      category: category, mode: nil, todayPath: todayPath, showsPath: showsPath,
-      venuesPath: venuesPath, artistsPath: artistsPath)
+      category: category, todayPath: todayPath, showsPath: showsPath, venuesPath: venuesPath,
+      artistsPath: artistsPath)
   }
 }
 
@@ -244,25 +244,22 @@ struct ArchiveNavigationTests {
 
   @Test func stateChanges() {
     #expect(
-      ArchiveNavigation.State(category: .today, mode: nil).change(
-        for: ArchiveNavigation.State(category: .today, mode: nil)) == .none)
+      ArchiveNavigation.State(category: .today).change(
+        for: ArchiveNavigation.State(category: .today)) == .none)
     #expect(
-      ArchiveNavigation.State(category: .today, mode: nil).change(
-        for: ArchiveNavigation.State(category: .artists, mode: nil)) == .assign)
+      ArchiveNavigation.State(category: .today).change(
+        for: ArchiveNavigation.State(category: .artists)) == .assign)
     #expect(
-      ArchiveNavigation.State(category: .today, mode: nil).change(
-        for: ArchiveNavigation.State(
-          category: .today, mode: nil, todayPath: [ArchivePath.artist("id")]))
+      ArchiveNavigation.State(category: .today).change(
+        for: ArchiveNavigation.State(category: .today, todayPath: [ArchivePath.artist("id")]))
         == .assign)
     #expect(
-      ArchiveNavigation.State(category: .today, mode: nil).change(
-        for: ArchiveNavigation.State(
-          category: .artists, mode: nil, todayPath: [ArchivePath.artist("id")]))
+      ArchiveNavigation.State(category: .today).change(
+        for: ArchiveNavigation.State(category: .artists, todayPath: [ArchivePath.artist("id")]))
         == .assignWithWorkaround)
     #expect(
       ArchiveNavigation.State(mode: .ordinal).change(for: ArchiveNavigation.State(mode: .grouped))
         == .assign)
-
     #expect(
       ArchiveNavigation.State(mode: .ordinal).change(
         for: ArchiveNavigation.State(mode: .grouped, showsPath: [ArchivePath.artist("id")]))
