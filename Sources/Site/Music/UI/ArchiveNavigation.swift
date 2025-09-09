@@ -68,9 +68,8 @@ extension Logger {
 
     enum Change {
       case none
-      case category
-      case path
-      case both
+      case assign
+      case assignWithWorkaround
     }
 
     private func samePaths(for other: State) -> Bool {
@@ -80,9 +79,9 @@ extension Logger {
 
     func change(for other: State) -> Change {
       if self.category == other.category {
-        return samePaths(for: other) ? .none : .path
+        return samePaths(for: other) ? .none : .assign
       }
-      return samePaths(for: other) ? .category : .both
+      return samePaths(for: other) ? .assign : .assignWithWorkaround
     }
 
     func update(with other: State) -> State {
@@ -168,9 +167,9 @@ extension Logger {
     switch self.state.change(for: other) {
     case .none:
       break
-    case .category, .path:
+    case .assign:
       self.state = self.state.update(with: other)
-    case .both:
+    case .assignWithWorkaround:
       // Without this workaround, changing the category will update the UI
       //  such that the path is cleared after the first property changes.
       if useDispatchMainWorkaround {

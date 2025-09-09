@@ -244,14 +244,14 @@ struct ArchiveNavigationTests {
         for: ArchiveNavigation.State(category: .today)) == .none)
     #expect(
       ArchiveNavigation.State(category: .today).change(
-        for: ArchiveNavigation.State(category: .artists)) == .category)
+        for: ArchiveNavigation.State(category: .artists)) == .assign)
     #expect(
       ArchiveNavigation.State(category: .today).change(
         for: ArchiveNavigation.State(category: .today, todayPath: [ArchivePath.artist("id")]))
-        == .path)
+        == .assign)
     #expect(
       ArchiveNavigation.State(category: .today).change(
         for: ArchiveNavigation.State(category: .artists, todayPath: [ArchivePath.artist("id")]))
-        == .both)
+        == .assignWithWorkaround)
   }
 }
