@@ -43,8 +43,8 @@ extension ArchiveNavigation.State {
     let artistsPath = categoryPaths[.artists] ?? []
 
     self.init(
-      category: category, todayPath: todayPath, showsPath: showsPath, venuesPath: venuesPath,
-      artistsPath: artistsPath)
+      category: category, mode: nil, todayPath: todayPath, showsPath: showsPath,
+      venuesPath: venuesPath, artistsPath: artistsPath)
   }
 }
 
@@ -62,6 +62,10 @@ extension ArchiveNavigation {
 
 let regularActivities = ArchiveCategory.allCases.filter { $0.isRegularActivity }
 let irregularActivities = ArchiveCategory.allCases.filter { !$0.isRegularActivity }
+
+let categoryModes = [
+  ArchiveCategory.today: ShowsMode.ordinal, ArchiveCategory.shows: ShowsMode.grouped,
+]
 
 @MainActor
 struct ArchiveNavigationTests {
@@ -240,18 +244,42 @@ struct ArchiveNavigationTests {
 
   @Test func stateChanges() {
     #expect(
-      ArchiveNavigation.State(category: .today).change(
-        for: ArchiveNavigation.State(category: .today)) == .none)
+      ArchiveNavigation.State(category: .today, mode: nil).change(
+        for: ArchiveNavigation.State(category: .today, mode: nil)) == .none)
     #expect(
-      ArchiveNavigation.State(category: .today).change(
-        for: ArchiveNavigation.State(category: .artists)) == .assign)
+      ArchiveNavigation.State(category: .today, mode: nil).change(
+        for: ArchiveNavigation.State(category: .artists, mode: nil)) == .assign)
     #expect(
-      ArchiveNavigation.State(category: .today).change(
-        for: ArchiveNavigation.State(category: .today, todayPath: [ArchivePath.artist("id")]))
+      ArchiveNavigation.State(category: .today, mode: nil).change(
+        for: ArchiveNavigation.State(
+          category: .today, mode: nil, todayPath: [ArchivePath.artist("id")]))
         == .assign)
     #expect(
-      ArchiveNavigation.State(category: .today).change(
-        for: ArchiveNavigation.State(category: .artists, todayPath: [ArchivePath.artist("id")]))
+      ArchiveNavigation.State(category: .today, mode: nil).change(
+        for: ArchiveNavigation.State(
+          category: .artists, mode: nil, todayPath: [ArchivePath.artist("id")]))
         == .assignWithWorkaround)
+    #expect(
+      ArchiveNavigation.State(mode: .ordinal).change(for: ArchiveNavigation.State(mode: .grouped))
+        == .assign)
+
+    #expect(
+      ArchiveNavigation.State(mode: .ordinal).change(
+        for: ArchiveNavigation.State(mode: .grouped, showsPath: [ArchivePath.artist("id")]))
+        == .assignWithWorkaround)
+  }
+
+  @Test("Test Navigate To ShowMode", arguments: zip(categoryModes.keys, categoryModes.values))
+  func testNavigateCategoryMode(category: ArchiveCategory, mode: ShowsMode) {
+    let ar = ArchiveNavigation()
+    ar.navigate(to: category)
+    #expect(ar.mode == mode)
+  }
+
+  @Test("Test Change ShowMode", arguments: zip(categoryModes.values, categoryModes.keys))
+  func testChangeMode(mode: ShowsMode, category: ArchiveCategory) {
+    let ar = ArchiveNavigation()
+    ar.mode = mode
+    #expect(ar.category == category)
   }
 }

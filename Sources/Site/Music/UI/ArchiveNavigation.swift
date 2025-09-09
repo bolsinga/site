@@ -15,9 +15,35 @@ extension Logger {
   fileprivate static let archive = Logger(category: "archive")
 }
 
+extension ArchiveCategory {
+  fileprivate var mode: ShowsMode? {
+    switch self {
+    case .today:
+      .ordinal
+    case .shows:
+      .grouped
+    case .venues, .artists, .stats, .settings, .search:
+      nil
+    }
+  }
+}
+
+extension ShowsMode {
+  fileprivate var category: ArchiveCategory {
+    switch self {
+    case .ordinal:
+      .today
+    case .grouped:
+      .shows
+    }
+  }
+}
+
 @MainActor @Observable final class ArchiveNavigation {
   struct State: Codable, Equatable, Sendable {
     var category: ArchiveCategory
+
+    var mode: ShowsMode
 
     var todayPath: [ArchivePath]
     var showsPath: [ArchivePath]
@@ -25,10 +51,12 @@ extension Logger {
     var artistsPath: [ArchivePath]
 
     init(
-      category: ArchiveCategory = .defaultCategory, todayPath: [ArchivePath] = [],
-      showsPath: [ArchivePath] = [], venuesPath: [ArchivePath] = [], artistsPath: [ArchivePath] = []
+      category: ArchiveCategory = .defaultCategory, mode: ShowsMode? = nil,
+      todayPath: [ArchivePath] = [], showsPath: [ArchivePath] = [], venuesPath: [ArchivePath] = [],
+      artistsPath: [ArchivePath] = []
     ) {
       self.category = category
+      self.mode = mode ?? .default
       self.todayPath = todayPath
       self.showsPath = showsPath
       self.venuesPath = venuesPath
@@ -54,15 +82,15 @@ extension Logger {
       let category = path.category
       switch category {
       case .today:
-        self.init(category: category, todayPath: [path])
+        self.init(category: category, mode: category.mode, todayPath: [path])
       case .stats, .settings, .search:
-        self.init(category: category)
+        self.init(category: category, mode: category.mode)
       case .shows:
-        self.init(category: category, showsPath: [path])
+        self.init(category: category, mode: category.mode, showsPath: [path])
       case .venues:
-        self.init(category: category, venuesPath: [path])
+        self.init(category: category, mode: category.mode, venuesPath: [path])
       case .artists:
-        self.init(category: category, artistsPath: [path])
+        self.init(category: category, mode: category.mode, artistsPath: [path])
       }
     }
 
@@ -78,7 +106,7 @@ extension Logger {
     }
 
     func change(for other: State) -> Change {
-      if self.category == other.category {
+      if self.category == other.category, self.mode == other.mode {
         return samePaths(for: other) ? .none : .assign
       }
       return samePaths(for: other) ? .assign : .assignWithWorkaround
@@ -88,23 +116,23 @@ extension Logger {
       switch other.category {
       case .today:
         State(
-          category: other.category, todayPath: other.todayPath, showsPath: showsPath,
-          venuesPath: venuesPath, artistsPath: artistsPath)
+          category: other.category, mode: other.mode, todayPath: other.todayPath,
+          showsPath: showsPath, venuesPath: venuesPath, artistsPath: artistsPath)
       case .shows:
         State(
-          category: other.category, todayPath: todayPath, showsPath: other.showsPath,
-          venuesPath: venuesPath, artistsPath: artistsPath)
+          category: other.category, mode: other.mode, todayPath: todayPath,
+          showsPath: other.showsPath, venuesPath: venuesPath, artistsPath: artistsPath)
       case .venues:
         State(
-          category: other.category, todayPath: todayPath, showsPath: showsPath,
+          category: other.category, mode: mode, todayPath: todayPath, showsPath: showsPath,
           venuesPath: other.venuesPath, artistsPath: artistsPath)
       case .artists:
         State(
-          category: other.category, todayPath: todayPath, showsPath: showsPath,
+          category: other.category, mode: mode, todayPath: todayPath, showsPath: showsPath,
           venuesPath: venuesPath, artistsPath: other.artistsPath)
       case .stats, .settings, .search:
         State(
-          category: other.category, todayPath: todayPath, showsPath: showsPath,
+          category: other.category, mode: mode, todayPath: todayPath, showsPath: showsPath,
           venuesPath: venuesPath, artistsPath: artistsPath)
       }
     }
@@ -163,6 +191,15 @@ extension Logger {
     }
   }
 
+  var mode: ShowsMode {
+    get {
+      state.mode
+    }
+    set {
+      self.update(state: State(category: newValue.category, mode: newValue))
+    }
+  }
+
   private func update(state other: State) {
     switch self.state.change(for: other) {
     case .none:
@@ -178,7 +215,7 @@ extension Logger {
         var t = Transaction()
         t.disablesAnimations = true
         withTransaction(t) {
-          self.state = self.state.update(with: State(category: other.category))
+          self.state = self.state.update(with: State(category: other.category, mode: other.mode))
         }
         // Make the path change on the next turn of the RunLoop
         //  with an animation.
@@ -204,7 +241,7 @@ extension Logger {
 
   func navigate(to category: ArchiveCategory) {
     Logger.archive.log("nav to category: \(category.rawValue, privacy: .public)")
-    self.update(state: State(category: category))
+    self.update(state: State(category: category, mode: category.mode))
   }
 
   var activity: ArchiveActivity {
