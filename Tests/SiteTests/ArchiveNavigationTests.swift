@@ -220,34 +220,20 @@ struct ArchiveNavigationTests {
     #expect(ar.category == category)
   }
 
-  @Test func changePaths() {
+  @Test("Change Paths - Regular", arguments: regularActivities, [ArchivePath.artist("id")])
+  func changePaths(category: ArchiveCategory, path: ArchivePath) {
     let ar = ArchiveNavigation()
 
-    ar.category = .today
-    ar.path = [ArchivePath.artist("id")]
-    #expect(ar.path == [ArchivePath.artist("id")])
+    ar.category = category
+    ar.path = [path]
+    #expect(ar.path == [path])
+  }
 
-    ar.category = .shows
-    ar.path = [ArchivePath.artist("id")]
-    #expect(ar.path == [ArchivePath.artist("id")])
+  @Test("Change Paths - Irregular", arguments: irregularActivities)
+  func changePaths(category: ArchiveCategory) {
+    let ar = ArchiveNavigation()
 
-    ar.category = .venues
-    ar.path = [ArchivePath.artist("id")]
-    #expect(ar.path == [ArchivePath.artist("id")])
-
-    ar.category = .artists
-    ar.path = [ArchivePath.artist("id")]
-    #expect(ar.path == [ArchivePath.artist("id")])
-
-    ar.category = .stats
-    ar.path = [ArchivePath.artist("id")]
-    #expect(ar.path.isEmpty)
-
-    ar.category = .settings
-    ar.path = [ArchivePath.artist("id")]
-    #expect(ar.path.isEmpty)
-
-    ar.category = .search
+    ar.category = category
     ar.path = [ArchivePath.artist("id")]
     #expect(ar.path.isEmpty)
   }
