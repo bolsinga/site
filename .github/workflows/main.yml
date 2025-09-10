@@ -33,6 +33,6 @@ jobs:
     - name: Show Destinations
       run: xcodebuild -scheme SiteApp -showdestinations
     - name: Build / Test
-      run: xcodebuild test -verbose -skipPackagePluginValidation -scheme SiteApp
+      run: xcodebuild test -verbose -skipPackagePluginValidation -scheme SiteApp -destination "generic/platform=iOS Simulator"
     - name: Build iOS / macOS / tvOS
       run: xcodebuild -verbose -skipPackagePluginValidation -scheme SiteApp -destination "generic/platform=iOS Simulator" -destination "generic/platform=macOS" -destination "generic/platform=tvOS Simulator"
