@@ -45,6 +45,6 @@ struct ArchiveCategoryToolbarContent: ToolbarContent {
     }
     ArchiveSharableToolbarContent(
       item: ArchiveCategoryLinkable(
-        category: category, url: model.vault.sharableURL(for: category)))
+        category: category, url: model.vault.url(for: category)))
   }
 }

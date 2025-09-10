@@ -48,7 +48,7 @@ struct ArchiveStateView: View {
       }
       .onOpenURL { archiveNavigation.openURL($0) }
       .advertiseUserActivity(
-        for: archiveNavigation.activity, urlForCategory: { model.vault.sharableURL(for: $0) }
+        for: archiveNavigation.activity, urlForCategory: { model.vault.url(for: $0) }
       ) {
         model.vault.restorableSharableLinkable(for: $0)
       }
