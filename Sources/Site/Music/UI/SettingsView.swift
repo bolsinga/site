@@ -7,6 +7,25 @@
 
 import SwiftUI
 
+extension Bundle {
+  fileprivate var buildNumber: String {
+    guard let value = object(forInfoDictionaryKey: "CFBundleVersion"), let vers = value as? String
+    else { return "Unknown" }
+    return vers
+  }
+
+  fileprivate var shortVersion: String {
+    guard let value = object(forInfoDictionaryKey: "CFBundleShortVersionString"),
+      let vers = value as? String
+    else { return "Unknown" }
+    return vers
+  }
+
+  fileprivate var version: String {
+    "\(shortVersion) (\(buildNumber))"
+  }
+}
+
 public struct SettingsView: View {
   public init() {}
 
@@ -14,15 +33,15 @@ public struct SettingsView: View {
 
   public var body: some View {
     Form {
-      Section(header: Text("Nearby Distance", bundle: .module)) {
+      Section(header: Text("Nearby Distance")) {
         NearbyDistanceThresholdView(distanceThreshold: $nearbyDistance)
       }
       #if !os(macOS)
-        Section(header: Text("About", bundle: .module)) {
+        Section(header: Text("About")) {
           LabeledContent {
-            Text(PackageBuild.info.version)
+            Text(Bundle.main.version)
           } label: {
-            Text("Version", bundle: .module)
+            Text("Version")
           }
         }
       #endif

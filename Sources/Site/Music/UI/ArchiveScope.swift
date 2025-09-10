@@ -15,11 +15,11 @@ enum ArchiveScope: CaseIterable {
   var localizedString: String {
     switch self {
     case .all:
-      String(localized: "All", bundle: .module, comment: "ArchiveScope.all")
+      String(localized: "All", comment: "ArchiveScope.all")
     case .artist:
-      String(localized: "Artist", bundle: .module, comment: "ArchiveScope.artist")
+      String(localized: "Artist", comment: "ArchiveScope.artist")
     case .venue:
-      String(localized: "Venue", bundle: .module, comment: "ArchiveScope.venue")
+      String(localized: "Venue", comment: "ArchiveScope.venue")
     }
   }
 }

@@ -21,19 +21,19 @@ public enum ArchiveCategory: String, CaseIterable, Codable, Sendable {
   public var localizedString: String {
     switch self {
     case .today:
-      return String(localized: "Today", bundle: .module)
+      return String(localized: "Today")
     case .stats:
-      return String(localized: "Stats", bundle: .module)
+      return String(localized: "Stats")
     case .shows:
-      return String(localized: "Shows", bundle: .module)
+      return String(localized: "Shows")
     case .venues:
-      return String(localized: "Venues", bundle: .module)
+      return String(localized: "Venues")
     case .artists:
-      return String(localized: "Artists", bundle: .module)
+      return String(localized: "Artists")
     case .settings:
-      return String(localized: "Settings", bundle: .module)
+      return String(localized: "Settings")
     case .search:
-      return String(localized: "Search", bundle: .module)
+      return String(localized: "Search")
     }
   }
 
@@ -59,17 +59,17 @@ public enum ArchiveCategory: String, CaseIterable, Codable, Sendable {
   public var title: String {
     switch self {
     case .today:
-      return String(localized: "Display Shows On This Date", bundle: .module)
+      return String(localized: "Display Shows On This Date")
     case .stats:
-      return String(localized: "Show Statistics", bundle: .module)
+      return String(localized: "Show Statistics")
     case .shows:
-      return String(localized: "All Shows", bundle: .module)
+      return String(localized: "All Shows")
     case .venues:
-      return String(localized: "Show Venues", bundle: .module)
+      return String(localized: "Show Venues")
     case .artists:
-      return String(localized: "Show Artists", bundle: .module)
+      return String(localized: "Show Artists")
     case .settings:
-      return String(localized: "Settings", bundle: .module)
+      return String(localized: "Settings")
     case .search:
       return localizedString
     }

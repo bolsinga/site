@@ -6,10 +6,9 @@
 //
 
 import Foundation
-import MusicData
 import Testing
 
-@testable import Site
+@testable import SiteApp
 
 struct PathRestorableUserActivityTests {
   let rootURL = URL(string: "https://www.example.com/")!

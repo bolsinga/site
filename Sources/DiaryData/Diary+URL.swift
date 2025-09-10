@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Utilities
 
 extension Diary {
   public static func load(url: URL) async throws -> Diary {

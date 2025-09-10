@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import MusicData
 
 extension ArtistDigest: PathRestorableUserActivity {
   func updateActivity(_ userActivity: NSUserActivity) {
@@ -15,6 +14,6 @@ extension ArtistDigest: PathRestorableUserActivity {
     userActivity.isEligibleForSearch = true
     userActivity.title = self.name
     userActivity.addSearchableContent(
-      description: String(localized: "See Shows With This Artist", bundle: .module))
+      description: String(localized: "See Shows With This Artist"))
   }
 }

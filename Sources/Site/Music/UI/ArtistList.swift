@@ -5,9 +5,7 @@
 //  Created by Greg Bolsinga on 4/10/23.
 //
 
-import MusicData
 import SwiftUI
-import Utilities
 
 struct ArtistList: View {
   let artistDigests: [ArtistDigest]
@@ -24,7 +22,7 @@ struct ArtistList: View {
       itemLabelView: { Text($0.name.emphasizedAttributed(matching: searchString)) }, sort: sort
     )
     .archiveSearchable(
-      searchPrompt: String(localized: "Artist Names", bundle: .module),
+      searchPrompt: String(localized: "Artist Names"),
       searchString: $searchString, contentsEmpty: digests.isEmpty
     )
   }

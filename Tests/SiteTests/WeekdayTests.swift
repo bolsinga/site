@@ -8,7 +8,7 @@
 import Foundation
 import Testing
 
-@testable import Site
+@testable import SiteApp
 
 struct WeekdayTests {
   func date(year: Int, month: Int, day: Int) -> Date {

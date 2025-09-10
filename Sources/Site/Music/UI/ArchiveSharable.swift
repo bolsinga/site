@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import MusicData
 
 // iOS Only:
 // When sharing via Messages, link is shared followed by the message text.
@@ -24,7 +23,7 @@ extension Concert: ArchiveSharable {
 }
 
 extension VenueDigest: ArchiveSharable {
-  var subject: String { String(localized: "Shows at \(self.name)", bundle: .module) }
+  var subject: String { String(localized: "Shows at \(self.name)") }
   var message: String { subject }
 }
 
@@ -34,6 +33,6 @@ extension AnnumDigest: ArchiveSharable {
 }
 
 extension ArtistDigest: ArchiveSharable {
-  var subject: String { String(localized: "Shows with \(self.name)", bundle: .module) }
+  var subject: String { String(localized: "Shows with \(self.name)") }
   var message: String { subject }
 }

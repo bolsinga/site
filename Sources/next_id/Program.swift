@@ -6,7 +6,6 @@
 
 import ArgumentParser
 import Foundation
-import MusicData
 
 @main
 struct Program: AsyncParsableCommand {

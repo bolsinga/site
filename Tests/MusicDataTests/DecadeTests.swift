@@ -7,7 +7,7 @@
 
 import Testing
 
-@testable import MusicData
+@testable import SiteApp
 
 struct DecadeTests {
   @Test func int() {

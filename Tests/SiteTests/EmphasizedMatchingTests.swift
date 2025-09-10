@@ -7,7 +7,7 @@
 
 import Testing
 
-@testable import Site
+@testable import SiteApp
 
 struct EmphasizedMatchingTests {
   @Test func justOneLetterMatchingWithOneMatch() {

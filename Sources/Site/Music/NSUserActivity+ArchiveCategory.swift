@@ -7,8 +7,6 @@
 
 import Foundation
 import Intents
-import MusicData
-import Utilities
 import os
 
 extension Logger {
@@ -36,7 +34,7 @@ extension NSUserActivity {
         self.isEligibleForPrediction = true
       #endif
       #if !os(tvOS)
-        self.suggestedInvocationPhrase = String(localized: "Shows Today", bundle: .module)
+        self.suggestedInvocationPhrase = String(localized: "Shows Today")
       #endif
     }
 

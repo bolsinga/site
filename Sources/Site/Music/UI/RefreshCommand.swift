@@ -22,7 +22,7 @@ import SwiftUI
             await refreshAction()
           }
         } label: {
-          Text("Refresh", bundle: .module)
+          Text("Refresh")
         }
         .keyboardShortcut(KeyboardShortcut(KeyEquivalent("r"), modifiers: [.command]))
       }

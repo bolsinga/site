@@ -5,7 +5,6 @@
 //  Created by Greg Bolsinga on 2/18/23.
 //
 
-import MusicData
 import SwiftUI
 
 struct ArtistDetail: View {
@@ -15,7 +14,7 @@ struct ArtistDetail: View {
 
   @ViewBuilder private var firstSetElement: some View {
     HStack {
-      Text("First Set", bundle: .module)
+      Text("First Set")
       Spacer()
       Text(digest.firstSet.rank.formatted())
     }
@@ -37,7 +36,7 @@ struct ArtistDetail: View {
   @ViewBuilder private var showsElement: some View {
     if !digest.concerts.isEmpty {
       Section(
-        header: Text("Shows", bundle: .module)
+        header: Text("Shows")
       ) {
         ForEach(digest.concerts.sorted(by: concertCompare)) { concert in
           PathRestorableLink(pathRestorable: concert, isPathNavigable: isPathNavigable) {
@@ -51,7 +50,7 @@ struct ArtistDetail: View {
   @ViewBuilder private var relatedsElement: some View {
     if !digest.related.isEmpty {
       Section(
-        header: Text("Related Artists", bundle: .module)
+        header: Text("Related Artists")
       ) {
         ForEach(digest.related) { relatedArtist in
           PathRestorableLink(

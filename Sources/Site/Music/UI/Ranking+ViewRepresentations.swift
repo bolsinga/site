@@ -5,7 +5,6 @@
 //  Created by Greg Bolsinga on 5/24/23.
 //
 
-import MusicData
 import SwiftUI
 
 extension Ranking {
@@ -14,7 +13,7 @@ extension Ranking {
     HStack {
       Text(self.formatted(.rankOnly))
       Spacer()
-      Text("\(self.value) Show(s)", bundle: .module)
+      Text("\(self.value) Show(s)")
     }
   }
 
@@ -23,7 +22,7 @@ extension Ranking {
     HStack {
       Text(self.formatted(.rankOnly))
       Spacer()
-      Text("\(self.value) Year(s)", bundle: .module)
+      Text("\(self.value) Year(s)")
     }
   }
 
@@ -32,7 +31,7 @@ extension Ranking {
     HStack {
       Text(self.formatted(.rankOnly))
       Spacer()
-      Text("\(self.value) Venue(s)", bundle: .module)
+      Text("\(self.value) Venue(s)")
     }
   }
 
@@ -41,7 +40,7 @@ extension Ranking {
     HStack {
       Text(self.formatted(.rankOnly))
       Spacer()
-      Text("\(self.value) Artist(s)", bundle: .module)
+      Text("\(self.value) Artist(s)")
     }
   }
 }

@@ -24,26 +24,26 @@ struct NearbyLocationView: View {
           #endif
       } else if filteredDataIsEmpty {
         ContentUnavailableView(
-          String(localized: "Nothing Nearby", bundle: .module),
+          String(localized: "Nothing Nearby"),
           systemImage: "location.slash.circle",
           description: Text(
-            "Nothing is nearby. Disable the Location Filter or increase the nearby distance filter.",
-            bundle: .module)
+            "Nothing is nearby. Disable the Location Filter or increase the nearby distance filter."
+          )
         )
       }
     case .restricted:
       ContentUnavailableView(
-        String(localized: "Location Disabled", bundle: .module),
+        String(localized: "Location Disabled"),
         systemImage: "location.slash.circle",
         description: Text(
-          "Location Services are disabled. Disable the Location Filter.", bundle: .module)
+          "Location Services are disabled. Disable the Location Filter.")
       )
     case .denied:
       ContentUnavailableView(
-        String(localized: "Location Unavailable", bundle: .module),
+        String(localized: "Location Unavailable"),
         systemImage: "location.slash.circle",
         description: Text(
-          "Location Services are not available. Disable the Location Filter.", bundle: .module)
+          "Location Services are not available. Disable the Location Filter.")
       )
     }
   }

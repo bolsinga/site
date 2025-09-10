@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Utilities
 
 extension Dictionary where Key: Codable, Value: Codable {
   static func read(fileName: String, fileManager: FileManager = .default, deleteFile: Bool = false)

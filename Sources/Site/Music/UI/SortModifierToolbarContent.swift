@@ -13,7 +13,7 @@ struct SortModifierToolbarContent: ToolbarContent {
 
   var body: some ToolbarContent {
     ToolbarItem(placement: .primaryAction) {
-      let sortText = Text("Sort", bundle: .module)
+      let sortText = Text("Sort")
       Menu {
         Picker(selection: $algorithm) {
           ForEach(RankingSort.allCases, id: \.self) { category in

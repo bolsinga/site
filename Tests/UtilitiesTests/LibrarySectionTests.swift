@@ -7,7 +7,7 @@
 
 import Testing
 
-@testable import Utilities
+@testable import SiteApp
 
 struct LibrarySectionTests {
   @Test func librarySection() {

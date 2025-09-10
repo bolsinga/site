@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import MusicData
 
 extension Ranking {
   struct FormatStyle: Codable, Equatable, Hashable {
@@ -35,7 +34,7 @@ extension Ranking.FormatStyle: Foundation.FormatStyle {
     case .rankAndCount:
       return String(
         localized: "\(value.rank.formatted(.hash)) Count: \(value.value.formatted(.number))",
-        bundle: .module, comment: "ranking.rankAndCount")
+        comment: "ranking.rankAndCount")
     }
   }
 }

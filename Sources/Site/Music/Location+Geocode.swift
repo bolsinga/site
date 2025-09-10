@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import MusicData
 
 #if canImport(Contacts)
   import Contacts

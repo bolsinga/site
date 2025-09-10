@@ -33,7 +33,7 @@ struct LocationMap<T: Equatable>: View {
       } else if let error = error {
         ContentUnavailableView(
           error.localizedDescription, systemImage: "exclamationmark.magnifyingglass",
-          description: Text("Unable to determine map location.", bundle: .module))
+          description: Text("Unable to determine map location."))
       } else {
         HStack {
           Spacer()

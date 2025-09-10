@@ -5,7 +5,6 @@
 //  Created by Greg Bolsinga on 7/31/24.
 //
 
-import MusicData
 import SwiftUI
 
 extension ArchiveCategory {
@@ -60,7 +59,7 @@ struct ArchiveTabView: View {
       )
       .searchable(
         text: $searchString,
-        prompt: String(localized: "Artist or Venue Name", bundle: .module)
+        prompt: String(localized: "Artist or Venue Name")
       )
       .searchScopes($scope) {
         ForEach(ArchiveScope.allCases, id: \.self) {

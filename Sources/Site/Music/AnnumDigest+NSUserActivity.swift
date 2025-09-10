@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import MusicData
 
 extension AnnumDigest: PathRestorableUserActivity {
   func updateActivity(_ userActivity: NSUserActivity) {
@@ -15,6 +14,6 @@ extension AnnumDigest: PathRestorableUserActivity {
     userActivity.isEligibleForSearch = true
     userActivity.title = self.annum.formatted()
     userActivity.addSearchableContent(
-      description: String(localized: "See Shows From This Year", bundle: .module))
+      description: String(localized: "See Shows From This Year"))
   }
 }

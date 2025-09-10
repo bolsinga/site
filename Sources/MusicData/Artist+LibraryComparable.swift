@@ -6,6 +6,5 @@
 //
 
 import Foundation
-import Utilities
 
 extension Artist: LibraryComparable {}

@@ -5,9 +5,7 @@
 //  Created by Greg Bolsinga on 5/11/23.
 //
 
-import MusicData
 import SwiftUI
-import Utilities
 import os
 
 #if swift(>=6.2) || !targetEnvironment(simulator)
@@ -47,14 +45,14 @@ public struct SiteView: View {
         VStack(alignment: .center) {
           ContentUnavailableView(
             error.localizedDescription, systemImage: "network.slash",
-            description: Text("Unable to load data.", bundle: .module))
+            description: Text("Unable to load data."))
           Button {
             Task {
               logger?.log("User retry")
               await model.load()
             }
           } label: {
-            Label(String(localized: "Retry", bundle: .module), systemImage: "arrow.clockwise")
+            Label(String(localized: "Retry"), systemImage: "arrow.clockwise")
           }
           .buttonStyle(.borderedProminent)
         }

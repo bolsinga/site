@@ -7,7 +7,7 @@
 
 import Testing
 
-@testable import MusicData
+@testable import SiteApp
 
 struct PartialDateTests {
   @Test func unknown_Unknown() {

@@ -6,9 +6,8 @@
 //
 
 import Testing
-import Utilities
 
-@testable import Site
+@testable import SiteApp
 
 struct LibrarySectionFormatterTests {
   @Test func format() {

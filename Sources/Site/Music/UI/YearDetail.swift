@@ -5,7 +5,6 @@
 //  Created by Greg Bolsinga on 3/26/23.
 //
 
-import MusicData
 import SwiftUI
 
 struct YearDetail: View {
@@ -29,7 +28,7 @@ struct YearDetail: View {
   @ViewBuilder private var showsElement: some View {
     let concerts = concerts
     if !concerts.isEmpty {
-      Section(header: Text("Shows", bundle: .module)) {
+      Section(header: Text("Shows")) {
         ForEach(concerts.sorted(by: concertCompare)) { concert in
           PathRestorableLink(pathRestorable: concert, isPathNavigable: isPathNavigable) {
             ConcertBlurb(concert: concert)

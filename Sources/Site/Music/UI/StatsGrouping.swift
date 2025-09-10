@@ -5,7 +5,6 @@
 //  Created by Greg Bolsinga on 5/13/23.
 //
 
-import MusicData
 import SwiftUI
 
 struct StatsGrouping: View {
@@ -49,7 +48,7 @@ struct StatsGrouping: View {
   @ViewBuilder var yearsElement: some View {
     if let yearsSpanRanking {
       HStack {
-        Text("\(yearsSpanRanking.value) Year(s)", bundle: .module)
+        Text("\(yearsSpanRanking.value) Year(s)")
         Spacer()
         Text(yearsSpanRanking.formatted(.rankOnly))
       }
@@ -65,7 +64,7 @@ struct StatsGrouping: View {
   }
 
   @ViewBuilder var showCount: some View {
-    Text("\(concerts.count) Show(s)", bundle: .module)
+    Text("\(concerts.count) Show(s)")
   }
 
   @ViewBuilder var showsElement: some View {
@@ -81,7 +80,7 @@ struct StatsGrouping: View {
   }
 
   @ViewBuilder func count(venues: [Venue]) -> some View {
-    Text("\(venues.count) Venue(s)", bundle: .module)
+    Text("\(venues.count) Venue(s)")
   }
 
   @ViewBuilder func element(for venues: [Venue]) -> some View {
@@ -97,7 +96,7 @@ struct StatsGrouping: View {
   }
 
   @ViewBuilder func count(artists: [Artist]) -> some View {
-    Text("\(artists.count) Artist(s)", bundle: .module)
+    Text("\(artists.count) Artist(s)")
   }
 
   @ViewBuilder func element(for artists: [Artist]) -> some View {
@@ -173,10 +172,10 @@ struct StatsGrouping: View {
         case .artists:
           element(for: artists)
         case .weekday:
-          let name = String(localized: "Weekdays", bundle: .module)
+          let name = String(localized: "Weekdays")
           NavigationLink(name) { WeekdayChart(dates: knownShowDates).navigationTitle(name) }
         case .month:
-          let name = String(localized: "Months", bundle: .module)
+          let name = String(localized: "Months")
           NavigationLink(name) { MonthChart(dates: knownShowDates).navigationTitle(name) }
         case .state:
           NavigationLink {
@@ -185,7 +184,7 @@ struct StatsGrouping: View {
             LabeledContent {
               Text(stateCounts.keys.count.formatted())
             } label: {
-              Text("States", bundle: .module)
+              Text("States")
             }
           }
         }

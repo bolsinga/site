@@ -8,7 +8,7 @@
 import Foundation
 import Testing
 
-@testable import MusicData
+@testable import SiteApp
 
 struct ArchivePathCategoryTests {
   @Test func archiveCategories() throws {
