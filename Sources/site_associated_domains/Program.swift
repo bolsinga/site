@@ -31,11 +31,23 @@ struct Program: AsyncParsableCommand {
                  },
                  {
                     "/": "/dates/*",
-                    "comment": "Allows shows."
+                    "comment": "Allows shows and today."
                  },
                  {
                     "/": "/venues/*",
                     "comment": "Allows venues."
+                 },
+                 {
+                    "/": "/stats.html",
+                    "comment": "Allows Stats."
+                 },
+                 {
+                    "/": "/settings.html",
+                    "comment": "Allows Settings."
+                 },
+                 {
+                    "/": "/search.html",
+                    "comment": "Allows Search."
                  }
               ]
             }

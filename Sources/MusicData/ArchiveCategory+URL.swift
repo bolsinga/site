@@ -8,15 +8,6 @@
 import Foundation
 
 extension ArchiveCategory {
-  var isURLSharable: Bool {
-    switch self {
-    case .today, .stats, .settings, .search:
-      return false
-    case .shows, .venues, .artists:
-      return true
-    }
-  }
-
   func url(rootURL: URL) -> URL? {
     var urlComponents = URLComponents(url: rootURL, resolvingAgainstBaseURL: false)
     urlComponents?.path = self.formatted(.urlPath)

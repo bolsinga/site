@@ -121,12 +121,8 @@ public struct Vault: Sendable {
     return result.sorted { comparator.compare(lhs: $0, rhs: $1) }
   }
 
-  /// The URL for this category. Works in the app, always. May not have a equivalent on the web.
+  /// The URL for this category.
   public func url(for category: ArchiveCategory) -> URL? {
     categoryURLLookup[category]
-  }
-
-  public func sharableURL(for category: ArchiveCategory) -> URL? {
-    category.isURLSharable ? url(for: category) : nil
   }
 }
