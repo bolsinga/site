@@ -40,8 +40,10 @@ extension ArchiveCategory.FormatStyle: Foundation.FormatStyle {
         return "/venues/stats.html"
       case .artists:
         return "/bands/stats.html"
-      case .settings, .search:
-        return ""
+      case .settings:
+        return "/settings.html"
+      case .search:
+        return "/search.html"
       }
     }
   }
