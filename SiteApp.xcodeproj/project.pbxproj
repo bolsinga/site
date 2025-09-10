@@ -3,10 +3,348 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 70;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FE57C3022E713D1300A67D4F /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FE57C23A2E713D1300A67D4F /* Preview Assets.xcassets */; };
+		FE57C3032E713D1300A67D4F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FE57C23C2E713D1300A67D4F /* Assets.xcassets */; };
+		FE57C3052E713D1300A67D4F /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = FE57C23E2E713D1300A67D4F /* Localizable.xcstrings */; };
+		FE57C3062E713D1300A67D4F /* SiteAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2402E713D1300A67D4F /* SiteAppApp.swift */; };
+		FE57C30A2E713D1300A67D4F /* Album.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2462E713D1300A67D4F /* Album.swift */; };
+		FE57C30B2E713D1300A67D4F /* Annum.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2472E713D1300A67D4F /* Annum.swift */; };
+		FE57C30C2E713D1300A67D4F /* Annum+FormatStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2482E713D1300A67D4F /* Annum+FormatStyle.swift */; };
+		FE57C30D2E713D1300A67D4F /* Annum+ParseableFormatStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2492E713D1300A67D4F /* Annum+ParseableFormatStyle.swift */; };
+		FE57C30E2E713D1300A67D4F /* AnnumDigest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C24A2E713D1300A67D4F /* AnnumDigest.swift */; };
+		FE57C30F2E713D1300A67D4F /* ArchiveCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C24B2E713D1300A67D4F /* ArchiveCategory.swift */; };
+		FE57C3102E713D1300A67D4F /* ArchiveCategory+FormatStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C24C2E713D1300A67D4F /* ArchiveCategory+FormatStyle.swift */; };
+		FE57C3112E713D1300A67D4F /* ArchiveCategory+ParseableFormatStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C24D2E713D1300A67D4F /* ArchiveCategory+ParseableFormatStyle.swift */; };
+		FE57C3122E713D1300A67D4F /* ArchiveCategory+URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C24E2E713D1300A67D4F /* ArchiveCategory+URL.swift */; };
+		FE57C3132E713D1300A67D4F /* ArchivePath.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C24F2E713D1300A67D4F /* ArchivePath.swift */; };
+		FE57C3142E713D1300A67D4F /* ArchivePath+ArchiveCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2502E713D1300A67D4F /* ArchivePath+ArchiveCategory.swift */; };
+		FE57C3152E713D1300A67D4F /* ArchivePath+Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2512E713D1300A67D4F /* ArchivePath+Codable.swift */; };
+		FE57C3162E713D1300A67D4F /* ArchivePath+FormatStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2522E713D1300A67D4F /* ArchivePath+FormatStyle.swift */; };
+		FE57C3172E713D1300A67D4F /* ArchivePath+ParseableFormatStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2532E713D1300A67D4F /* ArchivePath+ParseableFormatStyle.swift */; };
+		FE57C3182E713D1300A67D4F /* ArchivePath+PathRestorable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2542E713D1300A67D4F /* ArchivePath+PathRestorable.swift */; };
+		FE57C3192E713D1300A67D4F /* ArchivePath+URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2552E713D1300A67D4F /* ArchivePath+URL.swift */; };
+		FE57C31A2E713D1300A67D4F /* Artist.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2562E713D1300A67D4F /* Artist.swift */; };
+		FE57C31B2E713D1300A67D4F /* Artist+Digest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2572E713D1300A67D4F /* Artist+Digest.swift */; };
+		FE57C31C2E713D1300A67D4F /* Artist+LibraryComparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2582E713D1300A67D4F /* Artist+LibraryComparable.swift */; };
+		FE57C31D2E713D1300A67D4F /* ArtistDigest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2592E713D1300A67D4F /* ArtistDigest.swift */; };
+		FE57C31E2E713D1300A67D4F /* ArtistDigest+LibraryComparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C25A2E713D1300A67D4F /* ArtistDigest+LibraryComparable.swift */; };
+		FE57C31F2E713D1300A67D4F /* Concert.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C25B2E713D1300A67D4F /* Concert.swift */; };
+		FE57C3202E713D1300A67D4F /* Concert+FormatStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C25C2E713D1300A67D4F /* Concert+FormatStyle.swift */; };
+		FE57C3212E713D1300A67D4F /* Decade.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C25D2E713D1300A67D4F /* Decade.swift */; };
+		FE57C3222E713D1300A67D4F /* Decade.FormatStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C25E2E713D1300A67D4F /* Decade.FormatStyle.swift */; };
+		FE57C3232E713D1300A67D4F /* FirstSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C25F2E713D1300A67D4F /* FirstSet.swift */; };
+		FE57C3242E713D1300A67D4F /* LibraryComparator+Concert.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2602E713D1300A67D4F /* LibraryComparator+Concert.swift */; };
+		FE57C3252E713D1300A67D4F /* LibraryComparator+Music.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2612E713D1300A67D4F /* LibraryComparator+Music.swift */; };
+		FE57C3262E713D1300A67D4F /* LibrarySectioner+Music.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2622E713D1300A67D4F /* LibrarySectioner+Music.swift */; };
+		FE57C3272E713D1300A67D4F /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2632E713D1300A67D4F /* Location.swift */; };
+		FE57C3282E713D1300A67D4F /* Location+Comparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2642E713D1300A67D4F /* Location+Comparable.swift */; };
+		FE57C3292E713D1300A67D4F /* Location+FormatStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2652E713D1300A67D4F /* Location+FormatStyle.swift */; };
+		FE57C32A2E713D1300A67D4F /* Lookup.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2662E713D1300A67D4F /* Lookup.swift */; };
+		FE57C32B2E713D1300A67D4F /* Music.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2672E713D1300A67D4F /* Music.swift */; };
+		FE57C32C2E713D1300A67D4F /* Music+Ranking.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2682E713D1300A67D4F /* Music+Ranking.swift */; };
+		FE57C32D2E713D1300A67D4F /* Music+ShowsOnly.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2692E713D1300A67D4F /* Music+ShowsOnly.swift */; };
+		FE57C32E2E713D1300A67D4F /* Music+URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C26A2E713D1300A67D4F /* Music+URL.swift */; };
+		FE57C32F2E713D1300A67D4F /* PartialDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C26B2E713D1300A67D4F /* PartialDate.swift */; };
+		FE57C3302E713D1300A67D4F /* PartialDate+Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C26C2E713D1300A67D4F /* PartialDate+Date.swift */; };
+		FE57C3312E713D1300A67D4F /* PartialDate+FormatStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C26D2E713D1300A67D4F /* PartialDate+FormatStyle.swift */; };
+		FE57C3322E713D1300A67D4F /* PartialDate+Span.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C26E2E713D1300A67D4F /* PartialDate+Span.swift */; };
+		FE57C3332E713D1300A67D4F /* PathRestorable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C26F2E713D1300A67D4F /* PathRestorable.swift */; };
+		FE57C3342E713D1300A67D4F /* Rank.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2702E713D1300A67D4F /* Rank.swift */; };
+		FE57C3352E713D1300A67D4F /* Ranking.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2712E713D1300A67D4F /* Ranking.swift */; };
+		FE57C3362E713D1300A67D4F /* Relation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2722E713D1300A67D4F /* Relation.swift */; };
+		FE57C3372E713D1300A67D4F /* Show.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2732E713D1300A67D4F /* Show.swift */; };
+		FE57C3382E713D1300A67D4F /* Show+Concert.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2742E713D1300A67D4F /* Show+Concert.swift */; };
+		FE57C3392E713D1300A67D4F /* Song.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2752E713D1300A67D4F /* Song.swift */; };
+		FE57C33A2E713D1300A67D4F /* Vault.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2762E713D1300A67D4F /* Vault.swift */; };
+		FE57C33B2E713D1300A67D4F /* Vault+AnnumDigest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2772E713D1300A67D4F /* Vault+AnnumDigest.swift */; };
+		FE57C33C2E713D1300A67D4F /* Vault+NextID.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2782E713D1300A67D4F /* Vault+NextID.swift */; };
+		FE57C33D2E713D1300A67D4F /* Vault+URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2792E713D1300A67D4F /* Vault+URL.swift */; };
+		FE57C33E2E713D1300A67D4F /* Venue.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C27A2E713D1300A67D4F /* Venue.swift */; };
+		FE57C33F2E713D1300A67D4F /* Venue+Digest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C27B2E713D1300A67D4F /* Venue+Digest.swift */; };
+		FE57C3402E713D1300A67D4F /* Venue+FormatStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C27C2E713D1300A67D4F /* Venue+FormatStyle.swift */; };
+		FE57C3412E713D1300A67D4F /* Venue+LibraryComparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C27D2E713D1300A67D4F /* Venue+LibraryComparable.swift */; };
+		FE57C3422E713D1300A67D4F /* VenueDigest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C27E2E713D1300A67D4F /* VenueDigest.swift */; };
+		FE57C3432E713D1300A67D4F /* VenueDigest+LibraryComparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C27F2E713D1300A67D4F /* VenueDigest+LibraryComparable.swift */; };
+		FE57C3452E713D1300A67D4F /* AddressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2832E713D1300A67D4F /* AddressView.swift */; };
+		FE57C3462E713D1300A67D4F /* ArchiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2842E713D1300A67D4F /* ArchiveActivity.swift */; };
+		FE57C3472E713D1300A67D4F /* ArchiveCategory+LocationFilterable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2852E713D1300A67D4F /* ArchiveCategory+LocationFilterable.swift */; };
+		FE57C3482E713D1300A67D4F /* ArchiveCategoryLinkable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2862E713D1300A67D4F /* ArchiveCategoryLinkable.swift */; };
+		FE57C3492E713D1300A67D4F /* ArchiveCategoryStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2872E713D1300A67D4F /* ArchiveCategoryStack.swift */; };
+		FE57C34A2E713D1300A67D4F /* ArchiveCategoryToolbarContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2882E713D1300A67D4F /* ArchiveCategoryToolbarContent.swift */; };
+		FE57C34B2E713D1300A67D4F /* ArchiveCrossSearchContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2892E713D1300A67D4F /* ArchiveCrossSearchContainer.swift */; };
+		FE57C34C2E713D1300A67D4F /* ArchiveCrossSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C28A2E713D1300A67D4F /* ArchiveCrossSearchView.swift */; };
+		FE57C34D2E713D1300A67D4F /* ArchiveNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C28B2E713D1300A67D4F /* ArchiveNavigation.swift */; };
+		FE57C34E2E713D1300A67D4F /* ArchiveNavigation+External.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C28C2E713D1300A67D4F /* ArchiveNavigation+External.swift */; };
+		FE57C34F2E713D1300A67D4F /* ArchiveNavigationUserActivityModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C28D2E713D1300A67D4F /* ArchiveNavigationUserActivityModifier.swift */; };
+		FE57C3502E713D1300A67D4F /* ArchivePath+Destination.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C28E2E713D1300A67D4F /* ArchivePath+Destination.swift */; };
+		FE57C3512E713D1300A67D4F /* ArchiveScope.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C28F2E713D1300A67D4F /* ArchiveScope.swift */; };
+		FE57C3522E713D1300A67D4F /* ArchiveSearchModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2902E713D1300A67D4F /* ArchiveSearchModifier.swift */; };
+		FE57C3532E713D1300A67D4F /* ArchiveSharable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2912E713D1300A67D4F /* ArchiveSharable.swift */; };
+		FE57C3542E713D1300A67D4F /* ArchiveSharableToolbarContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2922E713D1300A67D4F /* ArchiveSharableToolbarContent.swift */; };
+		FE57C3552E713D1300A67D4F /* ArchiveStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2932E713D1300A67D4F /* ArchiveStateView.swift */; };
+		FE57C3562E713D1300A67D4F /* ArchiveTabConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2942E713D1300A67D4F /* ArchiveTabConfiguration.swift */; };
+		FE57C3572E713D1300A67D4F /* ArchiveTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2952E713D1300A67D4F /* ArchiveTabView.swift */; };
+		FE57C3582E713D1300A67D4F /* ArtistBlurb.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2962E713D1300A67D4F /* ArtistBlurb.swift */; };
+		FE57C3592E713D1300A67D4F /* ArtistDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2972E713D1300A67D4F /* ArtistDetail.swift */; };
+		FE57C35A2E713D1300A67D4F /* ArtistDigest+RankingSort.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2982E713D1300A67D4F /* ArtistDigest+RankingSort.swift */; };
+		FE57C35B2E713D1300A67D4F /* ArtistList.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2992E713D1300A67D4F /* ArtistList.swift */; };
+		FE57C35C2E713D1300A67D4F /* ArtistsSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C29A2E713D1300A67D4F /* ArtistsSummary.swift */; };
+		FE57C35D2E713D1300A67D4F /* Bundle+AppIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C29B2E713D1300A67D4F /* Bundle+AppIcon.swift */; };
+		FE57C35E2E713D1300A67D4F /* ConcertBlurb.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C29C2E713D1300A67D4F /* ConcertBlurb.swift */; };
+		FE57C35F2E713D1300A67D4F /* DaysShowsSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C29D2E713D1300A67D4F /* DaysShowsSummary.swift */; };
+		FE57C3602E713D1300A67D4F /* LibrarySection+Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C29E2E713D1300A67D4F /* LibrarySection+Section.swift */; };
+		FE57C3612E713D1300A67D4F /* LocationFilterToolbarContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C29F2E713D1300A67D4F /* LocationFilterToolbarContent.swift */; };
+		FE57C3622E713D1300A67D4F /* LocationMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2A02E713D1300A67D4F /* LocationMap.swift */; };
+		FE57C3632E713D1300A67D4F /* MonthChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2A12E713D1300A67D4F /* MonthChart.swift */; };
+		FE57C3642E713D1300A67D4F /* NavigationLink+PathRestorable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2A22E713D1300A67D4F /* NavigationLink+PathRestorable.swift */; };
+		FE57C3652E713D1300A67D4F /* NearbyDistance.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2A32E713D1300A67D4F /* NearbyDistance.swift */; };
+		FE57C3662E713D1300A67D4F /* NearbyDistanceThresholdView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2A42E713D1300A67D4F /* NearbyDistanceThresholdView.swift */; };
+		FE57C3672E713D1300A67D4F /* NearbyLocationModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2A52E713D1300A67D4F /* NearbyLocationModifier.swift */; };
+		FE57C3682E713D1300A67D4F /* NearbyLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2A62E713D1300A67D4F /* NearbyLocationView.swift */; };
+		FE57C3692E713D1300A67D4F /* NearbyPreviewModifer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2A72E713D1300A67D4F /* NearbyPreviewModifer.swift */; };
+		FE57C36A2E713D1300A67D4F /* NotificationModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2A82E713D1300A67D4F /* NotificationModifier.swift */; };
+		FE57C36B2E713D1300A67D4F /* PathRestorableLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2A92E713D1300A67D4F /* PathRestorableLink.swift */; };
+		FE57C36C2E713D1300A67D4F /* RankableSortList.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2AA2E713D1300A67D4F /* RankableSortList.swift */; };
+		FE57C36D2E713D1300A67D4F /* Ranking+RankingSort.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2AB2E713D1300A67D4F /* Ranking+RankingSort.swift */; };
+		FE57C36E2E713D1300A67D4F /* Ranking+ViewRepresentations.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2AC2E713D1300A67D4F /* Ranking+ViewRepresentations.swift */; };
+		FE57C36F2E713D1300A67D4F /* RankingList.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2AD2E713D1300A67D4F /* RankingList.swift */; };
+		FE57C3702E713D1300A67D4F /* RefreshCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2AE2E713D1300A67D4F /* RefreshCommand.swift */; };
+		FE57C3712E713D1300A67D4F /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2AF2E713D1300A67D4F /* SettingsView.swift */; };
+		FE57C3722E713D1300A67D4F /* ShowDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2B02E713D1300A67D4F /* ShowDetail.swift */; };
+		FE57C3732E713D1300A67D4F /* ShowsMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2B12E713D1300A67D4F /* ShowsMode.swift */; };
+		FE57C3742E713D1300A67D4F /* ShowsSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2B22E713D1300A67D4F /* ShowsSummary.swift */; };
+		FE57C3752E713D1300A67D4F /* ShowYearList.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2B32E713D1300A67D4F /* ShowYearList.swift */; };
+		FE57C3762E713D1300A67D4F /* SiteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2B42E713D1300A67D4F /* SiteView.swift */; };
+		FE57C3772E713D1300A67D4F /* SortModifierToolbarContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2B52E713D1300A67D4F /* SortModifierToolbarContent.swift */; };
+		FE57C3782E713D1300A67D4F /* StateChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2B62E713D1300A67D4F /* StateChart.swift */; };
+		FE57C3792E713D1300A67D4F /* StatsCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2B72E713D1300A67D4F /* StatsCategory.swift */; };
+		FE57C37A2E713D1300A67D4F /* StatsGrouping.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2B82E713D1300A67D4F /* StatsGrouping.swift */; };
+		FE57C37B2E713D1300A67D4F /* StatsSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2B92E713D1300A67D4F /* StatsSummary.swift */; };
+		FE57C37C2E713D1300A67D4F /* StatsThreshold.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2BA2E713D1300A67D4F /* StatsThreshold.swift */; };
+		FE57C37D2E713D1300A67D4F /* TodayBlurb.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2BB2E713D1300A67D4F /* TodayBlurb.swift */; };
+		FE57C37E2E713D1300A67D4F /* TodayList.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2BC2E713D1300A67D4F /* TodayList.swift */; };
+		FE57C37F2E713D1300A67D4F /* TodaySummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2BD2E713D1300A67D4F /* TodaySummary.swift */; };
+		FE57C3802E713D1300A67D4F /* VaultPreviewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2BE2E713D1300A67D4F /* VaultPreviewModifier.swift */; };
+		FE57C3812E713D1300A67D4F /* VenueBlurb.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2BF2E713D1300A67D4F /* VenueBlurb.swift */; };
+		FE57C3822E713D1300A67D4F /* VenueDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2C02E713D1300A67D4F /* VenueDetail.swift */; };
+		FE57C3832E713D1300A67D4F /* VenueDigest+RankingSort.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2C12E713D1300A67D4F /* VenueDigest+RankingSort.swift */; };
+		FE57C3842E713D1300A67D4F /* VenueList.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2C22E713D1300A67D4F /* VenueList.swift */; };
+		FE57C3852E713D1300A67D4F /* VenuesSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2C32E713D1300A67D4F /* VenuesSummary.swift */; };
+		FE57C3862E713D1300A67D4F /* WeekdayChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2C42E713D1300A67D4F /* WeekdayChart.swift */; };
+		FE57C3872E713D1300A67D4F /* YearDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2C52E713D1300A67D4F /* YearDetail.swift */; };
+		FE57C3882E713D1300A67D4F /* AnnumDigest+NSUserActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2C72E713D1300A67D4F /* AnnumDigest+NSUserActivity.swift */; };
+		FE57C3892E713D1300A67D4F /* ArtistDigest+NSUserActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2C82E713D1300A67D4F /* ArtistDigest+NSUserActivity.swift */; };
+		FE57C38A2E713D1300A67D4F /* ArtistDigest+Rankable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2C92E713D1300A67D4F /* ArtistDigest+Rankable.swift */; };
+		FE57C38B2E713D1300A67D4F /* Atlas.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2CA2E713D1300A67D4F /* Atlas.swift */; };
+		FE57C38C2E713D1300A67D4F /* AtlasCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2CB2E713D1300A67D4F /* AtlasCache.swift */; };
+		FE57C38D2E713D1300A67D4F /* BatchGeocode.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2CC2E713D1300A67D4F /* BatchGeocode.swift */; };
+		FE57C38E2E713D1300A67D4F /* Concert+NSUserActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2CD2E713D1300A67D4F /* Concert+NSUserActivity.swift */; };
+		FE57C38F2E713D1300A67D4F /* Geocode.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2CE2E713D1300A67D4F /* Geocode.swift */; };
+		FE57C3902E713D1300A67D4F /* Location+Geocode.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2CF2E713D1300A67D4F /* Location+Geocode.swift */; };
+		FE57C3912E713D1300A67D4F /* LocationFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2D02E713D1300A67D4F /* LocationFilter.swift */; };
+		FE57C3922E713D1300A67D4F /* NearbyDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2D12E713D1300A67D4F /* NearbyDefaults.swift */; };
+		FE57C3932E713D1300A67D4F /* NearbyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2D22E713D1300A67D4F /* NearbyModel.swift */; };
+		FE57C3942E713D1300A67D4F /* NSError+Throttle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2D32E713D1300A67D4F /* NSError+Throttle.swift */; };
+		FE57C3952E713D1300A67D4F /* NSUserActivity+ArchiveCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2D42E713D1300A67D4F /* NSUserActivity+ArchiveCategory.swift */; };
+		FE57C3962E713D1300A67D4F /* NSUserActivity+ArchivePath.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2D52E713D1300A67D4F /* NSUserActivity+ArchivePath.swift */; };
+		FE57C3972E713D1300A67D4F /* NSUserActivity+Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2D62E713D1300A67D4F /* NSUserActivity+Search.swift */; };
+		FE57C3982E713D1300A67D4F /* PathRestorableUserActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2D72E713D1300A67D4F /* PathRestorableUserActivity.swift */; };
+		FE57C3992E713D1300A67D4F /* Placemark.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2D82E713D1300A67D4F /* Placemark.swift */; };
+		FE57C39A2E713D1300A67D4F /* Rankable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2D92E713D1300A67D4F /* Rankable.swift */; };
+		FE57C39B2E713D1300A67D4F /* RankingSort.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2DA2E713D1300A67D4F /* RankingSort.swift */; };
+		FE57C39C2E713D1300A67D4F /* SiteModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2DB2E713D1300A67D4F /* SiteModel.swift */; };
+		FE57C39D2E713D1300A67D4F /* Vault+ArchivePath.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2DC2E713D1300A67D4F /* Vault+ArchivePath.swift */; };
+		FE57C39E2E713D1300A67D4F /* VaultModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2DD2E713D1300A67D4F /* VaultModel.swift */; };
+		FE57C39F2E713D1300A67D4F /* Venue+Geocodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2DE2E713D1300A67D4F /* Venue+Geocodable.swift */; };
+		FE57C3A02E713D1300A67D4F /* VenueDigest+NSUserActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2DF2E713D1300A67D4F /* VenueDigest+NSUserActivity.swift */; };
+		FE57C3A12E713D1300A67D4F /* VenueDigest+Rankable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2E02E713D1300A67D4F /* VenueDigest+Rankable.swift */; };
+		FE57C3A22E713D1300A67D4F /* Date+Weekdays.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2E22E713D1300A67D4F /* Date+Weekdays.swift */; };
+		FE57C3A32E713D1300A67D4F /* Dictionary+JSONCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2E32E713D1300A67D4F /* Dictionary+JSONCache.swift */; };
+		FE57C3A42E713D1300A67D4F /* FileManager+FileURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2E42E713D1300A67D4F /* FileManager+FileURL.swift */; };
+		FE57C3A52E713D1300A67D4F /* FormatStyle+LibrarySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2E52E713D1300A67D4F /* FormatStyle+LibrarySection.swift */; };
+		FE57C3A62E713D1300A67D4F /* FormatStyle+Ranking.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2E62E713D1300A67D4F /* FormatStyle+Ranking.swift */; };
+		FE57C3A72E713D1300A67D4F /* Linkable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2E72E713D1300A67D4F /* Linkable.swift */; };
+		FE57C3A82E713D1300A67D4F /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2E82E713D1300A67D4F /* LocationManager.swift */; };
+		FE57C3A92E713D1300A67D4F /* MapItem+Geometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2E92E713D1300A67D4F /* MapItem+Geometry.swift */; };
+		FE57C3AA2E713D1300A67D4F /* NSCodingCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2EA2E713D1300A67D4F /* NSCodingCodable.swift */; };
+		FE57C3AB2E713D1300A67D4F /* Placemark+Geometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2EB2E713D1300A67D4F /* Placemark+Geometry.swift */; };
+		FE57C3AC2E713D1300A67D4F /* Rank+FormatStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2EC2E713D1300A67D4F /* Rank+FormatStyle.swift */; };
+		FE57C3AD2E713D1300A67D4F /* String+AttributedMatching.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2ED2E713D1300A67D4F /* String+AttributedMatching.swift */; };
+		FE57C3AE2E713D1300A67D4F /* String+EmphasizedMatching.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2EE2E713D1300A67D4F /* String+EmphasizedMatching.swift */; };
+		FE57C3AF2E713D1300A67D4F /* String+Markdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2EF2E713D1300A67D4F /* String+Markdown.swift */; };
+		FE57C3B22E713D1300A67D4F /* CompareOptional.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2F62E713D1300A67D4F /* CompareOptional.swift */; };
+		FE57C3B32E713D1300A67D4F /* Data+JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2F72E713D1300A67D4F /* Data+JSON.swift */; };
+		FE57C3B42E713D1300A67D4F /* LibraryComparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2F82E713D1300A67D4F /* LibraryComparable.swift */; };
+		FE57C3B52E713D1300A67D4F /* LibraryComparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2F92E713D1300A67D4F /* LibraryComparator.swift */; };
+		FE57C3B62E713D1300A67D4F /* LibrarySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2FA2E713D1300A67D4F /* LibrarySection.swift */; };
+		FE57C3B72E713D1300A67D4F /* LibrarySectioner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2FB2E713D1300A67D4F /* LibrarySectioner.swift */; };
+		FE57C3B82E713D1300A67D4F /* Logger+Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2FC2E713D1300A67D4F /* Logger+Category.swift */; };
+		FE57C3B92E713D1300A67D4F /* String+LibrarySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2FD2E713D1300A67D4F /* String+LibrarySection.swift */; };
+		FE57C3BA2E713D1300A67D4F /* String+LibrarySorting.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2FE2E713D1300A67D4F /* String+LibrarySorting.swift */; };
+		FE57C3BB2E713D1300A67D4F /* URL+JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2FF2E713D1300A67D4F /* URL+JSON.swift */; };
+		FE57C3BC2E713D1300A67D4F /* Diary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2422E713D1300A67D4F /* Diary.swift */; };
+		FE57C3BD2E713D1300A67D4F /* Diary+URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2432E713D1300A67D4F /* Diary+URL.swift */; };
+		FE57C3BE2E713D1300A67D4F /* Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2442E713D1300A67D4F /* Entry.swift */; };
+		FE57C3BF2E713D1300A67D4F /* Album.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2462E713D1300A67D4F /* Album.swift */; };
+		FE57C3C02E713D1300A67D4F /* Annum.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2472E713D1300A67D4F /* Annum.swift */; };
+		FE57C3C12E713D1300A67D4F /* Annum+FormatStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2482E713D1300A67D4F /* Annum+FormatStyle.swift */; };
+		FE57C3C22E713D1300A67D4F /* Annum+ParseableFormatStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2492E713D1300A67D4F /* Annum+ParseableFormatStyle.swift */; };
+		FE57C3C32E713D1300A67D4F /* AnnumDigest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C24A2E713D1300A67D4F /* AnnumDigest.swift */; };
+		FE57C3C42E713D1300A67D4F /* ArchiveCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C24B2E713D1300A67D4F /* ArchiveCategory.swift */; };
+		FE57C3C52E713D1300A67D4F /* ArchiveCategory+FormatStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C24C2E713D1300A67D4F /* ArchiveCategory+FormatStyle.swift */; };
+		FE57C3C62E713D1300A67D4F /* ArchiveCategory+ParseableFormatStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C24D2E713D1300A67D4F /* ArchiveCategory+ParseableFormatStyle.swift */; };
+		FE57C3C72E713D1300A67D4F /* ArchiveCategory+URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C24E2E713D1300A67D4F /* ArchiveCategory+URL.swift */; };
+		FE57C3C82E713D1300A67D4F /* ArchivePath.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C24F2E713D1300A67D4F /* ArchivePath.swift */; };
+		FE57C3C92E713D1300A67D4F /* ArchivePath+ArchiveCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2502E713D1300A67D4F /* ArchivePath+ArchiveCategory.swift */; };
+		FE57C3CA2E713D1300A67D4F /* ArchivePath+Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2512E713D1300A67D4F /* ArchivePath+Codable.swift */; };
+		FE57C3CB2E713D1300A67D4F /* ArchivePath+FormatStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2522E713D1300A67D4F /* ArchivePath+FormatStyle.swift */; };
+		FE57C3CC2E713D1300A67D4F /* ArchivePath+ParseableFormatStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2532E713D1300A67D4F /* ArchivePath+ParseableFormatStyle.swift */; };
+		FE57C3CD2E713D1300A67D4F /* ArchivePath+PathRestorable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2542E713D1300A67D4F /* ArchivePath+PathRestorable.swift */; };
+		FE57C3CE2E713D1300A67D4F /* ArchivePath+URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2552E713D1300A67D4F /* ArchivePath+URL.swift */; };
+		FE57C3CF2E713D1300A67D4F /* Artist.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2562E713D1300A67D4F /* Artist.swift */; };
+		FE57C3D02E713D1300A67D4F /* Artist+Digest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2572E713D1300A67D4F /* Artist+Digest.swift */; };
+		FE57C3D12E713D1300A67D4F /* Artist+LibraryComparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2582E713D1300A67D4F /* Artist+LibraryComparable.swift */; };
+		FE57C3D22E713D1300A67D4F /* ArtistDigest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2592E713D1300A67D4F /* ArtistDigest.swift */; };
+		FE57C3D32E713D1300A67D4F /* ArtistDigest+LibraryComparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C25A2E713D1300A67D4F /* ArtistDigest+LibraryComparable.swift */; };
+		FE57C3D42E713D1300A67D4F /* Concert.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C25B2E713D1300A67D4F /* Concert.swift */; };
+		FE57C3D52E713D1300A67D4F /* Concert+FormatStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C25C2E713D1300A67D4F /* Concert+FormatStyle.swift */; };
+		FE57C3D62E713D1300A67D4F /* Decade.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C25D2E713D1300A67D4F /* Decade.swift */; };
+		FE57C3D72E713D1300A67D4F /* Decade.FormatStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C25E2E713D1300A67D4F /* Decade.FormatStyle.swift */; };
+		FE57C3D82E713D1300A67D4F /* FirstSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C25F2E713D1300A67D4F /* FirstSet.swift */; };
+		FE57C3D92E713D1300A67D4F /* LibraryComparator+Concert.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2602E713D1300A67D4F /* LibraryComparator+Concert.swift */; };
+		FE57C3DA2E713D1300A67D4F /* LibraryComparator+Music.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2612E713D1300A67D4F /* LibraryComparator+Music.swift */; };
+		FE57C3DB2E713D1300A67D4F /* LibrarySectioner+Music.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2622E713D1300A67D4F /* LibrarySectioner+Music.swift */; };
+		FE57C3DC2E713D1300A67D4F /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2632E713D1300A67D4F /* Location.swift */; };
+		FE57C3DD2E713D1300A67D4F /* Location+Comparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2642E713D1300A67D4F /* Location+Comparable.swift */; };
+		FE57C3DE2E713D1300A67D4F /* Location+FormatStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2652E713D1300A67D4F /* Location+FormatStyle.swift */; };
+		FE57C3DF2E713D1300A67D4F /* Lookup.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2662E713D1300A67D4F /* Lookup.swift */; };
+		FE57C3E02E713D1300A67D4F /* Music.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2672E713D1300A67D4F /* Music.swift */; };
+		FE57C3E12E713D1300A67D4F /* Music+Ranking.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2682E713D1300A67D4F /* Music+Ranking.swift */; };
+		FE57C3E22E713D1300A67D4F /* Music+ShowsOnly.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2692E713D1300A67D4F /* Music+ShowsOnly.swift */; };
+		FE57C3E32E713D1300A67D4F /* Music+URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C26A2E713D1300A67D4F /* Music+URL.swift */; };
+		FE57C3E42E713D1300A67D4F /* PartialDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C26B2E713D1300A67D4F /* PartialDate.swift */; };
+		FE57C3E52E713D1300A67D4F /* PartialDate+Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C26C2E713D1300A67D4F /* PartialDate+Date.swift */; };
+		FE57C3E62E713D1300A67D4F /* PartialDate+FormatStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C26D2E713D1300A67D4F /* PartialDate+FormatStyle.swift */; };
+		FE57C3E72E713D1300A67D4F /* PartialDate+Span.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C26E2E713D1300A67D4F /* PartialDate+Span.swift */; };
+		FE57C3E82E713D1300A67D4F /* PathRestorable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C26F2E713D1300A67D4F /* PathRestorable.swift */; };
+		FE57C3E92E713D1300A67D4F /* Rank.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2702E713D1300A67D4F /* Rank.swift */; };
+		FE57C3EA2E713D1300A67D4F /* Ranking.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2712E713D1300A67D4F /* Ranking.swift */; };
+		FE57C3EB2E713D1300A67D4F /* Relation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2722E713D1300A67D4F /* Relation.swift */; };
+		FE57C3EC2E713D1300A67D4F /* Show.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2732E713D1300A67D4F /* Show.swift */; };
+		FE57C3ED2E713D1300A67D4F /* Show+Concert.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2742E713D1300A67D4F /* Show+Concert.swift */; };
+		FE57C3EE2E713D1300A67D4F /* Song.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2752E713D1300A67D4F /* Song.swift */; };
+		FE57C3EF2E713D1300A67D4F /* Vault.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2762E713D1300A67D4F /* Vault.swift */; };
+		FE57C3F02E713D1300A67D4F /* Vault+AnnumDigest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2772E713D1300A67D4F /* Vault+AnnumDigest.swift */; };
+		FE57C3F12E713D1300A67D4F /* Vault+NextID.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2782E713D1300A67D4F /* Vault+NextID.swift */; };
+		FE57C3F22E713D1300A67D4F /* Vault+URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2792E713D1300A67D4F /* Vault+URL.swift */; };
+		FE57C3F32E713D1300A67D4F /* Venue.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C27A2E713D1300A67D4F /* Venue.swift */; };
+		FE57C3F42E713D1300A67D4F /* Venue+Digest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C27B2E713D1300A67D4F /* Venue+Digest.swift */; };
+		FE57C3F52E713D1300A67D4F /* Venue+FormatStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C27C2E713D1300A67D4F /* Venue+FormatStyle.swift */; };
+		FE57C3F62E713D1300A67D4F /* Venue+LibraryComparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C27D2E713D1300A67D4F /* Venue+LibraryComparable.swift */; };
+		FE57C3F72E713D1300A67D4F /* VenueDigest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C27E2E713D1300A67D4F /* VenueDigest.swift */; };
+		FE57C3F82E713D1300A67D4F /* VenueDigest+LibraryComparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C27F2E713D1300A67D4F /* VenueDigest+LibraryComparable.swift */; };
+		FE57C3F92E713D1300A67D4F /* Program.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2F42E713D1300A67D4F /* Program.swift */; };
+		FE57C3FA2E713D1300A67D4F /* CompareOptional.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2F62E713D1300A67D4F /* CompareOptional.swift */; };
+		FE57C3FB2E713D1300A67D4F /* Data+JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2F72E713D1300A67D4F /* Data+JSON.swift */; };
+		FE57C3FC2E713D1300A67D4F /* LibraryComparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2F82E713D1300A67D4F /* LibraryComparable.swift */; };
+		FE57C3FD2E713D1300A67D4F /* LibraryComparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2F92E713D1300A67D4F /* LibraryComparator.swift */; };
+		FE57C3FE2E713D1300A67D4F /* LibrarySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2FA2E713D1300A67D4F /* LibrarySection.swift */; };
+		FE57C3FF2E713D1300A67D4F /* LibrarySectioner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2FB2E713D1300A67D4F /* LibrarySectioner.swift */; };
+		FE57C4002E713D1300A67D4F /* Logger+Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2FC2E713D1300A67D4F /* Logger+Category.swift */; };
+		FE57C4012E713D1300A67D4F /* String+LibrarySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2FD2E713D1300A67D4F /* String+LibrarySection.swift */; };
+		FE57C4022E713D1300A67D4F /* String+LibrarySorting.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2FE2E713D1300A67D4F /* String+LibrarySorting.swift */; };
+		FE57C4032E713D1300A67D4F /* URL+JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2FF2E713D1300A67D4F /* URL+JSON.swift */; };
+		FE57C4042E713D1300A67D4F /* Program.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2F22E713D1300A67D4F /* Program.swift */; };
+		FE57C4052E713D1300A67D4F /* Album.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2462E713D1300A67D4F /* Album.swift */; };
+		FE57C4062E713D1300A67D4F /* Annum.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2472E713D1300A67D4F /* Annum.swift */; };
+		FE57C4072E713D1300A67D4F /* Annum+FormatStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2482E713D1300A67D4F /* Annum+FormatStyle.swift */; };
+		FE57C4082E713D1300A67D4F /* Annum+ParseableFormatStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2492E713D1300A67D4F /* Annum+ParseableFormatStyle.swift */; };
+		FE57C4092E713D1300A67D4F /* AnnumDigest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C24A2E713D1300A67D4F /* AnnumDigest.swift */; };
+		FE57C40A2E713D1300A67D4F /* ArchiveCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C24B2E713D1300A67D4F /* ArchiveCategory.swift */; };
+		FE57C40B2E713D1300A67D4F /* ArchiveCategory+FormatStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C24C2E713D1300A67D4F /* ArchiveCategory+FormatStyle.swift */; };
+		FE57C40C2E713D1300A67D4F /* ArchiveCategory+ParseableFormatStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C24D2E713D1300A67D4F /* ArchiveCategory+ParseableFormatStyle.swift */; };
+		FE57C40D2E713D1300A67D4F /* ArchiveCategory+URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C24E2E713D1300A67D4F /* ArchiveCategory+URL.swift */; };
+		FE57C40E2E713D1300A67D4F /* ArchivePath.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C24F2E713D1300A67D4F /* ArchivePath.swift */; };
+		FE57C40F2E713D1300A67D4F /* ArchivePath+ArchiveCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2502E713D1300A67D4F /* ArchivePath+ArchiveCategory.swift */; };
+		FE57C4102E713D1300A67D4F /* ArchivePath+Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2512E713D1300A67D4F /* ArchivePath+Codable.swift */; };
+		FE57C4112E713D1300A67D4F /* ArchivePath+FormatStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2522E713D1300A67D4F /* ArchivePath+FormatStyle.swift */; };
+		FE57C4122E713D1300A67D4F /* ArchivePath+ParseableFormatStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2532E713D1300A67D4F /* ArchivePath+ParseableFormatStyle.swift */; };
+		FE57C4132E713D1300A67D4F /* ArchivePath+PathRestorable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2542E713D1300A67D4F /* ArchivePath+PathRestorable.swift */; };
+		FE57C4142E713D1300A67D4F /* ArchivePath+URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2552E713D1300A67D4F /* ArchivePath+URL.swift */; };
+		FE57C4152E713D1300A67D4F /* Artist.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2562E713D1300A67D4F /* Artist.swift */; };
+		FE57C4162E713D1300A67D4F /* Artist+Digest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2572E713D1300A67D4F /* Artist+Digest.swift */; };
+		FE57C4172E713D1300A67D4F /* Artist+LibraryComparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2582E713D1300A67D4F /* Artist+LibraryComparable.swift */; };
+		FE57C4182E713D1300A67D4F /* ArtistDigest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2592E713D1300A67D4F /* ArtistDigest.swift */; };
+		FE57C4192E713D1300A67D4F /* ArtistDigest+LibraryComparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C25A2E713D1300A67D4F /* ArtistDigest+LibraryComparable.swift */; };
+		FE57C41A2E713D1300A67D4F /* Concert.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C25B2E713D1300A67D4F /* Concert.swift */; };
+		FE57C41B2E713D1300A67D4F /* Concert+FormatStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C25C2E713D1300A67D4F /* Concert+FormatStyle.swift */; };
+		FE57C41C2E713D1300A67D4F /* Decade.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C25D2E713D1300A67D4F /* Decade.swift */; };
+		FE57C41D2E713D1300A67D4F /* Decade.FormatStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C25E2E713D1300A67D4F /* Decade.FormatStyle.swift */; };
+		FE57C41E2E713D1300A67D4F /* FirstSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C25F2E713D1300A67D4F /* FirstSet.swift */; };
+		FE57C41F2E713D1300A67D4F /* LibraryComparator+Concert.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2602E713D1300A67D4F /* LibraryComparator+Concert.swift */; };
+		FE57C4202E713D1300A67D4F /* LibraryComparator+Music.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2612E713D1300A67D4F /* LibraryComparator+Music.swift */; };
+		FE57C4212E713D1300A67D4F /* LibrarySectioner+Music.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2622E713D1300A67D4F /* LibrarySectioner+Music.swift */; };
+		FE57C4222E713D1300A67D4F /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2632E713D1300A67D4F /* Location.swift */; };
+		FE57C4232E713D1300A67D4F /* Location+Comparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2642E713D1300A67D4F /* Location+Comparable.swift */; };
+		FE57C4242E713D1300A67D4F /* Location+FormatStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2652E713D1300A67D4F /* Location+FormatStyle.swift */; };
+		FE57C4252E713D1300A67D4F /* Lookup.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2662E713D1300A67D4F /* Lookup.swift */; };
+		FE57C4262E713D1300A67D4F /* Music.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2672E713D1300A67D4F /* Music.swift */; };
+		FE57C4272E713D1300A67D4F /* Music+Ranking.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2682E713D1300A67D4F /* Music+Ranking.swift */; };
+		FE57C4282E713D1300A67D4F /* Music+ShowsOnly.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2692E713D1300A67D4F /* Music+ShowsOnly.swift */; };
+		FE57C4292E713D1300A67D4F /* Music+URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C26A2E713D1300A67D4F /* Music+URL.swift */; };
+		FE57C42A2E713D1300A67D4F /* PartialDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C26B2E713D1300A67D4F /* PartialDate.swift */; };
+		FE57C42B2E713D1300A67D4F /* PartialDate+Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C26C2E713D1300A67D4F /* PartialDate+Date.swift */; };
+		FE57C42C2E713D1300A67D4F /* PartialDate+FormatStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C26D2E713D1300A67D4F /* PartialDate+FormatStyle.swift */; };
+		FE57C42D2E713D1300A67D4F /* PartialDate+Span.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C26E2E713D1300A67D4F /* PartialDate+Span.swift */; };
+		FE57C42E2E713D1300A67D4F /* PathRestorable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C26F2E713D1300A67D4F /* PathRestorable.swift */; };
+		FE57C42F2E713D1300A67D4F /* Rank.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2702E713D1300A67D4F /* Rank.swift */; };
+		FE57C4302E713D1300A67D4F /* Ranking.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2712E713D1300A67D4F /* Ranking.swift */; };
+		FE57C4312E713D1300A67D4F /* Relation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2722E713D1300A67D4F /* Relation.swift */; };
+		FE57C4322E713D1300A67D4F /* Show.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2732E713D1300A67D4F /* Show.swift */; };
+		FE57C4332E713D1300A67D4F /* Show+Concert.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2742E713D1300A67D4F /* Show+Concert.swift */; };
+		FE57C4342E713D1300A67D4F /* Song.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2752E713D1300A67D4F /* Song.swift */; };
+		FE57C4352E713D1300A67D4F /* Vault.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2762E713D1300A67D4F /* Vault.swift */; };
+		FE57C4362E713D1300A67D4F /* Vault+AnnumDigest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2772E713D1300A67D4F /* Vault+AnnumDigest.swift */; };
+		FE57C4372E713D1300A67D4F /* Vault+NextID.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2782E713D1300A67D4F /* Vault+NextID.swift */; };
+		FE57C4382E713D1300A67D4F /* Vault+URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2792E713D1300A67D4F /* Vault+URL.swift */; };
+		FE57C4392E713D1300A67D4F /* Venue.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C27A2E713D1300A67D4F /* Venue.swift */; };
+		FE57C43A2E713D1300A67D4F /* Venue+Digest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C27B2E713D1300A67D4F /* Venue+Digest.swift */; };
+		FE57C43B2E713D1300A67D4F /* Venue+FormatStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C27C2E713D1300A67D4F /* Venue+FormatStyle.swift */; };
+		FE57C43C2E713D1300A67D4F /* Venue+LibraryComparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C27D2E713D1300A67D4F /* Venue+LibraryComparable.swift */; };
+		FE57C43D2E713D1300A67D4F /* VenueDigest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C27E2E713D1300A67D4F /* VenueDigest.swift */; };
+		FE57C43E2E713D1300A67D4F /* VenueDigest+LibraryComparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C27F2E713D1300A67D4F /* VenueDigest+LibraryComparable.swift */; };
+		FE57C43F2E713D1300A67D4F /* Program.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2812E713D1300A67D4F /* Program.swift */; };
+		FE57C4402E713D1300A67D4F /* CompareOptional.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2F62E713D1300A67D4F /* CompareOptional.swift */; };
+		FE57C4412E713D1300A67D4F /* Data+JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2F72E713D1300A67D4F /* Data+JSON.swift */; };
+		FE57C4422E713D1300A67D4F /* LibraryComparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2F82E713D1300A67D4F /* LibraryComparable.swift */; };
+		FE57C4432E713D1300A67D4F /* LibraryComparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2F92E713D1300A67D4F /* LibraryComparator.swift */; };
+		FE57C4442E713D1300A67D4F /* LibrarySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2FA2E713D1300A67D4F /* LibrarySection.swift */; };
+		FE57C4452E713D1300A67D4F /* LibrarySectioner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2FB2E713D1300A67D4F /* LibrarySectioner.swift */; };
+		FE57C4462E713D1300A67D4F /* Logger+Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2FC2E713D1300A67D4F /* Logger+Category.swift */; };
+		FE57C4472E713D1300A67D4F /* String+LibrarySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2FD2E713D1300A67D4F /* String+LibrarySection.swift */; };
+		FE57C4482E713D1300A67D4F /* String+LibrarySorting.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2FE2E713D1300A67D4F /* String+LibrarySorting.swift */; };
+		FE57C4492E713D1300A67D4F /* URL+JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2FF2E713D1300A67D4F /* URL+JSON.swift */; };
+		FE57C45F2E713D4600A67D4F /* AnnumFormatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C44A2E713D4600A67D4F /* AnnumFormatTests.swift */; };
+		FE57C4602E713D4600A67D4F /* AnnumTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C44B2E713D4600A67D4F /* AnnumTests.swift */; };
+		FE57C4612E713D4600A67D4F /* ArchiveCategoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C44C2E713D4600A67D4F /* ArchiveCategoryTests.swift */; };
+		FE57C4622E713D4600A67D4F /* ArchivePathCategoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C44D2E713D4600A67D4F /* ArchivePathCategoryTests.swift */; };
+		FE57C4632E713D4600A67D4F /* ArchivePathTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C44E2E713D4600A67D4F /* ArchivePathTests.swift */; };
+		FE57C4642E713D4600A67D4F /* DecadeFormatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C44F2E713D4600A67D4F /* DecadeFormatTests.swift */; };
+		FE57C4652E713D4600A67D4F /* DecadeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C4502E713D4600A67D4F /* DecadeTests.swift */; };
+		FE57C4662E713D4600A67D4F /* PartialDateFormatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C4512E713D4600A67D4F /* PartialDateFormatTests.swift */; };
+		FE57C4672E713D4600A67D4F /* PartialDateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C4522E713D4600A67D4F /* PartialDateTests.swift */; };
+		FE57C4682E713D4600A67D4F /* ArchiveNavigationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C4542E713D4600A67D4F /* ArchiveNavigationTests.swift */; };
+		FE57C4692E713D4600A67D4F /* ConcertComparatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C4552E713D4600A67D4F /* ConcertComparatorTests.swift */; };
+		FE57C46A2E713D4600A67D4F /* EmphasizedMatchingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C4562E713D4600A67D4F /* EmphasizedMatchingTests.swift */; };
+		FE57C46B2E713D4600A67D4F /* LibrarySectionFormatterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C4572E713D4600A67D4F /* LibrarySectionFormatterTests.swift */; };
+		FE57C46C2E713D4600A67D4F /* PathRestorableUserActivityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C4582E713D4600A67D4F /* PathRestorableUserActivityTests.swift */; };
+		FE57C46D2E713D4600A67D4F /* WeekdayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C4592E713D4600A67D4F /* WeekdayTests.swift */; };
+		FE57C46E2E713D4600A67D4F /* LibraryComparatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C45B2E713D4600A67D4F /* LibraryComparatorTests.swift */; };
+		FE57C46F2E713D4600A67D4F /* LibrarySectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C45C2E713D4600A67D4F /* LibrarySectionTests.swift */; };
 		FEB4895E2E6E6E8F0043057D /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = FEB4895D2E6E6E8F0043057D /* ArgumentParser */; };
 		FEB489B52E6E6FC10043057D /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = FEB489B42E6E6FC10043057D /* ArgumentParser */; };
 		FEB48A082E6E70E20043057D /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = FEB48A072E6E70E20043057D /* ArgumentParser */; };
@@ -54,6 +392,210 @@
 
 /* Begin PBXFileReference section */
 		FE5360FD29CE82CA00618099 /* SiteApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SiteApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FE57C23A2E713D1300A67D4F /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		FE57C23C2E713D1300A67D4F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		FE57C23D2E713D1300A67D4F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FE57C23E2E713D1300A67D4F /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		FE57C23F2E713D1300A67D4F /* SiteApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SiteApp.entitlements; sourceTree = "<group>"; };
+		FE57C2402E713D1300A67D4F /* SiteAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiteAppApp.swift; sourceTree = "<group>"; };
+		FE57C2422E713D1300A67D4F /* Diary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Diary.swift; sourceTree = "<group>"; };
+		FE57C2432E713D1300A67D4F /* Diary+URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Diary+URL.swift"; sourceTree = "<group>"; };
+		FE57C2442E713D1300A67D4F /* Entry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entry.swift; sourceTree = "<group>"; };
+		FE57C2462E713D1300A67D4F /* Album.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Album.swift; sourceTree = "<group>"; };
+		FE57C2472E713D1300A67D4F /* Annum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Annum.swift; sourceTree = "<group>"; };
+		FE57C2482E713D1300A67D4F /* Annum+FormatStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Annum+FormatStyle.swift"; sourceTree = "<group>"; };
+		FE57C2492E713D1300A67D4F /* Annum+ParseableFormatStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Annum+ParseableFormatStyle.swift"; sourceTree = "<group>"; };
+		FE57C24A2E713D1300A67D4F /* AnnumDigest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnumDigest.swift; sourceTree = "<group>"; };
+		FE57C24B2E713D1300A67D4F /* ArchiveCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveCategory.swift; sourceTree = "<group>"; };
+		FE57C24C2E713D1300A67D4F /* ArchiveCategory+FormatStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ArchiveCategory+FormatStyle.swift"; sourceTree = "<group>"; };
+		FE57C24D2E713D1300A67D4F /* ArchiveCategory+ParseableFormatStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ArchiveCategory+ParseableFormatStyle.swift"; sourceTree = "<group>"; };
+		FE57C24E2E713D1300A67D4F /* ArchiveCategory+URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ArchiveCategory+URL.swift"; sourceTree = "<group>"; };
+		FE57C24F2E713D1300A67D4F /* ArchivePath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchivePath.swift; sourceTree = "<group>"; };
+		FE57C2502E713D1300A67D4F /* ArchivePath+ArchiveCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ArchivePath+ArchiveCategory.swift"; sourceTree = "<group>"; };
+		FE57C2512E713D1300A67D4F /* ArchivePath+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ArchivePath+Codable.swift"; sourceTree = "<group>"; };
+		FE57C2522E713D1300A67D4F /* ArchivePath+FormatStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ArchivePath+FormatStyle.swift"; sourceTree = "<group>"; };
+		FE57C2532E713D1300A67D4F /* ArchivePath+ParseableFormatStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ArchivePath+ParseableFormatStyle.swift"; sourceTree = "<group>"; };
+		FE57C2542E713D1300A67D4F /* ArchivePath+PathRestorable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ArchivePath+PathRestorable.swift"; sourceTree = "<group>"; };
+		FE57C2552E713D1300A67D4F /* ArchivePath+URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ArchivePath+URL.swift"; sourceTree = "<group>"; };
+		FE57C2562E713D1300A67D4F /* Artist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Artist.swift; sourceTree = "<group>"; };
+		FE57C2572E713D1300A67D4F /* Artist+Digest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Artist+Digest.swift"; sourceTree = "<group>"; };
+		FE57C2582E713D1300A67D4F /* Artist+LibraryComparable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Artist+LibraryComparable.swift"; sourceTree = "<group>"; };
+		FE57C2592E713D1300A67D4F /* ArtistDigest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistDigest.swift; sourceTree = "<group>"; };
+		FE57C25A2E713D1300A67D4F /* ArtistDigest+LibraryComparable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ArtistDigest+LibraryComparable.swift"; sourceTree = "<group>"; };
+		FE57C25B2E713D1300A67D4F /* Concert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Concert.swift; sourceTree = "<group>"; };
+		FE57C25C2E713D1300A67D4F /* Concert+FormatStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Concert+FormatStyle.swift"; sourceTree = "<group>"; };
+		FE57C25D2E713D1300A67D4F /* Decade.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Decade.swift; sourceTree = "<group>"; };
+		FE57C25E2E713D1300A67D4F /* Decade.FormatStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Decade.FormatStyle.swift; sourceTree = "<group>"; };
+		FE57C25F2E713D1300A67D4F /* FirstSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstSet.swift; sourceTree = "<group>"; };
+		FE57C2602E713D1300A67D4F /* LibraryComparator+Concert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryComparator+Concert.swift"; sourceTree = "<group>"; };
+		FE57C2612E713D1300A67D4F /* LibraryComparator+Music.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryComparator+Music.swift"; sourceTree = "<group>"; };
+		FE57C2622E713D1300A67D4F /* LibrarySectioner+Music.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibrarySectioner+Music.swift"; sourceTree = "<group>"; };
+		FE57C2632E713D1300A67D4F /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
+		FE57C2642E713D1300A67D4F /* Location+Comparable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Location+Comparable.swift"; sourceTree = "<group>"; };
+		FE57C2652E713D1300A67D4F /* Location+FormatStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Location+FormatStyle.swift"; sourceTree = "<group>"; };
+		FE57C2662E713D1300A67D4F /* Lookup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lookup.swift; sourceTree = "<group>"; };
+		FE57C2672E713D1300A67D4F /* Music.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Music.swift; sourceTree = "<group>"; };
+		FE57C2682E713D1300A67D4F /* Music+Ranking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Music+Ranking.swift"; sourceTree = "<group>"; };
+		FE57C2692E713D1300A67D4F /* Music+ShowsOnly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Music+ShowsOnly.swift"; sourceTree = "<group>"; };
+		FE57C26A2E713D1300A67D4F /* Music+URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Music+URL.swift"; sourceTree = "<group>"; };
+		FE57C26B2E713D1300A67D4F /* PartialDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartialDate.swift; sourceTree = "<group>"; };
+		FE57C26C2E713D1300A67D4F /* PartialDate+Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PartialDate+Date.swift"; sourceTree = "<group>"; };
+		FE57C26D2E713D1300A67D4F /* PartialDate+FormatStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PartialDate+FormatStyle.swift"; sourceTree = "<group>"; };
+		FE57C26E2E713D1300A67D4F /* PartialDate+Span.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PartialDate+Span.swift"; sourceTree = "<group>"; };
+		FE57C26F2E713D1300A67D4F /* PathRestorable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathRestorable.swift; sourceTree = "<group>"; };
+		FE57C2702E713D1300A67D4F /* Rank.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rank.swift; sourceTree = "<group>"; };
+		FE57C2712E713D1300A67D4F /* Ranking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ranking.swift; sourceTree = "<group>"; };
+		FE57C2722E713D1300A67D4F /* Relation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Relation.swift; sourceTree = "<group>"; };
+		FE57C2732E713D1300A67D4F /* Show.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Show.swift; sourceTree = "<group>"; };
+		FE57C2742E713D1300A67D4F /* Show+Concert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Show+Concert.swift"; sourceTree = "<group>"; };
+		FE57C2752E713D1300A67D4F /* Song.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Song.swift; sourceTree = "<group>"; };
+		FE57C2762E713D1300A67D4F /* Vault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vault.swift; sourceTree = "<group>"; };
+		FE57C2772E713D1300A67D4F /* Vault+AnnumDigest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Vault+AnnumDigest.swift"; sourceTree = "<group>"; };
+		FE57C2782E713D1300A67D4F /* Vault+NextID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Vault+NextID.swift"; sourceTree = "<group>"; };
+		FE57C2792E713D1300A67D4F /* Vault+URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Vault+URL.swift"; sourceTree = "<group>"; };
+		FE57C27A2E713D1300A67D4F /* Venue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Venue.swift; sourceTree = "<group>"; };
+		FE57C27B2E713D1300A67D4F /* Venue+Digest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Venue+Digest.swift"; sourceTree = "<group>"; };
+		FE57C27C2E713D1300A67D4F /* Venue+FormatStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Venue+FormatStyle.swift"; sourceTree = "<group>"; };
+		FE57C27D2E713D1300A67D4F /* Venue+LibraryComparable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Venue+LibraryComparable.swift"; sourceTree = "<group>"; };
+		FE57C27E2E713D1300A67D4F /* VenueDigest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenueDigest.swift; sourceTree = "<group>"; };
+		FE57C27F2E713D1300A67D4F /* VenueDigest+LibraryComparable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VenueDigest+LibraryComparable.swift"; sourceTree = "<group>"; };
+		FE57C2812E713D1300A67D4F /* Program.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Program.swift; sourceTree = "<group>"; };
+		FE57C2832E713D1300A67D4F /* AddressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressView.swift; sourceTree = "<group>"; };
+		FE57C2842E713D1300A67D4F /* ArchiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveActivity.swift; sourceTree = "<group>"; };
+		FE57C2852E713D1300A67D4F /* ArchiveCategory+LocationFilterable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ArchiveCategory+LocationFilterable.swift"; sourceTree = "<group>"; };
+		FE57C2862E713D1300A67D4F /* ArchiveCategoryLinkable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveCategoryLinkable.swift; sourceTree = "<group>"; };
+		FE57C2872E713D1300A67D4F /* ArchiveCategoryStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveCategoryStack.swift; sourceTree = "<group>"; };
+		FE57C2882E713D1300A67D4F /* ArchiveCategoryToolbarContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveCategoryToolbarContent.swift; sourceTree = "<group>"; };
+		FE57C2892E713D1300A67D4F /* ArchiveCrossSearchContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveCrossSearchContainer.swift; sourceTree = "<group>"; };
+		FE57C28A2E713D1300A67D4F /* ArchiveCrossSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveCrossSearchView.swift; sourceTree = "<group>"; };
+		FE57C28B2E713D1300A67D4F /* ArchiveNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveNavigation.swift; sourceTree = "<group>"; };
+		FE57C28C2E713D1300A67D4F /* ArchiveNavigation+External.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ArchiveNavigation+External.swift"; sourceTree = "<group>"; };
+		FE57C28D2E713D1300A67D4F /* ArchiveNavigationUserActivityModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveNavigationUserActivityModifier.swift; sourceTree = "<group>"; };
+		FE57C28E2E713D1300A67D4F /* ArchivePath+Destination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ArchivePath+Destination.swift"; sourceTree = "<group>"; };
+		FE57C28F2E713D1300A67D4F /* ArchiveScope.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveScope.swift; sourceTree = "<group>"; };
+		FE57C2902E713D1300A67D4F /* ArchiveSearchModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveSearchModifier.swift; sourceTree = "<group>"; };
+		FE57C2912E713D1300A67D4F /* ArchiveSharable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveSharable.swift; sourceTree = "<group>"; };
+		FE57C2922E713D1300A67D4F /* ArchiveSharableToolbarContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveSharableToolbarContent.swift; sourceTree = "<group>"; };
+		FE57C2932E713D1300A67D4F /* ArchiveStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveStateView.swift; sourceTree = "<group>"; };
+		FE57C2942E713D1300A67D4F /* ArchiveTabConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveTabConfiguration.swift; sourceTree = "<group>"; };
+		FE57C2952E713D1300A67D4F /* ArchiveTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveTabView.swift; sourceTree = "<group>"; };
+		FE57C2962E713D1300A67D4F /* ArtistBlurb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistBlurb.swift; sourceTree = "<group>"; };
+		FE57C2972E713D1300A67D4F /* ArtistDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistDetail.swift; sourceTree = "<group>"; };
+		FE57C2982E713D1300A67D4F /* ArtistDigest+RankingSort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ArtistDigest+RankingSort.swift"; sourceTree = "<group>"; };
+		FE57C2992E713D1300A67D4F /* ArtistList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistList.swift; sourceTree = "<group>"; };
+		FE57C29A2E713D1300A67D4F /* ArtistsSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistsSummary.swift; sourceTree = "<group>"; };
+		FE57C29B2E713D1300A67D4F /* Bundle+AppIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+AppIcon.swift"; sourceTree = "<group>"; };
+		FE57C29C2E713D1300A67D4F /* ConcertBlurb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcertBlurb.swift; sourceTree = "<group>"; };
+		FE57C29D2E713D1300A67D4F /* DaysShowsSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaysShowsSummary.swift; sourceTree = "<group>"; };
+		FE57C29E2E713D1300A67D4F /* LibrarySection+Section.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibrarySection+Section.swift"; sourceTree = "<group>"; };
+		FE57C29F2E713D1300A67D4F /* LocationFilterToolbarContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationFilterToolbarContent.swift; sourceTree = "<group>"; };
+		FE57C2A02E713D1300A67D4F /* LocationMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationMap.swift; sourceTree = "<group>"; };
+		FE57C2A12E713D1300A67D4F /* MonthChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthChart.swift; sourceTree = "<group>"; };
+		FE57C2A22E713D1300A67D4F /* NavigationLink+PathRestorable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NavigationLink+PathRestorable.swift"; sourceTree = "<group>"; };
+		FE57C2A32E713D1300A67D4F /* NearbyDistance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearbyDistance.swift; sourceTree = "<group>"; };
+		FE57C2A42E713D1300A67D4F /* NearbyDistanceThresholdView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearbyDistanceThresholdView.swift; sourceTree = "<group>"; };
+		FE57C2A52E713D1300A67D4F /* NearbyLocationModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearbyLocationModifier.swift; sourceTree = "<group>"; };
+		FE57C2A62E713D1300A67D4F /* NearbyLocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearbyLocationView.swift; sourceTree = "<group>"; };
+		FE57C2A72E713D1300A67D4F /* NearbyPreviewModifer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearbyPreviewModifer.swift; sourceTree = "<group>"; };
+		FE57C2A82E713D1300A67D4F /* NotificationModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationModifier.swift; sourceTree = "<group>"; };
+		FE57C2A92E713D1300A67D4F /* PathRestorableLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathRestorableLink.swift; sourceTree = "<group>"; };
+		FE57C2AA2E713D1300A67D4F /* RankableSortList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankableSortList.swift; sourceTree = "<group>"; };
+		FE57C2AB2E713D1300A67D4F /* Ranking+RankingSort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ranking+RankingSort.swift"; sourceTree = "<group>"; };
+		FE57C2AC2E713D1300A67D4F /* Ranking+ViewRepresentations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ranking+ViewRepresentations.swift"; sourceTree = "<group>"; };
+		FE57C2AD2E713D1300A67D4F /* RankingList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankingList.swift; sourceTree = "<group>"; };
+		FE57C2AE2E713D1300A67D4F /* RefreshCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshCommand.swift; sourceTree = "<group>"; };
+		FE57C2AF2E713D1300A67D4F /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		FE57C2B02E713D1300A67D4F /* ShowDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowDetail.swift; sourceTree = "<group>"; };
+		FE57C2B12E713D1300A67D4F /* ShowsMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowsMode.swift; sourceTree = "<group>"; };
+		FE57C2B22E713D1300A67D4F /* ShowsSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowsSummary.swift; sourceTree = "<group>"; };
+		FE57C2B32E713D1300A67D4F /* ShowYearList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowYearList.swift; sourceTree = "<group>"; };
+		FE57C2B42E713D1300A67D4F /* SiteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiteView.swift; sourceTree = "<group>"; };
+		FE57C2B52E713D1300A67D4F /* SortModifierToolbarContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortModifierToolbarContent.swift; sourceTree = "<group>"; };
+		FE57C2B62E713D1300A67D4F /* StateChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateChart.swift; sourceTree = "<group>"; };
+		FE57C2B72E713D1300A67D4F /* StatsCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsCategory.swift; sourceTree = "<group>"; };
+		FE57C2B82E713D1300A67D4F /* StatsGrouping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsGrouping.swift; sourceTree = "<group>"; };
+		FE57C2B92E713D1300A67D4F /* StatsSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsSummary.swift; sourceTree = "<group>"; };
+		FE57C2BA2E713D1300A67D4F /* StatsThreshold.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsThreshold.swift; sourceTree = "<group>"; };
+		FE57C2BB2E713D1300A67D4F /* TodayBlurb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayBlurb.swift; sourceTree = "<group>"; };
+		FE57C2BC2E713D1300A67D4F /* TodayList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayList.swift; sourceTree = "<group>"; };
+		FE57C2BD2E713D1300A67D4F /* TodaySummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodaySummary.swift; sourceTree = "<group>"; };
+		FE57C2BE2E713D1300A67D4F /* VaultPreviewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultPreviewModifier.swift; sourceTree = "<group>"; };
+		FE57C2BF2E713D1300A67D4F /* VenueBlurb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenueBlurb.swift; sourceTree = "<group>"; };
+		FE57C2C02E713D1300A67D4F /* VenueDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenueDetail.swift; sourceTree = "<group>"; };
+		FE57C2C12E713D1300A67D4F /* VenueDigest+RankingSort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VenueDigest+RankingSort.swift"; sourceTree = "<group>"; };
+		FE57C2C22E713D1300A67D4F /* VenueList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenueList.swift; sourceTree = "<group>"; };
+		FE57C2C32E713D1300A67D4F /* VenuesSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenuesSummary.swift; sourceTree = "<group>"; };
+		FE57C2C42E713D1300A67D4F /* WeekdayChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekdayChart.swift; sourceTree = "<group>"; };
+		FE57C2C52E713D1300A67D4F /* YearDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YearDetail.swift; sourceTree = "<group>"; };
+		FE57C2C72E713D1300A67D4F /* AnnumDigest+NSUserActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AnnumDigest+NSUserActivity.swift"; sourceTree = "<group>"; };
+		FE57C2C82E713D1300A67D4F /* ArtistDigest+NSUserActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ArtistDigest+NSUserActivity.swift"; sourceTree = "<group>"; };
+		FE57C2C92E713D1300A67D4F /* ArtistDigest+Rankable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ArtistDigest+Rankable.swift"; sourceTree = "<group>"; };
+		FE57C2CA2E713D1300A67D4F /* Atlas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Atlas.swift; sourceTree = "<group>"; };
+		FE57C2CB2E713D1300A67D4F /* AtlasCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtlasCache.swift; sourceTree = "<group>"; };
+		FE57C2CC2E713D1300A67D4F /* BatchGeocode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchGeocode.swift; sourceTree = "<group>"; };
+		FE57C2CD2E713D1300A67D4F /* Concert+NSUserActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Concert+NSUserActivity.swift"; sourceTree = "<group>"; };
+		FE57C2CE2E713D1300A67D4F /* Geocode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Geocode.swift; sourceTree = "<group>"; };
+		FE57C2CF2E713D1300A67D4F /* Location+Geocode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Location+Geocode.swift"; sourceTree = "<group>"; };
+		FE57C2D02E713D1300A67D4F /* LocationFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationFilter.swift; sourceTree = "<group>"; };
+		FE57C2D12E713D1300A67D4F /* NearbyDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearbyDefaults.swift; sourceTree = "<group>"; };
+		FE57C2D22E713D1300A67D4F /* NearbyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearbyModel.swift; sourceTree = "<group>"; };
+		FE57C2D32E713D1300A67D4F /* NSError+Throttle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSError+Throttle.swift"; sourceTree = "<group>"; };
+		FE57C2D42E713D1300A67D4F /* NSUserActivity+ArchiveCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSUserActivity+ArchiveCategory.swift"; sourceTree = "<group>"; };
+		FE57C2D52E713D1300A67D4F /* NSUserActivity+ArchivePath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSUserActivity+ArchivePath.swift"; sourceTree = "<group>"; };
+		FE57C2D62E713D1300A67D4F /* NSUserActivity+Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSUserActivity+Search.swift"; sourceTree = "<group>"; };
+		FE57C2D72E713D1300A67D4F /* PathRestorableUserActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathRestorableUserActivity.swift; sourceTree = "<group>"; };
+		FE57C2D82E713D1300A67D4F /* Placemark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Placemark.swift; sourceTree = "<group>"; };
+		FE57C2D92E713D1300A67D4F /* Rankable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rankable.swift; sourceTree = "<group>"; };
+		FE57C2DA2E713D1300A67D4F /* RankingSort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankingSort.swift; sourceTree = "<group>"; };
+		FE57C2DB2E713D1300A67D4F /* SiteModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiteModel.swift; sourceTree = "<group>"; };
+		FE57C2DC2E713D1300A67D4F /* Vault+ArchivePath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Vault+ArchivePath.swift"; sourceTree = "<group>"; };
+		FE57C2DD2E713D1300A67D4F /* VaultModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultModel.swift; sourceTree = "<group>"; };
+		FE57C2DE2E713D1300A67D4F /* Venue+Geocodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Venue+Geocodable.swift"; sourceTree = "<group>"; };
+		FE57C2DF2E713D1300A67D4F /* VenueDigest+NSUserActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VenueDigest+NSUserActivity.swift"; sourceTree = "<group>"; };
+		FE57C2E02E713D1300A67D4F /* VenueDigest+Rankable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VenueDigest+Rankable.swift"; sourceTree = "<group>"; };
+		FE57C2E22E713D1300A67D4F /* Date+Weekdays.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Weekdays.swift"; sourceTree = "<group>"; };
+		FE57C2E32E713D1300A67D4F /* Dictionary+JSONCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dictionary+JSONCache.swift"; sourceTree = "<group>"; };
+		FE57C2E42E713D1300A67D4F /* FileManager+FileURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileManager+FileURL.swift"; sourceTree = "<group>"; };
+		FE57C2E52E713D1300A67D4F /* FormatStyle+LibrarySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FormatStyle+LibrarySection.swift"; sourceTree = "<group>"; };
+		FE57C2E62E713D1300A67D4F /* FormatStyle+Ranking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FormatStyle+Ranking.swift"; sourceTree = "<group>"; };
+		FE57C2E72E713D1300A67D4F /* Linkable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Linkable.swift; sourceTree = "<group>"; };
+		FE57C2E82E713D1300A67D4F /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		FE57C2E92E713D1300A67D4F /* MapItem+Geometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MapItem+Geometry.swift"; sourceTree = "<group>"; };
+		FE57C2EA2E713D1300A67D4F /* NSCodingCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSCodingCodable.swift; sourceTree = "<group>"; };
+		FE57C2EB2E713D1300A67D4F /* Placemark+Geometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Placemark+Geometry.swift"; sourceTree = "<group>"; };
+		FE57C2EC2E713D1300A67D4F /* Rank+FormatStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Rank+FormatStyle.swift"; sourceTree = "<group>"; };
+		FE57C2ED2E713D1300A67D4F /* String+AttributedMatching.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+AttributedMatching.swift"; sourceTree = "<group>"; };
+		FE57C2EE2E713D1300A67D4F /* String+EmphasizedMatching.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+EmphasizedMatching.swift"; sourceTree = "<group>"; };
+		FE57C2EF2E713D1300A67D4F /* String+Markdown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Markdown.swift"; sourceTree = "<group>"; };
+		FE57C2F22E713D1300A67D4F /* Program.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Program.swift; sourceTree = "<group>"; };
+		FE57C2F42E713D1300A67D4F /* Program.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Program.swift; sourceTree = "<group>"; };
+		FE57C2F62E713D1300A67D4F /* CompareOptional.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompareOptional.swift; sourceTree = "<group>"; };
+		FE57C2F72E713D1300A67D4F /* Data+JSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+JSON.swift"; sourceTree = "<group>"; };
+		FE57C2F82E713D1300A67D4F /* LibraryComparable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryComparable.swift; sourceTree = "<group>"; };
+		FE57C2F92E713D1300A67D4F /* LibraryComparator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryComparator.swift; sourceTree = "<group>"; };
+		FE57C2FA2E713D1300A67D4F /* LibrarySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibrarySection.swift; sourceTree = "<group>"; };
+		FE57C2FB2E713D1300A67D4F /* LibrarySectioner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibrarySectioner.swift; sourceTree = "<group>"; };
+		FE57C2FC2E713D1300A67D4F /* Logger+Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Logger+Category.swift"; sourceTree = "<group>"; };
+		FE57C2FD2E713D1300A67D4F /* String+LibrarySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+LibrarySection.swift"; sourceTree = "<group>"; };
+		FE57C2FE2E713D1300A67D4F /* String+LibrarySorting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+LibrarySorting.swift"; sourceTree = "<group>"; };
+		FE57C2FF2E713D1300A67D4F /* URL+JSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+JSON.swift"; sourceTree = "<group>"; };
+		FE57C44A2E713D4600A67D4F /* AnnumFormatTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnumFormatTests.swift; sourceTree = "<group>"; };
+		FE57C44B2E713D4600A67D4F /* AnnumTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnumTests.swift; sourceTree = "<group>"; };
+		FE57C44C2E713D4600A67D4F /* ArchiveCategoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveCategoryTests.swift; sourceTree = "<group>"; };
+		FE57C44D2E713D4600A67D4F /* ArchivePathCategoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchivePathCategoryTests.swift; sourceTree = "<group>"; };
+		FE57C44E2E713D4600A67D4F /* ArchivePathTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchivePathTests.swift; sourceTree = "<group>"; };
+		FE57C44F2E713D4600A67D4F /* DecadeFormatTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecadeFormatTests.swift; sourceTree = "<group>"; };
+		FE57C4502E713D4600A67D4F /* DecadeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecadeTests.swift; sourceTree = "<group>"; };
+		FE57C4512E713D4600A67D4F /* PartialDateFormatTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartialDateFormatTests.swift; sourceTree = "<group>"; };
+		FE57C4522E713D4600A67D4F /* PartialDateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartialDateTests.swift; sourceTree = "<group>"; };
+		FE57C4542E713D4600A67D4F /* ArchiveNavigationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveNavigationTests.swift; sourceTree = "<group>"; };
+		FE57C4552E713D4600A67D4F /* ConcertComparatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcertComparatorTests.swift; sourceTree = "<group>"; };
+		FE57C4562E713D4600A67D4F /* EmphasizedMatchingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmphasizedMatchingTests.swift; sourceTree = "<group>"; };
+		FE57C4572E713D4600A67D4F /* LibrarySectionFormatterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibrarySectionFormatterTests.swift; sourceTree = "<group>"; };
+		FE57C4582E713D4600A67D4F /* PathRestorableUserActivityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathRestorableUserActivityTests.swift; sourceTree = "<group>"; };
+		FE57C4592E713D4600A67D4F /* WeekdayTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekdayTests.swift; sourceTree = "<group>"; };
+		FE57C45B2E713D4600A67D4F /* LibraryComparatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryComparatorTests.swift; sourceTree = "<group>"; };
+		FE57C45C2E713D4600A67D4F /* LibrarySectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibrarySectionTests.swift; sourceTree = "<group>"; };
 		FE9910DC2AC205A70054D229 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		FEB486502E6E6D740043057D /* site_tool */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = site_tool; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEB489AA2E6E6F960043057D /* site_associated_domains */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = site_associated_domains; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -61,187 +603,6 @@
 		FEC1720F2E70F1E800E8EFC8 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		FEE0AECC2E6E74F5005CE1AB /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		FEB4833A2E6E476D0043057D /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				App/Info.plist,
-				DiaryData/Diary.swift,
-				"DiaryData/Diary+URL.swift",
-				DiaryData/Entry.swift,
-				next_id/Program.swift,
-				site_associated_domains/Program.swift,
-				site_tool/Program.swift,
-			);
-			target = FE5360FC29CE82CA00618099 /* SiteApp */;
-		};
-		FEB486582E6E6DBC0043057D /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				DiaryData/Diary.swift,
-				"DiaryData/Diary+URL.swift",
-				DiaryData/Entry.swift,
-				MusicData/Album.swift,
-				MusicData/Annum.swift,
-				"MusicData/Annum+FormatStyle.swift",
-				"MusicData/Annum+ParseableFormatStyle.swift",
-				MusicData/AnnumDigest.swift,
-				MusicData/ArchiveCategory.swift,
-				"MusicData/ArchiveCategory+FormatStyle.swift",
-				"MusicData/ArchiveCategory+ParseableFormatStyle.swift",
-				"MusicData/ArchiveCategory+URL.swift",
-				MusicData/ArchivePath.swift,
-				"MusicData/ArchivePath+ArchiveCategory.swift",
-				"MusicData/ArchivePath+Codable.swift",
-				"MusicData/ArchivePath+FormatStyle.swift",
-				"MusicData/ArchivePath+ParseableFormatStyle.swift",
-				"MusicData/ArchivePath+PathRestorable.swift",
-				"MusicData/ArchivePath+URL.swift",
-				MusicData/Artist.swift,
-				"MusicData/Artist+Digest.swift",
-				"MusicData/Artist+LibraryComparable.swift",
-				MusicData/ArtistDigest.swift,
-				"MusicData/ArtistDigest+LibraryComparable.swift",
-				MusicData/Concert.swift,
-				"MusicData/Concert+FormatStyle.swift",
-				MusicData/Decade.FormatStyle.swift,
-				MusicData/Decade.swift,
-				MusicData/FirstSet.swift,
-				"MusicData/LibraryComparator+Concert.swift",
-				"MusicData/LibraryComparator+Music.swift",
-				"MusicData/LibrarySectioner+Music.swift",
-				MusicData/Location.swift,
-				"MusicData/Location+Comparable.swift",
-				"MusicData/Location+FormatStyle.swift",
-				MusicData/Lookup.swift,
-				MusicData/Music.swift,
-				"MusicData/Music+Ranking.swift",
-				"MusicData/Music+ShowsOnly.swift",
-				"MusicData/Music+URL.swift",
-				MusicData/PartialDate.swift,
-				"MusicData/PartialDate+Date.swift",
-				"MusicData/PartialDate+FormatStyle.swift",
-				"MusicData/PartialDate+Span.swift",
-				MusicData/PathRestorable.swift,
-				MusicData/Rank.swift,
-				MusicData/Ranking.swift,
-				MusicData/Relation.swift,
-				MusicData/Show.swift,
-				"MusicData/Show+Concert.swift",
-				MusicData/Song.swift,
-				MusicData/Vault.swift,
-				"MusicData/Vault+AnnumDigest.swift",
-				"MusicData/Vault+NextID.swift",
-				"MusicData/Vault+URL.swift",
-				MusicData/Venue.swift,
-				"MusicData/Venue+Digest.swift",
-				"MusicData/Venue+FormatStyle.swift",
-				"MusicData/Venue+LibraryComparable.swift",
-				MusicData/VenueDigest.swift,
-				"MusicData/VenueDigest+LibraryComparable.swift",
-				site_tool/Program.swift,
-				Utilities/CompareOptional.swift,
-				"Utilities/Data+JSON.swift",
-				Utilities/LibraryComparable.swift,
-				Utilities/LibraryComparator.swift,
-				Utilities/LibrarySection.swift,
-				Utilities/LibrarySectioner.swift,
-				"Utilities/Logger+Category.swift",
-				"Utilities/String+LibrarySection.swift",
-				"Utilities/String+LibrarySorting.swift",
-				"Utilities/URL+JSON.swift",
-			);
-			target = FEB4864F2E6E6D740043057D /* site_tool */;
-		};
-		FEB489B22E6E6FAE0043057D /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				site_associated_domains/Program.swift,
-			);
-			target = FEB489A92E6E6F960043057D /* site_associated_domains */;
-		};
-		FEB489C22E6E70920043057D /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				MusicData/Album.swift,
-				MusicData/Annum.swift,
-				"MusicData/Annum+FormatStyle.swift",
-				"MusicData/Annum+ParseableFormatStyle.swift",
-				MusicData/AnnumDigest.swift,
-				MusicData/ArchiveCategory.swift,
-				"MusicData/ArchiveCategory+FormatStyle.swift",
-				"MusicData/ArchiveCategory+ParseableFormatStyle.swift",
-				"MusicData/ArchiveCategory+URL.swift",
-				MusicData/ArchivePath.swift,
-				"MusicData/ArchivePath+ArchiveCategory.swift",
-				"MusicData/ArchivePath+Codable.swift",
-				"MusicData/ArchivePath+FormatStyle.swift",
-				"MusicData/ArchivePath+ParseableFormatStyle.swift",
-				"MusicData/ArchivePath+PathRestorable.swift",
-				"MusicData/ArchivePath+URL.swift",
-				MusicData/Artist.swift,
-				"MusicData/Artist+Digest.swift",
-				"MusicData/Artist+LibraryComparable.swift",
-				MusicData/ArtistDigest.swift,
-				"MusicData/ArtistDigest+LibraryComparable.swift",
-				MusicData/Concert.swift,
-				"MusicData/Concert+FormatStyle.swift",
-				MusicData/Decade.FormatStyle.swift,
-				MusicData/Decade.swift,
-				MusicData/FirstSet.swift,
-				"MusicData/LibraryComparator+Concert.swift",
-				"MusicData/LibraryComparator+Music.swift",
-				"MusicData/LibrarySectioner+Music.swift",
-				MusicData/Location.swift,
-				"MusicData/Location+Comparable.swift",
-				"MusicData/Location+FormatStyle.swift",
-				MusicData/Lookup.swift,
-				MusicData/Music.swift,
-				"MusicData/Music+Ranking.swift",
-				"MusicData/Music+ShowsOnly.swift",
-				"MusicData/Music+URL.swift",
-				MusicData/PartialDate.swift,
-				"MusicData/PartialDate+Date.swift",
-				"MusicData/PartialDate+FormatStyle.swift",
-				"MusicData/PartialDate+Span.swift",
-				MusicData/PathRestorable.swift,
-				MusicData/Rank.swift,
-				MusicData/Ranking.swift,
-				MusicData/Relation.swift,
-				MusicData/Show.swift,
-				"MusicData/Show+Concert.swift",
-				MusicData/Song.swift,
-				MusicData/Vault.swift,
-				"MusicData/Vault+AnnumDigest.swift",
-				"MusicData/Vault+NextID.swift",
-				"MusicData/Vault+URL.swift",
-				MusicData/Venue.swift,
-				"MusicData/Venue+Digest.swift",
-				"MusicData/Venue+FormatStyle.swift",
-				"MusicData/Venue+LibraryComparable.swift",
-				MusicData/VenueDigest.swift,
-				"MusicData/VenueDigest+LibraryComparable.swift",
-				next_id/Program.swift,
-				Utilities/CompareOptional.swift,
-				"Utilities/Data+JSON.swift",
-				Utilities/LibraryComparable.swift,
-				Utilities/LibraryComparator.swift,
-				Utilities/LibrarySection.swift,
-				Utilities/LibrarySectioner.swift,
-				"Utilities/Logger+Category.swift",
-				"Utilities/String+LibrarySection.swift",
-				"Utilities/String+LibrarySorting.swift",
-				"Utilities/URL+JSON.swift",
-			);
-			target = FEB489B92E6E70800043057D /* next_id */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		FEB4827E2E6E471D0043057D /* Sources */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (FEB4833A2E6E476D0043057D /* PBXFileSystemSynchronizedBuildFileExceptionSet */, FEB486582E6E6DBC0043057D /* PBXFileSystemSynchronizedBuildFileExceptionSet */, FEB489B22E6E6FAE0043057D /* PBXFileSystemSynchronizedBuildFileExceptionSet */, FEB489C22E6E70920043057D /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Sources; sourceTree = "<group>"; };
-		FEE0AECD2E6E74F5005CE1AB /* Tests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Tests; sourceTree = "<group>"; };
-/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		FE5360FA29CE82CA00618099 /* Frameworks */ = {
@@ -290,8 +651,8 @@
 			children = (
 				FE9910DC2AC205A70054D229 /* Config.xcconfig */,
 				FEC1720F2E70F1E800E8EFC8 /* README.md */,
-				FEB4827E2E6E471D0043057D /* Sources */,
-				FEE0AECD2E6E74F5005CE1AB /* Tests */,
+				FE57C3012E713D1300A67D4F /* Sources */,
+				FE57C45E2E713D4600A67D4F /* Tests */,
 				FE5360FE29CE82CA00618099 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -308,6 +669,344 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		FE57C23B2E713D1300A67D4F /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				FE57C23A2E713D1300A67D4F /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		FE57C2412E713D1300A67D4F /* App */ = {
+			isa = PBXGroup;
+			children = (
+				FE57C23B2E713D1300A67D4F /* Preview Content */,
+				FE57C23C2E713D1300A67D4F /* Assets.xcassets */,
+				FE57C23D2E713D1300A67D4F /* Info.plist */,
+				FE57C23E2E713D1300A67D4F /* Localizable.xcstrings */,
+				FE57C23F2E713D1300A67D4F /* SiteApp.entitlements */,
+				FE57C2402E713D1300A67D4F /* SiteAppApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		FE57C2452E713D1300A67D4F /* DiaryData */ = {
+			isa = PBXGroup;
+			children = (
+				FE57C2422E713D1300A67D4F /* Diary.swift */,
+				FE57C2432E713D1300A67D4F /* Diary+URL.swift */,
+				FE57C2442E713D1300A67D4F /* Entry.swift */,
+			);
+			path = DiaryData;
+			sourceTree = "<group>";
+		};
+		FE57C2802E713D1300A67D4F /* MusicData */ = {
+			isa = PBXGroup;
+			children = (
+				FE57C2462E713D1300A67D4F /* Album.swift */,
+				FE57C2472E713D1300A67D4F /* Annum.swift */,
+				FE57C2482E713D1300A67D4F /* Annum+FormatStyle.swift */,
+				FE57C2492E713D1300A67D4F /* Annum+ParseableFormatStyle.swift */,
+				FE57C24A2E713D1300A67D4F /* AnnumDigest.swift */,
+				FE57C24B2E713D1300A67D4F /* ArchiveCategory.swift */,
+				FE57C24C2E713D1300A67D4F /* ArchiveCategory+FormatStyle.swift */,
+				FE57C24D2E713D1300A67D4F /* ArchiveCategory+ParseableFormatStyle.swift */,
+				FE57C24E2E713D1300A67D4F /* ArchiveCategory+URL.swift */,
+				FE57C24F2E713D1300A67D4F /* ArchivePath.swift */,
+				FE57C2502E713D1300A67D4F /* ArchivePath+ArchiveCategory.swift */,
+				FE57C2512E713D1300A67D4F /* ArchivePath+Codable.swift */,
+				FE57C2522E713D1300A67D4F /* ArchivePath+FormatStyle.swift */,
+				FE57C2532E713D1300A67D4F /* ArchivePath+ParseableFormatStyle.swift */,
+				FE57C2542E713D1300A67D4F /* ArchivePath+PathRestorable.swift */,
+				FE57C2552E713D1300A67D4F /* ArchivePath+URL.swift */,
+				FE57C2562E713D1300A67D4F /* Artist.swift */,
+				FE57C2572E713D1300A67D4F /* Artist+Digest.swift */,
+				FE57C2582E713D1300A67D4F /* Artist+LibraryComparable.swift */,
+				FE57C2592E713D1300A67D4F /* ArtistDigest.swift */,
+				FE57C25A2E713D1300A67D4F /* ArtistDigest+LibraryComparable.swift */,
+				FE57C25B2E713D1300A67D4F /* Concert.swift */,
+				FE57C25C2E713D1300A67D4F /* Concert+FormatStyle.swift */,
+				FE57C25D2E713D1300A67D4F /* Decade.swift */,
+				FE57C25E2E713D1300A67D4F /* Decade.FormatStyle.swift */,
+				FE57C25F2E713D1300A67D4F /* FirstSet.swift */,
+				FE57C2602E713D1300A67D4F /* LibraryComparator+Concert.swift */,
+				FE57C2612E713D1300A67D4F /* LibraryComparator+Music.swift */,
+				FE57C2622E713D1300A67D4F /* LibrarySectioner+Music.swift */,
+				FE57C2632E713D1300A67D4F /* Location.swift */,
+				FE57C2642E713D1300A67D4F /* Location+Comparable.swift */,
+				FE57C2652E713D1300A67D4F /* Location+FormatStyle.swift */,
+				FE57C2662E713D1300A67D4F /* Lookup.swift */,
+				FE57C2672E713D1300A67D4F /* Music.swift */,
+				FE57C2682E713D1300A67D4F /* Music+Ranking.swift */,
+				FE57C2692E713D1300A67D4F /* Music+ShowsOnly.swift */,
+				FE57C26A2E713D1300A67D4F /* Music+URL.swift */,
+				FE57C26B2E713D1300A67D4F /* PartialDate.swift */,
+				FE57C26C2E713D1300A67D4F /* PartialDate+Date.swift */,
+				FE57C26D2E713D1300A67D4F /* PartialDate+FormatStyle.swift */,
+				FE57C26E2E713D1300A67D4F /* PartialDate+Span.swift */,
+				FE57C26F2E713D1300A67D4F /* PathRestorable.swift */,
+				FE57C2702E713D1300A67D4F /* Rank.swift */,
+				FE57C2712E713D1300A67D4F /* Ranking.swift */,
+				FE57C2722E713D1300A67D4F /* Relation.swift */,
+				FE57C2732E713D1300A67D4F /* Show.swift */,
+				FE57C2742E713D1300A67D4F /* Show+Concert.swift */,
+				FE57C2752E713D1300A67D4F /* Song.swift */,
+				FE57C2762E713D1300A67D4F /* Vault.swift */,
+				FE57C2772E713D1300A67D4F /* Vault+AnnumDigest.swift */,
+				FE57C2782E713D1300A67D4F /* Vault+NextID.swift */,
+				FE57C2792E713D1300A67D4F /* Vault+URL.swift */,
+				FE57C27A2E713D1300A67D4F /* Venue.swift */,
+				FE57C27B2E713D1300A67D4F /* Venue+Digest.swift */,
+				FE57C27C2E713D1300A67D4F /* Venue+FormatStyle.swift */,
+				FE57C27D2E713D1300A67D4F /* Venue+LibraryComparable.swift */,
+				FE57C27E2E713D1300A67D4F /* VenueDigest.swift */,
+				FE57C27F2E713D1300A67D4F /* VenueDigest+LibraryComparable.swift */,
+			);
+			path = MusicData;
+			sourceTree = "<group>";
+		};
+		FE57C2822E713D1300A67D4F /* next_id */ = {
+			isa = PBXGroup;
+			children = (
+				FE57C2812E713D1300A67D4F /* Program.swift */,
+			);
+			path = next_id;
+			sourceTree = "<group>";
+		};
+		FE57C2C62E713D1300A67D4F /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				FE57C2832E713D1300A67D4F /* AddressView.swift */,
+				FE57C2842E713D1300A67D4F /* ArchiveActivity.swift */,
+				FE57C2852E713D1300A67D4F /* ArchiveCategory+LocationFilterable.swift */,
+				FE57C2862E713D1300A67D4F /* ArchiveCategoryLinkable.swift */,
+				FE57C2872E713D1300A67D4F /* ArchiveCategoryStack.swift */,
+				FE57C2882E713D1300A67D4F /* ArchiveCategoryToolbarContent.swift */,
+				FE57C2892E713D1300A67D4F /* ArchiveCrossSearchContainer.swift */,
+				FE57C28A2E713D1300A67D4F /* ArchiveCrossSearchView.swift */,
+				FE57C28B2E713D1300A67D4F /* ArchiveNavigation.swift */,
+				FE57C28C2E713D1300A67D4F /* ArchiveNavigation+External.swift */,
+				FE57C28D2E713D1300A67D4F /* ArchiveNavigationUserActivityModifier.swift */,
+				FE57C28E2E713D1300A67D4F /* ArchivePath+Destination.swift */,
+				FE57C28F2E713D1300A67D4F /* ArchiveScope.swift */,
+				FE57C2902E713D1300A67D4F /* ArchiveSearchModifier.swift */,
+				FE57C2912E713D1300A67D4F /* ArchiveSharable.swift */,
+				FE57C2922E713D1300A67D4F /* ArchiveSharableToolbarContent.swift */,
+				FE57C2932E713D1300A67D4F /* ArchiveStateView.swift */,
+				FE57C2942E713D1300A67D4F /* ArchiveTabConfiguration.swift */,
+				FE57C2952E713D1300A67D4F /* ArchiveTabView.swift */,
+				FE57C2962E713D1300A67D4F /* ArtistBlurb.swift */,
+				FE57C2972E713D1300A67D4F /* ArtistDetail.swift */,
+				FE57C2982E713D1300A67D4F /* ArtistDigest+RankingSort.swift */,
+				FE57C2992E713D1300A67D4F /* ArtistList.swift */,
+				FE57C29A2E713D1300A67D4F /* ArtistsSummary.swift */,
+				FE57C29B2E713D1300A67D4F /* Bundle+AppIcon.swift */,
+				FE57C29C2E713D1300A67D4F /* ConcertBlurb.swift */,
+				FE57C29D2E713D1300A67D4F /* DaysShowsSummary.swift */,
+				FE57C29E2E713D1300A67D4F /* LibrarySection+Section.swift */,
+				FE57C29F2E713D1300A67D4F /* LocationFilterToolbarContent.swift */,
+				FE57C2A02E713D1300A67D4F /* LocationMap.swift */,
+				FE57C2A12E713D1300A67D4F /* MonthChart.swift */,
+				FE57C2A22E713D1300A67D4F /* NavigationLink+PathRestorable.swift */,
+				FE57C2A32E713D1300A67D4F /* NearbyDistance.swift */,
+				FE57C2A42E713D1300A67D4F /* NearbyDistanceThresholdView.swift */,
+				FE57C2A52E713D1300A67D4F /* NearbyLocationModifier.swift */,
+				FE57C2A62E713D1300A67D4F /* NearbyLocationView.swift */,
+				FE57C2A72E713D1300A67D4F /* NearbyPreviewModifer.swift */,
+				FE57C2A82E713D1300A67D4F /* NotificationModifier.swift */,
+				FE57C2A92E713D1300A67D4F /* PathRestorableLink.swift */,
+				FE57C2AA2E713D1300A67D4F /* RankableSortList.swift */,
+				FE57C2AB2E713D1300A67D4F /* Ranking+RankingSort.swift */,
+				FE57C2AC2E713D1300A67D4F /* Ranking+ViewRepresentations.swift */,
+				FE57C2AD2E713D1300A67D4F /* RankingList.swift */,
+				FE57C2AE2E713D1300A67D4F /* RefreshCommand.swift */,
+				FE57C2AF2E713D1300A67D4F /* SettingsView.swift */,
+				FE57C2B02E713D1300A67D4F /* ShowDetail.swift */,
+				FE57C2B12E713D1300A67D4F /* ShowsMode.swift */,
+				FE57C2B22E713D1300A67D4F /* ShowsSummary.swift */,
+				FE57C2B32E713D1300A67D4F /* ShowYearList.swift */,
+				FE57C2B42E713D1300A67D4F /* SiteView.swift */,
+				FE57C2B52E713D1300A67D4F /* SortModifierToolbarContent.swift */,
+				FE57C2B62E713D1300A67D4F /* StateChart.swift */,
+				FE57C2B72E713D1300A67D4F /* StatsCategory.swift */,
+				FE57C2B82E713D1300A67D4F /* StatsGrouping.swift */,
+				FE57C2B92E713D1300A67D4F /* StatsSummary.swift */,
+				FE57C2BA2E713D1300A67D4F /* StatsThreshold.swift */,
+				FE57C2BB2E713D1300A67D4F /* TodayBlurb.swift */,
+				FE57C2BC2E713D1300A67D4F /* TodayList.swift */,
+				FE57C2BD2E713D1300A67D4F /* TodaySummary.swift */,
+				FE57C2BE2E713D1300A67D4F /* VaultPreviewModifier.swift */,
+				FE57C2BF2E713D1300A67D4F /* VenueBlurb.swift */,
+				FE57C2C02E713D1300A67D4F /* VenueDetail.swift */,
+				FE57C2C12E713D1300A67D4F /* VenueDigest+RankingSort.swift */,
+				FE57C2C22E713D1300A67D4F /* VenueList.swift */,
+				FE57C2C32E713D1300A67D4F /* VenuesSummary.swift */,
+				FE57C2C42E713D1300A67D4F /* WeekdayChart.swift */,
+				FE57C2C52E713D1300A67D4F /* YearDetail.swift */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		FE57C2E12E713D1300A67D4F /* Music */ = {
+			isa = PBXGroup;
+			children = (
+				FE57C2C62E713D1300A67D4F /* UI */,
+				FE57C2C72E713D1300A67D4F /* AnnumDigest+NSUserActivity.swift */,
+				FE57C2C82E713D1300A67D4F /* ArtistDigest+NSUserActivity.swift */,
+				FE57C2C92E713D1300A67D4F /* ArtistDigest+Rankable.swift */,
+				FE57C2CA2E713D1300A67D4F /* Atlas.swift */,
+				FE57C2CB2E713D1300A67D4F /* AtlasCache.swift */,
+				FE57C2CC2E713D1300A67D4F /* BatchGeocode.swift */,
+				FE57C2CD2E713D1300A67D4F /* Concert+NSUserActivity.swift */,
+				FE57C2CE2E713D1300A67D4F /* Geocode.swift */,
+				FE57C2CF2E713D1300A67D4F /* Location+Geocode.swift */,
+				FE57C2D02E713D1300A67D4F /* LocationFilter.swift */,
+				FE57C2D12E713D1300A67D4F /* NearbyDefaults.swift */,
+				FE57C2D22E713D1300A67D4F /* NearbyModel.swift */,
+				FE57C2D32E713D1300A67D4F /* NSError+Throttle.swift */,
+				FE57C2D42E713D1300A67D4F /* NSUserActivity+ArchiveCategory.swift */,
+				FE57C2D52E713D1300A67D4F /* NSUserActivity+ArchivePath.swift */,
+				FE57C2D62E713D1300A67D4F /* NSUserActivity+Search.swift */,
+				FE57C2D72E713D1300A67D4F /* PathRestorableUserActivity.swift */,
+				FE57C2D82E713D1300A67D4F /* Placemark.swift */,
+				FE57C2D92E713D1300A67D4F /* Rankable.swift */,
+				FE57C2DA2E713D1300A67D4F /* RankingSort.swift */,
+				FE57C2DB2E713D1300A67D4F /* SiteModel.swift */,
+				FE57C2DC2E713D1300A67D4F /* Vault+ArchivePath.swift */,
+				FE57C2DD2E713D1300A67D4F /* VaultModel.swift */,
+				FE57C2DE2E713D1300A67D4F /* Venue+Geocodable.swift */,
+				FE57C2DF2E713D1300A67D4F /* VenueDigest+NSUserActivity.swift */,
+				FE57C2E02E713D1300A67D4F /* VenueDigest+Rankable.swift */,
+			);
+			path = Music;
+			sourceTree = "<group>";
+		};
+		FE57C2F02E713D1300A67D4F /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				FE57C2E22E713D1300A67D4F /* Date+Weekdays.swift */,
+				FE57C2E32E713D1300A67D4F /* Dictionary+JSONCache.swift */,
+				FE57C2E42E713D1300A67D4F /* FileManager+FileURL.swift */,
+				FE57C2E52E713D1300A67D4F /* FormatStyle+LibrarySection.swift */,
+				FE57C2E62E713D1300A67D4F /* FormatStyle+Ranking.swift */,
+				FE57C2E72E713D1300A67D4F /* Linkable.swift */,
+				FE57C2E82E713D1300A67D4F /* LocationManager.swift */,
+				FE57C2E92E713D1300A67D4F /* MapItem+Geometry.swift */,
+				FE57C2EA2E713D1300A67D4F /* NSCodingCodable.swift */,
+				FE57C2EB2E713D1300A67D4F /* Placemark+Geometry.swift */,
+				FE57C2EC2E713D1300A67D4F /* Rank+FormatStyle.swift */,
+				FE57C2ED2E713D1300A67D4F /* String+AttributedMatching.swift */,
+				FE57C2EE2E713D1300A67D4F /* String+EmphasizedMatching.swift */,
+				FE57C2EF2E713D1300A67D4F /* String+Markdown.swift */,
+			);
+			path = Utility;
+			sourceTree = "<group>";
+		};
+		FE57C2F12E713D1300A67D4F /* Site */ = {
+			isa = PBXGroup;
+			children = (
+				FE57C2E12E713D1300A67D4F /* Music */,
+				FE57C2F02E713D1300A67D4F /* Utility */,
+			);
+			path = Site;
+			sourceTree = "<group>";
+		};
+		FE57C2F32E713D1300A67D4F /* site_associated_domains */ = {
+			isa = PBXGroup;
+			children = (
+				FE57C2F22E713D1300A67D4F /* Program.swift */,
+			);
+			path = site_associated_domains;
+			sourceTree = "<group>";
+		};
+		FE57C2F52E713D1300A67D4F /* site_tool */ = {
+			isa = PBXGroup;
+			children = (
+				FE57C2F42E713D1300A67D4F /* Program.swift */,
+			);
+			path = site_tool;
+			sourceTree = "<group>";
+		};
+		FE57C3002E713D1300A67D4F /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				FE57C2F62E713D1300A67D4F /* CompareOptional.swift */,
+				FE57C2F72E713D1300A67D4F /* Data+JSON.swift */,
+				FE57C2F82E713D1300A67D4F /* LibraryComparable.swift */,
+				FE57C2F92E713D1300A67D4F /* LibraryComparator.swift */,
+				FE57C2FA2E713D1300A67D4F /* LibrarySection.swift */,
+				FE57C2FB2E713D1300A67D4F /* LibrarySectioner.swift */,
+				FE57C2FC2E713D1300A67D4F /* Logger+Category.swift */,
+				FE57C2FD2E713D1300A67D4F /* String+LibrarySection.swift */,
+				FE57C2FE2E713D1300A67D4F /* String+LibrarySorting.swift */,
+				FE57C2FF2E713D1300A67D4F /* URL+JSON.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		FE57C3012E713D1300A67D4F /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				FE57C2412E713D1300A67D4F /* App */,
+				FE57C2452E713D1300A67D4F /* DiaryData */,
+				FE57C2802E713D1300A67D4F /* MusicData */,
+				FE57C2822E713D1300A67D4F /* next_id */,
+				FE57C2F12E713D1300A67D4F /* Site */,
+				FE57C2F32E713D1300A67D4F /* site_associated_domains */,
+				FE57C2F52E713D1300A67D4F /* site_tool */,
+				FE57C3002E713D1300A67D4F /* Utilities */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		FE57C4532E713D4600A67D4F /* MusicDataTests */ = {
+			isa = PBXGroup;
+			children = (
+				FE57C44A2E713D4600A67D4F /* AnnumFormatTests.swift */,
+				FE57C44B2E713D4600A67D4F /* AnnumTests.swift */,
+				FE57C44C2E713D4600A67D4F /* ArchiveCategoryTests.swift */,
+				FE57C44D2E713D4600A67D4F /* ArchivePathCategoryTests.swift */,
+				FE57C44E2E713D4600A67D4F /* ArchivePathTests.swift */,
+				FE57C44F2E713D4600A67D4F /* DecadeFormatTests.swift */,
+				FE57C4502E713D4600A67D4F /* DecadeTests.swift */,
+				FE57C4512E713D4600A67D4F /* PartialDateFormatTests.swift */,
+				FE57C4522E713D4600A67D4F /* PartialDateTests.swift */,
+			);
+			path = MusicDataTests;
+			sourceTree = "<group>";
+		};
+		FE57C45A2E713D4600A67D4F /* SiteTests */ = {
+			isa = PBXGroup;
+			children = (
+				FE57C4542E713D4600A67D4F /* ArchiveNavigationTests.swift */,
+				FE57C4552E713D4600A67D4F /* ConcertComparatorTests.swift */,
+				FE57C4562E713D4600A67D4F /* EmphasizedMatchingTests.swift */,
+				FE57C4572E713D4600A67D4F /* LibrarySectionFormatterTests.swift */,
+				FE57C4582E713D4600A67D4F /* PathRestorableUserActivityTests.swift */,
+				FE57C4592E713D4600A67D4F /* WeekdayTests.swift */,
+			);
+			path = SiteTests;
+			sourceTree = "<group>";
+		};
+		FE57C45D2E713D4600A67D4F /* UtilitiesTests */ = {
+			isa = PBXGroup;
+			children = (
+				FE57C45B2E713D4600A67D4F /* LibraryComparatorTests.swift */,
+				FE57C45C2E713D4600A67D4F /* LibrarySectionTests.swift */,
+			);
+			path = UtilitiesTests;
+			sourceTree = "<group>";
+		};
+		FE57C45E2E713D4600A67D4F /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				FE57C4532E713D4600A67D4F /* MusicDataTests */,
+				FE57C45A2E713D4600A67D4F /* SiteTests */,
+				FE57C45D2E713D4600A67D4F /* UtilitiesTests */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -322,9 +1021,6 @@
 			buildRules = (
 			);
 			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				FEB4827E2E6E471D0043057D /* Sources */,
 			);
 			name = SiteApp;
 			packageProductDependencies = (
@@ -406,9 +1102,6 @@
 			dependencies = (
 				FEE0AED12E6E74F5005CE1AB /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				FEE0AECD2E6E74F5005CE1AB /* Tests */,
-			);
 			name = Tests;
 			packageProductDependencies = (
 			);
@@ -474,6 +1167,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FE57C3022E713D1300A67D4F /* Preview Assets.xcassets in Resources */,
+				FE57C3032E713D1300A67D4F /* Assets.xcassets in Resources */,
+				FE57C3052E713D1300A67D4F /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -491,6 +1187,182 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FE57C3062E713D1300A67D4F /* SiteAppApp.swift in Sources */,
+				FE57C30A2E713D1300A67D4F /* Album.swift in Sources */,
+				FE57C30B2E713D1300A67D4F /* Annum.swift in Sources */,
+				FE57C30C2E713D1300A67D4F /* Annum+FormatStyle.swift in Sources */,
+				FE57C30D2E713D1300A67D4F /* Annum+ParseableFormatStyle.swift in Sources */,
+				FE57C30E2E713D1300A67D4F /* AnnumDigest.swift in Sources */,
+				FE57C30F2E713D1300A67D4F /* ArchiveCategory.swift in Sources */,
+				FE57C3102E713D1300A67D4F /* ArchiveCategory+FormatStyle.swift in Sources */,
+				FE57C3112E713D1300A67D4F /* ArchiveCategory+ParseableFormatStyle.swift in Sources */,
+				FE57C3122E713D1300A67D4F /* ArchiveCategory+URL.swift in Sources */,
+				FE57C3132E713D1300A67D4F /* ArchivePath.swift in Sources */,
+				FE57C3142E713D1300A67D4F /* ArchivePath+ArchiveCategory.swift in Sources */,
+				FE57C3152E713D1300A67D4F /* ArchivePath+Codable.swift in Sources */,
+				FE57C3162E713D1300A67D4F /* ArchivePath+FormatStyle.swift in Sources */,
+				FE57C3172E713D1300A67D4F /* ArchivePath+ParseableFormatStyle.swift in Sources */,
+				FE57C3182E713D1300A67D4F /* ArchivePath+PathRestorable.swift in Sources */,
+				FE57C3192E713D1300A67D4F /* ArchivePath+URL.swift in Sources */,
+				FE57C31A2E713D1300A67D4F /* Artist.swift in Sources */,
+				FE57C31B2E713D1300A67D4F /* Artist+Digest.swift in Sources */,
+				FE57C31C2E713D1300A67D4F /* Artist+LibraryComparable.swift in Sources */,
+				FE57C31D2E713D1300A67D4F /* ArtistDigest.swift in Sources */,
+				FE57C31E2E713D1300A67D4F /* ArtistDigest+LibraryComparable.swift in Sources */,
+				FE57C31F2E713D1300A67D4F /* Concert.swift in Sources */,
+				FE57C3202E713D1300A67D4F /* Concert+FormatStyle.swift in Sources */,
+				FE57C3212E713D1300A67D4F /* Decade.swift in Sources */,
+				FE57C3222E713D1300A67D4F /* Decade.FormatStyle.swift in Sources */,
+				FE57C3232E713D1300A67D4F /* FirstSet.swift in Sources */,
+				FE57C3242E713D1300A67D4F /* LibraryComparator+Concert.swift in Sources */,
+				FE57C3252E713D1300A67D4F /* LibraryComparator+Music.swift in Sources */,
+				FE57C3262E713D1300A67D4F /* LibrarySectioner+Music.swift in Sources */,
+				FE57C3272E713D1300A67D4F /* Location.swift in Sources */,
+				FE57C3282E713D1300A67D4F /* Location+Comparable.swift in Sources */,
+				FE57C3292E713D1300A67D4F /* Location+FormatStyle.swift in Sources */,
+				FE57C32A2E713D1300A67D4F /* Lookup.swift in Sources */,
+				FE57C32B2E713D1300A67D4F /* Music.swift in Sources */,
+				FE57C32C2E713D1300A67D4F /* Music+Ranking.swift in Sources */,
+				FE57C32D2E713D1300A67D4F /* Music+ShowsOnly.swift in Sources */,
+				FE57C32E2E713D1300A67D4F /* Music+URL.swift in Sources */,
+				FE57C32F2E713D1300A67D4F /* PartialDate.swift in Sources */,
+				FE57C3302E713D1300A67D4F /* PartialDate+Date.swift in Sources */,
+				FE57C3312E713D1300A67D4F /* PartialDate+FormatStyle.swift in Sources */,
+				FE57C3322E713D1300A67D4F /* PartialDate+Span.swift in Sources */,
+				FE57C3332E713D1300A67D4F /* PathRestorable.swift in Sources */,
+				FE57C3342E713D1300A67D4F /* Rank.swift in Sources */,
+				FE57C3352E713D1300A67D4F /* Ranking.swift in Sources */,
+				FE57C3362E713D1300A67D4F /* Relation.swift in Sources */,
+				FE57C3372E713D1300A67D4F /* Show.swift in Sources */,
+				FE57C3382E713D1300A67D4F /* Show+Concert.swift in Sources */,
+				FE57C3392E713D1300A67D4F /* Song.swift in Sources */,
+				FE57C33A2E713D1300A67D4F /* Vault.swift in Sources */,
+				FE57C33B2E713D1300A67D4F /* Vault+AnnumDigest.swift in Sources */,
+				FE57C33C2E713D1300A67D4F /* Vault+NextID.swift in Sources */,
+				FE57C33D2E713D1300A67D4F /* Vault+URL.swift in Sources */,
+				FE57C33E2E713D1300A67D4F /* Venue.swift in Sources */,
+				FE57C33F2E713D1300A67D4F /* Venue+Digest.swift in Sources */,
+				FE57C3402E713D1300A67D4F /* Venue+FormatStyle.swift in Sources */,
+				FE57C3412E713D1300A67D4F /* Venue+LibraryComparable.swift in Sources */,
+				FE57C3422E713D1300A67D4F /* VenueDigest.swift in Sources */,
+				FE57C3432E713D1300A67D4F /* VenueDigest+LibraryComparable.swift in Sources */,
+				FE57C3452E713D1300A67D4F /* AddressView.swift in Sources */,
+				FE57C3462E713D1300A67D4F /* ArchiveActivity.swift in Sources */,
+				FE57C3472E713D1300A67D4F /* ArchiveCategory+LocationFilterable.swift in Sources */,
+				FE57C3482E713D1300A67D4F /* ArchiveCategoryLinkable.swift in Sources */,
+				FE57C3492E713D1300A67D4F /* ArchiveCategoryStack.swift in Sources */,
+				FE57C34A2E713D1300A67D4F /* ArchiveCategoryToolbarContent.swift in Sources */,
+				FE57C34B2E713D1300A67D4F /* ArchiveCrossSearchContainer.swift in Sources */,
+				FE57C34C2E713D1300A67D4F /* ArchiveCrossSearchView.swift in Sources */,
+				FE57C34D2E713D1300A67D4F /* ArchiveNavigation.swift in Sources */,
+				FE57C34E2E713D1300A67D4F /* ArchiveNavigation+External.swift in Sources */,
+				FE57C34F2E713D1300A67D4F /* ArchiveNavigationUserActivityModifier.swift in Sources */,
+				FE57C3502E713D1300A67D4F /* ArchivePath+Destination.swift in Sources */,
+				FE57C3512E713D1300A67D4F /* ArchiveScope.swift in Sources */,
+				FE57C3522E713D1300A67D4F /* ArchiveSearchModifier.swift in Sources */,
+				FE57C3532E713D1300A67D4F /* ArchiveSharable.swift in Sources */,
+				FE57C3542E713D1300A67D4F /* ArchiveSharableToolbarContent.swift in Sources */,
+				FE57C3552E713D1300A67D4F /* ArchiveStateView.swift in Sources */,
+				FE57C3562E713D1300A67D4F /* ArchiveTabConfiguration.swift in Sources */,
+				FE57C3572E713D1300A67D4F /* ArchiveTabView.swift in Sources */,
+				FE57C3582E713D1300A67D4F /* ArtistBlurb.swift in Sources */,
+				FE57C3592E713D1300A67D4F /* ArtistDetail.swift in Sources */,
+				FE57C35A2E713D1300A67D4F /* ArtistDigest+RankingSort.swift in Sources */,
+				FE57C35B2E713D1300A67D4F /* ArtistList.swift in Sources */,
+				FE57C35C2E713D1300A67D4F /* ArtistsSummary.swift in Sources */,
+				FE57C35D2E713D1300A67D4F /* Bundle+AppIcon.swift in Sources */,
+				FE57C35E2E713D1300A67D4F /* ConcertBlurb.swift in Sources */,
+				FE57C35F2E713D1300A67D4F /* DaysShowsSummary.swift in Sources */,
+				FE57C3602E713D1300A67D4F /* LibrarySection+Section.swift in Sources */,
+				FE57C3612E713D1300A67D4F /* LocationFilterToolbarContent.swift in Sources */,
+				FE57C3622E713D1300A67D4F /* LocationMap.swift in Sources */,
+				FE57C3632E713D1300A67D4F /* MonthChart.swift in Sources */,
+				FE57C3642E713D1300A67D4F /* NavigationLink+PathRestorable.swift in Sources */,
+				FE57C3652E713D1300A67D4F /* NearbyDistance.swift in Sources */,
+				FE57C3662E713D1300A67D4F /* NearbyDistanceThresholdView.swift in Sources */,
+				FE57C3672E713D1300A67D4F /* NearbyLocationModifier.swift in Sources */,
+				FE57C3682E713D1300A67D4F /* NearbyLocationView.swift in Sources */,
+				FE57C3692E713D1300A67D4F /* NearbyPreviewModifer.swift in Sources */,
+				FE57C36A2E713D1300A67D4F /* NotificationModifier.swift in Sources */,
+				FE57C36B2E713D1300A67D4F /* PathRestorableLink.swift in Sources */,
+				FE57C36C2E713D1300A67D4F /* RankableSortList.swift in Sources */,
+				FE57C36D2E713D1300A67D4F /* Ranking+RankingSort.swift in Sources */,
+				FE57C36E2E713D1300A67D4F /* Ranking+ViewRepresentations.swift in Sources */,
+				FE57C36F2E713D1300A67D4F /* RankingList.swift in Sources */,
+				FE57C3702E713D1300A67D4F /* RefreshCommand.swift in Sources */,
+				FE57C3712E713D1300A67D4F /* SettingsView.swift in Sources */,
+				FE57C3722E713D1300A67D4F /* ShowDetail.swift in Sources */,
+				FE57C3732E713D1300A67D4F /* ShowsMode.swift in Sources */,
+				FE57C3742E713D1300A67D4F /* ShowsSummary.swift in Sources */,
+				FE57C3752E713D1300A67D4F /* ShowYearList.swift in Sources */,
+				FE57C3762E713D1300A67D4F /* SiteView.swift in Sources */,
+				FE57C3772E713D1300A67D4F /* SortModifierToolbarContent.swift in Sources */,
+				FE57C3782E713D1300A67D4F /* StateChart.swift in Sources */,
+				FE57C3792E713D1300A67D4F /* StatsCategory.swift in Sources */,
+				FE57C37A2E713D1300A67D4F /* StatsGrouping.swift in Sources */,
+				FE57C37B2E713D1300A67D4F /* StatsSummary.swift in Sources */,
+				FE57C37C2E713D1300A67D4F /* StatsThreshold.swift in Sources */,
+				FE57C37D2E713D1300A67D4F /* TodayBlurb.swift in Sources */,
+				FE57C37E2E713D1300A67D4F /* TodayList.swift in Sources */,
+				FE57C37F2E713D1300A67D4F /* TodaySummary.swift in Sources */,
+				FE57C3802E713D1300A67D4F /* VaultPreviewModifier.swift in Sources */,
+				FE57C3812E713D1300A67D4F /* VenueBlurb.swift in Sources */,
+				FE57C3822E713D1300A67D4F /* VenueDetail.swift in Sources */,
+				FE57C3832E713D1300A67D4F /* VenueDigest+RankingSort.swift in Sources */,
+				FE57C3842E713D1300A67D4F /* VenueList.swift in Sources */,
+				FE57C3852E713D1300A67D4F /* VenuesSummary.swift in Sources */,
+				FE57C3862E713D1300A67D4F /* WeekdayChart.swift in Sources */,
+				FE57C3872E713D1300A67D4F /* YearDetail.swift in Sources */,
+				FE57C3882E713D1300A67D4F /* AnnumDigest+NSUserActivity.swift in Sources */,
+				FE57C3892E713D1300A67D4F /* ArtistDigest+NSUserActivity.swift in Sources */,
+				FE57C38A2E713D1300A67D4F /* ArtistDigest+Rankable.swift in Sources */,
+				FE57C38B2E713D1300A67D4F /* Atlas.swift in Sources */,
+				FE57C38C2E713D1300A67D4F /* AtlasCache.swift in Sources */,
+				FE57C38D2E713D1300A67D4F /* BatchGeocode.swift in Sources */,
+				FE57C38E2E713D1300A67D4F /* Concert+NSUserActivity.swift in Sources */,
+				FE57C38F2E713D1300A67D4F /* Geocode.swift in Sources */,
+				FE57C3902E713D1300A67D4F /* Location+Geocode.swift in Sources */,
+				FE57C3912E713D1300A67D4F /* LocationFilter.swift in Sources */,
+				FE57C3922E713D1300A67D4F /* NearbyDefaults.swift in Sources */,
+				FE57C3932E713D1300A67D4F /* NearbyModel.swift in Sources */,
+				FE57C3942E713D1300A67D4F /* NSError+Throttle.swift in Sources */,
+				FE57C3952E713D1300A67D4F /* NSUserActivity+ArchiveCategory.swift in Sources */,
+				FE57C3962E713D1300A67D4F /* NSUserActivity+ArchivePath.swift in Sources */,
+				FE57C3972E713D1300A67D4F /* NSUserActivity+Search.swift in Sources */,
+				FE57C3982E713D1300A67D4F /* PathRestorableUserActivity.swift in Sources */,
+				FE57C3992E713D1300A67D4F /* Placemark.swift in Sources */,
+				FE57C39A2E713D1300A67D4F /* Rankable.swift in Sources */,
+				FE57C39B2E713D1300A67D4F /* RankingSort.swift in Sources */,
+				FE57C39C2E713D1300A67D4F /* SiteModel.swift in Sources */,
+				FE57C39D2E713D1300A67D4F /* Vault+ArchivePath.swift in Sources */,
+				FE57C39E2E713D1300A67D4F /* VaultModel.swift in Sources */,
+				FE57C39F2E713D1300A67D4F /* Venue+Geocodable.swift in Sources */,
+				FE57C3A02E713D1300A67D4F /* VenueDigest+NSUserActivity.swift in Sources */,
+				FE57C3A12E713D1300A67D4F /* VenueDigest+Rankable.swift in Sources */,
+				FE57C3A22E713D1300A67D4F /* Date+Weekdays.swift in Sources */,
+				FE57C3A32E713D1300A67D4F /* Dictionary+JSONCache.swift in Sources */,
+				FE57C3A42E713D1300A67D4F /* FileManager+FileURL.swift in Sources */,
+				FE57C3A52E713D1300A67D4F /* FormatStyle+LibrarySection.swift in Sources */,
+				FE57C3A62E713D1300A67D4F /* FormatStyle+Ranking.swift in Sources */,
+				FE57C3A72E713D1300A67D4F /* Linkable.swift in Sources */,
+				FE57C3A82E713D1300A67D4F /* LocationManager.swift in Sources */,
+				FE57C3A92E713D1300A67D4F /* MapItem+Geometry.swift in Sources */,
+				FE57C3AA2E713D1300A67D4F /* NSCodingCodable.swift in Sources */,
+				FE57C3AB2E713D1300A67D4F /* Placemark+Geometry.swift in Sources */,
+				FE57C3AC2E713D1300A67D4F /* Rank+FormatStyle.swift in Sources */,
+				FE57C3AD2E713D1300A67D4F /* String+AttributedMatching.swift in Sources */,
+				FE57C3AE2E713D1300A67D4F /* String+EmphasizedMatching.swift in Sources */,
+				FE57C3AF2E713D1300A67D4F /* String+Markdown.swift in Sources */,
+				FE57C3B22E713D1300A67D4F /* CompareOptional.swift in Sources */,
+				FE57C3B32E713D1300A67D4F /* Data+JSON.swift in Sources */,
+				FE57C3B42E713D1300A67D4F /* LibraryComparable.swift in Sources */,
+				FE57C3B52E713D1300A67D4F /* LibraryComparator.swift in Sources */,
+				FE57C3B62E713D1300A67D4F /* LibrarySection.swift in Sources */,
+				FE57C3B72E713D1300A67D4F /* LibrarySectioner.swift in Sources */,
+				FE57C3B82E713D1300A67D4F /* Logger+Category.swift in Sources */,
+				FE57C3B92E713D1300A67D4F /* String+LibrarySection.swift in Sources */,
+				FE57C3BA2E713D1300A67D4F /* String+LibrarySorting.swift in Sources */,
+				FE57C3BB2E713D1300A67D4F /* URL+JSON.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -498,6 +1370,78 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FE57C3BC2E713D1300A67D4F /* Diary.swift in Sources */,
+				FE57C3BD2E713D1300A67D4F /* Diary+URL.swift in Sources */,
+				FE57C3BE2E713D1300A67D4F /* Entry.swift in Sources */,
+				FE57C3BF2E713D1300A67D4F /* Album.swift in Sources */,
+				FE57C3C02E713D1300A67D4F /* Annum.swift in Sources */,
+				FE57C3C12E713D1300A67D4F /* Annum+FormatStyle.swift in Sources */,
+				FE57C3C22E713D1300A67D4F /* Annum+ParseableFormatStyle.swift in Sources */,
+				FE57C3C32E713D1300A67D4F /* AnnumDigest.swift in Sources */,
+				FE57C3C42E713D1300A67D4F /* ArchiveCategory.swift in Sources */,
+				FE57C3C52E713D1300A67D4F /* ArchiveCategory+FormatStyle.swift in Sources */,
+				FE57C3C62E713D1300A67D4F /* ArchiveCategory+ParseableFormatStyle.swift in Sources */,
+				FE57C3C72E713D1300A67D4F /* ArchiveCategory+URL.swift in Sources */,
+				FE57C3C82E713D1300A67D4F /* ArchivePath.swift in Sources */,
+				FE57C3C92E713D1300A67D4F /* ArchivePath+ArchiveCategory.swift in Sources */,
+				FE57C3CA2E713D1300A67D4F /* ArchivePath+Codable.swift in Sources */,
+				FE57C3CB2E713D1300A67D4F /* ArchivePath+FormatStyle.swift in Sources */,
+				FE57C3CC2E713D1300A67D4F /* ArchivePath+ParseableFormatStyle.swift in Sources */,
+				FE57C3CD2E713D1300A67D4F /* ArchivePath+PathRestorable.swift in Sources */,
+				FE57C3CE2E713D1300A67D4F /* ArchivePath+URL.swift in Sources */,
+				FE57C3CF2E713D1300A67D4F /* Artist.swift in Sources */,
+				FE57C3D02E713D1300A67D4F /* Artist+Digest.swift in Sources */,
+				FE57C3D12E713D1300A67D4F /* Artist+LibraryComparable.swift in Sources */,
+				FE57C3D22E713D1300A67D4F /* ArtistDigest.swift in Sources */,
+				FE57C3D32E713D1300A67D4F /* ArtistDigest+LibraryComparable.swift in Sources */,
+				FE57C3D42E713D1300A67D4F /* Concert.swift in Sources */,
+				FE57C3D52E713D1300A67D4F /* Concert+FormatStyle.swift in Sources */,
+				FE57C3D62E713D1300A67D4F /* Decade.swift in Sources */,
+				FE57C3D72E713D1300A67D4F /* Decade.FormatStyle.swift in Sources */,
+				FE57C3D82E713D1300A67D4F /* FirstSet.swift in Sources */,
+				FE57C3D92E713D1300A67D4F /* LibraryComparator+Concert.swift in Sources */,
+				FE57C3DA2E713D1300A67D4F /* LibraryComparator+Music.swift in Sources */,
+				FE57C3DB2E713D1300A67D4F /* LibrarySectioner+Music.swift in Sources */,
+				FE57C3DC2E713D1300A67D4F /* Location.swift in Sources */,
+				FE57C3DD2E713D1300A67D4F /* Location+Comparable.swift in Sources */,
+				FE57C3DE2E713D1300A67D4F /* Location+FormatStyle.swift in Sources */,
+				FE57C3DF2E713D1300A67D4F /* Lookup.swift in Sources */,
+				FE57C3E02E713D1300A67D4F /* Music.swift in Sources */,
+				FE57C3E12E713D1300A67D4F /* Music+Ranking.swift in Sources */,
+				FE57C3E22E713D1300A67D4F /* Music+ShowsOnly.swift in Sources */,
+				FE57C3E32E713D1300A67D4F /* Music+URL.swift in Sources */,
+				FE57C3E42E713D1300A67D4F /* PartialDate.swift in Sources */,
+				FE57C3E52E713D1300A67D4F /* PartialDate+Date.swift in Sources */,
+				FE57C3E62E713D1300A67D4F /* PartialDate+FormatStyle.swift in Sources */,
+				FE57C3E72E713D1300A67D4F /* PartialDate+Span.swift in Sources */,
+				FE57C3E82E713D1300A67D4F /* PathRestorable.swift in Sources */,
+				FE57C3E92E713D1300A67D4F /* Rank.swift in Sources */,
+				FE57C3EA2E713D1300A67D4F /* Ranking.swift in Sources */,
+				FE57C3EB2E713D1300A67D4F /* Relation.swift in Sources */,
+				FE57C3EC2E713D1300A67D4F /* Show.swift in Sources */,
+				FE57C3ED2E713D1300A67D4F /* Show+Concert.swift in Sources */,
+				FE57C3EE2E713D1300A67D4F /* Song.swift in Sources */,
+				FE57C3EF2E713D1300A67D4F /* Vault.swift in Sources */,
+				FE57C3F02E713D1300A67D4F /* Vault+AnnumDigest.swift in Sources */,
+				FE57C3F12E713D1300A67D4F /* Vault+NextID.swift in Sources */,
+				FE57C3F22E713D1300A67D4F /* Vault+URL.swift in Sources */,
+				FE57C3F32E713D1300A67D4F /* Venue.swift in Sources */,
+				FE57C3F42E713D1300A67D4F /* Venue+Digest.swift in Sources */,
+				FE57C3F52E713D1300A67D4F /* Venue+FormatStyle.swift in Sources */,
+				FE57C3F62E713D1300A67D4F /* Venue+LibraryComparable.swift in Sources */,
+				FE57C3F72E713D1300A67D4F /* VenueDigest.swift in Sources */,
+				FE57C3F82E713D1300A67D4F /* VenueDigest+LibraryComparable.swift in Sources */,
+				FE57C3F92E713D1300A67D4F /* Program.swift in Sources */,
+				FE57C3FA2E713D1300A67D4F /* CompareOptional.swift in Sources */,
+				FE57C3FB2E713D1300A67D4F /* Data+JSON.swift in Sources */,
+				FE57C3FC2E713D1300A67D4F /* LibraryComparable.swift in Sources */,
+				FE57C3FD2E713D1300A67D4F /* LibraryComparator.swift in Sources */,
+				FE57C3FE2E713D1300A67D4F /* LibrarySection.swift in Sources */,
+				FE57C3FF2E713D1300A67D4F /* LibrarySectioner.swift in Sources */,
+				FE57C4002E713D1300A67D4F /* Logger+Category.swift in Sources */,
+				FE57C4012E713D1300A67D4F /* String+LibrarySection.swift in Sources */,
+				FE57C4022E713D1300A67D4F /* String+LibrarySorting.swift in Sources */,
+				FE57C4032E713D1300A67D4F /* URL+JSON.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -505,6 +1449,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FE57C4042E713D1300A67D4F /* Program.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -512,6 +1457,75 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FE57C4052E713D1300A67D4F /* Album.swift in Sources */,
+				FE57C4062E713D1300A67D4F /* Annum.swift in Sources */,
+				FE57C4072E713D1300A67D4F /* Annum+FormatStyle.swift in Sources */,
+				FE57C4082E713D1300A67D4F /* Annum+ParseableFormatStyle.swift in Sources */,
+				FE57C4092E713D1300A67D4F /* AnnumDigest.swift in Sources */,
+				FE57C40A2E713D1300A67D4F /* ArchiveCategory.swift in Sources */,
+				FE57C40B2E713D1300A67D4F /* ArchiveCategory+FormatStyle.swift in Sources */,
+				FE57C40C2E713D1300A67D4F /* ArchiveCategory+ParseableFormatStyle.swift in Sources */,
+				FE57C40D2E713D1300A67D4F /* ArchiveCategory+URL.swift in Sources */,
+				FE57C40E2E713D1300A67D4F /* ArchivePath.swift in Sources */,
+				FE57C40F2E713D1300A67D4F /* ArchivePath+ArchiveCategory.swift in Sources */,
+				FE57C4102E713D1300A67D4F /* ArchivePath+Codable.swift in Sources */,
+				FE57C4112E713D1300A67D4F /* ArchivePath+FormatStyle.swift in Sources */,
+				FE57C4122E713D1300A67D4F /* ArchivePath+ParseableFormatStyle.swift in Sources */,
+				FE57C4132E713D1300A67D4F /* ArchivePath+PathRestorable.swift in Sources */,
+				FE57C4142E713D1300A67D4F /* ArchivePath+URL.swift in Sources */,
+				FE57C4152E713D1300A67D4F /* Artist.swift in Sources */,
+				FE57C4162E713D1300A67D4F /* Artist+Digest.swift in Sources */,
+				FE57C4172E713D1300A67D4F /* Artist+LibraryComparable.swift in Sources */,
+				FE57C4182E713D1300A67D4F /* ArtistDigest.swift in Sources */,
+				FE57C4192E713D1300A67D4F /* ArtistDigest+LibraryComparable.swift in Sources */,
+				FE57C41A2E713D1300A67D4F /* Concert.swift in Sources */,
+				FE57C41B2E713D1300A67D4F /* Concert+FormatStyle.swift in Sources */,
+				FE57C41C2E713D1300A67D4F /* Decade.swift in Sources */,
+				FE57C41D2E713D1300A67D4F /* Decade.FormatStyle.swift in Sources */,
+				FE57C41E2E713D1300A67D4F /* FirstSet.swift in Sources */,
+				FE57C41F2E713D1300A67D4F /* LibraryComparator+Concert.swift in Sources */,
+				FE57C4202E713D1300A67D4F /* LibraryComparator+Music.swift in Sources */,
+				FE57C4212E713D1300A67D4F /* LibrarySectioner+Music.swift in Sources */,
+				FE57C4222E713D1300A67D4F /* Location.swift in Sources */,
+				FE57C4232E713D1300A67D4F /* Location+Comparable.swift in Sources */,
+				FE57C4242E713D1300A67D4F /* Location+FormatStyle.swift in Sources */,
+				FE57C4252E713D1300A67D4F /* Lookup.swift in Sources */,
+				FE57C4262E713D1300A67D4F /* Music.swift in Sources */,
+				FE57C4272E713D1300A67D4F /* Music+Ranking.swift in Sources */,
+				FE57C4282E713D1300A67D4F /* Music+ShowsOnly.swift in Sources */,
+				FE57C4292E713D1300A67D4F /* Music+URL.swift in Sources */,
+				FE57C42A2E713D1300A67D4F /* PartialDate.swift in Sources */,
+				FE57C42B2E713D1300A67D4F /* PartialDate+Date.swift in Sources */,
+				FE57C42C2E713D1300A67D4F /* PartialDate+FormatStyle.swift in Sources */,
+				FE57C42D2E713D1300A67D4F /* PartialDate+Span.swift in Sources */,
+				FE57C42E2E713D1300A67D4F /* PathRestorable.swift in Sources */,
+				FE57C42F2E713D1300A67D4F /* Rank.swift in Sources */,
+				FE57C4302E713D1300A67D4F /* Ranking.swift in Sources */,
+				FE57C4312E713D1300A67D4F /* Relation.swift in Sources */,
+				FE57C4322E713D1300A67D4F /* Show.swift in Sources */,
+				FE57C4332E713D1300A67D4F /* Show+Concert.swift in Sources */,
+				FE57C4342E713D1300A67D4F /* Song.swift in Sources */,
+				FE57C4352E713D1300A67D4F /* Vault.swift in Sources */,
+				FE57C4362E713D1300A67D4F /* Vault+AnnumDigest.swift in Sources */,
+				FE57C4372E713D1300A67D4F /* Vault+NextID.swift in Sources */,
+				FE57C4382E713D1300A67D4F /* Vault+URL.swift in Sources */,
+				FE57C4392E713D1300A67D4F /* Venue.swift in Sources */,
+				FE57C43A2E713D1300A67D4F /* Venue+Digest.swift in Sources */,
+				FE57C43B2E713D1300A67D4F /* Venue+FormatStyle.swift in Sources */,
+				FE57C43C2E713D1300A67D4F /* Venue+LibraryComparable.swift in Sources */,
+				FE57C43D2E713D1300A67D4F /* VenueDigest.swift in Sources */,
+				FE57C43E2E713D1300A67D4F /* VenueDigest+LibraryComparable.swift in Sources */,
+				FE57C43F2E713D1300A67D4F /* Program.swift in Sources */,
+				FE57C4402E713D1300A67D4F /* CompareOptional.swift in Sources */,
+				FE57C4412E713D1300A67D4F /* Data+JSON.swift in Sources */,
+				FE57C4422E713D1300A67D4F /* LibraryComparable.swift in Sources */,
+				FE57C4432E713D1300A67D4F /* LibraryComparator.swift in Sources */,
+				FE57C4442E713D1300A67D4F /* LibrarySection.swift in Sources */,
+				FE57C4452E713D1300A67D4F /* LibrarySectioner.swift in Sources */,
+				FE57C4462E713D1300A67D4F /* Logger+Category.swift in Sources */,
+				FE57C4472E713D1300A67D4F /* String+LibrarySection.swift in Sources */,
+				FE57C4482E713D1300A67D4F /* String+LibrarySorting.swift in Sources */,
+				FE57C4492E713D1300A67D4F /* URL+JSON.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -519,6 +1533,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FE57C45F2E713D4600A67D4F /* AnnumFormatTests.swift in Sources */,
+				FE57C4602E713D4600A67D4F /* AnnumTests.swift in Sources */,
+				FE57C4612E713D4600A67D4F /* ArchiveCategoryTests.swift in Sources */,
+				FE57C4622E713D4600A67D4F /* ArchivePathCategoryTests.swift in Sources */,
+				FE57C4632E713D4600A67D4F /* ArchivePathTests.swift in Sources */,
+				FE57C4642E713D4600A67D4F /* DecadeFormatTests.swift in Sources */,
+				FE57C4652E713D4600A67D4F /* DecadeTests.swift in Sources */,
+				FE57C4662E713D4600A67D4F /* PartialDateFormatTests.swift in Sources */,
+				FE57C4672E713D4600A67D4F /* PartialDateTests.swift in Sources */,
+				FE57C4682E713D4600A67D4F /* ArchiveNavigationTests.swift in Sources */,
+				FE57C4692E713D4600A67D4F /* ConcertComparatorTests.swift in Sources */,
+				FE57C46A2E713D4600A67D4F /* EmphasizedMatchingTests.swift in Sources */,
+				FE57C46B2E713D4600A67D4F /* LibrarySectionFormatterTests.swift in Sources */,
+				FE57C46C2E713D4600A67D4F /* PathRestorableUserActivityTests.swift in Sources */,
+				FE57C46D2E713D4600A67D4F /* WeekdayTests.swift in Sources */,
+				FE57C46E2E713D4600A67D4F /* LibraryComparatorTests.swift in Sources */,
+				FE57C46F2E713D4600A67D4F /* LibrarySectionTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
