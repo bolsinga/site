@@ -4,6 +4,9 @@
     "#%@" : {
       "comment" : "rank.hash"
     },
+    "%@" : {
+
+    },
     "%@ : %@" : {
       "comment" : "full.no.venue",
       "localizations" : {
@@ -207,6 +210,9 @@
     "Check again tomorrow." : {
 
     },
+    "club" : {
+
+    },
     "Comment" : {
 
     },
@@ -222,10 +228,16 @@
     "Decade Unknown" : {
 
     },
+    "Discover" : {
+
+    },
     "Display Shows On This Date" : {
 
     },
     "Displays Category Details in App." : {
+
+    },
+    "Displays Venue Details in App." : {
 
     },
     "Edit Nearby Distance" : {
@@ -288,6 +300,9 @@
     "Open Category" : {
 
     },
+    "Open Venue" : {
+
+    },
     "Punctuation" : {
 
     },
@@ -307,6 +322,9 @@
 
     },
     "Search" : {
+
+    },
+    "Search for Venues from Concerts based on complex criteria." : {
 
     },
     "See More About This Show" : {
@@ -397,6 +415,9 @@
 
     },
     "Unable to load data." : {
+
+    },
+    "venue" : {
 
     },
     "Venue" : {

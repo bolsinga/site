@@ -11,6 +11,7 @@ extension Location {
   public struct FormatStyle: Codable, Equatable, Hashable {
     public enum Style: Codable, Equatable, Hashable {
       case oneLine
+      case oneLineNoURL
     }
 
     let style: Style
@@ -25,21 +26,31 @@ extension Location {
   }
 }
 
+extension Location {
+  fileprivate var physicalAddress: String {
+    var physicalAddress: String = ""
+    if let street = street {
+      physicalAddress = "\(street), "
+    }
+
+    physicalAddress += "\(city), \(state)"
+    return physicalAddress
+  }
+}
+
 extension Location.FormatStyle: Foundation.FormatStyle {
   public func format(_ value: Location) -> String {
     switch style {
     case .oneLine:
-      var physicalAddress: String = ""
-      if let street = value.street {
-        physicalAddress = "\(street), "
-      }
-
-      physicalAddress += "\(value.city), \(value.state)"
+      let physicalAddress = value.physicalAddress
 
       if let url = value.web {
         return "\(physicalAddress) [\(url)]"
       }
       return physicalAddress
+
+    case .oneLineNoURL:
+      return value.physicalAddress
     }
   }
 }
@@ -57,6 +68,7 @@ extension Location {
 
 extension FormatStyle where Self == Location.FormatStyle {
   public static var oneLine: Self { .init(.oneLine) }
+  public static var oneLineNoURL: Self { .init(.oneLineNoURL) }
 
   static func Location(style: Location.FormatStyle.Style = .oneLine) -> Self {
     .init(style)

@@ -352,6 +352,10 @@
 		FEB48A082E6E70E20043057D /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = FEB48A072E6E70E20043057D /* ArgumentParser */; };
 		FEE42FA92E72600E0059ED0F /* SiteShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEE42FA82E72600E0059ED0F /* SiteShortcuts.swift */; };
 		FEE42FAB2E726D9E0059ED0F /* AppShortcuts.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = FEE42FAA2E726D9E0059ED0F /* AppShortcuts.xcstrings */; };
+		FEE42FAD2E7280630059ED0F /* VenueEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEE42FAC2E7280630059ED0F /* VenueEntity.swift */; };
+		FEE42FAF2E72818B0059ED0F /* VenueEntityQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEE42FAE2E72818B0059ED0F /* VenueEntityQuery.swift */; };
+		FEE42FB12E7285E90059ED0F /* OpenVenue.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEE42FB02E7285E90059ED0F /* OpenVenue.swift */; };
+		FEE42FB62E73622B0059ED0F /* AppIntents.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = FEE42FB42E73622B0059ED0F /* AppIntents.stringsdict */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -610,6 +614,10 @@
 		FEE0AECC2E6E74F5005CE1AB /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEE42FA82E72600E0059ED0F /* SiteShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiteShortcuts.swift; sourceTree = "<group>"; };
 		FEE42FAA2E726D9E0059ED0F /* AppShortcuts.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = AppShortcuts.xcstrings; sourceTree = "<group>"; };
+		FEE42FAC2E7280630059ED0F /* VenueEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenueEntity.swift; sourceTree = "<group>"; };
+		FEE42FAE2E72818B0059ED0F /* VenueEntityQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenueEntityQuery.swift; sourceTree = "<group>"; };
+		FEE42FB02E7285E90059ED0F /* OpenVenue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenVenue.swift; sourceTree = "<group>"; };
+		FEE42FB52E73622B0059ED0F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/AppIntents.stringsdict; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -693,6 +701,7 @@
 				FE57C23D2E713D1300A67D4F /* Info.plist */,
 				FE57C23E2E713D1300A67D4F /* Localizable.xcstrings */,
 				FEE42FAA2E726D9E0059ED0F /* AppShortcuts.xcstrings */,
+				FEE42FB42E73622B0059ED0F /* AppIntents.stringsdict */,
 				FE57C23F2E713D1300A67D4F /* SiteApp.entitlements */,
 				FE57C2402E713D1300A67D4F /* SiteAppApp.swift */,
 			);
@@ -1023,6 +1032,9 @@
 				FE57C6A92E71433A00A67D4F /* CategoryEnum.swift */,
 				FE57C6AA2E71433A00A67D4F /* OpenCategory.swift */,
 				FEE42FA82E72600E0059ED0F /* SiteShortcuts.swift */,
+				FEE42FAC2E7280630059ED0F /* VenueEntity.swift */,
+				FEE42FAE2E72818B0059ED0F /* VenueEntityQuery.swift */,
+				FEE42FB02E7285E90059ED0F /* OpenVenue.swift */,
 			);
 			path = Intents;
 			sourceTree = "<group>";
@@ -1187,6 +1199,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FEE42FB62E73622B0059ED0F /* AppIntents.stringsdict in Resources */,
 				FE57C3022E713D1300A67D4F /* Preview Assets.xcassets in Resources */,
 				FEE42FAB2E726D9E0059ED0F /* AppShortcuts.xcstrings in Resources */,
 				FE57C3032E713D1300A67D4F /* Assets.xcassets in Resources */,
@@ -1269,6 +1282,7 @@
 				FE57C3422E713D1300A67D4F /* VenueDigest.swift in Sources */,
 				FE57C3432E713D1300A67D4F /* VenueDigest+LibraryComparable.swift in Sources */,
 				FE57C3452E713D1300A67D4F /* AddressView.swift in Sources */,
+				FEE42FB12E7285E90059ED0F /* OpenVenue.swift in Sources */,
 				FE57C3462E713D1300A67D4F /* ArchiveActivity.swift in Sources */,
 				FE57C3472E713D1300A67D4F /* ArchiveCategory+LocationFilterable.swift in Sources */,
 				FE57C3482E713D1300A67D4F /* ArchiveCategoryLinkable.swift in Sources */,
@@ -1352,12 +1366,14 @@
 				FE57C3942E713D1300A67D4F /* NSError+Throttle.swift in Sources */,
 				FE57C3952E713D1300A67D4F /* NSUserActivity+ArchiveCategory.swift in Sources */,
 				FE57C3962E713D1300A67D4F /* NSUserActivity+ArchivePath.swift in Sources */,
+				FEE42FAD2E7280630059ED0F /* VenueEntity.swift in Sources */,
 				FE57C3972E713D1300A67D4F /* NSUserActivity+Search.swift in Sources */,
 				FE57C3982E713D1300A67D4F /* PathRestorableUserActivity.swift in Sources */,
 				FE57C3992E713D1300A67D4F /* Placemark.swift in Sources */,
 				FE57C39A2E713D1300A67D4F /* Rankable.swift in Sources */,
 				FE57C39B2E713D1300A67D4F /* RankingSort.swift in Sources */,
 				FE57C39C2E713D1300A67D4F /* SiteModel.swift in Sources */,
+				FEE42FAF2E72818B0059ED0F /* VenueEntityQuery.swift in Sources */,
 				FE57C39D2E713D1300A67D4F /* Vault+ArchivePath.swift in Sources */,
 				FE57C39E2E713D1300A67D4F /* VaultModel.swift in Sources */,
 				FE57C39F2E713D1300A67D4F /* Venue+Geocodable.swift in Sources */,
@@ -1586,6 +1602,17 @@
 			targetProxy = FEE0AED02E6E74F5005CE1AB /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		FEE42FB42E73622B0059ED0F /* AppIntents.stringsdict */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FEE42FB52E73622B0059ED0F /* en */,
+			);
+			name = AppIntents.stringsdict;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		FE53610A29CE82CB00618099 /* Debug */ = {
