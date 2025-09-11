@@ -8,7 +8,7 @@
 import AppIntents
 import Foundation
 
-final class SiteShortcuts: AppShortcutsProvider {
+struct SiteShortcuts: AppShortcutsProvider {
   static let shortcutTileColor = ShortcutTileColor.grayGreen
 
   static var appShortcuts: [AppShortcut] {
