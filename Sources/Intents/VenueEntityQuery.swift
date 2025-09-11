@@ -86,6 +86,14 @@ extension VenueEntityQuery: EntityPropertyQuery {
         #Predicate<VenueEntity> { $0.location != searchValue }
       }
     }
+
+    Property(\VenueEntity.$related) {
+      ContainsComparator { searchValue in
+        #Predicate<VenueEntity> {
+          !$0.related.filter { $0.localizedStandardContains(searchValue) }.isEmpty
+        }
+      }
+    }
   }
 
   static let sortingOptions = SortingOptions {
