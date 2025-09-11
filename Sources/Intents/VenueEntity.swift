@@ -8,7 +8,7 @@
 import AppIntents
 import Foundation
 
-struct VenueEntity: IndexedEntity {
+struct VenueEntity: AppEntity {
   static var typeDisplayRepresentation: TypeDisplayRepresentation {
     TypeDisplayRepresentation(
       name: LocalizedStringResource("Venue", table: "AppIntents"),
@@ -37,3 +37,7 @@ struct VenueEntity: IndexedEntity {
     self.location = digest.venue.location.formatted(.oneLineNoURL)
   }
 }
+
+#if !os(tvOS)
+  extension VenueEntity: IndexedEntity {}
+#endif
