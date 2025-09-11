@@ -75,22 +75,22 @@ extension VenueEntityQuery: EntityPropertyQuery {
       }
     }
 
-    Property(\VenueEntity.$location) {
+    Property(\VenueEntity.$address) {
       ContainsComparator { searchValue in
-        #Predicate<VenueEntity> { $0.location.localizedStandardContains(searchValue) }
+        #Predicate<VenueEntity> { $0.address.localizedStandardContains(searchValue) }
       }
       EqualToComparator { searchValue in
-        #Predicate<VenueEntity> { $0.location == searchValue }
+        #Predicate<VenueEntity> { $0.address == searchValue }
       }
       NotEqualToComparator { searchValue in
-        #Predicate<VenueEntity> { $0.location != searchValue }
+        #Predicate<VenueEntity> { $0.address != searchValue }
       }
     }
   }
 
   static let sortingOptions = SortingOptions {
     SortableBy(\VenueEntity.$name)
-    SortableBy(\VenueEntity.$location)
+    SortableBy(\VenueEntity.$address)
   }
 
   static var findIntentDescription: IntentDescription? {
@@ -114,9 +114,9 @@ extension VenueEntityQuery: EntityPropertyQuery {
       case \.$name:
         matchedEntities.sort(
           using: KeyPathComparator(\VenueEntity.name, order: sortOperation.order.sortOrder))
-      case \.$location:
+      case \.$address:
         matchedEntities.sort(
-          using: KeyPathComparator(\VenueEntity.location, order: sortOperation.order.sortOrder))
+          using: KeyPathComparator(\VenueEntity.address, order: sortOperation.order.sortOrder))
       default:
         break
       }
