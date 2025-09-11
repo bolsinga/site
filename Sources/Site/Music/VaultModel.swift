@@ -5,6 +5,7 @@
 //  Created by Greg Bolsinga on 7/12/23.
 //
 
+import AppIntents
 import CoreLocation
 import Foundation
 import MapKit
@@ -47,6 +48,8 @@ enum LocationAuthorization {
 
   @MainActor
   internal init(_ vault: Vault, executeAsynchronousTasks: Bool) {
+    AppDependencyManager.shared.add(dependency: vault)
+
     self.vault = vault
 
     updateTodayConcerts()

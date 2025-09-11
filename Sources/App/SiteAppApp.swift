@@ -11,6 +11,10 @@ import SwiftUI
 struct SiteAppApp: App {
   @State private var model = SiteModel(urlString: "https://www.bolsinga.com/json/shows.json")
 
+  init() {
+    SiteShortcuts.updateAppShortcutParameters()
+  }
+
   var body: some Scene {
     WindowGroup {
       SiteView(model)

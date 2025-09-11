@@ -4,6 +4,21 @@
 <dict>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>INAlternativeAppNames</key>
+	<array>
+		<dict>
+			<key>INAlternativeAppName</key>
+			<string>Site</string>
+		</dict>
+		<dict>
+			<key>INAlternativeAppName</key>
+			<string>Site Shows</string>
+		</dict>
+		<dict>
+			<key>INAlternativeAppName</key>
+			<string>Shows</string>
+		</dict>
+	</array>
 	<key>NSUserActivityTypes</key>
 	<array>
 		<string>gdb.SiteApp.view-archivePath</string>

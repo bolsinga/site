@@ -345,9 +345,13 @@
 		FE57C46D2E713D4600A67D4F /* WeekdayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C4592E713D4600A67D4F /* WeekdayTests.swift */; };
 		FE57C46E2E713D4600A67D4F /* LibraryComparatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C45B2E713D4600A67D4F /* LibraryComparatorTests.swift */; };
 		FE57C46F2E713D4600A67D4F /* LibrarySectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C45C2E713D4600A67D4F /* LibrarySectionTests.swift */; };
+		FE57C6AC2E71433A00A67D4F /* CategoryEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C6A92E71433A00A67D4F /* CategoryEnum.swift */; };
+		FE57C6AD2E71433A00A67D4F /* OpenCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C6AA2E71433A00A67D4F /* OpenCategory.swift */; };
 		FEB4895E2E6E6E8F0043057D /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = FEB4895D2E6E6E8F0043057D /* ArgumentParser */; };
 		FEB489B52E6E6FC10043057D /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = FEB489B42E6E6FC10043057D /* ArgumentParser */; };
 		FEB48A082E6E70E20043057D /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = FEB48A072E6E70E20043057D /* ArgumentParser */; };
+		FEE42FA92E72600E0059ED0F /* SiteShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEE42FA82E72600E0059ED0F /* SiteShortcuts.swift */; };
+		FEE42FAB2E726D9E0059ED0F /* AppShortcuts.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = FEE42FAA2E726D9E0059ED0F /* AppShortcuts.xcstrings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -596,12 +600,16 @@
 		FE57C4592E713D4600A67D4F /* WeekdayTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekdayTests.swift; sourceTree = "<group>"; };
 		FE57C45B2E713D4600A67D4F /* LibraryComparatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryComparatorTests.swift; sourceTree = "<group>"; };
 		FE57C45C2E713D4600A67D4F /* LibrarySectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibrarySectionTests.swift; sourceTree = "<group>"; };
+		FE57C6A92E71433A00A67D4F /* CategoryEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEnum.swift; sourceTree = "<group>"; };
+		FE57C6AA2E71433A00A67D4F /* OpenCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenCategory.swift; sourceTree = "<group>"; };
 		FE9910DC2AC205A70054D229 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		FEB486502E6E6D740043057D /* site_tool */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = site_tool; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEB489AA2E6E6F960043057D /* site_associated_domains */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = site_associated_domains; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEB489BA2E6E70800043057D /* next_id */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = next_id; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEC1720F2E70F1E800E8EFC8 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		FEE0AECC2E6E74F5005CE1AB /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FEE42FA82E72600E0059ED0F /* SiteShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiteShortcuts.swift; sourceTree = "<group>"; };
+		FEE42FAA2E726D9E0059ED0F /* AppShortcuts.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = AppShortcuts.xcstrings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -684,6 +692,7 @@
 				FE57C23C2E713D1300A67D4F /* Assets.xcassets */,
 				FE57C23D2E713D1300A67D4F /* Info.plist */,
 				FE57C23E2E713D1300A67D4F /* Localizable.xcstrings */,
+				FEE42FAA2E726D9E0059ED0F /* AppShortcuts.xcstrings */,
 				FE57C23F2E713D1300A67D4F /* SiteApp.entitlements */,
 				FE57C2402E713D1300A67D4F /* SiteAppApp.swift */,
 			);
@@ -948,6 +957,7 @@
 			isa = PBXGroup;
 			children = (
 				FE57C2412E713D1300A67D4F /* App */,
+				FE57C6AB2E71433A00A67D4F /* Intents */,
 				FE57C2452E713D1300A67D4F /* DiaryData */,
 				FE57C2802E713D1300A67D4F /* MusicData */,
 				FE57C2822E713D1300A67D4F /* next_id */,
@@ -1005,6 +1015,16 @@
 				FE57C45D2E713D4600A67D4F /* UtilitiesTests */,
 			);
 			path = Tests;
+			sourceTree = "<group>";
+		};
+		FE57C6AB2E71433A00A67D4F /* Intents */ = {
+			isa = PBXGroup;
+			children = (
+				FE57C6A92E71433A00A67D4F /* CategoryEnum.swift */,
+				FE57C6AA2E71433A00A67D4F /* OpenCategory.swift */,
+				FEE42FA82E72600E0059ED0F /* SiteShortcuts.swift */,
+			);
+			path = Intents;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1168,6 +1188,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FE57C3022E713D1300A67D4F /* Preview Assets.xcassets in Resources */,
+				FEE42FAB2E726D9E0059ED0F /* AppShortcuts.xcstrings in Resources */,
 				FE57C3032E713D1300A67D4F /* Assets.xcassets in Resources */,
 				FE57C3052E713D1300A67D4F /* Localizable.xcstrings in Resources */,
 			);
@@ -1202,6 +1223,7 @@
 				FE57C3152E713D1300A67D4F /* ArchivePath+Codable.swift in Sources */,
 				FE57C3162E713D1300A67D4F /* ArchivePath+FormatStyle.swift in Sources */,
 				FE57C3172E713D1300A67D4F /* ArchivePath+ParseableFormatStyle.swift in Sources */,
+				FEE42FA92E72600E0059ED0F /* SiteShortcuts.swift in Sources */,
 				FE57C3182E713D1300A67D4F /* ArchivePath+PathRestorable.swift in Sources */,
 				FE57C3192E713D1300A67D4F /* ArchivePath+URL.swift in Sources */,
 				FE57C31A2E713D1300A67D4F /* Artist.swift in Sources */,
@@ -1325,6 +1347,8 @@
 				FE57C3912E713D1300A67D4F /* LocationFilter.swift in Sources */,
 				FE57C3922E713D1300A67D4F /* NearbyDefaults.swift in Sources */,
 				FE57C3932E713D1300A67D4F /* NearbyModel.swift in Sources */,
+				FE57C6AC2E71433A00A67D4F /* CategoryEnum.swift in Sources */,
+				FE57C6AD2E71433A00A67D4F /* OpenCategory.swift in Sources */,
 				FE57C3942E713D1300A67D4F /* NSError+Throttle.swift in Sources */,
 				FE57C3952E713D1300A67D4F /* NSUserActivity+ArchiveCategory.swift in Sources */,
 				FE57C3962E713D1300A67D4F /* NSUserActivity+ArchivePath.swift in Sources */,

@@ -201,6 +201,9 @@
     "Artists" : {
 
     },
+    "Category" : {
+
+    },
     "Check again tomorrow." : {
 
     },
@@ -220,6 +223,9 @@
 
     },
     "Display Shows On This Date" : {
+
+    },
+    "Displays Category Details in App." : {
 
     },
     "Edit Nearby Distance" : {
@@ -274,6 +280,12 @@
 
     },
     "On This Day: %@" : {
+
+    },
+    "Open ${target}" : {
+
+    },
+    "Open Category" : {
 
     },
     "Punctuation" : {
@@ -373,6 +385,9 @@
 
     },
     "Stats" : {
+
+    },
+    "The category does not have a URL." : {
 
     },
     "Today" : {

@@ -1,0 +1,20 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "Open ${target} in ${applicationName}" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringSet" : {
+            "state" : "new",
+            "values" : [
+              "Open ${target} in ${applicationName}",
+              "Show ${target} in ${applicationName}"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}
