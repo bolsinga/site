@@ -11,6 +11,7 @@ import Foundation
 struct SiteShortcuts: AppShortcutsProvider {
   static let shortcutTileColor = ShortcutTileColor.grayGreen
 
+  // AppShortcut phrases will be built into AppShortcuts.xcstrings
   static var appShortcuts: [AppShortcut] {
     AppShortcut(
       intent: OpenCategory(),

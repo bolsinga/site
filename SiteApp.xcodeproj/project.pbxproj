@@ -351,6 +351,7 @@
 		FEB489B52E6E6FC10043057D /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = FEB489B42E6E6FC10043057D /* ArgumentParser */; };
 		FEB48A082E6E70E20043057D /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = FEB48A072E6E70E20043057D /* ArgumentParser */; };
 		FEE42FA92E72600E0059ED0F /* SiteShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEE42FA82E72600E0059ED0F /* SiteShortcuts.swift */; };
+		FEE42FAB2E726D9E0059ED0F /* AppShortcuts.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = FEE42FAA2E726D9E0059ED0F /* AppShortcuts.xcstrings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -608,6 +609,7 @@
 		FEC1720F2E70F1E800E8EFC8 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		FEE0AECC2E6E74F5005CE1AB /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEE42FA82E72600E0059ED0F /* SiteShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiteShortcuts.swift; sourceTree = "<group>"; };
+		FEE42FAA2E726D9E0059ED0F /* AppShortcuts.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = AppShortcuts.xcstrings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -690,6 +692,7 @@
 				FE57C23C2E713D1300A67D4F /* Assets.xcassets */,
 				FE57C23D2E713D1300A67D4F /* Info.plist */,
 				FE57C23E2E713D1300A67D4F /* Localizable.xcstrings */,
+				FEE42FAA2E726D9E0059ED0F /* AppShortcuts.xcstrings */,
 				FE57C23F2E713D1300A67D4F /* SiteApp.entitlements */,
 				FE57C2402E713D1300A67D4F /* SiteAppApp.swift */,
 			);
@@ -1185,6 +1188,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FE57C3022E713D1300A67D4F /* Preview Assets.xcassets in Resources */,
+				FEE42FAB2E726D9E0059ED0F /* AppShortcuts.xcstrings in Resources */,
 				FE57C3032E713D1300A67D4F /* Assets.xcassets in Resources */,
 				FE57C3052E713D1300A67D4F /* Localizable.xcstrings in Resources */,
 			);
