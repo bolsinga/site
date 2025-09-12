@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FE42CBCC2E73BA190064F683 /* Concert+Headliner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE42CBCB2E73BA190064F683 /* Concert+Headliner.swift */; };
+		FE42CBCD2E73BA190064F683 /* Concert+Headliner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE42CBCB2E73BA190064F683 /* Concert+Headliner.swift */; };
+		FE42CBCE2E73BA190064F683 /* Concert+Headliner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE42CBCB2E73BA190064F683 /* Concert+Headliner.swift */; };
+		FE42CBD02E73BAA30064F683 /* PerformersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE42CBCF2E73BAA30064F683 /* PerformersView.swift */; };
 		FE57C3022E713D1300A67D4F /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FE57C23A2E713D1300A67D4F /* Preview Assets.xcassets */; };
 		FE57C3032E713D1300A67D4F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FE57C23C2E713D1300A67D4F /* Assets.xcassets */; };
 		FE57C3052E713D1300A67D4F /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = FE57C23E2E713D1300A67D4F /* Localizable.xcstrings */; };
@@ -125,7 +129,6 @@
 		FE57C37A2E713D1300A67D4F /* StatsGrouping.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2B82E713D1300A67D4F /* StatsGrouping.swift */; };
 		FE57C37B2E713D1300A67D4F /* StatsSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2B92E713D1300A67D4F /* StatsSummary.swift */; };
 		FE57C37C2E713D1300A67D4F /* StatsThreshold.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2BA2E713D1300A67D4F /* StatsThreshold.swift */; };
-		FE57C37D2E713D1300A67D4F /* TodayBlurb.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2BB2E713D1300A67D4F /* TodayBlurb.swift */; };
 		FE57C37E2E713D1300A67D4F /* TodayList.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2BC2E713D1300A67D4F /* TodayList.swift */; };
 		FE57C37F2E713D1300A67D4F /* TodaySummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2BD2E713D1300A67D4F /* TodaySummary.swift */; };
 		FE57C3802E713D1300A67D4F /* VaultPreviewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2BE2E713D1300A67D4F /* VaultPreviewModifier.swift */; };
@@ -399,6 +402,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		FE42CBCB2E73BA190064F683 /* Concert+Headliner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Concert+Headliner.swift"; sourceTree = "<group>"; };
+		FE42CBCF2E73BAA30064F683 /* PerformersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformersView.swift; sourceTree = "<group>"; };
 		FE5360FD29CE82CA00618099 /* SiteApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SiteApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE57C23A2E713D1300A67D4F /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		FE57C23C2E713D1300A67D4F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -524,7 +529,6 @@
 		FE57C2B82E713D1300A67D4F /* StatsGrouping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsGrouping.swift; sourceTree = "<group>"; };
 		FE57C2B92E713D1300A67D4F /* StatsSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsSummary.swift; sourceTree = "<group>"; };
 		FE57C2BA2E713D1300A67D4F /* StatsThreshold.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsThreshold.swift; sourceTree = "<group>"; };
-		FE57C2BB2E713D1300A67D4F /* TodayBlurb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayBlurb.swift; sourceTree = "<group>"; };
 		FE57C2BC2E713D1300A67D4F /* TodayList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayList.swift; sourceTree = "<group>"; };
 		FE57C2BD2E713D1300A67D4F /* TodaySummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodaySummary.swift; sourceTree = "<group>"; };
 		FE57C2BE2E713D1300A67D4F /* VaultPreviewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaultPreviewModifier.swift; sourceTree = "<group>"; };
@@ -743,6 +747,7 @@
 				FE57C2592E713D1300A67D4F /* ArtistDigest.swift */,
 				FE57C25A2E713D1300A67D4F /* ArtistDigest+LibraryComparable.swift */,
 				FE57C25B2E713D1300A67D4F /* Concert.swift */,
+				FE42CBCB2E73BA190064F683 /* Concert+Headliner.swift */,
 				FE57C25C2E713D1300A67D4F /* Concert+FormatStyle.swift */,
 				FE57C25D2E713D1300A67D4F /* Decade.swift */,
 				FE57C25E2E713D1300A67D4F /* Decade.FormatStyle.swift */,
@@ -820,6 +825,7 @@
 				FE57C29A2E713D1300A67D4F /* ArtistsSummary.swift */,
 				FE57C29B2E713D1300A67D4F /* Bundle+AppIcon.swift */,
 				FE57C29C2E713D1300A67D4F /* ConcertBlurb.swift */,
+				FE42CBCF2E73BAA30064F683 /* PerformersView.swift */,
 				FE57C29D2E713D1300A67D4F /* DaysShowsSummary.swift */,
 				FE57C29E2E713D1300A67D4F /* LibrarySection+Section.swift */,
 				FE57C29F2E713D1300A67D4F /* LocationFilterToolbarContent.swift */,
@@ -850,7 +856,6 @@
 				FE57C2B82E713D1300A67D4F /* StatsGrouping.swift */,
 				FE57C2B92E713D1300A67D4F /* StatsSummary.swift */,
 				FE57C2BA2E713D1300A67D4F /* StatsThreshold.swift */,
-				FE57C2BB2E713D1300A67D4F /* TodayBlurb.swift */,
 				FE57C2BC2E713D1300A67D4F /* TodayList.swift */,
 				FE57C2BD2E713D1300A67D4F /* TodaySummary.swift */,
 				FE57C2BE2E713D1300A67D4F /* VaultPreviewModifier.swift */,
@@ -1226,6 +1231,7 @@
 				FE57C30B2E713D1300A67D4F /* Annum.swift in Sources */,
 				FE57C30C2E713D1300A67D4F /* Annum+FormatStyle.swift in Sources */,
 				FE57C30D2E713D1300A67D4F /* Annum+ParseableFormatStyle.swift in Sources */,
+				FE42CBCC2E73BA190064F683 /* Concert+Headliner.swift in Sources */,
 				FE57C30E2E713D1300A67D4F /* AnnumDigest.swift in Sources */,
 				FE57C30F2E713D1300A67D4F /* ArchiveCategory.swift in Sources */,
 				FE57C3102E713D1300A67D4F /* ArchiveCategory+FormatStyle.swift in Sources */,
@@ -1295,6 +1301,7 @@
 				FE57C34F2E713D1300A67D4F /* ArchiveNavigationUserActivityModifier.swift in Sources */,
 				FE57C3502E713D1300A67D4F /* ArchivePath+Destination.swift in Sources */,
 				FE57C3512E713D1300A67D4F /* ArchiveScope.swift in Sources */,
+				FE42CBD02E73BAA30064F683 /* PerformersView.swift in Sources */,
 				FE57C3522E713D1300A67D4F /* ArchiveSearchModifier.swift in Sources */,
 				FE57C3532E713D1300A67D4F /* ArchiveSharable.swift in Sources */,
 				FE57C3542E713D1300A67D4F /* ArchiveSharableToolbarContent.swift in Sources */,
@@ -1338,7 +1345,6 @@
 				FE57C37A2E713D1300A67D4F /* StatsGrouping.swift in Sources */,
 				FE57C37B2E713D1300A67D4F /* StatsSummary.swift in Sources */,
 				FE57C37C2E713D1300A67D4F /* StatsThreshold.swift in Sources */,
-				FE57C37D2E713D1300A67D4F /* TodayBlurb.swift in Sources */,
 				FE57C37E2E713D1300A67D4F /* TodayList.swift in Sources */,
 				FE57C37F2E713D1300A67D4F /* TodaySummary.swift in Sources */,
 				FE57C3802E713D1300A67D4F /* VaultPreviewModifier.swift in Sources */,
@@ -1462,6 +1468,7 @@
 				FE57C3ED2E713D1300A67D4F /* Show+Concert.swift in Sources */,
 				FE57C3EE2E713D1300A67D4F /* Song.swift in Sources */,
 				FE57C3EF2E713D1300A67D4F /* Vault.swift in Sources */,
+				FE42CBCE2E73BA190064F683 /* Concert+Headliner.swift in Sources */,
 				FE57C3F02E713D1300A67D4F /* Vault+AnnumDigest.swift in Sources */,
 				FE57C3F12E713D1300A67D4F /* Vault+NextID.swift in Sources */,
 				FE57C3F22E713D1300A67D4F /* Vault+URL.swift in Sources */,
@@ -1544,6 +1551,7 @@
 				FE57C4312E713D1300A67D4F /* Relation.swift in Sources */,
 				FE57C4322E713D1300A67D4F /* Show.swift in Sources */,
 				FE57C4332E713D1300A67D4F /* Show+Concert.swift in Sources */,
+				FE42CBCD2E73BA190064F683 /* Concert+Headliner.swift in Sources */,
 				FE57C4342E713D1300A67D4F /* Song.swift in Sources */,
 				FE57C4352E713D1300A67D4F /* Vault.swift in Sources */,
 				FE57C4362E713D1300A67D4F /* Vault+AnnumDigest.swift in Sources */,

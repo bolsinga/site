@@ -31,7 +31,7 @@ struct YearDetail: View {
       Section(header: Text("Shows")) {
         ForEach(concerts.sorted(by: concertCompare)) { concert in
           PathRestorableLink(pathRestorable: concert, isPathNavigable: isPathNavigable) {
-            ConcertBlurb(concert: concert)
+            ConcertBlurb(concert: concert, dateFormat: .noYear)
           }
         }
       }
