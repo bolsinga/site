@@ -253,17 +253,9 @@ extension ShowsMode {
   }
 }
 
-#if swift(>=6.2)
-  extension ArchiveNavigation: @MainActor CustomStringConvertible {}
-#else
-  extension ArchiveNavigation: @preconcurrency CustomStringConvertible {}
-#endif
+extension ArchiveNavigation: @MainActor CustomStringConvertible {}
 
-#if swift(>=6.2)
-  extension ArchiveNavigation: @MainActor RawRepresentable {}
-#else
-  extension ArchiveNavigation: @preconcurrency RawRepresentable {}
-#endif
+extension ArchiveNavigation: @MainActor RawRepresentable {}
 
 extension ArchiveNavigation {
   convenience init?(rawValue: String) {
