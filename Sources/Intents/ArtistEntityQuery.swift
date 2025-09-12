@@ -30,10 +30,10 @@ struct ArtistEntityQuery: EntityQuery {
     let concertsToday = vault.concerts(on: .now)
     guard !concertsToday.isEmpty else { return [] }
 
-    let venueIDs = concertsToday.compactMap { $0.venue?.id }
-    guard !venueIDs.isEmpty else { return [] }
+    let iDs = concertsToday.flatMap { $0.artists }.map { $0.id }
+    guard !iDs.isEmpty else { return [] }
 
-    return try await entities(for: venueIDs)
+    return try await entities(for: iDs)
   }
 
   @Dependency
