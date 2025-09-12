@@ -8,29 +8,35 @@
 import SwiftUI
 
 struct ConcertBlurb: View {
-  let concert: Concert
-
-  @ViewBuilder private var artistsView: some View {
-    VStack(alignment: .leading) {
-      ForEach(concert.artists) { artist in
-        Text(artist.name).font(.headline)
-      }
-    }
+  enum DateFormat {
+    case noYear
+    case relative
   }
+
+  let concert: Concert
+  let dateFormat: DateFormat
 
   @ViewBuilder private var detailsView: some View {
     VStack(alignment: .trailing) {
       if let venue = concert.venue {
-        Text(venue.name)
+        Text(venue.name).font(.headline)
       }
-      Text(concert.show.date.formatted(.noYear))
+      switch dateFormat {
+      case .noYear:
+        Text(concert.show.date.formatted(.noYear))
+          .font(.footnote)
+      case .relative:
+        if let date = concert.show.date.date {
+          Text(date.formatted(.relative(presentation: .numeric)))
+            .font(.footnote)
+        }
+      }
     }
-    .font(.footnote)
   }
 
   var body: some View {
     HStack {
-      artistsView
+      PerformersView(concert: concert)
       Spacer()
       detailsView
     }
@@ -39,15 +45,15 @@ struct ConcertBlurb: View {
 
 #Preview(traits: .modifier(VaultPreviewModifier())) {
   @Previewable @Environment(VaultModel.self) var model
-  ConcertBlurb(concert: model.vault.concerts[0])
+  ConcertBlurb(concert: model.vault.concerts[0], dateFormat: .noYear)
 }
 
 #Preview(traits: .modifier(VaultPreviewModifier())) {
   @Previewable @Environment(VaultModel.self) var model
-  ConcertBlurb(concert: model.vault.concerts[1])
+  ConcertBlurb(concert: model.vault.concerts[1], dateFormat: .relative)
 }
 
 #Preview(traits: .modifier(VaultPreviewModifier())) {
   @Previewable @Environment(VaultModel.self) var model
-  ConcertBlurb(concert: model.vault.concerts[2])
+  ConcertBlurb(concert: model.vault.concerts[2], dateFormat: .noYear)
 }

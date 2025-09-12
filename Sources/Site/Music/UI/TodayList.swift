@@ -20,7 +20,7 @@ struct TodayList: View {
       .navigationTitle(Text("On This Day"))
     } else {
       List(concerts) { concert in
-        NavigationLink(value: concert) { TodayBlurb(concert: concert) }
+        NavigationLink(value: concert) { ConcertBlurb(concert: concert, dateFormat: .relative) }
       }
       .listStyle(.plain)
       .navigationTitle(
