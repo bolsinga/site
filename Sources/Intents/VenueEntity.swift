@@ -22,14 +22,16 @@ struct VenueEntity: AppEntity {
   var url: URL
 
   @Property var name: String
-  @Property var location: String
+
+  @Property(title: "Address")
+  var address: String
 
   @Property(title: "Related Venues")
   var related: [String]
 
   var displayRepresentation: DisplayRepresentation {
     DisplayRepresentation(
-      title: "\(name)", subtitle: "\(location)", image: .init(systemName: "music.note.house"))
+      title: "\(name)", subtitle: "\(address)", image: .init(systemName: "music.note.house"))
   }
 
   init?(digest: VenueDigest) {
@@ -37,8 +39,8 @@ struct VenueEntity: AppEntity {
     self.id = digest.id
     self.url = url
     self.name = digest.name
+    self.address = digest.venue.location.formatted(.oneLineNoURL)
     self.related = digest.related.map { $0.name }
-    self.location = digest.venue.location.formatted(.oneLineNoURL)
   }
 }
 
