@@ -13,17 +13,6 @@ extension Logger {
   fileprivate static let venueQuery = Logger(category: "venueQuery")
 }
 
-extension EntityQuerySort.Ordering {
-  fileprivate var sortOrder: SortOrder {
-    switch self {
-    case .ascending:
-      return SortOrder.forward
-    case .descending:
-      return SortOrder.reverse
-    }
-  }
-}
-
 struct VenueEntityQuery: EntityQuery {
   func entities(for identifiers: [VenueEntity.ID]) async throws -> [VenueEntity] {
     Logger.venueQuery.log("Identifiers: \(identifiers)")

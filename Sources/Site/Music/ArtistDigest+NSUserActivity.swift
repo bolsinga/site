@@ -5,6 +5,7 @@
 //  Created by Greg Bolsinga on 6/21/23.
 //
 
+import AppIntents
 import Foundation
 
 extension ArtistDigest: PathRestorableUserActivity {
@@ -15,5 +16,9 @@ extension ArtistDigest: PathRestorableUserActivity {
     userActivity.title = self.name
     userActivity.addSearchableContent(
       description: String(localized: "See Shows With This Artist"))
+
+    if let entity = ArtistEntity(digest: self) {
+      userActivity.appEntityIdentifier = EntityIdentifier(for: entity)
+    }
   }
 }

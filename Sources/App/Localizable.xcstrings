@@ -195,6 +195,9 @@
     "All Shows" : {
 
     },
+    "artist" : {
+
+    },
     "Artist" : {
       "comment" : "ArchiveScope.artist"
     },
@@ -205,6 +208,9 @@
 
     },
     "Artists" : {
+
+    },
+    "band" : {
 
     },
     "Category" : {
@@ -235,6 +241,9 @@
 
     },
     "Display Shows On This Date" : {
+
+    },
+    "Displays Artist Details in App." : {
 
     },
     "Displays Category Details in App." : {
@@ -300,10 +309,16 @@
     "Open ${target}" : {
 
     },
+    "Open Artist" : {
+
+    },
     "Open Category" : {
 
     },
     "Open Venue" : {
+
+    },
+    "performer" : {
 
     },
     "Punctuation" : {
@@ -325,6 +340,9 @@
 
     },
     "Search" : {
+
+    },
+    "Search for Artists from Concerts based on complex criteria." : {
 
     },
     "Search for Venues from Concerts based on complex criteria." : {
