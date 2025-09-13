@@ -52,6 +52,20 @@
 			<string>Venues</string>
 		</dict>
 	</dict>
+	<key>Club</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>one</key>
+			<string>Club</string>
+			<key>other</key>
+			<string>Clubs</string>
+		</dict>
+	</dict>
 	<key>Artist</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
@@ -64,6 +78,34 @@
 			<string>Artist</string>
 			<key>other</key>
 			<string>Artists</string>
+		</dict>
+	</dict>
+	<key>Performer</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>one</key>
+			<string>Performer</string>
+			<key>other</key>
+			<string>Performers</string>
+		</dict>
+	</dict>
+	<key>Band</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>one</key>
+			<string>Band</string>
+			<key>other</key>
+			<string>Bands</string>
 		</dict>
 	</dict>
 </dict>
