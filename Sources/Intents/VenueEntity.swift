@@ -12,7 +12,8 @@ struct VenueEntity: AppEntity {
   static var typeDisplayRepresentation: TypeDisplayRepresentation {
     TypeDisplayRepresentation(
       name: LocalizedStringResource("Venue", table: "AppIntents"),
-      numericFormat: LocalizedStringResource("\(placeholder: .int) Venue(s)", table: "AppIntents")
+      numericFormat: LocalizedStringResource("\(placeholder: .int) Venue(s)", table: "AppIntents"),
+      synonyms: [LocalizedStringResource("Club", table: "AppIntents")]
     )
   }
 

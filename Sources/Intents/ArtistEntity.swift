@@ -12,7 +12,11 @@ struct ArtistEntity: AppEntity {
   static var typeDisplayRepresentation: TypeDisplayRepresentation {
     TypeDisplayRepresentation(
       name: LocalizedStringResource("Artist", table: "AppIntents"),
-      numericFormat: LocalizedStringResource("\(placeholder: .int) Artist(s)", table: "AppIntents")
+      numericFormat: LocalizedStringResource("\(placeholder: .int) Artist(s)", table: "AppIntents"),
+      synonyms: [
+        LocalizedStringResource("Performer", table: "AppIntents"),
+        LocalizedStringResource("Band", table: "AppIntents"),
+      ]
     )
   }
 

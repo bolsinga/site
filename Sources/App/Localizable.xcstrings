@@ -213,6 +213,9 @@
     "band" : {
 
     },
+    "Bands" : {
+
+    },
     "Category" : {
 
     },
@@ -222,7 +225,13 @@
     "club" : {
 
     },
+    "Clubs" : {
+
+    },
     "Comment" : {
+
+    },
+    "Concerts" : {
 
     },
     "Count" : {
@@ -319,6 +328,9 @@
 
     },
     "performer" : {
+
+    },
+    "Performers" : {
 
     },
     "Punctuation" : {
