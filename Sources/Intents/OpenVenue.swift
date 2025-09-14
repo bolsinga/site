@@ -7,13 +7,8 @@
 
 import AppIntents
 import Foundation
-import os
 
-extension Logger {
-  fileprivate static let openVenue = Logger(category: "openVenue")
-}
-
-struct OpenVenue: AppIntent {
+struct OpenVenue: OpenIntent, URLRepresentableIntent {
   static let title = LocalizedStringResource("Open Venue")
 
   static let description = IntentDescription("Displays Venue Details in App.")
@@ -24,9 +19,4 @@ struct OpenVenue: AppIntent {
 
   @Parameter(title: "Venue")
   var target: VenueEntity
-
-  @MainActor func perform() async throws -> some IntentResult & OpensIntent {
-    Logger.openVenue.log("Intent Open URL: \(target.url.absoluteString)")
-    return .result(opensIntent: OpenURLIntent(target.url))
-  }
 }

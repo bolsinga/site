@@ -20,9 +20,9 @@ struct VenueEntity: AppEntity {
   static let defaultQuery = VenueEntityQuery()
 
   var id: Venue.ID
-  var url: URL
   var address: String
 
+  @Property var url: URL
   @Property var name: String
 
   @Property(title: "City")
@@ -42,13 +42,19 @@ struct VenueEntity: AppEntity {
   init?(digest: VenueDigest) {
     guard let url = digest.url else { return nil }
     self.id = digest.id
-    self.url = url
     self.address = digest.venue.location.formatted(.oneLineNoURL)
 
+    self.url = url
     self.name = digest.name
     self.city = digest.venue.location.city
     self.state = digest.venue.location.state
     self.related = digest.related.map { $0.name }
+  }
+}
+
+extension VenueEntity: URLRepresentableEntity {
+  static var urlRepresentation: URLRepresentation {
+    "\(\.$url)"
   }
 }
 
