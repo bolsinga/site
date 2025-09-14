@@ -104,7 +104,7 @@ extension VenueEntityQuery: EntityPropertyQuery {
   ) async throws -> [VenueEntity] {
     Logger.venueQuery.log("Predicate")
 
-    var matchedEntities = try venues(matching: comparators, mode: mode)
+    var matchedEntities = try entities(matching: comparators, mode: mode)
 
     for sortOperation in sortedBy {
       switch sortOperation.by {
@@ -126,7 +126,7 @@ extension VenueEntityQuery: EntityPropertyQuery {
     return matchedEntities
   }
 
-  private func venues(matching comparators: [Predicate<VenueEntity>], mode: ComparatorMode) throws
+  private func entities(matching comparators: [Predicate<VenueEntity>], mode: ComparatorMode) throws
     -> [VenueEntity]
   {
     try vault.venueDigests.compactMap { VenueEntity(digest: $0) }.compactMap { entity in
