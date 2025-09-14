@@ -27,6 +27,9 @@ struct ArtistEntity: AppEntity {
   @Property var url: URL
   @Property var name: String
 
+  @Property(title: "Show Count")
+  var showCount: Int
+
   @Property(title: "Related Artists")
   var related: [String]
 
@@ -40,6 +43,7 @@ struct ArtistEntity: AppEntity {
     self.id = digest.id
     self.url = url
     self.name = digest.name
+    self.showCount = digest.concerts.count
     self.related = digest.related.map { $0.name }
   }
 }
