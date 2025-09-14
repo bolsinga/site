@@ -5,12 +5,23 @@
 //  Created by Greg Bolsinga on 9/10/25.
 //
 
+import Algorithms
 @preconcurrency import AppIntents
 import Foundation
 import os
 
 extension Logger {
   fileprivate static let venueQuery = Logger(category: "venueQuery")
+}
+
+extension Sequence where Element == Concert {
+  fileprivate var venueIDs: [Venue.ID] {
+    Array(self.compactMap { $0.venue?.id }.uniqued())
+  }
+
+  fileprivate func recent(_ count: Int = 5) -> [Venue.ID] {
+    self.suffix(count).venueIDs
+  }
 }
 
 struct VenueEntityQuery: EntityQuery {
@@ -27,13 +38,10 @@ struct VenueEntityQuery: EntityQuery {
   func suggestedEntities() async throws -> [VenueEntity] {
     Logger.venueQuery.log("Suggested")
 
-    let concertsToday = vault.concerts(on: .now)
-    guard !concertsToday.isEmpty else { return [] }
+    var ids = vault.concerts(on: .now).venueIDs
+    if ids.isEmpty { ids = vault.concerts.recent() }
 
-    let venueIDs = concertsToday.compactMap { $0.venue?.id }
-    guard !venueIDs.isEmpty else { return [] }
-
-    return try await entities(for: venueIDs)
+    return try await entities(for: ids.reversed())
   }
 
   @Dependency
