@@ -34,6 +34,9 @@ struct VenueEntity: AppEntity {
   @Property(title: "Show Count")
   var showCount: Int
 
+  @Property(title: "Artist Count")
+  var artistCount: Int
+
   @Property(title: "Related Venues")
   var related: [String]
 
@@ -52,6 +55,7 @@ struct VenueEntity: AppEntity {
     self.city = digest.venue.location.city
     self.state = digest.venue.location.state
     self.showCount = digest.concerts.count
+    self.artistCount = Array(digest.concerts.flatMap { $0.artists }.uniqued()).count
     self.related = digest.related.map { $0.name }
   }
 }
