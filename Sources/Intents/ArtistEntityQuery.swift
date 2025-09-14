@@ -91,7 +91,7 @@ extension ArtistEntityQuery: EntityPropertyQuery {
   ) async throws -> [ArtistEntity] {
     Logger.artistQuery.log("Predicate")
 
-    var matchedEntities = try venues(matching: comparators, mode: mode)
+    var matchedEntities = try entities(matching: comparators, mode: mode)
 
     for sortOperation in sortedBy {
       switch sortOperation.by {
@@ -110,8 +110,8 @@ extension ArtistEntityQuery: EntityPropertyQuery {
     return matchedEntities
   }
 
-  private func venues(matching comparators: [Predicate<ArtistEntity>], mode: ComparatorMode) throws
-    -> [ArtistEntity]
+  private func entities(matching comparators: [Predicate<ArtistEntity>], mode: ComparatorMode)
+    throws -> [ArtistEntity]
   {
     try vault.artistDigests.compactMap { ArtistEntity(digest: $0) }.compactMap { entity in
       var includeAsResult = mode == .and ? true : false
