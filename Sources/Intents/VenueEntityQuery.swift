@@ -111,6 +111,21 @@ extension VenueEntityQuery: EntityPropertyQuery {
       }
     }
 
+    Property(\VenueEntity.$artistCount) {
+      LessThanOrEqualToComparator { searchValue in
+        #Predicate<VenueEntity> { $0.artistCount <= searchValue }
+      }
+      GreaterThanOrEqualToComparator { searchValue in
+        #Predicate<VenueEntity> { $0.artistCount >= searchValue }
+      }
+      EqualToComparator { searchValue in
+        #Predicate<VenueEntity> { $0.artistCount == searchValue }
+      }
+      NotEqualToComparator { searchValue in
+        #Predicate<VenueEntity> { $0.artistCount != searchValue }
+      }
+    }
+
     Property(\VenueEntity.$related) {
       ContainsComparator { searchValue in
         #Predicate<VenueEntity> {
@@ -125,6 +140,7 @@ extension VenueEntityQuery: EntityPropertyQuery {
     SortableBy(\VenueEntity.$city)
     SortableBy(\VenueEntity.$state)
     SortableBy(\VenueEntity.$showCount)
+    SortableBy(\VenueEntity.$artistCount)
   }
 
   static var findIntentDescription: IntentDescription? {
@@ -157,6 +173,9 @@ extension VenueEntityQuery: EntityPropertyQuery {
       case \.$showCount:
         matchedEntities.sort(
           using: KeyPathComparator(\VenueEntity.showCount, order: sortOperation.order.sortOrder))
+      case \.$artistCount:
+        matchedEntities.sort(
+          using: KeyPathComparator(\VenueEntity.artistCount, order: sortOperation.order.sortOrder))
       default:
         break
       }
