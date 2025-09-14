@@ -23,8 +23,8 @@ struct ArtistEntity: AppEntity {
   static let defaultQuery = ArtistEntityQuery()
 
   var id: Artist.ID
-  var url: URL
 
+  @Property var url: URL
   @Property var name: String
 
   @Property(title: "Related Artists")
@@ -41,6 +41,12 @@ struct ArtistEntity: AppEntity {
     self.url = url
     self.name = digest.name
     self.related = digest.related.map { $0.name }
+  }
+}
+
+extension ArtistEntity: URLRepresentableEntity {
+  static var urlRepresentation: URLRepresentation {
+    "\(\.$url)"
   }
 }
 
