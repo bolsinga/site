@@ -20,14 +20,14 @@ extension ArchiveCategory {
 
 extension ArchiveActivity {
   func matches(category: ArchiveCategory) -> Bool {
-    if case let .category(cat) = self {
+    if case .category(let cat) = self {
       return cat == category
     }
     return false
   }
 
   func matches(path: ArchivePath) -> Bool {
-    if case let .path(ap) = self {
+    if case .path(let ap) = self {
       return ap == path
     }
     return false
