@@ -186,9 +186,6 @@
     "About" : {
 
     },
-    "Address" : {
-
-    },
     "All" : {
       "comment" : "ArchiveScope.all"
     },
@@ -213,16 +210,28 @@
     "band" : {
 
     },
+    "Bands" : {
+
+    },
     "Category" : {
 
     },
     "Check again tomorrow." : {
 
     },
+    "City" : {
+
+    },
     "club" : {
 
     },
+    "Clubs" : {
+
+    },
     "Comment" : {
+
+    },
+    "Concerts" : {
 
     },
     "Count" : {
@@ -319,6 +328,9 @@
 
     },
     "performer" : {
+
+    },
+    "Performers" : {
 
     },
     "Punctuation" : {

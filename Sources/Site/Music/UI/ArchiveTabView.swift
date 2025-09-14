@@ -84,7 +84,7 @@ struct ArchiveTabView: View {
             .badge(category.badge(model))
           #endif
         } else {
-          #if os(macOS) && swift(<6.2)
+          #if os(macOS)
             Tab(category.localizedString, systemImage: category.systemImage, value: category) {
               searchTabContent
             }

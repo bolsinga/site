@@ -5,12 +5,23 @@
 //  Created by Greg Bolsinga on 9/10/25.
 //
 
+import Algorithms
 @preconcurrency import AppIntents
 import Foundation
 import os
 
 extension Logger {
   fileprivate static let venueQuery = Logger(category: "venueQuery")
+}
+
+extension Sequence where Element == Concert {
+  fileprivate var venueIDs: [Venue.ID] {
+    Array(self.compactMap { $0.venue?.id }.uniqued())
+  }
+
+  fileprivate func recent(_ count: Int = 5) -> [Venue.ID] {
+    self.suffix(count).venueIDs
+  }
 }
 
 struct VenueEntityQuery: EntityQuery {
@@ -27,13 +38,10 @@ struct VenueEntityQuery: EntityQuery {
   func suggestedEntities() async throws -> [VenueEntity] {
     Logger.venueQuery.log("Suggested")
 
-    let concertsToday = vault.concerts(on: .now)
-    guard !concertsToday.isEmpty else { return [] }
+    var ids = vault.concerts(on: .now).venueIDs
+    if ids.isEmpty { ids = vault.concerts.recent() }
 
-    let venueIDs = concertsToday.compactMap { $0.venue?.id }
-    guard !venueIDs.isEmpty else { return [] }
-
-    return try await entities(for: venueIDs)
+    return try await entities(for: ids.reversed())
   }
 
   @Dependency
@@ -64,15 +72,27 @@ extension VenueEntityQuery: EntityPropertyQuery {
       }
     }
 
-    Property(\VenueEntity.$address) {
+    Property(\VenueEntity.$city) {
       ContainsComparator { searchValue in
-        #Predicate<VenueEntity> { $0.address.localizedStandardContains(searchValue) }
+        #Predicate<VenueEntity> { $0.city.localizedStandardContains(searchValue) }
       }
       EqualToComparator { searchValue in
-        #Predicate<VenueEntity> { $0.address == searchValue }
+        #Predicate<VenueEntity> { $0.city == searchValue }
       }
       NotEqualToComparator { searchValue in
-        #Predicate<VenueEntity> { $0.address != searchValue }
+        #Predicate<VenueEntity> { $0.city != searchValue }
+      }
+    }
+
+    Property(\VenueEntity.$state) {
+      ContainsComparator { searchValue in
+        #Predicate<VenueEntity> { $0.state.localizedStandardContains(searchValue) }
+      }
+      EqualToComparator { searchValue in
+        #Predicate<VenueEntity> { $0.state == searchValue }
+      }
+      NotEqualToComparator { searchValue in
+        #Predicate<VenueEntity> { $0.state != searchValue }
       }
     }
 
@@ -87,7 +107,8 @@ extension VenueEntityQuery: EntityPropertyQuery {
 
   static let sortingOptions = SortingOptions {
     SortableBy(\VenueEntity.$name)
-    SortableBy(\VenueEntity.$address)
+    SortableBy(\VenueEntity.$city)
+    SortableBy(\VenueEntity.$state)
   }
 
   static var findIntentDescription: IntentDescription? {
@@ -104,16 +125,19 @@ extension VenueEntityQuery: EntityPropertyQuery {
   ) async throws -> [VenueEntity] {
     Logger.venueQuery.log("Predicate")
 
-    var matchedEntities = try venues(matching: comparators, mode: mode)
+    var matchedEntities = try entities(matching: comparators, mode: mode)
 
     for sortOperation in sortedBy {
       switch sortOperation.by {
       case \.$name:
         matchedEntities.sort(
           using: KeyPathComparator(\VenueEntity.name, order: sortOperation.order.sortOrder))
-      case \.$address:
+      case \.$city:
         matchedEntities.sort(
-          using: KeyPathComparator(\VenueEntity.address, order: sortOperation.order.sortOrder))
+          using: KeyPathComparator(\VenueEntity.city, order: sortOperation.order.sortOrder))
+      case \.$state:
+        matchedEntities.sort(
+          using: KeyPathComparator(\VenueEntity.state, order: sortOperation.order.sortOrder))
       default:
         break
       }
@@ -126,7 +150,7 @@ extension VenueEntityQuery: EntityPropertyQuery {
     return matchedEntities
   }
 
-  private func venues(matching comparators: [Predicate<VenueEntity>], mode: ComparatorMode) throws
+  private func entities(matching comparators: [Predicate<VenueEntity>], mode: ComparatorMode) throws
     -> [VenueEntity]
   {
     try vault.venueDigests.compactMap { VenueEntity(digest: $0) }.compactMap { entity in

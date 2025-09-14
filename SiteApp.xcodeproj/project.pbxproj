@@ -7,14 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		FE42CBCC2E73BA190064F683 /* Concert+Headliner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE42CBCB2E73BA190064F683 /* Concert+Headliner.swift */; };
-		FE42CBCD2E73BA190064F683 /* Concert+Headliner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE42CBCB2E73BA190064F683 /* Concert+Headliner.swift */; };
-		FE42CBCE2E73BA190064F683 /* Concert+Headliner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE42CBCB2E73BA190064F683 /* Concert+Headliner.swift */; };
-		FE42CBD02E73BAA30064F683 /* PerformersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE42CBCF2E73BAA30064F683 /* PerformersView.swift */; };
 		FE42CBC42E739F640064F683 /* ArtistEntityQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE42CBC32E739F640064F683 /* ArtistEntityQuery.swift */; };
 		FE42CBC62E739F810064F683 /* EntityQuerySort+SortOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE42CBC52E739F810064F683 /* EntityQuerySort+SortOrder.swift */; };
 		FE42CBC82E73A0900064F683 /* ArtistEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE42CBC72E73A0900064F683 /* ArtistEntity.swift */; };
 		FE42CBCA2E73A1DD0064F683 /* OpenArtist.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE42CBC92E73A1DD0064F683 /* OpenArtist.swift */; };
+		FE42CBCC2E73BA190064F683 /* Concert+Headliner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE42CBCB2E73BA190064F683 /* Concert+Headliner.swift */; };
+		FE42CBCD2E73BA190064F683 /* Concert+Headliner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE42CBCB2E73BA190064F683 /* Concert+Headliner.swift */; };
+		FE42CBCE2E73BA190064F683 /* Concert+Headliner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE42CBCB2E73BA190064F683 /* Concert+Headliner.swift */; };
+		FE42CBD02E73BAA30064F683 /* PerformersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE42CBCF2E73BAA30064F683 /* PerformersView.swift */; };
 		FE57C3022E713D1300A67D4F /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FE57C23A2E713D1300A67D4F /* Preview Assets.xcassets */; };
 		FE57C3032E713D1300A67D4F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FE57C23C2E713D1300A67D4F /* Assets.xcassets */; };
 		FE57C3052E713D1300A67D4F /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = FE57C23E2E713D1300A67D4F /* Localizable.xcstrings */; };
@@ -358,6 +358,7 @@
 		FEB4895E2E6E6E8F0043057D /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = FEB4895D2E6E6E8F0043057D /* ArgumentParser */; };
 		FEB489B52E6E6FC10043057D /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = FEB489B42E6E6FC10043057D /* ArgumentParser */; };
 		FEB48A082E6E70E20043057D /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = FEB48A072E6E70E20043057D /* ArgumentParser */; };
+		FEB722BE2E776336006A4DA2 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = FEB722BD2E776336006A4DA2 /* Algorithms */; };
 		FEE42FA92E72600E0059ED0F /* SiteShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEE42FA82E72600E0059ED0F /* SiteShortcuts.swift */; };
 		FEE42FAB2E726D9E0059ED0F /* AppShortcuts.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = FEE42FAA2E726D9E0059ED0F /* AppShortcuts.xcstrings */; };
 		FEE42FAD2E7280630059ED0F /* VenueEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEE42FAC2E7280630059ED0F /* VenueEntity.swift */; };
@@ -407,12 +408,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		FE42CBCB2E73BA190064F683 /* Concert+Headliner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Concert+Headliner.swift"; sourceTree = "<group>"; };
-		FE42CBCF2E73BAA30064F683 /* PerformersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformersView.swift; sourceTree = "<group>"; };
 		FE42CBC32E739F640064F683 /* ArtistEntityQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistEntityQuery.swift; sourceTree = "<group>"; };
 		FE42CBC52E739F810064F683 /* EntityQuerySort+SortOrder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EntityQuerySort+SortOrder.swift"; sourceTree = "<group>"; };
 		FE42CBC72E73A0900064F683 /* ArtistEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistEntity.swift; sourceTree = "<group>"; };
 		FE42CBC92E73A1DD0064F683 /* OpenArtist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenArtist.swift; sourceTree = "<group>"; };
+		FE42CBCB2E73BA190064F683 /* Concert+Headliner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Concert+Headliner.swift"; sourceTree = "<group>"; };
+		FE42CBCF2E73BAA30064F683 /* PerformersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformersView.swift; sourceTree = "<group>"; };
 		FE5360FD29CE82CA00618099 /* SiteApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SiteApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE57C23A2E713D1300A67D4F /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		FE57C23C2E713D1300A67D4F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -639,6 +640,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FEB722BE2E776336006A4DA2 /* Algorithms in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -683,6 +685,7 @@
 				FEC1720F2E70F1E800E8EFC8 /* README.md */,
 				FE57C3012E713D1300A67D4F /* Sources */,
 				FE57C45E2E713D4600A67D4F /* Tests */,
+				FEB722B92E77625C006A4DA2 /* Frameworks */,
 				FE5360FE29CE82CA00618099 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -1059,6 +1062,13 @@
 			path = Intents;
 			sourceTree = "<group>";
 		};
+		FEB722B92E77625C006A4DA2 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1076,6 +1086,7 @@
 			);
 			name = SiteApp;
 			packageProductDependencies = (
+				FEB722BD2E776336006A4DA2 /* Algorithms */,
 			);
 			productName = SiteApp;
 			productReference = FE5360FD29CE82CA00618099 /* SiteApp.app */;
@@ -1200,6 +1211,7 @@
 			mainGroup = FE5360F429CE82CA00618099;
 			packageReferences = (
 				FEB4895C2E6E6E8F0043057D /* XCRemoteSwiftPackageReference "swift-argument-parser" */,
+				FEB722BC2E776336006A4DA2 /* XCRemoteSwiftPackageReference "swift-algorithms" */,
 			);
 			productRefGroup = FE5360FE29CE82CA00618099 /* Products */;
 			projectDirPath = "";
@@ -2076,6 +2088,14 @@
 				version = 1.6.1;
 			};
 		};
+		FEB722BC2E776336006A4DA2 /* XCRemoteSwiftPackageReference "swift-algorithms" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-algorithms.git";
+			requirement = {
+				kind = exactVersion;
+				version = 1.2.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -2093,6 +2113,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FEB4895C2E6E6E8F0043057D /* XCRemoteSwiftPackageReference "swift-argument-parser" */;
 			productName = ArgumentParser;
+		};
+		FEB722BD2E776336006A4DA2 /* Algorithms */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FEB722BC2E776336006A4DA2 /* XCRemoteSwiftPackageReference "swift-algorithms" */;
+			productName = Algorithms;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

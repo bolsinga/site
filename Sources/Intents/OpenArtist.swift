@@ -7,13 +7,8 @@
 
 import AppIntents
 import Foundation
-import os
 
-extension Logger {
-  fileprivate static let openArtist = Logger(category: "openArtist")
-}
-
-struct OpenArtist: AppIntent {
+struct OpenArtist: OpenIntent, URLRepresentableIntent {
   static let title = LocalizedStringResource("Open Artist")
 
   static let description = IntentDescription("Displays Artist Details in App.")
@@ -24,9 +19,4 @@ struct OpenArtist: AppIntent {
 
   @Parameter(title: "Artist")
   var target: ArtistEntity
-
-  @MainActor func perform() async throws -> some IntentResult & OpensIntent {
-    Logger.openArtist.log("Intent Open URL: \(target.url.absoluteString)")
-    return .result(opensIntent: OpenURLIntent(target.url))
-  }
 }
