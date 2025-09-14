@@ -64,15 +64,27 @@ extension VenueEntityQuery: EntityPropertyQuery {
       }
     }
 
-    Property(\VenueEntity.$address) {
+    Property(\VenueEntity.$city) {
       ContainsComparator { searchValue in
-        #Predicate<VenueEntity> { $0.address.localizedStandardContains(searchValue) }
+        #Predicate<VenueEntity> { $0.city.localizedStandardContains(searchValue) }
       }
       EqualToComparator { searchValue in
-        #Predicate<VenueEntity> { $0.address == searchValue }
+        #Predicate<VenueEntity> { $0.city == searchValue }
       }
       NotEqualToComparator { searchValue in
-        #Predicate<VenueEntity> { $0.address != searchValue }
+        #Predicate<VenueEntity> { $0.city != searchValue }
+      }
+    }
+
+    Property(\VenueEntity.$state) {
+      ContainsComparator { searchValue in
+        #Predicate<VenueEntity> { $0.state.localizedStandardContains(searchValue) }
+      }
+      EqualToComparator { searchValue in
+        #Predicate<VenueEntity> { $0.state == searchValue }
+      }
+      NotEqualToComparator { searchValue in
+        #Predicate<VenueEntity> { $0.state != searchValue }
       }
     }
 
@@ -87,7 +99,8 @@ extension VenueEntityQuery: EntityPropertyQuery {
 
   static let sortingOptions = SortingOptions {
     SortableBy(\VenueEntity.$name)
-    SortableBy(\VenueEntity.$address)
+    SortableBy(\VenueEntity.$city)
+    SortableBy(\VenueEntity.$state)
   }
 
   static var findIntentDescription: IntentDescription? {
@@ -111,9 +124,12 @@ extension VenueEntityQuery: EntityPropertyQuery {
       case \.$name:
         matchedEntities.sort(
           using: KeyPathComparator(\VenueEntity.name, order: sortOperation.order.sortOrder))
-      case \.$address:
+      case \.$city:
         matchedEntities.sort(
-          using: KeyPathComparator(\VenueEntity.address, order: sortOperation.order.sortOrder))
+          using: KeyPathComparator(\VenueEntity.city, order: sortOperation.order.sortOrder))
+      case \.$state:
+        matchedEntities.sort(
+          using: KeyPathComparator(\VenueEntity.state, order: sortOperation.order.sortOrder))
       default:
         break
       }

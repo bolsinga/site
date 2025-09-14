@@ -21,11 +21,15 @@ struct VenueEntity: AppEntity {
 
   var id: Venue.ID
   var url: URL
+  var address: String
 
   @Property var name: String
 
-  @Property(title: "Address")
-  var address: String
+  @Property(title: "City")
+  var city: String
+
+  @Property(title: "State")
+  var state: String
 
   @Property(title: "Related Venues")
   var related: [String]
@@ -39,8 +43,11 @@ struct VenueEntity: AppEntity {
     guard let url = digest.url else { return nil }
     self.id = digest.id
     self.url = url
-    self.name = digest.name
     self.address = digest.venue.location.formatted(.oneLineNoURL)
+
+    self.name = digest.name
+    self.city = digest.venue.location.city
+    self.state = digest.venue.location.state
     self.related = digest.related.map { $0.name }
   }
 }

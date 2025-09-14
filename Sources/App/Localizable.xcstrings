@@ -186,9 +186,6 @@
     "About" : {
 
     },
-    "Address" : {
-
-    },
     "All" : {
       "comment" : "ArchiveScope.all"
     },
@@ -220,6 +217,9 @@
 
     },
     "Check again tomorrow." : {
+
+    },
+    "City" : {
 
     },
     "club" : {
