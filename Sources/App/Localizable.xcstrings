@@ -198,6 +198,9 @@
     "Artist" : {
       "comment" : "ArchiveScope.artist"
     },
+    "Artist Count" : {
+
+    },
     "Artist Names" : {
 
     },
@@ -378,6 +381,9 @@
     "Show Artists" : {
 
     },
+    "Show Count" : {
+
+    },
     "Show Statistics" : {
 
     },
@@ -455,6 +461,9 @@
     },
     "Venue" : {
       "comment" : "ArchiveScope.venue"
+    },
+    "Venue Count" : {
+
     },
     "Venue Names" : {
 

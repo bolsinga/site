@@ -74,6 +74,36 @@ extension ArtistEntityQuery: EntityPropertyQuery {
       }
     }
 
+    Property(\ArtistEntity.$showCount) {
+      LessThanOrEqualToComparator { searchValue in
+        #Predicate<ArtistEntity> { $0.showCount <= searchValue }
+      }
+      GreaterThanOrEqualToComparator { searchValue in
+        #Predicate<ArtistEntity> { $0.showCount >= searchValue }
+      }
+      EqualToComparator { searchValue in
+        #Predicate<ArtistEntity> { $0.showCount == searchValue }
+      }
+      NotEqualToComparator { searchValue in
+        #Predicate<ArtistEntity> { $0.showCount != searchValue }
+      }
+    }
+
+    Property(\ArtistEntity.$venueCount) {
+      LessThanOrEqualToComparator { searchValue in
+        #Predicate<ArtistEntity> { $0.venueCount <= searchValue }
+      }
+      GreaterThanOrEqualToComparator { searchValue in
+        #Predicate<ArtistEntity> { $0.venueCount >= searchValue }
+      }
+      EqualToComparator { searchValue in
+        #Predicate<ArtistEntity> { $0.venueCount == searchValue }
+      }
+      NotEqualToComparator { searchValue in
+        #Predicate<ArtistEntity> { $0.venueCount != searchValue }
+      }
+    }
+
     Property(\ArtistEntity.$related) {
       ContainsComparator { searchValue in
         #Predicate<ArtistEntity> {
@@ -85,6 +115,8 @@ extension ArtistEntityQuery: EntityPropertyQuery {
 
   static let sortingOptions = SortingOptions {
     SortableBy(\ArtistEntity.$name)
+    SortableBy(\ArtistEntity.$showCount)
+    SortableBy(\ArtistEntity.$venueCount)
   }
 
   static var findIntentDescription: IntentDescription? {
@@ -108,6 +140,12 @@ extension ArtistEntityQuery: EntityPropertyQuery {
       case \.$name:
         matchedEntities.sort(
           using: KeyPathComparator(\ArtistEntity.name, order: sortOperation.order.sortOrder))
+      case \.$showCount:
+        matchedEntities.sort(
+          using: KeyPathComparator(\ArtistEntity.showCount, order: sortOperation.order.sortOrder))
+      case \.$venueCount:
+        matchedEntities.sort(
+          using: KeyPathComparator(\ArtistEntity.venueCount, order: sortOperation.order.sortOrder))
       default:
         break
       }
