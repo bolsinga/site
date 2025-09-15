@@ -711,12 +711,12 @@
 		FE57C2412E713D1300A67D4F /* App */ = {
 			isa = PBXGroup;
 			children = (
-				FE57C23B2E713D1300A67D4F /* Preview Content */,
+				FEE42FB42E73622B0059ED0F /* AppIntents.stringsdict */,
+				FEE42FAA2E726D9E0059ED0F /* AppShortcuts.xcstrings */,
 				FE57C23C2E713D1300A67D4F /* Assets.xcassets */,
 				FE57C23D2E713D1300A67D4F /* Info.plist */,
 				FE57C23E2E713D1300A67D4F /* Localizable.xcstrings */,
-				FEE42FAA2E726D9E0059ED0F /* AppShortcuts.xcstrings */,
-				FEE42FB42E73622B0059ED0F /* AppIntents.stringsdict */,
+				FE57C23B2E713D1300A67D4F /* Preview Content */,
 				FE57C23F2E713D1300A67D4F /* SiteApp.entitlements */,
 				FE57C2402E713D1300A67D4F /* SiteAppApp.swift */,
 			);
@@ -758,8 +758,8 @@
 				FE57C2592E713D1300A67D4F /* ArtistDigest.swift */,
 				FE57C25A2E713D1300A67D4F /* ArtistDigest+LibraryComparable.swift */,
 				FE57C25B2E713D1300A67D4F /* Concert.swift */,
-				FE42CBCB2E73BA190064F683 /* Concert+Headliner.swift */,
 				FE57C25C2E713D1300A67D4F /* Concert+FormatStyle.swift */,
+				FE42CBCB2E73BA190064F683 /* Concert+Headliner.swift */,
 				FE57C25D2E713D1300A67D4F /* Decade.swift */,
 				FE57C25E2E713D1300A67D4F /* Decade.FormatStyle.swift */,
 				FE57C25F2E713D1300A67D4F /* FirstSet.swift */,
@@ -836,7 +836,6 @@
 				FE57C29A2E713D1300A67D4F /* ArtistsSummary.swift */,
 				FE57C29B2E713D1300A67D4F /* Bundle+AppIcon.swift */,
 				FE57C29C2E713D1300A67D4F /* ConcertBlurb.swift */,
-				FE42CBCF2E73BAA30064F683 /* PerformersView.swift */,
 				FE57C29D2E713D1300A67D4F /* DaysShowsSummary.swift */,
 				FE57C29E2E713D1300A67D4F /* LibrarySection+Section.swift */,
 				FE57C29F2E713D1300A67D4F /* LocationFilterToolbarContent.swift */,
@@ -850,6 +849,7 @@
 				FE57C2A72E713D1300A67D4F /* NearbyPreviewModifer.swift */,
 				FE57C2A82E713D1300A67D4F /* NotificationModifier.swift */,
 				FE57C2A92E713D1300A67D4F /* PathRestorableLink.swift */,
+				FE42CBCF2E73BAA30064F683 /* PerformersView.swift */,
 				FE57C2AA2E713D1300A67D4F /* RankableSortList.swift */,
 				FE57C2AB2E713D1300A67D4F /* Ranking+RankingSort.swift */,
 				FE57C2AC2E713D1300A67D4F /* Ranking+ViewRepresentations.swift */,
@@ -1045,16 +1045,16 @@
 		FE57C6AB2E71433A00A67D4F /* Intents */ = {
 			isa = PBXGroup;
 			children = (
+				FE42CBC72E73A0900064F683 /* ArtistEntity.swift */,
+				FE42CBC32E739F640064F683 /* ArtistEntityQuery.swift */,
 				FE57C6A92E71433A00A67D4F /* CategoryEnum.swift */,
+				FE42CBC52E739F810064F683 /* EntityQuerySort+SortOrder.swift */,
+				FE42CBC92E73A1DD0064F683 /* OpenArtist.swift */,
 				FE57C6AA2E71433A00A67D4F /* OpenCategory.swift */,
+				FEE42FB02E7285E90059ED0F /* OpenVenue.swift */,
 				FEE42FA82E72600E0059ED0F /* SiteShortcuts.swift */,
 				FEE42FAC2E7280630059ED0F /* VenueEntity.swift */,
-				FE42CBC72E73A0900064F683 /* ArtistEntity.swift */,
 				FEE42FAE2E72818B0059ED0F /* VenueEntityQuery.swift */,
-				FE42CBC52E739F810064F683 /* EntityQuerySort+SortOrder.swift */,
-				FE42CBC32E739F640064F683 /* ArtistEntityQuery.swift */,
-				FEE42FB02E7285E90059ED0F /* OpenVenue.swift */,
-				FE42CBC92E73A1DD0064F683 /* OpenArtist.swift */,
 			);
 			path = Intents;
 			sourceTree = "<group>";
