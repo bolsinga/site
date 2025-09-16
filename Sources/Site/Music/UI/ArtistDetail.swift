@@ -26,9 +26,8 @@ struct ArtistDetail: View {
         firstSetElement
         StatsGrouping(
           concerts: digest.concerts, shouldCalculateArtistCount: false,
-          yearsSpanRanking: digest.spanRank,
-          computeShowsRank: { digest.showRank },
-          computeArtistVenuesRank: { digest.venueRank })
+          yearsSpanRanking: digest.spanRank, showRanking: digest.showRank,
+          artistVenuesRanking: digest.venueRank)
       }
     }
   }

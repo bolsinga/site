@@ -13,26 +13,26 @@ struct StatsGrouping: View {
   let concerts: [Concert]
   let shouldCalculateArtistCount: Bool
   let yearsSpanRanking: Ranking?
-  let computeShowsRank: (() -> Ranking)?
-  let computeArtistVenuesRank: (() -> Ranking)?
-  let computeVenueArtistsRank: (() -> Ranking)?
+  let showRanking: Ranking?
+  let artistVenuesRanking: Ranking?
+  let venueArtistsRanking: Ranking?
   let displayArchiveCategoryCounts: Bool  // Basically do not want this at the ArchiveCategory.stats.
 
   internal init(
     concerts: [Concert],
     shouldCalculateArtistCount: Bool = true,
     yearsSpanRanking: Ranking? = nil,
-    computeShowsRank: (() -> Ranking)? = nil,
-    computeArtistVenuesRank: (() -> Ranking)? = nil,
-    computeVenueArtistsRank: (() -> Ranking)? = nil,
+    showRanking: Ranking? = nil,
+    artistVenuesRanking: Ranking? = nil,
+    venueArtistsRanking: Ranking? = nil,
     displayArchiveCategoryCounts: Bool = true
   ) {
     self.concerts = concerts
     self.shouldCalculateArtistCount = shouldCalculateArtistCount
     self.yearsSpanRanking = yearsSpanRanking
-    self.computeShowsRank = computeShowsRank
-    self.computeArtistVenuesRank = computeArtistVenuesRank
-    self.computeVenueArtistsRank = computeVenueArtistsRank
+    self.showRanking = showRanking
+    self.artistVenuesRanking = artistVenuesRanking
+    self.venueArtistsRanking = venueArtistsRanking
     self.displayArchiveCategoryCounts = displayArchiveCategoryCounts
   }
 
@@ -68,11 +68,11 @@ struct StatsGrouping: View {
   }
 
   @ViewBuilder var showsElement: some View {
-    if let computeShowsRank {
+    if let showRanking {
       HStack {
         showCount
         Spacer()
-        Text(computeShowsRank().formatted(.rankOnly))
+        Text(showRanking.formatted(.rankOnly))
       }
     } else {
       showCount
@@ -84,11 +84,11 @@ struct StatsGrouping: View {
   }
 
   @ViewBuilder func element(for venues: [Venue]) -> some View {
-    if let computeArtistVenuesRank {
+    if let artistVenuesRanking {
       HStack {
         count(venues: venues)
         Spacer()
-        Text(computeArtistVenuesRank().formatted(.rankOnly))
+        Text(artistVenuesRanking.formatted(.rankOnly))
       }
     } else {
       count(venues: venues)
@@ -100,11 +100,11 @@ struct StatsGrouping: View {
   }
 
   @ViewBuilder func element(for artists: [Artist]) -> some View {
-    if let computeVenueArtistsRank {
+    if let venueArtistsRanking {
       HStack {
         count(artists: artists)
         Spacer()
-        Text(computeVenueArtistsRank().formatted(.rankOnly))
+        Text(venueArtistsRanking.formatted(.rankOnly))
       }
     } else {
       count(artists: artists)
