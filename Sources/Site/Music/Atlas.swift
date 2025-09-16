@@ -17,8 +17,8 @@ protocol Geocodable {
   func geocode() async throws -> Place
 }
 
-protocol AtlasGeocodable: Geocodable, Codable, Equatable, Hashable, Sendable
-where Place: Codable & Sendable {}
+protocol AtlasGeocodable: Geocodable, Identifiable, Sendable
+where ID: Codable, Place: Codable & Sendable {}
 
 private enum Constants {
   static let maxRequests = 50

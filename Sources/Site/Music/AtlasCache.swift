@@ -24,13 +24,13 @@ struct AtlasCache<T: AtlasGeocodable> {
   private let fileName: String
 
   private var staggerOffset = 0.0
-  private var cache: [T: Value] = [:]
+  private var cache: [T.ID: Value] = [:]
 
   internal init(fileName: String = "atlas.json") {
     self.fileName = fileName
 
     do {
-      let diskCache = try [T: Value].read(fileName: fileName)
+      let diskCache = try [T.ID: Value].read(fileName: fileName)
       let now = Date.now
       self.cache = diskCache.filter { $0.value.expirationDate >= now }  // Include those whose expiration date has not passed .now
 
@@ -50,18 +50,18 @@ struct AtlasCache<T: AtlasGeocodable> {
 
   private subscript(index: T) -> T.Place? {
     get {
-      cache[index]?.placemark
+      cache[index.id]?.placemark
     }
     set(newValue) {
       if let newValue {
-        cache[index] = Value(
+        cache[index.id] = Value(
           placemark: newValue,
           expirationDate: .now + expirationOffset + staggerOffset)
 
         // This allows batch geocodes to be "staggered" in their expiration so they do not run all the time once the day comes.
         staggerOffset += ExpirationStaggerDuration
       } else {
-        cache[index] = nil
+        cache[index.id] = nil
       }
       do {
         try cache.save(fileName: fileName)
