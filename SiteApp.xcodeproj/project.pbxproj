@@ -354,6 +354,7 @@
 		FE57C46F2E713D4600A67D4F /* LibrarySectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C45C2E713D4600A67D4F /* LibrarySectionTests.swift */; };
 		FE57C6AC2E71433A00A67D4F /* CategoryEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C6A92E71433A00A67D4F /* CategoryEnum.swift */; };
 		FE57C6AD2E71433A00A67D4F /* OpenCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C6AA2E71433A00A67D4F /* OpenCategory.swift */; };
+		FE57C6AF2E71450300A67D4F /* SiteApp.icon in Resources */ = {isa = PBXBuildFile; fileRef = FE57C6AE2E71450300A67D4F /* SiteApp.icon */; };
 		FEB4895E2E6E6E8F0043057D /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = FEB4895D2E6E6E8F0043057D /* ArgumentParser */; };
 		FEB489B52E6E6FC10043057D /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = FEB489B42E6E6FC10043057D /* ArgumentParser */; };
 		FEB48A082E6E70E20043057D /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = FEB48A072E6E70E20043057D /* ArgumentParser */; };
@@ -619,6 +620,7 @@
 		FE57C45C2E713D4600A67D4F /* LibrarySectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibrarySectionTests.swift; sourceTree = "<group>"; };
 		FE57C6A92E71433A00A67D4F /* CategoryEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEnum.swift; sourceTree = "<group>"; };
 		FE57C6AA2E71433A00A67D4F /* OpenCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenCategory.swift; sourceTree = "<group>"; };
+		FE57C6AE2E71450300A67D4F /* SiteApp.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = SiteApp.icon; sourceTree = "<group>"; };
 		FE9910DC2AC205A70054D229 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		FEB486502E6E6D740043057D /* site_tool */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = site_tool; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEB489AA2E6E6F960043057D /* site_associated_domains */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = site_associated_domains; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -714,6 +716,7 @@
 				FEE42FB42E73622B0059ED0F /* AppIntents.stringsdict */,
 				FEE42FAA2E726D9E0059ED0F /* AppShortcuts.xcstrings */,
 				FE57C23C2E713D1300A67D4F /* Assets.xcassets */,
+				FE57C6AE2E71450300A67D4F /* SiteApp.icon */,
 				FE57C23D2E713D1300A67D4F /* Info.plist */,
 				FE57C23E2E713D1300A67D4F /* Localizable.xcstrings */,
 				FE57C23B2E713D1300A67D4F /* Preview Content */,
@@ -1231,6 +1234,7 @@
 				FEE42FB62E73622B0059ED0F /* AppIntents.stringsdict in Resources */,
 				FE57C3022E713D1300A67D4F /* Preview Assets.xcassets in Resources */,
 				FEE42FAB2E726D9E0059ED0F /* AppShortcuts.xcstrings in Resources */,
+				FE57C6AF2E71450300A67D4F /* SiteApp.icon in Resources */,
 				FE57C3032E713D1300A67D4F /* Assets.xcassets in Resources */,
 				FE57C3052E713D1300A67D4F /* Localizable.xcstrings in Resources */,
 			);
@@ -1776,7 +1780,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = FE9910DC2AC205A70054D229 /* Config.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = SiteApp;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Sources/App/SiteApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
@@ -1826,7 +1830,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = FE9910DC2AC205A70054D229 /* Config.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = SiteApp;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Sources/App/SiteApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
