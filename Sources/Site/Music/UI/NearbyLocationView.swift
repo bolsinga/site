@@ -16,12 +16,16 @@ struct NearbyLocationView: View {
     switch locationAuthorization {
     case .allowed:
       if geocodingProgress < 1.0 {
-        ProgressView(value: geocodingProgress)
-          .progressViewStyle(.circular)
-          .tint(.accentColor)
-          #if os(macOS)
-            .padding(EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 0))
-          #endif
+        VStack {
+          ProgressView(value: geocodingProgress)
+            .progressViewStyle(.circular)
+            .tint(.accentColor)
+            #if os(macOS)
+              .padding(EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 0))
+            #endif
+          Text("Geocoding…")
+            .font(.headline)
+        }
       } else if filteredDataIsEmpty {
         ContentUnavailableView(
           String(localized: "Nothing Nearby"),
