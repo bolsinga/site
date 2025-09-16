@@ -35,4 +35,4 @@ jobs:
     - name: Build / Test
       run: xcodebuild test -verbose -skipPackagePluginValidation -scheme SiteApp -destination "platform=iOS Simulator,name=iPhone 17,OS=26.0"
     - name: Build iOS / macOS / tvOS
-      run: xcodebuild -verbose -skipPackagePluginValidation -scheme SiteApp -destination "generic/platform=iOS Simulator" -destination "generic/platform=macOS" -destination "generic/platform=tvOS Simulator"
+      run: xcodebuild -verbose -skipPackagePluginValidation -scheme SiteApp -destination "platform=iOS Simulator,name=iPhone 17,arch=arm64" -destination "platform=macOS,arch=arm64" -destination "platform=tvOS Simulator,name=Apple TV,arch=arm64"
