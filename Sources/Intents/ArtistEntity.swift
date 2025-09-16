@@ -33,7 +33,7 @@ struct ArtistEntity: AppEntity {
   @Property(title: "Venue Count")
   var venueCount: Int
 
-  @Property(title: "Related Artists")
+  @Property(title: "Name Or Related Names")
   var related: [String]
 
   var displayRepresentation: DisplayRepresentation {

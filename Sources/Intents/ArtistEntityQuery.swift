@@ -107,7 +107,8 @@ extension ArtistEntityQuery: EntityPropertyQuery {
     Property(\ArtistEntity.$related) {
       ContainsComparator { searchValue in
         #Predicate<ArtistEntity> {
-          !$0.related.filter { $0.localizedStandardContains(searchValue) }.isEmpty
+          $0.name.localizedStandardContains(searchValue)
+            || !$0.related.filter { $0.localizedStandardContains(searchValue) }.isEmpty
         }
       }
     }
