@@ -238,7 +238,8 @@ enum LocationAuthorization {
   }
 
   @MainActor
-  func geocode(_ venue: Venue) async throws -> MKMapItem {
-    MKMapItem(placemark: MKPlacemark(placemark: try await atlas.geocode(venue).placemark))
+  func geocode(_ venue: Venue) async throws -> MKMapItem? {
+    guard let placemark = try await atlas.geocode(venue)?.placemark else { return nil }
+    return MKMapItem(placemark: MKPlacemark(placemark: placemark))
   }
 }

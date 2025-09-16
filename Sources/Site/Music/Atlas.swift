@@ -43,18 +43,18 @@ actor Atlas<T: AtlasGeocodable> {
     reset()
   }
 
-  public func geocode(_ geocodable: T) async throws -> T.Place {
+  public func geocode(_ geocodable: T) async throws -> T.Place? {
     if let result = cache.get(geocodable) {
       Logger.atlas.log("cached result")
       return result
     }
 
-    let result = try await gatedGeocode(geocodable)
+    guard let result = try await gatedGeocode(geocodable) else { return nil }
     cache.add(geocodable, value: result)
     return result
   }
 
-  private func gatedGeocode(_ geocodable: T) async throws -> T.Place {
+  private func gatedGeocode(_ geocodable: T) async throws -> T.Place? {
     Logger.atlas.log("start gatedGeocode")
     defer {
       Logger.atlas.log("end gatedGeocode")
@@ -82,8 +82,15 @@ actor Atlas<T: AtlasGeocodable> {
           // throttling error
           try await idleAndReset()
           retry = true
+        } else if error.isGeocodingFailureError {
+          Logger.atlas.error(
+            "geocoding error: \(error.localizedDescription, privacy: .public) geocodable: \(String(describing: geocodable))"
+          )
+          return nil
         } else {
-          Logger.atlas.error("error: \(error.localizedDescription, privacy: .public)")
+          Logger.atlas.error(
+            "unknown error: \(error.localizedDescription, privacy: .public) geocodable: \(String(describing: geocodable))"
+          )
           throw error
         }
       } catch {

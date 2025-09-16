@@ -12,7 +12,7 @@ extension ArchivePath {
   @MainActor
   @ViewBuilder func destination(
     vault: Vault, isPathNavigable: @escaping (PathRestorable) -> Bool,
-    geocoder: @escaping @MainActor (VenueDigest) async throws -> MKMapItem
+    geocoder: @escaping @MainActor (VenueDigest) async throws -> MKMapItem?
   )
     -> some View
   {
