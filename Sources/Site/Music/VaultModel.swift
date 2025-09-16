@@ -38,6 +38,8 @@ enum LocationAuthorization {
 
   private static let distanceFilter: CLLocationDistance = 10
 
+  private var batchGeocodeCompleted = false
+
   private let locationManager = LocationManager(
     activityType: .other,
     distanceFilter: distanceFilter,
@@ -116,10 +118,12 @@ enum LocationAuthorization {
     } catch {
       Logger.vaultModel.error("batch geocode error: \(error, privacy: .public)")
     }
+    batchGeocodeCompleted = true
   }
 
   var geocodingProgress: Double {
-    Double(venuePlacemarks.count) / Double(vault.venueDigests.count)
+    guard !batchGeocodeCompleted else { return 1.0 }
+    return Double(venuePlacemarks.count) / Double(vault.venueDigests.count)
   }
 
   @MainActor
