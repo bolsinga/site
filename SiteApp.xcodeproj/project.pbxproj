@@ -155,7 +155,7 @@
 		FE57C3912E713D1300A67D4F /* LocationFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2D02E713D1300A67D4F /* LocationFilter.swift */; };
 		FE57C3922E713D1300A67D4F /* NearbyDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2D12E713D1300A67D4F /* NearbyDefaults.swift */; };
 		FE57C3932E713D1300A67D4F /* NearbyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2D22E713D1300A67D4F /* NearbyModel.swift */; };
-		FE57C3942E713D1300A67D4F /* NSError+Throttle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2D32E713D1300A67D4F /* NSError+Throttle.swift */; };
+		FE57C3942E713D1300A67D4F /* NSError+Geocoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2D32E713D1300A67D4F /* NSError+Geocoding.swift */; };
 		FE57C3952E713D1300A67D4F /* NSUserActivity+ArchiveCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2D42E713D1300A67D4F /* NSUserActivity+ArchiveCategory.swift */; };
 		FE57C3962E713D1300A67D4F /* NSUserActivity+ArchivePath.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2D52E713D1300A67D4F /* NSUserActivity+ArchivePath.swift */; };
 		FE57C3972E713D1300A67D4F /* NSUserActivity+Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2D62E713D1300A67D4F /* NSUserActivity+Search.swift */; };
@@ -561,7 +561,7 @@
 		FE57C2D02E713D1300A67D4F /* LocationFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationFilter.swift; sourceTree = "<group>"; };
 		FE57C2D12E713D1300A67D4F /* NearbyDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearbyDefaults.swift; sourceTree = "<group>"; };
 		FE57C2D22E713D1300A67D4F /* NearbyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearbyModel.swift; sourceTree = "<group>"; };
-		FE57C2D32E713D1300A67D4F /* NSError+Throttle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSError+Throttle.swift"; sourceTree = "<group>"; };
+		FE57C2D32E713D1300A67D4F /* NSError+Geocoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSError+Geocoding.swift"; sourceTree = "<group>"; };
 		FE57C2D42E713D1300A67D4F /* NSUserActivity+ArchiveCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSUserActivity+ArchiveCategory.swift"; sourceTree = "<group>"; };
 		FE57C2D52E713D1300A67D4F /* NSUserActivity+ArchivePath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSUserActivity+ArchivePath.swift"; sourceTree = "<group>"; };
 		FE57C2D62E713D1300A67D4F /* NSUserActivity+Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSUserActivity+Search.swift"; sourceTree = "<group>"; };
@@ -900,7 +900,7 @@
 				FE57C2D02E713D1300A67D4F /* LocationFilter.swift */,
 				FE57C2D12E713D1300A67D4F /* NearbyDefaults.swift */,
 				FE57C2D22E713D1300A67D4F /* NearbyModel.swift */,
-				FE57C2D32E713D1300A67D4F /* NSError+Throttle.swift */,
+				FE57C2D32E713D1300A67D4F /* NSError+Geocoding.swift */,
 				FE57C2D42E713D1300A67D4F /* NSUserActivity+ArchiveCategory.swift */,
 				FE57C2D52E713D1300A67D4F /* NSUserActivity+ArchivePath.swift */,
 				FE57C2D62E713D1300A67D4F /* NSUserActivity+Search.swift */,
@@ -1400,7 +1400,7 @@
 				FE57C3932E713D1300A67D4F /* NearbyModel.swift in Sources */,
 				FE57C6AC2E71433A00A67D4F /* CategoryEnum.swift in Sources */,
 				FE57C6AD2E71433A00A67D4F /* OpenCategory.swift in Sources */,
-				FE57C3942E713D1300A67D4F /* NSError+Throttle.swift in Sources */,
+				FE57C3942E713D1300A67D4F /* NSError+Geocoding.swift in Sources */,
 				FE57C3952E713D1300A67D4F /* NSUserActivity+ArchiveCategory.swift in Sources */,
 				FE57C3962E713D1300A67D4F /* NSUserActivity+ArchivePath.swift in Sources */,
 				FEE42FAD2E7280630059ED0F /* VenueEntity.swift in Sources */,

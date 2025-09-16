@@ -9,7 +9,7 @@ import MapKit
 import SwiftUI
 
 struct LocationMap<T: Equatable>: View {
-  typealias geocoder = @MainActor () async throws -> MKMapItem
+  typealias geocoder = @MainActor () async throws -> MKMapItem?
 
   let identifier: T
   let geocode: geocoder?

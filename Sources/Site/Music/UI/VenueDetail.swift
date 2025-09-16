@@ -13,7 +13,7 @@ private enum VenueDetailGeocodeError: Error {
 }
 
 struct VenueDetail: View {
-  typealias geocoder = @MainActor (VenueDigest) async throws -> MKMapItem
+  typealias geocoder = @MainActor (VenueDigest) async throws -> MKMapItem?
 
   let digest: VenueDigest
   let concertCompare: (Concert, Concert) -> Bool

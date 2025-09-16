@@ -8,7 +8,7 @@
 import Foundation
 
 struct BatchGeocode<T: AtlasGeocodable>: AsyncSequence {
-  typealias Element = (T, T.Place)
+  typealias Element = (T, T.Place?)
 
   let atlas: Atlas<T>
   let geocodables: [T]
