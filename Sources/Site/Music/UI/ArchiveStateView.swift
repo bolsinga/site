@@ -47,6 +47,7 @@ struct ArchiveStateView: View {
         archiveNavigation.categoryActivity($0)
       }
       .onOpenURL { archiveNavigation.openURL($0) }
+      .handlesExternalEvents(preferring: ["*"], allowing: ["*"])
       .advertiseUserActivity(
         for: archiveNavigation.activity, urlForCategory: { model.vault.url(for: $0) }
       ) {
