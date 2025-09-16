@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: macos-15
+    runs-on: macos-26
 
     steps:
     - uses: actions/checkout@v5
@@ -16,7 +16,7 @@ jobs:
       run: sw_vers
     - name: Available Xcodes
       run: ls /Applications | grep Xcode
-    - name: Switch to Xcode 26 Beta
+    - name: Switch to Xcode
       run: sudo xcode-select -s "/Applications/Xcode_26.0.app/Contents/Developer"
     - name: Xcode - Accept License
       run: sudo xcodebuild -license accept
@@ -33,6 +33,6 @@ jobs:
     - name: Show Destinations
       run: xcodebuild -scheme SiteApp -showdestinations
     - name: Build / Test
-      run: xcodebuild test -verbose -skipPackagePluginValidation -scheme SiteApp -destination "platform=iOS Simulator,name=iPhone 16,OS=18.6"
+      run: xcodebuild test -verbose -skipPackagePluginValidation -scheme SiteApp -destination "platform=iOS Simulator,name=iPhone 17,OS=26.0"
     - name: Build iOS / macOS / tvOS
       run: xcodebuild -verbose -skipPackagePluginValidation -scheme SiteApp -destination "generic/platform=iOS Simulator" -destination "generic/platform=macOS" -destination "generic/platform=tvOS Simulator"
