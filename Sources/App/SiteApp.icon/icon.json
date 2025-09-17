@@ -13,7 +13,14 @@
           "glass" : true,
           "hidden" : false,
           "image-name" : "disc.png",
-          "name" : "disc"
+          "name" : "disc",
+          "position" : {
+            "scale" : 1,
+            "translation-in-points" : [
+              2,
+              0
+            ]
+          }
         }
       ],
       "shadow" : {
@@ -33,7 +40,14 @@
             "solid" : "display-p3:0.21961,0.49804,0.50196,1.00000"
           },
           "image-name" : "spokes.png",
-          "name" : "spokes"
+          "name" : "spokes",
+          "position" : {
+            "scale" : 1,
+            "translation-in-points" : [
+              2,
+              0
+            ]
+          }
         }
       ],
       "lighting" : "individual",
