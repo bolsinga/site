@@ -355,6 +355,7 @@
 		FE57C6AC2E71433A00A67D4F /* CategoryEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C6A92E71433A00A67D4F /* CategoryEnum.swift */; };
 		FE57C6AD2E71433A00A67D4F /* OpenCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C6AA2E71433A00A67D4F /* OpenCategory.swift */; };
 		FE57C6AF2E71450300A67D4F /* SiteApp.icon in Resources */ = {isa = PBXBuildFile; fileRef = FE57C6AE2E71450300A67D4F /* SiteApp.icon */; };
+		FE8F85912E7B7409006AF701 /* Stats.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE8F85902E7B7409006AF701 /* Stats.swift */; };
 		FEB4895E2E6E6E8F0043057D /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = FEB4895D2E6E6E8F0043057D /* ArgumentParser */; };
 		FEB489B52E6E6FC10043057D /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = FEB489B42E6E6FC10043057D /* ArgumentParser */; };
 		FEB48A082E6E70E20043057D /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = FEB48A072E6E70E20043057D /* ArgumentParser */; };
@@ -621,6 +622,7 @@
 		FE57C6A92E71433A00A67D4F /* CategoryEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryEnum.swift; sourceTree = "<group>"; };
 		FE57C6AA2E71433A00A67D4F /* OpenCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenCategory.swift; sourceTree = "<group>"; };
 		FE57C6AE2E71450300A67D4F /* SiteApp.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = SiteApp.icon; sourceTree = "<group>"; };
+		FE8F85902E7B7409006AF701 /* Stats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stats.swift; sourceTree = "<group>"; };
 		FE9910DC2AC205A70054D229 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		FEB486502E6E6D740043057D /* site_tool */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = site_tool; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEB489AA2E6E6F960043057D /* site_associated_domains */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = site_associated_domains; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -866,6 +868,7 @@
 				FE57C2B42E713D1300A67D4F /* SiteView.swift */,
 				FE57C2B52E713D1300A67D4F /* SortModifierToolbarContent.swift */,
 				FE57C2B62E713D1300A67D4F /* StateChart.swift */,
+				FE8F85902E7B7409006AF701 /* Stats.swift */,
 				FE57C2B72E713D1300A67D4F /* StatsCategory.swift */,
 				FE57C2B82E713D1300A67D4F /* StatsGrouping.swift */,
 				FE57C2B92E713D1300A67D4F /* StatsSummary.swift */,
@@ -1295,6 +1298,7 @@
 				FE57C32C2E713D1300A67D4F /* Music+Ranking.swift in Sources */,
 				FE57C32D2E713D1300A67D4F /* Music+ShowsOnly.swift in Sources */,
 				FE57C32E2E713D1300A67D4F /* Music+URL.swift in Sources */,
+				FE8F85912E7B7409006AF701 /* Stats.swift in Sources */,
 				FE57C32F2E713D1300A67D4F /* PartialDate.swift in Sources */,
 				FE57C3302E713D1300A67D4F /* PartialDate+Date.swift in Sources */,
 				FE57C3312E713D1300A67D4F /* PartialDate+FormatStyle.swift in Sources */,
