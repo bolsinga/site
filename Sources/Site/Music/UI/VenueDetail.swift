@@ -46,8 +46,7 @@ struct VenueDetail: View {
       if digest.concerts.count > 1 {
         StatsGrouping(
           concerts: digest.concerts, yearsSpanRanking: digest.spanRank,
-          computeShowsRank: { digest.showRank },
-          computeVenueArtistsRank: { digest.venueArtistRank })
+          showRanking: digest.showRank, venueArtistsRanking: digest.venueArtistRank)
       }
     }
   }
