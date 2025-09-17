@@ -9,26 +9,64 @@ import Charts
 import SwiftUI
 
 struct StateChart: View {
-  let counts: [String: Int]
+  enum Presentation {
+    case `default`
+    case compact
+  }
 
-  var body: some View {
+  let counts: [String: Int]
+  let presentation: Presentation
+
+  internal init(counts: [String: Int], presentation: Presentation = .default) {
+    self.counts = counts
+    self.presentation = presentation
+  }
+
+  @ViewBuilder private var defaultChart: some View {
     Chart(counts.sorted { $0.value < $1.value }, id: \.key) { item in
+      let (state, count) = item
       BarMark(
-        x: .value(Text("State"), item.key),
-        y: .value(Text("Count"), item.value)
+        x: .value("State", state),
+        y: .value("Count", count)
       )
       .annotation(position: .top) {
-        if item.value > 0 {
-          Text(item.value.formatted(.number))
+        if count > 0 {
+          Text(count.formatted(.number))
             .font(.caption2)
         }
       }
     }
   }
+
+  @ViewBuilder private var compactChart: some View {
+    Chart(counts.sorted { $0.value < $1.value }, id: \.key) { item in
+      let (state, count) = item
+      BarMark(
+        x: .value("State", state),
+        y: .value("Count", count)
+      )
+    }
+    .chartYAxis(.hidden)
+  }
+
+  var body: some View {
+    switch presentation {
+    case .default:
+      defaultChart
+    case .compact:
+      compactChart
+    }
+  }
 }
 
-#Preview(traits: .modifier(VaultPreviewModifier())) {
+#Preview("Default Presentation", traits: .modifier(VaultPreviewModifier())) {
   @Previewable @Environment(VaultModel.self) var model
-  StateChart(counts: Stats(concerts: model.vault.concerts).stateCounts)
+  StateChart(counts: Stats(concerts: model.vault.concerts).stateCounts, presentation: .default)
+    .padding()
+}
+
+#Preview("Compact Presentation", traits: .modifier(VaultPreviewModifier())) {
+  @Previewable @Environment(VaultModel.self) var model
+  StateChart(counts: Stats(concerts: model.vault.concerts).stateCounts, presentation: .compact)
     .padding()
 }
