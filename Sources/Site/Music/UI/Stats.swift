@@ -33,17 +33,18 @@ extension Collection where Element == Concert {
 }
 
 struct Stats {
-  let concerts: [Concert]
-  let venues: [Venue]
-  let artists: [Artist]
+  let concertsCount: Int
+  let venueCount: Int
+  let artistCount: Int
   let dates: [Date]
   let stateCounts: [String: Int]
 
   internal init(concerts: [Concert], shouldCalculateArtistCount: Bool) {
-    self.concerts = concerts
+    self.concertsCount = concerts.count
+    self.venueCount = concerts.venues.count
+    let artists = shouldCalculateArtistCount ? concerts.artists : []
+    self.artistCount = artists.count
     self.dates = concerts.knownDates
-    self.venues = concerts.venues
-    self.artists = shouldCalculateArtistCount ? concerts.artists : []
     self.stateCounts = concerts.stateCounts
   }
 
@@ -51,15 +52,13 @@ struct Stats {
     weekdayOrMonthChartConcertThreshold: Int, displayArchiveCategoryCounts: Bool,
     yearsSpanRanking: Ranking?
   ) -> [StatsCategory] {
-    let venuesCount = venues.count
-    let showVenues = venuesCount > 1
+    let showVenues = venueCount > 1
 
-    let artistsCount = artists.count
-    let showArtists = artistsCount > 1
+    let showArtists = artistCount > 1
 
     let showState = stateCounts.keys.count > 1
 
-    let showWeekdayOrMonthChart = concerts.count > weekdayOrMonthChartConcertThreshold
+    let showWeekdayOrMonthChart = concertsCount > weekdayOrMonthChartConcertThreshold
 
     // This needs to be broken down like this or the swift compiler says it is too complex.
     var statsCategoryCases = [StatsCategory]()

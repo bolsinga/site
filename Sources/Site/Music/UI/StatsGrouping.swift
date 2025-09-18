@@ -46,7 +46,7 @@ struct StatsGrouping: View {
   }
 
   @ViewBuilder var showCount: some View {
-    Text("\(stats.concerts.count) Show(s)")
+    Text("\(stats.concertsCount) Show(s)")
   }
 
   @ViewBuilder var showsElement: some View {
@@ -61,35 +61,35 @@ struct StatsGrouping: View {
     }
   }
 
-  @ViewBuilder func count(venues: [Venue]) -> some View {
-    Text("\(venues.count) Venue(s)")
+  @ViewBuilder var venueCount: some View {
+    Text("\(stats.venueCount) Venue(s)")
   }
 
-  @ViewBuilder func element(for venues: [Venue]) -> some View {
+  @ViewBuilder var venuesElement: some View {
     if let artistVenuesRanking {
       HStack {
-        count(venues: venues)
+        venueCount
         Spacer()
         Text(artistVenuesRanking.formatted(.rankOnly))
       }
     } else {
-      count(venues: venues)
+      venueCount
     }
   }
 
-  @ViewBuilder func count(artists: [Artist]) -> some View {
-    Text("\(artists.count) Artist(s)")
+  @ViewBuilder var artistCount: some View {
+    Text("\(stats.artistCount) Artist(s)")
   }
 
-  @ViewBuilder func element(for artists: [Artist]) -> some View {
+  @ViewBuilder var artistsElement: some View {
     if let venueArtistsRanking {
       HStack {
-        count(artists: artists)
+        artistCount
         Spacer()
         Text(venueArtistsRanking.formatted(.rankOnly))
       }
     } else {
-      count(artists: artists)
+      artistCount
     }
   }
 
@@ -106,9 +106,9 @@ struct StatsGrouping: View {
         case .years:
           yearsElement
         case .venues:
-          element(for: stats.venues)
+          venuesElement
         case .artists:
-          element(for: stats.artists)
+          artistsElement
         case .weekday:
           let name = String(localized: "Weekdays")
           NavigationLink(name) { WeekdayChart(dates: stats.dates).navigationTitle(name) }
