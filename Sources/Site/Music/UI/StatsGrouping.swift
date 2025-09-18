@@ -20,6 +20,9 @@ struct StatsGrouping: View {
   let weekdaysTitleLocalizedString: LocalizedStringResource
   let monthsTitleLocalizedString: LocalizedStringResource
 
+  @State private var showWeekdays = false
+  @State private var showMonths = false
+
   internal init(
     concerts: [Concert],
     shouldCalculateArtistCount: Bool = true,
@@ -116,13 +119,15 @@ struct StatsGrouping: View {
         case .artists:
           artistsElement
         case .weekday:
-          NavigationLink(String(localized: "Weekdays")) {
-            WeekdayChart(dates: stats.dates).navigationTitle(weekdaysTitleLocalizedString)
-          }
+          Button("Weekdays") { showWeekdays = true }
+            .titledSheet(isPresented: $showWeekdays, title: weekdaysTitleLocalizedString) {
+              WeekdayChart(dates: stats.dates)
+            }
         case .month:
-          NavigationLink(String(localized: "Months")) {
-            MonthChart(dates: stats.dates).navigationTitle(monthsTitleLocalizedString)
-          }
+          Button("Months") { showMonths = true }
+            .titledSheet(isPresented: $showMonths, title: monthsTitleLocalizedString) {
+              MonthChart(dates: stats.dates)
+            }
         case .state:
           NavigationLink {
             StateChart(counts: stats.stateCounts)
