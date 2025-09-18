@@ -19,9 +19,7 @@ extension Collection where Element == Concert {
 
   fileprivate var knownDates: [Date] {
     self.map { $0.show.date }
-      .filter { $0.day != nil }
-      .filter { $0.month != nil }
-      .filter { $0.year != nil }
+      .filter { !$0.isUnknown }
       .compactMap { $0.date }
   }
 
