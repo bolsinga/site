@@ -12,7 +12,10 @@ struct StatsSummary: View {
 
   var body: some View {
     List {
-      StatsGrouping(concerts: model.vault.concerts, displayArchiveCategoryCounts: true)
+      StatsGrouping(
+        concerts: model.vault.concerts, displayArchiveCategoryCounts: true,
+        weekdaysTitleLocalizedString: "\(ArchiveCategory.shows.localizedString) Weekdays",
+        monthsTitleLocalizedString: "\(ArchiveCategory.shows.localizedString) Months")
     }
     .navigationTitle(Text(ArchiveCategory.stats.localizedString))
   }

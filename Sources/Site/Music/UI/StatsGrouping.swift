@@ -17,6 +17,8 @@ struct StatsGrouping: View {
   let artistVenuesRanking: Ranking?
   let venueArtistsRanking: Ranking?
   let displayArchiveCategoryCounts: Bool  // Basically do not want this at the ArchiveCategory.stats.
+  let weekdaysTitleLocalizedString: LocalizedStringResource
+  let monthsTitleLocalizedString: LocalizedStringResource
 
   internal init(
     concerts: [Concert],
@@ -25,7 +27,9 @@ struct StatsGrouping: View {
     showRanking: Ranking? = nil,
     artistVenuesRanking: Ranking? = nil,
     venueArtistsRanking: Ranking? = nil,
-    displayArchiveCategoryCounts: Bool = true
+    displayArchiveCategoryCounts: Bool = true,
+    weekdaysTitleLocalizedString: LocalizedStringResource,
+    monthsTitleLocalizedString: LocalizedStringResource
   ) {
     self.stats = Stats(concerts: concerts, shouldCalculateArtistCount: shouldCalculateArtistCount)
     self.yearsSpanRanking = yearsSpanRanking
@@ -33,6 +37,8 @@ struct StatsGrouping: View {
     self.artistVenuesRanking = artistVenuesRanking
     self.venueArtistsRanking = venueArtistsRanking
     self.displayArchiveCategoryCounts = displayArchiveCategoryCounts
+    self.weekdaysTitleLocalizedString = weekdaysTitleLocalizedString
+    self.monthsTitleLocalizedString = monthsTitleLocalizedString
   }
 
   @ViewBuilder var yearsElement: some View {
@@ -110,11 +116,13 @@ struct StatsGrouping: View {
         case .artists:
           artistsElement
         case .weekday:
-          let name = String(localized: "Weekdays")
-          NavigationLink(name) { WeekdayChart(dates: stats.dates).navigationTitle(name) }
+          NavigationLink(String(localized: "Weekdays")) {
+            WeekdayChart(dates: stats.dates).navigationTitle(weekdaysTitleLocalizedString)
+          }
         case .month:
-          let name = String(localized: "Months")
-          NavigationLink(name) { MonthChart(dates: stats.dates).navigationTitle(name) }
+          NavigationLink(String(localized: "Months")) {
+            MonthChart(dates: stats.dates).navigationTitle(monthsTitleLocalizedString)
+          }
         case .state:
           NavigationLink {
             StateChart(counts: stats.stateCounts)
