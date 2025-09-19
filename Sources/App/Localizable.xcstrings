@@ -51,6 +51,12 @@
         }
       }
     },
+    "%@ Months" : {
+
+    },
+    "%@ Weekdays" : {
+
+    },
     "%@, %@" : {
       "comment" : "headlinerAndVenue.no.venue",
       "localizations" : {

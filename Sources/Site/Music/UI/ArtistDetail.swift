@@ -27,7 +27,9 @@ struct ArtistDetail: View {
         StatsGrouping(
           concerts: digest.concerts, shouldCalculateArtistCount: false,
           yearsSpanRanking: digest.spanRank, showRanking: digest.showRank,
-          artistVenuesRanking: digest.venueRank)
+          artistVenuesRanking: digest.venueRank,
+          weekdaysTitleLocalizedString: "\(digest.name) Weekdays",
+          monthsTitleLocalizedString: "\(digest.name) Months")
       }
     }
   }

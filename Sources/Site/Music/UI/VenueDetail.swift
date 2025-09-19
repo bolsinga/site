@@ -46,7 +46,9 @@ struct VenueDetail: View {
       if digest.concerts.count > 1 {
         StatsGrouping(
           concerts: digest.concerts, yearsSpanRanking: digest.spanRank,
-          showRanking: digest.showRank, venueArtistsRanking: digest.venueArtistRank)
+          showRanking: digest.showRank, venueArtistsRanking: digest.venueArtistRank,
+          weekdaysTitleLocalizedString: "\(digest.name) Weekdays",
+          monthsTitleLocalizedString: "\(digest.name) Months")
       }
     }
   }

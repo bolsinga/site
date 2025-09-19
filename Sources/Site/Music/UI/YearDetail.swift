@@ -20,7 +20,10 @@ struct YearDetail: View {
     let concerts = concerts
     if !concerts.isEmpty {
       Section(header: Text(ArchiveCategory.stats.localizedString)) {
-        StatsGrouping(concerts: concerts)
+        StatsGrouping(
+          concerts: concerts,
+          weekdaysTitleLocalizedString: "\(digest.annum.formatted(.year)) Weekdays",
+          monthsTitleLocalizedString: "\(digest.annum.formatted(.year)) Months")
       }
     }
   }
