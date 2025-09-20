@@ -24,36 +24,10 @@ public struct Vault: Sendable {
 
   private let categoryURLLookup: [ArchiveCategory: URL]
 
-  private init(
-    comparator: LibraryComparator, sectioner: LibrarySectioner,
-    rootURL: URL, concerts: [Concert], artistDigests: [ArtistDigest], venueDigests: [VenueDigest],
-    decadesMap: [Decade: [Annum: [Show.ID]]]
-  ) {
-    self.comparator = comparator
-    self.sectioner = sectioner
-    self.rootURL = rootURL
-
-    self.concerts = concerts
-    self.concertMap = self.concerts.reduce(into: [:]) { $0[$1.id] = $1 }
-
-    self.artistDigests = artistDigests
-    self.artistDigestMap = self.artistDigests.reduce(into: [:]) { $0[$1.artist.id] = $1 }
-
-    self.venueDigests = venueDigests
-    self.venueDigestMap = self.venueDigests.reduce(into: [:]) { $0[$1.venue.id] = $1 }
-
-    self.decadesMap = decadesMap
-
-    self.categoryURLLookup = ArchiveCategory.allCases.reduce(into: [ArchiveCategory: URL]()) {
-      guard let url = $1.url(rootURL: rootURL) else { return }
-      $0[$1] = url
-    }
-  }
-
-  public static func create(music: Music, url: URL) async -> Vault {
-    async let asyncLookup = await Lookup.create(music: music)
-    async let asyncComparator = await LibraryComparator.create(music: music)
-    async let sectioner = await LibrarySectioner.create(music: music)
+  public init(music: Music, url: URL) async {
+    async let asyncLookup = await Lookup(music: music)
+    async let asyncComparator = await LibraryComparator(music: music)
+    async let sectioner = await LibrarySectioner(music: music)
 
     let lookup = await asyncLookup
     let comparator = await asyncComparator
@@ -73,12 +47,25 @@ public struct Vault: Sendable {
       concerts: concerts, rootURL: url, lookup: lookup, comparator: comparator.compare(lhs:rhs:)
     )
 
-    let v = Vault(
-      comparator: comparator, sectioner: await sectioner, rootURL: url,
-      concerts: concerts, artistDigests: await artistDigests, venueDigests: await venueDigests,
-      decadesMap: await decadesMap)
+    self.comparator = comparator
+    self.sectioner = await sectioner
+    self.rootURL = url
 
-    return v
+    self.concerts = concerts
+    self.concertMap = self.concerts.reduce(into: [:]) { $0[$1.id] = $1 }
+
+    self.artistDigests = await artistDigests
+    self.artistDigestMap = self.artistDigests.reduce(into: [:]) { $0[$1.artist.id] = $1 }
+
+    self.venueDigests = await venueDigests
+    self.venueDigestMap = self.venueDigests.reduce(into: [:]) { $0[$1.venue.id] = $1 }
+
+    self.decadesMap = await decadesMap
+
+    self.categoryURLLookup = ArchiveCategory.allCases.reduce(into: [ArchiveCategory: URL]()) {
+      guard let url = $1.url(rootURL: url) else { return }
+      $0[$1] = url
+    }
   }
 
   public func concerts(on date: Date) -> [Concert] {
