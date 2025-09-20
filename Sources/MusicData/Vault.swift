@@ -24,28 +24,7 @@ public struct Vault: Sendable {
 
   private let categoryURLLookup: [ArchiveCategory: URL]
 
-  public init(music: Music, url: URL) {
-    // non-parallel, used for previews, tests
-    let lookup = Lookup(music: music)
-    let comparator = LibraryComparator()
-
-    let concerts = music.shows.concerts(
-      rootURL: url, lookup: lookup, comparator: comparator.compare(lhs:rhs:))
-    let artistDigests = music.artists.digests(
-      concerts: concerts, rootURL: url, lookup: lookup, comparator: comparator.compare(lhs:rhs:)
-    )
-    let venueDigests = music.venues.digests(
-      concerts: concerts, rootURL: url, lookup: lookup, comparator: comparator.compare(lhs:rhs:)
-    )
-    let decadesMap = lookup.decadesMap
-
-    self.init(
-      comparator: comparator, sectioner: LibrarySectioner(), rootURL: url,
-      concerts: concerts, artistDigests: artistDigests, venueDigests: venueDigests,
-      decadesMap: decadesMap)
-  }
-
-  internal init(
+  private init(
     comparator: LibraryComparator, sectioner: LibrarySectioner,
     rootURL: URL, concerts: [Concert], artistDigests: [ArtistDigest], venueDigests: [VenueDigest],
     decadesMap: [Decade: [Annum: [Show.ID]]]
