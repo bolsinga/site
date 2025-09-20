@@ -30,36 +30,7 @@ public struct Lookup: Sendable {
   private let venueFirstSetsMap: [Venue.ID: FirstSet]
   private let relationMap: [String: [String]]  // Artist/Venue ID : [Artist/Venue ID]
 
-  private init(
-    artistMap: [Artist.ID: Artist],
-    venueMap: [Venue.ID: Venue],
-    artistRankingMap: [Artist.ID: Ranking],
-    venueRankingMap: [Venue.ID: Ranking],
-    artistShowSpanRankingMap: [Artist.ID: Ranking],
-    venueShowSpanRankingMap: [Venue.ID: Ranking],
-    artistVenueRankingMap: [Artist.ID: Ranking],
-    venueArtistRankingMap: [Venue.ID: Ranking],
-    decadesMap: [Decade: [Annum: [Show.ID]]],
-    artistFirstSetsMap: [Artist.ID: FirstSet],
-    venueFirstSetsMap: [Venue.ID: FirstSet],
-    relationMap: [String: [String]]
-  ) {
-    self.artistMap = artistMap
-    self.venueMap = venueMap
-    self.artistRankingMap = artistRankingMap
-    self.venueRankingMap = venueRankingMap
-    self.artistShowSpanRankingMap = artistShowSpanRankingMap
-    self.venueShowSpanRankingMap = venueShowSpanRankingMap
-    self.artistVenueRankingMap = artistVenueRankingMap
-    self.venueArtistRankingMap = venueArtistRankingMap
-    self.decadesMap = decadesMap
-    self.artistFirstSetsMap = artistFirstSetsMap
-    self.venueFirstSetsMap = venueFirstSetsMap
-    self.relationMap = relationMap
-  }
-
-  public static func create(music: Music) async -> Lookup {
-    // parallel
+  public init(music: Music) async {
     async let artistLookup = createLookup(music.artists)
     async let venueLookup = createLookup(music.venues)
     async let artistRanks = music.artistRankings
@@ -73,29 +44,18 @@ public struct Lookup: Sendable {
     async let venueFirsts = music.venueFirstSets
     async let relations = music.relationMap
 
-    let (
-      artistMap, venueMap, artistRankings, venueRankings, artistSpanRankings,
-      venueSpanRankings, artistVenueRankings, venueArtistRankings, decadesMap, artistFirstSets,
-      venueFirstSets, relationMap
-    ) = await (
-      artistLookup, venueLookup, artistRanks, venueRanks, artistSpanRanks,
-      venueSpanRanks, artistVenueRanks, venueArtistRanks, decades, artistFirsts, venueFirsts,
-      relations
-    )
-
-    return Lookup(
-      artistMap: artistMap,
-      venueMap: venueMap,
-      artistRankingMap: artistRankings,
-      venueRankingMap: venueRankings,
-      artistShowSpanRankingMap: artistSpanRankings,
-      venueShowSpanRankingMap: venueSpanRankings,
-      artistVenueRankingMap: artistVenueRankings,
-      venueArtistRankingMap: venueArtistRankings,
-      decadesMap: decadesMap,
-      artistFirstSetsMap: artistFirstSets,
-      venueFirstSetsMap: venueFirstSets,
-      relationMap: relationMap)
+    self.artistMap = await artistLookup
+    self.venueMap = await venueLookup
+    self.artistRankingMap = await artistRanks
+    self.venueRankingMap = await venueRanks
+    self.artistShowSpanRankingMap = await artistSpanRanks
+    self.venueShowSpanRankingMap = await venueSpanRanks
+    self.artistVenueRankingMap = await artistVenueRanks
+    self.venueArtistRankingMap = await venueArtistRanks
+    self.decadesMap = await decades
+    self.artistFirstSetsMap = await artistFirsts
+    self.venueFirstSetsMap = await venueFirsts
+    self.relationMap = await relations
   }
 
   public func venueForShow(_ show: Show) -> Venue? {

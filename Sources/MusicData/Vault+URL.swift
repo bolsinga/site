@@ -56,6 +56,6 @@ extension Vault {
 
     guard let rootURL = url.rootURL else { throw VaultError.noRootURL(url.absoluteString) }
 
-    return await Vault.create(music: artistsWithShowsOnly ? music.showsOnly : music, url: rootURL)
+    return await Vault(music: artistsWithShowsOnly ? music.showsOnly : music, url: rootURL)
   }
 }
