@@ -30,35 +30,7 @@ public struct Lookup: Sendable {
   private let venueFirstSetsMap: [Venue.ID: FirstSet]
   private let relationMap: [String: [String]]  // Artist/Venue ID : [Artist/Venue ID]
 
-  public init(music: Music) {
-    // non-parallel, used for Previews, tests
-    let artistRanks = music.artistRankings
-    let venueRanks = music.venueRankings
-    let artistSpanRanks = music.artistSpanRankings
-    let venueSpanRanks = music.venueSpanRankings
-    let artistVenueRanks = music.artistVenueRankings
-    let venueArtistRanks = music.venueArtistRankings
-    let decadesMap = music.decadesMap
-    let artistFirstSets = music.artistFirstSets
-    let venueFirstSets = music.venueFirstSets
-    let relationMap = music.relationMap
-
-    self.init(
-      artistMap: createLookup(music.artists),
-      venueMap: createLookup(music.venues),
-      artistRankingMap: artistRanks,
-      venueRankingMap: venueRanks,
-      artistShowSpanRankingMap: artistSpanRanks,
-      venueShowSpanRankingMap: venueSpanRanks,
-      artistVenueRankingMap: artistVenueRanks,
-      venueArtistRankingMap: venueArtistRanks,
-      decadesMap: decadesMap,
-      artistFirstSetsMap: artistFirstSets,
-      venueFirstSetsMap: venueFirstSets,
-      relationMap: relationMap)
-  }
-
-  internal init(
+  private init(
     artistMap: [Artist.ID: Artist],
     venueMap: [Venue.ID: Venue],
     artistRankingMap: [Artist.ID: Ranking],
