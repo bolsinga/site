@@ -63,7 +63,7 @@ public struct Vault: Sendable {
 
     self.decadesMap = await decadesMap
     self.annumDigestMap = self.decadesMap.values.flatMap { $0.keys }.digests(
-      concerts: concerts, rootURL: url, comparator: comparator.compare(lhs:rhs:)
+      concerts: concerts, rootURL: url, lookup: lookup, comparator: comparator.compare(lhs:rhs:)
     ).reduce(into: [:]) { $0[$1.annum] = $1 }
 
     self.categoryURLLookup = ArchiveCategory.allCases.reduce(into: [ArchiveCategory: URL]()) {

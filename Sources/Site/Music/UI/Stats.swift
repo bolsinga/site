@@ -50,11 +50,11 @@ struct Stats {
 
   func categories(
     weekdayOrMonthChartConcertThreshold: Int, displayArchiveCategoryCounts: Bool,
-    yearsSpanRanking: Ranking?
+    yearsSpanRanking: Ranking?, alwaysShowVenuesArtistsStats: Bool
   ) -> [StatsCategory] {
-    let showVenues = venueCount > 1
+    let showVenues = alwaysShowVenuesArtistsStats || venueCount > 1
 
-    let showArtists = artistCount > 1
+    let showArtists = alwaysShowVenuesArtistsStats || artistCount > 1
 
     let showState = stateCounts.keys.count > 1
 

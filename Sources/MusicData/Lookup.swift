@@ -25,6 +25,9 @@ public struct Lookup: Sendable {
   private let venueShowSpanRankingMap: [Venue.ID: Ranking]
   private let artistVenueRankingMap: [Artist.ID: Ranking]
   private let venueArtistRankingMap: [Venue.ID: Ranking]
+  private let annumShowRankingMap: [Annum: Ranking]
+  private let annumVenueRankingMap: [Annum: Ranking]
+  private let annumArtistRankingMap: [Annum: Ranking]
   public let decadesMap: [Decade: [Annum: [Show.ID]]]
   private let artistFirstSetsMap: [Artist.ID: FirstSet]
   private let venueFirstSetsMap: [Venue.ID: FirstSet]
@@ -39,6 +42,9 @@ public struct Lookup: Sendable {
     async let venueSpanRanks = music.venueSpanRankings
     async let artistVenueRanks = music.artistVenueRankings
     async let venueArtistRanks = music.venueArtistRankings
+    async let annumShowRanks = music.annumShowRankings
+    async let annumVenueRanks = music.annumVenueRankings
+    async let annumArtistRanks = music.annumArtistRankings
     async let decades = music.decadesMap
     async let artistFirsts = music.artistFirstSets
     async let venueFirsts = music.venueFirstSets
@@ -52,6 +58,9 @@ public struct Lookup: Sendable {
     self.venueShowSpanRankingMap = await venueSpanRanks
     self.artistVenueRankingMap = await artistVenueRanks
     self.venueArtistRankingMap = await venueArtistRanks
+    self.annumShowRankingMap = await annumShowRanks
+    self.annumVenueRankingMap = await annumVenueRanks
+    self.annumArtistRankingMap = await annumArtistRanks
     self.decadesMap = await decades
     self.artistFirstSetsMap = await artistFirsts
     self.venueFirstSetsMap = await venueFirsts
@@ -108,6 +117,18 @@ public struct Lookup: Sendable {
 
   public func venueArtistRank(venue: Venue) -> Ranking {
     venueArtistRankingMap[venue.id] ?? Ranking.empty
+  }
+
+  public func showRank(annum: Annum) -> Ranking {
+    annumShowRankingMap[annum] ?? .empty
+  }
+
+  public func venueRank(annum: Annum) -> Ranking {
+    annumVenueRankingMap[annum] ?? .empty
+  }
+
+  public func artistRank(annum: Annum) -> Ranking {
+    annumArtistRankingMap[annum] ?? .empty
   }
 
   public func firstSet(artist: Artist) -> FirstSet {

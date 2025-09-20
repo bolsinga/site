@@ -19,6 +19,7 @@ struct StatsGrouping: View {
   let displayArchiveCategoryCounts: Bool  // Basically do not want this at the ArchiveCategory.stats.
   let weekdaysTitleLocalizedString: LocalizedStringResource
   let monthsTitleLocalizedString: LocalizedStringResource
+  let alwaysShowVenuesArtistsStats: Bool
 
   @State private var showWeekdays = false
   @State private var showMonths = false
@@ -33,7 +34,8 @@ struct StatsGrouping: View {
     venueArtistsRanking: Ranking? = nil,
     displayArchiveCategoryCounts: Bool = true,
     weekdaysTitleLocalizedString: LocalizedStringResource,
-    monthsTitleLocalizedString: LocalizedStringResource
+    monthsTitleLocalizedString: LocalizedStringResource,
+    alwaysShowVenuesArtistsStats: Bool = false
   ) {
     self.stats = Stats(concerts: concerts, shouldCalculateArtistCount: shouldCalculateArtistCount)
     self.yearsSpanRanking = yearsSpanRanking
@@ -43,6 +45,7 @@ struct StatsGrouping: View {
     self.displayArchiveCategoryCounts = displayArchiveCategoryCounts
     self.weekdaysTitleLocalizedString = weekdaysTitleLocalizedString
     self.monthsTitleLocalizedString = monthsTitleLocalizedString
+    self.alwaysShowVenuesArtistsStats = alwaysShowVenuesArtistsStats
   }
 
   @ViewBuilder var yearsElement: some View {
@@ -106,7 +109,8 @@ struct StatsGrouping: View {
   var body: some View {
     let statsCategoryCases = stats.categories(
       weekdayOrMonthChartConcertThreshold: statsThreshold,
-      displayArchiveCategoryCounts: displayArchiveCategoryCounts, yearsSpanRanking: yearsSpanRanking
+      displayArchiveCategoryCounts: displayArchiveCategoryCounts,
+      yearsSpanRanking: yearsSpanRanking, alwaysShowVenuesArtistsStats: alwaysShowVenuesArtistsStats
     )
     ForEach(statsCategoryCases, id: \.self) { category in
       Group {

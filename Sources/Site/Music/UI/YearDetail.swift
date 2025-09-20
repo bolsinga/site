@@ -22,8 +22,13 @@ struct YearDetail: View {
       Section(header: Text(ArchiveCategory.stats.localizedString)) {
         StatsGrouping(
           concerts: concerts,
+          shouldCalculateArtistCount: true,
+          showRanking: digest.showRank,
+          artistVenuesRanking: digest.venueRank,
+          venueArtistsRanking: digest.artistRank,
           weekdaysTitleLocalizedString: "\(digest.annum.formatted(.year)) Weekdays",
-          monthsTitleLocalizedString: "\(digest.annum.formatted(.year)) Months")
+          monthsTitleLocalizedString: "\(digest.annum.formatted(.year)) Months",
+          alwaysShowVenuesArtistsStats: true)
       }
     }
   }
