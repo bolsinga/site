@@ -22,6 +22,7 @@ struct StatsGrouping: View {
 
   @State private var showWeekdays = false
   @State private var showMonths = false
+  @State private var showStates = false
 
   internal init(
     concerts: [Concert],
@@ -129,15 +130,12 @@ struct StatsGrouping: View {
               MonthChart(dates: stats.dates)
             }
         case .state:
-          NavigationLink {
-            StateChart(counts: stats.stateCounts)
-          } label: {
-            LabeledContent {
-              Text(stats.stateCounts.keys.count.formatted())
-            } label: {
-              Text("States")
+          Button("States") { showStates = true }
+            .titledSheet(
+              isPresented: $showStates, title: "\(stats.stateCounts.keys.count.formatted()) States"
+            ) {
+              StateChart(counts: stats.stateCounts)
             }
-          }
         }
       }
     }
