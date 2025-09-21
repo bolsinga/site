@@ -17,7 +17,7 @@ extension Vault {
     case .artist(let iD):
       return artistDigestMap[iD]
     case .year(let annum):
-      return digest(for: annum)
+      return annumDigestMap[annum]
     }
   }
 }

@@ -7,9 +7,22 @@
 
 import Foundation
 
-extension Vault {
-  public func digest(for annum: Annum) -> AnnumDigest {
+extension Annum {
+  fileprivate func digest(concerts: [Concert], rootURL: URL, comparator: (Concert, Concert) -> Bool)
+    -> AnnumDigest
+  {
     AnnumDigest(
-      annum: annum, url: annum.archivePath.url(using: rootURL), concerts: concerts(during: annum))
+      annum: self,
+      url: archivePath.url(using: rootURL),
+      concerts: concerts.filter { $0.show.date.annum == self }.sorted(by: comparator)
+    )
+  }
+}
+
+extension Array where Element == Annum {
+  public func digests(concerts: [Concert], rootURL: URL, comparator: (Concert, Concert) -> Bool)
+    -> [AnnumDigest]
+  {
+    self.map { $0.digest(concerts: concerts, rootURL: rootURL, comparator: comparator) }
   }
 }
