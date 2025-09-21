@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct AnnumDigest {
+public struct AnnumDigest: Sendable {
   public let annum: Annum
   public let url: URL?
   public let concerts: [Concert]

@@ -35,9 +35,11 @@ extension ArchivePath {
           isPathNavigable: isPathNavigable)
       }
     case .year(let annum):
-      YearDetail(
-        digest: vault.digest(for: annum), concertCompare: vault.comparator.compare(lhs:rhs:),
-        isPathNavigable: isPathNavigable)
+      if let annumDigest = vault.annumDigestMap[annum] {
+        YearDetail(
+          digest: annumDigest, concertCompare: vault.comparator.compare(lhs:rhs:),
+          isPathNavigable: isPathNavigable)
+      }
     }
   }
 }

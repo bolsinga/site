@@ -21,6 +21,7 @@ public struct Vault: Sendable {
   public let venueDigestMap: [Venue.ID: VenueDigest]
 
   public let decadesMap: [Decade: [Annum: [Show.ID]]]
+  public let annumDigestMap: [Annum: AnnumDigest]
 
   private let categoryURLLookup: [ArchiveCategory: URL]
 
@@ -61,6 +62,9 @@ public struct Vault: Sendable {
     self.venueDigestMap = self.venueDigests.reduce(into: [:]) { $0[$1.venue.id] = $1 }
 
     self.decadesMap = await decadesMap
+    self.annumDigestMap = self.decadesMap.values.flatMap { $0.keys }.digests(
+      concerts: concerts, rootURL: url, comparator: comparator.compare(lhs:rhs:)
+    ).reduce(into: [:]) { $0[$1.annum] = $1 }
 
     self.categoryURLLookup = ArchiveCategory.allCases.reduce(into: [ArchiveCategory: URL]()) {
       guard let url = $1.url(rootURL: url) else { return }
@@ -77,14 +81,6 @@ public struct Vault: Sendable {
           matchesComponents: DateComponents(month: $0.show.date.month!, day: $0.show.date.day!))
       }
       .sorted { comparator.compare(lhs: $0, rhs: $1) }
-  }
-
-  func concerts(during annum: Annum) -> [Concert] {
-    var result: [Concert] = []
-    for id in decadesMap[annum.decade]?[annum] ?? [] {
-      result += concerts.filter { $0.id == id }
-    }
-    return result.sorted { comparator.compare(lhs: $0, rhs: $1) }
   }
 
   /// The URL for this category.
