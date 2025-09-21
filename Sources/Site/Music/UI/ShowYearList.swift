@@ -13,6 +13,7 @@ extension Dictionary where Key == Annum, Value == [Concert.ID] {
   }
 }
 
+
 struct ShowYearList: View {
   let decadesMap: [Decade: [Annum: [Concert.ID]]]
 
@@ -46,6 +47,7 @@ struct ShowYearList: View {
           } label: {
             Text(decade.formatted(.defaultDigits))
           }
+          .glassOS26()
         }
       }
     }
