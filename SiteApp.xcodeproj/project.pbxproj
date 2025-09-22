@@ -68,7 +68,7 @@
 		FE57C3382E713D1300A67D4F /* Show+Concert.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2742E713D1300A67D4F /* Show+Concert.swift */; };
 		FE57C3392E713D1300A67D4F /* Song.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2752E713D1300A67D4F /* Song.swift */; };
 		FE57C33A2E713D1300A67D4F /* Vault.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2762E713D1300A67D4F /* Vault.swift */; };
-		FE57C33B2E713D1300A67D4F /* Vault+AnnumDigest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2772E713D1300A67D4F /* Vault+AnnumDigest.swift */; };
+		FE57C33B2E713D1300A67D4F /* Annum+Digest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2772E713D1300A67D4F /* Annum+Digest.swift */; };
 		FE57C33C2E713D1300A67D4F /* Vault+NextID.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2782E713D1300A67D4F /* Vault+NextID.swift */; };
 		FE57C33D2E713D1300A67D4F /* Vault+URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2792E713D1300A67D4F /* Vault+URL.swift */; };
 		FE57C33E2E713D1300A67D4F /* Venue.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C27A2E713D1300A67D4F /* Venue.swift */; };
@@ -245,7 +245,7 @@
 		FE57C3ED2E713D1300A67D4F /* Show+Concert.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2742E713D1300A67D4F /* Show+Concert.swift */; };
 		FE57C3EE2E713D1300A67D4F /* Song.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2752E713D1300A67D4F /* Song.swift */; };
 		FE57C3EF2E713D1300A67D4F /* Vault.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2762E713D1300A67D4F /* Vault.swift */; };
-		FE57C3F02E713D1300A67D4F /* Vault+AnnumDigest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2772E713D1300A67D4F /* Vault+AnnumDigest.swift */; };
+		FE57C3F02E713D1300A67D4F /* Annum+Digest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2772E713D1300A67D4F /* Annum+Digest.swift */; };
 		FE57C3F12E713D1300A67D4F /* Vault+NextID.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2782E713D1300A67D4F /* Vault+NextID.swift */; };
 		FE57C3F22E713D1300A67D4F /* Vault+URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2792E713D1300A67D4F /* Vault+URL.swift */; };
 		FE57C3F32E713D1300A67D4F /* Venue.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C27A2E713D1300A67D4F /* Venue.swift */; };
@@ -315,7 +315,7 @@
 		FE57C4332E713D1300A67D4F /* Show+Concert.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2742E713D1300A67D4F /* Show+Concert.swift */; };
 		FE57C4342E713D1300A67D4F /* Song.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2752E713D1300A67D4F /* Song.swift */; };
 		FE57C4352E713D1300A67D4F /* Vault.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2762E713D1300A67D4F /* Vault.swift */; };
-		FE57C4362E713D1300A67D4F /* Vault+AnnumDigest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2772E713D1300A67D4F /* Vault+AnnumDigest.swift */; };
+		FE57C4362E713D1300A67D4F /* Annum+Digest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2772E713D1300A67D4F /* Annum+Digest.swift */; };
 		FE57C4372E713D1300A67D4F /* Vault+NextID.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2782E713D1300A67D4F /* Vault+NextID.swift */; };
 		FE57C4382E713D1300A67D4F /* Vault+URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C2792E713D1300A67D4F /* Vault+URL.swift */; };
 		FE57C4392E713D1300A67D4F /* Venue.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C27A2E713D1300A67D4F /* Venue.swift */; };
@@ -475,7 +475,7 @@
 		FE57C2742E713D1300A67D4F /* Show+Concert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Show+Concert.swift"; sourceTree = "<group>"; };
 		FE57C2752E713D1300A67D4F /* Song.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Song.swift; sourceTree = "<group>"; };
 		FE57C2762E713D1300A67D4F /* Vault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vault.swift; sourceTree = "<group>"; };
-		FE57C2772E713D1300A67D4F /* Vault+AnnumDigest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Vault+AnnumDigest.swift"; sourceTree = "<group>"; };
+		FE57C2772E713D1300A67D4F /* Annum+Digest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Annum+Digest.swift"; sourceTree = "<group>"; };
 		FE57C2782E713D1300A67D4F /* Vault+NextID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Vault+NextID.swift"; sourceTree = "<group>"; };
 		FE57C2792E713D1300A67D4F /* Vault+URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Vault+URL.swift"; sourceTree = "<group>"; };
 		FE57C27A2E713D1300A67D4F /* Venue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Venue.swift; sourceTree = "<group>"; };
@@ -745,6 +745,7 @@
 			children = (
 				FE57C2462E713D1300A67D4F /* Album.swift */,
 				FE57C2472E713D1300A67D4F /* Annum.swift */,
+				FE57C2772E713D1300A67D4F /* Annum+Digest.swift */,
 				FE57C2482E713D1300A67D4F /* Annum+FormatStyle.swift */,
 				FE57C2492E713D1300A67D4F /* Annum+ParseableFormatStyle.swift */,
 				FE57C24A2E713D1300A67D4F /* AnnumDigest.swift */,
@@ -793,7 +794,6 @@
 				FE57C2742E713D1300A67D4F /* Show+Concert.swift */,
 				FE57C2752E713D1300A67D4F /* Song.swift */,
 				FE57C2762E713D1300A67D4F /* Vault.swift */,
-				FE57C2772E713D1300A67D4F /* Vault+AnnumDigest.swift */,
 				FE57C2782E713D1300A67D4F /* Vault+NextID.swift */,
 				FE57C2792E713D1300A67D4F /* Vault+URL.swift */,
 				FE57C27A2E713D1300A67D4F /* Venue.swift */,
@@ -1315,7 +1315,7 @@
 				FE57C3392E713D1300A67D4F /* Song.swift in Sources */,
 				FE57C33A2E713D1300A67D4F /* Vault.swift in Sources */,
 				FE42CBC82E73A0900064F683 /* ArtistEntity.swift in Sources */,
-				FE57C33B2E713D1300A67D4F /* Vault+AnnumDigest.swift in Sources */,
+				FE57C33B2E713D1300A67D4F /* Annum+Digest.swift in Sources */,
 				FE57C33C2E713D1300A67D4F /* Vault+NextID.swift in Sources */,
 				FE57C33D2E713D1300A67D4F /* Vault+URL.swift in Sources */,
 				FE57C33E2E713D1300A67D4F /* Venue.swift in Sources */,
@@ -1509,7 +1509,7 @@
 				FE57C3EE2E713D1300A67D4F /* Song.swift in Sources */,
 				FE57C3EF2E713D1300A67D4F /* Vault.swift in Sources */,
 				FE42CBCE2E73BA190064F683 /* Concert+Headliner.swift in Sources */,
-				FE57C3F02E713D1300A67D4F /* Vault+AnnumDigest.swift in Sources */,
+				FE57C3F02E713D1300A67D4F /* Annum+Digest.swift in Sources */,
 				FE57C3F12E713D1300A67D4F /* Vault+NextID.swift in Sources */,
 				FE57C3F22E713D1300A67D4F /* Vault+URL.swift in Sources */,
 				FE57C3F32E713D1300A67D4F /* Venue.swift in Sources */,
@@ -1594,7 +1594,7 @@
 				FE42CBCD2E73BA190064F683 /* Concert+Headliner.swift in Sources */,
 				FE57C4342E713D1300A67D4F /* Song.swift in Sources */,
 				FE57C4352E713D1300A67D4F /* Vault.swift in Sources */,
-				FE57C4362E713D1300A67D4F /* Vault+AnnumDigest.swift in Sources */,
+				FE57C4362E713D1300A67D4F /* Annum+Digest.swift in Sources */,
 				FE57C4372E713D1300A67D4F /* Vault+NextID.swift in Sources */,
 				FE57C4382E713D1300A67D4F /* Vault+URL.swift in Sources */,
 				FE57C4392E713D1300A67D4F /* Venue.swift in Sources */,
