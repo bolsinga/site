@@ -24,12 +24,7 @@ struct ArtistDetail: View {
     if !digest.concerts.isEmpty {
       Section(header: Text(ArchiveCategory.stats.localizedString)) {
         firstSetElement
-        StatsGrouping(
-          concerts: digest.concerts, shouldCalculateArtistCount: false,
-          yearsSpanRanking: digest.spanRank, showRanking: digest.showRank,
-          artistVenuesRanking: digest.venueRank,
-          weekdaysTitleLocalizedString: "\(digest.name) Weekdays",
-          monthsTitleLocalizedString: "\(digest.name) Months")
+        StatsGrouping(stats: Stats(artistDigest: digest))
       }
     }
   }

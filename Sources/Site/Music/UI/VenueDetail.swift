@@ -44,11 +44,7 @@ struct VenueDetail: View {
     Section(header: Text(ArchiveCategory.stats.localizedString)) {
       firstSetElement
       if digest.concerts.count > 1 {
-        StatsGrouping(
-          concerts: digest.concerts, yearsSpanRanking: digest.spanRank,
-          showRanking: digest.showRank, venueArtistsRanking: digest.venueArtistRank,
-          weekdaysTitleLocalizedString: "\(digest.name) Weekdays",
-          monthsTitleLocalizedString: "\(digest.name) Months")
+        StatsGrouping(stats: Stats(venueDigest: digest))
       }
     }
   }
