@@ -38,20 +38,44 @@ struct Stats {
   let artistCount: Int
   let dates: [Date]
   let stateCounts: [String: Int]
+  let yearsSpanRanking: Ranking?
+  let showRanking: Ranking?
+  let artistVenuesRanking: Ranking?
+  let venueArtistsRanking: Ranking?
+  let displayArchiveCategoryCounts: Bool  // Basically do not want this at the ArchiveCategory.stats.
+  let weekdaysTitleLocalizedString: LocalizedStringResource
+  let monthsTitleLocalizedString: LocalizedStringResource
+  let alwaysShowVenuesArtistsStats: Bool
 
-  internal init(concerts: [Concert], shouldCalculateArtistCount: Bool) {
+  internal init(
+    concerts: [Concert],
+    shouldCalculateArtistCount: Bool = true,
+    yearsSpanRanking: Ranking? = nil,
+    showRanking: Ranking? = nil,
+    artistVenuesRanking: Ranking? = nil,
+    venueArtistsRanking: Ranking? = nil,
+    displayArchiveCategoryCounts: Bool = true,
+    weekdaysTitleLocalizedString: LocalizedStringResource,
+    monthsTitleLocalizedString: LocalizedStringResource,
+    alwaysShowVenuesArtistsStats: Bool = false
+  ) {
     self.concertsCount = concerts.count
     self.venueCount = concerts.venues.count
     let artists = shouldCalculateArtistCount ? concerts.artists : []
     self.artistCount = artists.count
     self.dates = concerts.knownDates
     self.stateCounts = concerts.stateCounts
+    self.yearsSpanRanking = yearsSpanRanking
+    self.showRanking = showRanking
+    self.artistVenuesRanking = artistVenuesRanking
+    self.venueArtistsRanking = venueArtistsRanking
+    self.displayArchiveCategoryCounts = displayArchiveCategoryCounts
+    self.weekdaysTitleLocalizedString = weekdaysTitleLocalizedString
+    self.monthsTitleLocalizedString = monthsTitleLocalizedString
+    self.alwaysShowVenuesArtistsStats = alwaysShowVenuesArtistsStats
   }
 
-  func categories(
-    weekdayOrMonthChartConcertThreshold: Int, displayArchiveCategoryCounts: Bool,
-    yearsSpanRanking: Ranking?, alwaysShowVenuesArtistsStats: Bool
-  ) -> [StatsCategory] {
+  func categories(weekdayOrMonthChartConcertThreshold: Int) -> [StatsCategory] {
     let showVenues = alwaysShowVenuesArtistsStats || venueCount > 1
 
     let showArtists = alwaysShowVenuesArtistsStats || artistCount > 1

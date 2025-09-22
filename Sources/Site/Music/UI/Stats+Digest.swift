@@ -1,5 +1,5 @@
 //
-//  StatsGrouping+Digest.swift
+//  Stats+Digest.swift
 //  SiteApp
 //
 //  Created by Greg Bolsinga on 9/22/25.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension StatsGrouping {
+extension Stats {
   init(artistDigest digest: ArtistDigest) {
     self.init(
       concerts: digest.concerts,

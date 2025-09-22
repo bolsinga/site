@@ -44,7 +44,7 @@ struct VenueDetail: View {
     Section(header: Text(ArchiveCategory.stats.localizedString)) {
       firstSetElement
       if digest.concerts.count > 1 {
-        StatsGrouping(venueDigest: digest)
+        StatsGrouping(stats: Stats(venueDigest: digest))
       }
     }
   }
