@@ -85,7 +85,9 @@ struct PathRestorableUserActivityTests {
     let userActivity = NSUserActivity(activityType: "test-type")
 
     let item = Annum.year(1990)
-    let digest = AnnumDigest(annum: item, url: item.archivePath.url(using: rootURL), concerts: [])
+    let digest = AnnumDigest(
+      annum: item, url: item.archivePath.url(using: rootURL), concerts: [], showRank: .empty,
+      venueRank: .empty, artistRank: .empty)
 
     userActivity.update(digest)
 

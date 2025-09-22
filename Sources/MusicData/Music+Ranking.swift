@@ -56,6 +56,31 @@ extension Music {
     return computeRankings(items: venueArtistCounts)
   }
 
+  private var annums: [Annum] {
+    Array(shows.map { $0.date.annum }.uniqued())
+  }
+
+  var annumShowRankings: [Annum: Ranking] {
+    let annumShowCounts: [(Annum, Int)] = annums.map { annum in
+      (annum, shows.filter { $0.date.annum == annum }.count)
+    }
+    return computeRankings(items: annumShowCounts)
+  }
+
+  var annumVenueRankings: [Annum: Ranking] {
+    let annumVenueCounts: [(Annum, Int)] = annums.map { annum in
+      (annum, Array(shows.filter { $0.date.annum == annum }.map { $0.venue }.uniqued()).count)
+    }
+    return computeRankings(items: annumVenueCounts)
+  }
+
+  var annumArtistRankings: [Annum: Ranking] {
+    let annumArtistCounts: [(Annum, Int)] = annums.map { annum in
+      (annum, Array(shows.filter { $0.date.annum == annum }.flatMap { $0.artists }.uniqued()).count)
+    }
+    return computeRankings(items: annumArtistCounts)
+  }
+
   internal func computeRankings<T, V, R>(
     items: [(T, V)], rankBuilder: (Rank, V) -> R, rankSorted: (V, V) -> Bool
   ) -> [T: R]
