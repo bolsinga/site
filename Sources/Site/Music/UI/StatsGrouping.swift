@@ -109,3 +109,9 @@ struct StatsGrouping: View {
     }
   }
 }
+
+#Preview(traits: .modifier(VaultPreviewModifier())) {
+  @Previewable @Environment(VaultModel.self) var model
+  StatsGrouping(stats: Stats(concerts: model.vault.concerts))
+    .padding()
+}

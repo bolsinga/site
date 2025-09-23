@@ -27,3 +27,9 @@ struct MonthChart: View {
     }
   }
 }
+
+#Preview(traits: .modifier(VaultPreviewModifier())) {
+  @Previewable @Environment(VaultModel.self) var model
+  MonthChart(dates: Stats(concerts: model.vault.concerts).dates)
+    .padding()
+}
