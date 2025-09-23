@@ -26,3 +26,9 @@ struct StateChart: View {
     }
   }
 }
+
+#Preview(traits: .modifier(VaultPreviewModifier())) {
+  @Previewable @Environment(VaultModel.self) var model
+  StateChart(counts: Stats(concerts: model.vault.concerts).stateCounts)
+    .padding()
+}
