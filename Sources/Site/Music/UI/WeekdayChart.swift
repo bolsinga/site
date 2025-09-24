@@ -9,12 +9,28 @@ import Charts
 import SwiftUI
 
 struct WeekdayChart: View {
+  enum Presentation {
+    case `default`
+    case compact
+  }
+
   @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
   let dates: [Date]
+  let presentation: Presentation
+
+  internal init(dates: [Date], presentation: Presentation = .default) {
+    self.dates = dates
+    self.presentation = presentation
+  }
 
   private var format: Date.FormatStyle.Symbol.Weekday {
-    horizontalSizeClass == .compact ? .narrow : .abbreviated
+    switch presentation {
+    case .default:
+      horizontalSizeClass == .compact ? .narrow : .abbreviated
+    case .compact:
+      .narrow
+    }
   }
 
   @State private var firstWeekday = Calendar.autoupdatingCurrent.firstWeekday
@@ -28,12 +44,13 @@ struct WeekdayChart: View {
         y: .value("Count", count)
       )
       .annotation(position: .top) {
-        if count > 0 {
+        if count > 0, presentation == .default {
           Text(count.formatted(.number))
             .font(.caption2)
         }
       }
     }
+    .chartYAxis(presentation == .compact ? .hidden : .automatic)
     .chartXAxis {
       AxisMarks(values: .stride(by: .day)) { _ in
         AxisGridLine()
@@ -47,8 +64,14 @@ struct WeekdayChart: View {
   }
 }
 
-#Preview(traits: .modifier(VaultPreviewModifier())) {
+#Preview("Default", traits: .modifier(VaultPreviewModifier())) {
   @Previewable @Environment(VaultModel.self) var model
-  WeekdayChart(dates: Stats(concerts: model.vault.concerts).dates)
+  WeekdayChart(dates: Stats(concerts: model.vault.concerts).dates, presentation: .default)
+    .padding()
+}
+
+#Preview("Compact", traits: .modifier(VaultPreviewModifier())) {
+  @Previewable @Environment(VaultModel.self) var model
+  WeekdayChart(dates: Stats(concerts: model.vault.concerts).dates, presentation: .compact)
     .padding()
 }
