@@ -43,17 +43,17 @@ struct ConcertBlurb: View {
   }
 }
 
-#Preview(traits: .modifier(VaultPreviewModifier())) {
+#Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   ConcertBlurb(concert: model.vault.concerts[0], dateFormat: .noYear)
 }
 
-#Preview(traits: .modifier(VaultPreviewModifier())) {
+#Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   ConcertBlurb(concert: model.vault.concerts[1], dateFormat: .relative)
 }
 
-#Preview(traits: .modifier(VaultPreviewModifier())) {
+#Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   ConcertBlurb(concert: model.vault.concerts[2], dateFormat: .noYear)
 }

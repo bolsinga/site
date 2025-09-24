@@ -59,13 +59,13 @@ struct StateChart: View {
   }
 }
 
-#Preview("Default Presentation", traits: .modifier(VaultPreviewModifier())) {
+#Preview("Default Presentation", traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   StateChart(counts: Stats(concerts: model.vault.concerts).stateCounts, presentation: .default)
     .padding()
 }
 
-#Preview("Compact Presentation", traits: .modifier(VaultPreviewModifier())) {
+#Preview("Compact Presentation", traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   StateChart(counts: Stats(concerts: model.vault.concerts).stateCounts, presentation: .compact)
     .padding()

@@ -65,7 +65,7 @@ struct ShowYearList: View {
   }
 }
 
-#Preview(traits: .modifier(VaultPreviewModifier())) {
+#Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   NavigationStack {
     ShowYearList(decadesMap: model.vault.decadesMap)

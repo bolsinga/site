@@ -23,7 +23,7 @@ struct AddressView: View {
   }
 }
 
-#Preview(traits: .modifier(VaultPreviewModifier())) {
+#Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   AddressView(location: model.vault.venueDigests[0].venue.location)
 }

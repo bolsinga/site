@@ -28,10 +28,10 @@ struct DaysShowsSummary: View {
   }
 }
 
-#Preview("Ordinal", traits: .modifier(VaultPreviewModifier()), .modifier(NearbyPreviewModifer())) {
+#Preview("Ordinal", traits: .vaultModel, .nearbyModel) {
   DaysShowsSummary(mode: .constant(.ordinal))
 }
 
-#Preview("Grouped", traits: .modifier(VaultPreviewModifier()), .modifier(NearbyPreviewModifer())) {
+#Preview("Grouped", traits: .vaultModel, .nearbyModel) {
   DaysShowsSummary(mode: .constant(.grouped))
 }
