@@ -86,38 +86,38 @@ struct ArchiveCrossSearchView: View {
   }
 }
 
-#Preview("Empty Search String - All", traits: .modifier(VaultPreviewModifier())) {
+#Preview("Empty Search String - All", traits: .vaultModel) {
   ArchiveCrossSearchView(searchString: .constant(""), scope: .constant(.all)) { _ in }
 }
 
-#Preview("Matching Search String - All", traits: .modifier(VaultPreviewModifier())) {
+#Preview("Matching Search String - All", traits: .vaultModel) {
   ArchiveCrossSearchView(searchString: .constant("art"), scope: .constant(.all)) { _ in }
 }
 
-#Preview("No Matches - All", traits: .modifier(VaultPreviewModifier())) {
+#Preview("No Matches - All", traits: .vaultModel) {
   ArchiveCrossSearchView(searchString: .constant("zzzzzzzzz"), scope: .constant(.all)) { _ in }
 }
 
-#Preview("Empty Search String - Artist", traits: .modifier(VaultPreviewModifier())) {
+#Preview("Empty Search String - Artist", traits: .vaultModel) {
   ArchiveCrossSearchView(searchString: .constant(""), scope: .constant(.artist)) { _ in }
 }
 
-#Preview("Matching Search String - Artist", traits: .modifier(VaultPreviewModifier())) {
+#Preview("Matching Search String - Artist", traits: .vaultModel) {
   ArchiveCrossSearchView(searchString: .constant("art"), scope: .constant(.artist)) { _ in }
 }
 
-#Preview("No Matches - Artist", traits: .modifier(VaultPreviewModifier())) {
+#Preview("No Matches - Artist", traits: .vaultModel) {
   ArchiveCrossSearchView(searchString: .constant("zzzzzzzzz"), scope: .constant(.artist)) { _ in }
 }
 
-#Preview("Empty Search String - Venue", traits: .modifier(VaultPreviewModifier())) {
+#Preview("Empty Search String - Venue", traits: .vaultModel) {
   ArchiveCrossSearchView(searchString: .constant(""), scope: .constant(.venue)) { _ in }
 }
 
-#Preview("Matching Search String - Venue", traits: .modifier(VaultPreviewModifier())) {
+#Preview("Matching Search String - Venue", traits: .vaultModel) {
   ArchiveCrossSearchView(searchString: .constant("art"), scope: .constant(.venue)) { _ in }
 }
 
-#Preview("No Matches - Venue", traits: .modifier(VaultPreviewModifier())) {
+#Preview("No Matches - Venue", traits: .vaultModel) {
   ArchiveCrossSearchView(searchString: .constant("zzzzzzzzz"), scope: .constant(.venue)) { _ in }
 }

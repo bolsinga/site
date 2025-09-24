@@ -134,7 +134,7 @@ struct ArchiveTabView: View {
   }
 }
 
-#Preview(traits: .modifier(NearbyPreviewModifer()), .modifier(VaultPreviewModifier())) {
+#Preview(traits: .nearbyModel, .vaultModel) {
   @Previewable @State var showsMode = ShowsMode.grouped
   @Previewable @State var venueSort = RankingSort.alphabetical
   @Previewable @State var artistSort = RankingSort.alphabetical

@@ -64,13 +64,13 @@ struct WeekdayChart: View {
   }
 }
 
-#Preview("Default", traits: .modifier(VaultPreviewModifier())) {
+#Preview("Default", traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   WeekdayChart(dates: Stats(concerts: model.vault.concerts).dates, presentation: .default)
     .padding()
 }
 
-#Preview("Compact", traits: .modifier(VaultPreviewModifier())) {
+#Preview("Compact", traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   WeekdayChart(dates: Stats(concerts: model.vault.concerts).dates, presentation: .compact)
     .padding()

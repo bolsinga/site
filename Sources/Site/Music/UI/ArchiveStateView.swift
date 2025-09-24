@@ -58,6 +58,6 @@ struct ArchiveStateView: View {
   }
 }
 
-#Preview(traits: .modifier(VaultPreviewModifier())) {
+#Preview(traits: .vaultModel) {
   ArchiveStateView {}
 }

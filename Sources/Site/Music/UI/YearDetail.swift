@@ -45,7 +45,7 @@ struct YearDetail: View {
   }
 }
 
-#Preview(traits: .modifier(VaultPreviewModifier())) {
+#Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   YearDetail(
     digest: model.vault.annumDigestMap[.year(2001)]!,

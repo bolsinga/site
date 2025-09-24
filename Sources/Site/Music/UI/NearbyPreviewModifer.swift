@@ -17,3 +17,7 @@ struct NearbyPreviewModifer: PreviewModifier {
       .environment(context)
   }
 }
+
+extension PreviewTrait where T == Preview.ViewTraits {
+  @MainActor static var nearbyModel: Self = .modifier(NearbyPreviewModifer())
+}
