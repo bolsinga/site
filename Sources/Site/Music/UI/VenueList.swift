@@ -28,7 +28,7 @@ struct VenueList: View {
   }
 }
 
-#Preview(traits: .modifier(VaultPreviewModifier())) {
+#Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   VenueList(
     venueDigests: model.vault.venueDigests, sectioner: model.vault.sectioner,

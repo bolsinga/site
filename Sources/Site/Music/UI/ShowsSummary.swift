@@ -19,6 +19,6 @@ struct ShowsSummary: View {
   }
 }
 
-#Preview(traits: .modifier(NearbyPreviewModifer()), .modifier(VaultPreviewModifier())) {
+#Preview(traits: .nearbyModel, .vaultModel) {
   ShowsSummary()
 }

@@ -44,11 +44,7 @@ struct VenueDetail: View {
     Section(header: Text(ArchiveCategory.stats.localizedString)) {
       firstSetElement
       if digest.concerts.count > 1 {
-        StatsGrouping(
-          concerts: digest.concerts, yearsSpanRanking: digest.spanRank,
-          showRanking: digest.showRank, venueArtistsRanking: digest.venueArtistRank,
-          weekdaysTitleLocalizedString: "\(digest.name) Weekdays",
-          monthsTitleLocalizedString: "\(digest.name) Months")
+        StatsGrouping(stats: Stats(venueDigest: digest))
       }
     }
   }
@@ -90,7 +86,7 @@ struct VenueDetail: View {
   }
 }
 
-#Preview("Error", traits: .modifier(VaultPreviewModifier())) {
+#Preview("Error", traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   VenueDetail(
     digest: model.vault.venueDigests[0],
@@ -102,7 +98,7 @@ struct VenueDetail: View {
   )
 }
 
-#Preview("Current Location after 10 seconds", traits: .modifier(VaultPreviewModifier())) {
+#Preview("Current Location after 10 seconds", traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   VenueDetail(
     digest: model.vault.venueDigests[0],

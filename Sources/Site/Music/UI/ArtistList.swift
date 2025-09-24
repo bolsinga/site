@@ -28,7 +28,7 @@ struct ArtistList: View {
   }
 }
 
-#Preview(traits: .modifier(VaultPreviewModifier())) {
+#Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   ArtistList(
     artistDigests: model.vault.artistDigests, sectioner: model.vault.sectioner,

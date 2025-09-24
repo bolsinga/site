@@ -12,44 +12,12 @@ struct StatsGrouping: View {
 
   let stats: Stats
 
-  let yearsSpanRanking: Ranking?
-  let showRanking: Ranking?
-  let artistVenuesRanking: Ranking?
-  let venueArtistsRanking: Ranking?
-  let displayArchiveCategoryCounts: Bool  // Basically do not want this at the ArchiveCategory.stats.
-  let weekdaysTitleLocalizedString: LocalizedStringResource
-  let monthsTitleLocalizedString: LocalizedStringResource
-  let alwaysShowVenuesArtistsStats: Bool
-
   @State private var showWeekdays = false
   @State private var showMonths = false
   @State private var showStates = false
 
-  internal init(
-    concerts: [Concert],
-    shouldCalculateArtistCount: Bool = true,
-    yearsSpanRanking: Ranking? = nil,
-    showRanking: Ranking? = nil,
-    artistVenuesRanking: Ranking? = nil,
-    venueArtistsRanking: Ranking? = nil,
-    displayArchiveCategoryCounts: Bool = true,
-    weekdaysTitleLocalizedString: LocalizedStringResource,
-    monthsTitleLocalizedString: LocalizedStringResource,
-    alwaysShowVenuesArtistsStats: Bool = false
-  ) {
-    self.stats = Stats(concerts: concerts, shouldCalculateArtistCount: shouldCalculateArtistCount)
-    self.yearsSpanRanking = yearsSpanRanking
-    self.showRanking = showRanking
-    self.artistVenuesRanking = artistVenuesRanking
-    self.venueArtistsRanking = venueArtistsRanking
-    self.displayArchiveCategoryCounts = displayArchiveCategoryCounts
-    self.weekdaysTitleLocalizedString = weekdaysTitleLocalizedString
-    self.monthsTitleLocalizedString = monthsTitleLocalizedString
-    self.alwaysShowVenuesArtistsStats = alwaysShowVenuesArtistsStats
-  }
-
   @ViewBuilder var yearsElement: some View {
-    if let yearsSpanRanking {
+    if let yearsSpanRanking = stats.yearsSpanRanking {
       HStack {
         Text("\(yearsSpanRanking.value) Year(s)")
         Spacer()
@@ -63,7 +31,7 @@ struct StatsGrouping: View {
   }
 
   @ViewBuilder var showsElement: some View {
-    if let showRanking {
+    if let showRanking = stats.showRanking {
       HStack {
         showCount
         Spacer()
@@ -79,7 +47,7 @@ struct StatsGrouping: View {
   }
 
   @ViewBuilder var venuesElement: some View {
-    if let artistVenuesRanking {
+    if let artistVenuesRanking = stats.artistVenuesRanking {
       HStack {
         venueCount
         Spacer()
@@ -95,7 +63,7 @@ struct StatsGrouping: View {
   }
 
   @ViewBuilder var artistsElement: some View {
-    if let venueArtistsRanking {
+    if let venueArtistsRanking = stats.venueArtistsRanking {
       HStack {
         artistCount
         Spacer()
@@ -107,11 +75,7 @@ struct StatsGrouping: View {
   }
 
   var body: some View {
-    let statsCategoryCases = stats.categories(
-      weekdayOrMonthChartConcertThreshold: statsThreshold,
-      displayArchiveCategoryCounts: displayArchiveCategoryCounts,
-      yearsSpanRanking: yearsSpanRanking, alwaysShowVenuesArtistsStats: alwaysShowVenuesArtistsStats
-    )
+    let statsCategoryCases = stats.categories(weekdayOrMonthChartConcertThreshold: statsThreshold)
     ForEach(statsCategoryCases, id: \.self) { category in
       Group {
         switch category {
@@ -125,12 +89,12 @@ struct StatsGrouping: View {
           artistsElement
         case .weekday:
           Button("Weekdays") { showWeekdays = true }
-            .titledSheet(isPresented: $showWeekdays, title: weekdaysTitleLocalizedString) {
+            .titledSheet(isPresented: $showWeekdays, title: stats.weekdaysTitleLocalizedString) {
               WeekdayChart(dates: stats.dates)
             }
         case .month:
           Button("Months") { showMonths = true }
-            .titledSheet(isPresented: $showMonths, title: monthsTitleLocalizedString) {
+            .titledSheet(isPresented: $showMonths, title: stats.monthsTitleLocalizedString) {
               MonthChart(dates: stats.dates)
             }
         case .state:
@@ -144,4 +108,10 @@ struct StatsGrouping: View {
       }
     }
   }
+}
+
+#Preview(traits: .vaultModel) {
+  @Previewable @Environment(VaultModel.self) var model
+  StatsGrouping(stats: Stats(concerts: model.vault.concerts))
+    .padding()
 }

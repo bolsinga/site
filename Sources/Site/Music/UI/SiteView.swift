@@ -68,7 +68,7 @@ public struct SiteView: View {
   SiteView(SiteModel(urlString: "https://www.example.com"))
 }
 
-#Preview(traits: .modifier(VaultPreviewModifier())) {
+#Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   SiteView(
     SiteModel(

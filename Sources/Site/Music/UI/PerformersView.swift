@@ -21,7 +21,7 @@ struct PerformersView: View {
   }
 }
 
-#Preview(traits: .modifier(VaultPreviewModifier())) {
+#Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   PerformersView(concert: model.vault.concerts[0])
 }

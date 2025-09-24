@@ -30,7 +30,7 @@ struct TodayList: View {
   }
 }
 
-#Preview(traits: .modifier(VaultPreviewModifier())) {
+#Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   TodayList(concerts: model.vault.concerts.filter { !$0.show.date.isUnknown })
 }

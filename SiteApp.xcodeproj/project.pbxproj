@@ -357,10 +357,12 @@
 		FE57C6AF2E71450300A67D4F /* SiteApp.icon in Resources */ = {isa = PBXBuildFile; fileRef = FE57C6AE2E71450300A67D4F /* SiteApp.icon */; };
 		FE8F85912E7B7409006AF701 /* Stats.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE8F85902E7B7409006AF701 /* Stats.swift */; };
 		FE8F85932E7E0A5C006AF701 /* TitledSheetModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE8F85922E7E0A5C006AF701 /* TitledSheetModifier.swift */; };
+		FE8F85FE2E81E2F9006AF701 /* Stats+Digest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE8F85FD2E81E2F9006AF701 /* Stats+Digest.swift */; };
 		FEB4895E2E6E6E8F0043057D /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = FEB4895D2E6E6E8F0043057D /* ArgumentParser */; };
 		FEB489B52E6E6FC10043057D /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = FEB489B42E6E6FC10043057D /* ArgumentParser */; };
 		FEB48A082E6E70E20043057D /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = FEB48A072E6E70E20043057D /* ArgumentParser */; };
 		FEB722BE2E776336006A4DA2 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = FEB722BD2E776336006A4DA2 /* Algorithms */; };
+		FECE2D2A2E81F55400A56030 /* Date+MonthCounts.swift in Sources */ = {isa = PBXBuildFile; fileRef = FECE2D292E81F55400A56030 /* Date+MonthCounts.swift */; };
 		FEE42FA92E72600E0059ED0F /* SiteShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEE42FA82E72600E0059ED0F /* SiteShortcuts.swift */; };
 		FEE42FAB2E726D9E0059ED0F /* AppShortcuts.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = FEE42FAA2E726D9E0059ED0F /* AppShortcuts.xcstrings */; };
 		FEE42FAD2E7280630059ED0F /* VenueEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEE42FAC2E7280630059ED0F /* VenueEntity.swift */; };
@@ -625,11 +627,13 @@
 		FE57C6AE2E71450300A67D4F /* SiteApp.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = SiteApp.icon; sourceTree = "<group>"; };
 		FE8F85902E7B7409006AF701 /* Stats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stats.swift; sourceTree = "<group>"; };
 		FE8F85922E7E0A5C006AF701 /* TitledSheetModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitledSheetModifier.swift; sourceTree = "<group>"; };
+		FE8F85FD2E81E2F9006AF701 /* Stats+Digest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Stats+Digest.swift"; sourceTree = "<group>"; };
 		FE9910DC2AC205A70054D229 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		FEB486502E6E6D740043057D /* site_tool */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = site_tool; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEB489AA2E6E6F960043057D /* site_associated_domains */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = site_associated_domains; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEB489BA2E6E70800043057D /* next_id */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = next_id; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEC1720F2E70F1E800E8EFC8 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		FECE2D292E81F55400A56030 /* Date+MonthCounts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+MonthCounts.swift"; sourceTree = "<group>"; };
 		FEE0AECC2E6E74F5005CE1AB /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEE42FA82E72600E0059ED0F /* SiteShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiteShortcuts.swift; sourceTree = "<group>"; };
 		FEE42FAA2E726D9E0059ED0F /* AppShortcuts.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = AppShortcuts.xcstrings; sourceTree = "<group>"; };
@@ -871,6 +875,7 @@
 				FE57C2B52E713D1300A67D4F /* SortModifierToolbarContent.swift */,
 				FE57C2B62E713D1300A67D4F /* StateChart.swift */,
 				FE8F85902E7B7409006AF701 /* Stats.swift */,
+				FE8F85FD2E81E2F9006AF701 /* Stats+Digest.swift */,
 				FE57C2B72E713D1300A67D4F /* StatsCategory.swift */,
 				FE57C2B82E713D1300A67D4F /* StatsGrouping.swift */,
 				FE57C2B92E713D1300A67D4F /* StatsSummary.swift */,
@@ -927,6 +932,7 @@
 		FE57C2F02E713D1300A67D4F /* Utility */ = {
 			isa = PBXGroup;
 			children = (
+				FECE2D292E81F55400A56030 /* Date+MonthCounts.swift */,
 				FE57C2E22E713D1300A67D4F /* Date+Weekdays.swift */,
 				FE57C2E32E713D1300A67D4F /* Dictionary+JSONCache.swift */,
 				FE57C2E42E713D1300A67D4F /* FileManager+FileURL.swift */,
@@ -1307,7 +1313,9 @@
 				FE57C3312E713D1300A67D4F /* PartialDate+FormatStyle.swift in Sources */,
 				FE57C3322E713D1300A67D4F /* PartialDate+Span.swift in Sources */,
 				FE57C3332E713D1300A67D4F /* PathRestorable.swift in Sources */,
+				FECE2D2A2E81F55400A56030 /* Date+MonthCounts.swift in Sources */,
 				FE57C3342E713D1300A67D4F /* Rank.swift in Sources */,
+				FE8F85FE2E81E2F9006AF701 /* Stats+Digest.swift in Sources */,
 				FE57C3352E713D1300A67D4F /* Ranking.swift in Sources */,
 				FE57C3362E713D1300A67D4F /* Relation.swift in Sources */,
 				FE57C3372E713D1300A67D4F /* Show.swift in Sources */,

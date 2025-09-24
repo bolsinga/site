@@ -8,46 +8,65 @@
 import Charts
 import SwiftUI
 
-private let MonthChartFormat = Date.FormatStyle.dateTime.month(.abbreviated)
-
-// month as int: month as formatted localized string
-private var MonthAbbreviationsGetter: [Int: (String, Int)] {
-  var result = [Int: (String, Int)]()
-  for month in 1...12 {
-    guard
-      let date = DateComponents(calendar: Calendar.current, year: 2023, month: month, day: 1).date
-    else { fatalError("need to be able to get abbreviated months") }
-    result[month] = (MonthChartFormat.format(date), 0)
-  }
-  return result
-}
-
-private let MonthAbbreviations = MonthAbbreviationsGetter
-
 struct MonthChart: View {
-  let dates: [Date]
+  enum Presentation {
+    case `default`
+    case compact
+  }
 
-  private var computeMonthCounts: [Int: (String, Int)] {  // month as int: (month as string, count for that month)
-    return dates.reduce(into: MonthAbbreviations) {
-      let month = Calendar.autoupdatingCurrent.component(.month, from: $1)
-      let pair = $0[month] ?? (MonthChartFormat.format($1), 0)
-      $0[month] = (pair.0, pair.1 + 1)
+  @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+
+  let dates: [Date]
+  let presentation: Presentation
+
+  internal init(dates: [Date], presentation: Presentation = .default) {
+    self.dates = dates
+    self.presentation = presentation
+  }
+
+  private var format: Date.FormatStyle.Symbol.Month {
+    switch presentation {
+    case .default:
+      horizontalSizeClass == .compact ? .narrow : .abbreviated
+    case .compact:
+      .narrow
     }
   }
 
   var body: some View {
-    let monthCounts = computeMonthCounts.sorted { $0.key < $1.key }  // array of dictionary elements
+    let monthCounts = dates.monthCounts.sorted { $0.key < $1.key }  // array of dictionary elements
     Chart(monthCounts, id: \.key) { item in
+      let (date, count) = item.value
       BarMark(
-        x: .value(Text("Month"), item.value.0),
-        y: .value(Text("Count"), item.value.1)
+        x: .value("Month", date, unit: .month),
+        y: .value("Count", count)
       )
       .annotation(position: .top) {
-        if item.value.1 > 0 {
-          Text(item.value.1.formatted(.number))
+        if count > 0, presentation == .default {
+          Text(count.formatted(.number))
             .font(.caption2)
         }
       }
     }
+    .chartYAxis(presentation == .compact ? .hidden : .automatic)
+    .chartXAxis {
+      AxisMarks(values: .stride(by: .month)) { _ in
+        AxisGridLine()
+        AxisTick()
+        AxisValueLabel(format: .dateTime.month(format), centered: true)
+      }
+    }
   }
+}
+
+#Preview("Default", traits: .vaultModel) {
+  @Previewable @Environment(VaultModel.self) var model
+  MonthChart(dates: Stats(concerts: model.vault.concerts).dates, presentation: .default)
+    .padding()
+}
+
+#Preview("Compact", traits: .vaultModel) {
+  @Previewable @Environment(VaultModel.self) var model
+  MonthChart(dates: Stats(concerts: model.vault.concerts).dates, presentation: .compact)
+    .padding()
 }

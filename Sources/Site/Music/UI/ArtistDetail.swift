@@ -24,12 +24,7 @@ struct ArtistDetail: View {
     if !digest.concerts.isEmpty {
       Section(header: Text(ArchiveCategory.stats.localizedString)) {
         firstSetElement
-        StatsGrouping(
-          concerts: digest.concerts, shouldCalculateArtistCount: false,
-          yearsSpanRanking: digest.spanRank, showRanking: digest.showRank,
-          artistVenuesRanking: digest.venueRank,
-          weekdaysTitleLocalizedString: "\(digest.name) Weekdays",
-          monthsTitleLocalizedString: "\(digest.name) Months")
+        StatsGrouping(stats: Stats(artistDigest: digest))
       }
     }
   }
@@ -76,7 +71,7 @@ struct ArtistDetail: View {
   }
 }
 
-#Preview(traits: .modifier(VaultPreviewModifier())) {
+#Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   ArtistDetail(
     digest: model.vault.artistDigests[0],
@@ -87,7 +82,7 @@ struct ArtistDetail: View {
   )
 }
 
-#Preview(traits: .modifier(VaultPreviewModifier())) {
+#Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   ArtistDetail(
     digest: model.vault.artistDigests[1],
@@ -98,7 +93,7 @@ struct ArtistDetail: View {
   )
 }
 
-#Preview(traits: .modifier(VaultPreviewModifier())) {
+#Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   let selectedConcert = model.vault.artistDigests[1].concerts[0]
   return ArtistDetail(

@@ -58,7 +58,7 @@ where T: Rankable, T.ID == String {
   }
 }
 
-#Preview(traits: .modifier(VaultPreviewModifier())) {
+#Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   RankableSortList(
     items: model.vault.venueDigests, sectioner: model.vault.sectioner,

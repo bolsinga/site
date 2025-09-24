@@ -15,6 +15,6 @@ struct TodaySummary: View {
   }
 }
 
-#Preview(traits: .modifier(VaultPreviewModifier())) {
+#Preview(traits: .vaultModel) {
   TodaySummary()
 }

@@ -92,22 +92,22 @@ extension ArchiveCategoryStack {
   }
 }
 
-#Preview("Today", traits: .modifier(NearbyPreviewModifer()), .modifier(VaultPreviewModifier())) {
+#Preview("Today", traits: .nearbyModel, .vaultModel) {
   ArchiveCategoryStack(withPreviewCategory: .today)
 }
 
-#Preview("Stats", traits: .modifier(NearbyPreviewModifer()), .modifier(VaultPreviewModifier())) {
+#Preview("Stats", traits: .nearbyModel, .vaultModel) {
   ArchiveCategoryStack(withPreviewCategory: .stats)
 }
 
-#Preview("Shows", traits: .modifier(NearbyPreviewModifer()), .modifier(VaultPreviewModifier())) {
+#Preview("Shows", traits: .nearbyModel, .vaultModel) {
   ArchiveCategoryStack(withPreviewCategory: .shows)
 }
 
-#Preview("Venues", traits: .modifier(NearbyPreviewModifer()), .modifier(VaultPreviewModifier())) {
+#Preview("Venues", traits: .nearbyModel, .vaultModel) {
   ArchiveCategoryStack(withPreviewCategory: .venues)
 }
 
-#Preview("Artists", traits: .modifier(NearbyPreviewModifer()), .modifier(VaultPreviewModifier())) {
+#Preview("Artists", traits: .nearbyModel, .vaultModel) {
   ArchiveCategoryStack(withPreviewCategory: .artists)
 }

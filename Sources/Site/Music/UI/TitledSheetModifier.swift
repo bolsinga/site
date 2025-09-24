@@ -27,6 +27,7 @@ struct TitledSheetModifier<SheetContent: View>: ViewModifier {
           sheetContent
         }
         .padding(10)
+        .presentationDetents([.medium, .large])
       }
   }
 }
