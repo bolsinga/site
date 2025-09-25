@@ -110,8 +110,26 @@ struct StatsGrouping: View {
   }
 }
 
-#Preview(traits: .vaultModel) {
+#Preview("Concerts", traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   StatsGrouping(stats: Stats(concerts: model.vault.concerts))
+    .padding()
+}
+
+#Preview("Artists", traits: .vaultModel) {
+  @Previewable @Environment(VaultModel.self) var model
+  StatsGrouping(stats: Stats(artistDigest: model.vault.artistDigests[1]))
+    .padding()
+}
+
+#Preview("Venues", traits: .vaultModel) {
+  @Previewable @Environment(VaultModel.self) var model
+  StatsGrouping(stats: Stats(venueDigest: model.vault.venueDigests[0]))
+    .padding()
+}
+
+#Preview("Years", traits: .vaultModel) {
+  @Previewable @Environment(VaultModel.self) var model
+  StatsGrouping(stats: Stats(annumDigest: model.vault.annumDigestMap[.year(2003)]!))
     .padding()
 }
