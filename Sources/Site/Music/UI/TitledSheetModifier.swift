@@ -16,15 +16,12 @@ struct TitledSheetModifier<SheetContent: View>: ViewModifier {
     content
       .sheet(isPresented: $showSheet) {
         VStack {
-          HStack {
-            Text(title).font(.title).fontWeight(.bold)
-            #if os(macOS)
-              Spacer()
-              // FIXME : 26 add role: .close
-              Button("Done") { showSheet = false }
-            #endif
-          }
+          Text(title).font(.title).fontWeight(.bold)
           sheetContent
+          #if os(macOS)
+            // FIXME : 26 add role: .close
+            Button("Done") { showSheet = false }
+          #endif
         }
         .padding(10)
         .presentationDetents([.medium, .large])
