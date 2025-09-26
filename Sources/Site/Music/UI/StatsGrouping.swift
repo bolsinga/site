@@ -100,9 +100,7 @@ struct StatsGrouping: View {
         case .state:
           Button("States") { showStates = true }
             .dismissibleSheet(isPresented: $showStates) {
-              StateChart(
-                counts: stats.stateCounts,
-                title: "\(stats.stateCounts.keys.count.formatted()) States")
+              StateChart(counts: stats.stateCounts, title: stats.statesTitleLocalizedString)
             }
         }
       }
