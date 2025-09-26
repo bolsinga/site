@@ -1,5 +1,5 @@
 //
-//  TitledSheetModifier.swift
+//  DismissableSheetModifier.swift
 //  SiteApp
 //
 //  Created by Greg Bolsinga on 9/19/25.
@@ -7,17 +7,15 @@
 
 import SwiftUI
 
-struct TitledSheetModifier<SheetContent: View>: ViewModifier {
+struct DismissableSheetModifier<SheetContent>: ViewModifier where SheetContent: View {
   @Binding var showSheet: Bool
-  let title: LocalizedStringResource
-  @ViewBuilder let sheetContent: SheetContent
+  @ViewBuilder let sheetContent: () -> SheetContent
 
   func body(content: Content) -> some View {
     content
       .sheet(isPresented: $showSheet) {
         VStack {
-          Text(title).font(.title).fontWeight(.bold)
-          sheetContent
+          sheetContent()
           #if os(macOS)
             // FIXME : 26 add role: .close
             Button("Done") { showSheet = false }
@@ -30,9 +28,9 @@ struct TitledSheetModifier<SheetContent: View>: ViewModifier {
 }
 
 extension View {
-  func titledSheet<SheetContent: View>(
-    isPresented: Binding<Bool>, title: LocalizedStringResource, sheetContent: () -> SheetContent
+  func dismissableSheet<SheetContent: View>(
+    isPresented: Binding<Bool>, sheetContent: @escaping () -> SheetContent
   ) -> some View {
-    modifier(TitledSheetModifier(showSheet: isPresented, title: title, sheetContent: sheetContent))
+    modifier(DismissableSheetModifier(showSheet: isPresented, sheetContent: sheetContent))
   }
 }

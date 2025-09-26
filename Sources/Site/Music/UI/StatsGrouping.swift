@@ -89,20 +89,20 @@ struct StatsGrouping: View {
           artistsElement
         case .weekday:
           Button("Weekdays") { showWeekdays = true }
-            .titledSheet(isPresented: $showWeekdays, title: stats.weekdaysTitleLocalizedString) {
-              WeekdayChart(dates: stats.dates)
+            .dismissableSheet(isPresented: $showWeekdays) {
+              WeekdayChart(dates: stats.dates, title: stats.weekdaysTitleLocalizedString)
             }
         case .month:
           Button("Months") { showMonths = true }
-            .titledSheet(isPresented: $showMonths, title: stats.monthsTitleLocalizedString) {
-              MonthChart(dates: stats.dates)
+            .dismissableSheet(isPresented: $showMonths) {
+              MonthChart(dates: stats.dates, title: stats.monthsTitleLocalizedString)
             }
         case .state:
           Button("States") { showStates = true }
-            .titledSheet(
-              isPresented: $showStates, title: "\(stats.stateCounts.keys.count.formatted()) States"
-            ) {
-              StateChart(counts: stats.stateCounts)
+            .dismissableSheet(isPresented: $showStates) {
+              StateChart(
+                counts: stats.stateCounts,
+                title: "\(stats.stateCounts.keys.count.formatted()) States")
             }
         }
       }
