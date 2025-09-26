@@ -17,10 +17,14 @@ struct MonthChart: View {
   @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
   let dates: [Date]
+  let title: LocalizedStringResource
   let presentation: Presentation
 
-  internal init(dates: [Date], presentation: Presentation = .default) {
+  internal init(
+    dates: [Date], title: LocalizedStringResource, presentation: Presentation = .default
+  ) {
     self.dates = dates
+    self.title = title
     self.presentation = presentation
   }
 
@@ -34,26 +38,37 @@ struct MonthChart: View {
   }
 
   var body: some View {
-    let monthCounts = dates.monthCounts.sorted { $0.key < $1.key }  // array of dictionary elements
-    Chart(monthCounts, id: \.key) { item in
-      let (date, count) = item.value
-      BarMark(
-        x: .value("Month", date, unit: .month),
-        y: .value("Count", count)
-      )
-      .annotation(position: .top) {
-        if count > 0, presentation == .default {
-          Text(count.formatted(.number))
-            .font(.caption2)
+    VStack(alignment: .leading) {
+      let monthCounts = dates.monthCounts
+
+      Text(title)
+        .font(.title2).fontWeight(.bold)
+
+      let topDate = monthCounts.map { $0 }.topDate
+
+      Text("Most Shows During \(Date.FormatStyle.dateTime.month(.wide).format(topDate))")
+        .font(.subheadline)
+
+      Chart(monthCounts.sorted { $0.key < $1.key }, id: \.key) { item in  // array of dictionary elements
+        let (date, count) = item.value
+        BarMark(
+          x: .value("Month", date, unit: .month),
+          y: .value("Count", count)
+        )
+        .annotation(position: .top) {
+          if count > 0, presentation == .default {
+            Text(count.formatted(.number))
+              .font(.caption2)
+          }
         }
       }
-    }
-    .chartYAxis(presentation == .compact ? .hidden : .automatic)
-    .chartXAxis {
-      AxisMarks(values: .stride(by: .month)) { _ in
-        AxisGridLine()
-        AxisTick()
-        AxisValueLabel(format: .dateTime.month(format), centered: true)
+      .chartYAxis(presentation == .compact ? .hidden : .automatic)
+      .chartXAxis {
+        AxisMarks(values: .stride(by: .month)) { _ in
+          AxisGridLine()
+          AxisTick()
+          AxisValueLabel(format: .dateTime.month(format), centered: true)
+        }
       }
     }
   }
@@ -61,12 +76,16 @@ struct MonthChart: View {
 
 #Preview("Default", traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
-  MonthChart(dates: Stats(concerts: model.vault.concerts).dates, presentation: .default)
-    .padding()
+  MonthChart(
+    dates: Stats(concerts: model.vault.concerts).dates, title: "Months", presentation: .default
+  )
+  .padding()
 }
 
 #Preview("Compact", traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
-  MonthChart(dates: Stats(concerts: model.vault.concerts).dates, presentation: .compact)
-    .padding()
+  MonthChart(
+    dates: Stats(concerts: model.vault.concerts).dates, title: "Months", presentation: .compact
+  )
+  .padding()
 }

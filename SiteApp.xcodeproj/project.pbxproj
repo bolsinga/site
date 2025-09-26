@@ -356,8 +356,9 @@
 		FE57C6AD2E71433A00A67D4F /* OpenCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C6AA2E71433A00A67D4F /* OpenCategory.swift */; };
 		FE57C6AF2E71450300A67D4F /* SiteApp.icon in Resources */ = {isa = PBXBuildFile; fileRef = FE57C6AE2E71450300A67D4F /* SiteApp.icon */; };
 		FE8F85912E7B7409006AF701 /* Stats.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE8F85902E7B7409006AF701 /* Stats.swift */; };
-		FE8F85932E7E0A5C006AF701 /* TitledSheetModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE8F85922E7E0A5C006AF701 /* TitledSheetModifier.swift */; };
+		FE8F85932E7E0A5C006AF701 /* DismissibleSheetModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE8F85922E7E0A5C006AF701 /* DismissibleSheetModifier.swift */; };
 		FE8F85FE2E81E2F9006AF701 /* Stats+Digest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE8F85FD2E81E2F9006AF701 /* Stats+Digest.swift */; };
+		FE91B1D52E8739B500EBE477 /* TopDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE91B1D42E8739B500EBE477 /* TopDate.swift */; };
 		FEB4895E2E6E6E8F0043057D /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = FEB4895D2E6E6E8F0043057D /* ArgumentParser */; };
 		FEB489B52E6E6FC10043057D /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = FEB489B42E6E6FC10043057D /* ArgumentParser */; };
 		FEB48A082E6E70E20043057D /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = FEB48A072E6E70E20043057D /* ArgumentParser */; };
@@ -626,8 +627,9 @@
 		FE57C6AA2E71433A00A67D4F /* OpenCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenCategory.swift; sourceTree = "<group>"; };
 		FE57C6AE2E71450300A67D4F /* SiteApp.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = SiteApp.icon; sourceTree = "<group>"; };
 		FE8F85902E7B7409006AF701 /* Stats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stats.swift; sourceTree = "<group>"; };
-		FE8F85922E7E0A5C006AF701 /* TitledSheetModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitledSheetModifier.swift; sourceTree = "<group>"; };
+		FE8F85922E7E0A5C006AF701 /* DismissibleSheetModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissibleSheetModifier.swift; sourceTree = "<group>"; };
 		FE8F85FD2E81E2F9006AF701 /* Stats+Digest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Stats+Digest.swift"; sourceTree = "<group>"; };
+		FE91B1D42E8739B500EBE477 /* TopDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopDate.swift; sourceTree = "<group>"; };
 		FE9910DC2AC205A70054D229 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		FEB486502E6E6D740043057D /* site_tool */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = site_tool; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEB489AA2E6E6F960043057D /* site_associated_domains */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = site_associated_domains; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -848,6 +850,7 @@
 				FE57C29B2E713D1300A67D4F /* Bundle+AppIcon.swift */,
 				FE57C29C2E713D1300A67D4F /* ConcertBlurb.swift */,
 				FE57C29D2E713D1300A67D4F /* DaysShowsSummary.swift */,
+				FE8F85922E7E0A5C006AF701 /* DismissibleSheetModifier.swift */,
 				FE57C29E2E713D1300A67D4F /* LibrarySection+Section.swift */,
 				FE57C29F2E713D1300A67D4F /* LocationFilterToolbarContent.swift */,
 				FE57C2A02E713D1300A67D4F /* LocationMap.swift */,
@@ -880,7 +883,6 @@
 				FE57C2B82E713D1300A67D4F /* StatsGrouping.swift */,
 				FE57C2B92E713D1300A67D4F /* StatsSummary.swift */,
 				FE57C2BA2E713D1300A67D4F /* StatsThreshold.swift */,
-				FE8F85922E7E0A5C006AF701 /* TitledSheetModifier.swift */,
 				FE57C2BC2E713D1300A67D4F /* TodayList.swift */,
 				FE57C2BD2E713D1300A67D4F /* TodaySummary.swift */,
 				FE57C2BE2E713D1300A67D4F /* VaultPreviewModifier.swift */,
@@ -947,6 +949,7 @@
 				FE57C2ED2E713D1300A67D4F /* String+AttributedMatching.swift */,
 				FE57C2EE2E713D1300A67D4F /* String+EmphasizedMatching.swift */,
 				FE57C2EF2E713D1300A67D4F /* String+Markdown.swift */,
+				FE91B1D42E8739B500EBE477 /* TopDate.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -1303,6 +1306,7 @@
 				FE57C3282E713D1300A67D4F /* Location+Comparable.swift in Sources */,
 				FE57C3292E713D1300A67D4F /* Location+FormatStyle.swift in Sources */,
 				FE57C32A2E713D1300A67D4F /* Lookup.swift in Sources */,
+				FE91B1D52E8739B500EBE477 /* TopDate.swift in Sources */,
 				FE57C32B2E713D1300A67D4F /* Music.swift in Sources */,
 				FE57C32C2E713D1300A67D4F /* Music+Ranking.swift in Sources */,
 				FE57C32D2E713D1300A67D4F /* Music+ShowsOnly.swift in Sources */,
@@ -1335,7 +1339,7 @@
 				FE57C3452E713D1300A67D4F /* AddressView.swift in Sources */,
 				FEE42FB12E7285E90059ED0F /* OpenVenue.swift in Sources */,
 				FE57C3462E713D1300A67D4F /* ArchiveActivity.swift in Sources */,
-				FE8F85932E7E0A5C006AF701 /* TitledSheetModifier.swift in Sources */,
+				FE8F85932E7E0A5C006AF701 /* DismissibleSheetModifier.swift in Sources */,
 				FE57C3472E713D1300A67D4F /* ArchiveCategory+LocationFilterable.swift in Sources */,
 				FE57C3482E713D1300A67D4F /* ArchiveCategoryLinkable.swift in Sources */,
 				FE57C3492E713D1300A67D4F /* ArchiveCategoryStack.swift in Sources */,

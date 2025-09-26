@@ -15,10 +15,14 @@ struct StateChart: View {
   }
 
   let counts: [String: Int]
+  let title: LocalizedStringResource
   let presentation: Presentation
 
-  internal init(counts: [String: Int], presentation: Presentation = .default) {
+  internal init(
+    counts: [String: Int], title: LocalizedStringResource, presentation: Presentation = .default
+  ) {
     self.counts = counts
+    self.title = title
     self.presentation = presentation
   }
 
@@ -50,23 +54,37 @@ struct StateChart: View {
   }
 
   var body: some View {
-    switch presentation {
-    case .default:
-      defaultChart
-    case .compact:
-      compactChart
+    VStack(alignment: .leading) {
+      Text(title)
+        .font(.title2).fontWeight(.bold)
+
+      Text("Most Shows In \(counts.sorted { $0.value < $1.value}.map { $0.key }.reversed()[0])")
+        .font(.subheadline)
+
+      switch presentation {
+      case .default:
+        defaultChart
+      case .compact:
+        compactChart
+      }
     }
   }
 }
 
 #Preview("Default Presentation", traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
-  StateChart(counts: Stats(concerts: model.vault.concerts).stateCounts, presentation: .default)
-    .padding()
+  StateChart(
+    counts: Stats(concerts: model.vault.concerts).stateCounts, title: "States",
+    presentation: .default
+  )
+  .padding()
 }
 
 #Preview("Compact Presentation", traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
-  StateChart(counts: Stats(concerts: model.vault.concerts).stateCounts, presentation: .compact)
-    .padding()
+  StateChart(
+    counts: Stats(concerts: model.vault.concerts).stateCounts, title: "States",
+    presentation: .compact
+  )
+  .padding()
 }
