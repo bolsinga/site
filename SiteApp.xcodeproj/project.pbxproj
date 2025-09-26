@@ -356,7 +356,7 @@
 		FE57C6AD2E71433A00A67D4F /* OpenCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE57C6AA2E71433A00A67D4F /* OpenCategory.swift */; };
 		FE57C6AF2E71450300A67D4F /* SiteApp.icon in Resources */ = {isa = PBXBuildFile; fileRef = FE57C6AE2E71450300A67D4F /* SiteApp.icon */; };
 		FE8F85912E7B7409006AF701 /* Stats.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE8F85902E7B7409006AF701 /* Stats.swift */; };
-		FE8F85932E7E0A5C006AF701 /* DismissableSheetModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE8F85922E7E0A5C006AF701 /* DismissableSheetModifier.swift */; };
+		FE8F85932E7E0A5C006AF701 /* DismissibleSheetModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE8F85922E7E0A5C006AF701 /* DismissibleSheetModifier.swift */; };
 		FE8F85FE2E81E2F9006AF701 /* Stats+Digest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE8F85FD2E81E2F9006AF701 /* Stats+Digest.swift */; };
 		FE91B1D52E8739B500EBE477 /* TopDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE91B1D42E8739B500EBE477 /* TopDate.swift */; };
 		FEB4895E2E6E6E8F0043057D /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = FEB4895D2E6E6E8F0043057D /* ArgumentParser */; };
@@ -627,7 +627,7 @@
 		FE57C6AA2E71433A00A67D4F /* OpenCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenCategory.swift; sourceTree = "<group>"; };
 		FE57C6AE2E71450300A67D4F /* SiteApp.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = SiteApp.icon; sourceTree = "<group>"; };
 		FE8F85902E7B7409006AF701 /* Stats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stats.swift; sourceTree = "<group>"; };
-		FE8F85922E7E0A5C006AF701 /* DismissableSheetModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissableSheetModifier.swift; sourceTree = "<group>"; };
+		FE8F85922E7E0A5C006AF701 /* DismissibleSheetModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissibleSheetModifier.swift; sourceTree = "<group>"; };
 		FE8F85FD2E81E2F9006AF701 /* Stats+Digest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Stats+Digest.swift"; sourceTree = "<group>"; };
 		FE91B1D42E8739B500EBE477 /* TopDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopDate.swift; sourceTree = "<group>"; };
 		FE9910DC2AC205A70054D229 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
@@ -850,7 +850,7 @@
 				FE57C29B2E713D1300A67D4F /* Bundle+AppIcon.swift */,
 				FE57C29C2E713D1300A67D4F /* ConcertBlurb.swift */,
 				FE57C29D2E713D1300A67D4F /* DaysShowsSummary.swift */,
-				FE8F85922E7E0A5C006AF701 /* DismissableSheetModifier.swift */,
+				FE8F85922E7E0A5C006AF701 /* DismissibleSheetModifier.swift */,
 				FE57C29E2E713D1300A67D4F /* LibrarySection+Section.swift */,
 				FE57C29F2E713D1300A67D4F /* LocationFilterToolbarContent.swift */,
 				FE57C2A02E713D1300A67D4F /* LocationMap.swift */,
@@ -1339,7 +1339,7 @@
 				FE57C3452E713D1300A67D4F /* AddressView.swift in Sources */,
 				FEE42FB12E7285E90059ED0F /* OpenVenue.swift in Sources */,
 				FE57C3462E713D1300A67D4F /* ArchiveActivity.swift in Sources */,
-				FE8F85932E7E0A5C006AF701 /* DismissableSheetModifier.swift in Sources */,
+				FE8F85932E7E0A5C006AF701 /* DismissibleSheetModifier.swift in Sources */,
 				FE57C3472E713D1300A67D4F /* ArchiveCategory+LocationFilterable.swift in Sources */,
 				FE57C3482E713D1300A67D4F /* ArchiveCategoryLinkable.swift in Sources */,
 				FE57C3492E713D1300A67D4F /* ArchiveCategoryStack.swift in Sources */,

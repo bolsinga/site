@@ -1,5 +1,5 @@
 //
-//  DismissableSheetModifier.swift
+//  DismissibleSheetModifier.swift
 //  SiteApp
 //
 //  Created by Greg Bolsinga on 9/19/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct DismissableSheetModifier<SheetContent>: ViewModifier where SheetContent: View {
+struct DismissibleSheetModifier<SheetContent>: ViewModifier where SheetContent: View {
   @Binding var showSheet: Bool
   @ViewBuilder let sheetContent: () -> SheetContent
 
@@ -28,9 +28,9 @@ struct DismissableSheetModifier<SheetContent>: ViewModifier where SheetContent: 
 }
 
 extension View {
-  func dismissableSheet<SheetContent: View>(
+  func dismissibleSheet<SheetContent: View>(
     isPresented: Binding<Bool>, sheetContent: @escaping () -> SheetContent
   ) -> some View {
-    modifier(DismissableSheetModifier(showSheet: isPresented, sheetContent: sheetContent))
+    modifier(DismissibleSheetModifier(showSheet: isPresented, sheetContent: sheetContent))
   }
 }
