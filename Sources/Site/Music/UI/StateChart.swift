@@ -66,6 +66,7 @@ struct StateChart: View {
         defaultChart
       case .compact:
         compactChart
+          .frame(height: 100)
       }
     }
   }

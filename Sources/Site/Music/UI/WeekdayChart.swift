@@ -77,6 +77,7 @@ struct WeekdayChart: View {
           AxisValueLabel(format: .dateTime.weekday(format), centered: true)
         }
       }
+      .frame(height: presentation == .default ? nil : 100)
       .onNotification(name: NSLocale.currentLocaleDidChangeNotification) {
         firstWeekday = Calendar.current.firstWeekday
       }
