@@ -76,6 +76,7 @@ struct MonthChart: View {
           AxisValueLabel(format: .dateTime.month(format), centered: true)
         }
       }
+      .frame(height: presentation == .default ? nil : 100)
     }
   }
 }
