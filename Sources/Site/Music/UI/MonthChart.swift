@@ -37,6 +37,14 @@ struct MonthChart: View {
     }
   }
 
+  @ViewBuilder private func subtitle(_ monthCounts: [Int: (Date, Int)]) -> some View {
+    if let topDate = monthCounts.map({ $0 }).topDate {
+      Text("Most Shows During \(Date.FormatStyle.dateTime.month(.wide).format(topDate))")
+    } else {
+      Text("Multiple Months with Most Shows")
+    }
+  }
+
   var body: some View {
     VStack(alignment: .leading) {
       let monthCounts = dates.monthCounts
@@ -44,9 +52,7 @@ struct MonthChart: View {
       Text(title)
         .font(.title2).fontWeight(.bold)
 
-      let topDate = monthCounts.map { $0 }.topDate
-
-      Text("Most Shows During \(Date.FormatStyle.dateTime.month(.wide).format(topDate))")
+      subtitle(monthCounts)
         .font(.subheadline)
 
       Chart(monthCounts.sorted { $0.key < $1.key }, id: \.key) { item in  // array of dictionary elements
