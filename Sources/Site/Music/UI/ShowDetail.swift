@@ -66,30 +66,12 @@ struct ShowDetail: View {
 
 #Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
-  ShowDetail(
-    concert: model.vault.concerts[0],
-    isPathNavigable: { _ in
-      true
-    }
-  )
-}
-
-#Preview(traits: .vaultModel) {
-  @Previewable @Environment(VaultModel.self) var model
-  ShowDetail(
-    concert: model.vault.concerts[1],
-    isPathNavigable: { _ in
-      true
-    }
-  )
-}
-
-#Preview(traits: .vaultModel) {
-  @Previewable @Environment(VaultModel.self) var model
-  ShowDetail(
-    concert: model.vault.concerts[2],
-    isPathNavigable: { _ in
-      true
-    }
-  )
+  NavigationStack {
+    ShowDetail(
+      concert: model.vault.concertMap["sh899"]!,
+      isPathNavigable: { _ in
+        true
+      }
+    )
+  }
 }

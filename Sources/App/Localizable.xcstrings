@@ -51,15 +51,6 @@
         }
       }
     },
-    "%@ Months" : {
-
-    },
-    "%@ States" : {
-
-    },
-    "%@ Weekdays" : {
-
-    },
     "%@, %@" : {
       "comment" : "headlinerAndVenue.no.venue",
       "localizations" : {
@@ -198,7 +189,16 @@
     "All" : {
       "comment" : "ArchiveScope.all"
     },
+    "All Months with Shows" : {
+
+    },
     "All Shows" : {
+
+    },
+    "All States with Shows" : {
+
+    },
+    "All Weekdays with Shows" : {
 
     },
     "artist" : {
@@ -310,6 +310,24 @@
 
     },
     "Months" : {
+
+    },
+    "Months at %@" : {
+
+    },
+    "Months in %@" : {
+
+    },
+    "Months with %@" : {
+
+    },
+    "Most Shows During %@" : {
+
+    },
+    "Most Shows In %@" : {
+
+    },
+    "Most Shows On %@" : {
 
     },
     "Name Or Related Names" : {
@@ -459,6 +477,12 @@
     "States" : {
 
     },
+    "States visited in %@" : {
+
+    },
+    "States with Shows with %@" : {
+
+    },
     "Stats" : {
 
     },
@@ -496,6 +520,15 @@
 
     },
     "Weekdays" : {
+
+    },
+    "Weekdays at %@" : {
+
+    },
+    "Weekdays in %@" : {
+
+    },
+    "Weekdays with %@" : {
 
     },
     "Year Unknown" : {

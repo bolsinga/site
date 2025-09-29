@@ -17,10 +17,14 @@ struct WeekdayChart: View {
   @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
   let dates: [Date]
+  let title: LocalizedStringResource
   let presentation: Presentation
 
-  internal init(dates: [Date], presentation: Presentation = .default) {
+  internal init(
+    dates: [Date], title: LocalizedStringResource, presentation: Presentation = .default
+  ) {
     self.dates = dates
+    self.title = title
     self.presentation = presentation
   }
 
@@ -36,42 +40,56 @@ struct WeekdayChart: View {
   @State private var firstWeekday = Calendar.autoupdatingCurrent.firstWeekday
 
   var body: some View {
-    let weekdayCounts = dates.computeWeekdayCounts(firstWeekday)
-    Chart(weekdayCounts, id: \.0) { item in
-      let (date, count) = item.1
-      BarMark(
-        x: .value("Weekday", date, unit: .day),
-        y: .value("Count", count)
+    VStack(alignment: .leading) {
+      Text(title)
+        .font(.title2).fontWeight(.bold)
+
+      let weekdayCounts = dates.computeWeekdayCounts(firstWeekday)
+      Text(
+        "Most Shows On \(Date.FormatStyle.dateTime.weekday(.wide).format(weekdayCounts.topDate))"
       )
-      .annotation(position: .top) {
-        if count > 0, presentation == .default {
-          Text(count.formatted(.number))
-            .font(.caption2)
+      .font(.subheadline)
+
+      Chart(weekdayCounts, id: \.0) { item in
+        let (date, count) = item.1
+        BarMark(
+          x: .value("Weekday", date, unit: .day),
+          y: .value("Count", count)
+        )
+        .annotation(position: .top) {
+          if count > 0, presentation == .default {
+            Text(count.formatted(.number))
+              .font(.caption2)
+          }
         }
       }
-    }
-    .chartYAxis(presentation == .compact ? .hidden : .automatic)
-    .chartXAxis {
-      AxisMarks(values: .stride(by: .day)) { _ in
-        AxisGridLine()
-        AxisTick()
-        AxisValueLabel(format: .dateTime.weekday(format), centered: true)
+      .chartYAxis(presentation == .compact ? .hidden : .automatic)
+      .chartXAxis {
+        AxisMarks(values: .stride(by: .day)) { _ in
+          AxisGridLine()
+          AxisTick()
+          AxisValueLabel(format: .dateTime.weekday(format), centered: true)
+        }
       }
-    }
-    .onNotification(name: NSLocale.currentLocaleDidChangeNotification) {
-      firstWeekday = Calendar.current.firstWeekday
+      .onNotification(name: NSLocale.currentLocaleDidChangeNotification) {
+        firstWeekday = Calendar.current.firstWeekday
+      }
     }
   }
 }
 
 #Preview("Default", traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
-  WeekdayChart(dates: Stats(concerts: model.vault.concerts).dates, presentation: .default)
-    .padding()
+  WeekdayChart(
+    dates: Stats(concerts: model.vault.concerts).dates, title: "Weekdays", presentation: .default
+  )
+  .padding()
 }
 
 #Preview("Compact", traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
-  WeekdayChart(dates: Stats(concerts: model.vault.concerts).dates, presentation: .compact)
-    .padding()
+  WeekdayChart(
+    dates: Stats(concerts: model.vault.concerts).dates, title: "Weekdays", presentation: .compact
+  )
+  .padding()
 }

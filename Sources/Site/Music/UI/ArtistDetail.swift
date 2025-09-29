@@ -71,34 +71,41 @@ struct ArtistDetail: View {
   }
 }
 
-#Preview(traits: .vaultModel) {
+#Preview("All Navigable", traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
-  ArtistDetail(
-    digest: model.vault.artistDigests[0],
-    concertCompare: model.vault.comparator.compare(lhs:rhs:),
-    isPathNavigable: { _ in
-      true
-    }
-  )
+  NavigationStack {
+    ArtistDetail(
+      digest: model.vault.artistDigestMap["ar692"]!,
+      concertCompare: model.vault.comparator.compare(lhs:rhs:),
+      isPathNavigable: { _ in
+        true
+      }
+    )
+  }
 }
 
-#Preview(traits: .vaultModel) {
+#Preview("None Navigable", traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
-  ArtistDetail(
-    digest: model.vault.artistDigests[1],
-    concertCompare: model.vault.comparator.compare(lhs:rhs:),
-    isPathNavigable: { _ in
-      false
-    }
-  )
+  NavigationStack {
+    ArtistDetail(
+      digest: model.vault.artistDigestMap["ar692"]!,
+      concertCompare: model.vault.comparator.compare(lhs:rhs:),
+      isPathNavigable: { _ in
+        false
+      }
+    )
+  }
 }
 
-#Preview(traits: .vaultModel) {
+#Preview("First Navigated", traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
-  let selectedConcert = model.vault.artistDigests[1].concerts[0]
-  return ArtistDetail(
-    digest: model.vault.artistDigests[1],
-    concertCompare: model.vault.comparator.compare(lhs:rhs:),
-    isPathNavigable: { $0.archivePath != selectedConcert.archivePath }
-  )
+  let digest = model.vault.artistDigestMap["ar692"]!
+  let selectedConcert = digest.concerts[0]
+  NavigationStack {
+    ArtistDetail(
+      digest: digest,
+      concertCompare: model.vault.comparator.compare(lhs:rhs:),
+      isPathNavigable: { $0.archivePath != selectedConcert.archivePath }
+    )
+  }
 }

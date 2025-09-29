@@ -89,20 +89,18 @@ struct StatsGrouping: View {
           artistsElement
         case .weekday:
           Button("Weekdays") { showWeekdays = true }
-            .titledSheet(isPresented: $showWeekdays, title: stats.weekdaysTitleLocalizedString) {
-              WeekdayChart(dates: stats.dates)
+            .dismissibleSheet(isPresented: $showWeekdays) {
+              WeekdayChart(dates: stats.dates, title: stats.weekdaysTitleLocalizedString)
             }
         case .month:
           Button("Months") { showMonths = true }
-            .titledSheet(isPresented: $showMonths, title: stats.monthsTitleLocalizedString) {
-              MonthChart(dates: stats.dates)
+            .dismissibleSheet(isPresented: $showMonths) {
+              MonthChart(dates: stats.dates, title: stats.monthsTitleLocalizedString)
             }
         case .state:
           Button("States") { showStates = true }
-            .titledSheet(
-              isPresented: $showStates, title: "\(stats.stateCounts.keys.count.formatted()) States"
-            ) {
-              StateChart(counts: stats.stateCounts)
+            .dismissibleSheet(isPresented: $showStates) {
+              StateChart(counts: stats.stateCounts, title: stats.statesTitleLocalizedString)
             }
         }
       }
@@ -110,8 +108,26 @@ struct StatsGrouping: View {
   }
 }
 
-#Preview(traits: .vaultModel) {
+#Preview("Concerts", traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   StatsGrouping(stats: Stats(concerts: model.vault.concerts))
+    .padding()
+}
+
+#Preview("Artists", traits: .vaultModel) {
+  @Previewable @Environment(VaultModel.self) var model
+  StatsGrouping(stats: Stats(artistDigest: model.vault.artistDigestMap["ar692"]!))
+    .padding()
+}
+
+#Preview("Venues", traits: .vaultModel) {
+  @Previewable @Environment(VaultModel.self) var model
+  StatsGrouping(stats: Stats(venueDigest: model.vault.venueDigestMap["v103"]!))
+    .padding()
+}
+
+#Preview("Years", traits: .vaultModel) {
+  @Previewable @Environment(VaultModel.self) var model
+  StatsGrouping(stats: Stats(annumDigest: model.vault.annumDigestMap[.year(2003)]!))
     .padding()
 }

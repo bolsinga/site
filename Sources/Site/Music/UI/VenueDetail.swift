@@ -88,27 +88,31 @@ struct VenueDetail: View {
 
 #Preview("Error", traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
-  VenueDetail(
-    digest: model.vault.venueDigests[0],
-    concertCompare: model.vault.comparator.compare(lhs:rhs:),
-    geocode: nil,
-    isPathNavigable: { _ in
-      true
-    }
-  )
+  NavigationStack {
+    VenueDetail(
+      digest: model.vault.venueDigestMap["v103"]!,
+      concertCompare: model.vault.comparator.compare(lhs:rhs:),
+      geocode: nil,
+      isPathNavigable: { _ in
+        true
+      }
+    )
+  }
 }
 
 #Preview("Current Location after 10 seconds", traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
-  VenueDetail(
-    digest: model.vault.venueDigests[0],
-    concertCompare: model.vault.comparator.compare(lhs:rhs:),
-    geocode: { _ in
-      try await ContinuousClock().sleep(until: .now + Duration.seconds(10))
-      return MKMapItem.forCurrentLocation()
-    },
-    isPathNavigable: { _ in
-      true
-    }
-  )
+  NavigationStack {
+    VenueDetail(
+      digest: model.vault.venueDigestMap["v103"]!,
+      concertCompare: model.vault.comparator.compare(lhs:rhs:),
+      geocode: { _ in
+        try await ContinuousClock().sleep(until: .now + Duration.seconds(10))
+        return MKMapItem.forCurrentLocation()
+      },
+      isPathNavigable: { _ in
+        true
+      }
+    )
+  }
 }
