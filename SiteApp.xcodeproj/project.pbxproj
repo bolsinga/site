@@ -1991,6 +1991,7 @@
 		};
 		FEE0AED32E6E74F5005CE1AB /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = FE9910DC2AC205A70054D229 /* Config.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -2017,6 +2018,7 @@
 		};
 		FEE0AED42E6E74F5005CE1AB /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = FE9910DC2AC205A70054D229 /* Config.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
