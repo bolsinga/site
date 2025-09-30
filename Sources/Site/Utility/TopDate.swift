@@ -7,8 +7,15 @@
 
 import Foundation
 
+extension Array where Element == (Date, Int) {
+  fileprivate func matching(rank: Rank) -> [Date] {
+    computeRankings(items: self).filter { $0.value.rank == rank }.map { $0.key }
+  }
+}
+
 extension Array where Element == (Int, (Date, Int)) {
-  var topDate: Date {
-    map { $0.1 }.sorted { $0.1 < $1.1 }.reversed()[0].0
+  var topDate: Date? {
+    let tops = map { $0.1 }.matching(rank: .rank(1))
+    return tops.count == 1 ? tops.first : nil
   }
 }

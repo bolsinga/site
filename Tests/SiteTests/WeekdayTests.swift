@@ -10,13 +10,13 @@ import Testing
 
 @testable import SiteApp
 
-struct WeekdayTests {
-  func date(year: Int, month: Int, day: Int) -> Date {
-    let dateComponents = DateComponents(
-      calendar: Calendar.autoupdatingCurrent, year: year, month: month, day: day)
-    return dateComponents.date!
-  }
+private func date(year: Int, month: Int, day: Int) -> Date {
+  let dateComponents = DateComponents(
+    calendar: Calendar.autoupdatingCurrent, year: year, month: month, day: day)
+  return dateComponents.date!
+}
 
+struct WeekdayTests {
   @Test func oneSunday() {
     let result = [date(year: 2024, month: 9, day: 8)].weekdayCounts
     #expect(result.count == 7)
@@ -237,5 +237,31 @@ struct WeekdayTests {
     #expect(result[4].1.1 == 0)
     #expect(result[5].1.1 == 0)
     #expect(result[6].1.1 == 0)
+  }
+
+  let dates = [
+    date(year: 2025, month: 8, day: 1), date(year: 2025, month: 8, day: 8),
+    date(year: 2025, month: 8, day: 3), date(year: 2025, month: 8, day: 4),
+  ]
+
+  let multipleTops = [
+    date(year: 2025, month: 8, day: 1), date(year: 2025, month: 8, day: 8),
+    date(year: 2025, month: 8, day: 3), date(year: 2025, month: 8, day: 10),
+  ]
+
+  @Test func basic() async throws {
+    let r = dates.weekdayCounts
+
+    #expect(r.count == 7)  // One for each weekday.
+
+    #expect(r.filter { $0.value.1 > 0 }.count == 3)  // Three weekdays available.
+  }
+
+  @Test func topDate() async throws {
+    #expect(dates.weekdayCounts.map { $0 }.topDate != nil)
+  }
+
+  @Test func noTopDate() async throws {
+    #expect(multipleTops.weekdayCounts.map { $0 }.topDate == nil)
   }
 }

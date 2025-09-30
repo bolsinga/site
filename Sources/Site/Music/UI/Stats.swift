@@ -7,30 +7,6 @@
 
 import Foundation
 
-extension Collection where Element == Concert {
-  fileprivate var stateCounts: [String: Int] {
-    self.compactMap { $0.venue?.location }.map { $0.state }.reduce(
-      into: [String: Int]()
-    ) {
-      let count = $0[$1] ?? 0
-      $0[$1] = count + 1
-    }
-  }
-
-  fileprivate var knownDates: [Date] {
-    self.map { $0.show.date }
-      .filter { !$0.isUnknown }
-      .compactMap { $0.date }
-  }
-
-  fileprivate var venues: [Venue] {
-    Array(self.compactMap { $0.venue }.uniqued())
-  }
-
-  fileprivate var artists: [Artist] {
-    Array(self.flatMap { $0.artists }.uniqued())
-  }
-}
 
 struct Stats {
   let concertsCount: Int

@@ -34,7 +34,7 @@ extension Array where Element == Date {
     }
   }
 
-  // month as int: (month as Date, count for that month)
+  // weekday as int: (month as Date, count for that month)
   func computeWeekdayCounts(_ firstWeekday: Int) -> [(Int, (Date, Int))] {
     let sortedWeekdayCounts = weekdayCounts.sorted { $0.key < $1.key }
     let zeroBasedFirstWeekday = Swift.min(6, Swift.max(0, firstWeekday - 1))

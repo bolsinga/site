@@ -39,16 +39,22 @@ struct WeekdayChart: View {
 
   @State private var firstWeekday = Calendar.autoupdatingCurrent.firstWeekday
 
+  @ViewBuilder private func subtitle(_ weekdayCounts: [(Int, (Date, Int))]) -> some View {
+    if let topDate = weekdayCounts.topDate {
+      Text("Most Shows On \(Date.FormatStyle.dateTime.weekday(.wide).format(topDate))")
+    } else {
+      Text("Multiple Weekdays with Most Shows")
+    }
+  }
+
   var body: some View {
     VStack(alignment: .leading) {
       Text(title)
         .font(.title2).fontWeight(.bold)
 
       let weekdayCounts = dates.computeWeekdayCounts(firstWeekday)
-      Text(
-        "Most Shows On \(Date.FormatStyle.dateTime.weekday(.wide).format(weekdayCounts.topDate))"
-      )
-      .font(.subheadline)
+      subtitle(weekdayCounts)
+        .font(.subheadline)
 
       Chart(weekdayCounts, id: \.0) { item in
         let (date, count) = item.1
@@ -71,6 +77,7 @@ struct WeekdayChart: View {
           AxisValueLabel(format: .dateTime.weekday(format), centered: true)
         }
       }
+      .frame(height: presentation == .default ? nil : 100)
       .onNotification(name: NSLocale.currentLocaleDidChangeNotification) {
         firstWeekday = Calendar.current.firstWeekday
       }
