@@ -26,6 +26,15 @@ struct StateChart: View {
     self.presentation = presentation
   }
 
+  @ViewBuilder private var subtitle : some View {
+    let tops = computeRankings(items: counts.map { $0 }).filter { $0.value.rank == .rank(1) }.map { $0.key }
+    if tops.count == 1, let topState = tops.first {
+      Text("Most Shows In \(topState)")
+    } else {
+      Text("Multiple States with Most Shows")
+    }
+  }
+
   @ViewBuilder private var defaultChart: some View {
     Chart(counts.sorted { $0.value < $1.value }, id: \.key) { item in
       let (state, count) = item
@@ -58,7 +67,7 @@ struct StateChart: View {
       Text(title)
         .font(.title2).fontWeight(.bold)
 
-      Text("Most Shows In \(counts.sorted { $0.value < $1.value}.map { $0.key }.reversed()[0])")
+      subtitle
         .font(.subheadline)
 
       switch presentation {

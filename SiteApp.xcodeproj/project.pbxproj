@@ -375,6 +375,11 @@
 		FEE42FB12E7285E90059ED0F /* OpenVenue.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEE42FB02E7285E90059ED0F /* OpenVenue.swift */; };
 		FEE42FB62E73622B0059ED0F /* AppIntents.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = FEE42FB42E73622B0059ED0F /* AppIntents.stringsdict */; };
 		FEE44E6D2E8B016D0080998E /* MonthTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEE44E6C2E8B016D0080998E /* MonthTests.swift */; };
+		FEE44E712E8B4DC30080998E /* Concert+Stats.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEE44E702E8B4D710080998E /* Concert+Stats.swift */; };
+		FEE44E722E8B4DC40080998E /* Concert+Stats.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEE44E702E8B4D710080998E /* Concert+Stats.swift */; };
+		FEE44E732E8B4DC50080998E /* Concert+Stats.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEE44E702E8B4D710080998E /* Concert+Stats.swift */; };
+		FEE44E752E8B4DE20080998E /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = FEE44E742E8B4DE20080998E /* Algorithms */; };
+		FEE44E772E8B4DE70080998E /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = FEE44E762E8B4DE70080998E /* Algorithms */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -651,6 +656,7 @@
 		FEE42FB02E7285E90059ED0F /* OpenVenue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenVenue.swift; sourceTree = "<group>"; };
 		FEE42FB52E73622B0059ED0F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/AppIntents.stringsdict; sourceTree = "<group>"; };
 		FEE44E6C2E8B016D0080998E /* MonthTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthTests.swift; sourceTree = "<group>"; };
+		FEE44E702E8B4D710080998E /* Concert+Stats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Concert+Stats.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -666,6 +672,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FEE44E752E8B4DE20080998E /* Algorithms in Frameworks */,
 				FEB4895E2E6E6E8F0043057D /* ArgumentParser in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -682,6 +689,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FEE44E772E8B4DE70080998E /* Algorithms in Frameworks */,
 				FEB48A082E6E70E20043057D /* ArgumentParser in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -782,6 +790,7 @@
 				FE57C25B2E713D1300A67D4F /* Concert.swift */,
 				FE57C25C2E713D1300A67D4F /* Concert+FormatStyle.swift */,
 				FE42CBCB2E73BA190064F683 /* Concert+Headliner.swift */,
+				FEE44E702E8B4D710080998E /* Concert+Stats.swift */,
 				FE57C25D2E713D1300A67D4F /* Decade.swift */,
 				FE57C25E2E713D1300A67D4F /* Decade.FormatStyle.swift */,
 				FE57C25F2E713D1300A67D4F /* FirstSet.swift */,
@@ -1133,6 +1142,7 @@
 			name = site_tool;
 			packageProductDependencies = (
 				FEB4895D2E6E6E8F0043057D /* ArgumentParser */,
+				FEE44E742E8B4DE20080998E /* Algorithms */,
 			);
 			productName = site_tool;
 			productReference = FEB486502E6E6D740043057D /* site_tool */;
@@ -1173,6 +1183,7 @@
 			name = next_id;
 			packageProductDependencies = (
 				FEB48A072E6E70E20043057D /* ArgumentParser */,
+				FEE44E762E8B4DE70080998E /* Algorithms */,
 			);
 			productName = next_id;
 			productReference = FEB489BA2E6E70800043057D /* next_id */;
@@ -1310,6 +1321,7 @@
 				FE57C3222E713D1300A67D4F /* Decade.FormatStyle.swift in Sources */,
 				FE57C3232E713D1300A67D4F /* FirstSet.swift in Sources */,
 				FE57C3242E713D1300A67D4F /* LibraryComparator+Concert.swift in Sources */,
+				FEE44E722E8B4DC40080998E /* Concert+Stats.swift in Sources */,
 				FE42CBC62E739F810064F683 /* EntityQuerySort+SortOrder.swift in Sources */,
 				FE57C3252E713D1300A67D4F /* LibraryComparator+Music.swift in Sources */,
 				FE57C3262E713D1300A67D4F /* LibrarySectioner+Music.swift in Sources */,
@@ -1534,6 +1546,7 @@
 				FE57C3EE2E713D1300A67D4F /* Song.swift in Sources */,
 				FE57C3EF2E713D1300A67D4F /* Vault.swift in Sources */,
 				FE42CBCE2E73BA190064F683 /* Concert+Headliner.swift in Sources */,
+				FEE44E712E8B4DC30080998E /* Concert+Stats.swift in Sources */,
 				FE57C3F02E713D1300A67D4F /* Annum+Digest.swift in Sources */,
 				FE57C3F12E713D1300A67D4F /* Vault+NextID.swift in Sources */,
 				FE57C3F22E713D1300A67D4F /* Vault+URL.swift in Sources */,
@@ -1575,6 +1588,7 @@
 				FE57C4082E713D1300A67D4F /* Annum+ParseableFormatStyle.swift in Sources */,
 				FE57C4092E713D1300A67D4F /* AnnumDigest.swift in Sources */,
 				FE57C40A2E713D1300A67D4F /* ArchiveCategory.swift in Sources */,
+				FEE44E732E8B4DC50080998E /* Concert+Stats.swift in Sources */,
 				FE57C40B2E713D1300A67D4F /* ArchiveCategory+FormatStyle.swift in Sources */,
 				FE57C40C2E713D1300A67D4F /* ArchiveCategory+ParseableFormatStyle.swift in Sources */,
 				FE57C40D2E713D1300A67D4F /* ArchiveCategory+URL.swift in Sources */,
@@ -2153,6 +2167,16 @@
 			productName = ArgumentParser;
 		};
 		FEB722BD2E776336006A4DA2 /* Algorithms */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FEB722BC2E776336006A4DA2 /* XCRemoteSwiftPackageReference "swift-algorithms" */;
+			productName = Algorithms;
+		};
+		FEE44E742E8B4DE20080998E /* Algorithms */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FEB722BC2E776336006A4DA2 /* XCRemoteSwiftPackageReference "swift-algorithms" */;
+			productName = Algorithms;
+		};
+		FEE44E762E8B4DE70080998E /* Algorithms */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = FEB722BC2E776336006A4DA2 /* XCRemoteSwiftPackageReference "swift-algorithms" */;
 			productName = Algorithms;
