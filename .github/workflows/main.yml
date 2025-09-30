@@ -35,7 +35,7 @@ jobs:
     - name: Development Team
       env:
         TEAM: ${{ secrets.DEVELOPMENT_TEAM }}
-      run: echo "$TEAM" >> howdy.txt && cat howdy.txt
+      run: pwd && echo "$TEAM" >> howdy.txt && cat howdy.txt
     - name: Build / Test
       run: xcodebuild test -verbose -skipPackagePluginValidation -scheme SiteApp -destination "platform=iOS Simulator,name=iPhone 17,OS=26.0"
     - name: Build iOS / macOS / tvOS
