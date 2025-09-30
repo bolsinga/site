@@ -32,6 +32,10 @@ jobs:
       run: xcodebuild -showsdks
     - name: Show Destinations
       run: xcodebuild -scheme SiteApp -showdestinations
+    - name: Development Team
+      env:
+        DEVELOPMENT_TEAM: ${{ secrets.DEVELOPMENT_TEAM }}
+      run: echo "DEVELOPMENT_TEAM = $DEVELOPMENT_TEAM" >> DevelopmentTeam.xcconfig
     - name: Build / Test
       run: xcodebuild test -verbose -skipPackagePluginValidation -scheme SiteApp -destination "platform=macOS,arch=arm64"
     - name: Build iOS / macOS / tvOS
