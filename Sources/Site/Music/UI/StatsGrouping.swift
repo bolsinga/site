@@ -11,6 +11,9 @@ struct StatsGrouping: View {
   @Environment(\.statsThreshold) private var statsThreshold: Int
 
   let stats: Stats
+  let weekdaysTitleLocalizedString: LocalizedStringResource
+  let monthsTitleLocalizedString: LocalizedStringResource
+  let statesTitleLocalizedString: LocalizedStringResource
 
   @State private var showWeekdays = false
   @State private var showMonths = false
@@ -90,17 +93,17 @@ struct StatsGrouping: View {
         case .weekday:
           Button("Weekdays") { showWeekdays = true }
             .dismissibleSheet(isPresented: $showWeekdays) {
-              WeekdayChart(dates: stats.dates, title: stats.weekdaysTitleLocalizedString)
+              WeekdayChart(dates: stats.dates, title: weekdaysTitleLocalizedString)
             }
         case .month:
           Button("Months") { showMonths = true }
             .dismissibleSheet(isPresented: $showMonths) {
-              MonthChart(dates: stats.dates, title: stats.monthsTitleLocalizedString)
+              MonthChart(dates: stats.dates, title: monthsTitleLocalizedString)
             }
         case .state:
           Button("States") { showStates = true }
             .dismissibleSheet(isPresented: $showStates) {
-              StateChart(counts: stats.stateCounts, title: stats.statesTitleLocalizedString)
+              StateChart(counts: stats.stateCounts, title: statesTitleLocalizedString)
             }
         }
       }
@@ -110,24 +113,24 @@ struct StatsGrouping: View {
 
 #Preview("Concerts", traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
-  StatsGrouping(stats: Stats(concerts: model.vault.concerts))
+  StatsGrouping(concerts: model.vault.concerts)
     .padding()
 }
 
 #Preview("Artists", traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
-  StatsGrouping(stats: Stats(artistDigest: model.vault.artistDigestMap["ar692"]!))
+  StatsGrouping(artistDigest: model.vault.artistDigestMap["ar692"]!)
     .padding()
 }
 
 #Preview("Venues", traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
-  StatsGrouping(stats: Stats(venueDigest: model.vault.venueDigestMap["v103"]!))
+  StatsGrouping(venueDigest: model.vault.venueDigestMap["v103"]!)
     .padding()
 }
 
 #Preview("Years", traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
-  StatsGrouping(stats: Stats(annumDigest: model.vault.annumDigestMap[.year(2003)]!))
+  StatsGrouping(annumDigest: model.vault.annumDigestMap[.year(2003)]!)
     .padding()
 }

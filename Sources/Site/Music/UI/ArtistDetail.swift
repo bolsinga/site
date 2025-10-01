@@ -24,7 +24,7 @@ struct ArtistDetail: View {
     if !digest.concerts.isEmpty {
       Section(header: Text(ArchiveCategory.stats.localizedString)) {
         firstSetElement
-        StatsGrouping(stats: Stats(artistDigest: digest))
+        StatsGrouping(artistDigest: digest)
       }
     }
   }
