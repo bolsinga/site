@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  build_with_signing:
     runs-on: macos-26
 
     steps:
