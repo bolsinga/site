@@ -357,7 +357,7 @@
 		FE57C6AF2E71450300A67D4F /* SiteApp.icon in Resources */ = {isa = PBXBuildFile; fileRef = FE57C6AE2E71450300A67D4F /* SiteApp.icon */; };
 		FE8F85912E7B7409006AF701 /* Stats.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE8F85902E7B7409006AF701 /* Stats.swift */; };
 		FE8F85932E7E0A5C006AF701 /* DismissibleSheetModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE8F85922E7E0A5C006AF701 /* DismissibleSheetModifier.swift */; };
-		FE8F85FE2E81E2F9006AF701 /* Stats+Digest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE8F85FD2E81E2F9006AF701 /* Stats+Digest.swift */; };
+		FE8F85FE2E81E2F9006AF701 /* StatsGrouping+Digest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE8F85FD2E81E2F9006AF701 /* StatsGrouping+Digest.swift */; };
 		FE91B1D52E8739B500EBE477 /* TopDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE91B1D42E8739B500EBE477 /* TopDate.swift */; };
 		FE91B1D72E8AD95500EBE477 /* Ranking+Compute.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE91B1D62E8AD95500EBE477 /* Ranking+Compute.swift */; };
 		FE91B1D82E8AD95500EBE477 /* Ranking+Compute.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE91B1D62E8AD95500EBE477 /* Ranking+Compute.swift */; };
@@ -638,7 +638,7 @@
 		FE57C6AE2E71450300A67D4F /* SiteApp.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = SiteApp.icon; sourceTree = "<group>"; };
 		FE8F85902E7B7409006AF701 /* Stats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stats.swift; sourceTree = "<group>"; };
 		FE8F85922E7E0A5C006AF701 /* DismissibleSheetModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissibleSheetModifier.swift; sourceTree = "<group>"; };
-		FE8F85FD2E81E2F9006AF701 /* Stats+Digest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Stats+Digest.swift"; sourceTree = "<group>"; };
+		FE8F85FD2E81E2F9006AF701 /* StatsGrouping+Digest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StatsGrouping+Digest.swift"; sourceTree = "<group>"; };
 		FE91B1D42E8739B500EBE477 /* TopDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopDate.swift; sourceTree = "<group>"; };
 		FE91B1D62E8AD95500EBE477 /* Ranking+Compute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ranking+Compute.swift"; sourceTree = "<group>"; };
 		FE91B1DA2E8AD9F700EBE477 /* RankingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankingTests.swift; sourceTree = "<group>"; };
@@ -896,9 +896,9 @@
 				FE57C2B52E713D1300A67D4F /* SortModifierToolbarContent.swift */,
 				FE57C2B62E713D1300A67D4F /* StateChart.swift */,
 				FE8F85902E7B7409006AF701 /* Stats.swift */,
-				FE8F85FD2E81E2F9006AF701 /* Stats+Digest.swift */,
 				FE57C2B72E713D1300A67D4F /* StatsCategory.swift */,
 				FE57C2B82E713D1300A67D4F /* StatsGrouping.swift */,
+				FE8F85FD2E81E2F9006AF701 /* StatsGrouping+Digest.swift */,
 				FE57C2B92E713D1300A67D4F /* StatsSummary.swift */,
 				FE57C2BA2E713D1300A67D4F /* StatsThreshold.swift */,
 				FE57C2BC2E713D1300A67D4F /* TodayList.swift */,
@@ -1342,7 +1342,7 @@
 				FE57C3332E713D1300A67D4F /* PathRestorable.swift in Sources */,
 				FECE2D2A2E81F55400A56030 /* Date+MonthCounts.swift in Sources */,
 				FE57C3342E713D1300A67D4F /* Rank.swift in Sources */,
-				FE8F85FE2E81E2F9006AF701 /* Stats+Digest.swift in Sources */,
+				FE8F85FE2E81E2F9006AF701 /* StatsGrouping+Digest.swift in Sources */,
 				FE57C3352E713D1300A67D4F /* Ranking.swift in Sources */,
 				FE57C3362E713D1300A67D4F /* Relation.swift in Sources */,
 				FE57C3372E713D1300A67D4F /* Show.swift in Sources */,

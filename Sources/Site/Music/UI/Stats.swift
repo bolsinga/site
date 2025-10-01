@@ -18,9 +18,6 @@ struct Stats {
   let artistVenuesRanking: Ranking?
   let venueArtistsRanking: Ranking?
   let displayArchiveCategoryCounts: Bool  // Basically do not want this at the ArchiveCategory.stats.
-  let weekdaysTitleLocalizedString: LocalizedStringResource
-  let monthsTitleLocalizedString: LocalizedStringResource
-  let statesTitleLocalizedString: LocalizedStringResource
   let alwaysShowVenuesArtistsStats: Bool
 
   internal init(
@@ -31,9 +28,6 @@ struct Stats {
     artistVenuesRanking: Ranking? = nil,
     venueArtistsRanking: Ranking? = nil,
     displayArchiveCategoryCounts: Bool = true,
-    weekdaysTitleLocalizedString: LocalizedStringResource,
-    monthsTitleLocalizedString: LocalizedStringResource,
-    statesTitleLocalizedString: LocalizedStringResource,
     alwaysShowVenuesArtistsStats: Bool = false
   ) {
     self.concertsCount = concerts.count
@@ -47,9 +41,6 @@ struct Stats {
     self.artistVenuesRanking = artistVenuesRanking
     self.venueArtistsRanking = venueArtistsRanking
     self.displayArchiveCategoryCounts = displayArchiveCategoryCounts
-    self.weekdaysTitleLocalizedString = weekdaysTitleLocalizedString
-    self.monthsTitleLocalizedString = monthsTitleLocalizedString
-    self.statesTitleLocalizedString = statesTitleLocalizedString
     self.alwaysShowVenuesArtistsStats = alwaysShowVenuesArtistsStats
   }
 

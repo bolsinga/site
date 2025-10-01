@@ -15,7 +15,7 @@ struct YearDetail: View {
   @ViewBuilder private var statsElement: some View {
     if !digest.concerts.isEmpty {
       Section(header: Text(ArchiveCategory.stats.localizedString)) {
-        StatsGrouping(stats: Stats(annumDigest: digest))
+        StatsGrouping(annumDigest: digest)
       }
     }
   }
