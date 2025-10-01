@@ -26,8 +26,10 @@ struct StateChart: View {
     self.presentation = presentation
   }
 
-  @ViewBuilder private var subtitle : some View {
-    let tops = computeRankings(items: counts.map { $0 }).filter { $0.value.rank == .rank(1) }.map { $0.key }
+  @ViewBuilder private var subtitle: some View {
+    let tops = computeRankings(items: counts.map { $0 }).filter { $0.value.rank == .rank(1) }.map {
+      $0.key
+    }
     if tops.count == 1, let topState = tops.first {
       Text("Most Shows In \(topState)")
     } else {

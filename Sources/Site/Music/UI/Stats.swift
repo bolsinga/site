@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 struct Stats {
   let concertsCount: Int
   let venueCount: Int

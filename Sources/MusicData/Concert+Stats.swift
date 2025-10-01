@@ -5,8 +5,8 @@
 //  Created by Greg Bolsinga on 9/29/25.
 //
 
-import Foundation
 import Algorithms
+import Foundation
 
 extension Collection where Element == Concert {
   var stateCounts: [String: Int] {
