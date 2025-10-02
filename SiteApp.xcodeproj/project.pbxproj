@@ -380,6 +380,7 @@
 		FEE44E732E8B4DC50080998E /* Concert+Stats.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEE44E702E8B4D710080998E /* Concert+Stats.swift */; };
 		FEE44E752E8B4DE20080998E /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = FEE44E742E8B4DE20080998E /* Algorithms */; };
 		FEE44E772E8B4DE70080998E /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = FEE44E762E8B4DE70080998E /* Algorithms */; };
+		FEE44E7B2E8DF9600080998E /* Stats+Digest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEE44E7A2E8DF9600080998E /* Stats+Digest.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -657,6 +658,7 @@
 		FEE42FB52E73622B0059ED0F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/AppIntents.stringsdict; sourceTree = "<group>"; };
 		FEE44E6C2E8B016D0080998E /* MonthTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthTests.swift; sourceTree = "<group>"; };
 		FEE44E702E8B4D710080998E /* Concert+Stats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Concert+Stats.swift"; sourceTree = "<group>"; };
+		FEE44E7A2E8DF9600080998E /* Stats+Digest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Stats+Digest.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -896,6 +898,7 @@
 				FE57C2B52E713D1300A67D4F /* SortModifierToolbarContent.swift */,
 				FE57C2B62E713D1300A67D4F /* StateChart.swift */,
 				FE8F85902E7B7409006AF701 /* Stats.swift */,
+				FEE44E7A2E8DF9600080998E /* Stats+Digest.swift */,
 				FE57C2B72E713D1300A67D4F /* StatsCategory.swift */,
 				FE57C2B82E713D1300A67D4F /* StatsGrouping.swift */,
 				FE8F85FD2E81E2F9006AF701 /* StatsGrouping+Digest.swift */,
@@ -1309,6 +1312,7 @@
 				FE57C3172E713D1300A67D4F /* ArchivePath+ParseableFormatStyle.swift in Sources */,
 				FEE42FA92E72600E0059ED0F /* SiteShortcuts.swift in Sources */,
 				FE57C3182E713D1300A67D4F /* ArchivePath+PathRestorable.swift in Sources */,
+				FEE44E7B2E8DF9600080998E /* Stats+Digest.swift in Sources */,
 				FE57C3192E713D1300A67D4F /* ArchivePath+URL.swift in Sources */,
 				FE57C31A2E713D1300A67D4F /* Artist.swift in Sources */,
 				FE57C31B2E713D1300A67D4F /* Artist+Digest.swift in Sources */,
