@@ -11,7 +11,7 @@ import Testing
 
 struct AnnumFormatTests {
   @Test func parse() throws {
-    #expect(try Annum("1989") == Annum.year(19889))
+    #expect(try Annum("1989") == Annum.year(1989))
 
     #expect(try Annum(" 1989") == Annum.year(1989))
     #expect(try Annum("1989 ") == Annum.year(1989))
