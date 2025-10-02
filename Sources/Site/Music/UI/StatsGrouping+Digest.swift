@@ -10,10 +10,7 @@ import Foundation
 extension StatsGrouping {
   init(artistDigest digest: ArtistDigest) {
     self.init(
-      stats: Stats(
-        concerts: digest.concerts, shouldCalculateArtistCount: false,
-        yearsSpanRanking: digest.spanRank, showRanking: digest.showRank,
-        artistVenuesRanking: digest.venueRank),
+      stats: Stats(artistDigest: digest),
       weekdaysTitleLocalizedString: "Weekdays with \(digest.name)",
       monthsTitleLocalizedString: "Months with \(digest.name)",
       statesTitleLocalizedString: "States with Shows with \(digest.name)"
@@ -22,9 +19,7 @@ extension StatsGrouping {
 
   init(venueDigest digest: VenueDigest) {
     self.init(
-      stats: Stats(
-        concerts: digest.concerts, yearsSpanRanking: digest.spanRank, showRanking: digest.showRank,
-        venueArtistsRanking: digest.venueArtistRank),
+      stats: Stats(venueDigest: digest),
       weekdaysTitleLocalizedString: "Weekdays at \(digest.name)",
       monthsTitleLocalizedString: "Months at \(digest.name)",
       statesTitleLocalizedString: "States"  // A Venue is only ever in one state, so this is redundant.
@@ -33,10 +28,7 @@ extension StatsGrouping {
 
   init(annumDigest digest: AnnumDigest) {
     self.init(
-      stats: Stats(
-        concerts: digest.concerts, shouldCalculateArtistCount: true, showRanking: digest.showRank,
-        artistVenuesRanking: digest.venueRank, venueArtistsRanking: digest.artistRank,
-        alwaysShowVenuesArtistsStats: true),
+      stats: Stats(annumDigest: digest),
       weekdaysTitleLocalizedString: "Weekdays in \(digest.annum.formatted(.year))",
       monthsTitleLocalizedString: "Months in \(digest.annum.formatted(.year))",
       statesTitleLocalizedString: "States visited in \(digest.annum.formatted(.year))",
@@ -45,7 +37,7 @@ extension StatsGrouping {
 
   init(concerts: [Concert]) {
     self.init(
-      stats: Stats(concerts: concerts, displayArchiveCategoryCounts: true),
+      stats: Stats(concerts: concerts),
       weekdaysTitleLocalizedString: "All Weekdays with Shows",
       monthsTitleLocalizedString: "All Months with Shows",
       statesTitleLocalizedString: "All States with Shows"
