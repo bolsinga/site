@@ -381,6 +381,8 @@
 		FEE44E752E8B4DE20080998E /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = FEE44E742E8B4DE20080998E /* Algorithms */; };
 		FEE44E772E8B4DE70080998E /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = FEE44E762E8B4DE70080998E /* Algorithms */; };
 		FEE44E7B2E8DF9600080998E /* Stats+Digest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEE44E7A2E8DF9600080998E /* Stats+Digest.swift */; };
+		FEE44E7D2E9065580080998E /* StatsTitles.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEE44E7C2E9065580080998E /* StatsTitles.swift */; };
+		FEE44E7F2E9066900080998E /* StatsTitles+Digest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEE44E7E2E9066900080998E /* StatsTitles+Digest.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -659,6 +661,8 @@
 		FEE44E6C2E8B016D0080998E /* MonthTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthTests.swift; sourceTree = "<group>"; };
 		FEE44E702E8B4D710080998E /* Concert+Stats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Concert+Stats.swift"; sourceTree = "<group>"; };
 		FEE44E7A2E8DF9600080998E /* Stats+Digest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Stats+Digest.swift"; sourceTree = "<group>"; };
+		FEE44E7C2E9065580080998E /* StatsTitles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsTitles.swift; sourceTree = "<group>"; };
+		FEE44E7E2E9066900080998E /* StatsTitles+Digest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StatsTitles+Digest.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -904,6 +908,8 @@
 				FE8F85FD2E81E2F9006AF701 /* StatsGrouping+Digest.swift */,
 				FE57C2B92E713D1300A67D4F /* StatsSummary.swift */,
 				FE57C2BA2E713D1300A67D4F /* StatsThreshold.swift */,
+				FEE44E7C2E9065580080998E /* StatsTitles.swift */,
+				FEE44E7E2E9066900080998E /* StatsTitles+Digest.swift */,
 				FE57C2BC2E713D1300A67D4F /* TodayList.swift */,
 				FE57C2BD2E713D1300A67D4F /* TodaySummary.swift */,
 				FE57C2BE2E713D1300A67D4F /* VaultPreviewModifier.swift */,
@@ -1344,11 +1350,13 @@
 				FE57C3312E713D1300A67D4F /* PartialDate+FormatStyle.swift in Sources */,
 				FE57C3322E713D1300A67D4F /* PartialDate+Span.swift in Sources */,
 				FE57C3332E713D1300A67D4F /* PathRestorable.swift in Sources */,
+				FEE44E7F2E9066900080998E /* StatsTitles+Digest.swift in Sources */,
 				FECE2D2A2E81F55400A56030 /* Date+MonthCounts.swift in Sources */,
 				FE57C3342E713D1300A67D4F /* Rank.swift in Sources */,
 				FE8F85FE2E81E2F9006AF701 /* StatsGrouping+Digest.swift in Sources */,
 				FE57C3352E713D1300A67D4F /* Ranking.swift in Sources */,
 				FE57C3362E713D1300A67D4F /* Relation.swift in Sources */,
+				FEE44E7D2E9065580080998E /* StatsTitles.swift in Sources */,
 				FE57C3372E713D1300A67D4F /* Show.swift in Sources */,
 				FE57C3382E713D1300A67D4F /* Show+Concert.swift in Sources */,
 				FE57C3392E713D1300A67D4F /* Song.swift in Sources */,

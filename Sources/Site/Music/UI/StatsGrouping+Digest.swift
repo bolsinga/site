@@ -9,38 +9,18 @@ import Foundation
 
 extension StatsGrouping {
   init(artistDigest digest: ArtistDigest) {
-    self.init(
-      stats: Stats(artistDigest: digest),
-      weekdaysTitleLocalizedString: "Weekdays with \(digest.name)",
-      monthsTitleLocalizedString: "Months with \(digest.name)",
-      statesTitleLocalizedString: "States with Shows with \(digest.name)"
-    )
+    self.init(stats: Stats(artistDigest: digest), titles: StatsTitles(artistDigest: digest))
   }
 
   init(venueDigest digest: VenueDigest) {
-    self.init(
-      stats: Stats(venueDigest: digest),
-      weekdaysTitleLocalizedString: "Weekdays at \(digest.name)",
-      monthsTitleLocalizedString: "Months at \(digest.name)",
-      statesTitleLocalizedString: "States"  // A Venue is only ever in one state, so this is redundant.
-    )
+    self.init(stats: Stats(venueDigest: digest), titles: StatsTitles(venueDigest: digest))
   }
 
   init(annumDigest digest: AnnumDigest) {
-    self.init(
-      stats: Stats(annumDigest: digest),
-      weekdaysTitleLocalizedString: "Weekdays in \(digest.annum.formatted(.year))",
-      monthsTitleLocalizedString: "Months in \(digest.annum.formatted(.year))",
-      statesTitleLocalizedString: "States visited in \(digest.annum.formatted(.year))",
-    )
+    self.init(stats: Stats(annumDigest: digest), titles: StatsTitles(annumDigest: digest))
   }
 
   init(concerts: [Concert]) {
-    self.init(
-      stats: Stats(concerts: concerts),
-      weekdaysTitleLocalizedString: "All Weekdays with Shows",
-      monthsTitleLocalizedString: "All Months with Shows",
-      statesTitleLocalizedString: "All States with Shows"
-    )
+    self.init(stats: Stats(concerts: concerts), titles: StatsTitles(concerts: concerts))
   }
 }
