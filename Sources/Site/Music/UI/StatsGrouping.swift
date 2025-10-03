@@ -11,9 +11,7 @@ struct StatsGrouping: View {
   @Environment(\.statsThreshold) private var statsThreshold: Int
 
   let stats: Stats
-  let weekdaysTitleLocalizedString: LocalizedStringResource
-  let monthsTitleLocalizedString: LocalizedStringResource
-  let statesTitleLocalizedString: LocalizedStringResource
+  let titles: StatsTitles
 
   @State private var showWeekdays = false
   @State private var showMonths = false
@@ -91,19 +89,19 @@ struct StatsGrouping: View {
         case .artists:
           artistsElement
         case .weekday:
-          Button("Weekdays") { showWeekdays = true }
+          Button(StatsTitles.generic.weekday) { showWeekdays = true }
             .dismissibleSheet(isPresented: $showWeekdays) {
-              WeekdayChart(dates: stats.dates, title: weekdaysTitleLocalizedString)
+              WeekdayChart(dates: stats.dates, title: titles.weekday)
             }
         case .month:
-          Button("Months") { showMonths = true }
+          Button(StatsTitles.generic.month) { showMonths = true }
             .dismissibleSheet(isPresented: $showMonths) {
-              MonthChart(dates: stats.dates, title: monthsTitleLocalizedString)
+              MonthChart(dates: stats.dates, title: titles.month)
             }
         case .state:
-          Button("States") { showStates = true }
+          Button(StatsTitles.generic.state) { showStates = true }
             .dismissibleSheet(isPresented: $showStates) {
-              StateChart(counts: stats.stateCounts, title: statesTitleLocalizedString)
+              StateChart(counts: stats.stateCounts, title: titles.state)
             }
         }
       }
