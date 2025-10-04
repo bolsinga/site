@@ -8,6 +8,18 @@
 import Charts
 import SwiftUI
 
+extension ChartTitle {
+  internal init(title: LocalizedStringResource, presentation: MonthChart.Presentation) {
+    self.title = title
+    switch presentation {
+    case .default:
+      self.alignment = .center
+    case .compact:
+      self.alignment = .default
+    }
+  }
+}
+
 struct MonthChart: View {
   enum Presentation {
     case `default`
@@ -45,12 +57,29 @@ struct MonthChart: View {
     }
   }
 
+  @ViewBuilder private var titleText: some View {
+    Text(title)
+      .font(.title2).fontWeight(.bold)
+  }
+
+  @ViewBuilder private var titleView: some View {
+    switch presentation {
+    case .default:
+      HStack {
+        Spacer()
+        titleText
+        Spacer()
+      }
+    case .compact:
+      titleText
+    }
+  }
+
   var body: some View {
     VStack(alignment: .leading) {
       let monthCounts = dates.monthCounts
 
-      Text(title)
-        .font(.title2).fontWeight(.bold)
+      ChartTitle(title: title, presentation: presentation)
 
       subtitle(monthCounts)
         .font(.subheadline)

@@ -383,6 +383,7 @@
 		FEE44E7B2E8DF9600080998E /* Stats+Digest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEE44E7A2E8DF9600080998E /* Stats+Digest.swift */; };
 		FEE44E7D2E9065580080998E /* StatsTitles.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEE44E7C2E9065580080998E /* StatsTitles.swift */; };
 		FEE44E7F2E9066900080998E /* StatsTitles+Digest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEE44E7E2E9066900080998E /* StatsTitles+Digest.swift */; };
+		FEE44E812E9184C80080998E /* ChartTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEE44E802E9184C80080998E /* ChartTitle.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -663,6 +664,7 @@
 		FEE44E7A2E8DF9600080998E /* Stats+Digest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Stats+Digest.swift"; sourceTree = "<group>"; };
 		FEE44E7C2E9065580080998E /* StatsTitles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsTitles.swift; sourceTree = "<group>"; };
 		FEE44E7E2E9066900080998E /* StatsTitles+Digest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StatsTitles+Digest.swift"; sourceTree = "<group>"; };
+		FEE44E802E9184C80080998E /* ChartTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartTitle.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -872,6 +874,7 @@
 				FE57C2992E713D1300A67D4F /* ArtistList.swift */,
 				FE57C29A2E713D1300A67D4F /* ArtistsSummary.swift */,
 				FE57C29B2E713D1300A67D4F /* Bundle+AppIcon.swift */,
+				FEE44E802E9184C80080998E /* ChartTitle.swift */,
 				FE57C29C2E713D1300A67D4F /* ConcertBlurb.swift */,
 				FE57C29D2E713D1300A67D4F /* DaysShowsSummary.swift */,
 				FE8F85922E7E0A5C006AF701 /* DismissibleSheetModifier.swift */,
@@ -1307,6 +1310,7 @@
 				FE57C30D2E713D1300A67D4F /* Annum+ParseableFormatStyle.swift in Sources */,
 				FE42CBCC2E73BA190064F683 /* Concert+Headliner.swift in Sources */,
 				FE57C30E2E713D1300A67D4F /* AnnumDigest.swift in Sources */,
+				FEE44E812E9184C80080998E /* ChartTitle.swift in Sources */,
 				FE57C30F2E713D1300A67D4F /* ArchiveCategory.swift in Sources */,
 				FE57C3102E713D1300A67D4F /* ArchiveCategory+FormatStyle.swift in Sources */,
 				FE57C3112E713D1300A67D4F /* ArchiveCategory+ParseableFormatStyle.swift in Sources */,
