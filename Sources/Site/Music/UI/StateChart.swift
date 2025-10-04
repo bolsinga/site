@@ -8,6 +8,18 @@
 import Charts
 import SwiftUI
 
+extension ChartTitle {
+  internal init(title: LocalizedStringResource, presentation: StateChart.Presentation) {
+    self.title = title
+    switch presentation {
+    case .default:
+      self.alignment = .center
+    case .compact:
+      self.alignment = .default
+    }
+  }
+}
+
 struct StateChart: View {
   enum Presentation {
     case `default`
@@ -66,8 +78,7 @@ struct StateChart: View {
 
   var body: some View {
     VStack(alignment: .leading) {
-      Text(title)
-        .font(.title2).fontWeight(.bold)
+      ChartTitle(title: title, presentation: presentation)
 
       subtitle
         .font(.subheadline)
