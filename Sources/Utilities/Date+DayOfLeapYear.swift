@@ -35,16 +35,44 @@ extension Int {
     return dateComponents
   }
 
+  private var leapYeapDayRange: Range<Int>? {
+    guard let leapYearDate = leapYearComponents.date else { return nil }
+    return Calendar.autoupdatingCurrent.range(of: .day, in: .year, for: leapYearDate)
+  }
+
   private var isValidDayOfLeapYear: Bool {
-    guard let leapYearDate = leapYearComponents.date else { return false }
-    guard let range = Calendar.autoupdatingCurrent.range(of: .day, in: .year, for: leapYearDate)
-    else { return false }
-    return range.contains(self)
+    guard let leapYeapDayRange = leapYeapDayRange else { return false }
+    return leapYeapDayRange.contains(self)
   }
 
   var dayOfLeapYearFormatted: String {
     guard isValidDayOfLeapYear else { return "" }
     guard let dayOfLeapYearDate = dayOfLeapYearComponents.date else { return "" }
     return dayOfLeapYearDate.formatted(.dateTime.month(.defaultDigits).day())
+  }
+
+  private func offsetDayOfLeapYear(by offset: Int) -> Int {
+    guard let leapYeapDayRange = leapYeapDayRange else { return -1 }
+
+    let newDayOfLeapYear = self + offset
+
+    if newDayOfLeapYear < leapYeapDayRange.lowerBound {
+      return leapYeapDayRange.count
+    }
+    if newDayOfLeapYear >= leapYeapDayRange.upperBound {
+      return 1
+    }
+
+    return newDayOfLeapYear
+  }
+
+  var nextDayOfLeapYear: Int {
+    guard isValidDayOfLeapYear else { return -1 }
+    return offsetDayOfLeapYear(by: 1)
+  }
+
+  var previousDayOfLeapYear: Int {
+    guard isValidDayOfLeapYear else { return -1 }
+    return offsetDayOfLeapYear(by: -1)
   }
 }

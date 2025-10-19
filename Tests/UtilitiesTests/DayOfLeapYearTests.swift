@@ -86,4 +86,20 @@ struct DayOfLeapYearTests {
     #expect(61.dayOfLeapYearFormatted == "3/1")
     #expect(366.dayOfLeapYearFormatted == "12/31")
   }
+
+  @Test func next() async throws {
+    #expect(0.nextDayOfLeapYear == -1)
+    #expect(1.nextDayOfLeapYear == 2)
+    #expect(365.nextDayOfLeapYear == 366)
+    #expect(366.nextDayOfLeapYear == 1)
+    #expect(367.nextDayOfLeapYear == -1)
+  }
+
+  @Test func previous() async throws {
+    #expect(0.previousDayOfLeapYear == -1)
+    #expect(1.previousDayOfLeapYear == 366)
+    #expect(365.previousDayOfLeapYear == 364)
+    #expect(366.previousDayOfLeapYear == 365)
+    #expect(367.previousDayOfLeapYear == -1)
+  }
 }
