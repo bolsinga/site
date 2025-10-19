@@ -28,10 +28,9 @@ struct DaysShowsSummary: View {
   }
 }
 
-#Preview("Ordinal", traits: .vaultModel, .nearbyModel) {
-  DaysShowsSummary(mode: .constant(.ordinal))
-}
-
-#Preview("Grouped", traits: .vaultModel, .nearbyModel) {
-  DaysShowsSummary(mode: .constant(.grouped))
+#Preview(traits: .vaultModel, .nearbyModel) {
+  @Previewable @State var showsMode = ShowsMode.ordinal
+  NavigationStack {
+    DaysShowsSummary(mode: $showsMode)
+  }
 }

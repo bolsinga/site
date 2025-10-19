@@ -16,5 +16,7 @@ struct TodaySummary: View {
 }
 
 #Preview(traits: .vaultModel) {
-  TodaySummary()
+  NavigationStack {
+    TodaySummary()
+  }
 }
