@@ -8,16 +8,8 @@
 import SwiftUI
 
 extension Date {
-  private var dayOfYear: Int {
-    Calendar.autoupdatingCurrent.component(.dayOfYear, from: self)
-  }
-
-  private func isSameDayOfYear(as date: Date) -> Bool {
-    self.dayOfYear == date.dayOfYear
-  }
-
   fileprivate var isToday: Bool {
-    isSameDayOfYear(as: .now)
+    self.dayMonth == Date.now.dayMonth
   }
 }
 
