@@ -11,7 +11,7 @@ struct TodaySummary: View {
   @Environment(VaultModel.self) var model
 
   var body: some View {
-    TodayList(concerts: model.todayConcerts)
+    DayList(concerts: model.todayConcerts, date: .now)
   }
 }
 
