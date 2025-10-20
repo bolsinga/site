@@ -24,13 +24,10 @@ enum LocationAuthorization {
 @Observable public final class VaultModel {
   public let vault: Vault
 
-  internal var todayConcerts: [Concert] = []
   private var venuePlacemarks: [Venue.ID: Placemark] = [:]
   private var currentLocation: CLLocation?
   internal var locationAuthorization = LocationAuthorization.allowed
 
-  @ObservationIgnored
-  private var dayChangeTask: Task<Void, Never>?
   @ObservationIgnored
   private var geocodeTask: Task<Void, Never>?
   @ObservationIgnored
@@ -54,15 +51,9 @@ enum LocationAuthorization {
 
     self.vault = vault
 
-    updateTodayConcerts()
-
     guard executeAsynchronousTasks else {
       Logger.vaultModel.log("Ignoring Asynchronous Tasks")
       return
-    }
-
-    dayChangeTask = Task {
-      await self.monitorDayChanges()
     }
 
     geocodeTask = Task {
@@ -75,30 +66,13 @@ enum LocationAuthorization {
   }
 
   func cancelTasks() {
-    dayChangeTask?.cancel()
     geocodeTask?.cancel()
     locationTask?.cancel()
   }
 
   @MainActor
-  private func updateTodayConcerts() {
-    todayConcerts = vault.concerts(on: Date.now)
-
-    Logger.vaultModel.log("Today Count: \(self.todayConcerts.count, privacy: .public)")
-  }
-
-  @MainActor
-  private func monitorDayChanges() async {
-    Logger.vaultModel.log("start day monitoring")
-    defer {
-      Logger.vaultModel.log("end day monitoring")
-    }
-    for await _ in NotificationCenter.default.notifications(named: .NSCalendarDayChanged).map({
-      $0.name
-    }) {
-      Logger.vaultModel.log("day changed")
-      updateTodayConcerts()
-    }
+  var todayConcerts: [Concert] {
+    vault.concerts(on: .now)
   }
 
   @MainActor
