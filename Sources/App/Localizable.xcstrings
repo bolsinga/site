@@ -345,7 +345,10 @@
     "Nearby Distance" : {
 
     },
-    "No Shows On This Day" : {
+    "No Shows" : {
+
+    },
+    "No Shows Today" : {
 
     },
     "Nothing is nearby. Disable the Location Filter or increase the nearby distance filter." : {
@@ -355,9 +358,6 @@
 
     },
     "Numeric" : {
-
-    },
-    "On This Day" : {
 
     },
     "On This Day: %@" : {
