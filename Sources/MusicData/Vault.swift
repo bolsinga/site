@@ -77,17 +77,16 @@ public struct Vault: Sendable {
       guard !$1.show.date.isPartiallyUnknown else { return }
       guard let date = $1.show.date.date else { return }
 
-      let dayOfYear = Calendar.autoupdatingCurrent.component(.dayOfYear, from: date)
+      let dayMonth = date.dayMonth
 
-      var arr = $0[dayOfYear] ?? []
+      var arr = $0[dayMonth] ?? []
       arr.append($1.id)
-      $0[dayOfYear] = arr
+      $0[dayMonth] = arr
     }
   }
 
   public func concerts(on date: Date) -> [Concert] {
-    let concertIDs =
-      concertDayMap[Calendar.autoupdatingCurrent.component(.dayOfYear, from: date)] ?? []
+    let concertIDs = concertDayMap[date.dayMonth] ?? []
     return concertIDs.compactMap { concertMap[$0] }.sorted { comparator.compare(lhs: $0, rhs: $1) }
   }
 
