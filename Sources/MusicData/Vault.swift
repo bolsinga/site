@@ -25,6 +25,8 @@ public struct Vault: Sendable {
 
   private let categoryURLLookup: [ArchiveCategory: URL]
 
+  private let concertDayMap: [Int: [Concert.ID]]
+
   public init(music: Music, url: URL) async {
     async let asyncLookup = await Lookup(music: music)
     async let asyncComparator = await LibraryComparator(music: music)
@@ -70,17 +72,23 @@ public struct Vault: Sendable {
       guard let url = $1.url(rootURL: url) else { return }
       $0[$1] = url
     }
+
+    self.concertDayMap = self.concerts.reduce(into: [Int: [Concert.ID]]()) {
+      guard !$1.show.date.isPartiallyUnknown else { return }
+      guard let date = $1.show.date.date else { return }
+
+      let dayOfYear = Calendar.autoupdatingCurrent.component(.dayOfYear, from: date)
+
+      var arr = $0[dayOfYear] ?? []
+      arr.append($1.id)
+      $0[dayOfYear] = arr
+    }
   }
 
   public func concerts(on date: Date) -> [Concert] {
-    return concerts.filter { $0.show.date.day != nil }
-      .filter { $0.show.date.month != nil }
-      .filter {
-        Calendar.autoupdatingCurrent.date(
-          date,
-          matchesComponents: DateComponents(month: $0.show.date.month!, day: $0.show.date.day!))
-      }
-      .sorted { comparator.compare(lhs: $0, rhs: $1) }
+    let concertIDs =
+      concertDayMap[Calendar.autoupdatingCurrent.component(.dayOfYear, from: date)] ?? []
+    return concertIDs.compactMap { concertMap[$0] }.sorted { comparator.compare(lhs: $0, rhs: $1) }
   }
 
   /// The URL for this category.

@@ -20,6 +20,13 @@ extension PartialDate {
     }
     return false
   }
+
+  public var isPartiallyUnknown: Bool {
+    if year == nil || month == nil || day == nil {
+      return true
+    }
+    return false
+  }
 }
 
 extension PartialDate: Comparable {
