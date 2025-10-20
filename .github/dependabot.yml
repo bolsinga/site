@@ -11,13 +11,4 @@ updates:
         patterns:
           - "*"  # Group all Actions updates into a single larger pull request
     schedule:
-      interval: weekly
-  - package-ecosystem: swift
-    directory: /
-    groups:
-      swift:
-        patterns:
-          - "*"  # Group all Swift updates into a single larger pull request
-    schedule:
-      interval: weekly
-  
+      interval: weekly  
