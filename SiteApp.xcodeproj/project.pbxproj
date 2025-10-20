@@ -1019,8 +1019,8 @@
 			isa = PBXGroup;
 			children = (
 				FE57C2F62E713D1300A67D4F /* CompareOptional.swift */,
-				FE00A5EC2EA69913003DE0C6 /* Date+DayMonth.swift */,
 				FE57C2F72E713D1300A67D4F /* Data+JSON.swift */,
+				FE00A5EC2EA69913003DE0C6 /* Date+DayMonth.swift */,
 				FE57C2F82E713D1300A67D4F /* LibraryComparable.swift */,
 				FE57C2F92E713D1300A67D4F /* LibraryComparator.swift */,
 				FE57C2FA2E713D1300A67D4F /* LibrarySection.swift */,
@@ -1083,9 +1083,9 @@
 		FE57C45D2E713D4600A67D4F /* UtilitiesTests */ = {
 			isa = PBXGroup;
 			children = (
+				FE00A5F02EA69B2A003DE0C6 /* DayMonthTests.swift */,
 				FE57C45B2E713D4600A67D4F /* LibraryComparatorTests.swift */,
 				FE57C45C2E713D4600A67D4F /* LibrarySectionTests.swift */,
-				FE00A5F02EA69B2A003DE0C6 /* DayMonthTests.swift */,
 			);
 			path = UtilitiesTests;
 			sourceTree = "<group>";
