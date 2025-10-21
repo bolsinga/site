@@ -38,7 +38,7 @@ struct VenueEntityQuery: EntityQuery {
   func suggestedEntities() async throws -> [VenueEntity] {
     Logger.venueQuery.log("Suggested")
 
-    var ids = vault.concerts(on: .now).venueIDs
+    var ids = vault.concertsToday.venueIDs
     if ids.isEmpty { ids = vault.concerts.recent() }
 
     return try await entities(for: ids.reversed())

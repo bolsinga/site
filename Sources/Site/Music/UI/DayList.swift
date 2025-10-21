@@ -15,7 +15,7 @@ extension Date {
 
 struct DayList: View {
   let concerts: [Concert]
-  let date: Date
+  let date: Date  // TODO: Make this a DayMonth. Add a formatter for DayMonth for the title, and isToday property. Alternately have this be the only property and it references the model.
 
   var body: some View {
     Group {
@@ -41,7 +41,7 @@ struct DayList: View {
 #Preview("Concerts Today", traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   NavigationStack {
-    DayList(concerts: model.vault.concerts(on: .now), date: .now)
+    DayList(concerts: model.vault.concertsToday, date: .now)
   }
 }
 

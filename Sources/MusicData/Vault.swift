@@ -85,8 +85,12 @@ public struct Vault: Sendable {
     }
   }
 
-  public func concerts(on date: Date) -> [Concert] {
-    let concertIDs = concertDayMap[date.dayMonth] ?? []
+  public var concertsToday: [Concert] {
+    concerts(on: Date.now.dayMonth)
+  }
+
+  func concerts(on dayMonth: DayMonth) -> [Concert] {
+    let concertIDs = concertDayMap[dayMonth] ?? []
     return concertIDs.compactMap { concertMap[$0] }.sorted { comparator.compare(lhs: $0, rhs: $1) }
   }
 

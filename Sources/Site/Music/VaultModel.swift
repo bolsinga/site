@@ -24,10 +24,13 @@ enum LocationAuthorization {
 @Observable public final class VaultModel {
   public let vault: Vault
 
+  internal var todayDayMonth: DayMonth = Date.now.dayMonth
   private var venuePlacemarks: [Venue.ID: Placemark] = [:]
   private var currentLocation: CLLocation?
   internal var locationAuthorization = LocationAuthorization.allowed
 
+  @ObservationIgnored
+  private var dayChangeTask: Task<Void, Never>?
   @ObservationIgnored
   private var geocodeTask: Task<Void, Never>?
   @ObservationIgnored
@@ -56,6 +59,10 @@ enum LocationAuthorization {
       return
     }
 
+    dayChangeTask = Task {
+      await self.monitorDayChanges()
+    }
+
     geocodeTask = Task {
       await self.geocodeVenues()
     }
@@ -66,13 +73,29 @@ enum LocationAuthorization {
   }
 
   func cancelTasks() {
+    dayChangeTask?.cancel()
     geocodeTask?.cancel()
     locationTask?.cancel()
   }
 
   @MainActor
-  var todayConcerts: [Concert] {
-    vault.concerts(on: .now)
+  func concerts(on dayMonth: DayMonth) -> [Concert] {
+    vault.concerts(on: dayMonth)
+  }
+
+  @MainActor
+  private func monitorDayChanges() async {
+    Logger.vaultModel.log("start day monitoring")
+    defer {
+      Logger.vaultModel.log("end day monitoring")
+    }
+    for await _ in NotificationCenter.default.notifications(named: .NSCalendarDayChanged).map({
+      $0.name
+    }) {
+      todayDayMonth = Date.now.dayMonth
+
+      Logger.vaultModel.log("Today DayMonth: \(self.todayDayMonth, privacy: .public)")
+    }
   }
 
   @MainActor
