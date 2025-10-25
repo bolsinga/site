@@ -77,20 +77,20 @@ public struct Vault: Sendable {
       guard !$1.show.date.isPartiallyUnknown else { return }
       guard let date = $1.show.date.date else { return }
 
-      let dayMonth = date.dayMonth
+      let dayOfLeapYear = date.dayOfLeapYear
 
-      var arr = $0[dayMonth] ?? []
+      var arr = $0[dayOfLeapYear] ?? []
       arr.append($1.id)
-      $0[dayMonth] = arr
+      $0[dayOfLeapYear] = arr
     }
   }
 
   public var concertsToday: [Concert] {
-    concerts(on: Date.now.dayMonth)
+    concerts(on: Date.now.dayOfLeapYear)
   }
 
-  func concerts(on dayMonth: DayMonth) -> [Concert] {
-    let concertIDs = concertDayMap[dayMonth] ?? []
+  func concerts(on dayOfLeapYear: Int) -> [Concert] {
+    let concertIDs = concertDayMap[dayOfLeapYear] ?? []
     return concertIDs.compactMap { concertMap[$0] }.sorted { comparator.compare(lhs: $0, rhs: $1) }
   }
 

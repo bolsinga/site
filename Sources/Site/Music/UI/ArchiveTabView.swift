@@ -10,7 +10,7 @@ import SwiftUI
 extension ArchiveCategory {
   @MainActor
   fileprivate func badge(_ model: VaultModel) -> Text? {
-    let count = model.concerts(on: model.todayDayMonth).count
+    let count = model.concerts(on: model.todayDayOfLeapYear).count
     guard count > 0 else { return nil }
     switch self {
     case .today:
