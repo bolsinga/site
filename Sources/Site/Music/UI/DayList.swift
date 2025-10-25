@@ -9,13 +9,13 @@ import SwiftUI
 
 extension Date {
   fileprivate var isToday: Bool {
-    self.dayMonth == Date.now.dayMonth
+    self.dayOfLeapYear == Date.now.dayOfLeapYear
   }
 }
 
 struct DayList: View {
   let concerts: [Concert]
-  let date: Date  // TODO: Make this a DayMonth. Add a formatter for DayMonth for the title, and isToday property. Alternately have this be the only property and it references the model.
+  let date: Date  // TODO: Have this be the only property and it references the model to get the concerts.
 
   var body: some View {
     Group {

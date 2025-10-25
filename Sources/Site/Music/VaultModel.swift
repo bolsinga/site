@@ -24,7 +24,7 @@ enum LocationAuthorization {
 @Observable public final class VaultModel {
   public let vault: Vault
 
-  internal var todayDayMonth: DayMonth = Date.now.dayMonth
+  internal var todayDayOfLeapYear: Int = Date.now.dayOfLeapYear
   private var venuePlacemarks: [Venue.ID: Placemark] = [:]
   private var currentLocation: CLLocation?
   internal var locationAuthorization = LocationAuthorization.allowed
@@ -79,8 +79,8 @@ enum LocationAuthorization {
   }
 
   @MainActor
-  func concerts(on dayMonth: DayMonth) -> [Concert] {
-    vault.concerts(on: dayMonth)
+  func concerts(on dayOfLeapYear: Int) -> [Concert] {
+    vault.concerts(on: dayOfLeapYear)
   }
 
   @MainActor
@@ -92,9 +92,9 @@ enum LocationAuthorization {
     for await _ in NotificationCenter.default.notifications(named: .NSCalendarDayChanged).map({
       $0.name
     }) {
-      todayDayMonth = Date.now.dayMonth
+      todayDayOfLeapYear = Date.now.dayOfLeapYear
 
-      Logger.vaultModel.log("Today DayMonth: \(self.todayDayMonth, privacy: .public)")
+      Logger.vaultModel.log("Today dayOfLeapYear: \(self.todayDayOfLeapYear, privacy: .public)")
     }
   }
 
