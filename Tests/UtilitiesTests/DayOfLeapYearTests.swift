@@ -1,5 +1,5 @@
 //
-//  DayMonthTests.swift
+//  DayOfLeapYearTests.swift
 //  Tests
 //
 //  Created by Greg Bolsinga on 10/20/25.
@@ -24,7 +24,7 @@ extension Date {
   }
 }
 
-struct DayMonthTests {
+struct DayOfLeapYearTests {
   private func date(year: Int, month: Int, day: Int) -> Date {
     let dateComponents = DateComponents(
       calendar: Calendar.autoupdatingCurrent, year: year, month: month, day: day)
@@ -71,5 +71,19 @@ struct DayMonthTests {
     let halloween = date(year: 2024, month: 10, day: 31)
     #expect(halloween.dayOfYear == 305)
     #expect(halloween.dayOfLeapYear == 305)
+  }
+
+  @Test func invalidDayOfLeapYearFormatted() async throws {
+    #expect((-1).dayOfLeapYearFormatted == "")
+    #expect(0.dayOfLeapYearFormatted == "")
+    #expect(367.dayOfLeapYearFormatted == "")
+  }
+
+  @Test func validDayOfLeapYearFormatted() async throws {
+    #expect(1.dayOfLeapYearFormatted == "1/1")
+    #expect(59.dayOfLeapYearFormatted == "2/28")
+    #expect(60.dayOfLeapYearFormatted == "2/29")
+    #expect(61.dayOfLeapYearFormatted == "3/1")
+    #expect(366.dayOfLeapYearFormatted == "12/31")
   }
 }

@@ -7,23 +7,29 @@
 
 import SwiftUI
 
-extension Date {
+extension Int {
   fileprivate var isToday: Bool {
-    self.dayOfLeapYear == Date.now.dayOfLeapYear
+    self == Date.now.dayOfLeapYear
   }
 }
 
 struct DayList: View {
-  let concerts: [Concert]
-  let date: Date  // TODO: Have this be the only property and it references the model to get the concerts.
+  fileprivate let concerts: [Concert]
+  let dayOfLeapYear: Int
+
+  internal init(concerts: [Concert], dayOfLeapYear: Int) {
+    self.concerts = concerts
+    self.dayOfLeapYear = dayOfLeapYear
+  }
 
   var body: some View {
     Group {
       if concerts.isEmpty {
         ContentUnavailableView(
-          date.isToday ? String(localized: "No Shows Today") : String(localized: "No Shows"),
+          dayOfLeapYear.isToday
+            ? String(localized: "No Shows Today") : String(localized: "No Shows"),
           systemImage: "calendar.badge.exclamationmark",
-          description: date.isToday ? Text("Check again tomorrow.") : nil
+          description: dayOfLeapYear.isToday ? Text("Check again tomorrow.") : nil
         )
       } else {
         List(concerts) { concert in
@@ -34,25 +40,25 @@ struct DayList: View {
     }
     .navigationTitle(
       Text(
-        "On This Day: \(date.formatted(.dateTime.month(.defaultDigits).day()))"))
+        "On This Day: \(dayOfLeapYear.dayOfLeapYearFormatted)"))
   }
 }
 
 #Preview("Concerts Today", traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   NavigationStack {
-    DayList(concerts: model.vault.concertsToday, date: .now)
+    DayList(concerts: model.vault.concertsToday, dayOfLeapYear: Date.now.dayOfLeapYear)
   }
 }
 
 #Preview("Empty Concerts Today") {
   NavigationStack {
-    DayList(concerts: [], date: .now)
+    DayList(concerts: [], dayOfLeapYear: Date.now.dayOfLeapYear)
   }
 }
 
 #Preview("Empty Concerts Not Today") {
   NavigationStack {
-    DayList(concerts: [], date: .now.addingTimeInterval(24 * 60 * 60))
+    DayList(concerts: [], dayOfLeapYear: Date.now.dayOfLeapYear + 1)
   }
 }

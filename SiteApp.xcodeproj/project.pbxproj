@@ -10,7 +10,7 @@
 		FE00A5ED2EA69913003DE0C6 /* Date+DayOfLeapYear.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE00A5EC2EA69913003DE0C6 /* Date+DayOfLeapYear.swift */; };
 		FE00A5EE2EA69913003DE0C6 /* Date+DayOfLeapYear.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE00A5EC2EA69913003DE0C6 /* Date+DayOfLeapYear.swift */; };
 		FE00A5EF2EA69913003DE0C6 /* Date+DayOfLeapYear.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE00A5EC2EA69913003DE0C6 /* Date+DayOfLeapYear.swift */; };
-		FE00A5F12EA69B2A003DE0C6 /* DayMonthTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE00A5F02EA69B2A003DE0C6 /* DayMonthTests.swift */; };
+		FE00A5F12EA69B2A003DE0C6 /* DayOfLeapYearTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE00A5F02EA69B2A003DE0C6 /* DayOfLeapYearTests.swift */; };
 		FE42CBC42E739F640064F683 /* ArtistEntityQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE42CBC32E739F640064F683 /* ArtistEntityQuery.swift */; };
 		FE42CBC62E739F810064F683 /* EntityQuerySort+SortOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE42CBC52E739F810064F683 /* EntityQuerySort+SortOrder.swift */; };
 		FE42CBC82E73A0900064F683 /* ArtistEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE42CBC72E73A0900064F683 /* ArtistEntity.swift */; };
@@ -432,7 +432,7 @@
 
 /* Begin PBXFileReference section */
 		FE00A5EC2EA69913003DE0C6 /* Date+DayOfLeapYear.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+DayOfLeapYear.swift"; sourceTree = "<group>"; };
-		FE00A5F02EA69B2A003DE0C6 /* DayMonthTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayMonthTests.swift; sourceTree = "<group>"; };
+		FE00A5F02EA69B2A003DE0C6 /* DayOfLeapYearTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayOfLeapYearTests.swift; sourceTree = "<group>"; };
 		FE42CBC32E739F640064F683 /* ArtistEntityQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistEntityQuery.swift; sourceTree = "<group>"; };
 		FE42CBC52E739F810064F683 /* EntityQuerySort+SortOrder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EntityQuerySort+SortOrder.swift"; sourceTree = "<group>"; };
 		FE42CBC72E73A0900064F683 /* ArtistEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistEntity.swift; sourceTree = "<group>"; };
@@ -1083,7 +1083,7 @@
 		FE57C45D2E713D4600A67D4F /* UtilitiesTests */ = {
 			isa = PBXGroup;
 			children = (
-				FE00A5F02EA69B2A003DE0C6 /* DayMonthTests.swift */,
+				FE00A5F02EA69B2A003DE0C6 /* DayOfLeapYearTests.swift */,
 				FE57C45B2E713D4600A67D4F /* LibraryComparatorTests.swift */,
 				FE57C45C2E713D4600A67D4F /* LibrarySectionTests.swift */,
 			);
@@ -1697,7 +1697,7 @@
 				FE57C4642E713D4600A67D4F /* DecadeFormatTests.swift in Sources */,
 				FE57C4652E713D4600A67D4F /* DecadeTests.swift in Sources */,
 				FE57C4662E713D4600A67D4F /* PartialDateFormatTests.swift in Sources */,
-				FE00A5F12EA69B2A003DE0C6 /* DayMonthTests.swift in Sources */,
+				FE00A5F12EA69B2A003DE0C6 /* DayOfLeapYearTests.swift in Sources */,
 				FE57C4672E713D4600A67D4F /* PartialDateTests.swift in Sources */,
 				FE57C4682E713D4600A67D4F /* ArchiveNavigationTests.swift in Sources */,
 				FE57C4692E713D4600A67D4F /* ConcertComparatorTests.swift in Sources */,

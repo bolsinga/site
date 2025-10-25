@@ -22,3 +22,29 @@ extension Date {
     return dayOfYear
   }
 }
+
+extension Int {
+  private var leapYearComponents: DateComponents {
+    let knownLeapYear = 2024
+    return DateComponents(calendar: Calendar.autoupdatingCurrent, year: knownLeapYear)
+  }
+
+  private var dayOfLeapYearComponents: DateComponents {
+    var dateComponents = leapYearComponents
+    dateComponents.setValue(self, for: .dayOfYear)
+    return dateComponents
+  }
+
+  private var isValidDayOfLeapYear: Bool {
+    guard let leapYearDate = leapYearComponents.date else { return false }
+    guard let range = Calendar.autoupdatingCurrent.range(of: .day, in: .year, for: leapYearDate)
+    else { return false }
+    return range.contains(self)
+  }
+
+  var dayOfLeapYearFormatted: String {
+    guard isValidDayOfLeapYear else { return "" }
+    guard let dayOfLeapYearDate = dayOfLeapYearComponents.date else { return "" }
+    return dayOfLeapYearDate.formatted(.dateTime.month(.defaultDigits).day())
+  }
+}
