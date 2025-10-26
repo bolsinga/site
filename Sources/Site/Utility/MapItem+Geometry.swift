@@ -8,8 +8,21 @@
 import MapKit
 
 extension MKMapItem {
-  var center: CLLocationCoordinate2D { self.placemark.center }
-  var radius: CLLocationDistance { self.placemark.radius }
+  var center: CLLocationCoordinate2D {
+    if #available(iOS 26, macOS 26, tvOS 26, *) {
+      self.location.coordinate
+    } else {
+      self.placemark.center
+    }
+  }
+  var radius: CLLocationDistance {
+    if #available(iOS 26, macOS 26, tvOS 26, *) {
+      // FB19027378 No region for a MKMapItem
+      100
+    } else {
+      self.placemark.radius
+    }
+  }
 
   var rect: MKMapRect {
     let center = center
