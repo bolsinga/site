@@ -41,7 +41,7 @@ struct ArchiveCategoryStack: View {
   @ViewBuilder private var summary: some View {
     switch category {
     case .today:
-      TodaySummary()
+      DaySummary()
     case .stats:
       StatsSummary()
     case .shows:

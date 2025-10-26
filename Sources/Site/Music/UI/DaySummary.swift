@@ -1,5 +1,5 @@
 //
-//  TodaySummary.swift
+//  DaySummary.swift
 //  site
 //
 //  Created by Greg Bolsinga on 9/23/24.
@@ -13,7 +13,7 @@ extension DayList {
   }
 }
 
-struct TodaySummary: View {
+struct DaySummary: View {
   @Environment(VaultModel.self) var model
 
   var body: some View {
@@ -23,6 +23,6 @@ struct TodaySummary: View {
 
 #Preview(traits: .vaultModel) {
   NavigationStack {
-    TodaySummary()
+    DaySummary()
   }
 }
