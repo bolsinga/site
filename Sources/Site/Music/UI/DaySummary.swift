@@ -17,7 +17,11 @@ struct DaySummary: View {
   @Environment(VaultModel.self) var model
 
   var body: some View {
-    DayList(model: model, dayOfLeapYear: Date.now.dayOfLeapYear)
+    #if os(macOS)
+      DayList(model: model, dayOfLeapYear: Date.now.dayOfLeapYear)
+    #else
+      DayBrowser()
+    #endif
   }
 }
 
