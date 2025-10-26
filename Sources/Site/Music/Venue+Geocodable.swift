@@ -14,7 +14,6 @@ extension Logger {
 }
 
 extension Venue: AtlasGeocodable {
-  @available(iOS 26.0, macOS 26.0, tvOS 26.0, *)
   private func geocodeToolbox() async throws -> Placemark {
     let item = try await MKMapItemRequest(placeDescriptor: placeDescriptor).mapItem
 
@@ -30,7 +29,7 @@ extension Venue: AtlasGeocodable {
     //  - compare visually / programmatically with the MKGeocodingRequest.
     //  - This will allow the quality and / or logic to be double checked.
     let placemark: Placemark
-    //    if #available(iOS 26, macOS 26, tvOS 26, *) {
+    //    if useGeoToolbox {
     //      placemark = try await geocodeToolbox()
     //    } else {
     placemark = try await location.geocode()

@@ -9,19 +9,11 @@ import MapKit
 
 extension MKMapItem {
   var center: CLLocationCoordinate2D {
-    if #available(iOS 26, macOS 26, tvOS 26, *) {
-      self.location.coordinate
-    } else {
-      self.placemark.center
-    }
+    self.location.coordinate
   }
   var radius: CLLocationDistance {
-    if #available(iOS 26, macOS 26, tvOS 26, *) {
-      // FB19027378 No region for a MKMapItem
-      100
-    } else {
-      self.placemark.radius
-    }
+    // FB19027378 No region for a MKMapItem
+    100
   }
 
   var rect: MKMapRect {
