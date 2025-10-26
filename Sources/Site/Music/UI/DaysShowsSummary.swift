@@ -21,7 +21,7 @@ struct DaysShowsSummary: View {
 
     switch mode {
     case .ordinal:
-      TodaySummary()
+      DaySummary()
     case .grouped:
       ShowsSummary()
     }
