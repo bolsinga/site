@@ -13,7 +13,6 @@ extension Dictionary where Key == Annum, Value == [Concert.ID] {
   }
 }
 
-
 struct ShowYearList: View {
   let decadesMap: [Decade: [Annum: [Concert.ID]]]
 
