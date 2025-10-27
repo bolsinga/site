@@ -33,6 +33,7 @@ where T: LibraryComparable, T: Hashable, T: PathRestorable, R: Comparable, R: Ha
             }
           } header: {
             sectionHeaderView(ranking)
+              .glassOS26()
           }
         }
       }

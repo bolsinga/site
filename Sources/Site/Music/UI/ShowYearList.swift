@@ -46,6 +46,7 @@ struct ShowYearList: View {
           } label: {
             Text(decade.formatted(.defaultDigits))
           }
+          .glassOS26()
         }
       }
     }
