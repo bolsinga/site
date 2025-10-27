@@ -7,6 +7,6 @@
 
 import CoreLocation
 
-protocol Locatable: Codable, Sendable {
+protocol Locatable {
   func nearby(to otherLocation: CLLocation, distanceThreshold: CLLocationDistance) -> Bool
 }
