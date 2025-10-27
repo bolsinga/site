@@ -26,10 +26,16 @@ private enum Constants {
 }
 
 actor Atlas<T: AtlasGeocodable> {
-  private var cache = AtlasCache<T>()
+  private var cache: AtlasCache<T>?
 
-  private var count = 0
-  private var waitUntil: ContinuousClock.Instant = .now + Constants.timeUntilReset
+  private var count: Int
+  private var waitUntil: ContinuousClock.Instant
+
+  internal init(cache: AtlasCache<T>? = AtlasCache<T>()) {
+    self.cache = cache
+    self.count = 0
+    self.waitUntil = .now + Constants.timeUntilReset
+  }
 
   private func reset() {
     Logger.atlas.log("reset")
@@ -44,13 +50,13 @@ actor Atlas<T: AtlasGeocodable> {
   }
 
   public func geocode(_ geocodable: T) async throws -> T.Place? {
-    if let result = cache.get(geocodable) {
+    if let result = cache?.get(geocodable) {
       Logger.atlas.log("cached result")
       return result
     }
 
     guard let result = try await gatedGeocode(geocodable) else { return nil }
-    cache.add(geocodable, value: result)
+    cache?.add(geocodable, value: result)
     return result
   }
 
