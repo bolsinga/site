@@ -25,7 +25,7 @@ enum LocationAuthorization {
   public let vault: Vault
 
   internal var todayDayOfLeapYear: Int = Date.now.dayOfLeapYear
-  private var venuePlacemarks: [Venue.ID: Placemark] = [:]
+  private var venueLocatables: [Venue.ID: Locatable] = [:]
   private var currentLocation: CLLocation?
   internal var locationAuthorization = LocationAuthorization.allowed
 
@@ -106,11 +106,11 @@ enum LocationAuthorization {
     }
 
     do {
-      for try await (venue, placemark) in BatchGeocode(
+      for try await (venue, locatable) in BatchGeocode(
         atlas: atlas, geocodables: vault.venueDigests.map { $0.venue })
       {
         Logger.vaultModel.log("geocoded: \(venue.id, privacy: .public)")
-        venuePlacemarks[venue.id] = placemark
+        venueLocatables[venue.id] = locatable
       }
     } catch {
       Logger.vaultModel.error("batch geocode error: \(error, privacy: .public)")
@@ -120,7 +120,7 @@ enum LocationAuthorization {
 
   var geocodingProgress: Double {
     guard !batchGeocodeCompleted else { return 1.0 }
-    return Double(venuePlacemarks.count) / Double(vault.venueDigests.count)
+    return Double(venueLocatables.count) / Double(vault.venueDigests.count)
   }
 
   @MainActor
@@ -208,9 +208,9 @@ enum LocationAuthorization {
   {
     return vault.concerts
       .filter { $0.venue != nil }
-      .filter { venuePlacemarks[$0.venue!.id] != nil }
+      .filter { venueLocatables[$0.venue!.id] != nil }
       .filter {
-        venuePlacemarks[$0.venue!.id]!.nearby(to: location, distanceThreshold: distanceThreshold)
+        venueLocatables[$0.venue!.id]!.nearby(to: location, distanceThreshold: distanceThreshold)
       }
       .sorted { vault.comparator.compare(lhs: $0, rhs: $1) }
   }
