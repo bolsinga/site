@@ -9,6 +9,7 @@ import SwiftUI
 
 struct DaysShowsSummary: View {
   @Binding var mode: ShowsMode
+  @Binding var dayOfLeapYear: Int
 
   var body: some View {
     Picker(selection: $mode) {
@@ -21,7 +22,7 @@ struct DaysShowsSummary: View {
 
     switch mode {
     case .ordinal:
-      DaySummary()
+      DaySummary(dayOfLeapYear: $dayOfLeapYear)
     case .grouped:
       ShowsSummary()
     }
@@ -30,7 +31,9 @@ struct DaysShowsSummary: View {
 
 #Preview(traits: .vaultModel, .nearbyModel) {
   @Previewable @State var showsMode = ShowsMode.ordinal
+  @Previewable @State var dayOfLeapYear = Date.now.dayOfLeapYear
+
   NavigationStack {
-    DaysShowsSummary(mode: $showsMode)
+    DaysShowsSummary(mode: $showsMode, dayOfLeapYear: $dayOfLeapYear)
   }
 }
