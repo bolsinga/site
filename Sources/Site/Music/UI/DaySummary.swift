@@ -16,17 +16,21 @@ extension DayList {
 struct DaySummary: View {
   @Environment(VaultModel.self) var model
 
+  @Binding var dayOfLeapYear: Int
+
   var body: some View {
     #if os(macOS)
-      DayList(model: model, dayOfLeapYear: Date.now.dayOfLeapYear)
+      DayList(model: model, dayOfLeapYear: dayOfLeapYear)
     #else
-      DayBrowser()
+      DayBrowser(dayOfLeapYear: $dayOfLeapYear)
     #endif
   }
 }
 
 #Preview(traits: .vaultModel) {
+  @Previewable @State var dayOfLeapYear = Date.now.dayOfLeapYear
+
   NavigationStack {
-    DaySummary()
+    DaySummary(dayOfLeapYear: $dayOfLeapYear)
   }
 }

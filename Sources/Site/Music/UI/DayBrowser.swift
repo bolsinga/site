@@ -16,7 +16,7 @@ struct DayBrowser: View {
     case tomorrow
   }
 
-  @State private var dayOfLeapYear: Int = 1
+  @Binding var dayOfLeapYear: Int
   @State private var selection: DayTab = .today
 
   @ViewBuilder private func dayList(_ dayOfLeapYear: Int) -> some View {
@@ -50,9 +50,6 @@ struct DayBrowser: View {
       }
     }
     .navigationTitle(dayOfLeapYear.relativeTitle)  // need this here for ipad
-    .onAppear {
-      self.dayOfLeapYear = model.todayDayOfLeapYear
-    }
     #if !os(macOS)
       .indexViewStyle(.page(backgroundDisplayMode: .always))
       .tabViewStyle(.page(indexDisplayMode: .automatic))
@@ -61,7 +58,9 @@ struct DayBrowser: View {
 }
 
 #Preview(traits: .vaultModel) {
+  @Previewable @State var dayOfLeapYear = Date.now.dayOfLeapYear
+
   NavigationStack {
-    DayBrowser()
+    DayBrowser(dayOfLeapYear: $dayOfLeapYear)
   }
 }

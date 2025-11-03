@@ -29,6 +29,8 @@ struct ArchiveCategoryStack: View {
 
   @State private var showNearbyDistanceSettings: Bool = false
 
+  @State private var dayOfLeapYear = Date.now.dayOfLeapYear
+
   private var showToolbar: Bool {
     switch category {
     case .today, .venues, .artists, .stats, .settings, .search:
@@ -41,12 +43,12 @@ struct ArchiveCategoryStack: View {
   @ViewBuilder private var summary: some View {
     switch category {
     case .today:
-      DaySummary()
+      DaySummary(dayOfLeapYear: $dayOfLeapYear)
     case .stats:
       StatsSummary()
     case .shows:
       if combineTodayAndShowSummary {
-        DaysShowsSummary(mode: $showsMode)
+        DaysShowsSummary(mode: $showsMode, dayOfLeapYear: $dayOfLeapYear)
       } else {
         ShowsSummary()
       }
