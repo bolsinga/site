@@ -7,12 +7,6 @@
 
 import SwiftUI
 
-extension Int {
-  fileprivate var isToday: Bool {
-    self == Date.now.dayOfLeapYear
-  }
-}
-
 struct DayList: View {
   fileprivate let concerts: [Concert]
   let dayOfLeapYear: Int
@@ -22,14 +16,15 @@ struct DayList: View {
     self.dayOfLeapYear = dayOfLeapYear
   }
 
+  private var isToday: Bool { dayOfLeapYear.isToday }
+
   var body: some View {
     Group {
       if concerts.isEmpty {
         ContentUnavailableView(
-          dayOfLeapYear.isToday
-            ? String(localized: "No Shows Today") : String(localized: "No Shows"),
+          isToday ? String(localized: "No Shows Today") : String(localized: "No Shows"),
           systemImage: "calendar.badge.exclamationmark",
-          description: dayOfLeapYear.isToday ? Text("Check again tomorrow.") : nil
+          description: isToday ? Text("Check again tomorrow.") : nil
         )
       } else {
         List(concerts) { concert in
@@ -38,9 +33,7 @@ struct DayList: View {
         .listStyle(.plain)
       }
     }
-    .navigationTitle(
-      Text(
-        "On This Day: \(dayOfLeapYear.dayOfLeapYearFormatted)"))
+    .navigationTitle(dayOfLeapYear.relativeTitle)
   }
 }
 
