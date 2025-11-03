@@ -504,6 +504,9 @@
     "Today: %@" : {
 
     },
+    "Tomorrow: %@" : {
+
+    },
     "Unable to determine map location." : {
 
     },
@@ -544,6 +547,9 @@
 
     },
     "Year Unknown" : {
+
+    },
+    "Yesterday: %@" : {
 
     }
   },

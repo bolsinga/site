@@ -8,14 +8,44 @@
 import Foundation
 
 extension Int {
+  private enum Day {
+    case yesterday
+    case today
+    case tomorrow
+    case unknown
+  }
+
+  private var day: Day {
+    let todayDayOfLeapYear = Date.now.dayOfLeapYear
+
+    if self == todayDayOfLeapYear {
+      return .today
+    } else if self == todayDayOfLeapYear.previousDayOfLeapYear {
+      return .yesterday
+    } else if self == todayDayOfLeapYear.nextDayOfLeapYear {
+      return .tomorrow
+    }
+    return .unknown
+  }
+
   var isToday: Bool {
-    self == Date.now.dayOfLeapYear
+    switch day {
+    case .today:
+      true
+    default:
+      false
+    }
   }
 
   var relativeTitle: LocalizedStringResource {
-    if isToday {
+    switch day {
+    case .yesterday:
+      LocalizedStringResource("Yesterday: \(dayOfLeapYearFormatted)")
+    case .today:
       LocalizedStringResource("Today: \(dayOfLeapYearFormatted)")
-    } else {
+    case .tomorrow:
+      LocalizedStringResource("Tomorrow: \(dayOfLeapYearFormatted)")
+    case .unknown:
       LocalizedStringResource("On Date: \(dayOfLeapYearFormatted)")
     }
   }
