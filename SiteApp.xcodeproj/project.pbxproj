@@ -14,6 +14,7 @@
 		FE00A5F52EAE7945003DE0C6 /* DayBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE00A5F42EAE7945003DE0C6 /* DayBrowser.swift */; };
 		FE00A5F72EAEF303003DE0C6 /* GlassOS26Modifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE00A5F62EAEF303003DE0C6 /* GlassOS26Modifier.swift */; };
 		FE00A5F92EAEFD4E003DE0C6 /* Locatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE00A5F82EAEFD4B003DE0C6 /* Locatable.swift */; };
+		FE00A5FB2EB7FAE1003DE0C6 /* DayOfLeapYear+Title.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE00A5FA2EB7FAE1003DE0C6 /* DayOfLeapYear+Title.swift */; };
 		FE42CBC42E739F640064F683 /* ArtistEntityQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE42CBC32E739F640064F683 /* ArtistEntityQuery.swift */; };
 		FE42CBC62E739F810064F683 /* EntityQuerySort+SortOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE42CBC52E739F810064F683 /* EntityQuerySort+SortOrder.swift */; };
 		FE42CBC82E73A0900064F683 /* ArtistEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE42CBC72E73A0900064F683 /* ArtistEntity.swift */; };
@@ -439,6 +440,7 @@
 		FE00A5F42EAE7945003DE0C6 /* DayBrowser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayBrowser.swift; sourceTree = "<group>"; };
 		FE00A5F62EAEF303003DE0C6 /* GlassOS26Modifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlassOS26Modifier.swift; sourceTree = "<group>"; };
 		FE00A5F82EAEFD4B003DE0C6 /* Locatable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Locatable.swift; sourceTree = "<group>"; };
+		FE00A5FA2EB7FAE1003DE0C6 /* DayOfLeapYear+Title.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DayOfLeapYear+Title.swift"; sourceTree = "<group>"; };
 		FE42CBC32E739F640064F683 /* ArtistEntityQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistEntityQuery.swift; sourceTree = "<group>"; };
 		FE42CBC52E739F810064F683 /* EntityQuerySort+SortOrder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EntityQuerySort+SortOrder.swift"; sourceTree = "<group>"; };
 		FE42CBC72E73A0900064F683 /* ArtistEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistEntity.swift; sourceTree = "<group>"; };
@@ -890,6 +892,7 @@
 				FE57C29C2E713D1300A67D4F /* ConcertBlurb.swift */,
 				FE00A5F42EAE7945003DE0C6 /* DayBrowser.swift */,
 				FE57C2BC2E713D1300A67D4F /* DayList.swift */,
+				FE00A5FA2EB7FAE1003DE0C6 /* DayOfLeapYear+Title.swift */,
 				FE57C29D2E713D1300A67D4F /* DaysShowsSummary.swift */,
 				FE57C2BD2E713D1300A67D4F /* DaySummary.swift */,
 				FE8F85922E7E0A5C006AF701 /* DismissibleSheetModifier.swift */,
@@ -1411,6 +1414,7 @@
 				FE57C3512E713D1300A67D4F /* ArchiveScope.swift in Sources */,
 				FE42CBD02E73BAA30064F683 /* PerformersView.swift in Sources */,
 				FE57C3522E713D1300A67D4F /* ArchiveSearchModifier.swift in Sources */,
+				FE00A5FB2EB7FAE1003DE0C6 /* DayOfLeapYear+Title.swift in Sources */,
 				FE57C3532E713D1300A67D4F /* ArchiveSharable.swift in Sources */,
 				FE57C3542E713D1300A67D4F /* ArchiveSharableToolbarContent.swift in Sources */,
 				FE57C3552E713D1300A67D4F /* ArchiveStateView.swift in Sources */,

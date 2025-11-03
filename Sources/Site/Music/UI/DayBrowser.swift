@@ -49,7 +49,7 @@ struct DayBrowser: View {
         dayList(dayOfLeapYear.nextDayOfLeapYear)
       }
     }
-    .navigationTitle(Text("On This Day: \(dayOfLeapYear.dayOfLeapYearFormatted)"))  // need this here for ipad
+    .navigationTitle(dayOfLeapYear.relativeTitle)  // need this here for ipad
     .onAppear {
       self.dayOfLeapYear = model.todayDayOfLeapYear
     }

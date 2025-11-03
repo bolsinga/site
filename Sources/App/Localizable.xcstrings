@@ -360,7 +360,7 @@
     "Numeric" : {
 
     },
-    "On This Day: %@" : {
+    "On Date: %@" : {
 
     },
     "Open ${target}" : {
@@ -499,6 +499,9 @@
 
     },
     "Today" : {
+
+    },
+    "Today: %@" : {
 
     },
     "Unable to determine map location." : {
