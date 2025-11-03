@@ -38,7 +38,7 @@ struct ArtistEntityQuery: EntityQuery {
   func suggestedEntities() async throws -> [ArtistEntity] {
     Logger.artistQuery.log("Suggested")
 
-    var ids = vault.concertsToday.artistIDs
+    var ids = concertsToday(vault).artistIDs
     if ids.isEmpty {
       ids = vault.concerts.recent()
     }
