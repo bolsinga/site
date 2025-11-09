@@ -40,6 +40,9 @@ enum LocationAuthorization {
 
   private var batchGeocodeCompleted = false
 
+  @ObservationIgnored
+  private var todayUpdatesQuickly: Bool = false
+
   private let locationManager = LocationManager(
     activityType: .other,
     distanceFilter: distanceFilter,
@@ -89,12 +92,24 @@ enum LocationAuthorization {
     defer {
       Logger.vaultModel.log("end day monitoring")
     }
-    for await _ in NotificationCenter.default.notifications(named: .NSCalendarDayChanged).map({
-      $0.name
-    }) {
-      todayDayOfLeapYear = Date.now.dayOfLeapYear
 
-      Logger.vaultModel.log("Today dayOfLeapYear: \(self.todayDayOfLeapYear, privacy: .public)")
+    if todayUpdatesQuickly {
+      while true {
+        try? await ContinuousClock().sleep(until: .now + Duration.seconds(5))
+
+        todayDayOfLeapYear = todayDayOfLeapYear.nextDayOfLeapYear
+
+        Logger.vaultModel.log(
+          "FAST: Today dayOfLeapYear: \(self.todayDayOfLeapYear, privacy: .public)")
+      }
+    } else {
+      for await _ in NotificationCenter.default.notifications(named: .NSCalendarDayChanged).map({
+        $0.name
+      }) {
+        todayDayOfLeapYear = Date.now.dayOfLeapYear
+
+        Logger.vaultModel.log("Today dayOfLeapYear: \(self.todayDayOfLeapYear, privacy: .public)")
+      }
     }
   }
 
