@@ -29,7 +29,7 @@ struct ArchiveCategoryStack: View {
 
   @State private var showNearbyDistanceSettings: Bool = false
 
-  @State private var dayOfLeapYear = Date.now.dayOfLeapYear
+  @State private var dayOfLeapYear = 1
 
   private var showToolbar: Bool {
     switch category {
@@ -80,6 +80,12 @@ struct ArchiveCategoryStack: View {
               showNearbyDistanceSettings: $showNearbyDistanceSettings)
           }
         }
+    }
+    .onAppear {
+      self.dayOfLeapYear = model.todayDayOfLeapYear
+    }
+    .onChange(of: model.todayDayOfLeapYear) { _, newValue in
+      self.dayOfLeapYear = newValue
     }
   }
 }
