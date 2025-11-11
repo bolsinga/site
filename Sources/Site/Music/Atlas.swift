@@ -28,25 +28,11 @@ private enum Constants {
 actor Atlas<T: AtlasGeocodable> {
   private var cache: AtlasCache<T>?
 
-  private var count: Int
-  private var waitUntil: ContinuousClock.Instant
+  private let throttle = Throttle<T.Place>(
+    batchSize: Constants.maxRequests, timeUntilReset: Constants.timeUntilReset)
 
   internal init(cache: AtlasCache<T>? = AtlasCache<T>()) {
     self.cache = cache
-    self.count = 0
-    self.waitUntil = .now + Constants.timeUntilReset
-  }
-
-  private func reset() {
-    Logger.atlas.log("reset")
-    waitUntil = .now + Constants.timeUntilReset
-    count = 0
-  }
-
-  private func idleAndReset() async throws {
-    Logger.atlas.log("idleAndReset")
-    try await ContinuousClock().sleep(until: waitUntil)
-    reset()
   }
 
   public func geocode(_ geocodable: T) async throws -> T.Place? {
@@ -61,38 +47,21 @@ actor Atlas<T: AtlasGeocodable> {
   }
 
   private func gatedGeocode(_ geocodable: T) async throws -> T.Place? {
-    Logger.atlas.log("start gatedGeocode")
-    defer {
-      Logger.atlas.log("end gatedGeocode")
-    }
+    Logger.atlas.log("gatedGeocode")
 
-    if ContinuousClock.now.duration(to: waitUntil) <= .seconds(0) {
-      // wait time expired
-      Logger.atlas.log("wait expired")
-      reset()
-    } else if count != 0, count % Constants.maxRequests == 0 {
-      // hit max requests
-      Logger.atlas.log("reached max requests")
-      try await idleAndReset()
-    }
-
-    var retry = false
-    repeat {
+    return try await throttle.perform {
       do {
-        let placemark = try await geocodable.geocode()
-        count += 1
-        return placemark
+        return Throttle.Control.success(try await geocodable.geocode())
       } catch let error as NSError {
         if error.isGeocodingThrottledError {
           Logger.atlas.log("throttle: \(error.localizedDescription, privacy: .public)")
-          // throttling error
-          try await idleAndReset()
-          retry = true
+          // throttling error, try again
+          return Throttle.Control.pauseEntry
         } else if error.isGeocodingFailureError {
           Logger.atlas.error(
             "geocoding error: \(error.localizedDescription, privacy: .public) geocodable: \(String(describing: geocodable))"
           )
-          return nil
+          return Throttle.Control.nonRecoverableError
         } else {
           Logger.atlas.error(
             "unknown error: \(error.localizedDescription, privacy: .public) geocodable: \(String(describing: geocodable))"
@@ -102,6 +71,6 @@ actor Atlas<T: AtlasGeocodable> {
       } catch {
         throw error
       }
-    } while retry
+    }
   }
 }
