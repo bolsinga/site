@@ -12,7 +12,7 @@ extension Logger {
   fileprivate static let throttle = Logger(category: "throttle")
 }
 
-actor Throttle<T: Sendable> {
+actor Throttle<T> {
   enum Control {
     /// Client requires the throttle to be paused
     case pauseEntry
