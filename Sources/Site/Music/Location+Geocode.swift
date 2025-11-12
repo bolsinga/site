@@ -13,7 +13,7 @@ import Foundation
 
 extension Location: Geocodable {
   #if canImport(Contacts)
-    private var postalAddress: CNPostalAddress {
+    var postalAddress: CNPostalAddress {
       let pAddress = CNMutablePostalAddress()
       pAddress.city = city
       pAddress.state = state

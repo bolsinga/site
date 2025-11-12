@@ -13,10 +13,12 @@ private enum GeocodeError: Error {
 
 extension String: Geocodable {
   func geocode() async throws -> Placemark {
-    guard let placemark = try await CLGeocoder().geocodeAddressString(self).first else {
+    guard let placemark = try await CLGeocoder().geocodeAddressString(self).first,
+      let location = placemark.location
+    else {
       throw GeocodeError.noPlacemark
     }
-    return Placemark(placemark: placemark)
+    return Placemark(location: location)
   }
 }
 
@@ -25,10 +27,12 @@ extension String: Geocodable {
 
   extension CNPostalAddress: Geocodable {
     func geocode() async throws -> Placemark {
-      guard let placemark = try await CLGeocoder().geocodePostalAddress(self).first else {
+      guard let placemark = try await CLGeocoder().geocodePostalAddress(self).first,
+        let location = placemark.location
+      else {
         throw GeocodeError.noPlacemark
       }
-      return Placemark(placemark: placemark)
+      return Placemark(location: location)
     }
   }
 #endif

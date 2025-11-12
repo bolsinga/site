@@ -16,13 +16,4 @@ extension CLPlacemark {
     guard let circularRegion = self.region as? CLCircularRegion else { return 100.0 }  // meters
     return circularRegion.radius
   }
-
-  private func distance(from otherLocation: CLLocation) -> CLLocationDistance {
-    guard let location else { return CLLocationDistanceMax }
-    return location.distance(from: otherLocation)
-  }
-
-  func nearby(to otherLocation: CLLocation, distanceThreshold: CLLocationDistance) -> Bool {
-    return distance(from: otherLocation) <= distanceThreshold
-  }
 }
