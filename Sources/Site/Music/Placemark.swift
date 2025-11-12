@@ -9,11 +9,11 @@ import CoreLocation
 
 struct Placemark: Codable, Sendable {
   @NSCodingCodable
-  var placemark: CLPlacemark
+  var location: CLLocation
 }
 
 extension Placemark: Locatable {
   func nearby(to otherLocation: CLLocation, distanceThreshold: CLLocationDistance) -> Bool {
-    placemark.nearby(to: otherLocation, distanceThreshold: distanceThreshold)
+    location.nearby(to: otherLocation, distanceThreshold: distanceThreshold)
   }
 }
