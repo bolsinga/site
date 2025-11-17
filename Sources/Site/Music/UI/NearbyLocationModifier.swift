@@ -14,14 +14,21 @@ struct NearbyLocationModifier: ViewModifier {
   let filteredDataIsEmpty: Bool
 
   func body(content: Content) -> some View {
-    content
-      .overlay {
-        if nearbyModel.locationFilter.isNearby {
-          NearbyLocationView(
-            locationAuthorization: model.locationAuthorization,
-            geocodingProgress: model.geocodingProgress, filteredDataIsEmpty: filteredDataIsEmpty)
-        }
+    VStack {
+      if nearbyModel.locationFilter.isNearby {
+        NearbyProgressView(
+          locationAuthorization: model.locationAuthorization,
+          geocodingProgress: model.geocodingProgress)
       }
+      content
+    }
+    .overlay {
+      if nearbyModel.locationFilter.isNearby {
+        NearbyLocationView(
+          locationAuthorization: model.locationAuthorization,
+          filteredDataIsEmpty: filteredDataIsEmpty)
+      }
+    }
   }
 }
 

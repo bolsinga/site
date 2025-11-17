@@ -9,24 +9,12 @@ import SwiftUI
 
 struct NearbyLocationView: View {
   let locationAuthorization: LocationAuthorization
-  let geocodingProgress: Double
   let filteredDataIsEmpty: Bool
 
   var body: some View {
     switch locationAuthorization {
     case .allowed:
-      if geocodingProgress < 1.0 {
-        VStack {
-          ProgressView(value: geocodingProgress)
-            .progressViewStyle(.circular)
-            .tint(.accentColor)
-            #if os(macOS)
-              .padding(EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 0))
-            #endif
-          Text("Geocoding…")
-            .font(.headline)
-        }
-      } else if filteredDataIsEmpty {
+      if filteredDataIsEmpty {
         ContentUnavailableView(
           String(localized: "Nothing Nearby"),
           systemImage: "location.slash.circle",
@@ -55,20 +43,15 @@ struct NearbyLocationView: View {
 
 #Preview("Enabled-Geocoding-Allowed") {
   NearbyLocationView(
-    locationAuthorization: .allowed, geocodingProgress: 0, filteredDataIsEmpty: true)
-}
-
-#Preview("Enabled-Geocoding-Allowed-Empty") {
-  NearbyLocationView(
-    locationAuthorization: .allowed, geocodingProgress: 1, filteredDataIsEmpty: true)
+    locationAuthorization: .allowed, filteredDataIsEmpty: true)
 }
 
 #Preview("Enabled-Geocoding-Restricted") {
   NearbyLocationView(
-    locationAuthorization: .restricted, geocodingProgress: 0, filteredDataIsEmpty: false)
+    locationAuthorization: .restricted, filteredDataIsEmpty: false)
 }
 
 #Preview("Enabled-Geocoding-Denied") {
   NearbyLocationView(
-    locationAuthorization: .denied, geocodingProgress: 1, filteredDataIsEmpty: false)
+    locationAuthorization: .denied, filteredDataIsEmpty: false)
 }
