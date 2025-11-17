@@ -27,5 +27,5 @@ struct VaultPreviewModifier: PreviewModifier {
 }
 
 extension PreviewTrait where T == Preview.ViewTraits {
-  @MainActor static var vaultModel: Self = .modifier(VaultPreviewModifier())
+  static var vaultModel: Self = .modifier(VaultPreviewModifier())
 }

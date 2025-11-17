@@ -8,7 +8,6 @@
 import CoreLocation
 import SwiftUI
 
-@MainActor
 struct NearbyDistanceThresholdView: View {
   @Binding var distanceThreshold: CLLocationDistance
 

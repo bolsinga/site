@@ -8,7 +8,6 @@
 import SwiftUI
 
 extension Ranking {
-  @MainActor
   @ViewBuilder var showsCountView: some View {
     HStack {
       Text(self.formatted(.rankOnly))
@@ -17,7 +16,6 @@ extension Ranking {
     }
   }
 
-  @MainActor
   @ViewBuilder var yearsCountView: some View {
     HStack {
       Text(self.formatted(.rankOnly))
@@ -26,7 +24,6 @@ extension Ranking {
     }
   }
 
-  @MainActor
   @ViewBuilder var venuesCountView: some View {
     HStack {
       Text(self.formatted(.rankOnly))
@@ -35,7 +32,6 @@ extension Ranking {
     }
   }
 
-  @MainActor
   @ViewBuilder var artistsCountView: some View {
     HStack {
       Text(self.formatted(.rankOnly))
