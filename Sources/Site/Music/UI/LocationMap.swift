@@ -25,6 +25,7 @@ struct LocationMap<T: Equatable>: View {
         ) {
           Marker(item: item)
         }
+        .tint(.accentColor)
         .onTapGesture {
           #if !os(tvOS)
             item.openInMaps()
