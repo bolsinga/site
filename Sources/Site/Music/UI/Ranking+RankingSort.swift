@@ -8,7 +8,6 @@
 import SwiftUI
 
 extension Ranking {
-  @MainActor
   @ViewBuilder func sectionHeader(for sort: RankingSort) -> some View {
     switch sort {
     case .alphabetical, .firstSeen, .associatedRank:
