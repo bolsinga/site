@@ -67,7 +67,10 @@ struct ArchiveCategoryStack: View {
     NavigationStack(path: $path) {
       summary
         .refreshable { await reloadModel() }
-        .sheet(isPresented: $showNearbyDistanceSettings) { SettingsView() }
+        .sheet(isPresented: $showNearbyDistanceSettings) {
+          SettingsView()
+            .presentationDetents([.medium])
+        }
         .navigationDestination(for: ArchivePath.self) {
           $0.destination(
             vault: model.vault, isPathNavigable: path.isPathNavigable(_:),
