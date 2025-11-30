@@ -6,16 +6,17 @@
 //
 
 import Foundation
+import MapKit
 
-struct BatchGeocode<T: AtlasGeocodable>: AsyncSequence {
-  typealias Element = (T, T.Place?)
+struct BatchGeocode: AsyncSequence {
+  typealias Element = (Venue, MKMapItem?)
 
-  let atlas: Atlas<T>
-  let geocodables: [T]
+  let atlas: Atlas<Venue>
+  let geocodables: [Venue]
 
   struct AsyncIterator: AsyncIteratorProtocol {
-    let atlas: Atlas<T>
-    let geocodables: [T]
+    let atlas: Atlas<Venue>
+    let geocodables: [Venue]
 
     var index: Int = 0
 
@@ -25,9 +26,9 @@ struct BatchGeocode<T: AtlasGeocodable>: AsyncSequence {
       guard index < geocodables.count else { return nil }
 
       let geocodable = geocodables[index]
-      let placemark = try await atlas.geocode(geocodable)
+      let mapItem = try await atlas.geocode(geocodable)
       index += 1
-      return (geocodable, placemark)
+      return (geocodable, mapItem)
     }
   }
 
