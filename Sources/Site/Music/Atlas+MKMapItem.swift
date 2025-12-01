@@ -11,6 +11,6 @@ import MapKit
 extension Atlas where T == Venue {
   nonisolated func geocode(_ venue: T) async throws -> MKMapItem? {
     guard let placemark: Placemark = try await geocode(venue) else { return nil }
-    return MKMapItem(venue: venue, location: placemark.location)
+    return MKMapItem(venue: venue, placemark: placemark)
   }
 }

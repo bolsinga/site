@@ -19,14 +19,14 @@ extension String: Geocodable {
       guard let item = try await MKGeocodingRequest(addressString: self)?.mapItems.first else {
         throw GeocodeError.noPlacemark
       }
-      return Placemark(location: item.location)
+      return Placemark.coordinate(item.location)
     } else {
       guard let placemark = try await CLGeocoder().geocodeAddressString(self).first,
         let location = placemark.location
       else {
         throw GeocodeError.noPlacemark
       }
-      return Placemark(location: location)
+      return Placemark.coordinate(location)
     }
   }
 }
@@ -44,7 +44,7 @@ extension String: Geocodable {
         else {
           throw GeocodeError.noPlacemark
         }
-        return Placemark(location: location)
+        return Placemark.coordinate(location)
       }
     }
   }
