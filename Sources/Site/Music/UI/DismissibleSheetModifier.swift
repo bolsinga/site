@@ -17,8 +17,11 @@ struct DismissibleSheetModifier<SheetContent>: ViewModifier where SheetContent: 
         VStack {
           sheetContent()
           #if os(macOS)
-            // FIXME : 26 add role: .close
-            Button("Done") { showSheet = false }
+          if #available(macOS 26, *) {
+            Button(role: .close) { showSheet = false }
+          } else {
+            Button("Close") { showSheet = false }
+          }
           #endif
         }
         .padding(10)
