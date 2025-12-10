@@ -1,5 +1,5 @@
 //
-//  GlassOS26Modifier.swift
+//  SectionHeaderBackgroundModifier.swift
 //  SiteApp
 //
 //  Created by Greg Bolsinga on 10/26/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-private struct GlassOS26Modifier: ViewModifier {
+private struct SectionHeaderBackgroundModifier: ViewModifier {
   func body(content: Content) -> some View {
     if #available(iOS 26, macOS 26, tvOS 26, *) {
       content
@@ -20,7 +20,7 @@ private struct GlassOS26Modifier: ViewModifier {
 }
 
 extension View {
-  func glassOS26() -> some View {
-    modifier(GlassOS26Modifier())
+  func sectionHeaderBackground() -> some View {
+    modifier(SectionHeaderBackgroundModifier())
   }
 }
