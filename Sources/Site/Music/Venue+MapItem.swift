@@ -19,7 +19,7 @@ extension Venue {
 }
 
 extension MKMapItem {
-  fileprivate convenience init(venue: Venue, location: CLLocation) {
+  convenience init(venue: Venue, location: CLLocation) {
     if #available(iOS 26, macOS 26, tvOS 26, *) {
       self.init(location: location, address: venue.mkAddress)
       self.name = venue.name
@@ -32,9 +32,5 @@ extension MKMapItem {
       #endif
       self.init(placemark: placemark)
     }
-  }
-
-  convenience init(venue: Venue, placemark: Placemark) {
-    self.init(venue: venue, location: placemark.location)
   }
 }
