@@ -23,7 +23,7 @@ where T: LibraryComparable, T: Hashable, T: PathRestorable, R: Comparable, R: Ha
         if let items = rankingMap[ranking] {
           Section {
             ForEach(items) { item in
-              NavigationLink(value: item) {
+              NavigationLink(value: item.archivePath) {
                 LabeledContent {
                   itemContentView(item)
                 } label: {

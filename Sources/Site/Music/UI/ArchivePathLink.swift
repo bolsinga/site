@@ -52,9 +52,9 @@ struct ArchivePathLink<Label>: View where Label: View {
   var body: some View {
     if isPathNavigable(archivePath) {
       if let title {
-        NavigationLink(title, archivePath: archivePath)
+        NavigationLink(title, value: archivePath)
       } else {
-        NavigationLink(archivePath: archivePath) { labelView }
+        NavigationLink(value: archivePath) { labelView }
       }
     } else {
       labelView
