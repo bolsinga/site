@@ -11,7 +11,7 @@ import SwiftUI
 extension ArchivePath {
   @MainActor
   @ViewBuilder func destination(
-    vault: Vault, isPathNavigable: @escaping (PathRestorable) -> Bool,
+    vault: Vault, isPathNavigable: @escaping (ArchivePath) -> Bool,
     geocoder: @escaping @MainActor (VenueDigest) async throws -> MKMapItem?
   )
     -> some View

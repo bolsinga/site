@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ShowDetail: View {
   let concert: Concert
-  let isPathNavigable: (PathRestorable) -> Bool
+  let isPathNavigable: (ArchivePath) -> Bool
 
   private var venueName: String {
     guard let venue = concert.venue else {
@@ -24,8 +24,8 @@ struct ShowDetail: View {
   @ViewBuilder private var lineupElement: some View {
     Section(header: Text("Lineup")) {
       ForEach(concert.artists) { artist in
-        PathRestorableLink(
-          pathRestorable: artist, isPathNavigable: isPathNavigable, title: artist.name)
+        ArchivePathLink(
+          archivePath: artist.archivePath, isPathNavigable: isPathNavigable, title: artist.name)
       }
     }
   }
