@@ -8,19 +8,30 @@
 import SwiftUI
 
 struct ArtistBlurb: View {
-  let concert: Concert
+  let count: Int
+  let venue: String?
+  let date: PartialDate
 
   var body: some View {
     LabeledContent {
-      Text("\(concert.show.artists.count) Artist(s)")
+      Text("\(count) Artist(s)")
     } label: {
-      if let venue = concert.venue {
-        Text(venue.name)
+      if let venue {
+        Text(venue)
       }
-      Text(concert.show.date.formatted(.compact))
+      Text(date.formatted(.compact))
     }
   }
 }
+
+#if DEBUG
+  extension ArtistBlurb {
+    init(concert: Concert) {
+      self.init(
+        count: concert.show.artists.count, venue: concert.venue?.name, date: concert.show.date)
+    }
+  }
+#endif
 
 #Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model

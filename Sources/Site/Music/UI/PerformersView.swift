@@ -9,13 +9,16 @@ import Foundation
 import SwiftUI
 
 struct PerformersView: View {
-  let concert: Concert
+  let performers: [String]
+
+  private var headliner: String { performers[0] }
+  private var support: [String] { Array(performers.dropFirst()) }
 
   var body: some View {
     VStack(alignment: .leading) {
-      Text(concert.headliner.name).font(.headline)
-      ForEach(concert.support) { artist in
-        Text(artist.name)
+      Text(headliner).font(.headline)
+      ForEach(support, id: \.self) {
+        Text($0)
       }
     }
   }
@@ -23,5 +26,5 @@ struct PerformersView: View {
 
 #Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
-  PerformersView(concert: model.vault.concerts[0])
+  PerformersView(performers: model.vault.concerts[0].performers)
 }

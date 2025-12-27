@@ -8,23 +8,32 @@
 import SwiftUI
 
 struct VenueBlurb: View {
-  let concert: Concert
+  let date: PartialDate
+  let performers: [String]
 
   @ViewBuilder private var detailsView: some View {
     VStack(alignment: .trailing) {
-      Text(concert.show.date.formatted(.compact))
+      Text(date.formatted(.compact))
     }
     .font(.footnote)
   }
 
   var body: some View {
     HStack {
-      PerformersView(concert: concert)
+      PerformersView(performers: performers)
       Spacer()
       detailsView
     }
   }
 }
+
+#if DEBUG
+  extension VenueBlurb {
+    init(concert: Concert) {
+      self.init(date: concert.show.date, performers: concert.performers)
+    }
+  }
+#endif
 
 #Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model

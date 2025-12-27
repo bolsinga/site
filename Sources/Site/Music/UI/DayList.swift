@@ -28,7 +28,11 @@ struct DayList: View {
         )
       } else {
         List(concerts) { concert in
-          NavigationLink(value: concert) { ConcertBlurb(concert: concert, dateFormat: .relative) }
+          NavigationLink(value: concert) {
+            ConcertBlurb(
+              venue: concert.venue?.name, date: concert.show.date, performers: concert.performers,
+              dateFormat: .relative)
+          }
         }
         .listStyle(.plain)
       }
