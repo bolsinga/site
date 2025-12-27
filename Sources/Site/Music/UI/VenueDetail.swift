@@ -53,7 +53,7 @@ struct VenueDetail: View {
     Section(header: Text("Shows")) {
       ForEach(digest.concerts.sorted(by: concertCompare)) { concert in
         PathRestorableLink(pathRestorable: concert, isPathNavigable: isPathNavigable) {
-          VenueBlurb(concert: concert)
+          VenueBlurb(date: concert.show.date, performers: concert.performers)
         }
       }
     }

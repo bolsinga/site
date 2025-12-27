@@ -25,7 +25,9 @@ struct YearDetail: View {
       Section(header: Text("Shows")) {
         ForEach(digest.concerts.sorted(by: concertCompare)) { concert in
           PathRestorableLink(pathRestorable: concert, isPathNavigable: isPathNavigable) {
-            ConcertBlurb(concert: concert, dateFormat: .noYear)
+            ConcertBlurb(
+              venue: concert.venue?.name, date: concert.show.date, performers: concert.performers,
+              dateFormat: .noYear)
           }
         }
       }

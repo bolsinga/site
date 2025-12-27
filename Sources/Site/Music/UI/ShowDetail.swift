@@ -18,6 +18,9 @@ struct ShowDetail: View {
     return venue.name
   }
 
+  private var date: PartialDate { concert.show.date }
+  private var comment: String? { concert.show.comment }
+
   @ViewBuilder private var lineupElement: some View {
     Section(header: Text("Lineup")) {
       ForEach(concert.artists) { artist in
@@ -29,21 +32,21 @@ struct ShowDetail: View {
 
   @ViewBuilder private var dateElement: some View {
     Section(header: Text("Date")) {
-      let show = concert.show
-      if !show.date.isUnknown, let date = show.date.date {
+      let showDate = date
+      if !showDate.isUnknown, let date = showDate.date {
         LabeledContent {
           Text(date.formatted(.relative(presentation: .numeric)))
         } label: {
-          Text(show.date.formatted(.compact))
+          Text(showDate.formatted(.compact))
         }
       } else {
-        Text(show.date.formatted(.compact))
+        Text(showDate.formatted(.compact))
       }
     }
   }
 
   @ViewBuilder private var commentElement: some View {
-    if let comment = concert.show.comment {
+    if let comment {
       Section(header: Text("Comment")) {
         Text(comment.asAttributedString)
       }

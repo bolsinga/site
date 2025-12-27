@@ -36,7 +36,9 @@ struct ArtistDetail: View {
       ) {
         ForEach(digest.concerts.sorted(by: concertCompare)) { concert in
           PathRestorableLink(pathRestorable: concert, isPathNavigable: isPathNavigable) {
-            ArtistBlurb(concert: concert)
+            ArtistBlurb(
+              count: concert.show.artists.count, venue: concert.venue?.name, date: concert.show.date
+            )
           }
         }
       }
