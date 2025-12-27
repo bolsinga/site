@@ -18,7 +18,7 @@ struct VenueDetail: View {
   let digest: VenueDigest
   let concertCompare: (Concert, Concert) -> Bool
   let geocode: geocoder?
-  let isPathNavigable: (PathRestorable) -> Bool
+  let isPathNavigable: (ArchivePath) -> Bool
 
   @ViewBuilder private var firstSetElement: some View {
     HStack {
@@ -52,7 +52,7 @@ struct VenueDetail: View {
   @ViewBuilder private var showsElement: some View {
     Section(header: Text("Shows")) {
       ForEach(digest.concerts.sorted(by: concertCompare)) { concert in
-        PathRestorableLink(pathRestorable: concert, isPathNavigable: isPathNavigable) {
+        ArchivePathLink(archivePath: concert.archivePath, isPathNavigable: isPathNavigable) {
           VenueBlurb(date: concert.show.date, performers: concert.performers)
         }
       }
@@ -63,9 +63,9 @@ struct VenueDetail: View {
     if !digest.related.isEmpty {
       Section(header: Text("Related Venues")) {
         ForEach(digest.related) { relatedVenue in
-          PathRestorableLink(
-            pathRestorable: relatedVenue, isPathNavigable: isPathNavigable, title: relatedVenue.name
-          )
+          ArchivePathLink(
+            archivePath: relatedVenue.archivePath, isPathNavigable: isPathNavigable,
+            title: relatedVenue.name)
         }
       }
     }

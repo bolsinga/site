@@ -10,7 +10,7 @@ import SwiftUI
 struct YearDetail: View {
   let digest: AnnumDigest
   let concertCompare: (Concert, Concert) -> Bool
-  let isPathNavigable: (PathRestorable) -> Bool
+  let isPathNavigable: (ArchivePath) -> Bool
 
   @ViewBuilder private var statsElement: some View {
     if !digest.concerts.isEmpty {
@@ -24,7 +24,7 @@ struct YearDetail: View {
     if !digest.concerts.isEmpty {
       Section(header: Text("Shows")) {
         ForEach(digest.concerts.sorted(by: concertCompare)) { concert in
-          PathRestorableLink(pathRestorable: concert, isPathNavigable: isPathNavigable) {
+          ArchivePathLink(archivePath: concert.archivePath, isPathNavigable: isPathNavigable) {
             ConcertBlurb(
               venue: concert.venue?.name, date: concert.show.date, performers: concert.performers,
               dateFormat: .noYear)
