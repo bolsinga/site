@@ -25,6 +25,8 @@ struct ArchiveNavigationUserActivityModifier: ViewModifier {
   let urlForCategory: (ArchiveCategory) -> URL?
   let activityForPath: (ArchivePath) -> PathRestorableUserActivity?
 
+  @Environment(VaultModel.self) private var model
+
   func body(content: Content) -> some View {
     Logger.navigationUserActivity.log("activity: \(activity, privacy: .public)")
     return
@@ -40,7 +42,7 @@ struct ArchiveNavigationUserActivityModifier: ViewModifier {
 
         Logger.navigationUserActivity.log("update path \(path.formatted(.json), privacy: .public)")
         guard let pathUserActivity = activityForPath(path) else { return }
-        userActivity.update(pathUserActivity)
+        userActivity.update(pathUserActivity, url: model.vault.url(for: pathUserActivity))
       }
   }
 }

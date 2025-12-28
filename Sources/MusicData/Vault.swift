@@ -43,11 +43,11 @@ public struct Vault: Sendable {
     let concerts = await asyncConcerts
 
     async let artistDigests = music.artists.digests(
-      concerts: concerts, rootURL: url, lookup: lookup, comparator: comparator.compare(lhs:rhs:)
+      concerts: concerts, lookup: lookup, comparator: comparator.compare(lhs:rhs:)
     )
 
     async let venueDigests = music.venues.digests(
-      concerts: concerts, rootURL: url, lookup: lookup, comparator: comparator.compare(lhs:rhs:)
+      concerts: concerts, lookup: lookup, comparator: comparator.compare(lhs:rhs:)
     )
 
     self.comparator = comparator
@@ -65,7 +65,7 @@ public struct Vault: Sendable {
 
     self.decadesMap = await decadesMap
     self.annumDigestMap = self.decadesMap.values.flatMap { $0.keys }.digests(
-      concerts: concerts, rootURL: url, lookup: lookup, comparator: comparator.compare(lhs:rhs:)
+      concerts: concerts, lookup: lookup, comparator: comparator.compare(lhs:rhs:)
     ).reduce(into: [:]) { $0[$1.annum] = $1 }
 
     self.categoryURLLookup = ArchiveCategory.allCases.reduce(into: [ArchiveCategory: URL]()) {
@@ -93,5 +93,9 @@ public struct Vault: Sendable {
   /// The URL for this category.
   public func url(for category: ArchiveCategory) -> URL? {
     categoryURLLookup[category]
+  }
+
+  public func url(for item: PathRestorable) -> URL? {
+    item.archivePath.url(using: rootURL)
   }
 }

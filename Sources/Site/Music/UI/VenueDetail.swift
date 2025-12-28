@@ -13,6 +13,8 @@ private enum VenueDetailGeocodeError: Error {
 }
 
 struct VenueDetail: View {
+  @Environment(VaultModel.self) private var model
+
   typealias geocoder = @MainActor (VenueDigest) async throws -> MKMapItem?
 
   let digest: VenueDigest
@@ -82,7 +84,7 @@ struct VenueDetail: View {
       .listStyle(.grouped)
     #endif
     .navigationTitle(digest.venue.name)
-    .toolbar { ArchiveSharableToolbarContent(item: digest) }
+    .toolbar { ArchiveSharableToolbarContent(item: digest, url: model.vault.url(for: digest)) }
   }
 }
 

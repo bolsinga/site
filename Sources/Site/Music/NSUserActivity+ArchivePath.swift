@@ -16,18 +16,18 @@ extension Logger {
 extension NSUserActivity {
   internal static let archivePathKey = "archivePath"
 
-  func update<T: PathRestorableUserActivity>(_ item: T) {
+  func update<T: PathRestorableUserActivity>(_ item: T, url: URL?) {
     let identifier = item.archivePath.formatted(.json)
     Logger.updateActivity.log("advertise: \(identifier, privacy: .public)")
     self.targetContentIdentifier = identifier
 
-    if let url = item.url {
+    if let url {
       Logger.updateActivity.log("web: \(url.absoluteString, privacy: .public)")
       self.isEligibleForPublicIndexing = true
       self.webpageURL = url
     }
 
-    item.updateActivity(self)
+    item.updateActivity(self, url: url)
 
     self.requiredUserInfoKeys = [NSUserActivity.archivePathKey]
     self.addUserInfoEntries(from: [NSUserActivity.archivePathKey: identifier])

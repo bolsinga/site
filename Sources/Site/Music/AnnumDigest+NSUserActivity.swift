@@ -8,7 +8,7 @@
 import Foundation
 
 extension AnnumDigest: PathRestorableUserActivity {
-  func updateActivity(_ userActivity: NSUserActivity) {
+  func updateActivity(_ userActivity: NSUserActivity, url: URL?) {
     userActivity.isEligibleForHandoff = true
 
     userActivity.isEligibleForSearch = true

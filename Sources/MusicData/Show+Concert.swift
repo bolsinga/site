@@ -11,9 +11,7 @@ extension Show {
   fileprivate func concert(rootURL: URL, lookup: Lookup, comparator: (Concert, Concert) -> Bool)
     -> Concert
   {
-    Concert(
-      show: self, venue: lookup.venueForShow(self), artists: lookup.artistsForShow(self),
-      url: self.archivePath.url(using: rootURL))
+    Concert(show: self, venue: lookup.venueForShow(self), artists: lookup.artistsForShow(self))
   }
 }
 

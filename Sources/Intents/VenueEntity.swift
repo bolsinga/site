@@ -45,8 +45,7 @@ struct VenueEntity: AppEntity {
       title: "\(name)", subtitle: "\(address)", image: .init(systemName: "music.note.house"))
   }
 
-  init?(digest: VenueDigest) {
-    guard let url = digest.url else { return nil }
+  init(digest: VenueDigest, url: URL) {
     self.id = digest.id
     self.address = digest.venue.location.formatted(.oneLineNoURL)
 

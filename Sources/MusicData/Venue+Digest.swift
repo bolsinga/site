@@ -9,11 +9,10 @@ import Foundation
 
 extension Venue {
   fileprivate func digest(
-    concerts: [Concert], rootURL: URL, lookup: Lookup, comparator: (Concert, Concert) -> Bool
+    concerts: [Concert], lookup: Lookup, comparator: (Concert, Concert) -> Bool
   ) -> VenueDigest {
     VenueDigest(
       venue: self,
-      url: self.archivePath.url(using: rootURL),
       concerts: concerts.filter { $0.show.venue == id }.sorted(by: comparator),
       related: lookup.related(self),
       firstSet: lookup.firstSet(venue: self),
@@ -25,10 +24,8 @@ extension Venue {
 
 extension Array where Element == Venue {
   public func digests(
-    concerts: [Concert], rootURL: URL, lookup: Lookup, comparator: (Concert, Concert) -> Bool
+    concerts: [Concert], lookup: Lookup, comparator: (Concert, Concert) -> Bool
   ) -> [VenueDigest] {
-    self.map {
-      $0.digest(concerts: concerts, rootURL: rootURL, lookup: lookup, comparator: comparator)
-    }
+    self.map { $0.digest(concerts: concerts, lookup: lookup, comparator: comparator) }
   }
 }
