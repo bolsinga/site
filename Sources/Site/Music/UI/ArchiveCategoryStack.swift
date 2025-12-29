@@ -72,9 +72,7 @@ struct ArchiveCategoryStack: View {
             .presentationDetents([.medium])
         }
         .navigationDestination(for: ArchivePath.self) {
-          $0.destination(
-            vault: model.vault, isPathNavigable: path.isPathNavigable(_:),
-            geocoder: { try await model.geocode($0.venue) })
+          $0.destination(vault: model.vault, isPathNavigable: path.isPathNavigable(_:))
         }
         .toolbar {
           if showToolbar {
