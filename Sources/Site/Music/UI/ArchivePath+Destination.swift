@@ -23,22 +23,15 @@ extension ArchivePath {
       }
     case .venue(let iD):
       if let venueDigest = vault.venueDigestMap[iD] {
-        VenueDetail(
-          digest: venueDigest, concertCompare: vault.comparator.compare(lhs:rhs:),
-          geocode: geocoder, isPathNavigable: isPathNavigable
-        )
+        VenueDetail(digest: venueDigest, geocode: geocoder, isPathNavigable: isPathNavigable)
       }
     case .artist(let iD):
       if let artistDigest = vault.artistDigestMap[iD] {
-        ArtistDetail(
-          digest: artistDigest, concertCompare: vault.comparator.compare(lhs:rhs:),
-          isPathNavigable: isPathNavigable)
+        ArtistDetail(digest: artistDigest, isPathNavigable: isPathNavigable)
       }
     case .year(let annum):
       if let annumDigest = vault.annumDigestMap[annum] {
-        YearDetail(
-          digest: annumDigest, concertCompare: vault.comparator.compare(lhs:rhs:),
-          isPathNavigable: isPathNavigable)
+        YearDetail(digest: annumDigest, isPathNavigable: isPathNavigable)
       }
     }
   }

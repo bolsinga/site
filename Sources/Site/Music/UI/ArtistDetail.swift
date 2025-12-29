@@ -9,7 +9,6 @@ import SwiftUI
 
 struct ArtistDetail: View {
   let digest: ArtistDigest
-  let concertCompare: (Concert, Concert) -> Bool
   let isPathNavigable: (ArchivePath) -> Bool
 
   @ViewBuilder private var firstSetElement: some View {
@@ -34,7 +33,7 @@ struct ArtistDetail: View {
       Section(
         header: Text("Shows")
       ) {
-        ForEach(digest.concerts.sorted(by: concertCompare)) { concert in
+        ForEach(digest.concerts) { concert in
           ArchivePathLink(archivePath: concert.archivePath, isPathNavigable: isPathNavigable) {
             ArtistBlurb(
               count: concert.show.artists.count, venue: concert.venue?.name, date: concert.show.date
@@ -78,7 +77,6 @@ struct ArtistDetail: View {
   NavigationStack {
     ArtistDetail(
       digest: model.vault.artistDigestMap["ar692"]!,
-      concertCompare: model.vault.comparator.compare(lhs:rhs:),
       isPathNavigable: { _ in
         true
       }
@@ -91,7 +89,6 @@ struct ArtistDetail: View {
   NavigationStack {
     ArtistDetail(
       digest: model.vault.artistDigestMap["ar692"]!,
-      concertCompare: model.vault.comparator.compare(lhs:rhs:),
       isPathNavigable: { _ in
         false
       }
@@ -106,7 +103,6 @@ struct ArtistDetail: View {
   NavigationStack {
     ArtistDetail(
       digest: digest,
-      concertCompare: model.vault.comparator.compare(lhs:rhs:),
       isPathNavigable: { $0 != selectedConcert.archivePath }
     )
   }

@@ -16,7 +16,6 @@ struct VenueDetail: View {
   typealias geocoder = @MainActor (VenueDigest) async throws -> MKMapItem?
 
   let digest: VenueDigest
-  let concertCompare: (Concert, Concert) -> Bool
   let geocode: geocoder?
   let isPathNavigable: (ArchivePath) -> Bool
 
@@ -51,7 +50,7 @@ struct VenueDetail: View {
 
   @ViewBuilder private var showsElement: some View {
     Section(header: Text("Shows")) {
-      ForEach(digest.concerts.sorted(by: concertCompare)) { concert in
+      ForEach(digest.concerts) { concert in
         ArchivePathLink(archivePath: concert.archivePath, isPathNavigable: isPathNavigable) {
           VenueBlurb(date: concert.show.date, performers: concert.performers)
         }
@@ -91,7 +90,6 @@ struct VenueDetail: View {
   NavigationStack {
     VenueDetail(
       digest: model.vault.venueDigestMap["v103"]!,
-      concertCompare: model.vault.comparator.compare(lhs:rhs:),
       geocode: nil,
       isPathNavigable: { _ in
         true
@@ -105,7 +103,6 @@ struct VenueDetail: View {
   NavigationStack {
     VenueDetail(
       digest: model.vault.venueDigestMap["v103"]!,
-      concertCompare: model.vault.comparator.compare(lhs:rhs:),
       geocode: { _ in
         try await ContinuousClock().sleep(until: .now + Duration.seconds(10))
         return MKMapItem.forCurrentLocation()
