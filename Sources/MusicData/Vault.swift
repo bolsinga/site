@@ -11,7 +11,6 @@ public struct Vault: Sendable {
   public let comparator: LibraryComparator
   public let sectioner: LibrarySectioner
   public let rootURL: URL
-  public let concerts: [Concert]
   public let concertMap: [Concert.ID: Concert]
 
   public let artistDigests: [ArtistDigest]
@@ -54,8 +53,7 @@ public struct Vault: Sendable {
     self.sectioner = await sectioner
     self.rootURL = url
 
-    self.concerts = concerts
-    self.concertMap = self.concerts.reduce(into: [:]) { $0[$1.id] = $1 }
+    self.concertMap = concerts.reduce(into: [:]) { $0[$1.id] = $1 }
 
     self.artistDigests = await artistDigests
     self.artistDigestMap = self.artistDigests.reduce(into: [:]) { $0[$1.artist.id] = $1 }
@@ -73,7 +71,7 @@ public struct Vault: Sendable {
       $0[$1] = url
     }
 
-    self.concertDayMap = self.concerts.reduce(into: [Int: [Concert.ID]]()) {
+    self.concertDayMap = concerts.reduce(into: [Int: [Concert.ID]]()) {
       guard !$1.show.date.isPartiallyUnknown else { return }
       guard let date = $1.show.date.date else { return }
 
@@ -89,6 +87,8 @@ public struct Vault: Sendable {
     let concertIDs = concertDayMap[dayOfLeapYear] ?? []
     return concertIDs.compactMap { concertMap[$0] }.sorted { comparator.compare(lhs: $0, rhs: $1) }
   }
+
+  public var concerts: [Concert] { Array(concertMap.values) }
 
   /// The URL for this category.
   public func url(for category: ArchiveCategory) -> URL? {
