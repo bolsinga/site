@@ -24,20 +24,12 @@ extension Sequence where Element == Concert {
   }
 }
 
-extension Vault {
-  fileprivate func entity(for digest: VenueDigest) -> VenueEntity? {
-    guard let url = url(for: digest) else { return nil }
-    return VenueEntity(digest: digest, url: url)
-  }
-}
-
 struct VenueEntityQuery: EntityQuery {
   func entities(for identifiers: [VenueEntity.ID]) async throws -> [VenueEntity] {
     Logger.venueQuery.log("Identifiers: \(identifiers)")
 
     return identifiers.reduce(into: [VenueEntity]()) { partialResult, id in
-      guard let digest = vault.venueDigestMap[id] else { return }
-      guard let entity = vault.entity(for: digest) else { return }
+      guard let entity = vault.venueEntity(for: id) else { return }
       partialResult.append(entity)
     }
   }
@@ -59,7 +51,7 @@ extension VenueEntityQuery: EntityStringQuery {
   func entities(matching string: String) async throws -> [VenueEntity] {
     Logger.venueQuery.log("Matching: \(string)")
 
-    return vault.venueDigests.names(filteredBy: string).compactMap { vault.entity(for: $0) }
+    return vault.venueEntities(filteredBy: string)
   }
 }
 
@@ -199,7 +191,7 @@ extension VenueEntityQuery: EntityPropertyQuery {
   private func entities(matching comparators: [Predicate<VenueEntity>], mode: ComparatorMode) throws
     -> [VenueEntity]
   {
-    try vault.venueDigests.compactMap { vault.entity(for: $0) }.compactMap { entity in
+    try vault.venueEntities.compactMap { entity in
       var includeAsResult = mode == .and ? true : false
       let earlyBreakCondition = includeAsResult
       for comparator in comparators {
