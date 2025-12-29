@@ -45,15 +45,13 @@ struct ConcertBlurb: View {
   }
 }
 
-#if DEBUG
-  extension ConcertBlurb {
-    init(concert: Concert, dateFormat: DateFormat) {
-      self.init(
-        venue: concert.venue?.name, date: concert.show.date, performers: concert.performers,
-        dateFormat: dateFormat)
-    }
+extension ConcertBlurb {
+  fileprivate init(concert: Concert, dateFormat: DateFormat) {
+    self.init(
+      venue: concert.venue?.name, date: concert.show.date, performers: concert.performers,
+      dateFormat: dateFormat)
   }
-#endif
+}
 
 #Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model

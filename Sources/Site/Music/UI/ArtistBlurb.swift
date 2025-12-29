@@ -24,14 +24,12 @@ struct ArtistBlurb: View {
   }
 }
 
-#if DEBUG
-  extension ArtistBlurb {
-    init(concert: Concert) {
-      self.init(
-        count: concert.show.artists.count, venue: concert.venue?.name, date: concert.show.date)
-    }
+extension ArtistBlurb {
+  fileprivate init(concert: Concert) {
+    self.init(
+      count: concert.show.artists.count, venue: concert.venue?.name, date: concert.show.date)
   }
-#endif
+}
 
 #Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
