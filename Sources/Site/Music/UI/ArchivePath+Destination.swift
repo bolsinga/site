@@ -10,10 +10,7 @@ import SwiftUI
 
 extension ArchivePath {
   @MainActor
-  @ViewBuilder func destination(
-    vault: Vault, isPathNavigable: @escaping (ArchivePath) -> Bool,
-    geocoder: @escaping @MainActor (VenueDigest) async throws -> MKMapItem?
-  )
+  @ViewBuilder func destination(vault: Vault, isPathNavigable: @escaping (ArchivePath) -> Bool)
     -> some View
   {
     switch self {
@@ -23,7 +20,7 @@ extension ArchivePath {
       }
     case .venue(let iD):
       if let venueDigest = vault.venueDigestMap[iD] {
-        VenueDetail(digest: venueDigest, geocode: geocoder, isPathNavigable: isPathNavigable)
+        VenueDetail(digest: venueDigest, isPathNavigable: isPathNavigable)
       }
     case .artist(let iD):
       if let artistDigest = vault.artistDigestMap[iD] {

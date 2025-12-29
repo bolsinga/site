@@ -8,17 +8,10 @@
 import MapKit
 import SwiftUI
 
-private enum VenueDetailGeocodeError: Error {
-  case noGeocoder
-}
-
 struct VenueDetail: View {
   @Environment(VaultModel.self) private var model
 
-  typealias geocoder = @MainActor (VenueDigest) async throws -> MKMapItem?
-
   let digest: VenueDigest
-  let geocode: geocoder?
   let isPathNavigable: (ArchivePath) -> Bool
 
   @ViewBuilder private var firstSetElement: some View {
@@ -33,10 +26,7 @@ struct VenueDetail: View {
     Section(header: Text("Location")) {
       AddressView(location: digest.venue.location)
       LocationMap(identifier: digest) {
-        guard let geocode else {
-          throw VenueDetailGeocodeError.noGeocoder
-        }
-        return try await geocode(digest)
+        try await model.geocode(digest.venue)
       }
     }
   }
@@ -87,28 +77,11 @@ struct VenueDetail: View {
   }
 }
 
-#Preview("Error", traits: .vaultModel) {
+#Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   NavigationStack {
     VenueDetail(
       digest: model.vault.venueDigestMap["v103"]!,
-      geocode: nil,
-      isPathNavigable: { _ in
-        true
-      }
-    )
-  }
-}
-
-#Preview("Current Location after 10 seconds", traits: .vaultModel) {
-  @Previewable @Environment(VaultModel.self) var model
-  NavigationStack {
-    VenueDetail(
-      digest: model.vault.venueDigestMap["v103"]!,
-      geocode: { _ in
-        try await ContinuousClock().sleep(until: .now + Duration.seconds(10))
-        return MKMapItem.forCurrentLocation()
-      },
       isPathNavigable: { _ in
         true
       }
