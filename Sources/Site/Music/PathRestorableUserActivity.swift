@@ -7,6 +7,6 @@
 
 import Foundation
 
-protocol PathRestorableUserActivity: Linkable, PathRestorable {
-  func updateActivity(_ userActivity: NSUserActivity)
+protocol PathRestorableUserActivity: PathRestorable {
+  func updateActivity(_ userActivity: NSUserActivity, url: URL?)
 }

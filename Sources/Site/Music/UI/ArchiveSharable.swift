@@ -12,7 +12,7 @@ import Foundation
 // When sharing via Mail, subject is as expected, and message is link followed by message text.
 // macos ventura: no subject nor message shown messages nor mail
 
-protocol ArchiveSharable: Linkable {
+protocol ArchiveSharable {
   var subject: String { get }
   var message: String { get }
 }

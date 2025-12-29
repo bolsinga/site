@@ -9,7 +9,7 @@ import AppIntents
 import Foundation
 
 extension VenueDigest: PathRestorableUserActivity {
-  func updateActivity(_ userActivity: NSUserActivity) {
+  func updateActivity(_ userActivity: NSUserActivity, url: URL?) {
     userActivity.isEligibleForHandoff = true
 
     userActivity.isEligibleForSearch = true
@@ -17,8 +17,8 @@ extension VenueDigest: PathRestorableUserActivity {
     userActivity.addSearchableContent(
       description: String(localized: "See Shows At This Venue"))
 
-    if let entity = VenueEntity(digest: self) {
-      userActivity.appEntityIdentifier = EntityIdentifier(for: entity)
+    if let url {
+      userActivity.appEntityIdentifier = EntityIdentifier(for: VenueEntity(digest: self, url: url))
     }
   }
 }

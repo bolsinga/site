@@ -18,9 +18,8 @@ struct PathRestorableUserActivityTests {
 
     let concert = Concert(
       show: Show(artists: [], date: PartialDate(), id: "sh17", venue: "v0"),
-      venue: Venue(id: "v0", location: Location(city: "c", state: "s"), name: "V0"), artists: [],
-      url: URL(string: "https://hey")!)
-    userActivity.update(concert)
+      venue: Venue(id: "v0", location: Location(city: "c", state: "s"), name: "V0"), artists: [])
+    userActivity.update(concert, url: rootURL)
 
     #expect(userActivity.isEligibleForHandoff)
 
@@ -30,7 +29,7 @@ struct PathRestorableUserActivityTests {
     #expect(userActivity.contentAttributeSet != nil)
 
     #expect(userActivity.isEligibleForPublicIndexing)
-    #expect(userActivity.webpageURL != nil)
+    #expect(userActivity.webpageURL == rootURL)
 
     #expect(try ArchivePath("sh-sh17") == userActivity.archivePath)
 
@@ -42,9 +41,9 @@ struct PathRestorableUserActivityTests {
 
     let artist = Artist(id: "ar0", name: "AR0")
     let digest = ArtistDigest(
-      artist: artist, url: artist.archivePath.url(using: rootURL), concerts: [], related: [],
+      artist: artist, concerts: [], related: [],
       firstSet: .empty, spanRank: .empty, showRank: .empty, venueRank: .empty)
-    userActivity.update(digest)
+    userActivity.update(digest, url: rootURL)
 
     #expect(userActivity.isEligibleForHandoff)
 
@@ -54,7 +53,7 @@ struct PathRestorableUserActivityTests {
     #expect(userActivity.contentAttributeSet != nil)
 
     #expect(userActivity.isEligibleForPublicIndexing)
-    #expect(userActivity.webpageURL != nil)
+    #expect(userActivity.webpageURL == rootURL)
 
     #expect(try ArchivePath("ar-ar0") == userActivity.archivePath)
   }
@@ -64,9 +63,9 @@ struct PathRestorableUserActivityTests {
 
     let venue = Venue(id: "v10", location: Location(city: "c", state: "s"), name: "V10")
     let digest = VenueDigest(
-      venue: venue, url: venue.archivePath.url(using: rootURL), concerts: [], related: [],
+      venue: venue, concerts: [], related: [],
       firstSet: .empty, spanRank: .empty, showRank: .empty, venueArtistRank: .empty)
-    userActivity.update(digest)
+    userActivity.update(digest, url: rootURL)
 
     #expect(userActivity.isEligibleForHandoff)
 
@@ -76,7 +75,7 @@ struct PathRestorableUserActivityTests {
     #expect(userActivity.contentAttributeSet != nil)
 
     #expect(userActivity.isEligibleForPublicIndexing)
-    #expect(userActivity.webpageURL != nil)
+    #expect(userActivity.webpageURL == rootURL)
 
     #expect(try ArchivePath("v-v10") == userActivity.archivePath)
   }
@@ -86,10 +85,10 @@ struct PathRestorableUserActivityTests {
 
     let item = Annum.year(1990)
     let digest = AnnumDigest(
-      annum: item, url: item.archivePath.url(using: rootURL), concerts: [], showRank: .empty,
+      annum: item, concerts: [], showRank: .empty,
       venueRank: .empty, artistRank: .empty)
 
-    userActivity.update(digest)
+    userActivity.update(digest, url: rootURL)
 
     #expect(userActivity.isEligibleForHandoff)
 
@@ -99,7 +98,7 @@ struct PathRestorableUserActivityTests {
     #expect(userActivity.contentAttributeSet != nil)
 
     #expect(userActivity.isEligibleForPublicIndexing)
-    #expect(userActivity.webpageURL != nil)
+    #expect(userActivity.webpageURL == rootURL)
 
     #expect(try ArchivePath("y-1990") == userActivity.archivePath)
   }
@@ -109,13 +108,12 @@ struct PathRestorableUserActivityTests {
 
     let concert = Concert(
       show: Show(artists: [], date: PartialDate(), id: "sh17", venue: "v0"),
-      venue: Venue(id: "v0", location: Location(city: "c", state: "s"), name: "V0"), artists: [],
-      url: URL(string: "https://hey")!)
+      venue: Venue(id: "v0", location: Location(city: "c", state: "s"), name: "V0"), artists: [])
 
-    userActivity.update(concert)
+    userActivity.update(concert, url: rootURL)
 
     #expect(userActivity.isEligibleForPublicIndexing)
-    #expect(userActivity.webpageURL != nil)
+    #expect(userActivity.webpageURL == rootURL)
   }
 
   @Test func decodeError_noUserInfo() {

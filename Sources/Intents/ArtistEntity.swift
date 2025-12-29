@@ -41,8 +41,7 @@ struct ArtistEntity: AppEntity {
       title: "\(name)", image: .init(systemName: "person.and.background.dotted"))
   }
 
-  init?(digest: ArtistDigest) {
-    guard let url = digest.url else { return nil }
+  init(digest: ArtistDigest, url: URL) {
     self.id = digest.id
     self.url = url
     self.name = digest.name

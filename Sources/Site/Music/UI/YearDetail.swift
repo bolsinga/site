@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct YearDetail: View {
+  @Environment(VaultModel.self) private var model
+
   let digest: AnnumDigest
   let concertCompare: (Concert, Concert) -> Bool
   let isPathNavigable: (ArchivePath) -> Bool
@@ -43,7 +45,7 @@ struct YearDetail: View {
       .listStyle(.grouped)
     #endif
     .navigationTitle(Text(digest.annum.formatted()))
-    .toolbar { ArchiveSharableToolbarContent(item: digest) }
+    .toolbar { ArchiveSharableToolbarContent(item: digest, url: model.vault.url(for: digest)) }
   }
 }
 

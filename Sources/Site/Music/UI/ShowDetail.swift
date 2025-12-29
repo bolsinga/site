@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ShowDetail: View {
+  @Environment(VaultModel.self) private var model
+
   let concert: Concert
   let isPathNavigable: (ArchivePath) -> Bool
 
@@ -63,7 +65,7 @@ struct ShowDetail: View {
       .listStyle(.grouped)
     #endif
     .navigationTitle(venueName)
-    .toolbar { ArchiveSharableToolbarContent(item: concert) }
+    .toolbar { ArchiveSharableToolbarContent(item: concert, url: model.vault.url(for: concert)) }
   }
 }
 

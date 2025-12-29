@@ -9,7 +9,7 @@ import AppIntents
 import Foundation
 
 extension ArtistDigest: PathRestorableUserActivity {
-  func updateActivity(_ userActivity: NSUserActivity) {
+  func updateActivity(_ userActivity: NSUserActivity, url: URL?) {
     userActivity.isEligibleForHandoff = true
 
     userActivity.isEligibleForSearch = true
@@ -17,8 +17,8 @@ extension ArtistDigest: PathRestorableUserActivity {
     userActivity.addSearchableContent(
       description: String(localized: "See Shows With This Artist"))
 
-    if let entity = ArtistEntity(digest: self) {
-      userActivity.appEntityIdentifier = EntityIdentifier(for: entity)
+    if let url {
+      userActivity.appEntityIdentifier = EntityIdentifier(for: ArtistEntity(digest: self, url: url))
     }
   }
 }
