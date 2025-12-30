@@ -49,9 +49,11 @@ struct Program: AsyncParsableCommand {
 
     let vault = try await Vault.load(rootURL.appending(path: "music.json").absoluteString)
 
-    let concerts = vault.concerts
-    let artistDigests = vault.artistDigests
-    let venueDigests = vault.venueDigests
+    let concerts = vault.concertMap.values.sorted(by: vault.comparator.compare(lhs:rhs:))
+    let artistDigests = vault.artistDigestMap.values.sorted(
+      by: vault.comparator.libraryCompare(lhs:rhs:))
+    let venueDigests = vault.venueDigestMap.values.sorted(
+      by: vault.comparator.libraryCompare(lhs:rhs:))
 
     print("Artists: \(artistDigests.count)")
     print("Shows: \(concerts.count)")
