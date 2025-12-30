@@ -37,7 +37,7 @@ public struct Vault: Sendable {
     async let decadesMap = lookup.decadesMap
 
     async let asyncConcerts = music.shows.concerts(
-      rootURL: url, lookup: lookup, comparator: comparator.compare(lhs:rhs:))
+      lookup: lookup, comparator: comparator.compare(lhs:rhs:))
 
     let concerts = await asyncConcerts
 
