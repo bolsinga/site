@@ -20,7 +20,7 @@ extension StatsGrouping {
     self.init(stats: Stats(annumDigest: digest), titles: StatsTitles(annumDigest: digest))
   }
 
-  init(concerts: [Concert]) {
+  init(concerts: any Collection<Concert>) {
     self.init(stats: Stats(concerts: concerts), titles: StatsTitles(concerts: concerts))
   }
 }
