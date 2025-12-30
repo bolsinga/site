@@ -221,7 +221,7 @@ enum LocationAuthorization {
   private func concerts(nearby location: CLLocation, distanceThreshold: CLLocationDistance)
     -> [Concert]
   {
-    return vault.concerts
+    vault.concertMap.values
       .filter { $0.venue != nil }
       .filter { venueLocatables[$0.venue!.id] != nil }
       .filter {
