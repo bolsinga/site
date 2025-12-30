@@ -52,7 +52,7 @@ struct ArtistDetail: View {
       ) {
         ForEach(digest.related) { relatedArtist in
           ArchivePathLink(
-            archivePath: relatedArtist.archivePath, isPathNavigable: isPathNavigable,
+            archivePath: relatedArtist.id, isPathNavigable: isPathNavigable,
             title: relatedArtist.name)
         }
       }
