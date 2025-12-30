@@ -12,7 +12,7 @@ struct StatsSummary: View {
 
   var body: some View {
     List {
-      StatsGrouping(concerts: model.vault.concerts)
+      StatsGrouping(concerts: model.vault.concertMap.values)
     }
     .navigationTitle(Text(ArchiveCategory.stats.localizedString))
   }
