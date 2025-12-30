@@ -55,15 +55,15 @@ extension ConcertBlurb {
 
 #Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
-  ConcertBlurb(concert: model.vault.concerts[0], dateFormat: .noYear)
+  ConcertBlurb(concert: model.vault.concertMap["sh1"]!, dateFormat: .noYear)
 }
 
 #Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
-  ConcertBlurb(concert: model.vault.concerts[1], dateFormat: .relative)
+  ConcertBlurb(concert: model.vault.concertMap["sh500"]!, dateFormat: .relative)
 }
 
 #Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
-  ConcertBlurb(concert: model.vault.concerts[2], dateFormat: .noYear)
+  ConcertBlurb(concert: model.vault.concertMap["sh100"]!, dateFormat: .noYear)
 }
