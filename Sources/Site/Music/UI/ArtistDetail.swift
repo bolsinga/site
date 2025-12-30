@@ -21,7 +21,7 @@ struct ArtistDetail: View {
   }
 
   @ViewBuilder private var statsElement: some View {
-    if !digest.concerts.isEmpty {
+    if !digest.shows.isEmpty {
       Section(header: Text(ArchiveCategory.stats.localizedString)) {
         firstSetElement
         StatsGrouping(artistDigest: digest)
@@ -30,15 +30,13 @@ struct ArtistDetail: View {
   }
 
   @ViewBuilder private var showsElement: some View {
-    if !digest.concerts.isEmpty {
+    if !digest.shows.isEmpty {
       Section(
         header: Text("Shows")
       ) {
-        ForEach(digest.concerts) { concert in
-          ArchivePathLink(archivePath: concert.archivePath, isPathNavigable: isPathNavigable) {
-            ArtistBlurb(
-              count: concert.show.artists.count, venue: concert.venue?.name, date: concert.show.date
-            )
+        ForEach(digest.shows) { show in
+          ArchivePathLink(archivePath: show.id, isPathNavigable: isPathNavigable) {
+            ArtistBlurb(count: show.performers.count, venue: show.venue, date: show.date)
           }
         }
       }
@@ -102,12 +100,12 @@ struct ArtistDetail: View {
 #Preview("First Navigated", traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   let digest = model.vault.artistDigestMap["ar692"]!
-  let selectedConcert = digest.concerts[0]
+  let selectedConcert = digest.shows[0]
   NavigationStack {
     ArtistDetail(
       digest: digest,
       url: nil,
-      isPathNavigable: { $0 != selectedConcert.archivePath }
+      isPathNavigable: { $0 != selectedConcert.id }
     )
   }
 }

@@ -1,0 +1,16 @@
+//
+//  ShowDigest.swift
+//  SiteApp
+//
+//  Created by Greg Bolsinga on 12/30/25.
+//
+
+import Foundation
+
+public struct ShowDigest: Equatable, Hashable, Identifiable, Sendable {
+  public let id: ArchivePath
+  let date: PartialDate
+  let performers: [String]
+  let venue: String?
+  let location: Location?
+}

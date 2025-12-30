@@ -53,8 +53,8 @@ struct VenueEntity: AppEntity {
     self.name = digest.name
     self.city = digest.venue.location.city
     self.state = digest.venue.location.state
-    self.showCount = digest.concerts.count
-    self.artistCount = Array(digest.concerts.flatMap { $0.artists }.uniqued()).count
+    self.showCount = digest.shows.count
+    self.artistCount = Array(digest.shows.flatMap { $0.performers }.uniqued()).count
     self.related = digest.related.map { $0.name }
   }
 }

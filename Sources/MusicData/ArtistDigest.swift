@@ -11,7 +11,7 @@ public struct ArtistDigest: Equatable, Hashable, Identifiable, Sendable {
   public var id: Artist.ID { artist.id }
 
   public let artist: Artist
-  public let concerts: [Concert]
+  public let shows: [ShowDigest]
   public let related: [Related]
   public let firstSet: FirstSet
   public let spanRank: Ranking
@@ -19,11 +19,11 @@ public struct ArtistDigest: Equatable, Hashable, Identifiable, Sendable {
   public let venueRank: Ranking
 
   public init(
-    artist: Artist, concerts: [Concert], related: [Related], firstSet: FirstSet,
+    artist: Artist, shows: [ShowDigest], related: [Related], firstSet: FirstSet,
     spanRank: Ranking, showRank: Ranking, venueRank: Ranking
   ) {
     self.artist = artist
-    self.concerts = concerts
+    self.shows = shows
     self.related = related
     self.firstSet = firstSet
     self.spanRank = spanRank
