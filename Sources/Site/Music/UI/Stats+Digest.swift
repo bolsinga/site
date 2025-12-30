@@ -28,7 +28,7 @@ extension Stats {
       alwaysShowVenuesArtistsStats: true)
   }
 
-  init(concerts: [Concert]) {
+  init(concerts: any Collection<Concert>) {
     self.init(concerts: concerts, displayArchiveCategoryCounts: true)
   }
 }

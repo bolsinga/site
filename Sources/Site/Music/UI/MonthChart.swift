@@ -113,7 +113,8 @@ struct MonthChart: View {
 #Preview("Default", traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   MonthChart(
-    dates: Stats(concerts: model.vault.concerts).dates, title: "Months", presentation: .default
+    dates: Stats(concerts: model.vault.concertMap.values).dates, title: "Months",
+    presentation: .default
   )
   .padding()
 }
@@ -121,7 +122,8 @@ struct MonthChart: View {
 #Preview("Compact", traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   MonthChart(
-    dates: Stats(concerts: model.vault.concerts).dates, title: "Months", presentation: .compact
+    dates: Stats(concerts: model.vault.concertMap.values).dates, title: "Months",
+    presentation: .compact
   )
   .padding()
 }

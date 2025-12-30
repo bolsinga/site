@@ -21,7 +21,7 @@ struct Stats {
   let alwaysShowVenuesArtistsStats: Bool
 
   internal init(
-    concerts: [Concert],
+    concerts: any Collection<Concert>,
     shouldCalculateArtistCount: Bool = true,
     yearsSpanRanking: Ranking? = nil,
     showRanking: Ranking? = nil,
