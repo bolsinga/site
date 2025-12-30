@@ -88,8 +88,6 @@ public struct Vault: Sendable {
     return concertIDs.compactMap { concertMap[$0] }.sorted { comparator.compare(lhs: $0, rhs: $1) }
   }
 
-  public var concerts: [Concert] { Array(concertMap.values) }
-
   /// The URL for this category.
   public func url(for category: ArchiveCategory) -> URL? {
     categoryURLLookup[category]
