@@ -12,14 +12,14 @@ public struct ArtistDigest: Equatable, Hashable, Identifiable, Sendable {
 
   public let artist: Artist
   public let concerts: [Concert]
-  public let related: [Artist]
+  public let related: [Related]
   public let firstSet: FirstSet
   public let spanRank: Ranking
   public let showRank: Ranking
   public let venueRank: Ranking
 
   public init(
-    artist: Artist, concerts: [Concert], related: [Artist], firstSet: FirstSet,
+    artist: Artist, concerts: [Concert], related: [Related], firstSet: FirstSet,
     spanRank: Ranking, showRank: Ranking, venueRank: Ranking
   ) {
     self.artist = artist

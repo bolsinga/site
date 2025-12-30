@@ -139,11 +139,15 @@ public struct Lookup: Sendable {
     return venueFirstSetsMap[venue.id] ?? FirstSet.empty
   }
 
-  public func related(_ item: Venue) -> [Venue] {
-    relationMap[item.id]?.compactMap { venueMap[$0] } ?? []
+  public func related(_ item: Venue) -> [Related] {
+    relationMap[item.id]?.compactMap { venueMap[$0] }.map {
+      Related(id: $0.archivePath, name: $0.name)
+    } ?? []
   }
 
-  public func related(_ item: Artist) -> [Artist] {
-    relationMap[item.id]?.compactMap { artistMap[$0] } ?? []
+  public func related(_ item: Artist) -> [Related] {
+    relationMap[item.id]?.compactMap { artistMap[$0] }.map {
+      Related(id: $0.archivePath, name: $0.name)
+    } ?? []
   }
 }

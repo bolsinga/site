@@ -12,14 +12,14 @@ public struct VenueDigest: Equatable, Hashable, Identifiable, Sendable {
 
   public let venue: Venue
   public let concerts: [Concert]
-  public let related: [Venue]
+  public let related: [Related]
   public let firstSet: FirstSet
   public let spanRank: Ranking
   public let showRank: Ranking
   public let venueArtistRank: Ranking
 
   public init(
-    venue: Venue, concerts: [Concert], related: [Venue], firstSet: FirstSet,
+    venue: Venue, concerts: [Concert], related: [Related], firstSet: FirstSet,
     spanRank: Ranking, showRank: Ranking, venueArtistRank: Ranking
   ) {
     self.venue = venue

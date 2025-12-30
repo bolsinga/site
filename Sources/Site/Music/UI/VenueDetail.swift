@@ -56,7 +56,7 @@ struct VenueDetail: View {
       Section(header: Text("Related Venues")) {
         ForEach(digest.related) { relatedVenue in
           ArchivePathLink(
-            archivePath: relatedVenue.archivePath, isPathNavigable: isPathNavigable,
+            archivePath: relatedVenue.id, isPathNavigable: isPathNavigable,
             title: relatedVenue.name)
         }
       }
