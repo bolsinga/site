@@ -26,5 +26,5 @@ struct PerformersView: View {
 
 #Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
-  PerformersView(performers: model.vault.concerts[0].performers)
+  PerformersView(performers: model.vault.concertMap["sh1"]!.performers)
 }

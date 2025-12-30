@@ -33,15 +33,15 @@ extension ArtistBlurb {
 
 #Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
-  ArtistBlurb(concert: model.vault.concerts[0])
+  ArtistBlurb(concert: model.vault.concertMap["sh1"]!)
 }
 
 #Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
-  ArtistBlurb(concert: model.vault.concerts[1])
+  ArtistBlurb(concert: model.vault.concertMap["sh500"]!)
 }
 
 #Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
-  ArtistBlurb(concert: model.vault.concerts[2])
+  ArtistBlurb(concert: model.vault.concertMap["sh100"]!)
 }
