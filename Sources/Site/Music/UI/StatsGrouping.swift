@@ -111,7 +111,7 @@ struct StatsGrouping: View {
 
 #Preview("Concerts", traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
-  StatsGrouping(concerts: model.vault.concerts)
+  StatsGrouping(concerts: model.vault.concertMap.values)
     .padding()
 }
 
