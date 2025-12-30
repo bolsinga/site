@@ -12,6 +12,7 @@ struct VenueDetail: View {
   @Environment(VaultModel.self) private var model
 
   let digest: VenueDigest
+  let url: URL?
   let isPathNavigable: (ArchivePath) -> Bool
 
   @ViewBuilder private var firstSetElement: some View {
@@ -73,7 +74,7 @@ struct VenueDetail: View {
       .listStyle(.grouped)
     #endif
     .navigationTitle(digest.venue.name)
-    .toolbar { ArchiveSharableToolbarContent(item: digest, url: model.vault.url(for: digest)) }
+    .toolbar { ArchiveSharableToolbarContent(item: digest, url: url) }
   }
 }
 
@@ -82,6 +83,7 @@ struct VenueDetail: View {
   NavigationStack {
     VenueDetail(
       digest: model.vault.venueDigestMap["v103"]!,
+      url: nil,
       isPathNavigable: { _ in
         true
       }

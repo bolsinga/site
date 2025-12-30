@@ -19,16 +19,17 @@ extension ArchivePath {
         ShowDetail(concert: concert, isPathNavigable: isPathNavigable)
       }
     case .venue(let iD):
-      if let venueDigest = vault.venueDigestMap[iD] {
-        VenueDetail(digest: venueDigest, isPathNavigable: isPathNavigable)
+      if let digest = vault.venueDigestMap[iD] {
+        VenueDetail(digest: digest, url: vault.url(for: digest), isPathNavigable: isPathNavigable)
       }
     case .artist(let iD):
-      if let artistDigest = vault.artistDigestMap[iD] {
-        ArtistDetail(digest: artistDigest, isPathNavigable: isPathNavigable)
+      if let digest = vault.artistDigestMap[iD] {
+        ArtistDetail(digest: digest, url: vault.url(for: digest), isPathNavigable: isPathNavigable)
       }
     case .year(let annum):
-      if let annumDigest = vault.annumDigestMap[annum] {
-        YearDetail(digest: annumDigest, isPathNavigable: isPathNavigable)
+      if let digest = vault.annumDigestMap[annum] {
+        YearDetail(
+          digest: digest, url: vault.url(for: digest), isPathNavigable: isPathNavigable)
       }
     }
   }

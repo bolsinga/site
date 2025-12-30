@@ -8,9 +8,8 @@
 import SwiftUI
 
 struct ArtistDetail: View {
-  @Environment(VaultModel.self) private var model
-
   let digest: ArtistDigest
+  let url: URL?
   let isPathNavigable: (ArchivePath) -> Bool
 
   @ViewBuilder private var firstSetElement: some View {
@@ -70,7 +69,7 @@ struct ArtistDetail: View {
       .listStyle(.grouped)
     #endif
     .navigationTitle(digest.artist.name)
-    .toolbar { ArchiveSharableToolbarContent(item: digest, url: model.vault.url(for: digest)) }
+    .toolbar { ArchiveSharableToolbarContent(item: digest, url: url) }
   }
 }
 
@@ -79,6 +78,7 @@ struct ArtistDetail: View {
   NavigationStack {
     ArtistDetail(
       digest: model.vault.artistDigestMap["ar692"]!,
+      url: nil,
       isPathNavigable: { _ in
         true
       }
@@ -91,6 +91,7 @@ struct ArtistDetail: View {
   NavigationStack {
     ArtistDetail(
       digest: model.vault.artistDigestMap["ar692"]!,
+      url: nil,
       isPathNavigable: { _ in
         false
       }
@@ -105,6 +106,7 @@ struct ArtistDetail: View {
   NavigationStack {
     ArtistDetail(
       digest: digest,
+      url: nil,
       isPathNavigable: { $0 != selectedConcert.archivePath }
     )
   }

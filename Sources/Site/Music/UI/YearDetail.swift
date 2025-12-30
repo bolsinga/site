@@ -8,9 +8,8 @@
 import SwiftUI
 
 struct YearDetail: View {
-  @Environment(VaultModel.self) private var model
-
   let digest: AnnumDigest
+  let url: URL?
   let isPathNavigable: (ArchivePath) -> Bool
 
   @ViewBuilder private var statsElement: some View {
@@ -44,7 +43,7 @@ struct YearDetail: View {
       .listStyle(.grouped)
     #endif
     .navigationTitle(Text(digest.annum.formatted()))
-    .toolbar { ArchiveSharableToolbarContent(item: digest, url: model.vault.url(for: digest)) }
+    .toolbar { ArchiveSharableToolbarContent(item: digest, url: url) }
   }
 }
 
@@ -53,6 +52,7 @@ struct YearDetail: View {
   NavigationStack {
     YearDetail(
       digest: model.vault.annumDigestMap[.year(2001)]!,
+      url: nil,
       isPathNavigable: { _ in
         true
       }
