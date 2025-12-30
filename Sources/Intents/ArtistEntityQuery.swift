@@ -18,10 +18,6 @@ extension Sequence where Element == Concert {
   fileprivate var artistIDs: [Artist.ID] {
     Array(self.flatMap { $0.artists.map { $0.id }.reversed() }.uniqued())
   }
-
-  fileprivate func recent(_ count: Int = 5) -> [Artist.ID] {
-    self.suffix(count).artistIDs
-  }
 }
 
 struct ArtistEntityQuery: EntityQuery {
@@ -38,9 +34,7 @@ struct ArtistEntityQuery: EntityQuery {
     Logger.artistQuery.log("Suggested")
 
     var ids = concertsToday(vault).artistIDs
-    if ids.isEmpty {
-      ids = vault.concerts.recent()
-    }
+    if ids.isEmpty { ids = vault.recentConcerts().artistIDs }
 
     return try await entities(for: ids.reversed())
   }

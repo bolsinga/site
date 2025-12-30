@@ -43,4 +43,8 @@ extension Vault {
   func venueEntities(filteredBy searchString: String) -> [VenueEntity] {
     venueDigestMap.values.names(filteredBy: searchString).compactMap { entity(for: $0) }
   }
+
+  func recentConcerts(_ count: Int = 5) -> [Concert] {
+    concertMap.values.sorted(by: comparator.compare(lhs:rhs:)).suffix(count)
+  }
 }
