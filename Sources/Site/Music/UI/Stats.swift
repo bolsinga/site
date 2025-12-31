@@ -21,7 +21,11 @@ struct Stats {
   let alwaysShowVenuesArtistsStats: Bool
 
   internal init(
-    concerts: any Collection<Concert>,
+    concertsCount: Int,
+    venueCount: Int,
+    artistCount: Int,
+    dates: [Date],
+    stateCounts: [String: Int],
     shouldCalculateArtistCount: Bool = true,
     yearsSpanRanking: Ranking? = nil,
     showRanking: Ranking? = nil,
@@ -30,12 +34,11 @@ struct Stats {
     displayArchiveCategoryCounts: Bool = true,
     alwaysShowVenuesArtistsStats: Bool = false
   ) {
-    self.concertsCount = concerts.count
-    self.venueCount = concerts.venues.count
-    let artists = shouldCalculateArtistCount ? concerts.artists : []
-    self.artistCount = artists.count
-    self.dates = concerts.knownDates
-    self.stateCounts = concerts.stateCounts
+    self.concertsCount = concertsCount
+    self.venueCount = venueCount
+    self.artistCount = shouldCalculateArtistCount ? artistCount : 0
+    self.dates = dates
+    self.stateCounts = stateCounts
     self.yearsSpanRanking = yearsSpanRanking
     self.showRanking = showRanking
     self.artistVenuesRanking = artistVenuesRanking

@@ -97,7 +97,7 @@ struct StateChart: View {
 #Preview("Default Presentation", traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   StateChart(
-    counts: Stats(concerts: model.vault.concertMap.values).stateCounts, title: "States",
+    counts: Stats(vault: model.vault).stateCounts, title: "States",
     presentation: .default
   )
   .padding()
@@ -106,7 +106,7 @@ struct StateChart: View {
 #Preview("Compact Presentation", traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   StateChart(
-    counts: Stats(concerts: model.vault.concertMap.values).stateCounts, title: "States",
+    counts: Stats(vault: model.vault).stateCounts, title: "States",
     presentation: .compact
   )
   .padding()

@@ -8,6 +8,26 @@
 import Foundation
 
 extension Stats {
+  init(
+    concerts: any Collection<Concert>,
+    shouldCalculateArtistCount: Bool = true,
+    yearsSpanRanking: Ranking? = nil,
+    showRanking: Ranking? = nil,
+    artistVenuesRanking: Ranking? = nil,
+    venueArtistsRanking: Ranking? = nil,
+    displayArchiveCategoryCounts: Bool = true,
+    alwaysShowVenuesArtistsStats: Bool = false
+  ) {
+    self.init(
+      concertsCount: concerts.count, venueCount: concerts.venues.count,
+      artistCount: concerts.artists.count, dates: concerts.knownDates,
+      stateCounts: concerts.stateCounts, shouldCalculateArtistCount: shouldCalculateArtistCount,
+      yearsSpanRanking: yearsSpanRanking, showRanking: showRanking,
+      artistVenuesRanking: artistVenuesRanking, venueArtistsRanking: venueArtistsRanking,
+      displayArchiveCategoryCounts: displayArchiveCategoryCounts,
+      alwaysShowVenuesArtistsStats: alwaysShowVenuesArtistsStats)
+  }
+
   init(artistDigest digest: ArtistDigest) {
     self.init(
       concerts: digest.concerts, shouldCalculateArtistCount: false,
@@ -28,7 +48,7 @@ extension Stats {
       alwaysShowVenuesArtistsStats: true)
   }
 
-  init(concerts: any Collection<Concert>) {
-    self.init(concerts: concerts, displayArchiveCategoryCounts: true)
+  init(vault: Vault) {
+    self.init(concerts: vault.concertMap.values, displayArchiveCategoryCounts: true)
   }
 }

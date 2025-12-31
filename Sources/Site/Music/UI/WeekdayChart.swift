@@ -99,7 +99,7 @@ struct WeekdayChart: View {
 #Preview("Default", traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   WeekdayChart(
-    dates: Stats(concerts: model.vault.concertMap.values).dates, title: "Weekdays",
+    dates: Stats(vault: model.vault).dates, title: "Weekdays",
     presentation: .default
   )
   .padding()
@@ -108,7 +108,7 @@ struct WeekdayChart: View {
 #Preview("Compact", traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   WeekdayChart(
-    dates: Stats(concerts: model.vault.concertMap.values).dates, title: "Weekdays",
+    dates: Stats(vault: model.vault).dates, title: "Weekdays",
     presentation: .compact
   )
   .padding()
