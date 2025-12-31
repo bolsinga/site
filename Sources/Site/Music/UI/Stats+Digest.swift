@@ -19,8 +19,8 @@ extension Stats {
     alwaysShowVenuesArtistsStats: Bool = false
   ) {
     self.init(
-      concertsCount: concerts.count, venueCount: concerts.venues.count,
-      artistCount: concerts.artists.count, dates: concerts.knownDates,
+      concertsCount: concerts.count, venueCount: concerts.venueCount,
+      artistCount: concerts.artistCount, dates: concerts.knownDates,
       stateCounts: concerts.stateCounts, shouldCalculateArtistCount: shouldCalculateArtistCount,
       yearsSpanRanking: yearsSpanRanking, showRanking: showRanking,
       artistVenuesRanking: artistVenuesRanking, venueArtistsRanking: venueArtistsRanking,

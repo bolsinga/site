@@ -24,11 +24,11 @@ extension Collection where Element == Concert {
       .compactMap { $0.date }
   }
 
-  var venues: [Venue] {
-    Array(self.compactMap { $0.venue }.uniqued())
+  var venueCount: Int {
+    Array(self.compactMap { $0.venue }.uniqued()).count
   }
 
-  var artists: [Artist] {
-    Array(self.flatMap { $0.artists }.uniqued())
+  var artistCount: Int {
+    Array(self.flatMap { $0.artists }.uniqued()).count
   }
 }
