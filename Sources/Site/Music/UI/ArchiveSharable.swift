@@ -22,17 +22,32 @@ extension Concert: ArchiveSharable {
   var message: String { self.formatted(.full) }
 }
 
-extension VenueDigest: ArchiveSharable {
+extension Venue: ArchiveSharable {
   var subject: String { String(localized: "Shows at \(self.name)") }
   var message: String { subject }
 }
 
+extension VenueDigest: ArchiveSharable {
+  var subject: String { venue.subject }
+  var message: String { venue.message }
+}
+
+extension Annum: ArchiveSharable {
+  var subject: String { formatted(.shared) }
+  var message: String { subject }
+}
+
 extension AnnumDigest: ArchiveSharable {
-  var subject: String { annum.formatted(.shared) }
+  var subject: String { annum.subject }
+  var message: String { annum.message }
+}
+
+extension Artist: ArchiveSharable {
+  var subject: String { String(localized: "Shows with \(self.name)") }
   var message: String { subject }
 }
 
 extension ArtistDigest: ArchiveSharable {
-  var subject: String { String(localized: "Shows with \(self.name)") }
-  var message: String { subject }
+  var subject: String { artist.subject }
+  var message: String { artist.message }
 }
