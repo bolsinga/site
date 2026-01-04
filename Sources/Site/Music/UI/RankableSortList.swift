@@ -11,6 +11,7 @@ struct RankableSortList<T, SectionHeaderContent: View, LabelContent: View>: View
 where T: Rankable, T.ID == String {
   let items: [T]
   let sectioner: LibrarySectioner
+  let compare: (T, T) -> Bool
   let title: String
   @ViewBuilder let associatedRankSectionHeader: (Ranking) -> SectionHeaderContent
   @ViewBuilder let itemLabelView: ((T) -> LabelContent)
@@ -25,20 +26,25 @@ where T: Rankable, T.ID == String {
     if sort.isAlphabetical {
       RankingList(
         items: items,
-        rankingMapBuilder: { sectioner.sectionMap(for: $0) }, rankSorted: <,
+        rankingMapBuilder: { sectioner.sectionMap(for: $0) },
+        compare: compare,
+        rankSorted: <,
         itemContentView: { showCount(for: $0) },
         sectionHeaderView: { $0.representingView }, itemLabelView: itemLabelView)
     } else if sort.isFirstSeen {
       RankingList(
         items: items,
         rankingMapBuilder: { $0.firstSeen },
+        compare: compare,
         rankSorted: PartialDate.compareWithUnknownsMuted(lhs:rhs:),
         itemContentView: { Text($0.firstSet.rank.formatted(.hash)) },
         sectionHeaderView: { Text($0.formatted(.compact)) }, itemLabelView: itemLabelView)
     } else {
       RankingList(
         items: items,
-        rankingMapBuilder: { $0.ranked(by: sort) }, rankSorted: <,
+        rankingMapBuilder: { $0.ranked(by: sort) },
+        compare: compare,
+        rankSorted: <,
         itemContentView: { if sort.isShowYearRange { showCount(for: $0) } },
         sectionHeaderView: {
           switch sort {
@@ -60,7 +66,9 @@ where T: Rankable, T.ID == String {
 #Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   RankableSortList(
-    items: model.vault.venueDigests, sectioner: model.vault.sectioner,
+    items: Array(model.vault.venueDigestMap.values.shuffled()),
+    sectioner: model.vault.sectioner,
+    compare: model.vault.comparator.libraryCompare(lhs:rhs:),
     title: "Venues", associatedRankSectionHeader: { $0.artistsCountView },
     itemLabelView: { Text($0.name) }, sort: .alphabetical
   )
