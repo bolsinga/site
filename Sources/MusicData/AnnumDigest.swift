@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct AnnumDigest: Sendable {
+public struct AnnumDigest: Codable, Sendable {
   public let annum: Annum
   public let shows: [ShowDigest]
   public let showRank: Ranking

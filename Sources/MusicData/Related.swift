@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Related: Equatable, Hashable, Identifiable, Sendable {
+public struct Related: Codable, Equatable, Hashable, Identifiable, Sendable {
   public let id: ArchivePath
   let name: String
 }

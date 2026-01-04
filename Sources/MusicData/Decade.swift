@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum Decade: Equatable, Hashable, Sendable {
+public enum Decade: Codable, Equatable, Hashable, Sendable {
   case decade(Int)
   case unknown
 }

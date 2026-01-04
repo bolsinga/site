@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct ArtistDigest: Equatable, Hashable, Identifiable, Sendable {
+public struct ArtistDigest: Codable, Equatable, Hashable, Identifiable, Sendable {
   public var id: Artist.ID { artist.id }
 
   public let artist: Artist
