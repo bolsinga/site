@@ -237,16 +237,17 @@ enum LocationAuthorization {
   }
 
   func filteredVenueDigests(_ nearbyModel: NearbyModel, distanceThreshold: CLLocationDistance)
-    -> [VenueDigest]
+    -> any Collection<VenueDigest>
   {
-    nearbyModel.locationFilter.isNearby ? venueDigestsNearby(distanceThreshold) : vault.venueDigests
+    nearbyModel.locationFilter.isNearby
+      ? venueDigestsNearby(distanceThreshold) : vault.venueDigestMap.values
   }
 
   func filteredArtistDigests(_ nearbyModel: NearbyModel, distanceThreshold: CLLocationDistance)
-    -> [ArtistDigest]
+    -> any Collection<ArtistDigest>
   {
     nearbyModel.locationFilter.isNearby
-      ? artistDigestsNearby(distanceThreshold) : vault.artistDigests
+      ? artistDigestsNearby(distanceThreshold) : vault.artistDigestMap.values
   }
 
   @MainActor

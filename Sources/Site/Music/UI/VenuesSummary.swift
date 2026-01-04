@@ -18,7 +18,7 @@ struct VenuesSummary: View {
   var body: some View {
     let venueDigests = model.filteredVenueDigests(nearbyModel, distanceThreshold: nearbyDistance)
     VenueList(
-      venueDigests: venueDigests, sectioner: model.vault.sectioner,
+      venueDigests: Array(venueDigests), sectioner: model.vault.sectioner,
       compare: model.vault.comparator.libraryCompare(lhs:rhs:), sort: sort,
       searchString: $searchString
     )
@@ -27,5 +27,8 @@ struct VenuesSummary: View {
 }
 
 #Preview(traits: .nearbyModel, .vaultModel) {
-  VenuesSummary(sort: .alphabetical, searchString: .constant(""))
+  @Previewable @State var searchString = ""
+  NavigationStack {
+    VenuesSummary(sort: .alphabetical, searchString: $searchString)
+  }
 }
