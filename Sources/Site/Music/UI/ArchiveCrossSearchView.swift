@@ -25,11 +25,11 @@ private struct SearchResultButton: View {
 
 extension Vault {
   fileprivate func artistDigests(filteredBy searchString: String) -> [ArtistDigest] {
-    artistDigestMap.values.names(filteredBy: searchString, additive: true)
+    artistDigestMap.values.names(filteredBy: searchString, additive: true).sorted(by: comparator.libraryCompare(lhs:rhs:))
   }
 
   fileprivate func venueDigests(filteredBy searchString: String) -> [VenueDigest] {
-    venueDigestMap.values.names(filteredBy: searchString, additive: true)
+    venueDigestMap.values.names(filteredBy: searchString, additive: true).sorted(by: comparator.libraryCompare(lhs:rhs:))
   }
 }
 
