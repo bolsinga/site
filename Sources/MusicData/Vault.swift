@@ -13,10 +13,8 @@ public struct Vault: Sendable {
   public let rootURL: URL
   public let concertMap: [Concert.ID: Concert]
 
-  public let artistDigests: [ArtistDigest]
   public let artistDigestMap: [Artist.ID: ArtistDigest]
 
-  public let venueDigests: [VenueDigest]
   public let venueDigestMap: [Venue.ID: VenueDigest]
 
   public let decadesMap: [Decade: [Annum: [Show.ID]]]
@@ -55,11 +53,9 @@ public struct Vault: Sendable {
 
     self.concertMap = concerts.reduce(into: [:]) { $0[$1.id] = $1 }
 
-    self.artistDigests = await artistDigests
-    self.artistDigestMap = self.artistDigests.reduce(into: [:]) { $0[$1.artist.id] = $1 }
+    self.artistDigestMap = await artistDigests.reduce(into: [:]) { $0[$1.artist.id] = $1 }
 
-    self.venueDigests = await venueDigests
-    self.venueDigestMap = self.venueDigests.reduce(into: [:]) { $0[$1.venue.id] = $1 }
+    self.venueDigestMap = await venueDigests.reduce(into: [:]) { $0[$1.venue.id] = $1 }
 
     self.decadesMap = await decadesMap
     self.annumDigestMap = self.decadesMap.values.flatMap { $0.keys }.digests(
