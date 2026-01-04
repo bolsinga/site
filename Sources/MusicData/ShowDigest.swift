@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct ShowDigest: Equatable, Hashable, Identifiable, Sendable {
+public struct ShowDigest: Codable, Equatable, Hashable, Identifiable, Sendable {
   public let id: ArchivePath
   let date: PartialDate
   let performers: [String]
