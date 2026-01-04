@@ -23,6 +23,16 @@ private struct SearchResultButton: View {
   }
 }
 
+extension Vault {
+  fileprivate func artistDigests(filteredBy searchString: String) -> [ArtistDigest] {
+    artistDigestMap.values.names(filteredBy: searchString, additive: true)
+  }
+
+  fileprivate func venueDigests(filteredBy searchString: String) -> [VenueDigest] {
+    venueDigestMap.values.names(filteredBy: searchString, additive: true)
+  }
+}
+
 struct ArchiveCrossSearchView: View {
   @Environment(VaultModel.self) var model
   @AppStorage("nearby.distance") private var nearbyDistance = defaultNearbyDistanceThreshold
@@ -36,14 +46,14 @@ struct ArchiveCrossSearchView: View {
     case .venue:
       []
     case .all, .artist:
-      model.vault.artistDigests.names(filteredBy: searchString, additive: true)
+      model.vault.artistDigests(filteredBy: searchString)
     }
   }
 
   private var venueDigests: [VenueDigest] {
     switch scope {
     case .all, .venue:
-      model.vault.venueDigests.names(filteredBy: searchString, additive: true)
+      model.vault.venueDigests(filteredBy: searchString)
     case .artist:
       []
     }
