@@ -122,7 +122,7 @@ enum LocationAuthorization {
 
     do {
       for try await (venue, locatable) in BatchGeocode(
-        atlas: atlas, geocodables: vault.venueDigests.map { $0.venue })
+        atlas: atlas, geocodables: vault.venueDigestMap.map { $0.value.venue })
       {
         Logger.vaultModel.log("geocoded: \(venue.id, privacy: .public)")
         venueLocatables[venue.id] = locatable
@@ -135,7 +135,7 @@ enum LocationAuthorization {
 
   var geocodingProgress: Double {
     guard !batchGeocodeCompleted else { return 1.0 }
-    return Double(venueLocatables.count) / Double(vault.venueDigests.count)
+    return Double(venueLocatables.count) / Double(vault.venueDigestMap.count)
   }
 
   @MainActor
