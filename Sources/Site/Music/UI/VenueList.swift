@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct VenueList: View {
-  let venueDigests: [VenueDigest]
+  let venueDigests: any Collection<VenueDigest>
   let sectioner: LibrarySectioner
   let compare: (VenueDigest, VenueDigest) -> Bool
   let sort: RankingSort
@@ -32,7 +32,7 @@ struct VenueList: View {
 extension VenueList {
   fileprivate init(model: VaultModel, sort: RankingSort, searchString: Binding<String>) {
     self.init(
-      venueDigests: Array(model.vault.venueDigestMap.values.shuffled()),
+      venueDigests: model.vault.venueDigestMap.values.shuffled(),
       sectioner: model.vault.sectioner,
       compare: model.vault.comparator.libraryCompare(lhs:rhs:),
       sort: sort, searchString: searchString)
