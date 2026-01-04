@@ -27,5 +27,8 @@ struct VenuesSummary: View {
 }
 
 #Preview(traits: .nearbyModel, .vaultModel) {
-  VenuesSummary(sort: .alphabetical, searchString: .constant(""))
+  @Previewable @State var searchString = ""
+  NavigationStack {
+    VenuesSummary(sort: .alphabetical, searchString: $searchString)
+  }
 }

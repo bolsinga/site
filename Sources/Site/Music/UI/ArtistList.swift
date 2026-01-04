@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ArtistList: View {
-  let artistDigests: [ArtistDigest]
+  let artistDigests: any Collection<ArtistDigest>
   let sectioner: LibrarySectioner
   let compare: (ArtistDigest, ArtistDigest) -> Bool
   let sort: RankingSort
@@ -32,7 +32,7 @@ struct ArtistList: View {
 extension ArtistList {
   fileprivate init(model: VaultModel, sort: RankingSort, searchString: Binding<String>) {
     self.init(
-      artistDigests: Array(model.vault.artistDigestMap.values.shuffled()),
+      artistDigests: model.vault.artistDigestMap.values.shuffled(),
       sectioner: model.vault.sectioner,
       compare: model.vault.comparator.libraryCompare(lhs:rhs:),
       sort: sort, searchString: searchString)

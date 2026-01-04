@@ -27,5 +27,8 @@ struct ArtistsSummary: View {
 }
 
 #Preview(traits: .nearbyModel, .vaultModel) {
-  ArtistsSummary(sort: .alphabetical, searchString: .constant(""))
+  @Previewable @State var searchString = ""
+  NavigationStack {
+    ArtistsSummary(sort: .alphabetical, searchString: $searchString)
+  }
 }
