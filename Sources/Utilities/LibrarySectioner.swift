@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct LibrarySectioner: Sendable {
+public struct LibrarySectioner: Codable, Sendable {
   private let sectionMap: [String: LibrarySection]
 
   public init(sectionMap: [String: LibrarySection] = [:]) {

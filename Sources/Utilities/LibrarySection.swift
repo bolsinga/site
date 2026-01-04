@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum LibrarySection: Hashable, Sendable {
+public enum LibrarySection: Codable, Hashable, Sendable {
   case alphabetic(String)
   case numeric
   case punctuation
