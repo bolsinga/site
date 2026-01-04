@@ -28,22 +28,44 @@ extension Stats {
       alwaysShowVenuesArtistsStats: alwaysShowVenuesArtistsStats)
   }
 
+  init(
+    shows: any Collection<ShowDigest>,
+    shouldCalculateArtistCount: Bool = true,
+    yearsSpanRanking: Ranking? = nil,
+    showRanking: Ranking? = nil,
+    artistVenuesRanking: Ranking? = nil,
+    venueArtistsRanking: Ranking? = nil,
+    displayArchiveCategoryCounts: Bool = true,
+    alwaysShowVenuesArtistsStats: Bool = false
+  ) {
+    self.init(
+      concertsCount: shows.count, venueCount: shows.venueCount,
+      artistCount: shows.artistCount, dates: shows.knownDates,
+      stateCounts: shows.stateCounts, shouldCalculateArtistCount: shouldCalculateArtistCount,
+      yearsSpanRanking: yearsSpanRanking, showRanking: showRanking,
+      artistVenuesRanking: artistVenuesRanking, venueArtistsRanking: venueArtistsRanking,
+      displayArchiveCategoryCounts: displayArchiveCategoryCounts,
+      alwaysShowVenuesArtistsStats: alwaysShowVenuesArtistsStats)
+  }
+
   init(artistDigest digest: ArtistDigest) {
     self.init(
-      concerts: digest.concerts, shouldCalculateArtistCount: false,
+      shows: digest.shows, shouldCalculateArtistCount: false,
       yearsSpanRanking: digest.spanRank, showRanking: digest.showRank,
       artistVenuesRanking: digest.venueRank)
   }
 
   init(venueDigest digest: VenueDigest) {
     self.init(
-      concerts: digest.concerts, yearsSpanRanking: digest.spanRank, showRanking: digest.showRank,
+      shows: digest.shows, yearsSpanRanking: digest.spanRank,
+      showRanking: digest.showRank,
       venueArtistsRanking: digest.venueArtistRank)
   }
 
   init(annumDigest digest: AnnumDigest) {
     self.init(
-      concerts: digest.concerts, shouldCalculateArtistCount: true, showRanking: digest.showRank,
+      shows: digest.shows, shouldCalculateArtistCount: true,
+      showRanking: digest.showRank,
       artistVenuesRanking: digest.venueRank, venueArtistsRanking: digest.artistRank,
       alwaysShowVenuesArtistsStats: true)
   }

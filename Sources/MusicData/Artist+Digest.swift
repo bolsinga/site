@@ -13,7 +13,7 @@ extension Artist {
   ) -> ArtistDigest {
     ArtistDigest(
       artist: self,
-      concerts: concerts.filter { $0.show.artists.contains(id) }.sorted(by: comparator),
+      shows: concerts.filter { $0.show.artists.contains(id) }.digests(comparator: comparator),
       related: lookup.related(self),
       firstSet: lookup.firstSet(artist: self),
       spanRank: lookup.spanRank(artist: self),

@@ -41,7 +41,7 @@ struct PathRestorableUserActivityTests {
 
     let artist = Artist(id: "ar0", name: "AR0")
     let digest = ArtistDigest(
-      artist: artist, concerts: [], related: [],
+      artist: artist, shows: [], related: [],
       firstSet: .empty, spanRank: .empty, showRank: .empty, venueRank: .empty)
     userActivity.update(digest, url: rootURL)
 
@@ -63,7 +63,7 @@ struct PathRestorableUserActivityTests {
 
     let venue = Venue(id: "v10", location: Location(city: "c", state: "s"), name: "V10")
     let digest = VenueDigest(
-      venue: venue, concerts: [], related: [],
+      venue: venue, shows: [], related: [],
       firstSet: .empty, spanRank: .empty, showRank: .empty, venueArtistRank: .empty)
     userActivity.update(digest, url: rootURL)
 
@@ -85,7 +85,7 @@ struct PathRestorableUserActivityTests {
 
     let item = Annum.year(1990)
     let digest = AnnumDigest(
-      annum: item, concerts: [], showRank: .empty,
+      annum: item, shows: [], showRank: .empty,
       venueRank: .empty, artistRank: .empty)
 
     userActivity.update(digest, url: rootURL)

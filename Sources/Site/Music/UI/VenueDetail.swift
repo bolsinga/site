@@ -35,7 +35,7 @@ struct VenueDetail: View {
   @ViewBuilder private var statsElement: some View {
     Section(header: Text(ArchiveCategory.stats.localizedString)) {
       firstSetElement
-      if digest.concerts.count > 1 {
+      if digest.shows.count > 1 {
         StatsGrouping(venueDigest: digest)
       }
     }
@@ -43,9 +43,9 @@ struct VenueDetail: View {
 
   @ViewBuilder private var showsElement: some View {
     Section(header: Text("Shows")) {
-      ForEach(digest.concerts) { concert in
-        ArchivePathLink(archivePath: concert.archivePath, isPathNavigable: isPathNavigable) {
-          VenueBlurb(date: concert.show.date, performers: concert.performers)
+      ForEach(digest.shows) { show in
+        ArchivePathLink(archivePath: show.id, isPathNavigable: isPathNavigable) {
+          VenueBlurb(date: show.date, performers: show.performers)
         }
       }
     }

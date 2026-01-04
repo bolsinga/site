@@ -13,7 +13,7 @@ struct YearDetail: View {
   let isPathNavigable: (ArchivePath) -> Bool
 
   @ViewBuilder private var statsElement: some View {
-    if !digest.concerts.isEmpty {
+    if !digest.shows.isEmpty {
       Section(header: Text(ArchiveCategory.stats.localizedString)) {
         StatsGrouping(annumDigest: digest)
       }
@@ -21,13 +21,12 @@ struct YearDetail: View {
   }
 
   @ViewBuilder private var showsElement: some View {
-    if !digest.concerts.isEmpty {
+    if !digest.shows.isEmpty {
       Section(header: Text("Shows")) {
-        ForEach(digest.concerts) { concert in
-          ArchivePathLink(archivePath: concert.archivePath, isPathNavigable: isPathNavigable) {
+        ForEach(digest.shows) { show in
+          ArchivePathLink(archivePath: show.id, isPathNavigable: isPathNavigable) {
             ConcertBlurb(
-              venue: concert.venue?.name, date: concert.show.date, performers: concert.performers,
-              dateFormat: .noYear)
+              venue: show.venue, date: show.date, performers: show.performers, dateFormat: .noYear)
           }
         }
       }

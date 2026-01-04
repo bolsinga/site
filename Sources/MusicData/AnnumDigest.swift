@@ -9,17 +9,17 @@ import Foundation
 
 public struct AnnumDigest: Sendable {
   public let annum: Annum
-  public let concerts: [Concert]
+  public let shows: [ShowDigest]
   public let showRank: Ranking
   public let venueRank: Ranking
   public let artistRank: Ranking
 
   public init(
-    annum: Annum, concerts: [Concert], showRank: Ranking, venueRank: Ranking,
+    annum: Annum, shows: [ShowDigest], showRank: Ranking, venueRank: Ranking,
     artistRank: Ranking
   ) {
     self.annum = annum
-    self.concerts = concerts
+    self.shows = shows
     self.showRank = showRank
     self.venueRank = venueRank
     self.artistRank = artistRank
