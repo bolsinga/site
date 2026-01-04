@@ -13,11 +13,7 @@ extension Venue {
   ) -> VenueDigest {
     VenueDigest(
       venue: self,
-      shows: concerts.filter { $0.show.venue == id }.sorted(by: comparator).map {
-        ShowDigest(
-          id: $0.archivePath, date: $0.show.date, performers: $0.performers, venue: $0.venue?.name,
-          location: $0.venue?.location)
-      },
+      shows: concerts.filter { $0.show.venue == id }.digests(comparator: comparator),
       related: lookup.related(self),
       firstSet: lookup.firstSet(venue: self),
       spanRank: lookup.spanRank(venue: self),

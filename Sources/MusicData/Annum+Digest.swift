@@ -15,11 +15,7 @@ extension Annum {
   {
     AnnumDigest(
       annum: self,
-      shows: concerts.filter { $0.show.date.annum == self }.sorted(by: comparator).map {
-        ShowDigest(
-          id: $0.archivePath, date: $0.show.date, performers: $0.performers, venue: $0.venue?.name,
-          location: $0.venue?.location)
-      },
+      shows: concerts.filter { $0.show.date.annum == self }.digests(comparator: comparator),
       showRank: lookup.showRank(annum: self),
       venueRank: lookup.venueRank(annum: self),
       artistRank: lookup.artistRank(annum: self)
