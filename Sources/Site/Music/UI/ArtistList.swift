@@ -10,13 +10,14 @@ import SwiftUI
 struct ArtistList: View {
   let artistDigests: [ArtistDigest]
   let sectioner: LibrarySectioner
+  let compare: (ArtistDigest, ArtistDigest) -> Bool
   let sort: RankingSort
   @Binding var searchString: String
 
   var body: some View {
     let digests = artistDigests.names(filteredBy: searchString)
     RankableSortList(
-      items: digests, sectioner: sectioner,
+      items: digests, sectioner: sectioner, compare: compare,
       title: ArchiveCategory.artists.localizedString,
       associatedRankSectionHeader: { $0.venuesCountView },
       itemLabelView: { Text($0.name.emphasizedAttributed(matching: searchString)) }, sort: sort
@@ -28,15 +29,22 @@ struct ArtistList: View {
   }
 }
 
+extension ArtistList {
+  fileprivate init(model: VaultModel, sort: RankingSort, searchString: Binding<String>) {
+    self.init(
+      artistDigests: Array(model.vault.artistDigestMap.values.shuffled()),
+      sectioner: model.vault.sectioner,
+      compare: model.vault.comparator.libraryCompare(lhs:rhs:),
+      sort: sort, searchString: searchString)
+  }
+}
+
 #Preview("alphabetical", traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   @Previewable @State var searchString = ""
 
   NavigationStack {
-    ArtistList(
-      artistDigests: model.vault.artistDigests, sectioner: model.vault.sectioner,
-      sort: .alphabetical, searchString: $searchString
-    )
+    ArtistList(model: model, sort: .alphabetical, searchString: $searchString)
   }
 }
 
@@ -45,10 +53,7 @@ struct ArtistList: View {
   @Previewable @State var searchString = ""
 
   NavigationStack {
-    ArtistList(
-      artistDigests: model.vault.artistDigests, sectioner: model.vault.sectioner,
-      sort: .showCount, searchString: $searchString
-    )
+    ArtistList(model: model, sort: .showCount, searchString: $searchString)
   }
 }
 
@@ -57,10 +62,7 @@ struct ArtistList: View {
   @Previewable @State var searchString = ""
 
   NavigationStack {
-    ArtistList(
-      artistDigests: model.vault.artistDigests, sectioner: model.vault.sectioner,
-      sort: .showYearRange, searchString: $searchString
-    )
+    ArtistList(model: model, sort: .showYearRange, searchString: $searchString)
   }
 }
 
@@ -69,10 +71,7 @@ struct ArtistList: View {
   @Previewable @State var searchString = ""
 
   NavigationStack {
-    ArtistList(
-      artistDigests: model.vault.artistDigests, sectioner: model.vault.sectioner,
-      sort: .associatedRank, searchString: $searchString
-    )
+    ArtistList(model: model, sort: .associatedRank, searchString: $searchString)
   }
 }
 
@@ -81,9 +80,6 @@ struct ArtistList: View {
   @Previewable @State var searchString = ""
 
   NavigationStack {
-    ArtistList(
-      artistDigests: model.vault.artistDigests, sectioner: model.vault.sectioner,
-      sort: .firstSeen, searchString: $searchString
-    )
+    ArtistList(model: model, sort: .firstSeen, searchString: $searchString)
   }
 }
