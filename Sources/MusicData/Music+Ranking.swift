@@ -10,7 +10,7 @@ import Foundation
 extension Music {
   var artistRankings: [Artist.ID: Ranking] {
     let artistShowCounts: [(Artist.ID, Int)] = self.artists.reduce(into: [:]) { d, item in
-      d[item.id] = self.shows.filter { $0.artists.contains(item.id) }.count
+      d[item.id] = self.shows.count(where: { $0.artists.contains(item.id) })
     }.map { $0 }
 
     return computeRankings(items: artistShowCounts)
@@ -18,7 +18,7 @@ extension Music {
 
   var venueRankings: [Venue.ID: Ranking] {
     let venuesShowCount: [(Venue.ID, Int)] = self.venues.reduce(into: [:]) { d, item in
-      d[item.id] = self.shows.filter { $0.venue == item.id }.count
+      d[item.id] = self.shows.count(where: { $0.venue == item.id })
     }.map { $0 }
 
     return computeRankings(items: venuesShowCount)
@@ -62,7 +62,7 @@ extension Music {
 
   var annumShowRankings: [Annum: Ranking] {
     let annumShowCounts: [(Annum, Int)] = annums.map { annum in
-      (annum, shows.filter { $0.date.annum == annum }.count)
+      (annum, shows.count(where: { $0.date.annum == annum } ))
     }
     return computeRankings(items: annumShowCounts)
   }
