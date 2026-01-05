@@ -7,6 +7,10 @@
 
 import Foundation
 
+private let spanComponents = Set([
+  Calendar.Component.year, Calendar.Component.month, Calendar.Component.day,
+])
+
 extension Sequence<PartialDate> {
   public var yearSpan: Int {
     let uniqueDates = Set(self)
@@ -17,8 +21,7 @@ extension Sequence<PartialDate> {
     guard knownDates.count > 1 else { return 1 }
 
     if let max = knownDates.max(), let min = knownDates.min() {
-      let comps = Calendar.autoupdatingCurrent.dateComponents(
-        [.year, .month, .day], from: min, to: max)
+      let comps = Calendar.autoupdatingCurrent.dateComponents(spanComponents, from: min, to: max)
       if let year = comps.year, let month = comps.month, let day = comps.day {
         guard year > 0 else { return 1 }  // It's less than a year difference, so the sequence spans 1 year.
         guard year == 1 else { return year }  // It's more than 1 year, so just count the years, no rounding. Matches RelativeDateTimeFormatter() output.
