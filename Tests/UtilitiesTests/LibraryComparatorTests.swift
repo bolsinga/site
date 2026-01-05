@@ -9,6 +9,13 @@ import Testing
 
 @testable import SiteApp
 
+extension LibraryComparator {
+  func libraryCompare(lhs: String, rhs: String) -> Bool {
+    libraryCompareTokens(
+      lhs: lhs.removeCommonInitialPunctuation, rhs: rhs.removeCommonInitialPunctuation)
+  }
+}
+
 struct LibraryComparatorTests {
   let comparator = LibraryComparator()
 
