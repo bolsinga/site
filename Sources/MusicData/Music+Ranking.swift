@@ -62,7 +62,7 @@ extension Music {
 
   var annumShowRankings: [Annum: Ranking] {
     let annumShowCounts: [(Annum, Int)] = annums.map { annum in
-      (annum, shows.count(where: { $0.date.annum == annum } ))
+      (annum, shows.count(where: { $0.date.annum == annum }))
     }
     return computeRankings(items: annumShowCounts)
   }
