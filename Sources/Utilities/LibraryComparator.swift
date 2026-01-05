@@ -21,12 +21,7 @@ public struct LibraryComparator: Codable, Sendable {
     return libraryCompareTokens(lhs: lhToken, rhs: rhToken)
   }
 
-  func libraryCompare(lhs: String, rhs: String) -> Bool {
-    return libraryCompareTokens(
-      lhs: lhs.removeCommonInitialPunctuation, rhs: rhs.removeCommonInitialPunctuation)
-  }
-
-  private func libraryCompareTokens(lhs: String, rhs: String) -> Bool {
+  func libraryCompareTokens(lhs: String, rhs: String) -> Bool {
     var options = String.CompareOptions()
     options.insert(.caseInsensitive)
     options.insert(.diacriticInsensitive)
