@@ -6,6 +6,11 @@
 //
 
 import Foundation
+import os
+
+extension Logger {
+  fileprivate static let librarySectioner = Logger(category: "librarySectioner")
+}
 
 public struct LibrarySectioner: Codable, Sendable {
   private let sectionMap: [String: LibrarySection]
@@ -16,7 +21,11 @@ public struct LibrarySectioner: Codable, Sendable {
 
   private func librarySection<T>(_ item: T) -> LibrarySection
   where T: LibraryComparable, T.ID == String {
-    sectionMap[item.id] ?? item.librarySortString.librarySection
+    sectionMap[item.id]
+      ?? {
+        Logger.librarySectioner.debug("\(item.id, privacy: .public) not in map.")
+        return item.librarySortString.librarySection
+      }()
   }
 }
 
