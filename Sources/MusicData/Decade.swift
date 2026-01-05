@@ -48,8 +48,7 @@ extension Int {
 
 extension Date {
   public var decade: Decade {
-    let comps = Calendar.autoupdatingCurrent.dateComponents([.year], from: self)
-    guard let year = comps.year else { return .unknown }
+    guard let year = self.year else { return .unknown }
     return year.decade
   }
 }
