@@ -7,6 +7,50 @@
 
 import Foundation
 
+extension Collection where Element == Show {
+  fileprivate func dates(withArtist id: Artist.ID) -> [PartialDate] {
+    self.compactMap {
+      guard $0.artists.contains(id) else { return nil }
+      return $0.date
+    }
+  }
+
+  fileprivate func dates(withVenue id: Venue.ID) -> [PartialDate] {
+    self.compactMap {
+      guard $0.venue == id else { return nil }
+      return $0.date
+    }
+  }
+
+  fileprivate func venues(withArtist id: Artist.ID) -> [Venue.ID] {
+    self.compactMap {
+      guard $0.artists.contains(id) else { return nil }
+      return $0.venue
+    }
+  }
+
+  fileprivate func artists(withVenue id: Venue.ID) -> [Artist.ID] {
+    self.flatMap {
+      guard $0.venue == id else { return [Artist.ID]() }
+      return $0.artists
+    }
+  }
+
+  fileprivate func artists(annum: Annum) -> [Artist.ID] {
+    self.flatMap {
+      guard $0.date.annum == annum else { return [Artist.ID]() }
+      return $0.artists
+    }
+  }
+
+  fileprivate func venues(annum: Annum) -> [Venue.ID] {
+    self.compactMap {
+      guard $0.date.annum == annum else { return nil }
+      return $0.venue
+    }
+  }
+}
+
 extension Music {
   var artistRankings: [Artist.ID: Ranking] {
     let artistShowCounts: [(Artist.ID, Int)] = self.artists.reduce(into: [:]) { d, item in
@@ -26,7 +70,7 @@ extension Music {
 
   var artistSpanRankings: [Artist.ID: Ranking] {
     let artistShowSpans: [(Artist.ID, Int)] = self.artists.reduce(into: [:]) { d, item in
-      d[item.id] = self.shows.filter { $0.artists.contains(item.id) }.map { $0.date }.yearSpan
+      d[item.id] = self.shows.dates(withArtist: item.id).yearSpan
     }.map { $0 }
 
     return computeRankings(items: artistShowSpans)
@@ -34,7 +78,7 @@ extension Music {
 
   var venueSpanRankings: [Venue.ID: Ranking] {
     let venueShowSpans: [(Venue.ID, Int)] = self.venues.reduce(into: [:]) { d, item in
-      d[item.id] = self.shows.filter { $0.venue == item.id }.map { $0.date }.yearSpan
+      d[item.id] = self.shows.dates(withVenue: item.id).yearSpan
     }.map { $0 }
 
     return computeRankings(items: venueShowSpans)
@@ -42,7 +86,7 @@ extension Music {
 
   var artistVenueRankings: [Artist.ID: Ranking] {
     let artistVenueCounts: [(Artist.ID, Int)] = self.artists.reduce(into: [:]) { d, item in
-      d[item.id] = Set(self.shows.filter { $0.artists.contains(item.id) }.map { $0.venue }).count
+      d[item.id] = Set(self.shows.venues(withArtist: item.id)).count
     }.map { $0 }
 
     return computeRankings(items: artistVenueCounts)
@@ -50,7 +94,7 @@ extension Music {
 
   var venueArtistRankings: [Venue.ID: Ranking] {
     let venueArtistCounts: [(Venue.ID, Int)] = self.venues.reduce(into: [:]) { d, item in
-      d[item.id] = Set(self.shows.filter { $0.venue == item.id }.flatMap { $0.artists }).count
+      d[item.id] = Set(self.shows.artists(withVenue: item.id)).count
     }.map { $0 }
 
     return computeRankings(items: venueArtistCounts)
@@ -69,14 +113,14 @@ extension Music {
 
   var annumVenueRankings: [Annum: Ranking] {
     let annumVenueCounts: [(Annum, Int)] = annums.map { annum in
-      (annum, Array(shows.filter { $0.date.annum == annum }.map { $0.venue }.uniqued()).count)
+      (annum, Array(shows.venues(annum: annum).uniqued()).count)
     }
     return computeRankings(items: annumVenueCounts)
   }
 
   var annumArtistRankings: [Annum: Ranking] {
     let annumArtistCounts: [(Annum, Int)] = annums.map { annum in
-      (annum, Array(shows.filter { $0.date.annum == annum }.flatMap { $0.artists }.uniqued()).count)
+      (annum, Array(shows.artists(annum: annum).uniqued()).count)
     }
     return computeRankings(items: annumArtistCounts)
   }
