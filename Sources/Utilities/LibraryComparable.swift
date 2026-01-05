@@ -16,10 +16,6 @@ extension LibraryComparable {
   public var librarySortString: String {
     sortname ?? name
   }
-
-  public var librarySortToken: String {
-    librarySortString.removeCommonInitialPunctuation
-  }
 }
 
 extension Collection where Element: LibraryComparable {

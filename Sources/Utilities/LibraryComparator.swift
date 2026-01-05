@@ -24,13 +24,13 @@ public struct LibraryComparator: Codable, Sendable {
       tokenMap[lhs.id]
       ?? {
         Logger.libraryComparator.debug("\(lhs.id, privacy: .public) not in map.")
-        return lhs.librarySortToken
+        return LibraryCompareTokenizer().removeCommonInitialPunctuation(lhs.librarySortString)
       }()
     let rhToken =
       tokenMap[rhs.id]
       ?? {
         Logger.libraryComparator.debug("\(rhs.id, privacy: .public) not in map.")
-        return rhs.librarySortToken
+        return LibraryCompareTokenizer().removeCommonInitialPunctuation(rhs.librarySortString)
       }()
     return libraryCompareTokens(lhs: lhToken, rhs: rhToken)
   }
