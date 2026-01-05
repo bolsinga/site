@@ -126,20 +126,16 @@ extension Music {
   }
 
   var decadesMap: [Decade: [Annum: [Show.ID]]] {
-    let decadeShowMap: [Decade: [Show]] = shows.reduce(into: [:]) {
+    shows.reduce(into: [:]) {
       let decade = $1.date.decade
-      var arr = $0[decade] ?? []
-      arr.append($1)
-      $0[decade] = arr
-    }
+      var decadeDict = $0[decade] ?? [:]
 
-    return decadeShowMap.reduce(into: [:]) {
-      $0[$1.key] = $1.value.reduce(into: [:]) {
-        let annum = $1.date.annum
-        var arr = $0[annum] ?? []
-        arr.append($1.id)
-        $0[annum] = arr
-      }
+      let annum = $1.date.annum
+      var arr = decadeDict[annum] ?? []
+      arr.append($1.id)
+      decadeDict[annum] = arr
+
+      $0[decade] = decadeDict
     }
   }
 
