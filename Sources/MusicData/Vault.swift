@@ -26,10 +26,10 @@ public struct Vault: Sendable {
 
   public init(music: Music, url: URL) async {
     async let asyncLookup = await Lookup(music: music)
-    async let asyncComparator = await LibraryComparator(music: music)
-    async let sectioner = await LibrarySectioner(music: music)
-
     let lookup = await asyncLookup
+    async let asyncComparator = LibraryComparator(tokenMap: lookup.librarySortTokenMap)
+    async let sectioner = await LibrarySectioner(librarySortTokenMap: lookup.librarySortTokenMap)
+
     let comparator = await asyncComparator
 
     async let decadesMap = lookup.decadesMap

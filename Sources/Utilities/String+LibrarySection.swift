@@ -9,7 +9,7 @@ import Foundation
 
 extension String {
   public var librarySection: LibrarySection {
-    let pfx = self.removeCommonInitialPunctuation.prefix(1)
+    let pfx = prefix(1)
     if let first = pfx.first {
       if first.isNumber {
         return .numeric

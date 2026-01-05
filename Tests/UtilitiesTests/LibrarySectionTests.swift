@@ -11,7 +11,9 @@ import Testing
 
 struct LibrarySectionTests {
   @Test func librarySection() {
-    #expect("The Chapel".librarySection == .alphabetic("C"))
+    #expect("The Chapel".librarySection == .alphabetic("T"))
+
+    #expect("The Chapel".removeCommonInitialPunctuation.librarySection == .alphabetic("C"))
 
     #expect("33 Degrees".librarySection == .numeric)
 
