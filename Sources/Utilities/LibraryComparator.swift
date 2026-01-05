@@ -6,9 +6,13 @@
 //
 
 import Foundation
+import os
+
+extension Logger {
+  fileprivate static let libraryComparator = Logger(category: "libraryComparator")
+}
 
 public struct LibraryComparator: Codable, Sendable {
-
   private let tokenMap: [String: String]
 
   public init(tokenMap: [String: String] = [:]) {
@@ -16,8 +20,18 @@ public struct LibraryComparator: Codable, Sendable {
   }
 
   public func libraryCompare<T>(lhs: T, rhs: T) -> Bool where T: LibraryComparable, T.ID == String {
-    let lhToken = tokenMap[lhs.id] ?? lhs.librarySortToken
-    let rhToken = tokenMap[rhs.id] ?? rhs.librarySortToken
+    let lhToken =
+      tokenMap[lhs.id]
+      ?? {
+        Logger.libraryComparator.debug("\(lhs.id, privacy: .public) not in map.")
+        return lhs.librarySortToken
+      }()
+    let rhToken =
+      tokenMap[rhs.id]
+      ?? {
+        Logger.libraryComparator.debug("\(rhs.id, privacy: .public) not in map.")
+        return rhs.librarySortToken
+      }()
     return libraryCompareTokens(lhs: lhToken, rhs: rhToken)
   }
 
