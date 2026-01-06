@@ -156,11 +156,11 @@
 				"Utilities/Date+Year.swift",
 				Utilities/LibraryComparable.swift,
 				Utilities/LibraryComparator.swift,
+				Utilities/LibraryCompareTokenizer.swift,
 				Utilities/LibrarySection.swift,
 				Utilities/LibrarySectioner.swift,
 				"Utilities/Logger+Category.swift",
 				"Utilities/String+LibrarySection.swift",
-				"Utilities/String+LibrarySorting.swift",
 				"Utilities/URL+JSON.swift",
 			);
 			target = FEB4864F2E6E6D740043057D /* site_tool */;
@@ -246,11 +246,11 @@
 				"Utilities/Date+Year.swift",
 				Utilities/LibraryComparable.swift,
 				Utilities/LibraryComparator.swift,
+				Utilities/LibraryCompareTokenizer.swift,
 				Utilities/LibrarySection.swift,
 				Utilities/LibrarySectioner.swift,
 				"Utilities/Logger+Category.swift",
 				"Utilities/String+LibrarySection.swift",
-				"Utilities/String+LibrarySorting.swift",
 				"Utilities/URL+JSON.swift",
 			);
 			target = FEB489B92E6E70800043057D /* next_id */;

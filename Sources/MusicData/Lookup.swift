@@ -18,12 +18,13 @@ private func createLookup<T: Identifiable>(_ sequence: [T]) -> [T.ID: T] {
 
 extension Music {
   fileprivate var librarySortTokenMap: [String: String] {
-    artists.reduce(
+    let tokenizer = LibraryCompareTokenizer()
+    return artists.reduce(
       into: venues.reduce(into: [:]) {
-        $0[$1.id] = $1.librarySortToken
+        $0[$1.id] = tokenizer.removeCommonInitialPunctuation($1.librarySortString)
       }
     ) {
-      $0[$1.id] = $1.librarySortToken
+      $0[$1.id] = tokenizer.removeCommonInitialPunctuation($1.librarySortString)
     }
   }
 }

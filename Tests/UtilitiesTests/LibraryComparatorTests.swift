@@ -16,6 +16,12 @@ extension LibraryComparator {
   }
 }
 
+extension String {
+  fileprivate var removeCommonInitialPunctuation: String {
+    LibraryCompareTokenizer().removeCommonInitialPunctuation(self)
+  }
+}
+
 struct LibraryComparatorTests {
   let comparator = LibraryComparator()
 
