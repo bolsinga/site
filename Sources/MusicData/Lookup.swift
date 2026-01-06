@@ -16,9 +16,22 @@ private func createLookup<T: Identifiable>(_ sequence: [T]) -> [T.ID: T] {
   sequence.reduce(into: [:]) { $0[$1.id] = $1 }
 }
 
+extension Music {
+  fileprivate var librarySortTokenMap: [String: String] {
+    artists.reduce(
+      into: venues.reduce(into: [:]) {
+        $0[$1.id] = $1.librarySortToken
+      }
+    ) {
+      $0[$1.id] = $1.librarySortToken
+    }
+  }
+}
+
 public struct Lookup: Sendable {
   let artistMap: [Artist.ID: Artist]
   let venueMap: [Venue.ID: Venue]
+  let librarySortTokenMap: [String: String]  // String ID : tokenized LibraryComparable name for fast sorting.
   private let artistRankingMap: [Artist.ID: Ranking]
   private let venueRankingMap: [Venue.ID: Ranking]
   private let artistShowSpanRankingMap: [Artist.ID: Ranking]
@@ -36,6 +49,7 @@ public struct Lookup: Sendable {
   public init(music: Music) async {
     async let artistLookup = createLookup(music.artists)
     async let venueLookup = createLookup(music.venues)
+    async let librarySortTokenMap = music.librarySortTokenMap
     async let artistRanks = music.artistRankings
     async let venueRanks = music.venueRankings
     async let artistSpanRanks = music.artistSpanRankings
@@ -52,6 +66,7 @@ public struct Lookup: Sendable {
 
     self.artistMap = await artistLookup
     self.venueMap = await venueLookup
+    self.librarySortTokenMap = await librarySortTokenMap
     self.artistRankingMap = await artistRanks
     self.venueRankingMap = await venueRanks
     self.artistShowSpanRankingMap = await artistSpanRanks

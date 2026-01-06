@@ -8,14 +8,8 @@
 import Foundation
 
 extension LibrarySectioner {
-  public init(music: Music) async {
-    async let sectionMap = music.artists.reduce(
-      into: music.venues.reduce(into: [:]) {
-        $0[$1.id] = $1.librarySortString.librarySection
-      }
-    ) {
-      $0[$1.id] = $1.librarySortString.librarySection
-    }
+  public init(librarySortTokenMap: [String: String]) async {
+    async let sectionMap = librarySortTokenMap.mapValues { $0.librarySection }
     self.init(sectionMap: await sectionMap)
   }
 }
