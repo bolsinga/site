@@ -11,7 +11,10 @@ extension Annum {
   fileprivate func digest(sortedConcerts: [Concert], lookup: Lookup) -> AnnumDigest {
     AnnumDigest(
       annum: self,
-      shows: sortedConcerts.filter { $0.show.date.annum == self }.map { $0.digest },
+      shows: sortedConcerts.compactMap {
+        guard $0.show.date.annum == self else { return nil }
+        return $0.digest
+      },
       showRank: lookup.showRank(annum: self),
       venueRank: lookup.venueRank(annum: self),
       artistRank: lookup.artistRank(annum: self)
@@ -23,7 +26,10 @@ extension Artist {
   fileprivate func digest(sortedConcerts: [Concert], lookup: Lookup) -> ArtistDigest {
     ArtistDigest(
       artist: self,
-      shows: sortedConcerts.filter { $0.show.artists.contains(id) }.map { $0.digest },
+      shows: sortedConcerts.compactMap {
+        guard $0.show.artists.contains(id) else { return nil }
+        return $0.digest
+      },
       related: lookup.related(self),
       firstSet: lookup.firstSet(artist: self),
       spanRank: lookup.spanRank(artist: self),
@@ -50,7 +56,10 @@ extension Venue {
   fileprivate func digest(sortedConcerts: [Concert], lookup: Lookup) -> VenueDigest {
     VenueDigest(
       venue: self,
-      shows: sortedConcerts.filter { $0.show.venue == id }.map { $0.digest },
+      shows: sortedConcerts.compactMap {
+        guard $0.show.venue == id else { return nil }
+        return $0.digest
+      },
       related: lookup.related(self),
       firstSet: lookup.firstSet(venue: self),
       spanRank: lookup.spanRank(venue: self),
