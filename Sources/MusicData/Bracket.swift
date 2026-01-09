@@ -35,36 +35,26 @@ struct Bracket: Codable, Sendable {
   let artistFirstSetsMap: [Artist.ID: FirstSet]
   let venueFirstSetsMap: [Venue.ID: FirstSet]
 
-  public init(music: Music) async {
+  init(music: Music) async {
     var signpost = Signpost(category: "bracket", name: "process")
     signpost.start()
 
     async let librarySortTokenMap = music.librarySortTokenMap
-    async let artistRanks = music.artistRankings
-    async let venueRanks = music.venueRankings
-    async let artistSpanRanks = music.artistSpanRankings
-    async let venueSpanRanks = music.venueSpanRankings
-    async let artistVenueRanks = music.artistVenueRankings
-    async let venueArtistRanks = music.venueArtistRankings
-    async let annumShowRanks = music.annumShowRankings
-    async let annumVenueRanks = music.annumVenueRankings
-    async let annumArtistRanks = music.annumArtistRankings
-    async let decades = music.decadesMap
-    async let artistFirsts = music.artistFirstSets
-    async let venueFirsts = music.venueFirstSets
+    async let tracker = music.tracker
+
+    self.artistRankingMap = await tracker.artistRankings()
+    self.venueRankingMap = await tracker.venueRankings()
+    self.artistShowSpanRankingMap = await tracker.artistSpanRankings()
+    self.venueShowSpanRankingMap = await tracker.venueSpanRankings()
+    self.artistVenueRankingMap = await tracker.artistVenueRankings()
+    self.venueArtistRankingMap = await tracker.venueArtistRankings()
+    self.annumShowRankingMap = await tracker.annumShowRankings()
+    self.annumVenueRankingMap = await tracker.annumVenueRankings()
+    self.annumArtistRankingMap = await tracker.annumArtistRankings()
+    self.decadesMap = await tracker.decadesMap()
+    self.artistFirstSetsMap = await tracker.artistFirstSets()
+    self.venueFirstSetsMap = await tracker.venueFirstSets()
 
     self.librarySortTokenMap = await librarySortTokenMap
-    self.artistRankingMap = await artistRanks
-    self.venueRankingMap = await venueRanks
-    self.artistShowSpanRankingMap = await artistSpanRanks
-    self.venueShowSpanRankingMap = await venueSpanRanks
-    self.artistVenueRankingMap = await artistVenueRanks
-    self.venueArtistRankingMap = await venueArtistRanks
-    self.annumShowRankingMap = await annumShowRanks
-    self.annumVenueRankingMap = await annumVenueRanks
-    self.annumArtistRankingMap = await annumArtistRanks
-    self.decadesMap = await decades
-    self.artistFirstSetsMap = await artistFirsts
-    self.venueFirstSetsMap = await venueFirsts
   }
 }
