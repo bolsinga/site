@@ -1,0 +1,25 @@
+{
+  "configurations" : [
+    {
+      "id" : "DF43055E-EF51-4661-9987-869222BEA6F8",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : false,
+    "performanceAntipatternCheckerEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:SiteApp.xcodeproj",
+        "identifier" : "FEE0AECB2E6E74F5005CE1AB",
+        "name" : "Tests"
+      }
+    }
+  ],
+  "version" : 1
+}
