@@ -33,6 +33,6 @@ jobs:
     - name: Show Destinations
       run: xcodebuild -scheme SiteApp -showdestinations
     - name: Build / Test
-      run: xcodebuild test -verbose -skipPackagePluginValidation -scheme SiteApp -destination "platform=macOS,arch=arm64" CODE_SIGNING_ALLOWED=NO
+      run: xcodebuild test -verbose -skipPackagePluginValidation -scheme All -destination "platform=macOS,arch=arm64" CODE_SIGNING_ALLOWED=NO
     - name: Build iOS / macOS / tvOS
       run: xcodebuild -verbose -skipPackagePluginValidation -scheme SiteApp -destination "platform=iOS Simulator,name=iPhone 17,arch=arm64" -destination "platform=macOS,arch=arm64" -destination "platform=tvOS Simulator,name=Apple TV,arch=arm64"
