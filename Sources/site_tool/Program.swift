@@ -26,27 +26,8 @@ struct Program: AsyncParsableCommand {
   )
   var rootURL: URL
 
-  @Option(
-    name: .customLong("json"),
-    help: "Pass this to output json files to a directory.",
-    transform: ({
-      let url = URL(filePath: $0, directoryHint: .isDirectory)
-      let manager = FileManager.default
-      if !manager.fileExists(atPath: url.relativePath) {
-        try manager.createDirectory(at: url, withIntermediateDirectories: true)
-      }
-      return url
-    })
-  )
-  var jsonDirectoryURL: URL? = nil
-
   @MainActor
   func run() async throws {
-    let diary = try await Diary.load(url: rootURL.appending(path: "diary.json"))
-    print("\(diary.title) has \(diary.entries.count) entries.")
-
-    try jsonDirectoryURL?.appending(path: "diary.json").writeJSON(diary)
-
     let vault = try await Vault.load(rootURL.appending(path: "music.json").absoluteString)
 
     let concerts = vault.concertMap.values.sorted(by: vault.comparator.compare(lhs:rhs:))
