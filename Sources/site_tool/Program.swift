@@ -10,25 +10,11 @@ import Foundation
 
 @main
 struct Program: AsyncParsableCommand {
-  enum ProgramError: Error {
-    case notURLString(String)
-    case noVaultModel
-  }
-
-  @Argument(
-    help:
-      "The root URL for the json files.",
-    transform: ({
-      let url = URL(string: $0)
-      guard let url else { throw ProgramError.notURLString($0) }
-      return url
-    })
-  )
-  var rootURL: URL
+  @OptionGroup var options: VaultArguments
 
   @MainActor
   func run() async throws {
-    let vault = try await Vault.load(rootURL.appending(path: "music.json").absoluteString)
+    let vault = try await Vault.load(options.rootURL.appending(path: "music.json").absoluteString)
 
     let concerts = vault.concertMap.values.sorted(by: vault.comparator.compare(lhs:rhs:))
     let artistDigests = vault.artistDigestMap.values.sorted(

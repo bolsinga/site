@@ -193,6 +193,7 @@
 				MusicData/VenueDigest.swift,
 				"MusicData/VenueDigest+LibraryComparable.swift",
 				site_tool/Program.swift,
+				site_tool/VaultArguments.swift,
 				Utilities/CompareOptional.swift,
 				"Utilities/Data+JSON.swift",
 				"Utilities/Date+DayOfLeapYear.swift",
