@@ -68,7 +68,14 @@ struct Program: AsyncParsableCommand {
     }
 
     for digest in artistDigests {
-      let concerts = digest.concerts
+      let concerts = digest.shows.compactMap {
+        switch $0.id {
+        case .show(let iD):
+          return vault.concertMap[iD]
+        default:
+          return nil
+        }
+      }
 
       guard !concerts.isEmpty else { continue }
 
