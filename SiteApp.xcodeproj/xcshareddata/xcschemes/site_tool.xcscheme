@@ -53,6 +53,10 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
+            argument = "dumpDiary"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
             argument = "https://www.bolsinga.com/json/"
             isEnabled = "YES">
          </CommandLineArgument>
