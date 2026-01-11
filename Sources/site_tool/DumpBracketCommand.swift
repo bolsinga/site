@@ -1,5 +1,5 @@
 //
-//  DumpLookupCommand.swift
+//  DumpBracketCommand.swift
 //  site_tool
 //
 //  Created by Greg Bolsinga on 1/11/26.
@@ -8,16 +8,16 @@
 import ArgumentParser
 import Foundation
 
-struct DumpLookupCommand: AsyncParsableCommand {
+struct DumpBracketCommand: AsyncParsableCommand {
   static let configuration = CommandConfiguration(
-    commandName: "dumpLookup",
-    abstract: "Dump a json representation of Music Lookup."
+    commandName: "dumpBracket",
+    abstract: "Dump a json representation of Music Bracket."
   )
 
   @OptionGroup var rootURL: RootURLArguments
 
   func run() async throws {
-    let lookup = try await rootURL.lookup()
+    let lookup = try await rootURL.bracket()
 
     let encoder = JSONEncoder()
     encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
@@ -25,7 +25,7 @@ struct DumpLookupCommand: AsyncParsableCommand {
 
     let data = try encoder.encode(lookup.self)
     guard let value = String(data: data, encoding: .utf8) else {
-      print("cannot encode lookup")
+      print("cannot encode bracket")
       return
     }
     print(value)
