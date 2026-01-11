@@ -14,7 +14,7 @@ struct Program: AsyncParsableCommand {
 
   @MainActor
   func run() async throws {
-    let vault = try await Vault.load(rootURL.url.appending(path: "music.json").absoluteString)
+    let vault = try await rootURL.vault()
 
     let concerts = vault.concertMap.values.sorted(by: vault.comparator.compare(lhs:rhs:))
     let artistDigests = vault.artistDigestMap.values.sorted(
