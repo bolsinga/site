@@ -109,7 +109,7 @@
 		FEB489AA2E6E6F960043057D /* site_associated_domains */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = site_associated_domains; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEB489BA2E6E70800043057D /* next_id */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = next_id; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEC1720F2E70F1E800E8EFC8 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		FED9EFF72F1312F700E7A555 /* All.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = file; name = All.xctestplan; path = Tests/All.xctestplan; sourceTree = "<group>"; };
+		FED9EFF72F1312F700E7A555 /* All.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = All.xctestplan; path = Tests/All.xctestplan; sourceTree = "<group>"; };
 		FEE0AECC2E6E74F5005CE1AB /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
