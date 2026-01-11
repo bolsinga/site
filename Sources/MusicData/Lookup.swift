@@ -16,71 +16,30 @@ private func createLookup<T: Identifiable>(_ sequence: [T]) -> [T.ID: T] {
   sequence.reduce(into: [:]) { $0[$1.id] = $1 }
 }
 
-extension Music {
-  fileprivate var librarySortTokenMap: [String: String] {
-    let tokenizer = LibraryCompareTokenizer()
-    return artists.reduce(
-      into: venues.reduce(into: [:]) {
-        $0[$1.id] = tokenizer.removeCommonInitialPunctuation($1.librarySortString)
-      }
-    ) {
-      $0[$1.id] = tokenizer.removeCommonInitialPunctuation($1.librarySortString)
-    }
-  }
-}
-
-public struct Lookup: Codable, Sendable {
+public struct Lookup: Sendable {
   let artistMap: [Artist.ID: Artist]
   let venueMap: [Venue.ID: Venue]
-  let librarySortTokenMap: [String: String]  // String ID : tokenized LibraryComparable name for fast sorting.
-  private let artistRankingMap: [Artist.ID: Ranking]
-  private let venueRankingMap: [Venue.ID: Ranking]
-  private let artistShowSpanRankingMap: [Artist.ID: Ranking]
-  private let venueShowSpanRankingMap: [Venue.ID: Ranking]
-  private let artistVenueRankingMap: [Artist.ID: Ranking]
-  private let venueArtistRankingMap: [Venue.ID: Ranking]
-  private let annumShowRankingMap: [Annum: Ranking]
-  private let annumVenueRankingMap: [Annum: Ranking]
-  private let annumArtistRankingMap: [Annum: Ranking]
-  public let decadesMap: [Decade: [Annum: [Show.ID]]]
-  private let artistFirstSetsMap: [Artist.ID: FirstSet]
-  private let venueFirstSetsMap: [Venue.ID: FirstSet]
+  private let bracket: Bracket
   private let relationMap: [String: [String]]  // Artist/Venue ID : [Artist/Venue ID]
 
   public init(music: Music) async {
     async let artistLookup = createLookup(music.artists)
     async let venueLookup = createLookup(music.venues)
-    async let librarySortTokenMap = music.librarySortTokenMap
-    async let artistRanks = music.artistRankings
-    async let venueRanks = music.venueRankings
-    async let artistSpanRanks = music.artistSpanRankings
-    async let venueSpanRanks = music.venueSpanRankings
-    async let artistVenueRanks = music.artistVenueRankings
-    async let venueArtistRanks = music.venueArtistRankings
-    async let annumShowRanks = music.annumShowRankings
-    async let annumVenueRanks = music.annumVenueRankings
-    async let annumArtistRanks = music.annumArtistRankings
-    async let decades = music.decadesMap
-    async let artistFirsts = music.artistFirstSets
-    async let venueFirsts = music.venueFirstSets
+    async let bracket = await Bracket(music: music)
     async let relations = music.relationMap
 
     self.artistMap = await artistLookup
     self.venueMap = await venueLookup
-    self.librarySortTokenMap = await librarySortTokenMap
-    self.artistRankingMap = await artistRanks
-    self.venueRankingMap = await venueRanks
-    self.artistShowSpanRankingMap = await artistSpanRanks
-    self.venueShowSpanRankingMap = await venueSpanRanks
-    self.artistVenueRankingMap = await artistVenueRanks
-    self.venueArtistRankingMap = await venueArtistRanks
-    self.annumShowRankingMap = await annumShowRanks
-    self.annumVenueRankingMap = await annumVenueRanks
-    self.annumArtistRankingMap = await annumArtistRanks
-    self.decadesMap = await decades
-    self.artistFirstSetsMap = await artistFirsts
-    self.venueFirstSetsMap = await venueFirsts
+    self.bracket = await bracket
     self.relationMap = await relations
+  }
+
+  var librarySortTokenMap: [String: String] {
+    bracket.librarySortTokenMap
+  }
+
+  public var decadesMap: [Decade: [Annum: [Show.ID]]] {
+    bracket.decadesMap
   }
 
   public func venueForShow(_ show: Show) -> Venue? {
@@ -112,47 +71,47 @@ public struct Lookup: Codable, Sendable {
   }
 
   public func showRank(artist: Artist) -> Ranking {
-    artistRankingMap[artist.id] ?? Ranking.empty
+    bracket.artistRankingMap[artist.id] ?? Ranking.empty
   }
 
   public func venueRank(venue: Venue) -> Ranking {
-    venueRankingMap[venue.id] ?? Ranking.empty
+    bracket.venueRankingMap[venue.id] ?? Ranking.empty
   }
 
   public func spanRank(artist: Artist) -> Ranking {
-    artistShowSpanRankingMap[artist.id] ?? Ranking.empty
+    bracket.artistShowSpanRankingMap[artist.id] ?? Ranking.empty
   }
 
   public func spanRank(venue: Venue) -> Ranking {
-    venueShowSpanRankingMap[venue.id] ?? Ranking.empty
+    bracket.venueShowSpanRankingMap[venue.id] ?? Ranking.empty
   }
 
   public func artistVenueRank(artist: Artist) -> Ranking {
-    artistVenueRankingMap[artist.id] ?? Ranking.empty
+    bracket.artistVenueRankingMap[artist.id] ?? Ranking.empty
   }
 
   public func venueArtistRank(venue: Venue) -> Ranking {
-    venueArtistRankingMap[venue.id] ?? Ranking.empty
+    bracket.venueArtistRankingMap[venue.id] ?? Ranking.empty
   }
 
   public func showRank(annum: Annum) -> Ranking {
-    annumShowRankingMap[annum] ?? .empty
+    bracket.annumShowRankingMap[annum] ?? .empty
   }
 
   public func venueRank(annum: Annum) -> Ranking {
-    annumVenueRankingMap[annum] ?? .empty
+    bracket.annumVenueRankingMap[annum] ?? .empty
   }
 
   public func artistRank(annum: Annum) -> Ranking {
-    annumArtistRankingMap[annum] ?? .empty
+    bracket.annumArtistRankingMap[annum] ?? .empty
   }
 
   public func firstSet(artist: Artist) -> FirstSet {
-    return artistFirstSetsMap[artist.id] ?? FirstSet.empty
+    bracket.artistFirstSetsMap[artist.id] ?? FirstSet.empty
   }
 
   public func firstSet(venue: Venue) -> FirstSet {
-    return venueFirstSetsMap[venue.id] ?? FirstSet.empty
+    bracket.venueFirstSetsMap[venue.id] ?? FirstSet.empty
   }
 
   public func related(_ item: Venue) -> [Related] {
