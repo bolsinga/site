@@ -10,11 +10,11 @@ import Foundation
 
 @main
 struct Program: AsyncParsableCommand {
-  @OptionGroup var options: VaultArguments
+  @OptionGroup var rootURL: RootURLArguments
 
   @MainActor
   func run() async throws {
-    let vault = try await Vault.load(options.rootURL.appending(path: "music.json").absoluteString)
+    let vault = try await Vault.load(rootURL.url.appending(path: "music.json").absoluteString)
 
     let concerts = vault.concertMap.values.sorted(by: vault.comparator.compare(lhs:rhs:))
     let artistDigests = vault.artistDigestMap.values.sorted(
