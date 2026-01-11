@@ -14,7 +14,6 @@
 			);
 			dependencies = (
 				FED9EFF02F13129E00E7A555 /* PBXTargetDependency */,
-				FED9EFF22F13129E00E7A555 /* PBXTargetDependency */,
 				FED9EFF42F13129E00E7A555 /* PBXTargetDependency */,
 				FED9EFF62F13129E00E7A555 /* PBXTargetDependency */,
 			);
@@ -28,10 +27,8 @@
 /* Begin PBXBuildFile section */
 		FEB4895E2E6E6E8F0043057D /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = FEB4895D2E6E6E8F0043057D /* ArgumentParser */; };
 		FEB489B52E6E6FC10043057D /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = FEB489B42E6E6FC10043057D /* ArgumentParser */; };
-		FEB48A082E6E70E20043057D /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = FEB48A072E6E70E20043057D /* ArgumentParser */; };
 		FEB722BE2E776336006A4DA2 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = FEB722BD2E776336006A4DA2 /* Algorithms */; };
 		FEE44E752E8B4DE20080998E /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = FEE44E742E8B4DE20080998E /* Algorithms */; };
-		FEE44E772E8B4DE70080998E /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = FEE44E762E8B4DE70080998E /* Algorithms */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,13 +38,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = FE5360FC29CE82CA00618099;
 			remoteInfo = SiteApp;
-		};
-		FED9EFF12F13129E00E7A555 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = FE5360F529CE82CA00618099 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = FEB489B92E6E70800043057D;
-			remoteInfo = next_id;
 		};
 		FED9EFF32F13129E00E7A555 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -91,15 +81,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
-		FEB489B82E6E70800043057D /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 1;
-		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -107,7 +88,6 @@
 		FE9910DC2AC205A70054D229 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		FEB486502E6E6D740043057D /* site_tool */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = site_tool; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEB489AA2E6E6F960043057D /* site_associated_domains */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = site_associated_domains; sourceTree = BUILT_PRODUCTS_DIR; };
-		FEB489BA2E6E70800043057D /* next_id */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = next_id; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEC1720F2E70F1E800E8EFC8 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		FED9EFF72F1312F700E7A555 /* All.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = All.xctestplan; path = Tests/All.xctestplan; sourceTree = "<group>"; };
 		FEE0AECC2E6E74F5005CE1AB /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -121,11 +101,11 @@
 				DiaryData/Diary.swift,
 				"DiaryData/Diary+URL.swift",
 				DiaryData/Entry.swift,
-				next_id/Program.swift,
 				site_associated_domains/Program.swift,
 				site_tool/DumpBracketCommand.swift,
 				site_tool/DumpDiaryCommand.swift,
 				site_tool/DumpVaultCommand.swift,
+				site_tool/NextIDCommand.swift,
 				site_tool/Program.swift,
 				site_tool/RootURLArguments.swift,
 				"site_tool/RootURLArguments+Bracket.swift",
@@ -194,7 +174,6 @@
 				"MusicData/ShowDigest+Stats.swift",
 				MusicData/Song.swift,
 				MusicData/Vault.swift,
-				"MusicData/Vault+NextID.swift",
 				"MusicData/Vault+URL.swift",
 				MusicData/Venue.swift,
 				"MusicData/Venue+FormatStyle.swift",
@@ -204,6 +183,7 @@
 				site_tool/DumpBracketCommand.swift,
 				site_tool/DumpDiaryCommand.swift,
 				site_tool/DumpVaultCommand.swift,
+				site_tool/NextIDCommand.swift,
 				site_tool/Program.swift,
 				site_tool/RootURLArguments.swift,
 				"site_tool/RootURLArguments+Bracket.swift",
@@ -232,90 +212,11 @@
 			);
 			target = FEB489A92E6E6F960043057D /* site_associated_domains */;
 		};
-		FE00AC8A2EB848A4003DE0C6 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				MusicData/Album.swift,
-				MusicData/Annum.swift,
-				"MusicData/Annum+FormatStyle.swift",
-				"MusicData/Annum+ParseableFormatStyle.swift",
-				MusicData/AnnumDigest.swift,
-				MusicData/ArchiveCategory.swift,
-				"MusicData/ArchiveCategory+FormatStyle.swift",
-				"MusicData/ArchiveCategory+ParseableFormatStyle.swift",
-				"MusicData/ArchiveCategory+URL.swift",
-				MusicData/ArchivePath.swift,
-				"MusicData/ArchivePath+ArchiveCategory.swift",
-				"MusicData/ArchivePath+Codable.swift",
-				"MusicData/ArchivePath+FormatStyle.swift",
-				"MusicData/ArchivePath+Navigable.swift",
-				"MusicData/ArchivePath+ParseableFormatStyle.swift",
-				"MusicData/ArchivePath+URL.swift",
-				MusicData/Artist.swift,
-				"MusicData/Artist+LibraryComparable.swift",
-				MusicData/ArtistDigest.swift,
-				"MusicData/ArtistDigest+LibraryComparable.swift",
-				MusicData/Bracket.swift,
-				MusicData/Concert.swift,
-				"MusicData/Concert+FormatStyle.swift",
-				"MusicData/Concert+Performers.swift",
-				"MusicData/Concert+Stats.swift",
-				MusicData/Decade.FormatStyle.swift,
-				MusicData/Decade.swift,
-				MusicData/FirstSet.swift,
-				"MusicData/LibraryComparator+Concert.swift",
-				"MusicData/LibrarySectioner+Music.swift",
-				MusicData/Location.swift,
-				"MusicData/Location+Comparable.swift",
-				"MusicData/Location+FormatStyle.swift",
-				MusicData/Lookup.swift,
-				MusicData/Music.swift,
-				"MusicData/Music+Ranking.swift",
-				"MusicData/Music+ShowsOnly.swift",
-				"MusicData/Music+URL.swift",
-				MusicData/PartialDate.swift,
-				"MusicData/PartialDate+Date.swift",
-				"MusicData/PartialDate+FormatStyle.swift",
-				"MusicData/PartialDate+Span.swift",
-				MusicData/PathRestorable.swift,
-				MusicData/Rank.swift,
-				MusicData/Ranking.swift,
-				"MusicData/Ranking+Compute.swift",
-				MusicData/Related.swift,
-				MusicData/Relation.swift,
-				MusicData/Show.swift,
-				MusicData/ShowDigest.swift,
-				"MusicData/ShowDigest+Stats.swift",
-				MusicData/Song.swift,
-				MusicData/Vault.swift,
-				"MusicData/Vault+NextID.swift",
-				"MusicData/Vault+URL.swift",
-				MusicData/Venue.swift,
-				"MusicData/Venue+FormatStyle.swift",
-				"MusicData/Venue+LibraryComparable.swift",
-				MusicData/VenueDigest.swift,
-				"MusicData/VenueDigest+LibraryComparable.swift",
-				next_id/Program.swift,
-				Utilities/CompareOptional.swift,
-				"Utilities/Data+JSON.swift",
-				"Utilities/Date+DayOfLeapYear.swift",
-				"Utilities/Date+Year.swift",
-				Utilities/LibraryComparable.swift,
-				Utilities/LibraryComparator.swift,
-				Utilities/LibraryCompareTokenizer.swift,
-				Utilities/LibrarySection.swift,
-				Utilities/LibrarySectioner.swift,
-				"Utilities/Logger+Category.swift",
-				"Utilities/String+LibrarySection.swift",
-				"Utilities/URL+JSON.swift",
-			);
-			target = FEB489B92E6E70800043057D /* next_id */;
-		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		FE00A63E2EB8486D003DE0C6 /* Tests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Tests; sourceTree = "<group>"; };
-		FE00AB182EB848A4003DE0C6 /* Sources */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (FE00AC872EB848A4003DE0C6 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, FE00AC882EB848A4003DE0C6 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, FE00AC892EB848A4003DE0C6 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, FE00AC8A2EB848A4003DE0C6 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Sources; sourceTree = "<group>"; };
+		FE00AB182EB848A4003DE0C6 /* Sources */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (FE00AC872EB848A4003DE0C6 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, FE00AC882EB848A4003DE0C6 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, FE00AC892EB848A4003DE0C6 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Sources; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -341,15 +242,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				FEB489B52E6E6FC10043057D /* ArgumentParser in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		FEB489B72E6E70800043057D /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				FEE44E772E8B4DE70080998E /* Algorithms in Frameworks */,
-				FEB48A082E6E70E20043057D /* ArgumentParser in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -381,7 +273,6 @@
 				FE5360FD29CE82CA00618099 /* SiteApp.app */,
 				FEB486502E6E6D740043057D /* site_tool */,
 				FEB489AA2E6E6F960043057D /* site_associated_domains */,
-				FEB489BA2E6E70800043057D /* next_id */,
 				FEE0AECC2E6E74F5005CE1AB /* Tests.xctest */,
 			);
 			name = Products;
@@ -454,27 +345,6 @@
 			productReference = FEB489AA2E6E6F960043057D /* site_associated_domains */;
 			productType = "com.apple.product-type.tool";
 		};
-		FEB489B92E6E70800043057D /* next_id */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = FEB489BE2E6E70800043057D /* Build configuration list for PBXNativeTarget "next_id" */;
-			buildPhases = (
-				FEB489B62E6E70800043057D /* Sources */,
-				FEB489B72E6E70800043057D /* Frameworks */,
-				FEB489B82E6E70800043057D /* CopyFiles */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = next_id;
-			packageProductDependencies = (
-				FEB48A072E6E70E20043057D /* ArgumentParser */,
-				FEE44E762E8B4DE70080998E /* Algorithms */,
-			);
-			productName = next_id;
-			productReference = FEB489BA2E6E70800043057D /* next_id */;
-			productType = "com.apple.product-type.tool";
-		};
 		FEE0AECB2E6E74F5005CE1AB /* Tests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = FEE0AED22E6E74F5005CE1AB /* Build configuration list for PBXNativeTarget "Tests" */;
@@ -517,9 +387,6 @@
 					FEB489A92E6E6F960043057D = {
 						CreatedOnToolsVersion = 16.4;
 					};
-					FEB489B92E6E70800043057D = {
-						CreatedOnToolsVersion = 16.4;
-					};
 					FED9EFEB2F13127E00E7A555 = {
 						CreatedOnToolsVersion = 26.2;
 					};
@@ -550,7 +417,6 @@
 				FE5360FC29CE82CA00618099 /* SiteApp */,
 				FEB4864F2E6E6D740043057D /* site_tool */,
 				FEB489A92E6E6F960043057D /* site_associated_domains */,
-				FEB489B92E6E70800043057D /* next_id */,
 				FEE0AECB2E6E74F5005CE1AB /* Tests */,
 			);
 		};
@@ -595,13 +461,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		FEB489B62E6E70800043057D /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		FEE0AEC82E6E74F5005CE1AB /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -616,11 +475,6 @@
 			isa = PBXTargetDependency;
 			target = FE5360FC29CE82CA00618099 /* SiteApp */;
 			targetProxy = FED9EFEF2F13129E00E7A555 /* PBXContainerItemProxy */;
-		};
-		FED9EFF22F13129E00E7A555 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = FEB489B92E6E70800043057D /* next_id */;
-			targetProxy = FED9EFF12F13129E00E7A555 /* PBXContainerItemProxy */;
 		};
 		FED9EFF42F13129E00E7A555 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -923,37 +777,6 @@
 			};
 			name = Release;
 		};
-		FEB489BF2E6E70800043057D /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "$(inherited)";
-				ENABLE_HARDENED_RUNTIME = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 26.0;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
-				SWIFT_VERSION = 5.0;
-			};
-			name = Debug;
-		};
-		FEB489C02E6E70800043057D /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "$(inherited)";
-				ENABLE_HARDENED_RUNTIME = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 26.0;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
-				SWIFT_VERSION = 5.0;
-			};
-			name = Release;
-		};
 		FED9EFEC2F13127E00E7A555 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1066,15 +889,6 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		FEB489BE2E6E70800043057D /* Build configuration list for PBXNativeTarget "next_id" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				FEB489BF2E6E70800043057D /* Debug */,
-				FEB489C02E6E70800043057D /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		FED9EFEE2F13127E00E7A555 /* Build configuration list for PBXAggregateTarget "All" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -1125,22 +939,12 @@
 			package = FEB4895C2E6E6E8F0043057D /* XCRemoteSwiftPackageReference "swift-argument-parser" */;
 			productName = ArgumentParser;
 		};
-		FEB48A072E6E70E20043057D /* ArgumentParser */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = FEB4895C2E6E6E8F0043057D /* XCRemoteSwiftPackageReference "swift-argument-parser" */;
-			productName = ArgumentParser;
-		};
 		FEB722BD2E776336006A4DA2 /* Algorithms */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = FEB722BC2E776336006A4DA2 /* XCRemoteSwiftPackageReference "swift-algorithms" */;
 			productName = Algorithms;
 		};
 		FEE44E742E8B4DE20080998E /* Algorithms */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = FEB722BC2E776336006A4DA2 /* XCRemoteSwiftPackageReference "swift-algorithms" */;
-			productName = Algorithms;
-		};
-		FEE44E762E8B4DE70080998E /* Algorithms */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = FEB722BC2E776336006A4DA2 /* XCRemoteSwiftPackageReference "swift-algorithms" */;
 			productName = Algorithms;

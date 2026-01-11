@@ -61,6 +61,10 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
+            argument = "nextID"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
             argument = "https://www.bolsinga.com/json/"
             isEnabled = "YES">
          </CommandLineArgument>
