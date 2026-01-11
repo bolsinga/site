@@ -124,6 +124,7 @@
 				next_id/Program.swift,
 				site_associated_domains/Program.swift,
 				site_tool/Program.swift,
+				site_tool/VaultArguments.swift,
 			);
 			target = FE5360FC29CE82CA00618099 /* SiteApp */;
 		};
@@ -193,6 +194,7 @@
 				MusicData/VenueDigest.swift,
 				"MusicData/VenueDigest+LibraryComparable.swift",
 				site_tool/Program.swift,
+				site_tool/VaultArguments.swift,
 				Utilities/CompareOptional.swift,
 				"Utilities/Data+JSON.swift",
 				"Utilities/Date+DayOfLeapYear.swift",
