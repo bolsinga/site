@@ -29,7 +29,7 @@ extension Music {
   }
 }
 
-public struct Lookup: Sendable {
+public struct Lookup: Codable, Sendable {
   let artistMap: [Artist.ID: Artist]
   let venueMap: [Venue.ID: Venue]
   let librarySortTokenMap: [String: String]  // String ID : tokenized LibraryComparable name for fast sorting.
