@@ -1,5 +1,5 @@
 //
-//  Program.swift
+//  AssociatedDomainsCommand.swift
 //  site
 //
 //  Created by Greg Bolsinga on 6/11/23.
@@ -8,8 +8,12 @@
 import ArgumentParser
 import Foundation
 
-@main
-struct Program: AsyncParsableCommand {
+struct AssociatedDomainsCommand: AsyncParsableCommand {
+  static let configuration = CommandConfiguration(
+    commandName: "associatedDomains",
+    abstract: "Output the associated domains file for site."
+  )
+
   @Argument(help: "Application Identifier (from developer.apple.com)")
   var applicationIdentifier: String
 

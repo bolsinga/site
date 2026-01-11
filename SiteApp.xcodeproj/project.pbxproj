@@ -14,7 +14,6 @@
 			);
 			dependencies = (
 				FED9EFF02F13129E00E7A555 /* PBXTargetDependency */,
-				FED9EFF42F13129E00E7A555 /* PBXTargetDependency */,
 				FED9EFF62F13129E00E7A555 /* PBXTargetDependency */,
 			);
 			name = All;
@@ -26,7 +25,6 @@
 
 /* Begin PBXBuildFile section */
 		FEB4895E2E6E6E8F0043057D /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = FEB4895D2E6E6E8F0043057D /* ArgumentParser */; };
-		FEB489B52E6E6FC10043057D /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = FEB489B42E6E6FC10043057D /* ArgumentParser */; };
 		FEB722BE2E776336006A4DA2 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = FEB722BD2E776336006A4DA2 /* Algorithms */; };
 		FEE44E752E8B4DE20080998E /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = FEE44E742E8B4DE20080998E /* Algorithms */; };
 /* End PBXBuildFile section */
@@ -38,13 +36,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = FE5360FC29CE82CA00618099;
 			remoteInfo = SiteApp;
-		};
-		FED9EFF32F13129E00E7A555 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = FE5360F529CE82CA00618099 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = FEB489A92E6E6F960043057D;
-			remoteInfo = site_associated_domains;
 		};
 		FED9EFF52F13129E00E7A555 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -72,22 +63,12 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
-		FEB489A82E6E6F960043057D /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 1;
-		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		FE5360FD29CE82CA00618099 /* SiteApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SiteApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE9910DC2AC205A70054D229 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		FEB486502E6E6D740043057D /* site_tool */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = site_tool; sourceTree = BUILT_PRODUCTS_DIR; };
-		FEB489AA2E6E6F960043057D /* site_associated_domains */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = site_associated_domains; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEC1720F2E70F1E800E8EFC8 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		FED9EFF72F1312F700E7A555 /* All.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = All.xctestplan; path = Tests/All.xctestplan; sourceTree = "<group>"; };
 		FEE0AECC2E6E74F5005CE1AB /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -101,7 +82,7 @@
 				DiaryData/Diary.swift,
 				"DiaryData/Diary+URL.swift",
 				DiaryData/Entry.swift,
-				site_associated_domains/Program.swift,
+				site_tool/AssociatedDomainsCommand.swift,
 				site_tool/DumpBracketCommand.swift,
 				site_tool/DumpDiaryCommand.swift,
 				site_tool/DumpVaultCommand.swift,
@@ -180,6 +161,7 @@
 				"MusicData/Venue+LibraryComparable.swift",
 				MusicData/VenueDigest.swift,
 				"MusicData/VenueDigest+LibraryComparable.swift",
+				site_tool/AssociatedDomainsCommand.swift,
 				site_tool/DumpBracketCommand.swift,
 				site_tool/DumpDiaryCommand.swift,
 				site_tool/DumpVaultCommand.swift,
@@ -205,18 +187,11 @@
 			);
 			target = FEB4864F2E6E6D740043057D /* site_tool */;
 		};
-		FE00AC892EB848A4003DE0C6 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				site_associated_domains/Program.swift,
-			);
-			target = FEB489A92E6E6F960043057D /* site_associated_domains */;
-		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		FE00A63E2EB8486D003DE0C6 /* Tests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Tests; sourceTree = "<group>"; };
-		FE00AB182EB848A4003DE0C6 /* Sources */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (FE00AC872EB848A4003DE0C6 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, FE00AC882EB848A4003DE0C6 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, FE00AC892EB848A4003DE0C6 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Sources; sourceTree = "<group>"; };
+		FE00AB182EB848A4003DE0C6 /* Sources */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (FE00AC872EB848A4003DE0C6 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, FE00AC882EB848A4003DE0C6 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Sources; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -234,14 +209,6 @@
 			files = (
 				FEE44E752E8B4DE20080998E /* Algorithms in Frameworks */,
 				FEB4895E2E6E6E8F0043057D /* ArgumentParser in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		FEB489A72E6E6F960043057D /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				FEB489B52E6E6FC10043057D /* ArgumentParser in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -272,7 +239,6 @@
 			children = (
 				FE5360FD29CE82CA00618099 /* SiteApp.app */,
 				FEB486502E6E6D740043057D /* site_tool */,
-				FEB489AA2E6E6F960043057D /* site_associated_domains */,
 				FEE0AECC2E6E74F5005CE1AB /* Tests.xctest */,
 			);
 			name = Products;
@@ -325,26 +291,6 @@
 			productReference = FEB486502E6E6D740043057D /* site_tool */;
 			productType = "com.apple.product-type.tool";
 		};
-		FEB489A92E6E6F960043057D /* site_associated_domains */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = FEB489AE2E6E6F960043057D /* Build configuration list for PBXNativeTarget "site_associated_domains" */;
-			buildPhases = (
-				FEB489A62E6E6F960043057D /* Sources */,
-				FEB489A72E6E6F960043057D /* Frameworks */,
-				FEB489A82E6E6F960043057D /* CopyFiles */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = site_associated_domains;
-			packageProductDependencies = (
-				FEB489B42E6E6FC10043057D /* ArgumentParser */,
-			);
-			productName = site_associated_domains;
-			productReference = FEB489AA2E6E6F960043057D /* site_associated_domains */;
-			productType = "com.apple.product-type.tool";
-		};
 		FEE0AECB2E6E74F5005CE1AB /* Tests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = FEE0AED22E6E74F5005CE1AB /* Build configuration list for PBXNativeTarget "Tests" */;
@@ -384,9 +330,6 @@
 					FEB4864F2E6E6D740043057D = {
 						CreatedOnToolsVersion = 16.4;
 					};
-					FEB489A92E6E6F960043057D = {
-						CreatedOnToolsVersion = 16.4;
-					};
 					FED9EFEB2F13127E00E7A555 = {
 						CreatedOnToolsVersion = 26.2;
 					};
@@ -416,7 +359,6 @@
 				FED9EFEB2F13127E00E7A555 /* All */,
 				FE5360FC29CE82CA00618099 /* SiteApp */,
 				FEB4864F2E6E6D740043057D /* site_tool */,
-				FEB489A92E6E6F960043057D /* site_associated_domains */,
 				FEE0AECB2E6E74F5005CE1AB /* Tests */,
 			);
 		};
@@ -454,13 +396,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		FEB489A62E6E6F960043057D /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		FEE0AEC82E6E74F5005CE1AB /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -475,11 +410,6 @@
 			isa = PBXTargetDependency;
 			target = FE5360FC29CE82CA00618099 /* SiteApp */;
 			targetProxy = FED9EFEF2F13129E00E7A555 /* PBXContainerItemProxy */;
-		};
-		FED9EFF42F13129E00E7A555 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = FEB489A92E6E6F960043057D /* site_associated_domains */;
-			targetProxy = FED9EFF32F13129E00E7A555 /* PBXContainerItemProxy */;
 		};
 		FED9EFF62F13129E00E7A555 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -746,37 +676,6 @@
 			};
 			name = Release;
 		};
-		FEB489AF2E6E6F960043057D /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "$(inherited)";
-				ENABLE_HARDENED_RUNTIME = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 26.0;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
-				SWIFT_VERSION = 5.0;
-			};
-			name = Debug;
-		};
-		FEB489B02E6E6F960043057D /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "$(inherited)";
-				ENABLE_HARDENED_RUNTIME = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 26.0;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
-				SWIFT_VERSION = 5.0;
-			};
-			name = Release;
-		};
 		FED9EFEC2F13127E00E7A555 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -880,15 +779,6 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		FEB489AE2E6E6F960043057D /* Build configuration list for PBXNativeTarget "site_associated_domains" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				FEB489AF2E6E6F960043057D /* Debug */,
-				FEB489B02E6E6F960043057D /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		FED9EFEE2F13127E00E7A555 /* Build configuration list for PBXAggregateTarget "All" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -930,11 +820,6 @@
 
 /* Begin XCSwiftPackageProductDependency section */
 		FEB4895D2E6E6E8F0043057D /* ArgumentParser */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = FEB4895C2E6E6E8F0043057D /* XCRemoteSwiftPackageReference "swift-argument-parser" */;
-			productName = ArgumentParser;
-		};
-		FEB489B42E6E6FC10043057D /* ArgumentParser */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = FEB4895C2E6E6E8F0043057D /* XCRemoteSwiftPackageReference "swift-argument-parser" */;
 			productName = ArgumentParser;
