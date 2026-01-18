@@ -8,7 +8,6 @@
 import ArgumentParser
 import Foundation
 
-@main
 struct Program: AsyncParsableCommand {
   public static let configuration = CommandConfiguration(
     commandName: "site_tool",
@@ -19,4 +18,9 @@ struct Program: AsyncParsableCommand {
     ],
     defaultSubcommand: DumpVaultCommand.self
   )
+
+  static public func asyncMain() async {
+    // This was necessary so that main.swift knew this was an AsyncParsableCommand. Not sure why.
+    await main()
+  }
 }

@@ -6,44 +6,12 @@
 	objectVersion = 70;
 	objects = {
 
-/* Begin PBXAggregateTarget section */
-		FED9EFEB2F13127E00E7A555 /* All */ = {
-			isa = PBXAggregateTarget;
-			buildConfigurationList = FED9EFEE2F13127E00E7A555 /* Build configuration list for PBXAggregateTarget "All" */;
-			buildPhases = (
-			);
-			dependencies = (
-				FED9EFF02F13129E00E7A555 /* PBXTargetDependency */,
-				FED9EFF62F13129E00E7A555 /* PBXTargetDependency */,
-			);
-			name = All;
-			packageProductDependencies = (
-			);
-			productName = All;
-		};
-/* End PBXAggregateTarget section */
-
 /* Begin PBXBuildFile section */
-		FEB4895E2E6E6E8F0043057D /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = FEB4895D2E6E6E8F0043057D /* ArgumentParser */; };
 		FEB722BE2E776336006A4DA2 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = FEB722BD2E776336006A4DA2 /* Algorithms */; };
-		FEE44E752E8B4DE20080998E /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = FEE44E742E8B4DE20080998E /* Algorithms */; };
+		FED94E0A2F1D481100E7A555 /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = FED94E092F1D481100E7A555 /* ArgumentParser */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		FED9EFEF2F13129E00E7A555 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = FE5360F529CE82CA00618099 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = FE5360FC29CE82CA00618099;
-			remoteInfo = SiteApp;
-		};
-		FED9EFF52F13129E00E7A555 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = FE5360F529CE82CA00618099 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = FEB4864F2E6E6D740043057D;
-			remoteInfo = site_tool;
-		};
 		FEE0AED02E6E74F5005CE1AB /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = FE5360F529CE82CA00618099 /* Project object */;
@@ -53,22 +21,9 @@
 		};
 /* End PBXContainerItemProxy section */
 
-/* Begin PBXCopyFilesBuildPhase section */
-		FEB4864E2E6E6D740043057D /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 1;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
 		FE5360FD29CE82CA00618099 /* SiteApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SiteApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE9910DC2AC205A70054D229 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
-		FEB486502E6E6D740043057D /* site_tool */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = site_tool; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEC1720F2E70F1E800E8EFC8 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		FED9EFF72F1312F700E7A555 /* All.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = All.xctestplan; path = Tests/All.xctestplan; sourceTree = "<group>"; };
 		FEE0AECC2E6E74F5005CE1AB /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -79,119 +34,14 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				App/Info.plist,
-				DiaryData/Diary.swift,
-				"DiaryData/Diary+URL.swift",
-				DiaryData/Entry.swift,
-				site_tool/AssociatedDomainsCommand.swift,
-				site_tool/DumpBracketCommand.swift,
-				site_tool/DumpDiaryCommand.swift,
-				site_tool/DumpVaultCommand.swift,
-				site_tool/NextIDCommand.swift,
-				site_tool/Program.swift,
-				site_tool/RootURLArguments.swift,
-				"site_tool/RootURLArguments+Bracket.swift",
-				"site_tool/RootURLArguments+Diary.swift",
-				"site_tool/RootURLArguments+Music.swift",
-				"site_tool/RootURLArguments+Vault.swift",
 			);
 			target = FE5360FC29CE82CA00618099 /* SiteApp */;
-		};
-		FE00AC882EB848A4003DE0C6 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				DiaryData/Diary.swift,
-				"DiaryData/Diary+URL.swift",
-				DiaryData/Entry.swift,
-				MusicData/Album.swift,
-				MusicData/Annum.swift,
-				"MusicData/Annum+FormatStyle.swift",
-				"MusicData/Annum+ParseableFormatStyle.swift",
-				MusicData/AnnumDigest.swift,
-				MusicData/ArchiveCategory.swift,
-				"MusicData/ArchiveCategory+FormatStyle.swift",
-				"MusicData/ArchiveCategory+ParseableFormatStyle.swift",
-				"MusicData/ArchiveCategory+URL.swift",
-				MusicData/ArchivePath.swift,
-				"MusicData/ArchivePath+ArchiveCategory.swift",
-				"MusicData/ArchivePath+Codable.swift",
-				"MusicData/ArchivePath+FormatStyle.swift",
-				"MusicData/ArchivePath+Navigable.swift",
-				"MusicData/ArchivePath+ParseableFormatStyle.swift",
-				"MusicData/ArchivePath+URL.swift",
-				MusicData/Artist.swift,
-				"MusicData/Artist+LibraryComparable.swift",
-				MusicData/ArtistDigest.swift,
-				"MusicData/ArtistDigest+LibraryComparable.swift",
-				MusicData/Bracket.swift,
-				MusicData/Concert.swift,
-				"MusicData/Concert+FormatStyle.swift",
-				"MusicData/Concert+Performers.swift",
-				"MusicData/Concert+Stats.swift",
-				MusicData/Decade.FormatStyle.swift,
-				MusicData/Decade.swift,
-				MusicData/FirstSet.swift,
-				"MusicData/LibraryComparator+Concert.swift",
-				"MusicData/LibrarySectioner+Music.swift",
-				MusicData/Location.swift,
-				"MusicData/Location+Comparable.swift",
-				"MusicData/Location+FormatStyle.swift",
-				MusicData/Lookup.swift,
-				MusicData/Music.swift,
-				"MusicData/Music+Ranking.swift",
-				"MusicData/Music+ShowsOnly.swift",
-				"MusicData/Music+URL.swift",
-				MusicData/PartialDate.swift,
-				"MusicData/PartialDate+Date.swift",
-				"MusicData/PartialDate+FormatStyle.swift",
-				"MusicData/PartialDate+Span.swift",
-				MusicData/PathRestorable.swift,
-				MusicData/Rank.swift,
-				MusicData/Ranking.swift,
-				"MusicData/Ranking+Compute.swift",
-				MusicData/Related.swift,
-				MusicData/Relation.swift,
-				MusicData/Show.swift,
-				MusicData/ShowDigest.swift,
-				"MusicData/ShowDigest+Stats.swift",
-				MusicData/Song.swift,
-				MusicData/Vault.swift,
-				"MusicData/Vault+URL.swift",
-				MusicData/Venue.swift,
-				"MusicData/Venue+FormatStyle.swift",
-				"MusicData/Venue+LibraryComparable.swift",
-				MusicData/VenueDigest.swift,
-				"MusicData/VenueDigest+LibraryComparable.swift",
-				site_tool/AssociatedDomainsCommand.swift,
-				site_tool/DumpBracketCommand.swift,
-				site_tool/DumpDiaryCommand.swift,
-				site_tool/DumpVaultCommand.swift,
-				site_tool/NextIDCommand.swift,
-				site_tool/Program.swift,
-				site_tool/RootURLArguments.swift,
-				"site_tool/RootURLArguments+Bracket.swift",
-				"site_tool/RootURLArguments+Diary.swift",
-				"site_tool/RootURLArguments+Music.swift",
-				"site_tool/RootURLArguments+Vault.swift",
-				Utilities/CompareOptional.swift,
-				"Utilities/Data+JSON.swift",
-				"Utilities/Date+DayOfLeapYear.swift",
-				"Utilities/Date+Year.swift",
-				Utilities/LibraryComparable.swift,
-				Utilities/LibraryComparator.swift,
-				Utilities/LibraryCompareTokenizer.swift,
-				Utilities/LibrarySection.swift,
-				Utilities/LibrarySectioner.swift,
-				"Utilities/Logger+Category.swift",
-				"Utilities/String+LibrarySection.swift",
-				"Utilities/URL+JSON.swift",
-			);
-			target = FEB4864F2E6E6D740043057D /* site_tool */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		FE00A63E2EB8486D003DE0C6 /* Tests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Tests; sourceTree = "<group>"; };
-		FE00AB182EB848A4003DE0C6 /* Sources */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (FE00AC872EB848A4003DE0C6 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, FE00AC882EB848A4003DE0C6 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Sources; sourceTree = "<group>"; };
+		FE00AB182EB848A4003DE0C6 /* Sources */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (FE00AC872EB848A4003DE0C6 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Sources; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -199,16 +49,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FED94E0A2F1D481100E7A555 /* ArgumentParser in Frameworks */,
 				FEB722BE2E776336006A4DA2 /* Algorithms in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		FEB4864D2E6E6D740043057D /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				FEE44E752E8B4DE20080998E /* Algorithms in Frameworks */,
-				FEB4895E2E6E6E8F0043057D /* ArgumentParser in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -230,6 +72,7 @@
 				FEC1720F2E70F1E800E8EFC8 /* README.md */,
 				FE00AB182EB848A4003DE0C6 /* Sources */,
 				FE00A63E2EB8486D003DE0C6 /* Tests */,
+				FED94E082F1D481100E7A555 /* Frameworks */,
 				FE5360FE29CE82CA00618099 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -238,10 +81,16 @@
 			isa = PBXGroup;
 			children = (
 				FE5360FD29CE82CA00618099 /* SiteApp.app */,
-				FEB486502E6E6D740043057D /* site_tool */,
 				FEE0AECC2E6E74F5005CE1AB /* Tests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		FED94E082F1D481100E7A555 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -265,31 +114,11 @@
 			name = SiteApp;
 			packageProductDependencies = (
 				FEB722BD2E776336006A4DA2 /* Algorithms */,
+				FED94E092F1D481100E7A555 /* ArgumentParser */,
 			);
 			productName = SiteApp;
 			productReference = FE5360FD29CE82CA00618099 /* SiteApp.app */;
 			productType = "com.apple.product-type.application";
-		};
-		FEB4864F2E6E6D740043057D /* site_tool */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = FEB486562E6E6D740043057D /* Build configuration list for PBXNativeTarget "site_tool" */;
-			buildPhases = (
-				FEB4864C2E6E6D740043057D /* Sources */,
-				FEB4864D2E6E6D740043057D /* Frameworks */,
-				FEB4864E2E6E6D740043057D /* CopyFiles */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = site_tool;
-			packageProductDependencies = (
-				FEB4895D2E6E6E8F0043057D /* ArgumentParser */,
-				FEE44E742E8B4DE20080998E /* Algorithms */,
-			);
-			productName = site_tool;
-			productReference = FEB486502E6E6D740043057D /* site_tool */;
-			productType = "com.apple.product-type.tool";
 		};
 		FEE0AECB2E6E74F5005CE1AB /* Tests */ = {
 			isa = PBXNativeTarget;
@@ -327,12 +156,6 @@
 					FE5360FC29CE82CA00618099 = {
 						CreatedOnToolsVersion = 14.2;
 					};
-					FEB4864F2E6E6D740043057D = {
-						CreatedOnToolsVersion = 16.4;
-					};
-					FED9EFEB2F13127E00E7A555 = {
-						CreatedOnToolsVersion = 26.2;
-					};
 					FEE0AECB2E6E74F5005CE1AB = {
 						CreatedOnToolsVersion = 16.4;
 						TestTargetID = FE5360FC29CE82CA00618099;
@@ -356,9 +179,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				FED9EFEB2F13127E00E7A555 /* All */,
 				FE5360FC29CE82CA00618099 /* SiteApp */,
-				FEB4864F2E6E6D740043057D /* site_tool */,
 				FEE0AECB2E6E74F5005CE1AB /* Tests */,
 			);
 		};
@@ -389,13 +210,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		FEB4864C2E6E6D740043057D /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		FEE0AEC82E6E74F5005CE1AB /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -406,16 +220,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		FED9EFF02F13129E00E7A555 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = FE5360FC29CE82CA00618099 /* SiteApp */;
-			targetProxy = FED9EFEF2F13129E00E7A555 /* PBXContainerItemProxy */;
-		};
-		FED9EFF62F13129E00E7A555 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = FEB4864F2E6E6D740043057D /* site_tool */;
-			targetProxy = FED9EFF52F13129E00E7A555 /* PBXContainerItemProxy */;
-		};
 		FEE0AED12E6E74F5005CE1AB /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = FE5360FC29CE82CA00618099 /* SiteApp */;
@@ -645,55 +449,6 @@
 			};
 			name = Release;
 		};
-		FEB486542E6E6D740043057D /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "$(inherited)";
-				ENABLE_HARDENED_RUNTIME = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 26.0;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
-				SWIFT_VERSION = 5.0;
-			};
-			name = Debug;
-		};
-		FEB486552E6E6D740043057D /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "$(inherited)";
-				ENABLE_HARDENED_RUNTIME = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 26.0;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
-				SWIFT_VERSION = 5.0;
-			};
-			name = Release;
-		};
-		FED9EFEC2F13127E00E7A555 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = D3F44CA7F4;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		FED9EFED2F13127E00E7A555 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = D3F44CA7F4;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
 		FEE0AED32E6E74F5005CE1AB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = FE9910DC2AC205A70054D229 /* Config.xcconfig */;
@@ -770,24 +525,6 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		FEB486562E6E6D740043057D /* Build configuration list for PBXNativeTarget "site_tool" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				FEB486542E6E6D740043057D /* Debug */,
-				FEB486552E6E6D740043057D /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		FED9EFEE2F13127E00E7A555 /* Build configuration list for PBXAggregateTarget "All" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				FED9EFEC2F13127E00E7A555 /* Debug */,
-				FED9EFED2F13127E00E7A555 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		FEE0AED22E6E74F5005CE1AB /* Build configuration list for PBXNativeTarget "Tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -819,20 +556,15 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		FEB4895D2E6E6E8F0043057D /* ArgumentParser */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = FEB4895C2E6E6E8F0043057D /* XCRemoteSwiftPackageReference "swift-argument-parser" */;
-			productName = ArgumentParser;
-		};
 		FEB722BD2E776336006A4DA2 /* Algorithms */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = FEB722BC2E776336006A4DA2 /* XCRemoteSwiftPackageReference "swift-algorithms" */;
 			productName = Algorithms;
 		};
-		FEE44E742E8B4DE20080998E /* Algorithms */ = {
+		FED94E092F1D481100E7A555 /* ArgumentParser */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = FEB722BC2E776336006A4DA2 /* XCRemoteSwiftPackageReference "swift-algorithms" */;
-			productName = Algorithms;
+			package = FEB4895C2E6E6E8F0043057D /* XCRemoteSwiftPackageReference "swift-argument-parser" */;
+			productName = ArgumentParser;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
