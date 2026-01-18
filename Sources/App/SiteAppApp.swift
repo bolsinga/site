@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-@main
 struct SiteAppApp: App {
   @State private var model = SiteModel(urlString: "https://www.bolsinga.com/json/shows.json")
 
