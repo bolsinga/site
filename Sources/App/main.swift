@@ -8,14 +8,20 @@
 import ArgumentParser
 import Foundation
 
-extension CommandLine {
-  fileprivate static var isTool: Bool {
-    arguments.count > 1 && !arguments[1].contains("NSTreatUnknownArgumentsAsOpen")
+#if os(macOS)
+  extension CommandLine {
+    fileprivate static var isTool: Bool {
+      arguments.count > 1 && !arguments[1].contains("NSTreatUnknownArgumentsAsOpen")
+    }
   }
-}
+#endif
 
-if CommandLine.isTool {
-  await Program.asyncMain()
-} else {
+#if os(macOS)
+  if CommandLine.isTool {
+    await Program.asyncMain()
+  } else {
+    SiteAppApp.main()
+  }
+#else
   SiteAppApp.main()
-}
+#endif

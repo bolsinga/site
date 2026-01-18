@@ -35,6 +35,41 @@
 			membershipExceptions = (
 				App/Info.plist,
 			);
+			platformFiltersByRelativePath = {
+				site_tool/AssociatedDomainsCommand.swift = (
+					macos,
+				);
+				site_tool/DumpBracketCommand.swift = (
+					macos,
+				);
+				site_tool/DumpDiaryCommand.swift = (
+					macos,
+				);
+				site_tool/DumpVaultCommand.swift = (
+					macos,
+				);
+				site_tool/NextIDCommand.swift = (
+					macos,
+				);
+				site_tool/Program.swift = (
+					macos,
+				);
+				"site_tool/RootURLArguments+Bracket.swift" = (
+					macos,
+				);
+				"site_tool/RootURLArguments+Diary.swift" = (
+					macos,
+				);
+				"site_tool/RootURLArguments+Music.swift" = (
+					macos,
+				);
+				"site_tool/RootURLArguments+Vault.swift" = (
+					macos,
+				);
+				site_tool/RootURLArguments.swift = (
+					macos,
+				);
+			};
 			target = FE5360FC29CE82CA00618099 /* SiteApp */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
