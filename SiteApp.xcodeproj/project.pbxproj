@@ -25,7 +25,6 @@
 		FE5360FD29CE82CA00618099 /* SiteApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SiteApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE9910DC2AC205A70054D229 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		FEC1720F2E70F1E800E8EFC8 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		FED9EFF72F1312F700E7A555 /* All.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = All.xctestplan; path = Tests/All.xctestplan; sourceTree = "<group>"; };
 		FEE0AECC2E6E74F5005CE1AB /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -102,7 +101,6 @@
 		FE5360F429CE82CA00618099 = {
 			isa = PBXGroup;
 			children = (
-				FED9EFF72F1312F700E7A555 /* All.xctestplan */,
 				FE9910DC2AC205A70054D229 /* Config.xcconfig */,
 				FEC1720F2E70F1E800E8EFC8 /* README.md */,
 				FE00AB182EB848A4003DE0C6 /* Sources */,
