@@ -86,6 +86,9 @@ public struct Vault: Sendable {
   private let concertDayMap: [Int: [Concert.ID]]
 
   public init(music: Music, url: URL) async {
+    var signpost = Signpost(category: "vault", name: "process")
+    signpost.start()
+
     async let asyncLookup = await Lookup(music: music)
     let lookup = await asyncLookup
     async let asyncComparator = LibraryComparator(tokenMap: lookup.librarySortTokenMap)

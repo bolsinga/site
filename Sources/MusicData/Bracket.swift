@@ -36,6 +36,9 @@ struct Bracket: Codable, Sendable {
   let venueFirstSetsMap: [Venue.ID: FirstSet]
 
   public init(music: Music) async {
+    var signpost = Signpost(category: "bracket", name: "process")
+    signpost.start()
+
     async let librarySortTokenMap = music.librarySortTokenMap
     async let artistRanks = music.artistRankings
     async let venueRanks = music.venueRankings
