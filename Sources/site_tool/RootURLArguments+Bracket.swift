@@ -9,7 +9,6 @@ import Foundation
 
 extension RootURLArguments {
   func bracket() async throws -> Bracket {
-    let music = try await Music.load(url: url.appending(path: "music.json"))
-    return await Bracket(music: music)
+    await Bracket(music: try await music())
   }
 }
