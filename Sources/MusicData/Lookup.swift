@@ -23,6 +23,9 @@ public struct Lookup: Sendable {
   private let relationMap: [String: [String]]  // Artist/Venue ID : [Artist/Venue ID]
 
   public init(music: Music) async {
+    var signpost = Signpost(category: "lookup", name: "process")
+    signpost.start()
+
     async let artistLookup = createLookup(music.artists)
     async let venueLookup = createLookup(music.venues)
     async let bracket = await Bracket(music: music)
