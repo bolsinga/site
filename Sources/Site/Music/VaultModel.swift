@@ -198,12 +198,13 @@ enum LocationAuthorization {
     return nearbyArtistIDs.compactMap { vault.artistDigestMap[$0] }
   }
 
-  func decadesMapsNearby(_ distanceThreshold: CLLocationDistance) -> [Decade: [Annum: [Concert.ID]]]
-  {
+  func decadesMapsNearby(_ distanceThreshold: CLLocationDistance) -> [Decade: [Annum: Set<
+    Concert.ID
+  >]] {
     let nearbyConcertIDs = Set(concertsNearby(distanceThreshold).map { $0.id })
-    return [Decade: [Annum: [Concert.ID]]](
+    return [Decade: [Annum: Set<Concert.ID>]](
       uniqueKeysWithValues: vault.decadesMap.compactMap {
-        let nearbyAnnums = [Annum: [Show.ID]](
+        let nearbyAnnums = [Annum: Set<Show.ID>](
           uniqueKeysWithValues: $0.value.compactMap {
             let nearbyIDs = $0.value.filter { nearbyConcertIDs.contains($0) }
             if nearbyIDs.isEmpty {
@@ -231,7 +232,7 @@ enum LocationAuthorization {
   }
 
   func filteredDecadesMap(_ nearbyModel: NearbyModel, distanceThreshold: CLLocationDistance)
-    -> [Decade: [Annum: [Concert.ID]]]
+    -> [Decade: [Annum: Set<Concert.ID>]]
   {
     nearbyModel.locationFilter.isNearby ? decadesMapsNearby(distanceThreshold) : vault.decadesMap
   }
