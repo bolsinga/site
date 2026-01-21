@@ -141,15 +141,12 @@ extension Music {
 
   var artistFirstSets: [Artist.ID: FirstSet] {
     var artistsTracked = Set<Artist.ID>()
-    var allUnknownDateArtists = Set<Artist.ID>()
     var firstSetsOrdered = [(Artist.ID, FirstSet)]()
 
     var order = 1
     shows.sorted(by: { PartialDate.compareWithUnknownsMuted(lhs: $0.date, rhs: $1.date) }).forEach {
       show in
-      if show.date.isUnknown {
-        show.artists.forEach { allUnknownDateArtists.insert($0) }
-      } else {
+      if !show.date.isUnknown {
         show.artists.filter { !artistsTracked.contains($0) }.reversed().forEach { artistID in
           firstSetsOrdered.append((artistID, FirstSet(rank: .rank(order), date: show.date)))
           order += 1
@@ -159,34 +156,21 @@ extension Music {
       }
     }
 
-    let onlyUnknownDateArtists = allUnknownDateArtists.subtracting(artistsTracked)
-    onlyUnknownDateArtists.forEach { artistID in
-      firstSetsOrdered.append((artistID, FirstSet.empty))
-    }
-
     return firstSetsOrdered.reduce(into: [:]) { $0[$1.0] = $1.1 }
   }
 
   var venueFirstSets: [Venue.ID: FirstSet] {
     var venuesTracked = Set<Venue.ID>()
-    var allUnknownDateVenues = Set<Venue.ID>()
     var firstSetsOrdered = [(Venue.ID, FirstSet)]()
 
     var order = 1
     shows.sorted(by: { PartialDate.compareWithUnknownsMuted(lhs: $0.date, rhs: $1.date) }).forEach {
       show in
-      if show.date.isUnknown {
-        allUnknownDateVenues.insert(show.venue)
-      } else if !venuesTracked.contains(show.venue) {
+      if !show.date.isUnknown && !venuesTracked.contains(show.venue) {
         firstSetsOrdered.append((show.venue, FirstSet(rank: .rank(order), date: show.date)))
         venuesTracked.insert(show.venue)
         order += 1
       }
-    }
-
-    let onlyUnknownDateVenues = allUnknownDateVenues.subtracting(venuesTracked)
-    onlyUnknownDateVenues.forEach { venueID in
-      firstSetsOrdered.append((venueID, FirstSet.empty))
     }
 
     return firstSetsOrdered.reduce(into: [:]) { $0[$1.0] = $1.1 }
