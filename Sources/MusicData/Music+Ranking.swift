@@ -8,17 +8,17 @@
 import Foundation
 
 extension Collection where Element == Show {
-  fileprivate func dates(withArtist id: Artist.ID) -> [PartialDate] {
-    self.compactMap {
-      guard $0.artists.contains(id) else { return nil }
-      return $0.date
+  fileprivate func dates(withArtist id: Artist.ID) -> Set<PartialDate> {
+    reduce(into: Set<PartialDate>()) {
+      guard $1.artists.contains(id) else { return }
+      $0.insert($1.date)
     }
   }
 
-  fileprivate func dates(withVenue id: Venue.ID) -> [PartialDate] {
-    self.compactMap {
-      guard $0.venue == id else { return nil }
-      return $0.date
+  fileprivate func dates(withVenue id: Venue.ID) -> Set<PartialDate> {
+    reduce(into: Set<PartialDate>()) {
+      guard $1.venue == id else { return }
+      $0.insert($1.date)
     }
   }
 

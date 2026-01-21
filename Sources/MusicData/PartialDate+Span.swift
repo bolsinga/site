@@ -11,13 +11,12 @@ private let spanComponents = Set([
   Calendar.Component.year, Calendar.Component.month, Calendar.Component.day,
 ])
 
-extension Sequence<PartialDate> {
+extension Set<PartialDate> {
   public var yearSpan: Int {
-    let uniqueDates = Set(self)
-    guard !uniqueDates.isEmpty else { return 0 }
-    guard uniqueDates.count > 1 else { return 1 }
+    guard !isEmpty else { return 0 }
+    guard count > 1 else { return 1 }
 
-    let knownDates = uniqueDates.filter { $0.year != nil }.compactMap { $0.date }.sorted()
+    let knownDates = filter { $0.year != nil }.compactMap { $0.date }.sorted()
     guard knownDates.count > 1 else { return 1 }
 
     if let max = knownDates.max(), let min = knownDates.min() {
