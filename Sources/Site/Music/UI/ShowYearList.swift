@@ -7,14 +7,14 @@
 
 import SwiftUI
 
-extension Dictionary where Key == Annum, Value == [Concert.ID] {
+extension Dictionary where Key == Annum, Value == Set<Concert.ID> {
   fileprivate var showCount: Int {
     values.compactMap { $0.count }.reduce(0, { $0 + $1 })
   }
 }
 
 struct ShowYearList: View {
-  let decadesMap: [Decade: [Annum: [Concert.ID]]]
+  let decadesMap: [Decade: [Annum: Set<Concert.ID>]]
 
   @SceneStorage("shows.sort.descending") private var descending: Bool = false
 
@@ -32,7 +32,7 @@ struct ShowYearList: View {
               descending ? Annum.compareDescendingUnknownLast(lhs: lhs, rhs: rhs) : lhs < rhs
             }, id: \.self
           ) { annum in
-            let concerts = decadeMap[annum] ?? []
+            let concerts = decadeMap[annum] ?? Set<Concert.ID>()
             NavigationLink(value: annum.archivePath) {
               LabeledContent(
                 annum.formatted(),

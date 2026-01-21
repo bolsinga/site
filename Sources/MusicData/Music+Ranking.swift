@@ -125,15 +125,15 @@ extension Music {
     return computeRankings(items: annumArtistCounts)
   }
 
-  var decadesMap: [Decade: [Annum: [Show.ID]]] {
+  var decadesMap: [Decade: [Annum: Set<Show.ID>]] {
     shows.reduce(into: [:]) {
       let decade = $1.date.decade
       var decadeDict = $0[decade] ?? [:]
 
       let annum = $1.date.annum
-      var arr = decadeDict[annum] ?? []
-      arr.append($1.id)
-      decadeDict[annum] = arr
+      var s = decadeDict[annum] ?? Set<Show.ID>()
+      s.insert($1.id)
+      decadeDict[annum] = s
 
       $0[decade] = decadeDict
     }

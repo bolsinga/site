@@ -58,7 +58,7 @@ private struct OrderedBracket: Encodable {
           $0[$1.key.formatted(.defaultDigits)] = $1.value.reduce(
             into: [String: [Show.ID]](),
             {
-              $0[$1.key.formatted(.json)] = $1.value
+              $0[$1.key.formatted(.json)] = $1.value.sorted()
             })
         }),
       forKey: .decadesMap)

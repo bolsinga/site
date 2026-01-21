@@ -31,7 +31,7 @@ struct Bracket: Codable, Sendable {
   let annumShowRankingMap: [Annum: Ranking]
   let annumVenueRankingMap: [Annum: Ranking]
   let annumArtistRankingMap: [Annum: Ranking]
-  let decadesMap: [Decade: [Annum: [Show.ID]]]
+  let decadesMap: [Decade: [Annum: Set<Show.ID>]]
   let artistFirstSetsMap: [Artist.ID: FirstSet]
   let venueFirstSetsMap: [Venue.ID: FirstSet]
 

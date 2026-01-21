@@ -41,7 +41,7 @@ public struct Lookup: Sendable {
     bracket.librarySortTokenMap
   }
 
-  public var decadesMap: [Decade: [Annum: [Show.ID]]] {
+  public var decadesMap: [Decade: [Annum: Set<Show.ID>]] {
     bracket.decadesMap
   }
 

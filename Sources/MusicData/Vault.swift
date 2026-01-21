@@ -78,7 +78,7 @@ public struct Vault: Sendable {
 
   public let venueDigestMap: [Venue.ID: VenueDigest]
 
-  public let decadesMap: [Decade: [Annum: [Show.ID]]]
+  public let decadesMap: [Decade: [Annum: Set<Show.ID>]]
   public let annumDigestMap: [Annum: AnnumDigest]
 
   private let categoryURLLookup: [ArchiveCategory: URL]
