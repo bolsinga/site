@@ -17,8 +17,8 @@ private func createLookup<T: Identifiable>(_ sequence: [T]) -> [T.ID: T] {
 }
 
 public struct Lookup: Sendable {
-  let artistMap: [Artist.ID: Artist]
-  let venueMap: [Venue.ID: Venue]
+  private let artistMap: [Artist.ID: Artist]
+  private let venueMap: [Venue.ID: Venue]
   private let bracket: Bracket
   private let relationMap: [String: [String]]  // Artist/Venue ID : [Artist/Venue ID]
 
