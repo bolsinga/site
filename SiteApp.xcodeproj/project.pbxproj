@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		FEB722BE2E776336006A4DA2 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = FEB722BD2E776336006A4DA2 /* Algorithms */; };
 		FED94E0A2F1D481100E7A555 /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = FED94E092F1D481100E7A555 /* ArgumentParser */; };
+		FED95A502F1D7A9C00E7A555 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = FED95A4F2F1D7A9C00E7A555 /* Collections */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -83,6 +84,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FED95A502F1D7A9C00E7A555 /* Collections in Frameworks */,
 				FED94E0A2F1D481100E7A555 /* ArgumentParser in Frameworks */,
 				FEB722BE2E776336006A4DA2 /* Algorithms in Frameworks */,
 			);
@@ -148,6 +150,7 @@
 			packageProductDependencies = (
 				FEB722BD2E776336006A4DA2 /* Algorithms */,
 				FED94E092F1D481100E7A555 /* ArgumentParser */,
+				FED95A4F2F1D7A9C00E7A555 /* Collections */,
 			);
 			productName = SiteApp;
 			productReference = FE5360FD29CE82CA00618099 /* SiteApp.app */;
@@ -207,6 +210,7 @@
 			packageReferences = (
 				FEB4895C2E6E6E8F0043057D /* XCRemoteSwiftPackageReference "swift-argument-parser" */,
 				FEB722BC2E776336006A4DA2 /* XCRemoteSwiftPackageReference "swift-algorithms" */,
+				FED95A4E2F1D7A9C00E7A555 /* XCRemoteSwiftPackageReference "swift-collections" */,
 			);
 			productRefGroup = FE5360FE29CE82CA00618099 /* Products */;
 			projectDirPath = "";
@@ -586,6 +590,14 @@
 				version = 1.2.1;
 			};
 		};
+		FED95A4E2F1D7A9C00E7A555 /* XCRemoteSwiftPackageReference "swift-collections" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-collections.git";
+			requirement = {
+				kind = exactVersion;
+				version = 1.3.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -598,6 +610,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FEB4895C2E6E6E8F0043057D /* XCRemoteSwiftPackageReference "swift-argument-parser" */;
 			productName = ArgumentParser;
+		};
+		FED95A4F2F1D7A9C00E7A555 /* Collections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FED95A4E2F1D7A9C00E7A555 /* XCRemoteSwiftPackageReference "swift-collections" */;
+			productName = Collections;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
