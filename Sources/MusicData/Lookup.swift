@@ -66,13 +66,6 @@ public struct Lookup: Sendable {
     return showArtists
   }
 
-  public func artistForAlbum(_ album: Album) -> Artist? {
-    if let id = album.performer {
-      return artistMap[id]
-    }
-    return nil
-  }
-
   public func showRank(artist: Artist) -> Ranking {
     bracket.artistRankingMap[artist.id] ?? Ranking.empty
   }
