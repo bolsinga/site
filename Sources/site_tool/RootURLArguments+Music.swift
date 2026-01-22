@@ -9,6 +9,6 @@ import Foundation
 
 extension RootURLArguments {
   func music() async throws -> Music {
-    try await Music.load(url: url.appending(path: "music.json"))
+    try await Music.load(url: url.appending(path: "shows.json"))
   }
 }

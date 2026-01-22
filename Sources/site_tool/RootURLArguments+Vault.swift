@@ -9,6 +9,6 @@ import Foundation
 
 extension RootURLArguments {
   func vault() async throws -> Vault {
-    try await Vault.load(url.appending(path: "music.json").absoluteString)
+    try await Vault.load(url.appending(path: "shows.json").absoluteString)
   }
 }
