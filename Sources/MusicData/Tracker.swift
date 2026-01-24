@@ -8,7 +8,7 @@
 import Foundation
 import OrderedCollections
 
-extension Dictionary where Key == String, Value == Set<PartialDate> {
+extension Dictionary where Value == Set<PartialDate> {
   fileprivate mutating func insert(key: Key, value: PartialDate) {
     var v = self[key] ?? Value()
     v.insert(value)
@@ -16,15 +16,7 @@ extension Dictionary where Key == String, Value == Set<PartialDate> {
   }
 }
 
-extension Dictionary where Key == String, Value == Set<String> {
-  fileprivate mutating func insert(key: Key, value: Value.ValueType) {
-    var v = self[key] ?? Value()
-    v.insert(value)
-    self[key] = v
-  }
-}
-
-extension Dictionary where Key == Annum, Value == Set<String> {
+extension Dictionary where Value == Set<String> {
   fileprivate mutating func insert(key: Key, value: Value.ValueType) {
     var v = self[key] ?? Value()
     v.insert(value)
