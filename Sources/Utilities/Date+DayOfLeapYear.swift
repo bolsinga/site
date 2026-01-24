@@ -26,7 +26,7 @@ extension Date {
 extension Int {
   private var leapYearComponents: DateComponents {
     let knownLeapYear = 2024
-    return DateComponents(calendar: Calendar.autoupdatingCurrent, year: knownLeapYear)
+    return DateComponents(calendar: .autoupdatingCurrent, year: knownLeapYear)
   }
 
   private var dayOfLeapYearComponents: DateComponents {

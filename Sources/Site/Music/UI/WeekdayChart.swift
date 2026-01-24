@@ -90,7 +90,7 @@ struct WeekdayChart: View {
       }
       .frame(height: presentation == .default ? nil : 100)
       .onNotification(name: NSLocale.currentLocaleDidChangeNotification) {
-        firstWeekday = Calendar.current.firstWeekday
+        firstWeekday = Calendar.autoupdatingCurrent.firstWeekday
       }
     }
   }

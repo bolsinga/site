@@ -12,7 +12,7 @@ import Testing
 
 private func date(year: Int, month: Int, day: Int) -> Date {
   let dateComponents = DateComponents(
-    calendar: Calendar.autoupdatingCurrent, year: year, month: month, day: day)
+    calendar: .autoupdatingCurrent, year: year, month: month, day: day)
   return dateComponents.date!
 }
 
