@@ -83,7 +83,7 @@ public struct Vault: Sendable {
 
   private let categoryURLLookup: [ArchiveCategory: URL]
 
-  private let concertDayMap: [Int: [Concert.ID]]
+  private let concertDayMap: [Int: Set<Concert.ID>]
 
   public init(music: Music, url: URL) async {
     var signpost = Signpost(category: "vault", name: "process")
@@ -131,16 +131,7 @@ public struct Vault: Sendable {
       $0[$1] = url
     }
 
-    self.concertDayMap = sortedConcerts.reduce(into: [Int: [Concert.ID]]()) {
-      guard !$1.show.date.isPartiallyUnknown else { return }
-      guard let date = $1.show.date.date else { return }
-
-      let dayOfLeapYear = date.dayOfLeapYear
-
-      var arr = $0[dayOfLeapYear] ?? []
-      arr.append($1.id)
-      $0[dayOfLeapYear] = arr
-    }
+    self.concertDayMap = lookup.concertDayMap
   }
 
   func concerts(on dayOfLeapYear: Int) -> [Concert] {

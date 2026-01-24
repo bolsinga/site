@@ -45,6 +45,10 @@ public struct Lookup: Sendable {
     bracket.decadesMap
   }
 
+  public var concertDayMap: [Int: Set<Concert.ID>] {
+    bracket.concertDayMap
+  }
+
   public func venueForShow(_ show: Show) -> Venue? {
     guard let venue = venueMap[show.venue] else {
       Logger.lookup.log("Show: \(show.id, privacy: .public) missing venue")
