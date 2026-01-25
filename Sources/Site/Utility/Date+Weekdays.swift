@@ -10,7 +10,7 @@ import Foundation
 // weekday as int: (weekday, int) as Date : count
 private var weekdayAbbreviations: [Int: (Date, Int)] {
   var result = [Int: (Date, Int)]()
-  let dateComponents = DateComponents(calendar: Calendar.current, year: 2023, month: 4, day: 23)  // start with known Sunday
+  let dateComponents = DateComponents(calendar: .autoupdatingCurrent, year: 2023, month: 4, day: 23)  // start with known Sunday
   var date = dateComponents.date
 
   for weekday in 1...7 {

@@ -12,7 +12,8 @@ private var monthAbbreviations: [Int: (Date, Int)] {
   var result = [Int: (Date, Int)]()
   for month in 1...12 {
     guard
-      let date = DateComponents(calendar: Calendar.current, year: 2023, month: month, day: 1).date
+      let date = DateComponents(calendar: .autoupdatingCurrent, year: 2023, month: month, day: 1)
+        .date
     else { fatalError("need to be able to get abbreviated months") }
     result[month] = (date, 0)
   }
