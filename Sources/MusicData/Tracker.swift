@@ -49,6 +49,8 @@ struct Tracker {
   var annumArtists = [Annum: Set<Artist.ID>]()
   var annumVenues = [Annum: Set<Venue.ID>]()
 
+  var dayOfLeapYearShows = [Int: Set<Show.ID>]()
+
   private mutating func track(show: Show) {
     venueSpanDates.insert(key: show.venue, value: show.date)
     venueCounts.increment(key: show.venue)
@@ -69,6 +71,10 @@ struct Tracker {
 
     annumShows.insert(key: annum, value: show.id)
     annumVenues.insert(key: annum, value: show.venue)
+
+    if !show.date.isPartiallyUnknown, let date = show.date.date {
+      dayOfLeapYearShows.insert(key: date.dayOfLeapYear, value: show.id)
+    }
   }
 
   init(shows: [Show]) {
