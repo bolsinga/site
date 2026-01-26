@@ -37,7 +37,6 @@ extension Vault {
 
 struct ArchiveCrossSearchView: View {
   @Environment(VaultModel.self) var model
-  @AppStorage("nearby.distance") private var nearbyDistance = defaultNearbyDistanceThreshold
 
   @Binding var searchString: String
   @Binding var scope: ArchiveScope
