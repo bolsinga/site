@@ -23,38 +23,30 @@ private struct SearchResultButton: View {
   }
 }
 
-extension Vault {
-  fileprivate func artistDigests(filteredBy searchString: String) -> [ArtistDigest] {
-    artistDigestMap.values.names(filteredBy: searchString, additive: true).sorted(
-      by: comparator.libraryCompare(lhs:rhs:))
-  }
-
-  fileprivate func venueDigests(filteredBy searchString: String) -> [VenueDigest] {
-    venueDigestMap.values.names(filteredBy: searchString, additive: true).sorted(
-      by: comparator.libraryCompare(lhs:rhs:))
-  }
+protocol ArchiveSearchResult: PathRestorable {
+  var displayName: String { get }
 }
 
-struct ArchiveCrossSearchView: View {
-  @Environment(VaultModel.self) var model
-
+struct ArchiveCrossSearchView<A, V>: View where A: ArchiveSearchResult, V: ArchiveSearchResult {
   @Binding var searchString: String
   @Binding var scope: ArchiveScope
   let navigateToPath: (ArchivePath) -> Void
+  let artistSearch: (String) -> [A]
+  let venueSearch: (String) -> [V]
 
-  private var artistDigests: [ArtistDigest] {
+  private var artistDigests: [A] {
     switch scope {
     case .venue:
       []
     case .all, .artist:
-      model.vault.artistDigests(filteredBy: searchString)
+      artistSearch(searchString)
     }
   }
 
-  private var venueDigests: [VenueDigest] {
+  private var venueDigests: [V] {
     switch scope {
     case .all, .venue:
-      model.vault.venueDigests(filteredBy: searchString)
+      venueSearch(searchString)
     case .artist:
       []
     }
@@ -70,9 +62,10 @@ struct ArchiveCrossSearchView: View {
       List {
         if !artistDigests.isEmpty {
           Section(header: Text(ArchiveCategory.artists.localizedString)) {
-            ForEach(artistDigests) { item in
-              SearchResultButton(name: Text(item.name.emphasizedAttributed(matching: searchString)))
-              {
+            ForEach(artistDigests, id: \.archivePath) { item in
+              SearchResultButton(
+                name: Text(item.displayName.emphasizedAttributed(matching: searchString))
+              ) {
                 navigateToPath(item.archivePath)
               }
             }
@@ -81,9 +74,10 @@ struct ArchiveCrossSearchView: View {
 
         if !venueDigests.isEmpty {
           Section(header: Text(ArchiveCategory.venues.localizedString)) {
-            ForEach(venueDigests) { item in
-              SearchResultButton(name: Text(item.name.emphasizedAttributed(matching: searchString)))
-              {
+            ForEach(venueDigests, id: \.archivePath) { item in
+              SearchResultButton(
+                name: Text(item.displayName.emphasizedAttributed(matching: searchString))
+              ) {
                 navigateToPath(item.archivePath)
               }
             }
@@ -98,37 +92,73 @@ struct ArchiveCrossSearchView: View {
 }
 
 #Preview("Empty Search String - All", traits: .vaultModel) {
-  ArchiveCrossSearchView(searchString: .constant(""), scope: .constant(.all)) { _ in }
+  @Previewable @Environment(VaultModel.self) var model
+  ArchiveCrossSearchView(
+    searchString: .constant(""), scope: .constant(.all), navigateToPath: { _ in },
+    artistSearch: model.vault.artistDigests(filteredBy:),
+    venueSearch: model.vault.venueDigests(filteredBy:))
 }
 
 #Preview("Matching Search String - All", traits: .vaultModel) {
-  ArchiveCrossSearchView(searchString: .constant("art"), scope: .constant(.all)) { _ in }
+  @Previewable @Environment(VaultModel.self) var model
+  ArchiveCrossSearchView(
+    searchString: .constant("art"), scope: .constant(.all), navigateToPath: { _ in },
+    artistSearch: model.vault.artistDigests(filteredBy:),
+    venueSearch: model.vault.venueDigests(filteredBy:))
 }
 
 #Preview("No Matches - All", traits: .vaultModel) {
-  ArchiveCrossSearchView(searchString: .constant("zzzzzzzzz"), scope: .constant(.all)) { _ in }
+  @Previewable @Environment(VaultModel.self) var model
+  ArchiveCrossSearchView(
+    searchString: .constant("zzzzzzzzz"), scope: .constant(.all), navigateToPath: { _ in },
+    artistSearch: model.vault.artistDigests(filteredBy:),
+    venueSearch: model.vault.venueDigests(filteredBy:))
 }
 
 #Preview("Empty Search String - Artist", traits: .vaultModel) {
-  ArchiveCrossSearchView(searchString: .constant(""), scope: .constant(.artist)) { _ in }
+  @Previewable @Environment(VaultModel.self) var model
+  ArchiveCrossSearchView(
+    searchString: .constant(""), scope: .constant(.artist), navigateToPath: { _ in },
+    artistSearch: model.vault.artistDigests(filteredBy:),
+    venueSearch: model.vault.venueDigests(filteredBy:))
 }
 
 #Preview("Matching Search String - Artist", traits: .vaultModel) {
-  ArchiveCrossSearchView(searchString: .constant("art"), scope: .constant(.artist)) { _ in }
+  @Previewable @Environment(VaultModel.self) var model
+  ArchiveCrossSearchView(
+    searchString: .constant("art"), scope: .constant(.artist), navigateToPath: { _ in },
+    artistSearch: model.vault.artistDigests(filteredBy:),
+    venueSearch: model.vault.venueDigests(filteredBy:))
 }
 
 #Preview("No Matches - Artist", traits: .vaultModel) {
-  ArchiveCrossSearchView(searchString: .constant("zzzzzzzzz"), scope: .constant(.artist)) { _ in }
+  @Previewable @Environment(VaultModel.self) var model
+  ArchiveCrossSearchView(
+    searchString: .constant("zzzzzzzzz"), scope: .constant(.artist), navigateToPath: { _ in },
+    artistSearch: model.vault.artistDigests(filteredBy:),
+    venueSearch: model.vault.venueDigests(filteredBy:))
 }
 
 #Preview("Empty Search String - Venue", traits: .vaultModel) {
-  ArchiveCrossSearchView(searchString: .constant(""), scope: .constant(.venue)) { _ in }
+  @Previewable @Environment(VaultModel.self) var model
+  ArchiveCrossSearchView(
+    searchString: .constant(""), scope: .constant(.venue), navigateToPath: { _ in },
+    artistSearch: model.vault.artistDigests(filteredBy:),
+    venueSearch: model.vault.venueDigests(filteredBy:))
 }
 
 #Preview("Matching Search String - Venue", traits: .vaultModel) {
-  ArchiveCrossSearchView(searchString: .constant("art"), scope: .constant(.venue)) { _ in }
+  @Previewable @Environment(VaultModel.self) var model
+  ArchiveCrossSearchView(
+    searchString: .constant("art"), scope: .constant(.venue), navigateToPath: { _ in },
+    artistSearch: model.vault.artistDigests(filteredBy:),
+    venueSearch: model.vault.venueDigests(filteredBy:))
 }
 
 #Preview("No Matches - Venue", traits: .vaultModel) {
-  ArchiveCrossSearchView(searchString: .constant("zzzzzzzzz"), scope: .constant(.venue)) { _ in }
+  @Previewable @Environment(VaultModel.self) var model
+  ArchiveCrossSearchView(
+    searchString: .constant("zzzzzzzzz"), scope: .constant(.venue), navigateToPath: { _ in },
+    artistSearch: model.vault.artistDigests(filteredBy:),
+    venueSearch: model.vault.venueDigests(filteredBy:))
 }
