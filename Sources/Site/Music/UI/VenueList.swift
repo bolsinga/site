@@ -7,34 +7,35 @@
 
 import SwiftUI
 
-struct VenueList: View {
-  let venueDigests: any Collection<VenueDigest>
+struct VenueList<V>: View where V: Rankable, V.ID == String {
+  let venues: any Collection<V>
   let sectioner: LibrarySectioner
-  let compare: (VenueDigest, VenueDigest) -> Bool
+  let compare: (V, V) -> Bool
+  let filter: (any Collection<V>, String) -> [V]
   let sort: RankingSort
   @Binding var searchString: String
 
   var body: some View {
-    let digests = venueDigests.names(filteredBy: searchString)
-    RankableSortList(
-      items: digests, sectioner: sectioner, compare: compare,
+    RankableSearchableSortList(
+      items: venues,
+      sectioner: sectioner,
+      compare: compare,
+      filter: filter,
+      sort: sort,
       title: ArchiveCategory.venues.localizedString,
-      associatedRankSectionHeader: { $0.artistsCountView },
-      itemLabelView: { Text($0.name.emphasizedAttributed(matching: searchString)) }, sort: sort
-    )
-    .archiveSearchable(
       searchPrompt: String(localized: "Venue Names"),
-      searchString: $searchString, contentsEmpty: digests.isEmpty
-    )
+      associatedRankSectionHeader: { $0.artistsCountView },
+      searchString: $searchString)
   }
 }
 
-extension VenueList {
+extension VenueList<VenueDigest> {
   fileprivate init(model: VaultModel, sort: RankingSort, searchString: Binding<String>) {
     self.init(
-      venueDigests: model.vault.venueDigestMap.values.shuffled(),
+      venues: model.vault.venueDigestMap.values.shuffled(),
       sectioner: model.vault.sectioner,
       compare: model.vault.comparator.libraryCompare(lhs:rhs:),
+      filter: { $0.names(filteredBy: $1) },
       sort: sort, searchString: searchString)
   }
 }
