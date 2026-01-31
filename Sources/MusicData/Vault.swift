@@ -147,4 +147,14 @@ public struct Vault: Sendable {
   public func url(for item: PathRestorable) -> URL? {
     item.archivePath.url(using: rootURL)
   }
+
+  func artistDigests(filteredBy searchString: String) -> [ArtistDigest] {
+    artistDigestMap.values.names(filteredBy: searchString, additive: true).sorted(
+      by: comparator.libraryCompare(lhs:rhs:))
+  }
+
+  func venueDigests(filteredBy searchString: String) -> [VenueDigest] {
+    venueDigestMap.values.names(filteredBy: searchString, additive: true).sorted(
+      by: comparator.libraryCompare(lhs:rhs:))
+  }
 }

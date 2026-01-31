@@ -55,7 +55,9 @@ struct ArchiveTabView: View {
   @ViewBuilder private var searchTabContent: some View {
     NavigationStack {
       ArchiveCrossSearchContainer(
-        searchString: $searchString, scope: $scope, navigateToPath: navigateToPath
+        searchString: $searchString, scope: $scope, navigateToPath: navigateToPath,
+        artistSearch: model.vault.artistDigests(filteredBy:),
+        venueSearch: model.vault.venueDigests(filteredBy:)
       )
       .searchable(
         text: $searchString,
