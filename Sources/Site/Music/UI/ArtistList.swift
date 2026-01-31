@@ -7,34 +7,35 @@
 
 import SwiftUI
 
-struct ArtistList: View {
-  let artistDigests: any Collection<ArtistDigest>
+struct ArtistList<A>: View where A: Rankable, A.ID == String {
+  let artists: any Collection<A>
   let sectioner: LibrarySectioner
-  let compare: (ArtistDigest, ArtistDigest) -> Bool
+  let compare: (A, A) -> Bool
+  let filter: (any Collection<A>, String) -> [A]
   let sort: RankingSort
   @Binding var searchString: String
 
   var body: some View {
-    let digests = artistDigests.names(filteredBy: searchString)
-    RankableSortList(
-      items: digests, sectioner: sectioner, compare: compare,
+    RankableSearchableSortList(
+      items: artists,
+      sectioner: sectioner,
+      compare: compare,
+      filter: filter,
+      sort: sort,
       title: ArchiveCategory.artists.localizedString,
-      associatedRankSectionHeader: { $0.venuesCountView },
-      itemLabelView: { Text($0.name.emphasizedAttributed(matching: searchString)) }, sort: sort
-    )
-    .archiveSearchable(
       searchPrompt: String(localized: "Artist Names"),
-      searchString: $searchString, contentsEmpty: digests.isEmpty
-    )
+      associatedRankSectionHeader: { $0.venuesCountView },
+      searchString: $searchString)
   }
 }
 
-extension ArtistList {
+extension ArtistList<ArtistDigest> {
   fileprivate init(model: VaultModel, sort: RankingSort, searchString: Binding<String>) {
     self.init(
-      artistDigests: model.vault.artistDigestMap.values.shuffled(),
+      artists: model.vault.artistDigestMap.values.shuffled(),
       sectioner: model.vault.sectioner,
       compare: model.vault.comparator.libraryCompare(lhs:rhs:),
+      filter: { $0.names(filteredBy: $1) },
       sort: sort, searchString: searchString)
   }
 }

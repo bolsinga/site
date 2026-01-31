@@ -18,8 +18,9 @@ struct ArtistsSummary: View {
   var body: some View {
     let artistDigests = model.filteredArtistDigests(nearbyModel, distanceThreshold: nearbyDistance)
     ArtistList(
-      artistDigests: artistDigests, sectioner: model.vault.sectioner,
-      compare: model.vault.comparator.libraryCompare(lhs:rhs:), sort: sort,
+      artists: artistDigests, sectioner: model.vault.sectioner,
+      compare: model.vault.comparator.libraryCompare(lhs:rhs:),
+      filter: { $0.names(filteredBy: $1) }, sort: sort,
       searchString: $searchString
     )
     .nearbyLocation(filteredDataIsEmpty: artistDigests.isEmpty)
