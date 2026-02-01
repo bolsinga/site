@@ -95,70 +95,70 @@ struct ArchiveCrossSearchView<A, V>: View where A: ArchiveSearchResult, V: Archi
   @Previewable @Environment(VaultModel.self) var model
   ArchiveCrossSearchView(
     searchString: .constant(""), scope: .constant(.all), navigateToPath: { _ in },
-    artistSearch: model.vault.artistDigests(filteredBy:),
-    venueSearch: model.vault.venueDigests(filteredBy:))
+    artistSearch: model.vault.artists(filteredBy:),
+    venueSearch: model.vault.venues(filteredBy:))
 }
 
 #Preview("Matching Search String - All", traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   ArchiveCrossSearchView(
     searchString: .constant("art"), scope: .constant(.all), navigateToPath: { _ in },
-    artistSearch: model.vault.artistDigests(filteredBy:),
-    venueSearch: model.vault.venueDigests(filteredBy:))
+    artistSearch: model.vault.artists(filteredBy:),
+    venueSearch: model.vault.venues(filteredBy:))
 }
 
 #Preview("No Matches - All", traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   ArchiveCrossSearchView(
     searchString: .constant("zzzzzzzzz"), scope: .constant(.all), navigateToPath: { _ in },
-    artistSearch: model.vault.artistDigests(filteredBy:),
-    venueSearch: model.vault.venueDigests(filteredBy:))
+    artistSearch: model.vault.artists(filteredBy:),
+    venueSearch: model.vault.venues(filteredBy:))
 }
 
 #Preview("Empty Search String - Artist", traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   ArchiveCrossSearchView(
     searchString: .constant(""), scope: .constant(.artist), navigateToPath: { _ in },
-    artistSearch: model.vault.artistDigests(filteredBy:),
-    venueSearch: model.vault.venueDigests(filteredBy:))
+    artistSearch: model.vault.artists(filteredBy:),
+    venueSearch: model.vault.venues(filteredBy:))
 }
 
 #Preview("Matching Search String - Artist", traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   ArchiveCrossSearchView(
     searchString: .constant("art"), scope: .constant(.artist), navigateToPath: { _ in },
-    artistSearch: model.vault.artistDigests(filteredBy:),
-    venueSearch: model.vault.venueDigests(filteredBy:))
+    artistSearch: model.vault.artists(filteredBy:),
+    venueSearch: model.vault.venues(filteredBy:))
 }
 
 #Preview("No Matches - Artist", traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   ArchiveCrossSearchView(
     searchString: .constant("zzzzzzzzz"), scope: .constant(.artist), navigateToPath: { _ in },
-    artistSearch: model.vault.artistDigests(filteredBy:),
-    venueSearch: model.vault.venueDigests(filteredBy:))
+    artistSearch: model.vault.artists(filteredBy:),
+    venueSearch: model.vault.venues(filteredBy:))
 }
 
 #Preview("Empty Search String - Venue", traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   ArchiveCrossSearchView(
     searchString: .constant(""), scope: .constant(.venue), navigateToPath: { _ in },
-    artistSearch: model.vault.artistDigests(filteredBy:),
-    venueSearch: model.vault.venueDigests(filteredBy:))
+    artistSearch: model.vault.artists(filteredBy:),
+    venueSearch: model.vault.venues(filteredBy:))
 }
 
 #Preview("Matching Search String - Venue", traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   ArchiveCrossSearchView(
     searchString: .constant("art"), scope: .constant(.venue), navigateToPath: { _ in },
-    artistSearch: model.vault.artistDigests(filteredBy:),
-    venueSearch: model.vault.venueDigests(filteredBy:))
+    artistSearch: model.vault.artists(filteredBy:),
+    venueSearch: model.vault.venues(filteredBy:))
 }
 
 #Preview("No Matches - Venue", traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   ArchiveCrossSearchView(
     searchString: .constant("zzzzzzzzz"), scope: .constant(.venue), navigateToPath: { _ in },
-    artistSearch: model.vault.artistDigests(filteredBy:),
-    venueSearch: model.vault.venueDigests(filteredBy:))
+    artistSearch: model.vault.artists(filteredBy:),
+    venueSearch: model.vault.venues(filteredBy:))
 }

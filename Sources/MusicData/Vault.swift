@@ -148,13 +148,13 @@ public struct Vault: Sendable {
     item.archivePath.url(using: rootURL)
   }
 
-  func artistDigests(filteredBy searchString: String) -> [ArtistDigest] {
-    artistDigestMap.values.names(filteredBy: searchString, additive: true).sorted(
+  func artists(filteredBy searchString: String) -> [Artist] {
+    artistDigestMap.values.map { $0.artist }.names(filteredBy: searchString, additive: true).sorted(
       by: comparator.libraryCompare(lhs:rhs:))
   }
 
-  func venueDigests(filteredBy searchString: String) -> [VenueDigest] {
-    venueDigestMap.values.names(filteredBy: searchString, additive: true).sorted(
+  func venues(filteredBy searchString: String) -> [Venue] {
+    venueDigestMap.values.map { $0.venue }.names(filteredBy: searchString, additive: true).sorted(
       by: comparator.libraryCompare(lhs:rhs:))
   }
 }
