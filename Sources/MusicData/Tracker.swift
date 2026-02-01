@@ -98,39 +98,39 @@ struct Tracker {
     return await computeRankings(await items)
   }
 
-  func artistRankings() async -> [Artist.ID: Ranking] {
+  private func artistRankings() async -> [Artist.ID: Ranking] {
     await computeRankings { artistCounts.map { $0 } }
   }
 
-  func venueRankings() async -> [Venue.ID: Ranking] {
+  private func venueRankings() async -> [Venue.ID: Ranking] {
     await computeRankings { venueCounts.map { $0 } }
   }
 
-  func artistSpanRankings() async -> [Artist.ID: Ranking] {
+  private func artistSpanRankings() async -> [Artist.ID: Ranking] {
     await computeRankings { artistSpanDates.mapValues { $0.yearSpan }.map { $0 } }
   }
 
-  func venueSpanRankings() async -> [Venue.ID: Ranking] {
+  private func venueSpanRankings() async -> [Venue.ID: Ranking] {
     await computeRankings { venueSpanDates.mapValues { $0.yearSpan }.map { $0 } }
   }
 
-  func artistVenueRankings() async -> [Artist.ID: Ranking] {
+  private func artistVenueRankings() async -> [Artist.ID: Ranking] {
     await computeRankings { artistVenues.mapValues { $0.count }.map { $0 } }
   }
 
-  func venueArtistRankings() async -> [Venue.ID: Ranking] {
+  private func venueArtistRankings() async -> [Venue.ID: Ranking] {
     await computeRankings { venueArtists.mapValues { $0.count }.map { $0 } }
   }
 
-  func annumShowRankings() async -> [Annum: Ranking] {
+  private func annumShowRankings() async -> [Annum: Ranking] {
     await computeRankings { annumShows.mapValues { $0.count }.map { $0 } }
   }
 
-  func annumVenueRankings() async -> [Annum: Ranking] {
+  private func annumVenueRankings() async -> [Annum: Ranking] {
     await computeRankings { annumVenues.mapValues { $0.count }.map { $0 } }
   }
 
-  func annumArtistRankings() async -> [Annum: Ranking] {
+  private func annumArtistRankings() async -> [Annum: Ranking] {
     await computeRankings { annumArtists.mapValues { $0.count }.map { $0 } }
   }
 
@@ -144,7 +144,7 @@ struct Tracker {
     return await r
   }
 
-  func artistFirstSets() async -> [Artist.ID: FirstSet] {
+  private func artistFirstSets() async -> [Artist.ID: FirstSet] {
     var order = 1
     async let r = artistOrder.reduce(into: [Artist.ID: FirstSet]()) {
       guard
@@ -158,7 +158,7 @@ struct Tracker {
     return await r
   }
 
-  func venueFirstSets() async -> [Venue.ID: FirstSet] {
+  private func venueFirstSets() async -> [Venue.ID: FirstSet] {
     var order = 1
     async let r = venueOrder.reduce(into: [Venue.ID: FirstSet]()) {
       guard
@@ -170,5 +170,54 @@ struct Tracker {
       order += 1
     }
     return await r
+  }
+
+  private func rankDigests<Key>(
+    firstSets: [Key: FirstSet], spanRankings: [Key: Ranking],
+    showRankings: [Key: Ranking], associatedRankings: [Key: Ranking]
+  ) -> [Key: RankDigest] {
+    let ids = Set(firstSets.keys).union(Set(spanRankings.keys)).union(Set(showRankings.keys)).union(
+      Set(associatedRankings.keys))
+
+    return ids.reduce(into: [Key: RankDigest]()) {
+      $0[$1] = RankDigest(
+        firstSet: firstSets[$1] ?? .empty,
+        spanRank: spanRankings[$1] ?? .empty,
+        showRank: showRankings[$1] ?? .empty,
+        associatedRank: associatedRankings[$1] ?? .empty)
+    }
+  }
+
+  func artistRankDigests() async -> [Artist.ID: RankDigest] {
+    async let firstSets = await artistFirstSets()
+    async let spanRankings = await artistSpanRankings()
+    async let showRankings = await artistRankings()
+    async let associatedRankings = await artistVenueRankings()
+
+    return rankDigests(
+      firstSets: await firstSets, spanRankings: await spanRankings,
+      showRankings: await showRankings, associatedRankings: await associatedRankings)
+  }
+
+  func venueRankDigests() async -> [Venue.ID: RankDigest] {
+    async let firstSets = await venueFirstSets()
+    async let spanRankings = await venueSpanRankings()
+    async let showRankings = await venueRankings()
+    async let associatedRankings = await venueArtistRankings()
+
+    return rankDigests(
+      firstSets: await firstSets, spanRankings: await spanRankings,
+      showRankings: await showRankings, associatedRankings: await associatedRankings)
+  }
+
+  func annumRankDigests() async -> [Annum: RankDigest] {
+    // These names do not quite work.
+    async let spanRankings = await annumVenueRankings()
+    async let showRankings = await annumShowRankings()
+    async let associatedRankings = await annumArtistRankings()
+
+    return rankDigests(
+      firstSets: [:], spanRankings: await spanRankings, showRankings: await showRankings,
+      associatedRankings: await associatedRankings)
   }
 }

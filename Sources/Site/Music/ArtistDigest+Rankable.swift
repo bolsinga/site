@@ -7,4 +7,7 @@
 
 import Foundation
 
-extension ArtistDigest: Rankable {}
+extension ArtistDigest: Rankable {
+  var firstSet: FirstSet { rank.firstSet }
+  var showRank: Ranking { rank.showRank }
+}

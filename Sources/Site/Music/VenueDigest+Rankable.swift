@@ -7,4 +7,7 @@
 
 import Foundation
 
-extension VenueDigest: Rankable {}
+extension VenueDigest: Rankable {
+  var firstSet: FirstSet { rank.firstSet }
+  var showRank: Ranking { rank.showRank }
+}
