@@ -15,9 +15,7 @@ extension Annum {
         guard $0.show.date.annum == self else { return nil }
         return $0.digest
       },
-      showRank: lookup.showRank(annum: self),
-      venueRank: lookup.venueRank(annum: self),
-      artistRank: lookup.artistRank(annum: self)
+      rank: lookup.rankDigest(for: self)
     )
   }
 }
@@ -31,10 +29,7 @@ extension Artist {
         return $0.digest
       },
       related: lookup.related(self),
-      firstSet: lookup.firstSet(artist: self),
-      spanRank: lookup.spanRank(artist: self),
-      showRank: lookup.showRank(artist: self),
-      venueRank: lookup.artistVenueRank(artist: self))
+      rank: lookup.rankDigest(for: self))
   }
 }
 
@@ -61,10 +56,7 @@ extension Venue {
         return $0.digest
       },
       related: lookup.related(self),
-      firstSet: lookup.firstSet(venue: self),
-      spanRank: lookup.spanRank(venue: self),
-      showRank: lookup.venueRank(venue: self),
-      venueArtistRank: lookup.venueArtistRank(venue: self))
+      rank: lookup.rankDigest(for: self))
   }
 }
 

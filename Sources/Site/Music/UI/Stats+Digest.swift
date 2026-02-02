@@ -51,15 +51,14 @@ extension Stats {
   init(artistDigest digest: ArtistDigest) {
     self.init(
       shows: digest.shows, shouldCalculateArtistCount: false,
-      yearsSpanRanking: digest.spanRank, showRanking: digest.showRank,
-      artistVenuesRanking: digest.venueRank)
+      yearsSpanRanking: digest.rank.spanRank, showRanking: digest.rank.showRank,
+      artistVenuesRanking: digest.rank.associatedRank)
   }
 
   init(venueDigest digest: VenueDigest) {
     self.init(
-      shows: digest.shows, yearsSpanRanking: digest.spanRank,
-      showRanking: digest.showRank,
-      venueArtistsRanking: digest.venueArtistRank)
+      shows: digest.shows, yearsSpanRanking: digest.rank.spanRank,
+      showRanking: digest.rank.showRank, venueArtistsRanking: digest.rank.associatedRank)
   }
 
   init(annumDigest digest: AnnumDigest) {

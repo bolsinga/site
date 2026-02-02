@@ -70,48 +70,16 @@ public struct Lookup: Sendable {
     return showArtists
   }
 
-  public func showRank(artist: Artist) -> Ranking {
-    bracket.artistRankingMap[artist.id] ?? Ranking.empty
+  func rankDigest(for annum: Annum) -> RankDigest {
+    bracket.annumRankDigestMap[annum] ?? .empty
   }
 
-  public func venueRank(venue: Venue) -> Ranking {
-    bracket.venueRankingMap[venue.id] ?? Ranking.empty
+  func rankDigest(for artist: Artist) -> RankDigest {
+    bracket.artistRankDigestMap[artist.id] ?? .empty
   }
 
-  public func spanRank(artist: Artist) -> Ranking {
-    bracket.artistShowSpanRankingMap[artist.id] ?? Ranking.empty
-  }
-
-  public func spanRank(venue: Venue) -> Ranking {
-    bracket.venueShowSpanRankingMap[venue.id] ?? Ranking.empty
-  }
-
-  public func artistVenueRank(artist: Artist) -> Ranking {
-    bracket.artistVenueRankingMap[artist.id] ?? Ranking.empty
-  }
-
-  public func venueArtistRank(venue: Venue) -> Ranking {
-    bracket.venueArtistRankingMap[venue.id] ?? Ranking.empty
-  }
-
-  public func showRank(annum: Annum) -> Ranking {
-    bracket.annumShowRankingMap[annum] ?? .empty
-  }
-
-  public func venueRank(annum: Annum) -> Ranking {
-    bracket.annumVenueRankingMap[annum] ?? .empty
-  }
-
-  public func artistRank(annum: Annum) -> Ranking {
-    bracket.annumArtistRankingMap[annum] ?? .empty
-  }
-
-  public func firstSet(artist: Artist) -> FirstSet {
-    bracket.artistFirstSetsMap[artist.id] ?? FirstSet.empty
-  }
-
-  public func firstSet(venue: Venue) -> FirstSet {
-    bracket.venueFirstSetsMap[venue.id] ?? FirstSet.empty
+  func rankDigest(for venue: Venue) -> RankDigest {
+    bracket.venueRankDigestMap[venue.id] ?? .empty
   }
 
   public func related(_ item: Venue) -> [Related] {

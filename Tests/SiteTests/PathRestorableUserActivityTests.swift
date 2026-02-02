@@ -40,9 +40,7 @@ struct PathRestorableUserActivityTests {
     let userActivity = NSUserActivity(activityType: "test-type")
 
     let artist = Artist(id: "ar0", name: "AR0")
-    let digest = ArtistDigest(
-      artist: artist, shows: [], related: [],
-      firstSet: .empty, spanRank: .empty, showRank: .empty, venueRank: .empty)
+    let digest = ArtistDigest(artist: artist, shows: [], related: [], rank: .empty)
     userActivity.update(digest, url: rootURL)
 
     #expect(userActivity.isEligibleForHandoff)
@@ -62,9 +60,7 @@ struct PathRestorableUserActivityTests {
     let userActivity = NSUserActivity(activityType: "test-type")
 
     let venue = Venue(id: "v10", location: Location(city: "c", state: "s"), name: "V10")
-    let digest = VenueDigest(
-      venue: venue, shows: [], related: [],
-      firstSet: .empty, spanRank: .empty, showRank: .empty, venueArtistRank: .empty)
+    let digest = VenueDigest(venue: venue, shows: [], related: [], rank: .empty)
     userActivity.update(digest, url: rootURL)
 
     #expect(userActivity.isEligibleForHandoff)
@@ -84,9 +80,7 @@ struct PathRestorableUserActivityTests {
     let userActivity = NSUserActivity(activityType: "test-type")
 
     let item = Annum.year(1990)
-    let digest = AnnumDigest(
-      annum: item, shows: [], showRank: .empty,
-      venueRank: .empty, artistRank: .empty)
+    let digest = AnnumDigest(annum: item, shows: [], rank: .empty)
 
     userActivity.update(digest, url: rootURL)
 

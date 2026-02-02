@@ -13,11 +13,11 @@ extension VenueDigest {
     case .alphabetical, .firstSeen:
       Ranking.empty
     case .showCount:
-      showRank
+      rank.showRank
     case .showYearRange:
-      spanRank
+      rank.spanRank
     case .associatedRank:
-      venueArtistRank
+      rank.associatedRank
     }
   }
 }

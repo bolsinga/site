@@ -13,18 +13,10 @@ private struct OrderedBracket: Encodable {
 
   private enum Keys: String, CodingKey {
     case librarySortTokenMap
-    case artistRankingMap
-    case venueRankingMap
-    case artistShowSpanRankingMap
-    case venueShowSpanRankingMap
-    case artistVenueRankingMap
-    case venueArtistRankingMap
-    case annumShowRankingMap
-    case annumVenueRankingMap
-    case annumArtistRankingMap
+    case artistRankDigestMap
+    case venueRankDigestMap
+    case annumRankDigestMap
     case decadesMap
-    case artistFirstSetsMap
-    case venueFirstSetsMap
   }
 
   func encode(to encoder: any Encoder) throws {
@@ -33,24 +25,15 @@ private struct OrderedBracket: Encodable {
     //  (despite implementing `<`) do not do that. The other keys are the same.
     var container = encoder.container(keyedBy: Keys.self)
     try container.encode(bracket.librarySortTokenMap, forKey: .librarySortTokenMap)
-    try container.encode(bracket.artistRankingMap, forKey: .artistRankingMap)
-    try container.encode(bracket.venueRankingMap, forKey: .venueRankingMap)
-    try container.encode(bracket.artistShowSpanRankingMap, forKey: .artistShowSpanRankingMap)
-    try container.encode(bracket.venueShowSpanRankingMap, forKey: .venueShowSpanRankingMap)
-    try container.encode(bracket.artistVenueRankingMap, forKey: .artistVenueRankingMap)
-    try container.encode(bracket.venueArtistRankingMap, forKey: .venueArtistRankingMap)
+
+    try container.encode(bracket.artistRankDigestMap, forKey: .artistRankDigestMap)
+    try container.encode(bracket.venueRankDigestMap, forKey: .venueRankDigestMap)
+
     try container.encode(
-      bracket.annumShowRankingMap.reduce(
-        into: [String: Ranking](), { $0[$1.key.formatted(.json)] = $1.value }),
-      forKey: .annumShowRankingMap)
-    try container.encode(
-      bracket.annumVenueRankingMap.reduce(
-        into: [String: Ranking](), { $0[$1.key.formatted(.json)] = $1.value }),
-      forKey: .annumVenueRankingMap)
-    try container.encode(
-      bracket.annumArtistRankingMap.reduce(
-        into: [String: Ranking](), { $0[$1.key.formatted(.json)] = $1.value }),
-      forKey: .annumArtistRankingMap)
+      bracket.annumRankDigestMap.reduce(
+        into: [String: RankDigest](), { $0[$1.key.formatted(.json)] = $1.value }),
+      forKey: .annumRankDigestMap)
+
     try container.encode(
       bracket.decadesMap.reduce(
         into: [String: [String: [Show.ID]]](),
@@ -62,8 +45,6 @@ private struct OrderedBracket: Encodable {
             })
         }),
       forKey: .decadesMap)
-    try container.encode(bracket.artistFirstSetsMap, forKey: .artistFirstSetsMap)
-    try container.encode(bracket.venueFirstSetsMap, forKey: .venueFirstSetsMap)
   }
 }
 

@@ -10,18 +10,23 @@ import Foundation
 public struct AnnumDigest: Codable, Sendable {
   public let annum: Annum
   public let shows: [ShowDigest]
-  public let showRank: Ranking
-  public let venueRank: Ranking
-  public let artistRank: Ranking
+  private let rank: RankDigest
 
-  public init(
-    annum: Annum, shows: [ShowDigest], showRank: Ranking, venueRank: Ranking,
-    artistRank: Ranking
-  ) {
+  public init(annum: Annum, shows: [ShowDigest], rank: RankDigest) {
     self.annum = annum
     self.shows = shows
-    self.showRank = showRank
-    self.venueRank = venueRank
-    self.artistRank = artistRank
+    self.rank = rank
+  }
+
+  var showRank: Ranking {
+    rank.showRank
+  }
+
+  var venueRank: Ranking {
+    rank.spanRank
+  }
+
+  var artistRank: Ranking {
+    rank.associatedRank
   }
 }

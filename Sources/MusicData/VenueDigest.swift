@@ -13,21 +13,12 @@ public struct VenueDigest: Codable, Equatable, Hashable, Identifiable, Sendable 
   public let venue: Venue
   public let shows: [ShowDigest]
   public let related: [Related]
-  public let firstSet: FirstSet
-  public let spanRank: Ranking
-  public let showRank: Ranking
-  public let venueArtistRank: Ranking
+  public let rank: RankDigest
 
-  public init(
-    venue: Venue, shows: [ShowDigest], related: [Related], firstSet: FirstSet,
-    spanRank: Ranking, showRank: Ranking, venueArtistRank: Ranking
-  ) {
+  public init(venue: Venue, shows: [ShowDigest], related: [Related], rank: RankDigest) {
     self.venue = venue
     self.shows = shows
     self.related = related
-    self.firstSet = firstSet
-    self.spanRank = spanRank
-    self.showRank = showRank
-    self.venueArtistRank = venueArtistRank
+    self.rank = rank
   }
 }
