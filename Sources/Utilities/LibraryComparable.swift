@@ -7,7 +7,7 @@
 
 import Foundation
 
-public protocol LibraryComparable: Identifiable {
+public protocol LibraryComparable: Identifiable where ID: Codable, ID: Sendable {
   var sortname: String? { get }
   var name: String { get }
 }

@@ -8,7 +8,7 @@
 import Foundation
 
 extension LibrarySectioner {
-  public init(librarySortTokenMap: [String: String]) async {
+  public init(librarySortTokenMap: [Key: String]) async {
     async let sectionMap = librarySortTokenMap.mapValues { $0.librarySection }
     self.init(sectionMap: await sectionMap)
   }
