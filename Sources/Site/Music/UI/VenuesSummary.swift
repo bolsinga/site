@@ -16,14 +16,14 @@ struct VenuesSummary: View {
   @Binding var searchString: String
 
   var body: some View {
-    let venueDigests = model.filteredVenueDigests(nearbyModel, distanceThreshold: nearbyDistance)
+    let venues = model.nearbyVenues(nearbyModel, distanceThreshold: nearbyDistance)
     VenueList(
-      venues: venueDigests, sectioner: model.vault.sectioner,
+      venues: venues, sectioner: model.vault.sectioner,
       compare: model.vault.comparator.libraryCompare(lhs:rhs:),
       filter: { $0.names(filteredBy: $1) }, sort: sort,
       searchString: $searchString
     )
-    .nearbyLocation(filteredDataIsEmpty: venueDigests.isEmpty)
+    .nearbyLocation(filteredDataIsEmpty: venues.isEmpty)
   }
 }
 

@@ -16,14 +16,14 @@ struct ArtistsSummary: View {
   @Binding var searchString: String
 
   var body: some View {
-    let artistDigests = model.filteredArtistDigests(nearbyModel, distanceThreshold: nearbyDistance)
+    let artists = model.nearbyArtists(nearbyModel, distanceThreshold: nearbyDistance)
     ArtistList(
-      artists: artistDigests, sectioner: model.vault.sectioner,
+      artists: artists, sectioner: model.vault.sectioner,
       compare: model.vault.comparator.libraryCompare(lhs:rhs:),
       filter: { $0.names(filteredBy: $1) }, sort: sort,
       searchString: $searchString
     )
-    .nearbyLocation(filteredDataIsEmpty: artistDigests.isEmpty)
+    .nearbyLocation(filteredDataIsEmpty: artists.isEmpty)
   }
 }
 

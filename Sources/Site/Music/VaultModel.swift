@@ -187,15 +187,19 @@ enum LocationAuthorization {
     return nearbyConcerts
   }
 
-  private func venueDigestsNearby(_ distanceThreshold: CLLocationDistance) -> [VenueDigest] {
+  private func venuesNearby(_ distanceThreshold: CLLocationDistance)
+    -> any Collection<RankedArchiveItem>
+  {
     let nearbyVenueIDs = Set(concertsNearby(distanceThreshold).compactMap { $0.venue?.id })
-    return nearbyVenueIDs.compactMap { vault.venueDigestMap[$0] }
+    return nearbyVenueIDs.compactMap { vault.venueDigestMap[$0] }.map { $0.rankedArchiveItem }
   }
 
-  private func artistDigestsNearby(_ distanceThreshold: CLLocationDistance) -> [ArtistDigest] {
+  private func artistsNearby(_ distanceThreshold: CLLocationDistance)
+    -> any Collection<RankedArchiveItem>
+  {
     let nearbyArtistIDs = Set(
       concertsNearby(distanceThreshold).flatMap { $0.artists.map { $0.id } })
-    return nearbyArtistIDs.compactMap { vault.artistDigestMap[$0] }
+    return nearbyArtistIDs.compactMap { vault.artistDigestMap[$0] }.map { $0.rankedArchiveItem }
   }
 
   private func decadesMapsNearby(_ distanceThreshold: CLLocationDistance) -> [Decade: [Annum: Set<
@@ -237,18 +241,18 @@ enum LocationAuthorization {
     nearbyModel.locationFilter.isNearby ? decadesMapsNearby(distanceThreshold) : vault.decadesMap
   }
 
-  func filteredVenueDigests(_ nearbyModel: NearbyModel, distanceThreshold: CLLocationDistance)
-    -> any Collection<VenueDigest>
+  func nearbyVenues(_ nearbyModel: NearbyModel, distanceThreshold: CLLocationDistance)
+    -> any Collection<RankedArchiveItem>
   {
     nearbyModel.locationFilter.isNearby
-      ? venueDigestsNearby(distanceThreshold) : vault.venueDigestMap.values
+      ? venuesNearby(distanceThreshold) : vault.venueDigestMap.values.map { $0.rankedArchiveItem }
   }
 
-  func filteredArtistDigests(_ nearbyModel: NearbyModel, distanceThreshold: CLLocationDistance)
-    -> any Collection<ArtistDigest>
+  func nearbyArtists(_ nearbyModel: NearbyModel, distanceThreshold: CLLocationDistance)
+    -> any Collection<RankedArchiveItem>
   {
     nearbyModel.locationFilter.isNearby
-      ? artistDigestsNearby(distanceThreshold) : vault.artistDigestMap.values
+      ? artistsNearby(distanceThreshold) : vault.artistDigestMap.values.map { $0.rankedArchiveItem }
   }
 
   @MainActor
