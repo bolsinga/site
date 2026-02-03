@@ -7,10 +7,9 @@
 
 import SwiftUI
 
-struct RankableSearchableSortList<A, SectionHeaderContent: View>: View
-where A: Rankable, A.ID == String {
+struct RankableSearchableSortList<A, SectionHeaderContent: View>: View where A: Rankable {
   let items: any Collection<A>
-  let sectioner: LibrarySectioner
+  let sectioner: LibrarySectioner<A.ID>
   let compare: (A, A) -> Bool
   let filter: (any Collection<A>, String) -> [A]
   let sort: RankingSort

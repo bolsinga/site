@@ -62,7 +62,7 @@ extension Venue {
 
 public struct Vault: Sendable {
   public let comparator: LibraryComparator
-  public let sectioner: LibrarySectioner
+  public let sectioner: LibrarySectioner<String>
   public let rootURL: URL
   public let concertMap: [Concert.ID: Concert]
 
@@ -84,7 +84,8 @@ public struct Vault: Sendable {
     async let asyncLookup = await Lookup(music: music)
     let lookup = await asyncLookup
     async let asyncComparator = LibraryComparator(tokenMap: lookup.librarySortTokenMap)
-    async let sectioner = await LibrarySectioner(librarySortTokenMap: lookup.librarySortTokenMap)
+    async let sectioner = await LibrarySectioner<String>(
+      librarySortTokenMap: lookup.librarySortTokenMap)
 
     let comparator = await asyncComparator
 

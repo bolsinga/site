@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-struct VenueList<V>: View where V: Rankable, V.ID == String {
+struct VenueList<V>: View where V: Rankable {
   let venues: any Collection<V>
-  let sectioner: LibrarySectioner
+  let sectioner: LibrarySectioner<V.ID>
   let compare: (V, V) -> Bool
   let filter: (any Collection<V>, String) -> [V]
   let sort: RankingSort
