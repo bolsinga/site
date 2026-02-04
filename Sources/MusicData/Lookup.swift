@@ -16,13 +16,24 @@ private func createLookup<T: Identifiable>(_ sequence: [T]) -> [T.ID: T] {
   sequence.reduce(into: [:]) { $0[$1.id] = $1 }
 }
 
-public struct Lookup: Sendable {
+public struct Lookup<ID, AnnumID>: Sendable
+where
+  ID: Codable, ID: Hashable, ID: Sendable,
+  AnnumID: Codable, AnnumID: Hashable, AnnumID: Sendable
+{
   private let artistMap: [Artist.ID: Artist]
   private let venueMap: [Venue.ID: Venue]
-  private let bracket: Bracket<String, Annum>
+  private let bracket: Bracket<ID, AnnumID>
   private let relationMap: [String: [String]]  // Artist/Venue ID : [Artist/Venue ID]
 
-  public init(music: Music) async {
+  public init(
+    music: Music,
+    venueIdentifier: @Sendable (_ venue: String) -> ID,
+    artistIdentifier: @Sendable (_ artist: String) -> ID,
+    showIdentifier: @Sendable (_ artist: String) -> ID,
+    annumIdentifier: @Sendable (_ annum: PartialDate) -> AnnumID,
+    decadeIdentifier: @Sendable (AnnumID) -> Decade
+  ) async {
     var signpost = Signpost(category: "lookup", name: "process")
     signpost.start()
 
@@ -30,11 +41,11 @@ public struct Lookup: Sendable {
     async let venueLookup = createLookup(music.venues)
     async let bracket = await Bracket(
       music: music,
-      venueIdentifier: { $0 },
-      artistIdentifier: { $0 },
-      showIdentifier: { $0 },
-      annumIdentifier: { $0.annum },
-      decadeIdentifier: { $0.decade })
+      venueIdentifier: venueIdentifier,
+      artistIdentifier: artistIdentifier,
+      showIdentifier: showIdentifier,
+      annumIdentifier: annumIdentifier,
+      decadeIdentifier: decadeIdentifier)
     async let relations = music.relationMap
 
     self.artistMap = await artistLookup
@@ -47,11 +58,11 @@ public struct Lookup: Sendable {
     bracket.librarySortTokenMap
   }
 
-  public var decadesMap: [Decade: [Annum: Set<Show.ID>]] {
+  public var decadesMap: [Decade: [AnnumID: Set<ID>]] {
     bracket.decadesMap
   }
 
-  public var concertDayMap: [Int: Set<Concert.ID>] {
+  public var concertDayMap: [Int: Set<ID>] {
     bracket.concertDayMap
   }
 
@@ -76,16 +87,16 @@ public struct Lookup: Sendable {
     return showArtists
   }
 
-  func rankDigest(for annum: Annum) -> RankDigest {
+  func rankDigest(annum: AnnumID) -> RankDigest {
     bracket.annumRankDigestMap[annum] ?? .empty
   }
 
-  func rankDigest(for artist: Artist) -> RankDigest {
-    bracket.artistRankDigestMap[artist.id] ?? .empty
+  func rankDigest(artist: ID) -> RankDigest {
+    bracket.artistRankDigestMap[artist] ?? .empty
   }
 
-  func rankDigest(for venue: Venue) -> RankDigest {
-    bracket.venueRankDigestMap[venue.id] ?? .empty
+  func rankDigest(venue: ID) -> RankDigest {
+    bracket.venueRankDigestMap[venue] ?? .empty
   }
 
   public func related(_ item: Venue) -> [Related] {
