@@ -33,12 +33,16 @@ struct Bracket: Codable, Sendable {
     signpost.start()
 
     async let librarySortTokenMap = music.librarySortTokenMap
-    async let tracker = music.tracker
+    async let tracker = music.tracker(
+      venueIdentifier: { $0 },
+      artistIdentifier: { $0 },
+      showIdentifier: { $0 },
+      annumIdentifier: { $0.annum })
 
     self.artistRankDigestMap = await tracker.artistRankDigests()
     self.venueRankDigestMap = await tracker.venueRankDigests()
     self.annumRankDigestMap = await tracker.annumRankDigests()
-    self.decadesMap = await tracker.decadesMap()
+    self.decadesMap = await tracker.decadesMap(decade: { $0.decade })
     self.concertDayMap = await tracker.dayOfLeapYearShows
 
     self.librarySortTokenMap = await librarySortTokenMap
