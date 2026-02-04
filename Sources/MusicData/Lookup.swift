@@ -19,7 +19,7 @@ private func createLookup<T: Identifiable>(_ sequence: [T]) -> [T.ID: T] {
 public struct Lookup: Sendable {
   private let artistMap: [Artist.ID: Artist]
   private let venueMap: [Venue.ID: Venue]
-  private let bracket: Bracket
+  private let bracket: Bracket<String, Annum>
   private let relationMap: [String: [String]]  // Artist/Venue ID : [Artist/Venue ID]
 
   public init(music: Music) async {
@@ -28,7 +28,13 @@ public struct Lookup: Sendable {
 
     async let artistLookup = createLookup(music.artists)
     async let venueLookup = createLookup(music.venues)
-    async let bracket = await Bracket(music: music)
+    async let bracket = await Bracket(
+      music: music,
+      venueIdentifier: { $0 },
+      artistIdentifier: { $0 },
+      showIdentifier: { $0 },
+      annumIdentifier: { $0.annum },
+      decadeIdentifier: { $0.decade })
     async let relations = music.relationMap
 
     self.artistMap = await artistLookup

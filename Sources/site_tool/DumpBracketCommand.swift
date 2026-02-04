@@ -9,7 +9,7 @@ import ArgumentParser
 import Foundation
 
 private struct OrderedBracket: Encodable {
-  let bracket: Bracket
+  let bracket: Bracket<ArchivePath, ArchivePath>
 
   private enum Keys: String, CodingKey {
     case librarySortTokenMap
@@ -20,14 +20,19 @@ private struct OrderedBracket: Encodable {
   }
 
   func encode(to encoder: any Encoder) throws {
-    // Specialized encoder so that the annum and dictionary keys are formatted.
-    //  It seems that .sortedKeys is "lexicographic" sorting, and Annum and Decade
-    //  (despite implementing `<`) do not do that. The other keys are the same.
+    // Specialized encoder so that the keys are formatted.
+    //  It seems that .sortedKeys is "lexicographic" sorting.
     var container = encoder.container(keyedBy: Keys.self)
     try container.encode(bracket.librarySortTokenMap, forKey: .librarySortTokenMap)
 
-    try container.encode(bracket.artistRankDigestMap, forKey: .artistRankDigestMap)
-    try container.encode(bracket.venueRankDigestMap, forKey: .venueRankDigestMap)
+    try container.encode(
+      bracket.artistRankDigestMap.reduce(
+        into: [String: RankDigest](), { $0[$1.key.formatted(.json)] = $1.value }),
+      forKey: .artistRankDigestMap)
+    try container.encode(
+      bracket.venueRankDigestMap.reduce(
+        into: [String: RankDigest](), { $0[$1.key.formatted(.json)] = $1.value }),
+      forKey: .venueRankDigestMap)
 
     try container.encode(
       bracket.annumRankDigestMap.reduce(
@@ -36,12 +41,12 @@ private struct OrderedBracket: Encodable {
 
     try container.encode(
       bracket.decadesMap.reduce(
-        into: [String: [String: [Show.ID]]](),
+        into: [String: [String: [String]]](),
         {
           $0[$1.key.formatted(.defaultDigits)] = $1.value.reduce(
-            into: [String: [Show.ID]](),
+            into: [String: [String]](),
             {
-              $0[$1.key.formatted(.json)] = $1.value.sorted()
+              $0[$1.key.formatted(.json)] = $1.value.map { $0.formatted(.json) }.sorted()
             })
         }),
       forKey: .decadesMap)
