@@ -16,15 +16,7 @@ extension Dictionary where Value == Set<PartialDate> {
   }
 }
 
-extension Dictionary where Value == Set<String> {
-  fileprivate mutating func insert(key: Key, value: Value.ValueType) {
-    var v = self[key] ?? Value()
-    v.insert(value)
-    self[key] = v
-  }
-}
-
-extension Dictionary where Key == String, Value == Int {
+extension Dictionary where Value == Int {
   fileprivate mutating func increment(key: Key) {
     var v = self[key] ?? 0
     v += 1
@@ -32,58 +24,95 @@ extension Dictionary where Key == String, Value == Int {
   }
 }
 
-struct Tracker {
+struct Tracker<ID, AnnumID>
+where
+  ID: Codable, ID: Hashable, ID: Sendable,
+  AnnumID: Codable, AnnumID: Hashable, AnnumID: Sendable
+{
+  // Unsure how to make this generic over whatever Set.Element may be.
+  private func insert<Key>(into dictionary: inout [Key: Set<ID>], key: Key, value: ID) {
+    var v = dictionary[key] ?? Set<ID>()
+    v.insert(value)
+    dictionary[key] = v
+  }
+
   // All the unique dates for a venue, used to calculate its span.
-  var venueSpanDates = [Venue.ID: Set<PartialDate>]()
-  var venueCounts = [Venue.ID: Int]()
-  var venueArtists = [Venue.ID: Set<Artist.ID>]()
-  var venueOrder = OrderedSet<Venue.ID>()
+  var venueSpanDates = [ID: Set<PartialDate>]()
+  var venueCounts = [ID: Int]()
+  var venueArtists = [ID: Set<ID>]()
+  var venueOrder = OrderedSet<ID>()
 
   // All the unique dates for an artist, used to calculate its span.
-  var artistSpanDates = [Artist.ID: Set<PartialDate>]()
-  var artistCounts = [Artist.ID: Int]()
-  var artistVenues = [Artist.ID: Set<Venue.ID>]()
-  var artistOrder = OrderedSet<Artist.ID>()
+  var artistSpanDates = [ID: Set<PartialDate>]()
+  var artistCounts = [ID: Int]()
+  var artistVenues = [ID: Set<ID>]()
+  var artistOrder = OrderedSet<ID>()
 
-  var annumShows = [Annum: Set<Show.ID>]()
-  var annumArtists = [Annum: Set<Artist.ID>]()
-  var annumVenues = [Annum: Set<Venue.ID>]()
+  var annumShows = [AnnumID: Set<ID>]()
+  var annumArtists = [AnnumID: Set<ID>]()
+  var annumVenues = [AnnumID: Set<ID>]()
 
-  var dayOfLeapYearShows = [Int: Set<Show.ID>]()
+  var dayOfLeapYearShows = [Int: Set<ID>]()
 
-  private mutating func track(show: Show) {
-    venueSpanDates.insert(key: show.venue, value: show.date)
-    venueCounts.increment(key: show.venue)
-    venueOrder.append(show.venue)
+  private mutating func track(
+    show: Show,
+    venueIdentifier: @Sendable (_ venue: String) -> ID,
+    artistIdentifier: @Sendable (_ artist: String) -> ID,
+    showIdentifier: @Sendable (_ artist: String) -> ID,
+    annumIdentifier: @Sendable (_ annum: PartialDate) -> AnnumID
+  ) {
+    let showID = showIdentifier(show.id)
 
-    let annum = show.date.annum
+    let venueID = venueIdentifier(show.venue)
+    venueSpanDates.insert(key: venueID, value: show.date)
+    venueCounts.increment(key: venueID)
+    venueOrder.append(venueID)
+
+    let annumID = annumIdentifier(show.date)
 
     show.artists.reversed().forEach {
-      venueArtists.insert(key: show.venue, value: $0)
+      let artistID = artistIdentifier($0)
 
-      artistSpanDates.insert(key: $0, value: show.date)
-      artistCounts.increment(key: $0)
-      artistVenues.insert(key: $0, value: show.venue)
-      artistOrder.append($0)
+      insert(into: &venueArtists, key: venueID, value: artistID)
 
-      annumArtists.insert(key: annum, value: $0)
+      artistSpanDates.insert(key: artistID, value: show.date)
+      artistCounts.increment(key: artistID)
+      insert(into: &artistVenues, key: artistID, value: venueID)
+      artistOrder.append(artistID)
+
+      insert(into: &annumArtists, key: annumID, value: artistID)
     }
 
-    annumShows.insert(key: annum, value: show.id)
-    annumVenues.insert(key: annum, value: show.venue)
+    insert(into: &annumShows, key: annumID, value: showID)
+    insert(into: &annumVenues, key: annumID, value: venueID)
+
+    insert(into: &annumVenues, key: annumID, value: venueID)
 
     if !show.date.isPartiallyUnknown, let date = show.date.date {
-      dayOfLeapYearShows.insert(key: date.dayOfLeapYear, value: show.id)
+      insert(into: &dayOfLeapYearShows, key: date.dayOfLeapYear, value: showID)
     }
   }
 
-  init(shows: [Show]) {
+  init(
+    shows: [Show],
+    venueIdentifier: @Sendable (_ venue: String) -> ID,
+    artistIdentifier: @Sendable (_ artist: String) -> ID,
+    showIdentifier: @Sendable (_ artist: String) -> ID,
+    annumIdentifier: @Sendable (_ annum: PartialDate) -> AnnumID
+  ) {
     var signpost = Signpost(category: "tracker", name: "process")
     signpost.start()
 
     shows.sorted { lhs, rhs in
       PartialDate.compareWithUnknownsMuted(lhs: lhs.date, rhs: rhs.date)
-    }.forEach { track(show: $0) }
+    }.forEach {
+      track(
+        show: $0,
+        venueIdentifier: venueIdentifier,
+        artistIdentifier: artistIdentifier,
+        showIdentifier: showIdentifier,
+        annumIdentifier: annumIdentifier)
+    }
   }
 
   private func computeRankings<T: Sendable>(_ items: [(T, Int)]) async -> [T: Ranking] {
@@ -98,55 +127,55 @@ struct Tracker {
     return await computeRankings(await items)
   }
 
-  private func artistRankings() async -> [Artist.ID: Ranking] {
+  private func artistRankings() async -> [ID: Ranking] {
     await computeRankings { artistCounts.map { $0 } }
   }
 
-  private func venueRankings() async -> [Venue.ID: Ranking] {
+  private func venueRankings() async -> [ID: Ranking] {
     await computeRankings { venueCounts.map { $0 } }
   }
 
-  private func artistSpanRankings() async -> [Artist.ID: Ranking] {
+  private func artistSpanRankings() async -> [ID: Ranking] {
     await computeRankings { artistSpanDates.mapValues { $0.yearSpan }.map { $0 } }
   }
 
-  private func venueSpanRankings() async -> [Venue.ID: Ranking] {
+  private func venueSpanRankings() async -> [ID: Ranking] {
     await computeRankings { venueSpanDates.mapValues { $0.yearSpan }.map { $0 } }
   }
 
-  private func artistVenueRankings() async -> [Artist.ID: Ranking] {
+  private func artistVenueRankings() async -> [ID: Ranking] {
     await computeRankings { artistVenues.mapValues { $0.count }.map { $0 } }
   }
 
-  private func venueArtistRankings() async -> [Venue.ID: Ranking] {
+  private func venueArtistRankings() async -> [ID: Ranking] {
     await computeRankings { venueArtists.mapValues { $0.count }.map { $0 } }
   }
 
-  private func annumShowRankings() async -> [Annum: Ranking] {
+  private func annumShowRankings() async -> [AnnumID: Ranking] {
     await computeRankings { annumShows.mapValues { $0.count }.map { $0 } }
   }
 
-  private func annumVenueRankings() async -> [Annum: Ranking] {
+  private func annumVenueRankings() async -> [AnnumID: Ranking] {
     await computeRankings { annumVenues.mapValues { $0.count }.map { $0 } }
   }
 
-  private func annumArtistRankings() async -> [Annum: Ranking] {
+  private func annumArtistRankings() async -> [AnnumID: Ranking] {
     await computeRankings { annumArtists.mapValues { $0.count }.map { $0 } }
   }
 
-  func decadesMap() async -> [Decade: [Annum: Set<Show.ID>]] {
-    async let r = annumShows.reduce(into: [Decade: [Annum: Set<Show.ID>]]()) {
-      let decade = $1.key.decade
-      var d = $0[decade] ?? [Annum: Set<Show.ID>]()
+  func decadesMap(decade: @Sendable (AnnumID) -> Decade) async -> [Decade: [AnnumID: Set<ID>]] {
+    async let r = annumShows.reduce(into: [Decade: [AnnumID: Set<ID>]]()) {
+      let decade = decade($1.key)
+      var d = $0[decade] ?? [AnnumID: Set<ID>]()
       d[$1.key] = $1.value
       $0[decade] = d
     }
     return await r
   }
 
-  private func artistFirstSets() async -> [Artist.ID: FirstSet] {
+  private func artistFirstSets() async -> [ID: FirstSet] {
     var order = 1
-    async let r = artistOrder.reduce(into: [Artist.ID: FirstSet]()) {
+    async let r = artistOrder.reduce(into: [ID: FirstSet]()) {
       guard
         let firstDate = artistSpanDates[$1]?.sorted(
           by: PartialDate.compareWithUnknownsMuted(lhs:rhs:)
@@ -158,9 +187,9 @@ struct Tracker {
     return await r
   }
 
-  private func venueFirstSets() async -> [Venue.ID: FirstSet] {
+  private func venueFirstSets() async -> [ID: FirstSet] {
     var order = 1
-    async let r = venueOrder.reduce(into: [Venue.ID: FirstSet]()) {
+    async let r = venueOrder.reduce(into: [ID: FirstSet]()) {
       guard
         let firstDate = venueSpanDates[$1]?.sorted(
           by: PartialDate.compareWithUnknownsMuted(lhs:rhs:)
@@ -188,7 +217,7 @@ struct Tracker {
     }
   }
 
-  func artistRankDigests() async -> [Artist.ID: RankDigest] {
+  func artistRankDigests() async -> [ID: RankDigest] {
     async let firstSets = await artistFirstSets()
     async let spanRankings = await artistSpanRankings()
     async let showRankings = await artistRankings()
@@ -199,7 +228,7 @@ struct Tracker {
       showRankings: await showRankings, associatedRankings: await associatedRankings)
   }
 
-  func venueRankDigests() async -> [Venue.ID: RankDigest] {
+  func venueRankDigests() async -> [ID: RankDigest] {
     async let firstSets = await venueFirstSets()
     async let spanRankings = await venueSpanRankings()
     async let showRankings = await venueRankings()
@@ -210,7 +239,7 @@ struct Tracker {
       showRankings: await showRankings, associatedRankings: await associatedRankings)
   }
 
-  func annumRankDigests() async -> [Annum: RankDigest] {
+  func annumRankDigests() async -> [AnnumID: RankDigest] {
     // These names do not quite work.
     async let spanRankings = await annumVenueRankings()
     async let showRankings = await annumShowRankings()
