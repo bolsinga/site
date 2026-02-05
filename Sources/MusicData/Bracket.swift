@@ -20,29 +20,41 @@ extension Music {
   }
 }
 
-struct Bracket: Codable, Sendable {
+struct Bracket<ID, AnnumID>: Codable, Sendable
+where
+  ID: Codable, ID: Hashable, ID: Sendable,
+  AnnumID: Codable, AnnumID: Hashable, AnnumID: Sendable
+{
   let librarySortTokenMap: [String: String]  // String ID : tokenized LibraryComparable name for fast sorting.
-  let artistRankDigestMap: [Artist.ID: RankDigest]
-  let venueRankDigestMap: [Venue.ID: RankDigest]
-  let annumRankDigestMap: [Annum: RankDigest]
-  let decadesMap: [Decade: [Annum: Set<Show.ID>]]
-  let concertDayMap: [Int: Set<Concert.ID>]
+  let artistRankDigestMap: [ID: RankDigest]
+  let venueRankDigestMap: [ID: RankDigest]
+  let annumRankDigestMap: [AnnumID: RankDigest]
+  let decadesMap: [Decade: [AnnumID: Set<ID>]]
+  let concertDayMap: [Int: Set<ID>]
 
-  init(music: Music) async {
+  init(
+    music: Music,
+    venueIdentifier: @Sendable (_ venue: String) -> ID,
+    artistIdentifier: @Sendable (_ artist: String) -> ID,
+    showIdentifier: @Sendable (_ artist: String) -> ID,
+    annumIdentifier: @Sendable (_ annum: PartialDate) -> AnnumID,
+    decadeIdentifier: @Sendable (AnnumID) -> Decade
+  ) async {
     var signpost = Signpost(category: "bracket", name: "process")
     signpost.start()
 
     async let librarySortTokenMap = music.librarySortTokenMap
+
     async let tracker = music.tracker(
-      venueIdentifier: { $0 },
-      artistIdentifier: { $0 },
-      showIdentifier: { $0 },
-      annumIdentifier: { $0.annum })
+      venueIdentifier: venueIdentifier,
+      artistIdentifier: artistIdentifier,
+      showIdentifier: showIdentifier,
+      annumIdentifier: annumIdentifier)
 
     self.artistRankDigestMap = await tracker.artistRankDigests()
     self.venueRankDigestMap = await tracker.venueRankDigests()
     self.annumRankDigestMap = await tracker.annumRankDigests()
-    self.decadesMap = await tracker.decadesMap(decade: { $0.decade })
+    self.decadesMap = await tracker.decadesMap(decade: decadeIdentifier)
     self.concertDayMap = await tracker.dayOfLeapYearShows
 
     self.librarySortTokenMap = await librarySortTokenMap
