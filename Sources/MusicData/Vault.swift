@@ -65,7 +65,7 @@ extension Venue {
 }
 
 public struct Vault: Sendable {
-  public let comparator: LibraryComparator
+  public let comparator: LibraryComparator<String>
   public let sectioner: LibrarySectioner<String>
   public let rootURL: URL
   public let concertMap: [Concert.ID: Concert]

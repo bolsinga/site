@@ -12,24 +12,27 @@ extension Logger {
   fileprivate static let libraryComparator = Logger(category: "libraryComparator")
 }
 
-public struct LibraryComparator: Codable, Sendable {
-  private let tokenMap: [String: String]
+public struct LibraryComparator<ID>: Codable, Sendable
+where ID: Codable, ID: Hashable, ID: Sendable {
+  private let tokenMap: [ID: String]
 
-  public init(tokenMap: [String: String] = [:]) {
+  public init(tokenMap: [ID: String] = [:]) {
     self.tokenMap = tokenMap
   }
 
-  public func libraryCompare<T>(lhs: T, rhs: T) -> Bool where T: LibraryComparable, T.ID == String {
+  public func libraryCompare<T>(lhs: T, rhs: T) -> Bool where T: LibraryComparable, T.ID == ID {
     let lhToken =
       tokenMap[lhs.id]
       ?? {
-        Logger.libraryComparator.debug("\(lhs.id, privacy: .public) not in map.")
+        Logger.libraryComparator.debug(
+          "\(String(describing: lhs.id), privacy: .public) not in map.")
         return LibraryCompareTokenizer().removeCommonInitialPunctuation(lhs.librarySortString)
       }()
     let rhToken =
       tokenMap[rhs.id]
       ?? {
-        Logger.libraryComparator.debug("\(rhs.id, privacy: .public) not in map.")
+        Logger.libraryComparator.debug(
+          "\(String(describing: rhs.id), privacy: .public) not in map.")
         return LibraryCompareTokenizer().removeCommonInitialPunctuation(rhs.librarySortString)
       }()
     return libraryCompareTokens(lhs: lhToken, rhs: rhToken)

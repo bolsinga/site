@@ -8,14 +8,16 @@
 import Foundation
 
 extension Music {
-  fileprivate var librarySortTokenMap: [String: String] {
+  fileprivate func librarySortTokenMap<Identifier: ArchiveIdentifier>(_ identifier: Identifier)
+    -> [Identifier.ID: String]
+  {
     let tokenizer = LibraryCompareTokenizer()
     return artists.reduce(
       into: venues.reduce(into: [:]) {
-        $0[$1.id] = tokenizer.removeCommonInitialPunctuation($1.librarySortString)
+        $0[identifier.venue($1.id)] = tokenizer.removeCommonInitialPunctuation($1.librarySortString)
       }
     ) {
-      $0[$1.id] = tokenizer.removeCommonInitialPunctuation($1.librarySortString)
+      $0[identifier.artist($1.id)] = tokenizer.removeCommonInitialPunctuation($1.librarySortString)
     }
   }
 }
@@ -24,7 +26,7 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
   typealias ID = Identifier.ID
   typealias AnnumID = Identifier.AnnumID
 
-  let librarySortTokenMap: [String: String]  // String ID : tokenized LibraryComparable name for fast sorting.
+  let librarySortTokenMap: [ID: String]  // ID : tokenized LibraryComparable name for fast sorting.
   let artistRankDigestMap: [ID: RankDigest]
   let venueRankDigestMap: [ID: RankDigest]
   let annumRankDigestMap: [AnnumID: RankDigest]
@@ -35,7 +37,7 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
     var signpost = Signpost(category: "bracket", name: "process")
     signpost.start()
 
-    async let librarySortTokenMap = music.librarySortTokenMap
+    async let librarySortTokenMap = music.librarySortTokenMap(identifier)
 
     async let tracker = music.tracker(identifier: identifier)
 
