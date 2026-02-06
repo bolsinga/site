@@ -24,11 +24,10 @@ extension Dictionary where Value == Int {
   }
 }
 
-struct Tracker<ID, AnnumID>
-where
-  ID: Codable, ID: Hashable, ID: Sendable,
-  AnnumID: Codable, AnnumID: Hashable, AnnumID: Sendable
-{
+struct Tracker<Identifier: ArchiveIdentifier> {
+  typealias ID = Identifier.ID
+  typealias AnnumID = Identifier.AnnumID
+
   // Unsure how to make this generic over whatever Set.Element may be.
   private func insert<Key>(into dictionary: inout [Key: Set<ID>], key: Key, value: ID) {
     var v = dictionary[key] ?? Set<ID>()
@@ -54,24 +53,18 @@ where
 
   var dayOfLeapYearShows = [Int: Set<ID>]()
 
-  private mutating func track(
-    show: Show,
-    venueIdentifier: @Sendable (_ venue: String) -> ID,
-    artistIdentifier: @Sendable (_ artist: String) -> ID,
-    showIdentifier: @Sendable (_ artist: String) -> ID,
-    annumIdentifier: @Sendable (_ annum: PartialDate) -> AnnumID
-  ) {
-    let showID = showIdentifier(show.id)
+  private mutating func track(show: Show, identifier: Identifier) {
+    let showID = identifier.show(show.id)
 
-    let venueID = venueIdentifier(show.venue)
+    let venueID = identifier.venue(show.venue)
     venueSpanDates.insert(key: venueID, value: show.date)
     venueCounts.increment(key: venueID)
     venueOrder.append(venueID)
 
-    let annumID = annumIdentifier(show.date)
+    let annumID = identifier.annum(show.date)
 
     show.artists.reversed().forEach {
-      let artistID = artistIdentifier($0)
+      let artistID = identifier.artist($0)
 
       insert(into: &venueArtists, key: venueID, value: artistID)
 
@@ -93,25 +86,14 @@ where
     }
   }
 
-  init(
-    shows: [Show],
-    venueIdentifier: @Sendable (_ venue: String) -> ID,
-    artistIdentifier: @Sendable (_ artist: String) -> ID,
-    showIdentifier: @Sendable (_ artist: String) -> ID,
-    annumIdentifier: @Sendable (_ annum: PartialDate) -> AnnumID
-  ) {
+  init(shows: [Show], identifier: Identifier) {
     var signpost = Signpost(category: "tracker", name: "process")
     signpost.start()
 
     shows.sorted { lhs, rhs in
       PartialDate.compareWithUnknownsMuted(lhs: lhs.date, rhs: rhs.date)
     }.forEach {
-      track(
-        show: $0,
-        venueIdentifier: venueIdentifier,
-        artistIdentifier: artistIdentifier,
-        showIdentifier: showIdentifier,
-        annumIdentifier: annumIdentifier)
+      track(show: $0, identifier: identifier)
     }
   }
 

@@ -9,7 +9,7 @@ import ArgumentParser
 import Foundation
 
 private struct OrderedBracket: Encodable {
-  let bracket: Bracket<ArchivePath, ArchivePath>
+  let bracket: Bracket<ArchivePathIdentifier>
 
   private enum Keys: String, CodingKey {
     case librarySortTokenMap
