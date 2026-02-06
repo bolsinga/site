@@ -73,6 +73,13 @@ struct ArchivePathTests {
     #expect(throws: (any Error).self) { try ArchivePath(" ") }
   }
 
+  @Test func parseRaw() throws {
+    #expect(try ArchivePath(raw: "sh100") == ArchivePath.show("sh100"))
+    #expect(try ArchivePath(raw: "ar100") == ArchivePath.artist("ar100"))
+    #expect(try ArchivePath(raw: "v100") == ArchivePath.venue("v100"))
+    #expect(throws: (any Error).self) { try ArchivePath(raw: "g100") }
+  }
+
   @Test func uRLFormat() throws {
     #expect(
       try ArchivePath(URL(string: "https://www.example.com/bands/ar852.html")!)
