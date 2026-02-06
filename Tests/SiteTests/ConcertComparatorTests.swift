@@ -19,20 +19,20 @@ struct ConcertComparatorTests {
   let artist1 = Artist(id: "ar0", name: "A Artist")
   let artist2 = Artist(id: "ar1", name: "B Artist")
 
-  func createVault(artists: [Artist], shows: [Show], venues: [Venue]) async -> Vault {
-    await Vault(
+  func createVault(artists: [Artist], shows: [Show], venues: [Venue]) async throws -> Vault {
+    try await Vault(
       music: Music(
         albums: [], artists: artists, relations: [], shows: shows, songs: [], timestamp: Date(),
         venues: venues), url: URL(string: "https://www.example.com/")!)
   }
 
-  @Test func differentDates() async {
+  @Test func differentDates() async throws {
     let dateLater = PartialDate(year: date.year! + 1, month: 1, day: 15)
 
     let show1 = Show(artists: [artist1.id], date: date, id: "sh0", venue: venue1.id)
     let show2 = Show(artists: [artist2.id], date: dateLater, id: "sh1", venue: venue2.id)
 
-    let vaultTest = await createVault(
+    let vaultTest = try await createVault(
       artists: [artist1, artist2], shows: [show1, show2], venues: [venue1, venue2])
 
     let concert1 = vaultTest.concertMap[show1.id]!
@@ -43,11 +43,11 @@ struct ConcertComparatorTests {
     #expect(!vaultTest.comparator.compare(lhs: concert2, rhs: concert1))
   }
 
-  @Test func sameDates_differentVenues() async {
+  @Test func sameDates_differentVenues() async throws {
     let show1 = Show(artists: [artist1.id], date: date, id: "sh0", venue: venue1.id)
     let show2 = Show(artists: [artist2.id], date: date, id: "sh1", venue: venue2.id)
 
-    let vaultTest = await createVault(
+    let vaultTest = try await createVault(
       artists: [artist1, artist2], shows: [show1, show2], venues: [venue1, venue2])
 
     let concert1 = vaultTest.concertMap[show1.id]!
@@ -58,11 +58,11 @@ struct ConcertComparatorTests {
     #expect(vaultTest.comparator.compare(lhs: concert2, rhs: concert1))
   }
 
-  @Test func sameDates_sameVenues_differentArtists() async {
+  @Test func sameDates_sameVenues_differentArtists() async throws {
     let show1 = Show(artists: [artist1.id], date: date, id: "sh0", venue: venue1.id)
     let show2 = Show(artists: [artist2.id], date: date, id: "sh1", venue: venue1.id)
 
-    let vaultTest = await createVault(
+    let vaultTest = try await createVault(
       artists: [artist1, artist2], shows: [show1, show2], venues: [venue1, venue2])
 
     let concert1 = vaultTest.concertMap[show1.id]!
@@ -73,11 +73,11 @@ struct ConcertComparatorTests {
     #expect(!vaultTest.comparator.compare(lhs: concert2, rhs: concert1))
   }
 
-  @Test func sameDates_sameVenues_sameArtists() async {
+  @Test func sameDates_sameVenues_sameArtists() async throws {
     let show1 = Show(artists: [artist1.id], date: date, id: "sh0", venue: venue1.id)
     let show2 = Show(artists: [artist1.id], date: date, id: "sh1", venue: venue1.id)
 
-    let vaultTest = await createVault(
+    let vaultTest = try await createVault(
       artists: [artist1, artist2], shows: [show1, show2], venues: [venue1, venue2])
 
     let concert1 = vaultTest.concertMap[show1.id]!
@@ -88,11 +88,11 @@ struct ConcertComparatorTests {
     #expect(!vaultTest.comparator.compare(lhs: concert2, rhs: concert1))
   }
 
-  @Test func edgeCase() async {
+  @Test func edgeCase() async throws {
     let show1 = Show(artists: [artist1.id], date: date, id: "sh0", venue: venue1.id)
     let show2 = show1
 
-    let vaultTest = await createVault(
+    let vaultTest = try await createVault(
       artists: [artist1, artist2], shows: [show1, show2], venues: [venue1, venue2])
 
     let concert1 = vaultTest.concertMap[show1.id]!
