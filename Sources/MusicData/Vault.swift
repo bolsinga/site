@@ -8,20 +8,21 @@
 import Foundation
 
 extension Annum {
-  fileprivate func digest(sortedConcerts: [Concert], lookup: Lookup) -> AnnumDigest {
+  fileprivate func digest(sortedConcerts: [Concert], lookup: Lookup<String, Annum>) -> AnnumDigest {
     AnnumDigest(
       annum: self,
       shows: sortedConcerts.compactMap {
         guard $0.show.date.annum == self else { return nil }
         return $0.digest
       },
-      rank: lookup.rankDigest(for: self)
+      rank: lookup.rankDigest(annum: self)
     )
   }
 }
 
 extension Artist {
-  fileprivate func digest(sortedConcerts: [Concert], lookup: Lookup) -> ArtistDigest {
+  fileprivate func digest(sortedConcerts: [Concert], lookup: Lookup<String, Annum>) -> ArtistDigest
+  {
     ArtistDigest(
       artist: self,
       shows: sortedConcerts.compactMap {
@@ -29,7 +30,7 @@ extension Artist {
         return $0.digest
       },
       related: lookup.related(self),
-      rank: lookup.rankDigest(for: self))
+      rank: lookup.rankDigest(artist: self.id))
   }
 }
 
@@ -42,13 +43,13 @@ extension Concert {
 }
 
 extension Show {
-  fileprivate func concert(lookup: Lookup) -> Concert {
+  fileprivate func concert(lookup: Lookup<String, Annum>) -> Concert {
     Concert(show: self, venue: lookup.venueForShow(self), artists: lookup.artistsForShow(self))
   }
 }
 
 extension Venue {
-  fileprivate func digest(sortedConcerts: [Concert], lookup: Lookup) -> VenueDigest {
+  fileprivate func digest(sortedConcerts: [Concert], lookup: Lookup<String, Annum>) -> VenueDigest {
     VenueDigest(
       venue: self,
       shows: sortedConcerts.compactMap {
@@ -56,7 +57,7 @@ extension Venue {
         return $0.digest
       },
       related: lookup.related(self),
-      rank: lookup.rankDigest(for: self))
+      rank: lookup.rankDigest(venue: self.id))
   }
 }
 
@@ -81,7 +82,13 @@ public struct Vault: Sendable {
     var signpost = Signpost(category: "vault", name: "process")
     signpost.start()
 
-    async let asyncLookup = await Lookup(music: music)
+    async let asyncLookup = await Lookup<String, Annum>(
+      music: music,
+      venueIdentifier: { $0 },
+      artistIdentifier: { $0 },
+      showIdentifier: { $0 },
+      annumIdentifier: { $0.annum },
+      decadeIdentifier: { $0.decade })
     let lookup = await asyncLookup
     async let asyncComparator = LibraryComparator(tokenMap: lookup.librarySortTokenMap)
     async let sectioner = await LibrarySectioner<String>(
