@@ -16,36 +16,22 @@ private func createLookup<T: Identifiable>(_ sequence: [T]) -> [T.ID: T] {
   sequence.reduce(into: [:]) { $0[$1.id] = $1 }
 }
 
-public struct Lookup<ID, AnnumID>: Sendable
-where
-  ID: Codable, ID: Hashable, ID: Sendable,
-  AnnumID: Codable, AnnumID: Hashable, AnnumID: Sendable
-{
+public struct Lookup<Identifier: ArchiveIdentifier>: Sendable {
+  public typealias ID = Identifier.ID
+  public typealias AnnumID = Identifier.AnnumID
+
   private let artistMap: [Artist.ID: Artist]
   private let venueMap: [Venue.ID: Venue]
-  private let bracket: Bracket<ID, AnnumID>
+  private let bracket: Bracket<Identifier>
   private let relationMap: [String: [String]]  // Artist/Venue ID : [Artist/Venue ID]
 
-  public init(
-    music: Music,
-    venueIdentifier: @Sendable (_ venue: String) -> ID,
-    artistIdentifier: @Sendable (_ artist: String) -> ID,
-    showIdentifier: @Sendable (_ artist: String) -> ID,
-    annumIdentifier: @Sendable (_ annum: PartialDate) -> AnnumID,
-    decadeIdentifier: @Sendable (AnnumID) -> Decade
-  ) async {
+  public init(music: Music, identifier: Identifier) async {
     var signpost = Signpost(category: "lookup", name: "process")
     signpost.start()
 
     async let artistLookup = createLookup(music.artists)
     async let venueLookup = createLookup(music.venues)
-    async let bracket = await Bracket(
-      music: music,
-      venueIdentifier: venueIdentifier,
-      artistIdentifier: artistIdentifier,
-      showIdentifier: showIdentifier,
-      annumIdentifier: annumIdentifier,
-      decadeIdentifier: decadeIdentifier)
+    async let bracket = await Bracket(music: music, identifier: identifier)
     async let relations = music.relationMap
 
     self.artistMap = await artistLookup

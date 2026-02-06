@@ -8,18 +8,8 @@
 import Foundation
 
 extension Music {
-  func tracker<ID, AnnumID>(
-    venueIdentifier: @Sendable (_ venue: String) -> ID,
-    artistIdentifier: @Sendable (_ artist: String) -> ID,
-    showIdentifier: @Sendable (_ artist: String) -> ID,
-    annumIdentifier: @Sendable (_ annum: PartialDate) -> AnnumID
-  ) -> Tracker<ID, AnnumID> {
-    Tracker(
-      shows: self.shows,
-      venueIdentifier: venueIdentifier,
-      artistIdentifier: artistIdentifier,
-      showIdentifier: showIdentifier,
-      annumIdentifier: annumIdentifier)
+  func tracker<Identifier: ArchiveIdentifier>(identifier: Identifier) -> Tracker<Identifier> {
+    Tracker(shows: self.shows, identifier: identifier)
   }
 
   var relationMap: [String: [String]] {

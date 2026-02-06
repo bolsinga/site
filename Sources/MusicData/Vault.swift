@@ -8,7 +8,8 @@
 import Foundation
 
 extension Annum {
-  fileprivate func digest(sortedConcerts: [Concert], lookup: Lookup<String, Annum>) -> AnnumDigest {
+  fileprivate func digest(sortedConcerts: [Concert], lookup: Lookup<BasicIdentifier>) -> AnnumDigest
+  {
     AnnumDigest(
       annum: self,
       shows: sortedConcerts.compactMap {
@@ -21,7 +22,8 @@ extension Annum {
 }
 
 extension Artist {
-  fileprivate func digest(sortedConcerts: [Concert], lookup: Lookup<String, Annum>) -> ArtistDigest
+  fileprivate func digest(sortedConcerts: [Concert], lookup: Lookup<BasicIdentifier>)
+    -> ArtistDigest
   {
     ArtistDigest(
       artist: self,
@@ -43,13 +45,14 @@ extension Concert {
 }
 
 extension Show {
-  fileprivate func concert(lookup: Lookup<String, Annum>) -> Concert {
+  fileprivate func concert(lookup: Lookup<BasicIdentifier>) -> Concert {
     Concert(show: self, venue: lookup.venueForShow(self), artists: lookup.artistsForShow(self))
   }
 }
 
 extension Venue {
-  fileprivate func digest(sortedConcerts: [Concert], lookup: Lookup<String, Annum>) -> VenueDigest {
+  fileprivate func digest(sortedConcerts: [Concert], lookup: Lookup<BasicIdentifier>) -> VenueDigest
+  {
     VenueDigest(
       venue: self,
       shows: sortedConcerts.compactMap {
@@ -82,13 +85,7 @@ public struct Vault: Sendable {
     var signpost = Signpost(category: "vault", name: "process")
     signpost.start()
 
-    async let asyncLookup = await Lookup<String, Annum>(
-      music: music,
-      venueIdentifier: { $0 },
-      artistIdentifier: { $0 },
-      showIdentifier: { $0 },
-      annumIdentifier: { $0.annum },
-      decadeIdentifier: { $0.decade })
+    async let asyncLookup = await Lookup(music: music, identifier: BasicIdentifier())
     let lookup = await asyncLookup
     async let asyncComparator = LibraryComparator(tokenMap: lookup.librarySortTokenMap)
     async let sectioner = await LibrarySectioner<String>(
