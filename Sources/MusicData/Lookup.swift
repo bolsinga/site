@@ -40,7 +40,7 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Sendable {
     self.relationMap = await relations
   }
 
-  var librarySortTokenMap: [String: String] {
+  var librarySortTokenMap: [ID: String] {
     bracket.librarySortTokenMap
   }
 

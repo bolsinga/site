@@ -23,7 +23,7 @@ extension String {
 }
 
 struct LibraryComparatorTests {
-  let comparator = LibraryComparator()
+  let comparator = LibraryComparator<String>()
 
   @Test func stringBasic() {
     #expect(comparator.libraryCompare(lhs: "A", rhs: "B"))

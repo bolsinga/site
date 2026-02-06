@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension LibraryComparator {
+extension LibraryComparator where ID == String {
   public func compare(lhs: Concert, rhs: Concert) -> Bool {
     let lhShow = lhs.show
     let rhShow = rhs.show
