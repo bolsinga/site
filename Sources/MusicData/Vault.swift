@@ -81,12 +81,12 @@ public struct Vault: Sendable {
 
   private let concertDayMap: [Int: Set<Concert.ID>]
 
-  public init(music: Music, url: URL) async {
+  public init(music: Music, url: URL) async throws {
     var signpost = Signpost(category: "vault", name: "process")
     signpost.start()
 
     async let asyncLookup = await Lookup(music: music, identifier: BasicIdentifier())
-    let lookup = await asyncLookup
+    let lookup = try await asyncLookup
     async let asyncComparator = LibraryComparator(tokenMap: lookup.librarySortTokenMap)
     async let sectioner = await LibrarySectioner<String>(
       librarySortTokenMap: lookup.librarySortTokenMap)

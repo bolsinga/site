@@ -8,8 +8,9 @@
 import Foundation
 
 extension Music {
-  func tracker<Identifier: ArchiveIdentifier>(identifier: Identifier) -> Tracker<Identifier> {
-    Tracker(shows: self.shows, identifier: identifier)
+  func tracker<Identifier: ArchiveIdentifier>(identifier: Identifier) throws -> Tracker<Identifier>
+  {
+    try Tracker(shows: self.shows, identifier: identifier)
   }
 
   var relationMap: [String: [String]] {

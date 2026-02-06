@@ -9,6 +9,6 @@ import Foundation
 
 extension RootURLArguments {
   func bracket() async throws -> Bracket<ArchivePathIdentifier> {
-    await Bracket(music: try await music().showsOnly, identifier: ArchivePathIdentifier())
+    try await Bracket(music: try await music().showsOnly, identifier: ArchivePathIdentifier())
   }
 }

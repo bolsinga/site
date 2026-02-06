@@ -53,18 +53,18 @@ struct Tracker<Identifier: ArchiveIdentifier> {
 
   var dayOfLeapYearShows = [Int: Set<ID>]()
 
-  private mutating func track(show: Show, identifier: Identifier) {
-    let showID = identifier.show(show.id)
+  private mutating func track(show: Show, identifier: Identifier) throws {
+    let showID = try identifier.show(show.id)
 
-    let venueID = identifier.venue(show.venue)
+    let venueID = try identifier.venue(show.venue)
     venueSpanDates.insert(key: venueID, value: show.date)
     venueCounts.increment(key: venueID)
     venueOrder.append(venueID)
 
-    let annumID = identifier.annum(show.date)
+    let annumID = try identifier.annum(show.date)
 
-    show.artists.reversed().forEach {
-      let artistID = identifier.artist($0)
+    try show.artists.reversed().forEach {
+      let artistID = try identifier.artist($0)
 
       insert(into: &venueArtists, key: venueID, value: artistID)
 
@@ -86,14 +86,14 @@ struct Tracker<Identifier: ArchiveIdentifier> {
     }
   }
 
-  init(shows: [Show], identifier: Identifier) {
+  init(shows: [Show], identifier: Identifier) throws {
     var signpost = Signpost(category: "tracker", name: "process")
     signpost.start()
 
-    shows.sorted { lhs, rhs in
+    try shows.sorted { lhs, rhs in
       PartialDate.compareWithUnknownsMuted(lhs: lhs.date, rhs: rhs.date)
     }.forEach {
-      track(show: $0, identifier: identifier)
+      try track(show: $0, identifier: identifier)
     }
   }
 

@@ -25,7 +25,7 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Sendable {
   private let bracket: Bracket<Identifier>
   private let relationMap: [String: [String]]  // Artist/Venue ID : [Artist/Venue ID]
 
-  public init(music: Music, identifier: Identifier) async {
+  public init(music: Music, identifier: Identifier) async throws {
     var signpost = Signpost(category: "lookup", name: "process")
     signpost.start()
 
@@ -36,7 +36,7 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Sendable {
 
     self.artistMap = await artistLookup
     self.venueMap = await venueLookup
-    self.bracket = await bracket
+    self.bracket = try await bracket
     self.relationMap = await relations
   }
 
