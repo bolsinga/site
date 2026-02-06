@@ -9,15 +9,17 @@ import Foundation
 
 extension Music {
   fileprivate func librarySortTokenMap<Identifier: ArchiveIdentifier>(_ identifier: Identifier)
-    -> [Identifier.ID: String]
+    throws -> [Identifier.ID: String]
   {
     let tokenizer = LibraryCompareTokenizer()
-    return artists.reduce(
-      into: venues.reduce(into: [:]) {
-        $0[identifier.venue($1.id)] = tokenizer.removeCommonInitialPunctuation($1.librarySortString)
+    return try artists.reduce(
+      into: try venues.reduce(into: [:]) {
+        $0[try identifier.venue($1.id)] = tokenizer.removeCommonInitialPunctuation(
+          $1.librarySortString)
       }
     ) {
-      $0[identifier.artist($1.id)] = tokenizer.removeCommonInitialPunctuation($1.librarySortString)
+      $0[try identifier.artist($1.id)] = tokenizer.removeCommonInitialPunctuation(
+        $1.librarySortString)
     }
   }
 }
@@ -33,7 +35,7 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
   let decadesMap: [Decade: [AnnumID: Set<ID>]]
   let concertDayMap: [Int: Set<ID>]
 
-  init(music: Music, identifier: Identifier) async {
+  init(music: Music, identifier: Identifier) async throws {
     var signpost = Signpost(category: "bracket", name: "process")
     signpost.start()
 
@@ -41,12 +43,12 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
 
     async let tracker = music.tracker(identifier: identifier)
 
-    self.artistRankDigestMap = await tracker.artistRankDigests()
-    self.venueRankDigestMap = await tracker.venueRankDigests()
-    self.annumRankDigestMap = await tracker.annumRankDigests()
-    self.decadesMap = await tracker.decadesMap(decade: { identifier.decade($0) })
-    self.concertDayMap = await tracker.dayOfLeapYearShows
+    self.artistRankDigestMap = try await tracker.artistRankDigests()
+    self.venueRankDigestMap = try await tracker.venueRankDigests()
+    self.annumRankDigestMap = try await tracker.annumRankDigests()
+    self.decadesMap = try await tracker.decadesMap(decade: { identifier.decade($0) })
+    self.concertDayMap = try await tracker.dayOfLeapYearShows
 
-    self.librarySortTokenMap = await librarySortTokenMap
+    self.librarySortTokenMap = try await librarySortTokenMap
   }
 }
