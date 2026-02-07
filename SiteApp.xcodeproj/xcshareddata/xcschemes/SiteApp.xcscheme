@@ -71,6 +71,10 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
+            argument = "dumpLookup"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
             argument = "nextID"
             isEnabled = "NO">
          </CommandLineArgument>

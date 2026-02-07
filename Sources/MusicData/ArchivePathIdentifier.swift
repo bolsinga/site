@@ -16,4 +16,5 @@ struct ArchivePathIdentifier: ArchiveIdentifier {
     guard case .year(let year) = annum else { return .unknown }
     return year.decade
   }
+  func relation(_ id: String) throws -> ArchivePath { try ArchivePath(raw: id) }
 }
