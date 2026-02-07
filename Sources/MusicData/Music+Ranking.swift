@@ -7,6 +7,16 @@
 
 import Foundation
 
+extension Relation {
+  var relationMap: [String: Set<String>] {
+    members.reduce(into: [String: Set<String>]()) { d, id in
+      var arr = d[id] ?? []
+      arr = arr.union(members.filter { $0 != id })
+      d[id] = arr
+    }
+  }
+}
+
 extension Music {
   func tracker<Identifier: ArchiveIdentifier>(identifier: Identifier) throws -> Tracker<Identifier>
   {
@@ -15,11 +25,7 @@ extension Music {
 
   var relationMap: [String: Set<String>] {
     relations.reduce(into: [String: Set<String>]()) { d, relation in
-      d = relation.members.reduce(into: d) { d, id in
-        var arr = (d[id] ?? [])
-        arr = arr.union(relation.members.filter { $0 != id })
-        d[id] = arr
-      }
+      d.merge(relation.relationMap) { $0.union($1) }
     }
   }
 }
