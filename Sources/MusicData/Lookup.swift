@@ -23,7 +23,7 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Sendable {
   private let artistMap: [Artist.ID: Artist]
   private let venueMap: [Venue.ID: Venue]
   private let bracket: Bracket<Identifier>
-  private let relationMap: [String: [String]]  // Artist/Venue ID : [Artist/Venue ID]
+  private let relationMap: [String: Set<String>]  // Artist/Venue ID : Set<Artist/Venue ID>
 
   public init(music: Music, identifier: Identifier) async throws {
     var signpost = Signpost(category: "lookup", name: "process")
@@ -85,13 +85,13 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Sendable {
     bracket.venueRankDigestMap[venue] ?? .empty
   }
 
-  public func related(_ item: Venue) -> [Related] {
+  public func related(_ item: Venue) -> any Collection<Related> {
     relationMap[item.id]?.compactMap { venueMap[$0] }.map {
       Related(id: $0.archivePath, name: $0.name)
     } ?? []
   }
 
-  public func related(_ item: Artist) -> [Related] {
+  public func related(_ item: Artist) -> any Collection<Related> {
     relationMap[item.id]?.compactMap { artistMap[$0] }.map {
       Related(id: $0.archivePath, name: $0.name)
     } ?? []

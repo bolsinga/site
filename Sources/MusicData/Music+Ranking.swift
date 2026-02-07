@@ -13,11 +13,11 @@ extension Music {
     try Tracker(shows: self.shows, identifier: identifier)
   }
 
-  var relationMap: [String: [String]] {
-    relations.reduce(into: [String: [String]]()) { d, relation in
+  var relationMap: [String: Set<String>] {
+    relations.reduce(into: [String: Set<String>]()) { d, relation in
       d = relation.members.reduce(into: d) { d, id in
         var arr = (d[id] ?? [])
-        arr = Array(Set(arr).union(relation.members.filter { $0 != id }))
+        arr = arr.union(relation.members.filter { $0 != id })
         d[id] = arr
       }
     }

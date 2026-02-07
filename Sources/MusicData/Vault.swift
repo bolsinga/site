@@ -31,7 +31,7 @@ extension Artist {
         guard $0.show.artists.contains(id) else { return nil }
         return $0.digest
       },
-      related: lookup.related(self),
+      related: lookup.related(self).sorted(by: { $0.name < $1.name }),
       rank: lookup.rankDigest(artist: self.id))
   }
 }
@@ -59,7 +59,7 @@ extension Venue {
         guard $0.show.venue == id else { return nil }
         return $0.digest
       },
-      related: lookup.related(self),
+      related: lookup.related(self).sorted(by: { $0.name < $1.name }),
       rank: lookup.rankDigest(venue: self.id))
   }
 }
