@@ -126,6 +126,41 @@ extension ArchivePath.FormatStyle {
       }
     }
   }
+
+  public struct RawParseStrategy: Foundation.ParseStrategy {
+    enum ValidationError: Error {
+      case emptyInput
+      case invalidPrefix
+    }
+
+    static let validPrefixSet = CharacterSet(charactersIn: ArchivePath.showPrefix)
+      .union(CharacterSet(charactersIn: ArchivePath.venuePrefix))
+      .union(CharacterSet(charactersIn: ArchivePath.artistPrefix))
+
+    public init() {}
+
+    public func parse(_ value: String) throws -> ArchivePath {
+      let trimmedValue = value.trimmingCharacters(in: .whitespaces)
+
+      guard !trimmedValue.isEmpty else {
+        throw ValidationError.emptyInput
+      }
+
+      if trimmedValue.starts(with: ArchivePath.artistPrefix) {
+        return .artist(trimmedValue)
+      }
+
+      if trimmedValue.starts(with: ArchivePath.venuePrefix) {
+        return .venue(trimmedValue)
+      }
+
+      if trimmedValue.starts(with: ArchivePath.showPrefix) {
+        return .show(trimmedValue)
+      }
+
+      throw ValidationError.invalidPrefix
+    }
+  }
 }
 
 extension ArchivePath.FormatStyle: ParseableFormatStyle {
@@ -134,6 +169,10 @@ extension ArchivePath.FormatStyle: ParseableFormatStyle {
   }
 
   public var urlParseStrategy: ArchivePath.FormatStyle.URLParseStrategy {
+    .init()
+  }
+
+  public var rawParseStrategy: ArchivePath.FormatStyle.RawParseStrategy {
     .init()
   }
 }
@@ -161,6 +200,12 @@ extension ArchivePath {
     T: ParseStrategy, T.ParseInput == URL, T.ParseOutput == ArchivePath
   {
     self = try standard.parse(value)
+  }
+}
+
+extension ArchivePath {
+  public init(raw: String) throws {
+    self = try ArchivePath.FormatStyle().rawParseStrategy.parse(raw)
   }
 }
 
