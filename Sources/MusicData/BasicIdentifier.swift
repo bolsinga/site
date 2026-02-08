@@ -7,11 +7,14 @@
 
 import Foundation
 
-struct BasicIdentifier: ArchiveIdentifier {
-  func venue(_ id: String) throws -> String { id }
-  func artist(_ id: String) throws -> String { id }
-  func show(_ id: String) throws -> String { id }
-  func annum(_ annum: Annum) throws -> Annum { annum }
-  func decade(_ annum: Annum) -> Decade { annum.decade }
-  func relation(_ id: String) throws -> String { id }
+public struct BasicIdentifier: ArchiveIdentifier {
+  public init() {}
+
+  public func venue(_ id: String) throws -> String { id }
+  public func artist(_ id: String) throws -> String { id }
+  public func show(_ id: String) throws -> String { id }
+  public func annum(_ annum: Annum) throws -> Annum { annum }
+  public func decade(_ annum: Annum) -> Decade { annum.decade }
+  public func annum(for id: Annum) -> Annum { id }
+  public func relation(_ id: String) throws -> String { id }
 }

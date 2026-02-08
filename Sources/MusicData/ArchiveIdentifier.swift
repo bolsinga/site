@@ -16,5 +16,6 @@ public protocol ArchiveIdentifier: Codable, Sendable {
   func show(_ id: String) throws -> ID
   func annum(_ annum: Annum) throws -> AnnumID
   func decade(_ annum: AnnumID) -> Decade
+  func annum(for annum: AnnumID) -> Annum
   func relation(_ id: String) throws -> ID
 }
