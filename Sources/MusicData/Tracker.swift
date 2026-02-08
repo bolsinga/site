@@ -61,7 +61,7 @@ struct Tracker<Identifier: ArchiveIdentifier> {
     venueCounts.increment(key: venueID)
     venueOrder.append(venueID)
 
-    let annumID = try identifier.annum(show.date)
+    let annumID = try identifier.annum(show.date.annum)
 
     try show.artists.reversed().forEach {
       let artistID = try identifier.artist($0)
