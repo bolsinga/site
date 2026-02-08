@@ -7,60 +7,11 @@
 
 import Foundation
 
-extension Annum {
-  fileprivate func digest(sortedConcerts: [Concert], lookup: Lookup<BasicIdentifier>) -> AnnumDigest
-  {
-    AnnumDigest(
-      annum: self,
-      shows: sortedConcerts.compactMap {
-        guard $0.show.date.annum == self else { return nil }
-        return $0.digest
-      },
-      rank: lookup.rankDigest(annum: self)
-    )
-  }
-}
-
-extension Artist {
-  fileprivate func digest(sortedConcerts: [Concert], lookup: Lookup<BasicIdentifier>)
-    -> ArtistDigest
-  {
-    ArtistDigest(
-      artist: self,
-      shows: sortedConcerts.compactMap {
-        guard $0.show.artists.contains(id) else { return nil }
-        return $0.digest
-      },
-      related: lookup.related(self).sorted(by: { $0.name < $1.name }),
-      rank: lookup.rankDigest(artist: self.id))
-  }
-}
-
 extension Concert {
   fileprivate var digest: ShowDigest {
     ShowDigest(
       id: archivePath, date: show.date, performers: performers, venue: venue?.name,
       location: venue?.location)
-  }
-}
-
-extension Show {
-  fileprivate func concert(lookup: Lookup<BasicIdentifier>) -> Concert {
-    Concert(show: self, venue: lookup.venueForShow(self), artists: lookup.artistsForShow(self))
-  }
-}
-
-extension Venue {
-  fileprivate func digest(sortedConcerts: [Concert], lookup: Lookup<BasicIdentifier>) -> VenueDigest
-  {
-    VenueDigest(
-      venue: self,
-      shows: sortedConcerts.compactMap {
-        guard $0.show.venue == id else { return nil }
-        return $0.digest
-      },
-      related: lookup.related(self).sorted(by: { $0.name < $1.name }),
-      rank: lookup.rankDigest(venue: self.id))
   }
 }
 
@@ -95,17 +46,32 @@ public struct Vault: Sendable {
 
     async let decadesMap = lookup.decadesMap
 
-    async let asyncSortedConcerts = music.shows.map { $0.concert(lookup: lookup) }.sorted(
-      by: comparator.compare(lhs:rhs:))
+    async let asyncSortedConcerts = music.shows.map {
+      Concert(show: $0, venue: lookup.venueForShow($0), artists: lookup.artistsForShow($0))
+    }.sorted(by: comparator.compare(lhs:rhs:))
 
     let sortedConcerts = await asyncSortedConcerts
 
-    async let artistDigests = music.artists.map {
-      $0.digest(sortedConcerts: sortedConcerts, lookup: lookup)
+    async let artistDigests = music.artists.map { artist in
+      ArtistDigest(
+        artist: artist,
+        shows: sortedConcerts.compactMap {
+          guard $0.show.artists.contains(artist.id) else { return nil }
+          return $0.digest
+        },
+        related: lookup.related(artist).sorted(by: { $0.name < $1.name }),
+        rank: lookup.rankDigest(artist: artist.id))
     }
 
-    async let venueDigests = music.venues.map {
-      $0.digest(sortedConcerts: sortedConcerts, lookup: lookup)
+    async let venueDigests = music.venues.map { venue in
+      VenueDigest(
+        venue: venue,
+        shows: sortedConcerts.compactMap {
+          guard $0.show.venue == venue.id else { return nil }
+          return $0.digest
+        },
+        related: lookup.related(venue).sorted(by: { $0.name < $1.name }),
+        rank: lookup.rankDigest(venue: venue.id))
     }
 
     self.comparator = comparator
@@ -119,8 +85,15 @@ public struct Vault: Sendable {
     self.venueDigestMap = await venueDigests.reduce(into: [:]) { $0[$1.venue.id] = $1 }
 
     self.decadesMap = await decadesMap
-    self.annumDigestMap = self.decadesMap.values.flatMap { $0.keys }.map {
-      $0.digest(sortedConcerts: sortedConcerts, lookup: lookup)
+    self.annumDigestMap = self.decadesMap.values.flatMap { $0.keys }.map { annum in
+      AnnumDigest(
+        annum: annum,
+        shows: sortedConcerts.compactMap {
+          guard $0.show.date.annum == annum else { return nil }
+          return $0.digest
+        },
+        rank: lookup.rankDigest(annum: annum)
+      )
     }.reduce(into: [:]) { $0[$1.annum] = $1 }
 
     self.categoryURLLookup = ArchiveCategory.allCases.reduce(into: [ArchiveCategory: URL]()) {
