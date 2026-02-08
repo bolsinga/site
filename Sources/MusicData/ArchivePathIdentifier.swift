@@ -12,9 +12,12 @@ struct ArchivePathIdentifier: ArchiveIdentifier {
   func artist(_ id: String) throws -> ArchivePath { try ArchivePath(raw: id) }
   func show(_ id: String) throws -> ArchivePath { try ArchivePath(raw: id) }
   func annum(_ annum: Annum) throws -> ArchivePath { ArchivePath.year(annum) }
-  func decade(_ annum: ArchivePath) -> Decade {
-    guard case .year(let year) = annum else { return .unknown }
-    return year.decade
+  func decade(_ id: ArchivePath) -> Decade {
+    annum(for: id).decade
+  }
+  func annum(for id: ArchivePath) -> Annum {
+    guard case .year(let annum) = id else { return .unknown }
+    return annum
   }
   func relation(_ id: String) throws -> ArchivePath { try ArchivePath(raw: id) }
 }

@@ -16,31 +16,33 @@ extension Concert {
 }
 
 public struct Vault: Sendable {
-  public let comparator: LibraryComparator<String>
-  public let sectioner: LibrarySectioner<String>
+  public typealias ID = BasicIdentifier.ID
+  public typealias AnnumID = BasicIdentifier.AnnumID
+
+  public let comparator: LibraryComparator<ID>
+  public let sectioner: LibrarySectioner<ID>
   public let rootURL: URL
-  public let concertMap: [Concert.ID: Concert]
+  public let concertMap: [ID: Concert]
 
-  public let artistDigestMap: [Artist.ID: ArtistDigest]
+  public let artistDigestMap: [ID: ArtistDigest]
 
-  public let venueDigestMap: [Venue.ID: VenueDigest]
+  public let venueDigestMap: [ID: VenueDigest]
 
-  public let decadesMap: [Decade: [Annum: Set<Show.ID>]]
-  public let annumDigestMap: [Annum: AnnumDigest]
+  public let decadesMap: [Decade: [AnnumID: Set<ID>]]
+  public let annumDigestMap: [AnnumID: AnnumDigest]
 
   private let categoryURLLookup: [ArchiveCategory: URL]
 
-  private let concertDayMap: [Int: Set<Concert.ID>]
+  private let concertDayMap: [Int: Set<ID>]
 
-  public init(music: Music, url: URL) async throws {
+  public init(music: Music, url: URL, identifier: BasicIdentifier = .init()) async throws {
     var signpost = Signpost(category: "vault", name: "process")
     signpost.start()
 
-    async let asyncLookup = await Lookup(music: music, identifier: BasicIdentifier())
+    async let asyncLookup = await Lookup(music: music, identifier: identifier)
     let lookup = try await asyncLookup
     async let asyncComparator = LibraryComparator(tokenMap: lookup.librarySortTokenMap)
-    async let sectioner = await LibrarySectioner<String>(
-      librarySortTokenMap: lookup.librarySortTokenMap)
+    async let sectioner = await LibrarySectioner(librarySortTokenMap: lookup.librarySortTokenMap)
 
     let comparator = await asyncComparator
 
@@ -60,7 +62,7 @@ public struct Vault: Sendable {
           return $0.digest
         },
         related: lookup.related(artist).sorted(by: { $0.name < $1.name }),
-        rank: lookup.rankDigest(artist: artist.id))
+        rank: lookup.rankDigest(artist: try identifier.artist(artist.id)))
     }
 
     async let venueDigests = music.venues.map { venue in
@@ -71,30 +73,35 @@ public struct Vault: Sendable {
           return $0.digest
         },
         related: lookup.related(venue).sorted(by: { $0.name < $1.name }),
-        rank: lookup.rankDigest(venue: venue.id))
+        rank: lookup.rankDigest(venue: try identifier.venue(venue.id)))
     }
 
     self.comparator = comparator
     self.sectioner = await sectioner
     self.rootURL = url
 
-    self.concertMap = sortedConcerts.reduce(into: [:]) { $0[$1.id] = $1 }
+    self.concertMap = try sortedConcerts.reduce(into: [:]) { $0[try identifier.show($1.id)] = $1 }
 
-    self.artistDigestMap = await artistDigests.reduce(into: [:]) { $0[$1.artist.id] = $1 }
+    self.artistDigestMap = try await artistDigests.reduce(into: [:]) {
+      $0[try identifier.artist($1.artist.id)] = $1
+    }
 
-    self.venueDigestMap = await venueDigests.reduce(into: [:]) { $0[$1.venue.id] = $1 }
+    self.venueDigestMap = try await venueDigests.reduce(into: [:]) {
+      $0[try identifier.venue($1.venue.id)] = $1
+    }
 
     self.decadesMap = await decadesMap
-    self.annumDigestMap = self.decadesMap.values.flatMap { $0.keys }.map { annum in
+    let annums = self.decadesMap.values.flatMap { $0.keys.map { identifier.annum(for: $0) } }
+    self.annumDigestMap = try annums.map { annum in
       AnnumDigest(
         annum: annum,
         shows: sortedConcerts.compactMap {
           guard $0.show.date.annum == annum else { return nil }
           return $0.digest
         },
-        rank: lookup.rankDigest(annum: annum)
+        rank: lookup.rankDigest(annum: try identifier.annum(annum))
       )
-    }.reduce(into: [:]) { $0[$1.annum] = $1 }
+    }.reduce(into: [:]) { $0[try identifier.annum($1.annum)] = $1 }
 
     self.categoryURLLookup = ArchiveCategory.allCases.reduce(into: [ArchiveCategory: URL]()) {
       guard let url = $1.url(rootURL: url) else { return }
