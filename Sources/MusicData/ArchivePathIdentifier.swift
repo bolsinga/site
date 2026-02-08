@@ -11,7 +11,7 @@ struct ArchivePathIdentifier: ArchiveIdentifier {
   func venue(_ id: String) throws -> ArchivePath { try ArchivePath(raw: id) }
   func artist(_ id: String) throws -> ArchivePath { try ArchivePath(raw: id) }
   func show(_ id: String) throws -> ArchivePath { try ArchivePath(raw: id) }
-  func annum(_ date: PartialDate) throws -> ArchivePath { ArchivePath.year(date.annum) }
+  func annum(_ annum: Annum) throws -> ArchivePath { ArchivePath.year(annum) }
   func decade(_ annum: ArchivePath) -> Decade {
     guard case .year(let year) = annum else { return .unknown }
     return year.decade
