@@ -7,7 +7,7 @@
 
 import Foundation
 
-public protocol ArchiveIdentifier: Sendable {
+public protocol ArchiveIdentifier: Codable, Sendable {
   associatedtype ID: Codable, Hashable, Sendable
   associatedtype AnnumID: Codable, Hashable, Sendable
 
@@ -16,4 +16,5 @@ public protocol ArchiveIdentifier: Sendable {
   func show(_ id: String) throws -> ID
   func annum(_ date: PartialDate) throws -> AnnumID
   func decade(_ annum: AnnumID) -> Decade
+  func relation(_ id: String) throws -> ID
 }

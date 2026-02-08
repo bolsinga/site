@@ -12,32 +12,32 @@ extension Logger {
   fileprivate static let lookup = Logger(category: "lookup")
 }
 
-private func createLookup<T: Identifiable>(_ sequence: [T]) -> [T.ID: T] {
-  sequence.reduce(into: [:]) { $0[$1.id] = $1 }
-}
-
-public struct Lookup<Identifier: ArchiveIdentifier>: Sendable {
+public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
   public typealias ID = Identifier.ID
   public typealias AnnumID = Identifier.AnnumID
 
-  private let artistMap: [Artist.ID: Artist]
-  private let venueMap: [Venue.ID: Venue]
+  private let identifier: Identifier
+  private let artistMap: [ID: Artist]
+  private let venueMap: [ID: Venue]
   private let bracket: Bracket<Identifier>
-  private let relationMap: [String: Set<String>]  // Artist/Venue ID : Set<Artist/Venue ID>
+  private let relationMap: [ID: Set<ID>]  // Artist/Venue ID : Set<Artist/Venue ID>
 
   public init(music: Music, identifier: Identifier) async throws {
     var signpost = Signpost(category: "lookup", name: "process")
     signpost.start()
 
-    async let artistLookup = createLookup(music.artists)
-    async let venueLookup = createLookup(music.venues)
+    async let artistLookup = music.artists.reduce(into: [:]) {
+      $0[try identifier.artist($1.id)] = $1
+    }
+    async let venueLookup = music.venues.reduce(into: [:]) { $0[try identifier.venue($1.id)] = $1 }
     async let bracket = await Bracket(music: music, identifier: identifier)
-    async let relations = music.relationMap
+    async let relations = music.relationMap(identifier: identifier)
 
-    self.artistMap = await artistLookup
-    self.venueMap = await venueLookup
+    self.identifier = identifier
+    self.artistMap = try await artistLookup
+    self.venueMap = try await venueLookup
     self.bracket = try await bracket
-    self.relationMap = await relations
+    self.relationMap = try await relations
   }
 
   var librarySortTokenMap: [ID: String] {
@@ -53,7 +53,7 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Sendable {
   }
 
   public func venueForShow(_ show: Show) -> Venue? {
-    guard let venue = venueMap[show.venue] else {
+    guard let id = try? identifier.venue(show.venue), let venue = venueMap[id] else {
       Logger.lookup.log("Show: \(show.id, privacy: .public) missing venue")
       return nil
     }
@@ -63,7 +63,7 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Sendable {
   public func artistsForShow(_ show: Show) -> [Artist] {
     var showArtists = [Artist]()
     for id in show.artists {
-      guard let artist = artistMap[id] else {
+      guard let aid = try? identifier.artist(id), let artist = artistMap[aid] else {
         Logger.lookup.log(
           "Show: \(show.id, privacy: .public) missing artist: \(id, privacy: .public)")
         continue
@@ -86,13 +86,15 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Sendable {
   }
 
   public func related(_ item: Venue) -> any Collection<Related> {
-    relationMap[item.id]?.compactMap { venueMap[$0] }.map {
+    guard let id = try? identifier.relation(item.id) else { return [] }
+    return relationMap[id]?.compactMap { venueMap[$0] }.map {
       Related(id: $0.archivePath, name: $0.name)
     } ?? []
   }
 
   public func related(_ item: Artist) -> any Collection<Related> {
-    relationMap[item.id]?.compactMap { artistMap[$0] }.map {
+    guard let id = try? identifier.relation(item.id) else { return [] }
+    return relationMap[id]?.compactMap { artistMap[$0] }.map {
       Related(id: $0.archivePath, name: $0.name)
     } ?? []
   }

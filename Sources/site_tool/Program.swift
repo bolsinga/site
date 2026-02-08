@@ -14,7 +14,7 @@ struct Program: AsyncParsableCommand {
     abstract: "A tool for working with site data.",
     subcommands: [
       DumpVaultCommand.self, DumpDiaryCommand.self, DumpBracketCommand.self, NextIDCommand.self,
-      AssociatedDomainsCommand.self,
+      AssociatedDomainsCommand.self, DumpLookupCommand.self,
     ],
     defaultSubcommand: DumpVaultCommand.self
   )

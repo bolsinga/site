@@ -13,4 +13,5 @@ struct BasicIdentifier: ArchiveIdentifier {
   func show(_ id: String) throws -> String { id }
   func annum(_ date: PartialDate) throws -> Annum { date.annum }
   func decade(_ annum: Annum) -> Decade { annum.decade }
+  func relation(_ id: String) throws -> String { id }
 }

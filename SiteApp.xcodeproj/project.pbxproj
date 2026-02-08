@@ -45,6 +45,9 @@
 				site_tool/DumpDiaryCommand.swift = (
 					macos,
 				);
+				site_tool/DumpLookupCommand.swift = (
+					macos,
+				);
 				site_tool/DumpVaultCommand.swift = (
 					macos,
 				);
@@ -58,6 +61,9 @@
 					macos,
 				);
 				"site_tool/RootURLArguments+Diary.swift" = (
+					macos,
+				);
+				"site_tool/RootURLArguments+Lookup.swift" = (
 					macos,
 				);
 				"site_tool/RootURLArguments+Music.swift" = (
