@@ -22,7 +22,7 @@ enum LocationAuthorization {
 }
 
 @Observable public final class VaultModel {
-  public let vault: Vault
+  public let vault: Vault<BasicIdentifier>
 
   internal var todayDayOfLeapYear: Int = Date.now.dayOfLeapYear
   private var venueLocatables: [Venue.ID: Locatable] = [:]
@@ -52,7 +52,7 @@ enum LocationAuthorization {
   private let atlas = Atlas<Venue>()
 
   @MainActor
-  internal init(_ vault: Vault, executeAsynchronousTasks: Bool) {
+  internal init(_ vault: Vault<BasicIdentifier>, executeAsynchronousTasks: Bool) {
     AppDependencyManager.shared.add(dependency: vault)
 
     self.vault = vault

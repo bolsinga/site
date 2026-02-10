@@ -9,7 +9,7 @@ import AppIntents
 import Foundation
 
 extension EntityQuery {
-  func concertsToday(_ vault: Vault) -> [Concert] {
+  func concertsToday<Identifier: ArchiveIdentifier>(_ vault: Vault<Identifier>) -> [Concert] {
     // This is running outside the scope of VaultModel, so reference `Date.now` directly.
     vault.concerts(on: Date.now.dayOfLeapYear)
   }

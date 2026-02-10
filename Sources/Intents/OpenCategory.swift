@@ -47,5 +47,5 @@ struct OpenCategory: AppIntent {
   }
 
   @Dependency
-  private var vault: Vault
+  private var vault: Vault<BasicIdentifier>
 }

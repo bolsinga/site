@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension Vault {
+extension Vault where Identifier == BasicIdentifier {
   func restorableSharableLinkable(for path: ArchivePath) -> PathRestorableUserActivity? {
     switch path {
     case .show(let iD):

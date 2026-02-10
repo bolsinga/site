@@ -21,15 +21,20 @@ where ID: Codable, ID: Hashable, ID: Sendable {
   }
 
   public func libraryCompare<T>(lhs: T, rhs: T) -> Bool where T: LibraryComparable, T.ID == ID {
+    libraryCompare(lhs: lhs, lhsID: lhs.id, rhs: rhs, rhsID: rhs.id)
+  }
+
+  public func libraryCompare<T>(lhs: T, lhsID: ID, rhs: T, rhsID: ID) -> Bool
+  where T: LibraryComparable {
     let lhToken =
-      tokenMap[lhs.id]
+      tokenMap[lhsID]
       ?? {
         Logger.libraryComparator.debug(
           "\(String(describing: lhs.id), privacy: .public) not in map.")
         return LibraryCompareTokenizer().removeCommonInitialPunctuation(lhs.librarySortString)
       }()
     let rhToken =
-      tokenMap[rhs.id]
+      tokenMap[rhsID]
       ?? {
         Logger.libraryComparator.debug(
           "\(String(describing: rhs.id), privacy: .public) not in map.")
