@@ -21,3 +21,18 @@ extension Vault where Identifier == BasicIdentifier {
     }
   }
 }
+
+extension Vault where Identifier == ArchivePathIdentifier {
+  func restorableSharableLinkable(for path: ArchivePath) -> PathRestorableUserActivity? {
+    switch path {
+    case .show(_):
+      return concert(show: path)
+    case .venue(_):
+      return digest(venue: path)
+    case .artist(_):
+      return digest(artist: path)
+    case .year(let annum):
+      return annum
+    }
+  }
+}
