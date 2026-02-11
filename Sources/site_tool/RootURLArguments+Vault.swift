@@ -8,9 +8,9 @@
 import Foundation
 
 extension RootURLArguments {
-  func vault<Identifier: ArchiveIdentifier>(identifier: Identifier) async throws -> Vault<
-    Identifier
-  > {
+  func vault<Identifier: ArchiveIdentifier>(identifier: Identifier) async throws
+    -> Vault<Identifier>
+  {
     try await Vault.load(url.appending(path: "shows.json").absoluteString, identifier: identifier)
   }
 }

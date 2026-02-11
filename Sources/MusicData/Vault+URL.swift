@@ -41,9 +41,9 @@ extension VaultError: LocalizedError {
 }
 
 extension Vault where Identifier: ArchiveIdentifier {
-  public static func load(_ urlString: String, identifier: Identifier) async throws -> Vault<
-    Identifier
-  > {
+  public static func load(_ urlString: String, identifier: Identifier) async throws
+    -> Vault<Identifier>
+  {
     guard let url = URL(string: urlString) else { throw VaultError.illegalURL(urlString) }
 
     return try await Vault.load(url: url, identifier: identifier)
