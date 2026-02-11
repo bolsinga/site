@@ -33,7 +33,7 @@ struct NextIDCommand: AsyncParsableCommand {
   @OptionGroup var rootURL: RootURLArguments
 
   func run() async throws {
-    let vault = try await rootURL.vault()
+    let vault = try await rootURL.vault(identifier: BasicIdentifier())
 
     print("Next Show: \(vault.nextShowID)")
     print("Next Venue: \(vault.nextVenueID)")

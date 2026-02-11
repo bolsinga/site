@@ -8,7 +8,7 @@
 import ArgumentParser
 import Foundation
 
-extension Vault {
+extension Vault where Identifier == BasicIdentifier {
   fileprivate func dump() {
     let concerts = concertMap.values.sorted(by: comparator.compare(lhs:rhs:))
     let artistDigests = artistDigestMap.values.sorted(by: comparator.libraryCompare(lhs:rhs:))
@@ -56,7 +56,7 @@ struct DumpVaultCommand: AsyncParsableCommand {
   @OptionGroup var rootURL: RootURLArguments
 
   func run() async throws {
-    let vault = try await rootURL.vault()
+    let vault = try await rootURL.vault(identifier: BasicIdentifier())
     vault.dump()
   }
 }

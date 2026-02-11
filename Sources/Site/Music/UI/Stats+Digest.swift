@@ -69,7 +69,7 @@ extension Stats {
       alwaysShowVenuesArtistsStats: true)
   }
 
-  init(vault: Vault) {
+  init<Identifier: ArchiveIdentifier>(vault: Vault<Identifier>) {
     self.init(concerts: vault.concertMap.values, displayArchiveCategoryCounts: true)
   }
 }

@@ -33,7 +33,7 @@ extension Logger {
     do {
       error = nil
 
-      let vault = try await Vault.load(urlString)
+      let vault = try await Vault.load(urlString, identifier: BasicIdentifier())
 
       vaultModel?.cancelTasks()
       vaultModel = VaultModel(vault, executeAsynchronousTasks: executeAsynchronousTasks)

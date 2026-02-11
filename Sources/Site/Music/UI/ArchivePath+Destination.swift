@@ -10,7 +10,9 @@ import SwiftUI
 
 extension ArchivePath {
   @MainActor
-  @ViewBuilder func destination(vault: Vault, isPathNavigable: @escaping (ArchivePath) -> Bool)
+  @ViewBuilder func destination(
+    vault: Vault<BasicIdentifier>, isPathNavigable: @escaping (ArchivePath) -> Bool
+  )
     -> some View
   {
     switch self {

@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension Vault {
+extension Vault where Identifier == BasicIdentifier {
   fileprivate func entity(for digest: ArtistDigest) -> ArtistEntity? {
     guard let url = url(for: digest) else { return nil }
     return ArtistEntity(digest: digest, url: url)

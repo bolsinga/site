@@ -40,14 +40,18 @@ extension VaultError: LocalizedError {
   }
 }
 
-extension Vault {
-  public static func load(_ urlString: String) async throws -> Vault {
+extension Vault where Identifier: ArchiveIdentifier {
+  public static func load(_ urlString: String, identifier: Identifier) async throws
+    -> Vault<Identifier>
+  {
     guard let url = URL(string: urlString) else { throw VaultError.illegalURL(urlString) }
 
-    return try await Vault.load(url: url)
+    return try await Vault.load(url: url, identifier: identifier)
   }
 
-  public static func load(url: URL, artistsWithShowsOnly: Bool = true) async throws -> Vault {
+  public static func load(url: URL, artistsWithShowsOnly: Bool = true, identifier: Identifier)
+    async throws -> Vault<Identifier>
+  {
     Logger.vault.log("start")
     defer {
       Logger.vault.log("end")
@@ -56,6 +60,7 @@ extension Vault {
 
     guard let rootURL = url.rootURL else { throw VaultError.noRootURL(url.absoluteString) }
 
-    return try await Vault(music: artistsWithShowsOnly ? music.showsOnly : music, url: rootURL)
+    return try await Vault(
+      music: artistsWithShowsOnly ? music.showsOnly : music, url: rootURL, identifier: identifier)
   }
 }

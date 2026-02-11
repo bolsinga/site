@@ -15,10 +15,11 @@ extension Concert {
   }
 }
 
-public struct Vault: Sendable {
-  public typealias ID = BasicIdentifier.ID
-  public typealias AnnumID = BasicIdentifier.AnnumID
+public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
+  public typealias ID = Identifier.ID
+  public typealias AnnumID = Identifier.AnnumID
 
+  private let identifier: Identifier
   public let comparator: LibraryComparator<ID>
   public let sectioner: LibrarySectioner<ID>
   public let rootURL: URL
@@ -35,9 +36,40 @@ public struct Vault: Sendable {
 
   private let concertDayMap: [Int: Set<ID>]
 
-  public init(music: Music, url: URL, identifier: BasicIdentifier = .init()) async throws {
+  private static func sort(
+    lhs: Concert, rhs: Concert, identifier: Identifier, comparator: LibraryComparator<ID>
+  ) -> Bool {
+    let lhShow = lhs.show
+    let rhShow = rhs.show
+    if lhShow.date == rhShow.date {
+      if let lhVenue = lhs.venue, let rhVenue = rhs.venue {
+        if lhVenue == rhVenue {
+          if let lhHeadliner = lhs.artists.first, let rhHeadliner = rhs.artists.first {
+            if lhHeadliner == rhHeadliner {
+              return lhs.id < rhs.id
+            }
+            guard let lhHeadlinerID = try? identifier.artist(lhHeadliner.id),
+              let rhHeadlinerID = try? identifier.artist(rhHeadliner.id)
+            else { return false }
+            return comparator.libraryCompare(
+              lhs: lhHeadliner, lhsID: lhHeadlinerID, rhs: rhHeadliner, rhsID: rhHeadlinerID)
+          }
+        }
+        guard let lhVenueID = try? identifier.venue(lhVenue.id),
+          let rhVenueID = try? identifier.venue(rhVenue.id)
+        else { return false }
+        return comparator.libraryCompare(
+          lhs: lhVenue, lhsID: lhVenueID, rhs: rhVenue, rhsID: rhVenueID)
+      }
+    }
+    return lhShow.date < rhShow.date
+  }
+
+  public init(music: Music, url: URL, identifier: Identifier) async throws {
     var signpost = Signpost(category: "vault", name: "process")
     signpost.start()
+
+    self.identifier = identifier
 
     async let asyncLookup = await Lookup(music: music, identifier: identifier)
     let lookup = try await asyncLookup
@@ -50,7 +82,7 @@ public struct Vault: Sendable {
 
     async let asyncSortedConcerts = music.shows.map {
       Concert(show: $0, venue: lookup.venueForShow($0), artists: lookup.artistsForShow($0))
-    }.sorted(by: comparator.compare(lhs:rhs:))
+    }.sorted(by: { Self.sort(lhs: $0, rhs: $1, identifier: identifier, comparator: comparator) })
 
     let sortedConcerts = await asyncSortedConcerts
 
@@ -113,7 +145,9 @@ public struct Vault: Sendable {
 
   func concerts(on dayOfLeapYear: Int) -> [Concert] {
     let concertIDs = concertDayMap[dayOfLeapYear] ?? []
-    return concertIDs.compactMap { concertMap[$0] }.sorted { comparator.compare(lhs: $0, rhs: $1) }
+    return concertIDs.compactMap { concertMap[$0] }.sorted(by: {
+      Self.sort(lhs: $0, rhs: $1, identifier: identifier, comparator: comparator)
+    })
   }
 
   /// The URL for this category.
@@ -126,12 +160,20 @@ public struct Vault: Sendable {
   }
 
   func artists(filteredBy searchString: String) -> [Artist] {
-    artistDigestMap.values.map { $0.artist }.names(filteredBy: searchString, additive: true).sorted(
-      by: comparator.libraryCompare(lhs:rhs:))
+    artistDigestMap.values.map { $0.artist }.names(filteredBy: searchString, additive: true)
+      .sorted(by: { lhs, rhs in
+        guard let lhID = try? identifier.artist(lhs.id), let rhID = try? identifier.artist(rhs.id)
+        else { return false }
+        return comparator.libraryCompare(lhs: lhs, lhsID: lhID, rhs: rhs, rhsID: rhID)
+      })
   }
 
   func venues(filteredBy searchString: String) -> [Venue] {
     venueDigestMap.values.map { $0.venue }.names(filteredBy: searchString, additive: true).sorted(
-      by: comparator.libraryCompare(lhs:rhs:))
+      by: { lhs, rhs in
+        guard let lhID = try? identifier.venue(lhs.id), let rhID = try? identifier.venue(rhs.id)
+        else { return false }
+        return comparator.libraryCompare(lhs: lhs, lhsID: lhID, rhs: rhs, rhsID: rhID)
+      })
   }
 }

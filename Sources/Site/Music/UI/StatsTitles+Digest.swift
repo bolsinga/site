@@ -26,7 +26,7 @@ extension StatsTitles {
       state: "States visited in \(digest.annum.formatted(.year))")
   }
 
-  init(vault: Vault) {
+  init<Identifier: ArchiveIdentifier>(vault: Vault<Identifier>) {
     self.init(
       weekday: "All Weekdays with Shows", month: "All Months with Shows",
       state: "All States with Shows")
