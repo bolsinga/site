@@ -8,24 +8,20 @@ import ArgumentParser
 import Foundation
 
 extension String {
-  fileprivate func convert(prefix: String) -> Int? {
+  fileprivate func convertToIndex(prefix: String) -> Int? {
     guard starts(with: prefix) else { return nil }
     return Int(replacingOccurrences(of: prefix, with: ""))
   }
 
-  fileprivate var identifierIndex: Int? {
-    for prefix in [ArchivePath.artistPrefix, ArchivePath.venuePrefix, ArchivePath.showPrefix] {
-      if let index = convert(prefix: prefix) {
-        return index
-      }
-    }
-    return nil
+  fileprivate func identifierIndex(prefix: String) -> Int? {
+    guard let index = convertToIndex(prefix: prefix) else { return nil }
+    return index
   }
 }
 
 extension Collection where Element == String {
-  var missingIndices: any Collection<Int> {
-    let existingIndices = self.compactMap { $0.identifierIndex }
+  fileprivate func missingIndices(prefix: String) -> any Collection<Int> {
+    let existingIndices = self.compactMap { $0.identifierIndex(prefix: prefix) }
     let expectedIndices = Set(0...(existingIndices.count - 1))
     return expectedIndices.subtracting(existingIndices)
   }
@@ -48,15 +44,15 @@ extension Vault {
   }
 
   fileprivate var missingShowIndices: any Collection<Int> {
-    concertMap.values.map { $0.id }.missingIndices
+    concertMap.values.map { $0.id }.missingIndices(prefix: ArchivePath.showPrefix)
   }
 
   fileprivate var missingVenueIndices: any Collection<Int> {
-    venueDigestMap.values.map { $0.id }.missingIndices
+    venueDigestMap.values.map { $0.id }.missingIndices(prefix: ArchivePath.venuePrefix)
   }
 
   fileprivate var missingArtistIndices: any Collection<Int> {
-    artistDigestMap.values.map { $0.id }.missingIndices
+    artistDigestMap.values.map { $0.id }.missingIndices(prefix: ArchivePath.artistPrefix)
   }
 }
 
