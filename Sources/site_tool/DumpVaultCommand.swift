@@ -59,6 +59,9 @@ struct DumpVaultCommand: AsyncParsableCommand {
   @Flag(help: "Choose the Identifier for Vault.")
   var identifier: IdentifierFlag = .archivePath
 
+  @Option(help: "Search String to use.")
+  var searchString : String?
+
   private func dump(
     concerts: [Concert],
     artistDigests: [ArtistDigest],
@@ -98,11 +101,23 @@ struct DumpVaultCommand: AsyncParsableCommand {
       dump(concerts: concerts, artistDigests: artistDigests, venueDigests: venueDigests) {
         vault.concertsForArtistDigest(artistDigest: $0)
       }
+      if let searchString {
+        let venues = vault.venues(filteredBy: searchString).map { $0.name }
+        let artists = vault.artists(filteredBy: searchString).map { $0.name }
+        let matches = venues + artists
+        print("Matching (\(searchString)): \(matches.joined(separator: "; "))")
+      }
     case .archivePath:
       let vault = try await rootURL.vault(identifier: ArchivePathIdentifier())
       let (concerts, artistDigests, venueDigests) = vault.digests
       dump(concerts: concerts, artistDigests: artistDigests, venueDigests: venueDigests) {
         vault.concertsForArtistDigest(artistDigest: $0)
+      }
+      if let searchString {
+        let venues = vault.venues(filteredBy: searchString).map { $0.name }
+        let artists = vault.artists(filteredBy: searchString).map { $0.name }
+        let matches = venues + artists
+        print("Matching (\(searchString)): \(matches.joined(separator: "; "))")
       }
     }
   }
