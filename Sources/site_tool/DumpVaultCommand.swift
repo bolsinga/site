@@ -60,7 +60,7 @@ struct DumpVaultCommand: AsyncParsableCommand {
   var identifier: IdentifierFlag = .archivePath
 
   @Option(help: "Search String to use.")
-  var searchString : String?
+  var searchString: String?
 
   private func dump(
     concerts: [Concert],
