@@ -19,7 +19,6 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
   public typealias ID = Identifier.ID
   public typealias AnnumID = Identifier.AnnumID
 
-  private let identifier: Identifier
   public let comparator: LibraryComparator<ID>
   public let sectioner: LibrarySectioner<ID>
   public let rootURL: URL
@@ -68,8 +67,6 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
   public init(music: Music, url: URL, identifier: Identifier) async throws {
     var signpost = Signpost(category: "vault", name: "process")
     signpost.start()
-
-    self.identifier = identifier
 
     async let asyncLookup = await Lookup(music: music, identifier: identifier)
     let lookup = try await asyncLookup
@@ -143,11 +140,9 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
     self.concertDayMap = lookup.concertDayMap
   }
 
-  func concerts(on dayOfLeapYear: Int) -> [Concert] {
+  fileprivate func unsortedConcerts(on dayOfLeapYear: Int) -> any Collection<Concert> {
     let concertIDs = concertDayMap[dayOfLeapYear] ?? []
-    return concertIDs.compactMap { concertMap[$0] }.sorted(by: {
-      Self.sort(lhs: $0, rhs: $1, identifier: identifier, comparator: comparator)
-    })
+    return concertIDs.compactMap { concertMap[$0] }
   }
 
   /// The URL for this category.
@@ -185,5 +180,17 @@ extension Vault where ID == ArchivePath {
   func venues(filteredBy searchString: String) -> [Venue] {
     venueDigestMap.values.map { $0.venue }.names(filteredBy: searchString, additive: true)
       .sorted(by: comparator.libraryCompare(lhs:rhs:))
+  }
+}
+
+extension Vault where ID == String {
+  func concerts(on dayOfLeapYear: Int) -> [Concert] {
+    unsortedConcerts(on: dayOfLeapYear).sorted(by: comparator.compare(lhs:rhs:))
+  }
+}
+
+extension Vault where ID == ArchivePath {
+  func concerts(on dayOfLeapYear: Int) -> [Concert] {
+    unsortedConcerts(on: dayOfLeapYear).sorted(by: comparator.compare(lhs:rhs:))
   }
 }
