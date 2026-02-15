@@ -158,22 +158,32 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
   public func url(for item: PathRestorable) -> URL? {
     item.archivePath.url(using: rootURL)
   }
+}
 
+extension Vault where ID == String {
   func artists(filteredBy searchString: String) -> [Artist] {
     artistDigestMap.values.map { $0.artist }.names(filteredBy: searchString, additive: true)
-      .sorted(by: { lhs, rhs in
-        guard let lhID = try? identifier.artist(lhs.id), let rhID = try? identifier.artist(rhs.id)
-        else { return false }
-        return comparator.libraryCompare(lhs: lhs, lhsID: lhID, rhs: rhs, rhsID: rhID)
-      })
+      .sorted(by: comparator.libraryCompare(lhs:rhs:))
   }
+}
 
+extension Vault where ID == ArchivePath {
+  func artists(filteredBy searchString: String) -> [Artist] {
+    artistDigestMap.values.map { $0.artist }.names(filteredBy: searchString, additive: true)
+      .sorted(by: comparator.libraryCompare(lhs:rhs:))
+  }
+}
+
+extension Vault where ID == String {
   func venues(filteredBy searchString: String) -> [Venue] {
-    venueDigestMap.values.map { $0.venue }.names(filteredBy: searchString, additive: true).sorted(
-      by: { lhs, rhs in
-        guard let lhID = try? identifier.venue(lhs.id), let rhID = try? identifier.venue(rhs.id)
-        else { return false }
-        return comparator.libraryCompare(lhs: lhs, lhsID: lhID, rhs: rhs, rhsID: rhID)
-      })
+    venueDigestMap.values.map { $0.venue }.names(filteredBy: searchString, additive: true)
+      .sorted(by: comparator.libraryCompare(lhs:rhs:))
+  }
+}
+
+extension Vault where ID == ArchivePath {
+  func venues(filteredBy searchString: String) -> [Venue] {
+    venueDigestMap.values.map { $0.venue }.names(filteredBy: searchString, additive: true)
+      .sorted(by: comparator.libraryCompare(lhs:rhs:))
   }
 }
