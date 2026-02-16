@@ -11,9 +11,9 @@ import Foundation
 extension Vault where ID == String {
   fileprivate var digests: ([Concert], [ArtistDigest], [VenueDigest]) {
     (
-      concertMap.values.sorted(by: comparator.compare(lhs:rhs:)),
-      artistDigestMap.values.sorted(by: comparator.libraryCompare(lhs:rhs:)),
-      venueDigestMap.values.sorted(by: comparator.libraryCompare(lhs:rhs:))
+      concertMap.values.sorted(by: compare(lhs:rhs:)),
+      artistDigestMap.values.sorted(by: compare(lhs:rhs:)),
+      venueDigestMap.values.sorted(by: compare(lhs:rhs:))
     )
   }
 
@@ -32,9 +32,9 @@ extension Vault where ID == String {
 extension Vault where ID == ArchivePath {
   fileprivate var digests: ([Concert], [ArtistDigest], [VenueDigest]) {
     (
-      concertMap.values.sorted(by: comparator.compare(lhs:rhs:)),
-      artistDigestMap.values.sorted(by: comparator.libraryCompare(lhs:rhs:)),
-      venueDigestMap.values.sorted(by: comparator.libraryCompare(lhs:rhs:))
+      concertMap.values.sorted(by: compare(lhs:rhs:)),
+      artistDigestMap.values.sorted(by: compare(lhs:rhs:)),
+      venueDigestMap.values.sorted(by: compare(lhs:rhs:))
     )
   }
 

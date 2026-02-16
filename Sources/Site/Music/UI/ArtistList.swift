@@ -34,7 +34,7 @@ extension ArtistList<ArtistDigest> {
     self.init(
       artists: model.vault.artistDigestMap.values.shuffled(),
       sectioner: model.vault.sectioner,
-      compare: model.vault.comparator.libraryCompare(lhs:rhs:),
+      compare: model.vault.compare(lhs:rhs:),
       filter: { $0.names(filteredBy: $1) },
       sort: sort, searchString: searchString)
   }

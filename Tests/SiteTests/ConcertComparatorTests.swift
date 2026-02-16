@@ -42,8 +42,8 @@ struct ConcertComparatorTests {
     let concert2 = vaultTest.concertMap[show2.id]!
 
     #expect(concert1 != concert2)
-    #expect(vaultTest.comparator.compare(lhs: concert1, rhs: concert2))
-    #expect(!vaultTest.comparator.compare(lhs: concert2, rhs: concert1))
+    #expect(vaultTest.compare(lhs: concert1, rhs: concert2))
+    #expect(!vaultTest.compare(lhs: concert2, rhs: concert1))
   }
 
   @Test func sameDates_differentVenues() async throws {
@@ -57,8 +57,8 @@ struct ConcertComparatorTests {
     let concert2 = vaultTest.concertMap[show2.id]!
 
     #expect(concert1 != concert2)
-    #expect(!vaultTest.comparator.compare(lhs: concert1, rhs: concert2))
-    #expect(vaultTest.comparator.compare(lhs: concert2, rhs: concert1))
+    #expect(!vaultTest.compare(lhs: concert1, rhs: concert2))
+    #expect(vaultTest.compare(lhs: concert2, rhs: concert1))
   }
 
   @Test func sameDates_sameVenues_differentArtists() async throws {
@@ -72,8 +72,8 @@ struct ConcertComparatorTests {
     let concert2 = vaultTest.concertMap[show2.id]!
 
     #expect(concert1 != concert2)
-    #expect(vaultTest.comparator.compare(lhs: concert1, rhs: concert2))
-    #expect(!vaultTest.comparator.compare(lhs: concert2, rhs: concert1))
+    #expect(vaultTest.compare(lhs: concert1, rhs: concert2))
+    #expect(!vaultTest.compare(lhs: concert2, rhs: concert1))
   }
 
   @Test func sameDates_sameVenues_sameArtists() async throws {
@@ -87,8 +87,8 @@ struct ConcertComparatorTests {
     let concert2 = vaultTest.concertMap[show2.id]!
 
     #expect(concert1 != concert2)
-    #expect(vaultTest.comparator.compare(lhs: concert1, rhs: concert2))
-    #expect(!vaultTest.comparator.compare(lhs: concert2, rhs: concert1))
+    #expect(vaultTest.compare(lhs: concert1, rhs: concert2))
+    #expect(!vaultTest.compare(lhs: concert2, rhs: concert1))
   }
 
   @Test func edgeCase() async throws {
@@ -102,7 +102,7 @@ struct ConcertComparatorTests {
     let concert2 = vaultTest.concertMap[show2.id]!
 
     #expect(concert1 == concert2)
-    #expect(!vaultTest.comparator.compare(lhs: concert1, rhs: concert2))
-    #expect(!vaultTest.comparator.compare(lhs: concert2, rhs: concert1))
+    #expect(!vaultTest.compare(lhs: concert1, rhs: concert2))
+    #expect(!vaultTest.compare(lhs: concert2, rhs: concert1))
   }
 }

@@ -51,7 +51,7 @@ where T: LibraryComparable, T: Hashable, T: PathRestorable, R: Comparable, R: Ha
     rankingMapBuilder: { artists in
       [Ranking(rank: .rank(1), value: 3): artists]
     },
-    compare: model.vault.comparator.libraryCompare(lhs:rhs:),
+    compare: model.vault.compare(lhs:rhs:),
     rankSorted: >,
     itemContentView: { _ in
       Text(3.formatted(.number))
@@ -70,7 +70,7 @@ where T: LibraryComparable, T: Hashable, T: PathRestorable, R: Comparable, R: Ha
     rankingMapBuilder: { venues in
       [Ranking(rank: .rank(1), value: 3): venues]
     },
-    compare: model.vault.comparator.libraryCompare(lhs:rhs:),
+    compare: model.vault.compare(lhs:rhs:),
     rankSorted: <,
     itemContentView: { _ in },
     sectionHeaderView: { section in

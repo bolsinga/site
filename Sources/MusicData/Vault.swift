@@ -19,7 +19,7 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
   public typealias ID = Identifier.ID
   public typealias AnnumID = Identifier.AnnumID
 
-  public let comparator: LibraryComparator<ID>
+  private let comparator: LibraryComparator<ID>
   public let sectioner: LibrarySectioner<ID>
   public let rootURL: URL
   public let concertMap: [ID: Concert]
@@ -153,6 +153,11 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
   public func url(for item: PathRestorable) -> URL? {
     item.archivePath.url(using: rootURL)
   }
+
+  func compare<Comparable: LibraryComparable>(lhs: Comparable, rhs: Comparable) -> Bool
+  where Comparable.ID == ID {
+    comparator.libraryCompare(lhs: lhs, rhs: rhs)
+  }
 }
 
 extension Vault where ID == String {
@@ -185,12 +190,32 @@ extension Vault where ID == ArchivePath {
 
 extension Vault where ID == String {
   func concerts(on dayOfLeapYear: Int) -> [Concert] {
-    unsortedConcerts(on: dayOfLeapYear).sorted(by: comparator.compare(lhs:rhs:))
+    unsortedConcerts(on: dayOfLeapYear).sorted(by: compare(lhs:rhs:))
   }
 }
 
 extension Vault where ID == ArchivePath {
   func concerts(on dayOfLeapYear: Int) -> [Concert] {
-    unsortedConcerts(on: dayOfLeapYear).sorted(by: comparator.compare(lhs:rhs:))
+    unsortedConcerts(on: dayOfLeapYear).sorted(by: compare(lhs:rhs:))
+  }
+}
+
+extension Vault where ID == String {
+  func compare(lhs: Concert, rhs: Concert) -> Bool {
+    comparator.compare(lhs: lhs, rhs: rhs)
+  }
+}
+
+extension Vault where ID == ArchivePath {
+  func compare(lhs: Concert, rhs: Concert) -> Bool {
+    comparator.compare(lhs: lhs, rhs: rhs)
+  }
+}
+
+extension Vault where ID == ArchivePath {
+  func compare<Comparable: LibraryComparable & PathRestorable>(lhs: Comparable, rhs: Comparable)
+    -> Bool where Comparable.ID == String
+  {
+    comparator.libraryCompare(lhs: lhs, rhs: rhs)
   }
 }

@@ -45,6 +45,6 @@ extension Vault where Identifier == BasicIdentifier {
   }
 
   func recentConcerts(_ count: Int = 5) -> [Concert] {
-    concertMap.values.sorted(by: comparator.compare(lhs:rhs:)).suffix(count)
+    concertMap.values.sorted(by: compare(lhs:rhs:)).suffix(count)
   }
 }
