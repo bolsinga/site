@@ -70,12 +70,7 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
 
     async let asyncLookup = await Lookup(music: music, identifier: identifier)
     let lookup = try await asyncLookup
-    async let asyncComparator = LibraryComparator(tokenMap: lookup.librarySortTokenMap)
-    async let sectioner = await LibrarySectioner(librarySortTokenMap: lookup.librarySortTokenMap)
-
-    let comparator = await asyncComparator
-
-    async let decadesMap = lookup.decadesMap
+    let comparator = LibraryComparator(tokenMap: lookup.librarySortTokenMap)
 
     async let asyncSortedConcerts = music.shows.map {
       Concert(show: $0, venue: lookup.venueForShow($0), artists: lookup.artistsForShow($0))
@@ -106,7 +101,7 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
     }
 
     self.comparator = comparator
-    self.sectioner = await sectioner
+    self.sectioner = await LibrarySectioner(librarySortTokenMap: lookup.librarySortTokenMap)
     self.rootURL = url
 
     self.concertMap = try sortedConcerts.reduce(into: [:]) { $0[try identifier.show($1.id)] = $1 }
@@ -119,7 +114,7 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
       $0[try identifier.venue($1.venue.id)] = $1
     }
 
-    self.decadesMap = await decadesMap
+    self.decadesMap = lookup.decadesMap
     let annums = self.decadesMap.values.flatMap { $0.keys.map { identifier.annum(for: $0) } }
     self.annumDigestMap = try annums.map { annum in
       AnnumDigest(
