@@ -17,8 +17,8 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
   public typealias AnnumID = Identifier.AnnumID
 
   private let identifier: Identifier
-  private let artistMap: [ID: Artist]
-  private let venueMap: [ID: Venue]
+  let artistMap: [ID: Artist]
+  let venueMap: [ID: Venue]
   private let bracket: Bracket<Identifier>
   private let relationMap: [ID: Set<ID>]  // Artist/Venue ID : Set<Artist/Venue ID>
 
@@ -50,6 +50,10 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
 
   public var concertDayMap: [Int: Set<ID>] {
     bracket.concertDayMap
+  }
+
+  public var showMap: [ID: Show] {
+    bracket.showMap
   }
 
   public func venueForShow(_ show: Show) -> Venue? {

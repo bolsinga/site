@@ -72,13 +72,13 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
     let lookup = try await asyncLookup
     let comparator = LibraryComparator(tokenMap: lookup.librarySortTokenMap)
 
-    async let asyncSortedConcerts = music.shows.map {
+    async let asyncSortedConcerts = lookup.showMap.values.map {
       Concert(show: $0, venue: lookup.venueForShow($0), artists: lookup.artistsForShow($0))
     }.sorted(by: { Self.sort(lhs: $0, rhs: $1, identifier: identifier, comparator: comparator) })
 
     let sortedConcerts = await asyncSortedConcerts
 
-    async let artistDigests = music.artists.map { artist in
+    async let artistDigests = lookup.artistMap.values.map { artist in
       ArtistDigest(
         artist: artist,
         shows: sortedConcerts.compactMap {
@@ -89,7 +89,7 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
         rank: lookup.rankDigest(artist: try identifier.artist(artist.id)))
     }
 
-    async let venueDigests = music.venues.map { venue in
+    async let venueDigests = lookup.venueMap.values.map { venue in
       VenueDigest(
         venue: venue,
         shows: sortedConcerts.compactMap {
