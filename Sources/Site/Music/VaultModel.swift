@@ -232,7 +232,7 @@ enum LocationAuthorization {
       .filter {
         venueLocatables[$0.venue!.id]!.nearby(to: location, distanceThreshold: distanceThreshold)
       }
-      .sorted { vault.comparator.compare(lhs: $0, rhs: $1) }
+      .sorted { vault.compare(lhs: $0, rhs: $1) }
   }
 
   func filteredDecadesMap(_ nearbyModel: NearbyModel, distanceThreshold: CLLocationDistance)

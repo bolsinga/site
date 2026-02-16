@@ -34,7 +34,7 @@ extension VenueList<VenueDigest> {
     self.init(
       venues: model.vault.venueDigestMap.values.shuffled(),
       sectioner: model.vault.sectioner,
-      compare: model.vault.comparator.libraryCompare(lhs:rhs:),
+      compare: model.vault.compare(lhs:rhs:),
       filter: { $0.names(filteredBy: $1) },
       sort: sort, searchString: searchString)
   }

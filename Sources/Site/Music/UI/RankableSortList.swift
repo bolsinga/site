@@ -67,7 +67,7 @@ struct RankableSortList<T, SectionHeaderContent: View, LabelContent: View>: View
   RankableSortList(
     items: Array(model.vault.venueDigestMap.values.shuffled()),
     sectioner: model.vault.sectioner,
-    compare: model.vault.comparator.libraryCompare(lhs:rhs:),
+    compare: model.vault.compare(lhs:rhs:),
     title: "Venues", associatedRankSectionHeader: { $0.artistsCountView },
     itemLabelView: { Text($0.name) }, sort: .alphabetical
   )
