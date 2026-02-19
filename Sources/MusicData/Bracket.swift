@@ -34,6 +34,7 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
   let annumRankDigestMap: [AnnumID: RankDigest]
   let decadesMap: [Decade: [AnnumID: Set<ID>]]
   let concertDayMap: [Int: Set<ID>]
+  let showMap: [ID: Show]
 
   init(music: Music, identifier: Identifier) async throws {
     var signpost = Signpost(category: "bracket", name: "process")
@@ -48,6 +49,7 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
     self.annumRankDigestMap = try await tracker.annumRankDigests()
     self.decadesMap = try await tracker.decadesMap(decade: { identifier.decade($0) })
     self.concertDayMap = try await tracker.dayOfLeapYearShows
+    self.showMap = try await tracker.showMap
 
     self.librarySortTokenMap = try await librarySortTokenMap
   }

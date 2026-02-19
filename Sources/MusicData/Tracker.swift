@@ -52,9 +52,11 @@ struct Tracker<Identifier: ArchiveIdentifier> {
   var annumVenues = [AnnumID: Set<ID>]()
 
   var dayOfLeapYearShows = [Int: Set<ID>]()
+  var showMap = [ID: Show]()
 
   private mutating func track(show: Show, identifier: Identifier) throws {
     let showID = try identifier.show(show.id)
+    showMap[showID] = show
 
     let venueID = try identifier.venue(show.venue)
     venueSpanDates.insert(key: venueID, value: show.date)
