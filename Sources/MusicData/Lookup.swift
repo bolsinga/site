@@ -16,7 +16,7 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
   public typealias ID = Identifier.ID
   public typealias AnnumID = Identifier.AnnumID
 
-  private let identifier: Identifier
+  let identifier: Identifier
   let artistMap: [ID: Artist]
   let venueMap: [ID: Venue]
   private let bracket: Bracket<Identifier>

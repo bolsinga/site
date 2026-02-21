@@ -7,14 +7,6 @@
 
 import Foundation
 
-extension Concert {
-  fileprivate var digest: ShowDigest {
-    ShowDigest(
-      id: archivePath, date: show.date, performers: performers, venue: venue?.name,
-      location: venue?.location)
-  }
-}
-
 public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
   public typealias ID = Identifier.ID
   public typealias AnnumID = Identifier.AnnumID
@@ -46,33 +38,13 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
     self.lookup = lookup
     let comparator = LibraryComparator(tokenMap: lookup.librarySortTokenMap)
 
-    async let asyncSortedConcerts = lookup.showMap.values.map {
-      Concert(show: $0, venue: lookup.venueForShow($0), artists: lookup.artistsForShow($0))
-    }.sorted(by: { lookup.compareConcerts(lhs: $0, rhs: $1, comparator: comparator) })
+    async let asyncSortedConcerts = lookup.sortedConcerts(comparator: comparator)
 
     let sortedConcerts = await asyncSortedConcerts
 
-    async let artistDigests = lookup.artistMap.values.map { artist in
-      ArtistDigest(
-        artist: artist,
-        shows: sortedConcerts.compactMap {
-          guard $0.show.artists.contains(artist.id) else { return nil }
-          return $0.digest
-        },
-        related: lookup.related(artist).sorted(by: { $0.name < $1.name }),
-        rank: lookup.rankDigest(artist: try identifier.artist(artist.id)))
-    }
+    async let artistDigestMap = lookup.artistDigestMap(sortedConcerts: sortedConcerts)
 
-    async let venueDigests = lookup.venueMap.values.map { venue in
-      VenueDigest(
-        venue: venue,
-        shows: sortedConcerts.compactMap {
-          guard $0.show.venue == venue.id else { return nil }
-          return $0.digest
-        },
-        related: lookup.related(venue).sorted(by: { $0.name < $1.name }),
-        rank: lookup.rankDigest(venue: try identifier.venue(venue.id)))
-    }
+    async let venueDigestMap = lookup.venueDigestMap(sortedConcerts: sortedConcerts)
 
     self.comparator = comparator
     self.sectioner = await LibrarySectioner(librarySortTokenMap: lookup.librarySortTokenMap)
@@ -80,26 +52,12 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
 
     self.concertMap = try sortedConcerts.reduce(into: [:]) { $0[try identifier.show($1.id)] = $1 }
 
-    self.artistDigestMap = try await artistDigests.reduce(into: [:]) {
-      $0[try identifier.artist($1.artist.id)] = $1
-    }
+    self.artistDigestMap = try await artistDigestMap
 
-    self.venueDigestMap = try await venueDigests.reduce(into: [:]) {
-      $0[try identifier.venue($1.venue.id)] = $1
-    }
+    self.venueDigestMap = try await venueDigestMap
 
     self.decadesMap = lookup.decadesMap
-    let annums = self.decadesMap.values.flatMap { $0.keys.map { identifier.annum(for: $0) } }
-    self.annumDigestMap = try annums.map { annum in
-      AnnumDigest(
-        annum: annum,
-        shows: sortedConcerts.compactMap {
-          guard $0.show.date.annum == annum else { return nil }
-          return $0.digest
-        },
-        rank: lookup.rankDigest(annum: try identifier.annum(annum))
-      )
-    }.reduce(into: [:]) { $0[try identifier.annum($1.annum)] = $1 }
+    self.annumDigestMap = try lookup.annumDigestMap(sortedConcerts: sortedConcerts)
 
     self.categoryURLLookup = ArchiveCategory.allCases.reduce(into: [ArchiveCategory: URL]()) {
       guard let url = $1.url(rootURL: url) else { return }
