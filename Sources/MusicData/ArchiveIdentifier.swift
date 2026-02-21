@@ -18,4 +18,6 @@ public protocol ArchiveIdentifier: Codable, Sendable {
   func decade(_ annum: AnnumID) -> Decade
   func annum(for annum: AnnumID) -> Annum
   func relation(_ id: String) throws -> ID
+
+  func compareConcerts(lhs: Concert, rhs: Concert, comparator: LibraryComparator<ID>) -> Bool
 }
