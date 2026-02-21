@@ -107,4 +107,10 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
   {
     identifier.compareConcerts(lhs: lhs, rhs: rhs, comparator: comparator)
   }
+
+  public func libraryCompare<Comparable: LibraryComparable & PathRestorable>(
+    lhs: Comparable, rhs: Comparable, comparator: LibraryComparator<ID>
+  ) -> Bool where Comparable.ID == String {
+    identifier.libraryCompare(lhs: lhs, rhs: rhs, comparator: comparator)
+  }
 }

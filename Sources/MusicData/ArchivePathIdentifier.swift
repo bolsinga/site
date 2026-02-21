@@ -22,24 +22,9 @@ public struct ArchivePathIdentifier: ArchiveIdentifier {
   }
   public func relation(_ id: String) throws -> ArchivePath { try ArchivePath(raw: id) }
 
-  public func compareConcerts(
-    lhs: Concert, rhs: Concert, comparator: LibraryComparator<ArchivePath>
-  ) -> Bool {
-    let lhShow = lhs.show
-    let rhShow = rhs.show
-    if lhShow.date == rhShow.date {
-      if let lhVenue = lhs.venue, let rhVenue = rhs.venue {
-        if lhVenue == rhVenue {
-          if let lhHeadliner = lhs.artists.first, let rhHeadliner = rhs.artists.first {
-            if lhHeadliner == rhHeadliner {
-              return lhs.id < rhs.id
-            }
-            return comparator.libraryCompare(lhs: lhHeadliner, rhs: rhHeadliner)
-          }
-        }
-        return comparator.libraryCompare(lhs: lhVenue, rhs: rhVenue)
-      }
-    }
-    return lhShow.date < rhShow.date
+  public func libraryCompare<Comparable: LibraryComparable & PathRestorable>(
+    lhs: Comparable, rhs: Comparable, comparator: LibraryComparator<ArchivePath>
+  ) -> Bool where Comparable.ID == String {
+    comparator.libraryCompare(lhs: lhs, lhsID: lhs.archivePath, rhs: rhs, rhsID: rhs.archivePath)
   }
 }

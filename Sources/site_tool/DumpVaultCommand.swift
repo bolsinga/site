@@ -8,16 +8,9 @@
 import ArgumentParser
 import Foundation
 
-extension Vault where ID == String {
-  fileprivate var digests: ([Concert], [ArtistDigest], [VenueDigest]) {
-    (
-      concertMap.values.sorted(by: compare(lhs:rhs:)),
-      artistDigestMap.values.sorted(by: compare(lhs:rhs:)),
-      venueDigestMap.values.sorted(by: compare(lhs:rhs:))
-    )
-  }
-
-  fileprivate func concertsForArtistDigest(artistDigest: ArtistDigest) -> any Collection<Concert> {
+extension Vault {
+  fileprivate func concertsForArtistDigest(artistDigest: ArtistDigest) -> any Collection<Concert>
+  where ID == String {
     artistDigest.shows.compactMap {
       switch $0.id {
       case .show(let iD):
@@ -27,47 +20,19 @@ extension Vault where ID == String {
       }
     }
   }
-}
 
-extension Vault where ID == ArchivePath {
-  fileprivate var digests: ([Concert], [ArtistDigest], [VenueDigest]) {
-    (
-      concertMap.values.sorted(by: compare(lhs:rhs:)),
-      artistDigestMap.values.sorted(by: compare(lhs:rhs:)),
-      venueDigestMap.values.sorted(by: compare(lhs:rhs:))
-    )
-  }
-
-  fileprivate func concertsForArtistDigest(artistDigest: ArtistDigest) -> any Collection<Concert> {
+  fileprivate func concertsForArtistDigest(artistDigest: ArtistDigest) -> any Collection<Concert>
+  where ID == ArchivePath {
     artistDigest.shows.compactMap { concertMap[$0.id] }
   }
-}
 
-enum IdentifierFlag: String, EnumerableFlag {
-  case string
-  case archivePath
-}
-
-struct DumpVaultCommand: AsyncParsableCommand {
-  static let configuration = CommandConfiguration(
-    commandName: "dumpVault",
-    abstract: "Dump a text output of the Vault."
-  )
-
-  @OptionGroup var rootURL: RootURLArguments
-
-  @Flag(help: "Choose the Identifier for Vault.")
-  var identifier: IdentifierFlag = .archivePath
-
-  @Option(help: "Search String to use.")
-  var searchString: String?
-
-  private func dump(
-    concerts: [Concert],
-    artistDigests: [ArtistDigest],
-    venueDigests: [VenueDigest],
-    concertsForArtist: (ArtistDigest) -> any Collection<Concert>
+  fileprivate func dump(
+    searchString: String?, concertsForArtist: (ArtistDigest) -> any Collection<Concert>
   ) {
+    let concerts = concertMap.values.sorted(by: compare(lhs:rhs:))
+    let artistDigests = artistDigestMap.values.sorted(by: compare(lhs:rhs:))
+    let venueDigests = venueDigestMap.values.sorted(by: compare(lhs:rhs:))
+
     print("Artists: \(artistDigests.count)")
     print("Shows: \(concerts.count)")
     print("Venues: \(venueDigests.count)")
@@ -91,33 +56,46 @@ struct DumpVaultCommand: AsyncParsableCommand {
       }
       print("\(digest.artist.name): (\(concertParts.joined(separator: "; "))")
     }
+
+    if let searchString {
+      let venues = venues(filteredBy: searchString).map { $0.name }
+      let artists = artists(filteredBy: searchString).map { $0.name }
+      let matches = venues + artists
+      print("Matching (\(searchString)): \(matches.joined(separator: "; "))")
+    }
   }
+}
+
+enum IdentifierFlag: String, EnumerableFlag {
+  case string
+  case archivePath
+}
+
+struct DumpVaultCommand: AsyncParsableCommand {
+  static let configuration = CommandConfiguration(
+    commandName: "dumpVault",
+    abstract: "Dump a text output of the Vault."
+  )
+
+  @OptionGroup var rootURL: RootURLArguments
+
+  @Flag(help: "Choose the Identifier for Vault.")
+  var identifier: IdentifierFlag = .archivePath
+
+  @Option(help: "Search String to use.")
+  var searchString: String?
 
   func run() async throws {
     switch identifier {
     case .string:
       let vault = try await rootURL.vault(identifier: BasicIdentifier())
-      let (concerts, artistDigests, venueDigests) = vault.digests
-      dump(concerts: concerts, artistDigests: artistDigests, venueDigests: venueDigests) {
+      vault.dump(searchString: searchString) {
         vault.concertsForArtistDigest(artistDigest: $0)
-      }
-      if let searchString {
-        let venues = vault.venues(filteredBy: searchString).map { $0.name }
-        let artists = vault.artists(filteredBy: searchString).map { $0.name }
-        let matches = venues + artists
-        print("Matching (\(searchString)): \(matches.joined(separator: "; "))")
       }
     case .archivePath:
       let vault = try await rootURL.vault(identifier: ArchivePathIdentifier())
-      let (concerts, artistDigests, venueDigests) = vault.digests
-      dump(concerts: concerts, artistDigests: artistDigests, venueDigests: venueDigests) {
+      vault.dump(searchString: searchString) {
         vault.concertsForArtistDigest(artistDigest: $0)
-      }
-      if let searchString {
-        let venues = vault.venues(filteredBy: searchString).map { $0.name }
-        let artists = vault.artists(filteredBy: searchString).map { $0.name }
-        let matches = venues + artists
-        print("Matching (\(searchString)): \(matches.joined(separator: "; "))")
       }
     }
   }
