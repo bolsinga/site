@@ -135,40 +135,20 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
   func compare(lhs: Concert, rhs: Concert) -> Bool {
     lookup.compareConcerts(lhs: lhs, rhs: rhs, comparator: comparator)
   }
-}
 
-extension Vault where ID == String {
-  func artists(filteredBy searchString: String) -> [Artist] {
-    artistDigestMap.values.map { $0.artist }.names(filteredBy: searchString, additive: true)
-      .sorted(by: comparator.libraryCompare(lhs:rhs:))
-  }
-}
-
-extension Vault where ID == ArchivePath {
-  func artists(filteredBy searchString: String) -> [Artist] {
-    artistDigestMap.values.map { $0.artist }.names(filteredBy: searchString, additive: true)
-      .sorted(by: comparator.libraryCompare(lhs:rhs:))
-  }
-}
-
-extension Vault where ID == String {
-  func venues(filteredBy searchString: String) -> [Venue] {
-    venueDigestMap.values.map { $0.venue }.names(filteredBy: searchString, additive: true)
-      .sorted(by: comparator.libraryCompare(lhs:rhs:))
-  }
-}
-
-extension Vault where ID == ArchivePath {
-  func venues(filteredBy searchString: String) -> [Venue] {
-    venueDigestMap.values.map { $0.venue }.names(filteredBy: searchString, additive: true)
-      .sorted(by: comparator.libraryCompare(lhs:rhs:))
-  }
-}
-
-extension Vault where ID == ArchivePath {
   func compare<Comparable: LibraryComparable & PathRestorable>(lhs: Comparable, rhs: Comparable)
     -> Bool where Comparable.ID == String
   {
-    comparator.libraryCompare(lhs: lhs, rhs: rhs)
+    lookup.libraryCompare(lhs: lhs, rhs: rhs, comparator: comparator)
+  }
+
+  func artists(filteredBy searchString: String) -> [Artist] {
+    artistDigestMap.values.map { $0.artist }.names(filteredBy: searchString, additive: true)
+      .sorted(by: compare(lhs:rhs:))
+  }
+
+  func venues(filteredBy searchString: String) -> [Venue] {
+    venueDigestMap.values.map { $0.venue }.names(filteredBy: searchString, additive: true)
+      .sorted(by: compare(lhs:rhs:))
   }
 }
