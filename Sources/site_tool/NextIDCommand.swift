@@ -54,6 +54,16 @@ extension Vault {
   fileprivate var missingArtistIndices: any Collection<Int> {
     artistDigestMap.values.map { $0.id }.missingIndices(prefix: ArchivePath.artistPrefix)
   }
+
+  fileprivate func printIDs() {
+    print("Next Show: \(nextShowID)")
+    print("Next Venue: \(nextVenueID)")
+    print("Next Artist: \(nextArtistID)")
+
+    print("Missing Show IDs: \(missingShowIndices)")
+    print("Missing Venue IDs: \(missingVenueIndices)")
+    print("Missing Artist IDs: \(missingArtistIndices)")
+  }
 }
 
 struct NextIDCommand: AsyncParsableCommand {
@@ -64,15 +74,16 @@ struct NextIDCommand: AsyncParsableCommand {
 
   @OptionGroup var rootURL: RootURLArguments
 
+  @Flag(help: "Choose the Identifier for the Vault.")
+  var identifier: IdentifierFlag = .archivePath
+
   func run() async throws {
-    let vault = try await rootURL.vault(identifier: BasicIdentifier(), fileName: "music.json")
-
-    print("Next Show: \(vault.nextShowID)")
-    print("Next Venue: \(vault.nextVenueID)")
-    print("Next Artist: \(vault.nextArtistID)")
-
-    print("Missing Show IDs: \(vault.missingShowIndices)")
-    print("Missing Venue IDs: \(vault.missingVenueIndices)")
-    print("Missing Artist IDs: \(vault.missingArtistIndices)")
+    switch identifier {
+    case .basic:
+      try await rootURL.vault(identifier: BasicIdentifier(), fileName: "music.json").printIDs()
+    case .archivePath:
+      try await rootURL.vault(identifier: ArchivePathIdentifier(), fileName: "music.json")
+        .printIDs()
+    }
   }
 }

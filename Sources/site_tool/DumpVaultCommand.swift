@@ -66,11 +66,6 @@ extension Vault {
   }
 }
 
-enum IdentifierFlag: String, EnumerableFlag {
-  case string
-  case archivePath
-}
-
 struct DumpVaultCommand: AsyncParsableCommand {
   static let configuration = CommandConfiguration(
     commandName: "dumpVault",
@@ -79,7 +74,7 @@ struct DumpVaultCommand: AsyncParsableCommand {
 
   @OptionGroup var rootURL: RootURLArguments
 
-  @Flag(help: "Choose the Identifier for Vault.")
+  @Flag(help: "Choose the Identifier for the Vault.")
   var identifier: IdentifierFlag = .archivePath
 
   @Option(help: "Search String to use.")
@@ -87,7 +82,7 @@ struct DumpVaultCommand: AsyncParsableCommand {
 
   func run() async throws {
     switch identifier {
-    case .string:
+    case .basic:
       let vault = try await rootURL.vault(identifier: BasicIdentifier())
       vault.dump(searchString: searchString) {
         vault.concertsForArtistDigest(artistDigest: $0)

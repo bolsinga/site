@@ -8,6 +8,21 @@
 import ArgumentParser
 import Foundation
 
+extension Lookup {
+  fileprivate func dump() throws {
+    let encoder = JSONEncoder()
+    encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+    encoder.dateEncodingStrategy = .iso8601
+
+    let data = try encoder.encode(self)
+    guard let value = String(data: data, encoding: .utf8) else {
+      print("cannot encode lookup")
+      return
+    }
+    print(value)
+  }
+}
+
 struct DumpLookupCommand: AsyncParsableCommand {
   static let configuration = CommandConfiguration(
     commandName: "dumpLookup",
@@ -16,18 +31,16 @@ struct DumpLookupCommand: AsyncParsableCommand {
 
   @OptionGroup var rootURL: RootURLArguments
 
+  @Flag(help: "Choose the Identifier for Lookup.")
+  var identifier: IdentifierFlag = .archivePath
+
   func run() async throws {
-    let lookup = try await rootURL.lookup()
+    switch identifier {
+    case .basic:
+      try await rootURL.lookup(identifier: BasicIdentifier()).dump()
 
-    let encoder = JSONEncoder()
-    encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
-    encoder.dateEncodingStrategy = .iso8601
-
-    let data = try encoder.encode(lookup.self)
-    guard let value = String(data: data, encoding: .utf8) else {
-      print("cannot encode lookup")
-      return
+    case .archivePath:
+      try await rootURL.lookup(identifier: ArchivePathIdentifier()).dump()
     }
-    print(value)
   }
 }

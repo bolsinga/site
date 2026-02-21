@@ -67,18 +67,6 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "--string"
-            isEnabled = "NO">
-         </CommandLineArgument>
-         <CommandLineArgument
-            argument = "--search-string"
-            isEnabled = "NO">
-         </CommandLineArgument>
-         <CommandLineArgument
-            argument = "art"
-            isEnabled = "NO">
-         </CommandLineArgument>
-         <CommandLineArgument
             argument = "dumpDiary"
             isEnabled = "NO">
          </CommandLineArgument>
@@ -96,6 +84,18 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "associatedDomains"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "--search-string"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "art"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "--basic"
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
