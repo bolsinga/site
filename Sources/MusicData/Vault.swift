@@ -25,8 +25,6 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
 
   private let categoryURLLookup: [ArchiveCategory: URL]
 
-  private let concertDayMap: [Int: Set<ID>]
-
   private let lookup: Lookup<Identifier>
 
   public init(music: Music, url: URL, identifier: Identifier) async throws {
@@ -63,12 +61,10 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
       guard let url = $1.url(rootURL: url) else { return }
       $0[$1] = url
     }
-
-    self.concertDayMap = lookup.concertDayMap
   }
 
   fileprivate func unsortedConcerts(on dayOfLeapYear: Int) -> any Collection<Concert> {
-    let concertIDs = concertDayMap[dayOfLeapYear] ?? []
+    let concertIDs = lookup.concertDayMap[dayOfLeapYear] ?? []
     return concertIDs.compactMap { concertMap[$0] }
   }
 
