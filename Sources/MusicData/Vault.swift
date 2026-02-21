@@ -35,34 +35,7 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
 
   private let concertDayMap: [Int: Set<ID>]
 
-  private static func sort(
-    lhs: Concert, rhs: Concert, identifier: Identifier, comparator: LibraryComparator<ID>
-  ) -> Bool {
-    let lhShow = lhs.show
-    let rhShow = rhs.show
-    if lhShow.date == rhShow.date {
-      if let lhVenue = lhs.venue, let rhVenue = rhs.venue {
-        if lhVenue == rhVenue {
-          if let lhHeadliner = lhs.artists.first, let rhHeadliner = rhs.artists.first {
-            if lhHeadliner == rhHeadliner {
-              return lhs.id < rhs.id
-            }
-            guard let lhHeadlinerID = try? identifier.artist(lhHeadliner.id),
-              let rhHeadlinerID = try? identifier.artist(rhHeadliner.id)
-            else { return false }
-            return comparator.libraryCompare(
-              lhs: lhHeadliner, lhsID: lhHeadlinerID, rhs: rhHeadliner, rhsID: rhHeadlinerID)
-          }
-        }
-        guard let lhVenueID = try? identifier.venue(lhVenue.id),
-          let rhVenueID = try? identifier.venue(rhVenue.id)
-        else { return false }
-        return comparator.libraryCompare(
-          lhs: lhVenue, lhsID: lhVenueID, rhs: rhVenue, rhsID: rhVenueID)
-      }
-    }
-    return lhShow.date < rhShow.date
-  }
+  private let lookup: Lookup<Identifier>
 
   public init(music: Music, url: URL, identifier: Identifier) async throws {
     var signpost = Signpost(category: "vault", name: "process")
@@ -70,11 +43,12 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
 
     async let asyncLookup = await Lookup(music: music, identifier: identifier)
     let lookup = try await asyncLookup
+    self.lookup = lookup
     let comparator = LibraryComparator(tokenMap: lookup.librarySortTokenMap)
 
     async let asyncSortedConcerts = lookup.showMap.values.map {
       Concert(show: $0, venue: lookup.venueForShow($0), artists: lookup.artistsForShow($0))
-    }.sorted(by: { Self.sort(lhs: $0, rhs: $1, identifier: identifier, comparator: comparator) })
+    }.sorted(by: { lookup.compareConcerts(lhs: $0, rhs: $1, comparator: comparator) })
 
     let sortedConcerts = await asyncSortedConcerts
 
@@ -153,6 +127,14 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
   where Comparable.ID == ID {
     comparator.libraryCompare(lhs: lhs, rhs: rhs)
   }
+
+  func concerts(on dayOfLeapYear: Int) -> [Concert] {
+    unsortedConcerts(on: dayOfLeapYear).sorted(by: compare(lhs:rhs:))
+  }
+
+  func compare(lhs: Concert, rhs: Concert) -> Bool {
+    lookup.compareConcerts(lhs: lhs, rhs: rhs, comparator: comparator)
+  }
 }
 
 extension Vault where ID == String {
@@ -180,30 +162,6 @@ extension Vault where ID == ArchivePath {
   func venues(filteredBy searchString: String) -> [Venue] {
     venueDigestMap.values.map { $0.venue }.names(filteredBy: searchString, additive: true)
       .sorted(by: comparator.libraryCompare(lhs:rhs:))
-  }
-}
-
-extension Vault where ID == String {
-  func concerts(on dayOfLeapYear: Int) -> [Concert] {
-    unsortedConcerts(on: dayOfLeapYear).sorted(by: compare(lhs:rhs:))
-  }
-}
-
-extension Vault where ID == ArchivePath {
-  func concerts(on dayOfLeapYear: Int) -> [Concert] {
-    unsortedConcerts(on: dayOfLeapYear).sorted(by: compare(lhs:rhs:))
-  }
-}
-
-extension Vault where ID == String {
-  func compare(lhs: Concert, rhs: Concert) -> Bool {
-    comparator.compare(lhs: lhs, rhs: rhs)
-  }
-}
-
-extension Vault where ID == ArchivePath {
-  func compare(lhs: Concert, rhs: Concert) -> Bool {
-    comparator.compare(lhs: lhs, rhs: rhs)
   }
 }
 

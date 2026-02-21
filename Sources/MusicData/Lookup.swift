@@ -102,4 +102,9 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
       Related(id: $0.archivePath, name: $0.name)
     } ?? []
   }
+
+  public func compareConcerts(lhs: Concert, rhs: Concert, comparator: LibraryComparator<ID>) -> Bool
+  {
+    identifier.compareConcerts(lhs: lhs, rhs: rhs, comparator: comparator)
+  }
 }
