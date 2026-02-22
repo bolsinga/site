@@ -17,7 +17,7 @@ extension Vault where Identifier == BasicIdentifier {
     case .artist(let iD):
       return artistDigestMap[iD]
     case .year(let annum):
-      return annumDigestMap[annum]
+      return annum
     }
   }
 }
