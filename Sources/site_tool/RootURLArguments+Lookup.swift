@@ -8,7 +8,9 @@
 import Foundation
 
 extension RootURLArguments {
-  func lookup() async throws -> Lookup<ArchivePathIdentifier> {
-    try await Lookup(music: try await music().showsOnly, identifier: ArchivePathIdentifier())
+  func lookup<Identifier: ArchiveIdentifier>(identifier: Identifier) async throws
+    -> Lookup<Identifier>
+  {
+    try await Lookup(music: try await music().showsOnly, identifier: identifier)
   }
 }
