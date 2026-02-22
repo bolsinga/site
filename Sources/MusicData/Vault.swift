@@ -99,12 +99,12 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
   }
 
   func artists(filteredBy searchString: String) -> [Artist] {
-    artistDigestMap.values.map { $0.artist }.names(filteredBy: searchString, additive: true)
-      .sorted(by: compare(lhs:rhs:))
+    lookup.artistMap.values.names(filteredBy: searchString, additive: true).sorted(
+      by: compare(lhs:rhs:))
   }
 
   func venues(filteredBy searchString: String) -> [Venue] {
-    venueDigestMap.values.map { $0.venue }.names(filteredBy: searchString, additive: true)
-      .sorted(by: compare(lhs:rhs:))
+    lookup.venueMap.values.names(filteredBy: searchString, additive: true).sorted(
+      by: compare(lhs:rhs:))
   }
 }
