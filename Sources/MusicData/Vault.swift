@@ -20,7 +20,6 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
 
   public let venueDigestMap: [ID: VenueDigest]
 
-  public let decadesMap: [Decade: [AnnumID: Set<ID>]]
   public let annumDigestMap: [AnnumID: AnnumDigest]
 
   private let categoryURLLookup: [ArchiveCategory: URL]
@@ -54,13 +53,16 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
 
     self.venueDigestMap = try await venueDigestMap
 
-    self.decadesMap = lookup.decadesMap
     self.annumDigestMap = try lookup.annumDigestMap(sortedConcerts: sortedConcerts)
 
     self.categoryURLLookup = ArchiveCategory.allCases.reduce(into: [ArchiveCategory: URL]()) {
       guard let url = $1.url(rootURL: url) else { return }
       $0[$1] = url
     }
+  }
+
+  var decadesMap: [Decade: [AnnumID: Set<ID>]] {
+    lookup.decadesMap
   }
 
   fileprivate func unsortedConcerts(on dayOfLeapYear: Int) -> any Collection<Concert> {
