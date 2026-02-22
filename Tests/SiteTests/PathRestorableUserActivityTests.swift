@@ -80,9 +80,8 @@ struct PathRestorableUserActivityTests {
     let userActivity = NSUserActivity(activityType: "test-type")
 
     let item = Annum.year(1990)
-    let digest = AnnumDigest(annum: item, shows: [], rank: .empty)
 
-    userActivity.update(digest, url: rootURL)
+    userActivity.update(item, url: rootURL)
 
     #expect(userActivity.isEligibleForHandoff)
 
