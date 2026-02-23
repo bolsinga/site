@@ -40,6 +40,7 @@ struct Tracker<Identifier: ArchiveIdentifier> {
   var venueCounts = [ID: Int]()
   var venueArtists = [ID: Set<ID>]()
   var venueOrder = OrderedSet<ID>()
+  var venueShows = [ID: Set<ID>]()
 
   // All the unique dates for an artist, used to calculate its span.
   var artistSpanDates = [ID: Set<PartialDate>]()
@@ -62,6 +63,7 @@ struct Tracker<Identifier: ArchiveIdentifier> {
     venueSpanDates.insert(key: venueID, value: show.date)
     venueCounts.increment(key: venueID)
     venueOrder.append(venueID)
+    insert(into: &venueShows, key: venueID, value: showID)
 
     let annumID = try identifier.annum(show.date.annum)
 

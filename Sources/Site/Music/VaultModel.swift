@@ -25,7 +25,7 @@ enum LocationAuthorization {
   public let vault: Vault<BasicIdentifier>
 
   internal var todayDayOfLeapYear: Int = Date.now.dayOfLeapYear
-  private var venueLocatables: [Venue.ID: Locatable] = [:]
+  private var venueLocatables: [BasicIdentifier.ID: Locatable] = [:]
   private var currentLocation: CLLocation?
   internal var locationAuthorization = LocationAuthorization.allowed
 
@@ -38,6 +38,7 @@ enum LocationAuthorization {
 
   private static let distanceFilter: CLLocationDistance = 10
 
+  private var batchGeocodeTotalCount = 0
   private var batchGeocodeCompleted = false
 
   @ObservationIgnored
@@ -121,9 +122,9 @@ enum LocationAuthorization {
     }
 
     do {
-      for try await (venue, locatable) in BatchGeocode(
-        atlas: atlas, geocodables: vault.venueDigestMap.map { $0.value.venue })
-      {
+      let venues = vault.venues()
+      batchGeocodeTotalCount = venues.count
+      for try await (venue, locatable) in BatchGeocode(atlas: atlas, geocodables: venues) {
         Logger.vaultModel.log("geocoded: \(venue.id, privacy: .public)")
         venueLocatables[venue.id] = locatable
       }
@@ -135,7 +136,8 @@ enum LocationAuthorization {
 
   var geocodingProgress: Double {
     guard !batchGeocodeCompleted else { return 1.0 }
-    return Double(venueLocatables.count) / Double(vault.venueDigestMap.count)
+    guard batchGeocodeTotalCount != 0 else { return 1.0 }
+    return Double(venueLocatables.count) / Double(batchGeocodeTotalCount)
   }
 
   @MainActor
@@ -177,35 +179,38 @@ enum LocationAuthorization {
     }
   }
 
-  private func concertsNearby(_ distanceThreshold: CLLocationDistance) -> [Concert] {
+  private func venueIDsNearby(_ distanceThreshold: CLLocationDistance)
+    -> any Collection<BasicIdentifier.ID>
+  {
     guard let currentLocation else {
       Logger.vaultModel.log("Nearby: No Location")
       return []
     }
-    let nearbyConcerts = concerts(nearby: currentLocation, distanceThreshold: distanceThreshold)
-    Logger.vaultModel.log("Nearby: Concerts: \(nearbyConcerts.count, privacy: .public)")
-    return nearbyConcerts
+    let nearbyVenueIDs = venues(nearby: currentLocation, distanceThreshold: distanceThreshold)
+    Logger.vaultModel.log("Nearby: Venues: \(nearbyVenueIDs.count, privacy: .public)")
+    return nearbyVenueIDs
   }
 
   private func venuesNearby(_ distanceThreshold: CLLocationDistance)
     -> any Collection<RankedArchiveItem>
   {
-    let nearbyVenueIDs = Set(concertsNearby(distanceThreshold).map { $0.venue.id })
-    return nearbyVenueIDs.compactMap { vault.venueDigestMap[$0] }.map { $0.rankedArchiveItem }
+    let nearbyVenueIDs = venueIDsNearby(distanceThreshold)
+    return nearbyVenueIDs.compactMap { vault.rankedVenue(id: $0) }
   }
 
   private func artistsNearby(_ distanceThreshold: CLLocationDistance)
     -> any Collection<RankedArchiveItem>
   {
-    let nearbyArtistIDs = Set(
-      concertsNearby(distanceThreshold).flatMap { $0.artists.map { $0.id } })
-    return nearbyArtistIDs.compactMap { vault.artistDigestMap[$0] }.map { $0.rankedArchiveItem }
+    let nearbyVenueIDs = venueIDsNearby(distanceThreshold)
+    let nearbyArtistIDs = nearbyVenueIDs.flatMap { vault.artists(venueID: $0) }
+    return nearbyArtistIDs.compactMap { vault.rankedArtist(id: $0) }
   }
 
   private func decadesMapsNearby(_ distanceThreshold: CLLocationDistance) -> [Decade: [Annum: Set<
     Concert.ID
   >]] {
-    let nearbyConcertIDs = Set(concertsNearby(distanceThreshold).map { $0.id })
+    let nearbyVenueIDs = venueIDsNearby(distanceThreshold)
+    let nearbyConcertIDs = nearbyVenueIDs.flatMap { vault.shows(venueID: $0) }
     return [Decade: [Annum: Set<Concert.ID>]](
       uniqueKeysWithValues: vault.decadesMap.compactMap {
         let nearbyAnnums = [Annum: Set<Show.ID>](
@@ -223,15 +228,13 @@ enum LocationAuthorization {
       })
   }
 
-  private func concerts(nearby location: CLLocation, distanceThreshold: CLLocationDistance)
-    -> [Concert]
+  private func venues(nearby location: CLLocation, distanceThreshold: CLLocationDistance)
+    -> any Collection<BasicIdentifier.ID>
   {
-    vault.concertMap.values
-      .filter { venueLocatables[$0.venue.id] != nil }
-      .filter {
-        venueLocatables[$0.venue.id]!.nearby(to: location, distanceThreshold: distanceThreshold)
-      }
-      .sorted { vault.compare(lhs: $0, rhs: $1) }
+    venueLocatables.compactMap { (id, locatable) in
+      guard locatable.nearby(to: location, distanceThreshold: distanceThreshold) else { return nil }
+      return id
+    }
   }
 
   func filteredDecadesMap(_ nearbyModel: NearbyModel, distanceThreshold: CLLocationDistance)
@@ -244,14 +247,15 @@ enum LocationAuthorization {
     -> any Collection<RankedArchiveItem>
   {
     nearbyModel.locationFilter.isNearby
-      ? venuesNearby(distanceThreshold) : vault.venueDigestMap.values.map { $0.rankedArchiveItem }
+      ? venuesNearby(distanceThreshold) : vault.venues().compactMap { vault.rankedVenue(id: $0.id) }
   }
 
   func nearbyArtists(_ nearbyModel: NearbyModel, distanceThreshold: CLLocationDistance)
     -> any Collection<RankedArchiveItem>
   {
     nearbyModel.locationFilter.isNearby
-      ? artistsNearby(distanceThreshold) : vault.artistDigestMap.values.map { $0.rankedArchiveItem }
+      ? artistsNearby(distanceThreshold)
+      : vault.artists().compactMap { vault.rankedArtist(id: $0.id) }
   }
 
   @MainActor

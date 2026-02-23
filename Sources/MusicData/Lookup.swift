@@ -56,6 +56,14 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
     bracket.showMap
   }
 
+  public func shows(venueID: ID) -> Set<ID> {
+    bracket.venueShows[venueID] ?? []
+  }
+
+  public func artists(venueID: ID) -> Set<ID> {
+    bracket.venueArtists[venueID] ?? []
+  }
+
   public func venueForShow(_ show: Show) -> Venue? {
     guard let id = try? identifier.venue(show.venue), let venue = venueMap[id] else {
       Logger.lookup.log("Show: \(show.id, privacy: .public) missing venue")
