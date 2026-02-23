@@ -10,15 +10,16 @@ import Foundation
 extension Concert {
   fileprivate var digest: ShowDigest {
     ShowDigest(
-      id: archivePath, date: show.date, performers: performers, venue: venue?.name,
-      location: venue?.location)
+      id: archivePath, date: show.date, performers: performers, venue: venue.name,
+      location: venue.location)
   }
 }
 
 extension Lookup {
   func sortedConcerts(comparator: LibraryComparator<ID>) -> [Concert] {
-    showMap.values.map {
-      Concert(show: $0, venue: venueForShow($0), artists: artistsForShow($0))
+    showMap.values.compactMap {
+      guard let venue = venueForShow($0) else { return nil }
+      return Concert(show: $0, venue: venue, artists: artistsForShow($0))
     }.sorted(by: { compareConcerts(lhs: $0, rhs: $1, comparator: comparator) })
   }
 

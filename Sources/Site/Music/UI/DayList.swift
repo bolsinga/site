@@ -30,7 +30,7 @@ struct DayList: View {
         List(concerts) { concert in
           NavigationLink(value: concert.archivePath) {
             ConcertBlurb(
-              venue: concert.venue?.name, date: concert.show.date, performers: concert.performers,
+              venue: concert.venue.name, date: concert.show.date, performers: concert.performers,
               dateFormat: .relative)
           }
         }

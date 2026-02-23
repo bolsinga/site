@@ -7,17 +7,6 @@
     "%@" : {
 
     },
-    "%@ : %@" : {
-      "comment" : "full.no.venue",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ : %2$@"
-          }
-        }
-      }
-    },
     "%@ @ %@" : {
       "comment" : "artistAndVenue.no.venue",
       "localizations" : {

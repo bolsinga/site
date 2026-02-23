@@ -10,7 +10,7 @@ import Foundation
 
 extension Collection where Element == Concert {
   var stateCounts: [String: Int] {
-    self.compactMap { $0.venue?.location }.map { $0.state }.reduce(
+    self.map { $0.venue.location.state }.reduce(
       into: [String: Int]()
     ) {
       let count = $0[$1] ?? 0
@@ -25,7 +25,7 @@ extension Collection where Element == Concert {
   }
 
   var venueCount: Int {
-    Array(self.compactMap { $0.venue }.uniqued()).count
+    Array(self.map { $0.venue }.uniqued()).count
   }
 
   var artistCount: Int {

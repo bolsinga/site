@@ -13,10 +13,7 @@ struct ShowDetail: View {
   let isPathNavigable: (ArchivePath) -> Bool
 
   private var venueName: String {
-    guard let venue = concert.venue else {
-      return ""
-    }
-    return venue.name
+    concert.venue.name
   }
 
   private var date: PartialDate { concert.show.date }

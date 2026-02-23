@@ -33,33 +33,19 @@ extension Concert.FormatStyle: Foundation.FormatStyle {
     switch style {
     case .full:
       let artists = value.artists.map { $0.name }.joined(separator: ", ")
-      if let venue {
-        return String(
-          localized: "\(artists) @ \(venue.name) : \(value.show.date.formatted(.compact))",
-          comment: "full.venue")
-      } else {
-        return String(
-          localized: "\(artists) : \(value.show.date.formatted(.compact))",
-          comment: "full.no.venue")
-      }
+      return String(
+        localized: "\(artists) @ \(venue.name) : \(value.show.date.formatted(.compact))",
+        comment: "full.venue")
     case .artistsAndVenue:
       let artists = value.artists.map { $0.name }.joined(separator: ", ")
-      if let venue {
-        return String(
-          localized: "\(artists) @ \(venue.name)",
-          comment: "artistAndVenue.no.venue")
-      } else {
-        return artists
-      }
+      return String(
+        localized: "\(artists) @ \(venue.name)",
+        comment: "artistAndVenue.no.venue")
     case .headlinerAndVenue:
       let headliner = value.artists.first?.name ?? ""
-      if let venue {
-        return String(
-          localized: "\(headliner), \(venue.name)",
-          comment: "headlinerAndVenue.no.venue")
-      } else {
-        return headliner
-      }
+      return String(
+        localized: "\(headliner), \(venue.name)",
+        comment: "headlinerAndVenue.no.venue")
     }
   }
 }

@@ -29,17 +29,17 @@ extension ArchiveIdentifier {
     let lhShow = lhs.show
     let rhShow = rhs.show
     if lhShow.date == rhShow.date {
-      if let lhVenue = lhs.venue, let rhVenue = rhs.venue {
-        if lhVenue == rhVenue {
-          if let lhHeadliner = lhs.artists.first, let rhHeadliner = rhs.artists.first {
-            if lhHeadliner == rhHeadliner {
-              return lhs.id < rhs.id
-            }
-            return libraryCompare(lhs: lhHeadliner, rhs: rhHeadliner, comparator: comparator)
+      let lhVenue = lhs.venue
+      let rhVenue = rhs.venue
+      if lhVenue == rhVenue {
+        if let lhHeadliner = lhs.artists.first, let rhHeadliner = rhs.artists.first {
+          if lhHeadliner == rhHeadliner {
+            return lhs.id < rhs.id
           }
+          return libraryCompare(lhs: lhHeadliner, rhs: rhHeadliner, comparator: comparator)
         }
-        return libraryCompare(lhs: lhVenue, rhs: rhVenue, comparator: comparator)
       }
+      return libraryCompare(lhs: lhVenue, rhs: rhVenue, comparator: comparator)
     }
     return lhShow.date < rhShow.date
   }
