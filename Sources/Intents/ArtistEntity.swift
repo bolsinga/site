@@ -46,7 +46,7 @@ struct ArtistEntity: AppEntity {
     self.url = url
     self.name = digest.name
     self.showCount = digest.shows.count
-    self.venueCount = Array(digest.shows.compactMap { $0.venue }.uniqued()).count
+    self.venueCount = Array(digest.shows.map { $0.venue }.uniqued()).count
     self.related = digest.related.map { $0.name }
   }
 }
