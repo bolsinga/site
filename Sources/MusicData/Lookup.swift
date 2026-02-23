@@ -100,6 +100,24 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
     bracket.venueArtists[venueID] ?? []
   }
 
+  /// Returns all artist IDs that performed in the specified show.
+  ///
+  /// - Parameter showID: The stable show identifier.
+  /// - Returns: A set of artist IDs that appeared in the show.
+  public func artists(showID: ID) -> Set<ID> {
+    bracket.artistShows[showID] ?? []
+  }
+
+  /// Returns the venue IDs associated with the specified show.
+  ///
+  /// Shows have a single venue; this returns a set for consistency with other APIs.
+  ///
+  /// - Parameter showID: The stable show identifier.
+  /// - Returns: A set containing the venue ID for the show, if available; otherwise an empty set.
+  public func venues(showID: ID) -> Set<ID> {
+    bracket.venueShows[showID] ?? []
+  }
+
   /// Looks up the venue for a given show.
   ///
   /// - Parameter show: The show whose venue to resolve.
@@ -167,6 +185,16 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
     return relationMap[id]?.compactMap { artistMap[$0] }.map {
       Related(id: $0.archivePath, name: $0.name)
     } ?? []
+  }
+
+  /// Returns the most recent concert identifiers.
+  ///
+  /// The order reflects chronological ordering of shows with fully known dates.
+  ///
+  /// - Parameter count: The number of most-recent shows to return.
+  /// - Returns: An array of show IDs ordered from oldest to newest within the requested window.
+  public func recentConcerts(_ count: Int) -> [ID] {
+    bracket.showOrder.suffix(count)
   }
 
   /// Compares two concerts using the provided library comparator.

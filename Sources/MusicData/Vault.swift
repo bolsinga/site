@@ -71,8 +71,43 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
     comparator.libraryCompare(lhs: lhs, rhs: rhs)
   }
 
+  fileprivate func concertIDs(on dayOfLeapYear: Int, orRecentCount recentCount: Int)
+    -> any Collection<ID>
+  {
+    lookup.concertDayMap[dayOfLeapYear] ?? lookup.recentConcerts(recentCount)
+  }
+
+  /// Returns artist IDs for shows on a specific day or, if none, the most recent shows.
+  ///
+  /// If there are shows on the given day-of-leap-year index, the returned collection contains
+  /// the artists who performed those shows. Otherwise, this falls back to the artists from the
+  /// most recent `recentCount` shows.
+  ///
+  /// - Parameters:
+  ///   - dayOfLeapYear: The day-of-leap-year index (1...366) to query.
+  ///   - recentCount: The number of recent shows to consider when there are no shows on that day.
+  /// - Returns: A collection of artist IDs, capped to the most recent `recentCount` entries.
+  func artistIDs(on dayOfLeapYear: Int, orRecentCount recentCount: Int) -> any Collection<ID> {
+    concertIDs(on: dayOfLeapYear, orRecentCount: recentCount).flatMap { lookup.artists(showID: $0) }
+      .suffix(recentCount)
+  }
+
+  /// Returns venue IDs for shows on a specific day or, if none, the most recent shows.
+  ///
+  /// If there are shows on the given day-of-leap-year index, the returned collection contains
+  /// the venues that hosted those shows. Otherwise, this falls back to the venues from the
+  /// most recent `recentCount` shows.
+  ///
+  /// - Parameters:
+  ///   - dayOfLeapYear: The day-of-leap-year index (1...366) to query.
+  ///   - recentCount: The number of recent shows to consider when there are no shows on that day.
+  /// - Returns: A collection of venue IDs, capped to the most recent `recentCount` entries.
+  func venueIDs(on dayOfLeapYear: Int, orRecentCount recentCount: Int) -> any Collection<ID> {
+    concertIDs(on: dayOfLeapYear, orRecentCount: recentCount).flatMap { lookup.venues(showID: $0) }
+      .suffix(recentCount)
+  }
+
   func concerts(on dayOfLeapYear: Int) -> [Concert] {
-    // dayOfLeapYear: ShowID
     lookup.concertDayMap[dayOfLeapYear]?.compactMap { lookup.concert(showId: $0) }.sorted(
       by: compare(lhs:rhs:)) ?? []
   }

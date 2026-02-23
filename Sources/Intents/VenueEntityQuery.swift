@@ -14,12 +14,6 @@ extension Logger {
   fileprivate static let venueQuery = Logger(category: "venueQuery")
 }
 
-extension Sequence where Element == Concert {
-  fileprivate var venueIDs: [Venue.ID] {
-    Array(self.map { $0.venue.id }.uniqued())
-  }
-}
-
 struct VenueEntityQuery: EntityQuery {
   func entities(for identifiers: [VenueEntity.ID]) async throws -> [VenueEntity] {
     Logger.venueQuery.log("Identifiers: \(identifiers)")
@@ -33,8 +27,7 @@ struct VenueEntityQuery: EntityQuery {
   func suggestedEntities() async throws -> [VenueEntity] {
     Logger.venueQuery.log("Suggested")
 
-    var ids = concertsToday(vault).venueIDs
-    if ids.isEmpty { ids = vault.recentConcerts().venueIDs }
+    let ids = vault.venueIDs(on: Date.now.dayOfLeapYear, orRecentCount: 5)
 
     return try await entities(for: ids.reversed())
   }

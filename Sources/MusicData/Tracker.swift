@@ -88,6 +88,9 @@ struct Tracker<Identifier: ArchiveIdentifier> {
   /// Shows indexed by the day of leap year (1...366).
   var dayOfLeapYearShows = [Int: Set<ID>]()
 
+  /// Ordered sequence of show IDs with fully known dates.
+  var showOrder = OrderedSet<ID>()
+
   private mutating func track(show: Show, identifier: Identifier) throws {
     let showID = try identifier.show(show.id)
 
@@ -120,6 +123,7 @@ struct Tracker<Identifier: ArchiveIdentifier> {
 
     if !show.date.isPartiallyUnknown, let date = show.date.date {
       insert(into: &dayOfLeapYearShows, key: date.dayOfLeapYear, value: showID)
+      showOrder.append(showID)
     }
   }
 

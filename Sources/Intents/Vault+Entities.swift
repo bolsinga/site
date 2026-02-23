@@ -43,8 +43,4 @@ extension Vault where Identifier == BasicIdentifier {
   func venueEntities(filteredBy searchString: String) -> [VenueEntity] {
     venueDigestMap.values.names(filteredBy: searchString).compactMap { entity(for: $0) }
   }
-
-  func recentConcerts(_ count: Int = 5) -> [Concert] {
-    concertMap.values.sorted(by: compare(lhs:rhs:)).suffix(count)
-  }
 }
