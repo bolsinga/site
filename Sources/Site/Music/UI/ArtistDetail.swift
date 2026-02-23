@@ -34,7 +34,7 @@ struct ArtistDetail: View {
       Section(
         header: Text("Shows")
       ) {
-        ForEach(digest.shows) { show in
+        ForEach(digest.shows.sorted()) { show in
           ArchivePathLink(archivePath: show.id, isPathNavigable: isPathNavigable) {
             ArtistBlurb(count: show.performers.count, venue: show.venue, date: show.date)
           }
