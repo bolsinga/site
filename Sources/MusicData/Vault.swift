@@ -35,25 +35,23 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
     self.lookup = lookup
     let comparator = LibraryComparator(tokenMap: lookup.librarySortTokenMap)
 
-    async let asyncSortedConcerts = lookup.sortedConcerts(comparator: comparator)
+    let concerts = lookup.concerts
 
-    let sortedConcerts = await asyncSortedConcerts
+    async let artistDigestMap = lookup.artistDigestMap(concerts: concerts)
 
-    async let artistDigestMap = lookup.artistDigestMap(sortedConcerts: sortedConcerts)
-
-    async let venueDigestMap = lookup.venueDigestMap(sortedConcerts: sortedConcerts)
+    async let venueDigestMap = lookup.venueDigestMap(concerts: concerts)
 
     self.comparator = comparator
     self.sectioner = await LibrarySectioner(librarySortTokenMap: lookup.librarySortTokenMap)
     self.rootURL = url
 
-    self.concertMap = try sortedConcerts.reduce(into: [:]) { $0[try identifier.show($1.id)] = $1 }
+    self.concertMap = try concerts.reduce(into: [:]) { $0[try identifier.show($1.id)] = $1 }
 
     self.artistDigestMap = try await artistDigestMap
 
     self.venueDigestMap = try await venueDigestMap
 
-    self.annumDigestMap = try lookup.annumDigestMap(sortedConcerts: sortedConcerts)
+    self.annumDigestMap = try lookup.annumDigestMap(concerts: concerts)
 
     self.categoryURLLookup = ArchiveCategory.allCases.reduce(into: [ArchiveCategory: URL]()) {
       guard let url = $1.url(rootURL: url) else { return }

@@ -23,7 +23,7 @@ struct YearDetail: View {
   @ViewBuilder private var showsElement: some View {
     if !digest.shows.isEmpty {
       Section(header: Text("Shows")) {
-        ForEach(digest.shows) { show in
+        ForEach(digest.shows.sorted()) { show in
           ArchivePathLink(archivePath: show.id, isPathNavigable: isPathNavigable) {
             ConcertBlurb(
               venue: show.venue, date: show.date, performers: show.performers, dateFormat: .noYear)

@@ -43,7 +43,7 @@ struct VenueDetail: View {
 
   @ViewBuilder private var showsElement: some View {
     Section(header: Text("Shows")) {
-      ForEach(digest.shows) { show in
+      ForEach(digest.shows.sorted()) { show in
         ArchivePathLink(archivePath: show.id, isPathNavigable: isPathNavigable) {
           VenueBlurb(date: show.date, performers: show.performers)
         }

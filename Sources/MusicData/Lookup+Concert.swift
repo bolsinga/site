@@ -16,18 +16,18 @@ extension Concert {
 }
 
 extension Lookup {
-  func sortedConcerts(comparator: LibraryComparator<ID>) -> [Concert] {
+  var concerts: [Concert] {
     showMap.values.compactMap {
       guard let venue = venueForShow($0) else { return nil }
       return Concert(show: $0, venue: venue, artists: artistsForShow($0))
-    }.sorted(by: { compareConcerts(lhs: $0, rhs: $1, comparator: comparator) })
+    }
   }
 
-  func artistDigestMap(sortedConcerts: [Concert]) throws -> [ID: ArtistDigest] {
+  func artistDigestMap(concerts: [Concert]) throws -> [ID: ArtistDigest] {
     try artistMap.values.map { artist in
       ArtistDigest(
         artist: artist,
-        shows: sortedConcerts.compactMap {
+        shows: concerts.compactMap {
           guard $0.show.artists.contains(artist.id) else { return nil }
           return $0.digest
         },
@@ -38,11 +38,11 @@ extension Lookup {
     }
   }
 
-  func venueDigestMap(sortedConcerts: [Concert]) throws -> [ID: VenueDigest] {
+  func venueDigestMap(concerts: [Concert]) throws -> [ID: VenueDigest] {
     try venueMap.values.map { venue in
       VenueDigest(
         venue: venue,
-        shows: sortedConcerts.compactMap {
+        shows: concerts.compactMap {
           guard $0.show.venue == venue.id else { return nil }
           return $0.digest
         },
@@ -53,12 +53,12 @@ extension Lookup {
     }
   }
 
-  func annumDigestMap(sortedConcerts: [Concert]) throws -> [AnnumID: AnnumDigest] {
+  func annumDigestMap(concerts: [Concert]) throws -> [AnnumID: AnnumDigest] {
     let annums = decadesMap.values.flatMap { $0.keys.map { identifier.annum(for: $0) } }
     return try annums.map { annum in
       AnnumDigest(
         annum: annum,
-        shows: sortedConcerts.compactMap {
+        shows: concerts.compactMap {
           guard $0.show.date.annum == annum else { return nil }
           return $0.digest
         },
