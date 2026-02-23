@@ -68,6 +68,10 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
   let venueArtists: [ID: Set<ID>]
   /// Ordered sequence of show IDs with fully known dates, used to resolve recency.
   let showOrder: OrderedSet<ID>
+  /// For each show `ID`, the array of artist `ID`s that performed at that show, in order from headliner to opener.
+  let showArtists: [ID: Array<ID>]
+  // Venue ID for Show IDs.
+  let showVenue: [ID: ID]
 
   /// Creates a new `Bracket` by deriving ranking and lookup maps from the provided `Music` archive.
   ///
@@ -95,6 +99,8 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
     self.venueShows = try await tracker.venueShows
     self.venueArtists = try await tracker.venueArtists
     self.showOrder = try await tracker.showOrder
+    self.showArtists = try await tracker.showArtists.mapValues { $0.reversed() }
+    self.showVenue = try await tracker.showVenue
 
     self.librarySortTokenMap = try await librarySortTokenMap
   }

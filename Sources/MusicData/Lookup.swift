@@ -6,11 +6,6 @@
 //
 
 import Foundation
-import os
-
-extension Logger {
-  fileprivate static let lookup = Logger(category: "lookup")
-}
 
 /// A public facade for querying archive data by stable identifiers.
 ///
@@ -103,48 +98,36 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
   /// Returns all artist IDs that performed in the specified show.
   ///
   /// - Parameter showID: The stable show identifier.
-  /// - Returns: A set of artist IDs that appeared in the show.
-  public func artists(showID: ID) -> Set<ID> {
-    bracket.artistShows[showID] ?? []
+  /// - Returns: An array of artist IDs that appeared in the show, headliner to opener.
+  public func artists(showID: ID) -> Array<ID> {
+    bracket.showArtists[showID] ?? []
   }
 
-  /// Returns the venue IDs associated with the specified show.
+  /// Returns the venue ID associated with the specified show.
   ///
   /// Shows have a single venue; this returns a set for consistency with other APIs.
   ///
   /// - Parameter showID: The stable show identifier.
-  /// - Returns: A set containing the venue ID for the show, if available; otherwise an empty set.
-  public func venues(showID: ID) -> Set<ID> {
-    bracket.venueShows[showID] ?? []
+  /// - Returns: The venue ID for the show, if available; otherwise nil.
+  public func venues(showID: ID) -> ID? {
+    bracket.showVenue[showID]
   }
 
   /// Looks up the venue for a given show.
   ///
-  /// - Parameter show: The show whose venue to resolve.
+  /// - Parameter showID: The stable show identifier.
   /// - Returns: The `Venue` if found, otherwise `nil`.
-  public func venueForShow(_ show: Show) -> Venue? {
-    guard let id = try? identifier.venue(show.venue), let venue = venueMap[id] else {
-      Logger.lookup.log("Show: \(show.id, privacy: .public) missing venue")
-      return nil
-    }
-    return venue
+  public func venueForShow(showID: ID) -> Venue? {
+    guard let venueID = venues(showID: showID) else { return nil }
+    return venueMap[venueID]
   }
 
   /// Looks up all artists for a given show.
   ///
-  /// - Parameter show: The show whose artists to resolve.
+  /// - Parameter showID: The stable show identifier.
   /// - Returns: An array of `Artist` values, in the order they are stored for the show.
-  public func artistsForShow(_ show: Show) -> [Artist] {
-    var showArtists = [Artist]()
-    for id in show.artists {
-      guard let aid = try? identifier.artist(id), let artist = artistMap[aid] else {
-        Logger.lookup.log(
-          "Show: \(show.id, privacy: .public) missing artist: \(id, privacy: .public)")
-        continue
-      }
-      showArtists.append(artist)
-    }
-    return showArtists
+  public func artistsForShow(showID: ID) -> [Artist] {
+    artists(showID: showID).compactMap { artistMap[$0] }
   }
 
   func rankDigest(annum: AnnumID) -> RankDigest {
