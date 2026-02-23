@@ -190,7 +190,7 @@ enum LocationAuthorization {
   private func venuesNearby(_ distanceThreshold: CLLocationDistance)
     -> any Collection<RankedArchiveItem>
   {
-    let nearbyVenueIDs = Set(concertsNearby(distanceThreshold).compactMap { $0.venue?.id })
+    let nearbyVenueIDs = Set(concertsNearby(distanceThreshold).map { $0.venue.id })
     return nearbyVenueIDs.compactMap { vault.venueDigestMap[$0] }.map { $0.rankedArchiveItem }
   }
 
@@ -227,10 +227,9 @@ enum LocationAuthorization {
     -> [Concert]
   {
     vault.concertMap.values
-      .filter { $0.venue != nil }
-      .filter { venueLocatables[$0.venue!.id] != nil }
+      .filter { venueLocatables[$0.venue.id] != nil }
       .filter {
-        venueLocatables[$0.venue!.id]!.nearby(to: location, distanceThreshold: distanceThreshold)
+        venueLocatables[$0.venue.id]!.nearby(to: location, distanceThreshold: distanceThreshold)
       }
       .sorted { vault.compare(lhs: $0, rhs: $1) }
   }

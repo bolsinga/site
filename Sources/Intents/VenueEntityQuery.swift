@@ -16,7 +16,7 @@ extension Logger {
 
 extension Sequence where Element == Concert {
   fileprivate var venueIDs: [Venue.ID] {
-    Array(self.compactMap { $0.venue?.id }.uniqued())
+    Array(self.map { $0.venue.id }.uniqued())
   }
 }
 

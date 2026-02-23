@@ -11,6 +11,6 @@ public struct ShowDigest: Codable, Equatable, Hashable, Identifiable, Sendable {
   public let id: ArchivePath
   let date: PartialDate
   let performers: [String]
-  let venue: String?
-  let location: Location?
+  let venue: String
+  let location: Location
 }

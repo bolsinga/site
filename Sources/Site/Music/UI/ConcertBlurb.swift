@@ -13,16 +13,14 @@ struct ConcertBlurb: View {
     case relative
   }
 
-  let venue: String?
+  let venue: String
   let date: PartialDate
   let performers: [String]
   let dateFormat: DateFormat
 
   @ViewBuilder private var detailsView: some View {
     VStack(alignment: .trailing) {
-      if let venue {
-        Text(venue).font(.headline)
-      }
+      Text(venue).font(.headline)
       switch dateFormat {
       case .noYear:
         Text(date.formatted(.noYear))
@@ -48,7 +46,7 @@ struct ConcertBlurb: View {
 extension ConcertBlurb {
   fileprivate init(concert: Concert, dateFormat: DateFormat) {
     self.init(
-      venue: concert.venue?.name, date: concert.show.date, performers: concert.performers,
+      venue: concert.venue.name, date: concert.show.date, performers: concert.performers,
       dateFormat: dateFormat)
   }
 }

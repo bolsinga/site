@@ -9,16 +9,14 @@ import SwiftUI
 
 struct ArtistBlurb: View {
   let count: Int
-  let venue: String?
+  let venue: String
   let date: PartialDate
 
   var body: some View {
     LabeledContent {
       Text("\(count) Artist(s)")
     } label: {
-      if let venue {
-        Text(venue)
-      }
+      Text(venue)
       Text(date.formatted(.compact))
     }
   }
@@ -27,7 +25,7 @@ struct ArtistBlurb: View {
 extension ArtistBlurb {
   fileprivate init(concert: Concert) {
     self.init(
-      count: concert.show.artists.count, venue: concert.venue?.name, date: concert.show.date)
+      count: concert.show.artists.count, venue: concert.venue.name, date: concert.show.date)
   }
 }
 
