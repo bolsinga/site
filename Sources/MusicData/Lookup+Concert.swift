@@ -34,41 +34,71 @@ extension Lookup {
     return showIDs.compactMap { showDigest(showId: $0) }
   }
 
-  var concerts: [Concert] {
-    showMap.values.compactMap {
-      guard let venue = venueForShow($0) else { return nil }
-      return Concert(show: $0, venue: venue, artists: artistsForShow($0))
-    }
+  fileprivate func concert(show: Show) -> Concert? {
+    guard let venue = venueForShow(show) else { return nil }
+    return Concert(show: show, venue: venue, artists: artistsForShow(show))
   }
 
-  func artistDigestMap(concerts: [Concert]) throws -> [ID: ArtistDigest] {
+  func concert(showId: ID) -> Concert? {
+    guard let show = showMap[showId] else { return nil }
+    return concert(show: show)
+  }
+
+  var concerts: [Concert] {
+    // Used to build concertMap
+    showMap.values.compactMap { concert(show: $0) }
+  }
+
+  func artistDigestMap() throws -> [ID: ArtistDigest] {
     try artistMap.values.map { artist in
-      ArtistDigest(
-        artist: artist,
-        shows: concerts.compactMap {
-          guard $0.show.artists.contains(artist.id) else { return nil }
-          return $0.digest
-        },
-        related: related(artist).sorted(by: { $0.name < $1.name }),
-        rank: rankDigest(artist: try identifier.artist(artist.id)))
+      try artistDigest(artist: artist)
     }.reduce(into: [:]) {
       $0[try identifier.artist($1.artist.id)] = $1
     }
   }
 
-  func venueDigestMap(concerts: [Concert]) throws -> [ID: VenueDigest] {
+  private func artistDigest(artist: Artist, artistID: ID) throws -> ArtistDigest {
+    ArtistDigest(
+      artist: artist,
+      shows: shows(artistID: artistID).compactMap { showDigest(showId: $0) },
+      related: related(artist).sorted(by: { $0.name < $1.name }),
+      rank: rankDigest(artist: artistID))
+  }
+
+  private func artistDigest(artist: Artist) throws -> ArtistDigest {
+    let artistID = try identifier.artist(artist.id)
+    return try artistDigest(artist: artist, artistID: artistID)
+  }
+
+  func artistDigest(id artistID: ID) -> ArtistDigest? {
+    guard let artist = artistMap[artistID] else { return nil }
+    return try? artistDigest(artist: artist, artistID: artistID)
+  }
+
+  func venueDigestMap() throws -> [ID: VenueDigest] {
     try venueMap.values.map { venue in
-      VenueDigest(
-        venue: venue,
-        shows: concerts.compactMap {
-          guard $0.show.venue == venue.id else { return nil }
-          return $0.digest
-        },
-        related: related(venue).sorted(by: { $0.name < $1.name }),
-        rank: rankDigest(venue: try identifier.venue(venue.id)))
+      try venueDigest(venue: venue)
     }.reduce(into: [:]) {
       $0[try identifier.venue($1.venue.id)] = $1
     }
+  }
+
+  private func venueDigest(venue: Venue, venueID: ID) throws -> VenueDigest {
+    VenueDigest(
+      venue: venue,
+      shows: shows(venueID: venueID).compactMap { showDigest(showId: $0) },
+      related: related(venue).sorted(by: { $0.name < $1.name }),
+      rank: rankDigest(venue: venueID))
+  }
+
+  private func venueDigest(venue: Venue) throws -> VenueDigest {
+    let venueID = try identifier.venue(venue.id)
+    return try venueDigest(venue: venue, venueID: venueID)
+  }
+
+  func venueDigest(id venueID: ID) -> VenueDigest? {
+    guard let venue = venueMap[venueID] else { return nil }
+    return try? venueDigest(venue: venue, venueID: venueID)
   }
 
   func annumDigest(annum: Annum) throws -> AnnumDigest {
