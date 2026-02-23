@@ -129,6 +129,6 @@ struct StatsGrouping: View {
 
 #Preview("Years", traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
-  StatsGrouping(annumDigest: model.vault.annumDigestMap[.year(2003)]!)
+  StatsGrouping(annumDigest: model.vault.digest(annum: .year(2003))!)
     .padding()
 }

@@ -16,6 +16,24 @@ extension Concert {
 }
 
 extension Lookup {
+  fileprivate func showDigest(for show: Show) -> ShowDigest? {
+    guard let venue = venueForShow(show) else { return nil }
+    let performers = artistsForShow(show).map { $0.name }
+    return ShowDigest(
+      id: show.archivePath, date: show.date, performers: performers, venue: venue.name,
+      location: venue.location)
+  }
+
+  fileprivate func showDigest(showId: ID) -> ShowDigest? {
+    guard let show = showMap[showId] else { return nil }
+    return showDigest(for: show)
+  }
+
+  fileprivate func showDigests(annum: Annum, annumID: AnnumID) -> [ShowDigest] {
+    let showIDs = decadesMap[annum.decade]?[annumID] ?? []
+    return showIDs.compactMap { showDigest(showId: $0) }
+  }
+
   var concerts: [Concert] {
     showMap.values.compactMap {
       guard let venue = venueForShow($0) else { return nil }
@@ -53,17 +71,10 @@ extension Lookup {
     }
   }
 
-  func annumDigestMap(concerts: [Concert]) throws -> [AnnumID: AnnumDigest] {
-    let annums = decadesMap.values.flatMap { $0.keys.map { identifier.annum(for: $0) } }
-    return try annums.map { annum in
-      AnnumDigest(
-        annum: annum,
-        shows: concerts.compactMap {
-          guard $0.show.date.annum == annum else { return nil }
-          return $0.digest
-        },
-        rank: rankDigest(annum: try identifier.annum(annum))
-      )
-    }.reduce(into: [:]) { $0[try identifier.annum($1.annum)] = $1 }
+  func annumDigest(annum: Annum) throws -> AnnumDigest {
+    let annumID = try identifier.annum(annum)
+    return AnnumDigest(
+      annum: annum, shows: showDigests(annum: annum, annumID: annumID),
+      rank: rankDigest(annum: annumID))
   }
 }
