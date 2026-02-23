@@ -17,7 +17,7 @@ extension StatsGrouping {
   }
 
   init(annumDigest digest: AnnumDigest) {
-    self.init(stats: Stats(annumDigest: digest), titles: StatsTitles(annumDigest: digest))
+    self.init(stats: Stats(annumDigest: digest), titles: StatsTitles(annum: digest.annum))
   }
 
   init<Identifier: ArchiveIdentifier>(vault: Vault<Identifier>) {

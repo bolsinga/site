@@ -19,11 +19,11 @@ extension StatsTitles {
       weekday: "Weekdays at \(digest.name)", month: "Months at \(digest.name)", state: "States")
   }
 
-  init(annumDigest digest: AnnumDigest) {
+  init(annum: Annum) {
     self.init(
-      weekday: "Weekdays in \(digest.annum.formatted(.year))",
-      month: "Months in \(digest.annum.formatted(.year))",
-      state: "States visited in \(digest.annum.formatted(.year))")
+      weekday: "Weekdays in \(annum.formatted(.year))",
+      month: "Months in \(annum.formatted(.year))",
+      state: "States visited in \(annum.formatted(.year))")
   }
 
   init<Identifier: ArchiveIdentifier>(vault: Vault<Identifier>) {
