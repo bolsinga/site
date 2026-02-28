@@ -32,7 +32,7 @@ struct ArtistList<A>: View where A: Rankable {
 extension ArtistList<ArtistDigest> {
   fileprivate init(model: VaultModel, sort: RankingSort, searchString: Binding<String>) {
     self.init(
-      artists: model.vault.artistDigestMap.values.shuffled(),
+      artists: model.previewAllArtists,
       sectioner: model.vault.sectioner,
       compare: model.vault.compare(lhs:rhs:),
       filter: { $0.names(filteredBy: $1) },

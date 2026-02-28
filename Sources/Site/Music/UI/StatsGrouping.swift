@@ -117,13 +117,13 @@ struct StatsGrouping: View {
 
 #Preview("Artists", traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
-  StatsGrouping(artistDigest: model.vault.artistDigestMap["ar692"]!)
+  StatsGrouping(artistDigest: model.previewArtist("ar692"))
     .padding()
 }
 
 #Preview("Venues", traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
-  StatsGrouping(venueDigest: model.vault.venueDigestMap["v103"]!)
+  StatsGrouping(venueDigest: model.previewVenue("v103"))
     .padding()
 }
 

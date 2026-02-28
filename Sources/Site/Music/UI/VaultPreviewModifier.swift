@@ -29,3 +29,25 @@ struct VaultPreviewModifier: PreviewModifier {
 extension PreviewTrait where T == Preview.ViewTraits {
   static var vaultModel: Self = .modifier(VaultPreviewModifier())
 }
+
+extension VaultModel {
+  func previewArtist(_ id: String) -> ArtistDigest {
+    vault.artistDigestMap[id]!
+  }
+
+  var previewAllArtists: any Collection<ArtistDigest> {
+    vault.artistDigestMap.values.shuffled()
+  }
+
+  func previewVenue(_ id: String) -> VenueDigest {
+    vault.venueDigestMap[id]!
+  }
+
+  var previewAllVenues: any Collection<VenueDigest> {
+    vault.venueDigestMap.values.shuffled()
+  }
+
+  func previewConcert(_ id: String) -> Concert {
+    vault.concertMap[id]!
+  }
+}

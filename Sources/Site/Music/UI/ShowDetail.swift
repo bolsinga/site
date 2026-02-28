@@ -69,7 +69,7 @@ struct ShowDetail: View {
   @Previewable @Environment(VaultModel.self) var model
   NavigationStack {
     ShowDetail(
-      concert: model.vault.concertMap["sh899"]!,
+      concert: model.previewConcert("sh899"),
       url: nil,
       isPathNavigable: { _ in
         true

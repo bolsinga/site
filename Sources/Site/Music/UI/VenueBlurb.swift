@@ -35,15 +35,15 @@ extension VenueBlurb {
 
 #Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
-  VenueBlurb(concert: model.vault.concertMap["sh1"]!)
+  VenueBlurb(concert: model.previewConcert("sh1"))
 }
 
 #Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
-  VenueBlurb(concert: model.vault.concertMap["sh500"]!)
+  VenueBlurb(concert: model.previewConcert("sh500"))
 }
 
 #Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
-  VenueBlurb(concert: model.vault.concertMap["sh100"]!)
+  VenueBlurb(concert: model.previewConcert("sh100"))
 }

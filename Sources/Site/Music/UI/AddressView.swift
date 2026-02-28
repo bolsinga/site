@@ -25,7 +25,7 @@ struct AddressView: View {
 
 #Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
-  AddressView(location: model.vault.venueDigestMap["v0"]!.venue.location)
+  AddressView(location: model.previewVenue("v0").venue.location)
 }
 
 #Preview {
