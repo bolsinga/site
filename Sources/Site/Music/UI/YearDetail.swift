@@ -50,7 +50,7 @@ struct YearDetail: View {
   @Previewable @Environment(VaultModel.self) var model
   NavigationStack {
     YearDetail(
-      digest: model.vault.annumDigestMap[.year(2001)]!,
+      digest: model.vault.digest(annum: .year(2001))!,
       url: nil,
       isPathNavigable: { _ in
         true
