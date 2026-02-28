@@ -75,7 +75,7 @@ struct ArtistDetail: View {
   @Previewable @Environment(VaultModel.self) var model
   NavigationStack {
     ArtistDetail(
-      digest: model.vault.artistDigestMap["ar692"]!,
+      digest: model.previewArtist("ar692"),
       url: nil,
       isPathNavigable: { _ in
         true
@@ -88,7 +88,7 @@ struct ArtistDetail: View {
   @Previewable @Environment(VaultModel.self) var model
   NavigationStack {
     ArtistDetail(
-      digest: model.vault.artistDigestMap["ar692"]!,
+      digest: model.previewArtist("ar692"),
       url: nil,
       isPathNavigable: { _ in
         false
@@ -99,7 +99,7 @@ struct ArtistDetail: View {
 
 #Preview("First Navigated", traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
-  let digest = model.vault.artistDigestMap["ar692"]!
+  let digest = model.previewArtist("ar692")
   let selectedConcert = digest.shows[0]
   NavigationStack {
     ArtistDetail(

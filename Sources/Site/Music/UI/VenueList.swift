@@ -32,7 +32,7 @@ struct VenueList<V>: View where V: Rankable {
 extension VenueList<VenueDigest> {
   fileprivate init(model: VaultModel, sort: RankingSort, searchString: Binding<String>) {
     self.init(
-      venues: model.vault.venueDigestMap.values.shuffled(),
+      venues: model.previewAllVenues,
       sectioner: model.vault.sectioner,
       compare: model.vault.compare(lhs:rhs:),
       filter: { $0.names(filteredBy: $1) },

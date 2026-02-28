@@ -47,7 +47,7 @@ where T: LibraryComparable, T: Hashable, T: PathRestorable, R: Comparable, R: Ha
 #Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   RankingList(
-    items: Array(model.vault.artistDigestMap.values.shuffled()),
+    items: Array(model.previewAllArtists),
     rankingMapBuilder: { artists in
       [Ranking(rank: .rank(1), value: 3): artists]
     },
@@ -66,7 +66,7 @@ where T: LibraryComparable, T: Hashable, T: PathRestorable, R: Comparable, R: Ha
 #Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   RankingList(
-    items: Array(model.vault.venueDigestMap.values.shuffled()),
+    items: Array(model.previewAllVenues),
     rankingMapBuilder: { venues in
       [Ranking(rank: .rank(1), value: 3): venues]
     },

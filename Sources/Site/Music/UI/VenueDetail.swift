@@ -82,7 +82,7 @@ struct VenueDetail: View {
   @Previewable @Environment(VaultModel.self) var model
   NavigationStack {
     VenueDetail(
-      digest: model.vault.venueDigestMap["v103"]!,
+      digest: model.previewVenue("v103"),
       url: nil,
       isPathNavigable: { _ in
         true

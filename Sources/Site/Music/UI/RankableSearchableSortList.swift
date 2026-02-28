@@ -38,7 +38,7 @@ struct RankableSearchableSortList<A, SectionHeaderContent: View>: View where A: 
 
   NavigationStack {
     RankableSearchableSortList(
-      items: model.vault.artistDigestMap.values.shuffled(), sectioner: model.vault.sectioner,
+      items: model.previewAllArtists, sectioner: model.vault.sectioner,
       compare: model.vault.compare(lhs:rhs:),
       filter: { $0.names(filteredBy: $1) }, sort: .alphabetical, title: "title",
       searchPrompt: "prompt", associatedRankSectionHeader: { Text($0.formatted(.rankOnly)) },
