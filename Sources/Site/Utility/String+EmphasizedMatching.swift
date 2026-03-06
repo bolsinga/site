@@ -11,15 +11,16 @@ import RegexBuilder
 extension String {
   internal var emphasizedRespectingSpacesQuirks: String {
     self.replacing(Regex { Capture { self.trimmingCharacters(in: .whitespaces) } }) {
-      "**\($0.output.0)**"
+      let segment = $0.output.0
+      guard !segment.isEmpty else { return segment }
+      return "**\(segment)**"
     }
   }
 
   func emphasized(matching fragment: String) -> String {
-    let trimmedFragment = fragment.trimmingCharacters(in: .whitespaces)
-    guard !trimmedFragment.isEmpty else { return self }
+    guard !fragment.isEmpty else { return self }
 
-    let regex = Regex { Capture { trimmedFragment } }
+    let regex = Regex { Capture { fragment } }
       .repetitionBehavior(.reluctant)
       .ignoresCase()
 
