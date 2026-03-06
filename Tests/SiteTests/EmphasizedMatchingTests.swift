@@ -47,9 +47,10 @@ struct EmphasizedMatchingTests {
 
   @Test func spaceStringMatches() {
     #expect("Greg Bolsinga".emphasized(matching: "G") == "**G**reg Bolsinga")
-    #expect("Greg Bolsinga".emphasized(matching: "G ") == "Gre**g** Bolsinga")
+    #expect("Greg Bolsinga".emphasized(matching: "G ") == "**G**reg Bolsinga")
     #expect("Greg Bolsinga".emphasized(matching: "G B") == "Gre**g B**olsinga")
     #expect("Greg Bolsinga".emphasized(matching: " B") == "Greg **B**olsinga")
     #expect("Greg Bolsinga".emphasized(matching: "B") == "Greg **B**olsinga")
+    #expect("Greg Bolsinga".emphasized(matching: " ") == "Greg Bolsinga")
   }
 }

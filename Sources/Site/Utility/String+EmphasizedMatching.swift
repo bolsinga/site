@@ -16,9 +16,10 @@ extension String {
   }
 
   func emphasized(matching fragment: String) -> String {
-    guard !fragment.isEmpty else { return self }
+    let trimmedFragment = fragment.trimmingCharacters(in: .whitespaces)
+    guard !trimmedFragment.isEmpty else { return self }
 
-    let regex = Regex { Capture { fragment } }
+    let regex = Regex { Capture { trimmedFragment } }
       .repetitionBehavior(.reluctant)
       .ignoresCase()
 
