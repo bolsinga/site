@@ -56,6 +56,10 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
     bracket.showMap
   }
 
+  public func shows(artistID: ID) -> Set<ID> {
+    bracket.artistShows[artistID] ?? []
+  }
+
   public func shows(venueID: ID) -> Set<ID> {
     bracket.venueShows[venueID] ?? []
   }

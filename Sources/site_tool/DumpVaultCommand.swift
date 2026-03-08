@@ -9,44 +9,31 @@ import ArgumentParser
 import Foundation
 
 extension Vault {
-  fileprivate func concertsForArtistDigest(artistDigest: ArtistDigest) -> any Collection<Concert>
-  where ID == String {
-    artistDigest.shows.compactMap {
-      switch $0.id {
-      case .show(let iD):
-        return concertMap[iD]
-      default:
-        return nil
-      }
-    }
-  }
-
-  fileprivate func concertsForArtistDigest(artistDigest: ArtistDigest) -> any Collection<Concert>
-  where ID == ArchivePath {
-    artistDigest.shows.compactMap { concertMap[$0.id] }
+  fileprivate func concertsForArtist(artistID: ID) -> any Collection<Concert> {
+    self.shows(artistID: artistID).compactMap { concertMap[$0] }
   }
 
   fileprivate func dump(
-    searchString: String?, concertsForArtist: (ArtistDigest) -> any Collection<Concert>
+    searchString: String?, concertsForArtist: (Artist) -> any Collection<Concert>
   ) {
     let concerts = concertMap.values.sorted(by: compare(lhs:rhs:))
-    let artistDigests = artistDigestMap.values.sorted(by: compare(lhs:rhs:))
-    let venueDigests = venueDigestMap.values.sorted(by: compare(lhs:rhs:))
+    let artists = artists().sorted(by: compare(lhs:rhs:))
+    let venues = venues().sorted(by: compare(lhs:rhs:))
 
-    print("Artists: \(artistDigests.count)")
+    print("Artists: \(artists.count)")
     print("Shows: \(concerts.count)")
-    print("Venues: \(venueDigests.count)")
+    print("Venues: \(venues.count)")
 
     for concert in concerts.reversed() {
       print(concert.formatted(.full))
     }
 
-    for digest in venueDigests {
-      print(digest.venue.formatted(.oneLine))
+    for venue in venues {
+      print(venue.formatted(.oneLine))
     }
 
-    for digest in artistDigests {
-      let concerts = concertsForArtist(digest)
+    for artist in artists {
+      let concerts = concertsForArtist(artist)
 
       guard !concerts.isEmpty else { continue }
 
@@ -54,12 +41,12 @@ extension Vault {
       for concert in concerts {
         concertParts.append(concert.formatted(.full))
       }
-      print("\(digest.artist.name): (\(concertParts.joined(separator: "; "))")
+      print("\(artist.name): (\(concertParts.joined(separator: "; ")))")
     }
 
     if let searchString {
-      let venues = venues(filteredBy: searchString).map { $0.name }
-      let artists = artists(filteredBy: searchString).map { $0.name }
+      let venues = self.venues(filteredBy: searchString).map { $0.name }
+      let artists = self.artists(filteredBy: searchString).map { $0.name }
       let matches = venues + artists
       print("Matching (\(searchString)): \(matches.joined(separator: "; "))")
     }
@@ -85,12 +72,12 @@ struct DumpVaultCommand: AsyncParsableCommand {
     case .basic:
       let vault = try await rootURL.vault(identifier: BasicIdentifier())
       vault.dump(searchString: searchString) {
-        vault.concertsForArtistDigest(artistDigest: $0)
+        vault.concertsForArtist(artistID: $0.id)
       }
     case .archivePath:
       let vault = try await rootURL.vault(identifier: ArchivePathIdentifier())
       vault.dump(searchString: searchString) {
-        vault.concertsForArtistDigest(artistDigest: $0)
+        vault.concertsForArtist(artistID: $0.archivePath)
       }
     }
   }

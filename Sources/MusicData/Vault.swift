@@ -114,8 +114,16 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
     Array(lookup.artistMap.values)
   }
 
+  func shows() -> [Show] {
+    Array(lookup.showMap.values)
+  }
+
   func artists(venueID: ID) -> Set<ID> {
     lookup.artists(venueID: venueID)
+  }
+
+  func shows(artistID: ID) -> Set<ID> {
+    lookup.shows(artistID: artistID)
   }
 
   func shows(venueID: ID) -> Set<ID> {
