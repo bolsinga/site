@@ -10,22 +10,15 @@ import Foundation
 
 extension Collection where Element == ShowDigest {
   var stateCounts: [String: Int] {
-    self.map { $0.location.state }.reduce(
-      into: [String: Int]()
-    ) {
-      let count = $0[$1] ?? 0
-      $0[$1] = count + 1
-    }
+    self.map { $0.location }.stateCounts
   }
 
   var knownDates: [Date] {
-    self.map { $0.date }
-      .filter { !$0.isUnknown }
-      .compactMap { $0.date }
+    self.map { $0.date }.knownDates
   }
 
   var venueCount: Int {
-    Array(self.compactMap { $0.venue }.uniqued()).count
+    Array(self.map { $0.venue }.uniqued()).count
   }
 
   var artistCount: Int {
