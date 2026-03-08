@@ -29,30 +29,30 @@ extension Collection where Element == String {
 
 extension Vault {
   fileprivate var nextShowID: Show.ID {
-    let nextIndex = max(concertMap.count, 0)
+    let nextIndex = max(shows().count, 0)
     return "\(ArchivePath.showPrefix)\(nextIndex)"
   }
 
   fileprivate var nextVenueID: Venue.ID {
-    let nextIndex = max(venueDigestMap.count, 0)
+    let nextIndex = max(venues().count, 0)
     return "\(ArchivePath.venuePrefix)\(nextIndex)"
   }
 
   fileprivate var nextArtistID: Venue.ID {
-    let nextIndex = max(artistDigestMap.count, 0)
+    let nextIndex = max(artists().count, 0)
     return "\(ArchivePath.artistPrefix)\(nextIndex)"
   }
 
   fileprivate var missingShowIndices: any Collection<Int> {
-    concertMap.values.map { $0.id }.missingIndices(prefix: ArchivePath.showPrefix)
+    shows().map { $0.id }.missingIndices(prefix: ArchivePath.showPrefix)
   }
 
   fileprivate var missingVenueIndices: any Collection<Int> {
-    venueDigestMap.values.map { $0.id }.missingIndices(prefix: ArchivePath.venuePrefix)
+    venues().map { $0.id }.missingIndices(prefix: ArchivePath.venuePrefix)
   }
 
   fileprivate var missingArtistIndices: any Collection<Int> {
-    artistDigestMap.values.map { $0.id }.missingIndices(prefix: ArchivePath.artistPrefix)
+    artists().map { $0.id }.missingIndices(prefix: ArchivePath.artistPrefix)
   }
 
   fileprivate func printIDs() {

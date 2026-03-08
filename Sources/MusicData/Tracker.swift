@@ -47,6 +47,7 @@ struct Tracker<Identifier: ArchiveIdentifier> {
   var artistCounts = [ID: Int]()
   var artistVenues = [ID: Set<ID>]()
   var artistOrder = OrderedSet<ID>()
+  var artistShows = [ID: Set<ID>]()
 
   var annumShows = [AnnumID: Set<ID>]()
   var annumArtists = [AnnumID: Set<ID>]()
@@ -70,6 +71,7 @@ struct Tracker<Identifier: ArchiveIdentifier> {
     try show.artists.reversed().forEach {
       let artistID = try identifier.artist($0)
 
+      insert(into: &artistShows, key: artistID, value: showID)
       insert(into: &venueArtists, key: venueID, value: artistID)
 
       artistSpanDates.insert(key: artistID, value: show.date)

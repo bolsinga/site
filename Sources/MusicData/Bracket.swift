@@ -35,6 +35,7 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
   let decadesMap: [Decade: [AnnumID: Set<ID>]]
   let concertDayMap: [Int: Set<ID>]
   let showMap: [ID: Show]
+  let artistShows: [ID: Set<ID>]
   let venueShows: [ID: Set<ID>]
   let venueArtists: [ID: Set<ID>]
 
@@ -52,6 +53,7 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
     self.decadesMap = try await tracker.decadesMap(decade: { identifier.decade($0) })
     self.concertDayMap = try await tracker.dayOfLeapYearShows
     self.showMap = try await tracker.showMap
+    self.artistShows = try await tracker.artistShows
     self.venueShows = try await tracker.venueShows
     self.venueArtists = try await tracker.venueArtists
 
