@@ -105,4 +105,28 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
   func digest(annum: Annum) -> AnnumDigest? {
     try? lookup.annumDigest(annum: annum)
   }
+
+  func venues() -> [Venue] {
+    Array(lookup.venueMap.values)
+  }
+
+  func artists() -> [Artist] {
+    Array(lookup.artistMap.values)
+  }
+
+  func artists(venueID: ID) -> Set<ID> {
+    lookup.artists(venueID: venueID)
+  }
+
+  func shows(venueID: ID) -> Set<ID> {
+    lookup.shows(venueID: venueID)
+  }
+
+  func rankedArtist(id: ID) -> RankedArchiveItem? {
+    lookup.artistMap[id]?.rankedArchiveItem(lookup.rankDigest(artist: id))
+  }
+
+  func rankedVenue(id: ID) -> RankedArchiveItem? {
+    lookup.venueMap[id]?.rankedArchiveItem(lookup.rankDigest(venue: id))
+  }
 }

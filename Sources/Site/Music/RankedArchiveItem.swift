@@ -42,20 +42,14 @@ struct RankedArchiveItem: Rankable {
   }
 }
 
-extension Rankable where ID == String {
+extension Artist {
   func rankedArchiveItem(_ rank: RankDigest) -> RankedArchiveItem {
     RankedArchiveItem(archivePath: archivePath, id: id, sortname: sortname, name: name, rank: rank)
   }
 }
 
-extension ArtistDigest {
-  var rankedArchiveItem: RankedArchiveItem {
-    rankedArchiveItem(rank)
-  }
-}
-
-extension VenueDigest {
-  var rankedArchiveItem: RankedArchiveItem {
-    rankedArchiveItem(rank)
+extension Venue {
+  func rankedArchiveItem(_ rank: RankDigest) -> RankedArchiveItem {
+    RankedArchiveItem(archivePath: archivePath, id: id, sortname: sortname, name: name, rank: rank)
   }
 }
