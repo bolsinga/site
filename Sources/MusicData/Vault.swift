@@ -146,7 +146,9 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
       lookup.venueMap.count,
       lookup.artistMap.count,
       lookup.showMap.values.map { $0.date }.knownDates,
-      lookup.venueMap.values.map { $0.location }.stateCounts
+      lookup.venueMap.flatMap { (id, venue) in
+        Array(repeating: venue.location, count: self.shows(venueID: id).count)
+      }.stateCounts
     )
   }
 }
