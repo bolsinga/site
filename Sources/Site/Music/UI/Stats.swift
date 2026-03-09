@@ -26,13 +26,13 @@ struct Stats {
     artistCount: Int,
     dates: [Date],
     stateCounts: [String: Int],
-    shouldCalculateArtistCount: Bool = true,
-    yearsSpanRanking: Ranking? = nil,
-    showRanking: Ranking? = nil,
-    artistVenuesRanking: Ranking? = nil,
-    venueArtistsRanking: Ranking? = nil,
-    displayArchiveCategoryCounts: Bool = true,
-    alwaysShowVenuesArtistsStats: Bool = false
+    shouldCalculateArtistCount: Bool,
+    yearsSpanRanking: Ranking?,
+    showRanking: Ranking?,
+    artistVenuesRanking: Ranking?,
+    venueArtistsRanking: Ranking?,
+    displayArchiveCategoryCounts: Bool,
+    alwaysShowVenuesArtistsStats: Bool
   ) {
     self.concertsCount = concertsCount
     self.venueCount = venueCount

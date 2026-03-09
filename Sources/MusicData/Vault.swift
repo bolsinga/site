@@ -137,4 +137,18 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
   func rankedVenue(id: ID) -> RankedArchiveItem? {
     lookup.venueMap[id]?.rankedArchiveItem(lookup.rankDigest(venue: id))
   }
+
+  var statisticsData:
+    (showsCount: Int, venueCount: Int, artistCount: Int, dates: [Date], states: [String: Int])
+  {
+    (
+      lookup.showMap.count,
+      lookup.venueMap.count,
+      lookup.artistMap.count,
+      lookup.showMap.values.map { $0.date }.knownDates,
+      lookup.venueMap.flatMap { (id, venue) in
+        Array(repeating: venue.location, count: self.shows(venueID: id).count)
+      }.stateCounts
+    )
+  }
 }
