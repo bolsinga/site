@@ -32,22 +32,22 @@ extension PreviewTrait where T == Preview.ViewTraits {
 
 extension VaultModel {
   func previewArtist(_ id: String) -> ArtistDigest {
-    vault.artistDigestMap[id]!
+    vault.digest(artist: id)!
   }
 
   var previewAllArtists: any Collection<ArtistDigest> {
-    vault.artistDigestMap.values.shuffled()
+    vault.artists().compactMap { vault.digest(artist: $0.id) }.shuffled()
   }
 
   func previewVenue(_ id: String) -> VenueDigest {
-    vault.venueDigestMap[id]!
+    vault.digest(venue: id)!
   }
 
   var previewAllVenues: any Collection<VenueDigest> {
-    vault.venueDigestMap.values.shuffled()
+    vault.venues().compactMap { vault.digest(venue: $0.id) }.shuffled()
   }
 
   func previewConcert(_ id: String) -> Concert {
-    vault.concertMap[id]!
+    vault.concert(show: id)!
   }
 }

@@ -33,17 +33,15 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
     self.lookup = lookup
     let comparator = LibraryComparator(tokenMap: lookup.librarySortTokenMap)
 
-    let concerts = lookup.concerts
+    async let artistDigestMap = lookup.artistDigestMap()
 
-    async let artistDigestMap = lookup.artistDigestMap(concerts: concerts)
-
-    async let venueDigestMap = lookup.venueDigestMap(concerts: concerts)
+    async let venueDigestMap = lookup.venueDigestMap()
 
     self.comparator = comparator
     self.sectioner = await LibrarySectioner(librarySortTokenMap: lookup.librarySortTokenMap)
     self.rootURL = url
 
-    self.concertMap = try concerts.reduce(into: [:]) { $0[try identifier.show($1.id)] = $1 }
+    self.concertMap = try lookup.concerts.reduce(into: [:]) { $0[try identifier.show($1.id)] = $1 }
 
     self.artistDigestMap = try await artistDigestMap
 
@@ -57,11 +55,6 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
 
   var decadesMap: [Decade: [AnnumID: Set<ID>]] {
     lookup.decadesMap
-  }
-
-  fileprivate func unsortedConcerts(on dayOfLeapYear: Int) -> any Collection<Concert> {
-    let concertIDs = lookup.concertDayMap[dayOfLeapYear] ?? []
-    return concertIDs.compactMap { concertMap[$0] }
   }
 
   /// The URL for this category.
@@ -79,7 +72,9 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
   }
 
   func concerts(on dayOfLeapYear: Int) -> [Concert] {
-    unsortedConcerts(on: dayOfLeapYear).sorted(by: compare(lhs:rhs:))
+    // dayOfLeapYear: ShowID
+    lookup.concertDayMap[dayOfLeapYear]?.compactMap { lookup.concert(showId: $0) }.sorted(
+      by: compare(lhs:rhs:)) ?? []
   }
 
   func compare(lhs: Concert, rhs: Concert) -> Bool {
@@ -106,6 +101,18 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
     try? lookup.annumDigest(annum: annum)
   }
 
+  func digest(artist: ID) -> ArtistDigest? {
+    lookup.artistDigest(id: artist)
+  }
+
+  func digest(venue: ID) -> VenueDigest? {
+    lookup.venueDigest(id: venue)
+  }
+
+  func concert(show: ID) -> Concert? {
+    lookup.concert(showId: show)
+  }
+
   func venues() -> [Venue] {
     Array(lookup.venueMap.values)
   }
@@ -116,6 +123,10 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
 
   func shows() -> [Show] {
     Array(lookup.showMap.values)
+  }
+
+  func showIDs() -> Set<ID> {
+    Set(lookup.showMap.keys)
   }
 
   func artists(venueID: ID) -> Set<ID> {

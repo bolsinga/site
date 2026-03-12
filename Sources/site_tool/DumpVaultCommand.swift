@@ -10,13 +10,13 @@ import Foundation
 
 extension Vault {
   fileprivate func concertsForArtist(artistID: ID) -> any Collection<Concert> {
-    self.shows(artistID: artistID).compactMap { concertMap[$0] }
+    self.shows(artistID: artistID).compactMap { concert(show: $0) }
   }
 
   fileprivate func dump(
     searchString: String?, concertsForArtist: (Artist) -> any Collection<Concert>
   ) {
-    let concerts = concertMap.values.sorted(by: compare(lhs:rhs:))
+    let concerts = showIDs().compactMap { concert(show: $0) }.sorted(by: compare(lhs:rhs:))
     let artists = artists().sorted(by: compare(lhs:rhs:))
     let venues = venues().sorted(by: compare(lhs:rhs:))
 
