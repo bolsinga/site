@@ -19,6 +19,7 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
   let identifier: Identifier
   let artistMap: [ID: Artist]
   let venueMap: [ID: Venue]
+  let showMap: [ID: Show]
   private let bracket: Bracket<Identifier>
   private let relationMap: [ID: Set<ID>]  // Artist/Venue ID : Set<Artist/Venue ID>
 
@@ -30,12 +31,15 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
       $0[try identifier.artist($1.id)] = $1
     }
     async let venueLookup = music.venues.reduce(into: [:]) { $0[try identifier.venue($1.id)] = $1 }
+    async let showLookup = music.shows.reduce(into: [:]) { $0[try identifier.show($1.id)] = $1 }
+
     async let bracket = await Bracket(music: music, identifier: identifier)
     async let relations = music.relationMap(identifier: identifier)
 
     self.identifier = identifier
     self.artistMap = try await artistLookup
     self.venueMap = try await venueLookup
+    self.showMap = try await showLookup
     self.bracket = try await bracket
     self.relationMap = try await relations
   }
@@ -50,10 +54,6 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
 
   public var concertDayMap: [Int: Set<ID>] {
     bracket.concertDayMap
-  }
-
-  public var showMap: [ID: Show] {
-    bracket.showMap
   }
 
   public func shows(artistID: ID) -> Set<ID> {
