@@ -57,7 +57,7 @@ extension Lookup {
     }
   }
 
-  private func artistDigest(artist: Artist, artistID: ID) throws -> ArtistDigest {
+  private func artistDigest(artist: Artist, artistID: ID) -> ArtistDigest {
     ArtistDigest(
       artist: artist,
       shows: shows(artistID: artistID).compactMap { showDigest(showId: $0) },
@@ -67,12 +67,12 @@ extension Lookup {
 
   private func artistDigest(artist: Artist) throws -> ArtistDigest {
     let artistID = try identifier.artist(artist.id)
-    return try artistDigest(artist: artist, artistID: artistID)
+    return artistDigest(artist: artist, artistID: artistID)
   }
 
   func artistDigest(id artistID: ID) -> ArtistDigest? {
     guard let artist = artistMap[artistID] else { return nil }
-    return try? artistDigest(artist: artist, artistID: artistID)
+    return artistDigest(artist: artist, artistID: artistID)
   }
 
   func venueDigestMap() throws -> [ID: VenueDigest] {
@@ -83,7 +83,7 @@ extension Lookup {
     }
   }
 
-  private func venueDigest(venue: Venue, venueID: ID) throws -> VenueDigest {
+  private func venueDigest(venue: Venue, venueID: ID) -> VenueDigest {
     VenueDigest(
       venue: venue,
       shows: shows(venueID: venueID).compactMap { showDigest(showId: $0) },
@@ -93,12 +93,12 @@ extension Lookup {
 
   private func venueDigest(venue: Venue) throws -> VenueDigest {
     let venueID = try identifier.venue(venue.id)
-    return try venueDigest(venue: venue, venueID: venueID)
+    return venueDigest(venue: venue, venueID: venueID)
   }
 
   func venueDigest(id venueID: ID) -> VenueDigest? {
     guard let venue = venueMap[venueID] else { return nil }
-    return try? venueDigest(venue: venue, venueID: venueID)
+    return venueDigest(venue: venue, venueID: venueID)
   }
 
   func annumDigest(annum: Annum) throws -> AnnumDigest {
