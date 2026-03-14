@@ -24,6 +24,27 @@ extension Dictionary where Value == Int {
   }
 }
 
+/// Tracks relationships, counts, and spans among shows, artists, venues, and years.
+///
+/// `Tracker` processes a collection of shows and constructs multiple indices and
+/// mappings that enable efficient querying of related entities and statistical
+/// information. It maintains counts of shows per artist and venue, tracks the
+/// range of dates (spans) associated with each entity, and records ordering
+/// information to preserve insertion order or chronological order as needed.
+///
+/// It also builds bidirectional relationships such as which artists played at
+/// which venues, and which shows occurred in which years (annums). The tracker
+/// supports partial or unknown dates by utilizing `PartialDate` but only indexes
+/// fully known dates for certain operations.
+///
+/// Typically, a `Tracker` is initialized with a list of shows and an `ArchiveIdentifier`
+/// that provides a consistent way to map show, artist, venue, and year identifiers
+/// into a unified ID namespace used for efficient storage and lookup.
+///
+/// Usage notes:
+/// - Dates are partially known and can affect ordering and span calculations.
+/// - Various dictionaries use sets to track multiple relationships.
+/// - Flipped dictionaries expose inverse relationships for easy traversal.
 struct Tracker<Identifier: ArchiveIdentifier> {
   typealias ID = Identifier.ID
   typealias AnnumID = Identifier.AnnumID
@@ -35,24 +56,36 @@ struct Tracker<Identifier: ArchiveIdentifier> {
     dictionary[key] = v
   }
 
-  // All the unique dates for a venue, used to calculate its span.
+  /// All the unique partial dates associated with a venue, used to calculate its timespan.
   var venueSpanDates = [ID: Set<PartialDate>]()
+  /// Counts of how many shows have occurred at each venue.
   var venueCounts = [ID: Int]()
+  /// The set of artists who have played at each venue.
   var venueArtists = [ID: Set<ID>]()
+  /// Ordered set of venue IDs, preserving insertion order.
   var venueOrder = OrderedSet<ID>()
+  /// Shows associated with each venue.
   var venueShows = [ID: Set<ID>]()
 
-  // All the unique dates for an artist, used to calculate its span.
+  /// All the unique partial dates associated with an artist, used to calculate its timespan.
   var artistSpanDates = [ID: Set<PartialDate>]()
+  /// Counts of how many shows each artist has played.
   var artistCounts = [ID: Int]()
+  /// The set of venues where each artist has performed.
   var artistVenues = [ID: Set<ID>]()
+  /// Ordered set of artist IDs, preserving insertion order.
   var artistOrder = OrderedSet<ID>()
+  /// Shows associated with each artist.
   var artistShows = [ID: Set<ID>]()
 
+  /// Shows grouped by year (annum).
   var annumShows = [AnnumID: Set<ID>]()
+  /// Artists grouped by year (annum).
   var annumArtists = [AnnumID: Set<ID>]()
+  /// Venues grouped by year (annum).
   var annumVenues = [AnnumID: Set<ID>]()
 
+  /// Shows indexed by the day of leap year (1...366).
   var dayOfLeapYearShows = [Int: Set<ID>]()
 
   private mutating func track(show: Show, identifier: Identifier) throws {
@@ -90,6 +123,15 @@ struct Tracker<Identifier: ArchiveIdentifier> {
     }
   }
 
+  /// Initializes the tracker by sorting shows chronologically and building all
+  /// relevant indices and mappings.
+  ///
+  /// - Parameters:
+  ///   - shows: The array of shows to process.
+  ///   - identifier: The `ArchiveIdentifier` instance used to map original IDs
+  ///     to internal unified IDs.
+  ///
+  /// Throws an error if any identifier conversion fails.
   init(shows: [Show], identifier: Identifier) throws {
     var signpost = Signpost(category: "tracker", name: "process")
     signpost.start()
@@ -149,6 +191,11 @@ struct Tracker<Identifier: ArchiveIdentifier> {
     await computeRankings { annumArtists.mapValues { $0.count }.map { $0 } }
   }
 
+  /// Groups all annum shows by decade, producing a nested dictionary keyed first
+  /// by decade, then by annum ID, each mapping to the set of show IDs.
+  ///
+  /// - Parameter decade: A closure that converts an `AnnumID` into its `Decade`.
+  /// - Returns: A dictionary mapping decades to their contained annum shows.
   func decadesMap(decade: @Sendable (AnnumID) -> Decade) async -> [Decade: [AnnumID: Set<ID>]] {
     async let r = annumShows.reduce(into: [Decade: [AnnumID: Set<ID>]]()) {
       let decade = decade($1.key)
@@ -203,6 +250,11 @@ struct Tracker<Identifier: ArchiveIdentifier> {
     }
   }
 
+  /// Combines multiple ranking dimensions to produce a comprehensive ranking
+  /// digest for each artist, including first set rank, span rank, show rank,
+  /// and associated venue rank.
+  ///
+  /// - Returns: A dictionary mapping artist IDs to their rank digests.
   func artistRankDigests() async -> [ID: RankDigest] {
     async let firstSets = await artistFirstSets()
     async let spanRankings = await artistSpanRankings()
@@ -214,6 +266,11 @@ struct Tracker<Identifier: ArchiveIdentifier> {
       showRankings: await showRankings, associatedRankings: await associatedRankings)
   }
 
+  /// Combines multiple ranking dimensions to produce a comprehensive ranking
+  /// digest for each venue, including first set rank, span rank, show rank,
+  /// and associated artist rank.
+  ///
+  /// - Returns: A dictionary mapping venue IDs to their rank digests.
   func venueRankDigests() async -> [ID: RankDigest] {
     async let firstSets = await venueFirstSets()
     async let spanRankings = await venueSpanRankings()
@@ -225,6 +282,10 @@ struct Tracker<Identifier: ArchiveIdentifier> {
       showRankings: await showRankings, associatedRankings: await associatedRankings)
   }
 
+  /// Produces ranking digests for annums combining span rankings, show rankings,
+  /// and associated artist rankings. No first set rankings are included for annums.
+  ///
+  /// - Returns: A dictionary mapping annum IDs to their rank digests.
   func annumRankDigests() async -> [AnnumID: RankDigest] {
     // These names do not quite work.
     async let spanRankings = await annumVenueRankings()
