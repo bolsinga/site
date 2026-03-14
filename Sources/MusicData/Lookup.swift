@@ -12,8 +12,18 @@ extension Logger {
   fileprivate static let lookup = Logger(category: "lookup")
 }
 
+/// A public facade for querying archive data by stable identifiers.
+///
+/// `Lookup` exposes read-only, precomputed relationships and rankings for artists, venues,
+/// and shows. It wraps internal processing performed by `Bracket` and provides convenient
+/// APIs for `Vault` to fetch related items, sort keys, and date-based groupings.
+///
+/// - Generic Parameter Identifier: An `ArchiveIdentifier` that defines the stable ID types used
+///   throughout the lookup APIs.
 public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
+  /// Convenience alias for the stable identifier type used for artists, venues, and shows.
   public typealias ID = Identifier.ID
+  /// Convenience alias for the stable identifier type used for year-like (annum) groupings.
   public typealias AnnumID = Identifier.AnnumID
 
   let identifier: Identifier
@@ -23,6 +33,14 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
   private let bracket: Bracket<Identifier>
   private let relationMap: [ID: Set<ID>]  // Artist/Venue ID : Set<Artist/Venue ID>
 
+  /// Creates a `Lookup` by indexing the provided `Music` archive and preparing derived maps.
+  ///
+  /// Construction performs work concurrently to minimize initialization time.
+  ///
+  /// - Parameters:
+  ///   - music: The source archive from which to derive lookups.
+  ///   - identifier: An `ArchiveIdentifier` used to generate stable IDs for all lookups.
+  /// - Throws: Any error encountered while reading the archive or computing derived structures.
   public init(music: Music, identifier: Identifier) async throws {
     var signpost = Signpost(category: "lookup", name: "process")
     signpost.start()
@@ -48,26 +66,44 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
     bracket.librarySortTokenMap
   }
 
+  /// Groups shows by decade, then by annum (e.g., year), returning the set of show IDs for each.
   public var decadesMap: [Decade: [AnnumID: Set<ID>]] {
     bracket.decadesMap
   }
 
+  /// Maps a day-of-leap-year index (1...366) to the set of show IDs that occurred on that day.
   public var concertDayMap: [Int: Set<ID>] {
     bracket.concertDayMap
   }
 
+  /// Returns all show IDs associated with the specified artist.
+  ///
+  /// - Parameter artistID: The stable artist identifier.
+  /// - Returns: A set of show IDs the artist performed.
   public func shows(artistID: ID) -> Set<ID> {
     bracket.artistShows[artistID] ?? []
   }
 
+  /// Returns all show IDs associated with the specified venue.
+  ///
+  /// - Parameter venueID: The stable venue identifier.
+  /// - Returns: A set of show IDs hosted at the venue.
   public func shows(venueID: ID) -> Set<ID> {
     bracket.venueShows[venueID] ?? []
   }
 
+  /// Returns all artist IDs that have performed at the specified venue.
+  ///
+  /// - Parameter venueID: The stable venue identifier.
+  /// - Returns: A set of artist IDs.
   public func artists(venueID: ID) -> Set<ID> {
     bracket.venueArtists[venueID] ?? []
   }
 
+  /// Looks up the venue for a given show.
+  ///
+  /// - Parameter show: The show whose venue to resolve.
+  /// - Returns: The `Venue` if found, otherwise `nil`.
   public func venueForShow(_ show: Show) -> Venue? {
     guard let id = try? identifier.venue(show.venue), let venue = venueMap[id] else {
       Logger.lookup.log("Show: \(show.id, privacy: .public) missing venue")
@@ -76,6 +112,10 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
     return venue
   }
 
+  /// Looks up all artists for a given show.
+  ///
+  /// - Parameter show: The show whose artists to resolve.
+  /// - Returns: An array of `Artist` values, in the order they are stored for the show.
   public func artistsForShow(_ show: Show) -> [Artist] {
     var showArtists = [Artist]()
     for id in show.artists {
@@ -101,6 +141,13 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
     bracket.venueRankDigestMap[venue] ?? .empty
   }
 
+  /// Returns venues related to the given venue.
+  ///
+  /// Relatedness is domain-specific (e.g., shared characteristics or associations) and is
+  /// expressed as lightweight `Related` values suitable for UI display.
+  ///
+  /// - Parameter item: The venue to find related venues for.
+  /// - Returns: A collection of related items.
   public func related(_ item: Venue) -> any Collection<Related> {
     guard let id = try? identifier.relation(item.id) else { return [] }
     return relationMap[id]?.compactMap { venueMap[$0] }.map {
@@ -108,6 +155,13 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
     } ?? []
   }
 
+  /// Returns artists related to the given artist.
+  ///
+  /// Relatedness is domain-specific and is expressed as lightweight `Related` values suitable
+  /// for UI display.
+  ///
+  /// - Parameter item: The artist to find related artists for.
+  /// - Returns: A collection of related items.
   public func related(_ item: Artist) -> any Collection<Related> {
     guard let id = try? identifier.relation(item.id) else { return [] }
     return relationMap[id]?.compactMap { artistMap[$0] }.map {
@@ -115,11 +169,27 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
     } ?? []
   }
 
+  /// Compares two concerts using the provided library comparator.
+  ///
+  /// - Parameters:
+  ///   - lhs: The left-hand concert to compare.
+  ///   - rhs: The right-hand concert to compare.
+  ///   - comparator: A `LibraryComparator` configured for the current identifier type.
+  /// - Returns: `true` if `lhs` should be ordered before `rhs`.
   public func compareConcerts(lhs: Concert, rhs: Concert, comparator: LibraryComparator<ID>) -> Bool
   {
     identifier.compareConcerts(lhs: lhs, rhs: rhs, comparator: comparator)
   }
 
+  /// Compares two library comparables (artists, venues, etc.) using the provided comparator.
+  ///
+  /// - Parameters:
+  ///   - lhs: The left-hand item to compare.
+  ///   - rhs: The right-hand item to compare.
+  ///   - comparator: A `LibraryComparator` configured for the current identifier type.
+  /// - Returns: `true` if `lhs` should be ordered before `rhs`.
+  ///
+  /// - Note: `Comparable.ID` must be `String`.
   public func libraryCompare<Comparable: LibraryComparable & PathRestorable>(
     lhs: Comparable, rhs: Comparable, comparator: LibraryComparator<ID>
   ) -> Bool where Comparable.ID == String {
