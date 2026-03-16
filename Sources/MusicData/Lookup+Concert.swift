@@ -44,11 +44,6 @@ extension Lookup {
     return concert(show: show)
   }
 
-  var concerts: [Concert] {
-    // Used to build concertMap
-    showMap.values.compactMap { concert(show: $0) }
-  }
-
   func artistDigestMap() throws -> [ID: ArtistDigest] {
     try artistMap.values.map { artist in
       try artistDigest(artist: artist)
