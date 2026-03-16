@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import OrderedCollections
 
 extension Music {
   /// Builds a map from stable archive identifiers to a tokenized library sort string.
@@ -65,6 +66,8 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
   let venueShows: [ID: Set<ID>]
   /// For each venue `ID`, the set of artist `ID`s that have performed at that venue.
   let venueArtists: [ID: Set<ID>]
+  /// Ordered sequence of show IDs with fully known dates, used to resolve recency.
+  let showOrder: OrderedSet<ID>
 
   /// Creates a new `Bracket` by deriving ranking and lookup maps from the provided `Music` archive.
   ///
@@ -91,6 +94,7 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
     self.artistShows = try await tracker.artistShows
     self.venueShows = try await tracker.venueShows
     self.venueArtists = try await tracker.venueArtists
+    self.showOrder = try await tracker.showOrder
 
     self.librarySortTokenMap = try await librarySortTokenMap
   }
