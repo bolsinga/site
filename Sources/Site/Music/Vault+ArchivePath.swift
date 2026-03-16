@@ -15,7 +15,7 @@ extension Vault where Identifier == BasicIdentifier {
     case .venue(let iD):
       return venueDigestMap[iD]
     case .artist(let iD):
-      return artistDigestMap[iD]
+      return digest(artist: iD)
     case .year(let annum):
       return annum
     }

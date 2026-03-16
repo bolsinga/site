@@ -16,8 +16,6 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
   public let rootURL: URL
   public let concertMap: [ID: Concert]
 
-  public let artistDigestMap: [ID: ArtistDigest]
-
   public let venueDigestMap: [ID: VenueDigest]
 
   private let categoryURLLookup: [ArchiveCategory: URL]
@@ -33,8 +31,6 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
     self.lookup = lookup
     let comparator = LibraryComparator(tokenMap: lookup.librarySortTokenMap)
 
-    async let artistDigestMap = lookup.artistDigestMap()
-
     async let venueDigestMap = lookup.venueDigestMap()
 
     self.comparator = comparator
@@ -42,8 +38,6 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
     self.rootURL = url
 
     self.concertMap = try lookup.concerts.reduce(into: [:]) { $0[try identifier.show($1.id)] = $1 }
-
-    self.artistDigestMap = try await artistDigestMap
 
     self.venueDigestMap = try await venueDigestMap
 

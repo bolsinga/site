@@ -25,7 +25,7 @@ extension ArchivePath {
         VenueDetail(digest: digest, url: vault.url(for: digest), isPathNavigable: isPathNavigable)
       }
     case .artist(let iD):
-      if let digest = vault.artistDigestMap[iD] {
+      if let digest = vault.digest(artist: iD) {
         ArtistDetail(digest: digest, url: vault.url(for: digest), isPathNavigable: isPathNavigable)
       }
     case .year(let annum):

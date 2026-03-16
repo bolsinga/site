@@ -49,25 +49,12 @@ extension Lookup {
     showMap.values.compactMap { concert(show: $0) }
   }
 
-  func artistDigestMap() throws -> [ID: ArtistDigest] {
-    try artistMap.values.map { artist in
-      try artistDigest(artist: artist)
-    }.reduce(into: [:]) {
-      $0[try identifier.artist($1.artist.id)] = $1
-    }
-  }
-
   private func artistDigest(artist: Artist, artistID: ID) -> ArtistDigest {
     ArtistDigest(
       artist: artist,
       shows: shows(artistID: artistID).compactMap { showDigest(showId: $0) },
       related: related(artist).sorted(by: { $0.name < $1.name }),
       rank: rankDigest(artist: artistID))
-  }
-
-  private func artistDigest(artist: Artist) throws -> ArtistDigest {
-    let artistID = try identifier.artist(artist.id)
-    return artistDigest(artist: artist, artistID: artistID)
   }
 
   func artistDigest(id artistID: ID) -> ArtistDigest? {
