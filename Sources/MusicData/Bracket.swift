@@ -84,7 +84,7 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
 
     async let librarySortTokenMap = music.librarySortTokenMap(identifier)
 
-    async let tracker = music.tracker(identifier: identifier)
+    async let tracker = try Tracker(shows: music.shows, identifier: identifier)
 
     self.artistRankDigestMap = try await tracker.artistRankDigests()
     self.venueRankDigestMap = try await tracker.venueRankDigests()
