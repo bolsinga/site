@@ -19,28 +19,28 @@ extension Vault where Identifier == BasicIdentifier {
   }
 
   func artistEntity(for id: ArtistEntity.ID) -> ArtistEntity? {
-    guard let digest = artistDigestMap[id] else { return nil }
+    guard let digest = digest(artist: id) else { return nil }
     return entity(for: digest)
   }
 
   func venueEntity(for id: VenueEntity.ID) -> VenueEntity? {
-    guard let digest = venueDigestMap[id] else { return nil }
+    guard let digest = digest(venue: id) else { return nil }
     return entity(for: digest)
   }
 
   var artistEntities: [ArtistEntity] {
-    artistDigestMap.values.compactMap { entity(for: $0) }
+    artists().compactMap { artistEntity(for: $0.id) }
   }
 
   func artistEntities(filteredBy searchString: String) -> [ArtistEntity] {
-    artistDigestMap.values.names(filteredBy: searchString).compactMap { entity(for: $0) }
+    artists(filteredBy: searchString).compactMap { artistEntity(for: $0.id) }
   }
 
   var venueEntities: [VenueEntity] {
-    venueDigestMap.values.compactMap { entity(for: $0) }
+    venues().compactMap { venueEntity(for: $0.id) }
   }
 
   func venueEntities(filteredBy searchString: String) -> [VenueEntity] {
-    venueDigestMap.values.names(filteredBy: searchString).compactMap { entity(for: $0) }
+    venues(filteredBy: searchString).compactMap { venueEntity(for: $0.id) }
   }
 }
