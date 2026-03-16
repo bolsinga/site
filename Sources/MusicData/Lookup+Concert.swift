@@ -75,25 +75,12 @@ extension Lookup {
     return artistDigest(artist: artist, artistID: artistID)
   }
 
-  func venueDigestMap() throws -> [ID: VenueDigest] {
-    try venueMap.values.map { venue in
-      try venueDigest(venue: venue)
-    }.reduce(into: [:]) {
-      $0[try identifier.venue($1.venue.id)] = $1
-    }
-  }
-
   private func venueDigest(venue: Venue, venueID: ID) -> VenueDigest {
     VenueDigest(
       venue: venue,
       shows: shows(venueID: venueID).compactMap { showDigest(showId: $0) },
       related: related(venue).sorted(by: { $0.name < $1.name }),
       rank: rankDigest(venue: venueID))
-  }
-
-  private func venueDigest(venue: Venue) throws -> VenueDigest {
-    let venueID = try identifier.venue(venue.id)
-    return venueDigest(venue: venue, venueID: venueID)
   }
 
   func venueDigest(id venueID: ID) -> VenueDigest? {
