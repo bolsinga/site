@@ -17,11 +17,11 @@ extension ArchivePath {
   {
     switch self {
     case .show(let iD):
-      if let concert = vault.concertMap[iD] {
+      if let concert = vault.concert(show: iD) {
         ShowDetail(concert: concert, url: vault.url(for: concert), isPathNavigable: isPathNavigable)
       }
     case .venue(let iD):
-      if let digest = vault.venueDigestMap[iD] {
+      if let digest = vault.digest(venue: iD) {
         VenueDetail(digest: digest, url: vault.url(for: digest), isPathNavigable: isPathNavigable)
       }
     case .artist(let iD):
