@@ -15,8 +15,6 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
   public let sectioner: LibrarySectioner<ID>
   public let rootURL: URL
 
-  public let artistDigestMap: [ID: ArtistDigest]
-
   private let categoryURLLookup: [ArchiveCategory: URL]
 
   private let lookup: Lookup<Identifier>
@@ -30,13 +28,9 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
     self.lookup = lookup
     let comparator = LibraryComparator(tokenMap: lookup.librarySortTokenMap)
 
-    async let artistDigestMap = lookup.artistDigestMap()
-
     self.comparator = comparator
     self.sectioner = await LibrarySectioner(librarySortTokenMap: lookup.librarySortTokenMap)
     self.rootURL = url
-
-    self.artistDigestMap = try await artistDigestMap
 
     self.categoryURLLookup = ArchiveCategory.allCases.reduce(into: [ArchiveCategory: URL]()) {
       guard let url = $1.url(rootURL: url) else { return }
