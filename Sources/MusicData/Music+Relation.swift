@@ -8,8 +8,8 @@
 import Foundation
 
 extension Relation {
-  fileprivate func relationMap<Identifier: ArchiveIdentifier>(identifier: Identifier) throws -> [Identifier.ID:
-    Set<Identifier.ID>]
+  fileprivate func relationMap<Identifier: ArchiveIdentifier>(identifier: Identifier) throws
+    -> [Identifier.ID: Set<Identifier.ID>]
   {
     try members.reduce(into: [Identifier.ID: Set<Identifier.ID>]()) { d, id in
       let aid = try identifier.relation(id)
