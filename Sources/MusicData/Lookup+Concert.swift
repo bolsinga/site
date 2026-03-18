@@ -48,7 +48,7 @@ extension Lookup {
     ArtistDigest(
       artist: artist,
       shows: shows(artistID: artistID).compactMap { showDigest(showId: $0) },
-      related: related(artist).sorted(by: { $0.name < $1.name }),
+      related: related(artistID: artistID).sorted(by: { $0.name < $1.name }),
       rank: rankDigest(artist: artistID))
   }
 
@@ -61,7 +61,7 @@ extension Lookup {
     VenueDigest(
       venue: venue,
       shows: shows(venueID: venueID).compactMap { showDigest(showId: $0) },
-      related: related(venue).sorted(by: { $0.name < $1.name }),
+      related: related(venueID: venueID).sorted(by: { $0.name < $1.name }),
       rank: rankDigest(venue: venueID))
   }
 
