@@ -119,8 +119,6 @@ struct Tracker<Identifier: ArchiveIdentifier> {
     insert(into: &annumShows, key: annumID, value: showID)
     insert(into: &annumVenues, key: annumID, value: venueID)
 
-    insert(into: &annumVenues, key: annumID, value: venueID)
-
     if !show.date.isPartiallyUnknown, let date = show.date.date {
       insert(into: &dayOfLeapYearShows, key: date.dayOfLeapYear, value: showID)
       showOrder.append(showID)
