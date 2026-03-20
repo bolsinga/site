@@ -16,9 +16,9 @@ extension Concert {
 }
 
 extension Lookup {
-  fileprivate func showDigest(for show: Show) -> ShowDigest? {
-    guard let venue = venueForShow(show) else { return nil }
-    let performers = artistsForShow(show).map { $0.name }
+  fileprivate func showDigest(show: Show, showId: ID) -> ShowDigest? {
+    guard let venue = venueForShow(showID: showId) else { return nil }
+    let performers = artistsForShow(showID: showId).map { $0.name }
     return ShowDigest(
       id: show.archivePath, date: show.date, performers: performers, venue: venue.name,
       location: venue.location)
@@ -26,7 +26,7 @@ extension Lookup {
 
   fileprivate func showDigest(showId: ID) -> ShowDigest? {
     guard let show = showMap[showId] else { return nil }
-    return showDigest(for: show)
+    return showDigest(show: show, showId: showId)
   }
 
   fileprivate func showDigests(annum: Annum, annumID: AnnumID) -> [ShowDigest] {
@@ -34,14 +34,14 @@ extension Lookup {
     return showIDs.compactMap { showDigest(showId: $0) }
   }
 
-  fileprivate func concert(show: Show) -> Concert? {
-    guard let venue = venueForShow(show) else { return nil }
-    return Concert(show: show, venue: venue, artists: artistsForShow(show))
+  fileprivate func concert(show: Show, showId: ID) -> Concert? {
+    guard let venue = venueForShow(showID: showId) else { return nil }
+    return Concert(show: show, venue: venue, artists: artistsForShow(showID: showId))
   }
 
   func concert(showId: ID) -> Concert? {
     guard let show = showMap[showId] else { return nil }
-    return concert(show: show)
+    return concert(show: show, showId: showId)
   }
 
   private func artistDigest(artist: Artist, artistID: ID) -> ArtistDigest {

@@ -91,6 +91,12 @@ struct Tracker<Identifier: ArchiveIdentifier> {
   /// Ordered sequence of show IDs with fully known dates.
   var showOrder = OrderedSet<ID>()
 
+  // Venue ID for Show IDs.
+  var showVenue = [ID: ID]()
+
+  // Array<ID> of artists for Show ID key (opener to headliner)
+  var showArtists = [ID: Array<ID>]()
+
   private mutating func track(show: Show, identifier: Identifier) throws {
     let showID = try identifier.show(show.id)
 
@@ -99,11 +105,16 @@ struct Tracker<Identifier: ArchiveIdentifier> {
     venueCounts.increment(key: venueID)
     venueOrder.append(venueID)
     insert(into: &venueShows, key: venueID, value: showID)
+    showVenue[showID] = venueID
 
     let annumID = try identifier.annum(show.date.annum)
 
     try show.artists.reversed().forEach {
       let artistID = try identifier.artist($0)
+
+      var artists = showArtists[showID] ?? []
+      artists.append(artistID)
+      showArtists[showID] = artists
 
       insert(into: &artistShows, key: artistID, value: showID)
       insert(into: &venueArtists, key: venueID, value: artistID)
