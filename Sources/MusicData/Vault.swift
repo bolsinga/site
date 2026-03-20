@@ -11,6 +11,7 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
   public typealias ID = Identifier.ID
   public typealias AnnumID = Identifier.AnnumID
 
+  private let identifier: Identifier
   private let comparator: LibraryComparator<ID>
   public let sectioner: LibrarySectioner<ID>
   public let rootURL: URL
@@ -22,6 +23,8 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
   public init(music: Music, url: URL, identifier: Identifier) async throws {
     var signpost = Signpost(category: "vault", name: "process")
     signpost.start()
+
+    self.identifier = identifier
 
     async let asyncLookup = await Lookup(music: music, identifier: identifier)
     let lookup = try await asyncLookup
@@ -99,14 +102,28 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
       by: compare(lhs:rhs:)) ?? []
   }
 
+  /// Compares two concerts.
+  ///
+  /// - Parameters:
+  ///   - lhs: The left-hand concert to compare.
+  ///   - rhs: The right-hand concert to compare.
+  /// - Returns: `true` if `lhs` should be ordered before `rhs`.
   func compare(lhs: Concert, rhs: Concert) -> Bool {
-    lookup.compareConcerts(lhs: lhs, rhs: rhs, comparator: comparator)
+    identifier.compareConcerts(lhs: lhs, rhs: rhs, comparator: comparator)
   }
 
+  /// Compares two library comparables (artists, venues, etc.).
+  ///
+  /// - Parameters:
+  ///   - lhs: The left-hand item to compare.
+  ///   - rhs: The right-hand item to compare.
+  /// - Returns: `true` if `lhs` should be ordered before `rhs`.
+  ///
+  /// - Note: `Comparable.ID` must be `String`.
   func compare<Comparable: LibraryComparable & PathRestorable>(lhs: Comparable, rhs: Comparable)
     -> Bool where Comparable.ID == String
   {
-    lookup.libraryCompare(lhs: lhs, rhs: rhs, comparator: comparator)
+    identifier.libraryCompare(lhs: lhs, rhs: rhs, comparator: comparator)
   }
 
   func artists(filteredBy searchString: String) -> [Artist] {
