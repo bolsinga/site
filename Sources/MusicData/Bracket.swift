@@ -69,7 +69,7 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
   /// Ordered sequence of show IDs with fully known dates, used to resolve recency.
   let showOrder: OrderedSet<ID>
   /// For each show `ID`, the array of artist `ID`s that performed at that show, in order from headliner to opener.
-  let showArtists: [ID: Array<ID>]
+  let showArtists: [ID: [ID]]
   // Venue ID for Show IDs.
   let showVenue: [ID: ID]
 

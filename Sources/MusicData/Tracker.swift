@@ -95,7 +95,7 @@ struct Tracker<Identifier: ArchiveIdentifier> {
   var showVenue = [ID: ID]()
 
   // Array<ID> of artists for Show ID key (opener to headliner)
-  var showArtists = [ID: Array<ID>]()
+  var showArtists = [ID: [ID]]()
 
   private mutating func track(show: Show, identifier: Identifier) throws {
     let showID = try identifier.show(show.id)

@@ -99,7 +99,7 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
   ///
   /// - Parameter showID: The stable show identifier.
   /// - Returns: An array of artist IDs that appeared in the show, headliner to opener.
-  public func artists(showID: ID) -> Array<ID> {
+  public func artists(showID: ID) -> [ID] {
     bracket.showArtists[showID] ?? []
   }
 
