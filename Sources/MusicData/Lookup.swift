@@ -21,7 +21,6 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
   /// Convenience alias for the stable identifier type used for year-like (annum) groupings.
   public typealias AnnumID = Identifier.AnnumID
 
-  let identifier: Identifier
   let artistMap: [ID: Artist]
   let venueMap: [ID: Venue]
   let showMap: [ID: Show]
@@ -50,7 +49,6 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
     async let bracket = await Bracket(music: music, identifier: identifier)
     async let relations = music.relationMap(identifier: identifier)
 
-    self.identifier = identifier
     self.artistMap = try await artistLookup
     self.venueMap = try await venueLookup
     self.showMap = try await showLookup
@@ -179,32 +177,5 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
   /// - Returns: An array of show IDs ordered from oldest to newest within the requested window.
   public func recentConcerts(_ count: Int) -> [ID] {
     bracket.showOrder.suffix(count)
-  }
-
-  /// Compares two concerts using the provided library comparator.
-  ///
-  /// - Parameters:
-  ///   - lhs: The left-hand concert to compare.
-  ///   - rhs: The right-hand concert to compare.
-  ///   - comparator: A `LibraryComparator` configured for the current identifier type.
-  /// - Returns: `true` if `lhs` should be ordered before `rhs`.
-  public func compareConcerts(lhs: Concert, rhs: Concert, comparator: LibraryComparator<ID>) -> Bool
-  {
-    identifier.compareConcerts(lhs: lhs, rhs: rhs, comparator: comparator)
-  }
-
-  /// Compares two library comparables (artists, venues, etc.) using the provided comparator.
-  ///
-  /// - Parameters:
-  ///   - lhs: The left-hand item to compare.
-  ///   - rhs: The right-hand item to compare.
-  ///   - comparator: A `LibraryComparator` configured for the current identifier type.
-  /// - Returns: `true` if `lhs` should be ordered before `rhs`.
-  ///
-  /// - Note: `Comparable.ID` must be `String`.
-  public func libraryCompare<Comparable: LibraryComparable & PathRestorable>(
-    lhs: Comparable, rhs: Comparable, comparator: LibraryComparator<ID>
-  ) -> Bool where Comparable.ID == String {
-    identifier.libraryCompare(lhs: lhs, rhs: rhs, comparator: comparator)
   }
 }
