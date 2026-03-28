@@ -27,6 +27,7 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
   let showMap: [ID: Show]
   private let bracket: Bracket<Identifier>
   private let relationMap: [ID: Set<ID>]  // Artist/Venue ID : Set<Artist/Venue ID>
+  let annumMap: [AnnumID: Annum]
 
   /// Creates a `Lookup` by indexing the provided `Music` archive and preparing derived maps.
   ///
@@ -55,6 +56,8 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
     self.showMap = try await showLookup
     self.bracket = try await bracket
     self.relationMap = try await relations
+    let annumIDs = try await bracket.decadesMap.values.flatMap { $0.keys }
+    self.annumMap = annumIDs.reduce(into: [:]) { $0[$1] = identifier.annum(for: $1) }
   }
 
   var librarySortTokenMap: [ID: String] {

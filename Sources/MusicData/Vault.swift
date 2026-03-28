@@ -119,8 +119,8 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
       by: compare(lhs:rhs:))
   }
 
-  func digest(annum: Annum) -> AnnumDigest? {
-    try? lookup.annumDigest(annum: annum)
+  func digest(annum: AnnumID) -> AnnumDigest? {
+    lookup.annumDigest(id: annum)
   }
 
   func digest(artist: ID) -> ArtistDigest? {
