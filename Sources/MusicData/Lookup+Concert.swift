@@ -70,8 +70,8 @@ extension Lookup {
     return venueDigest(venue: venue, venueID: venueID)
   }
 
-  func annumDigest(annum: Annum) throws -> AnnumDigest {
-    let annumID = try identifier.annum(annum)
+  func annumDigest(id annumID: AnnumID) -> AnnumDigest? {
+    guard let annum = annumMap[annumID] else { return nil }
     return AnnumDigest(
       annum: annum, shows: showDigests(annum: annum, annumID: annumID),
       rank: rankDigest(annum: annumID))
