@@ -54,8 +54,6 @@ enum LocationAuthorization {
     executeAsynchronousTasks: Bool,
     distanceFilter: CLLocationDistance = 10
   ) {
-    AppDependencyManager.shared.add(dependency: vault)
-
     self.vault = vault
     self.distanceFilter = distanceFilter
     self.locationManager = LocationManager(
@@ -68,6 +66,8 @@ enum LocationAuthorization {
       Logger.vaultModel.log("Ignoring Asynchronous Tasks")
       return
     }
+
+    AppDependencyManager.shared.add(dependency: vault)
 
     dayChangeTask = Task {
       await self.monitorDayChanges()
