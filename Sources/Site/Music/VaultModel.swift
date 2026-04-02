@@ -21,11 +21,16 @@ enum LocationAuthorization {
   case denied  // Locations denied by user.
 }
 
-@Observable public final class VaultModel {
-  public let vault: Vault<BasicIdentifier>
+public typealias VaultModel = AbstractVaultModel<BasicIdentifier>
+
+@Observable public final class AbstractVaultModel<Identifier: ArchiveIdentifier> {
+  public typealias ID = Identifier.ID
+  public typealias AnnumID = Identifier.AnnumID
+
+  public let vault: Vault<Identifier>
 
   internal var todayDayOfLeapYear: Int = Date.now.dayOfLeapYear
-  private var venueLocatables: [BasicIdentifier.ID: Locatable] = [:]
+  private var venueLocatables: [ID: Locatable] = [:]
   private var currentLocation: CLLocation?
   internal var locationAuthorization = LocationAuthorization.allowed
 
@@ -49,7 +54,7 @@ enum LocationAuthorization {
 
   @MainActor
   internal init(
-    _ vault: Vault<BasicIdentifier>,
+    _ vault: Vault<Identifier>,
     executeAsynchronousTasks: Bool,
     distanceFilter: CLLocationDistance = 10
   ) {
@@ -182,9 +187,7 @@ enum LocationAuthorization {
     }
   }
 
-  private func venueIDsNearby(_ distanceThreshold: CLLocationDistance)
-    -> any Collection<BasicIdentifier.ID>
-  {
+  private func venueIDsNearby(_ distanceThreshold: CLLocationDistance) -> any Collection<ID> {
     guard let currentLocation else {
       Logger.vaultModel.log("Nearby: No Location")
       return []
@@ -209,14 +212,14 @@ enum LocationAuthorization {
     return nearbyArtistIDs.compactMap { vault.rankedArtist(id: $0) }
   }
 
-  private func decadesMapsNearby(_ distanceThreshold: CLLocationDistance) -> [Decade: [Annum: Set<
-    Concert.ID
-  >]] {
+  private func decadesMapsNearby(_ distanceThreshold: CLLocationDistance)
+    -> [Decade: [AnnumID: Set<ID>]]
+  {
     let nearbyVenueIDs = venueIDsNearby(distanceThreshold)
     let nearbyConcertIDs = nearbyVenueIDs.flatMap { vault.shows(venueID: $0) }
-    return [Decade: [Annum: Set<Concert.ID>]](
+    return [Decade: [AnnumID: Set<ID>]](
       uniqueKeysWithValues: vault.decadesMap.compactMap {
-        let nearbyAnnums = [Annum: Set<Show.ID>](
+        let nearbyAnnums = [AnnumID: Set<ID>](
           uniqueKeysWithValues: $0.value.compactMap {
             let nearbyIDs = $0.value.filter { nearbyConcertIDs.contains($0) }
             if nearbyIDs.isEmpty {
@@ -232,7 +235,7 @@ enum LocationAuthorization {
   }
 
   private func venues(nearby location: CLLocation, distanceThreshold: CLLocationDistance)
-    -> any Collection<BasicIdentifier.ID>
+    -> any Collection<ID>
   {
     venueLocatables.compactMap { (id, locatable) in
       guard locatable.nearby(to: location, distanceThreshold: distanceThreshold) else { return nil }
@@ -241,7 +244,7 @@ enum LocationAuthorization {
   }
 
   func filteredDecadesMap(_ nearbyModel: NearbyModel, distanceThreshold: CLLocationDistance)
-    -> [Decade: [Annum: Set<Concert.ID>]]
+    -> [Decade: [AnnumID: Set<ID>]]
   {
     nearbyModel.locationFilter.isNearby ? decadesMapsNearby(distanceThreshold) : vault.decadesMap
   }

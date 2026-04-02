@@ -1,5 +1,5 @@
 //
-//  Program.swift
+//  DumpVaultCommand.swift
 //  site
 //
 //  Created by Greg Bolsinga on 12/6/20.
@@ -12,13 +12,16 @@ extension Vault {
   fileprivate func concertsForArtist(artistID: ID) -> any Collection<Concert> {
     self.shows(artistID: artistID).compactMap { concert(show: $0) }
   }
+}
 
+extension AbstractVaultModel {
   fileprivate func dump(
     searchString: String?, concertsForArtist: (Artist) -> any Collection<Concert>
   ) {
-    let concerts = showIDs().compactMap { concert(show: $0) }.sorted(by: compare(lhs:rhs:))
-    let artists = artistIDs().map { $0.1 }.sorted(by: compare(lhs:rhs:))
-    let venues = venueIDs().map { $0.1 }.sorted(by: compare(lhs:rhs:))
+    let concerts = vault.showIDs().compactMap { vault.concert(show: $0) }.sorted(
+      by: vault.compare(lhs:rhs:))
+    let artists = vault.artistIDs().map { $0.1 }.sorted(by: vault.compare(lhs:rhs:))
+    let venues = vault.venueIDs().map { $0.1 }.sorted(by: vault.compare(lhs:rhs:))
 
     print("Artists: \(artists.count)")
     print("Shows: \(concerts.count)")
@@ -45,8 +48,8 @@ extension Vault {
     }
 
     if let searchString {
-      let venues = self.venues(filteredBy: searchString).map { $0.name }
-      let artists = self.artists(filteredBy: searchString).map { $0.name }
+      let venues = self.vault.venues(filteredBy: searchString).map { $0.name }
+      let artists = self.vault.artists(filteredBy: searchString).map { $0.name }
       let matches = venues + artists
       print("Matching (\(searchString)): \(matches.joined(separator: "; "))")
     }
@@ -67,16 +70,19 @@ struct DumpVaultCommand: AsyncParsableCommand {
   @Option(help: "Search String to use.")
   var searchString: String?
 
+  @MainActor
   func run() async throws {
     switch identifier {
     case .basic:
       let vault = try await rootURL.vault(identifier: BasicIdentifier())
-      vault.dump(searchString: searchString) {
+      let vaultModel = AbstractVaultModel(vault, executeAsynchronousTasks: false)
+      vaultModel.dump(searchString: searchString) {
         vault.concertsForArtist(artistID: $0.id)
       }
     case .archivePath:
       let vault = try await rootURL.vault(identifier: ArchivePathIdentifier())
-      vault.dump(searchString: searchString) {
+      let vaultModel = AbstractVaultModel(vault, executeAsynchronousTasks: false)
+      vaultModel.dump(searchString: searchString) {
         vault.concertsForArtist(artistID: $0.archivePath)
       }
     }
