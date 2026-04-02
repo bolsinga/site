@@ -36,7 +36,7 @@ enum LocationAuthorization {
   @ObservationIgnored
   private var locationTask: Task<Void, Never>?
 
-  private static let distanceFilter: CLLocationDistance = 10
+  private let distanceFilter: CLLocationDistance
 
   private var batchGeocodeTotalCount = 0
   private var batchGeocodeCompleted = false
@@ -44,19 +44,25 @@ enum LocationAuthorization {
   @ObservationIgnored
   private var todayUpdatesQuickly: Bool = false
 
-  private let locationManager = LocationManager(
-    activityType: .other,
-    distanceFilter: distanceFilter,
-    desiredAccuracy: kCLLocationAccuracyHundredMeters,
-    access: .inUse)
+  private let locationManager: LocationManager
 
   private let atlas = Atlas<Venue>()
 
   @MainActor
-  internal init(_ vault: Vault<BasicIdentifier>, executeAsynchronousTasks: Bool) {
+  internal init(
+    _ vault: Vault<BasicIdentifier>,
+    executeAsynchronousTasks: Bool,
+    distanceFilter: CLLocationDistance = 10
+  ) {
     AppDependencyManager.shared.add(dependency: vault)
 
     self.vault = vault
+    self.distanceFilter = distanceFilter
+    self.locationManager = LocationManager(
+      activityType: .other,
+      distanceFilter: distanceFilter,
+      desiredAccuracy: kCLLocationAccuracyHundredMeters,
+      access: .inUse)
 
     guard executeAsynchronousTasks else {
       Logger.vaultModel.log("Ignoring Asynchronous Tasks")
@@ -162,7 +168,7 @@ enum LocationAuthorization {
           }
 
           let distance = curLoc.distance(from: location)
-          guard distance > Self.distanceFilter else { continue }
+          guard distance > distanceFilter else { continue }
 
           Logger.vaultModel.log("location updated. distance: \(distance, privacy: .public)")
           currentLocation = location
