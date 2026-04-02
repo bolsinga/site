@@ -54,14 +54,14 @@ enum LocationAuthorization {
 
   @MainActor
   internal init(_ vault: Vault<BasicIdentifier>, executeAsynchronousTasks: Bool) {
-    AppDependencyManager.shared.add(dependency: vault)
-
     self.vault = vault
 
     guard executeAsynchronousTasks else {
       Logger.vaultModel.log("Ignoring Asynchronous Tasks")
       return
     }
+
+    AppDependencyManager.shared.add(dependency: vault)
 
     dayChangeTask = Task {
       await self.monitorDayChanges()
