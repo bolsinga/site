@@ -17,8 +17,8 @@ extension Vault {
     searchString: String?, concertsForArtist: (Artist) -> any Collection<Concert>
   ) {
     let concerts = showIDs().compactMap { concert(show: $0) }.sorted(by: compare(lhs:rhs:))
-    let artists = artists().sorted(by: compare(lhs:rhs:))
-    let venues = venues().sorted(by: compare(lhs:rhs:))
+    let artists = artistIDs().map { $0.1 }.sorted(by: compare(lhs:rhs:))
+    let venues = venueIDs().map { $0.1 }.sorted(by: compare(lhs:rhs:))
 
     print("Artists: \(artists.count)")
     print("Shows: \(concerts.count)")

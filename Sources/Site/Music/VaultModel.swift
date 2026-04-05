@@ -250,7 +250,8 @@ enum LocationAuthorization {
     -> any Collection<RankedArchiveItem>
   {
     nearbyModel.locationFilter.isNearby
-      ? venuesNearby(distanceThreshold) : vault.venues().compactMap { vault.rankedVenue(id: $0.id) }
+      ? venuesNearby(distanceThreshold)
+      : vault.venueIDs().compactMap { vault.rankedVenue(id: $0.0) }
   }
 
   func nearbyArtists(_ nearbyModel: NearbyModel, distanceThreshold: CLLocationDistance)
@@ -258,7 +259,7 @@ enum LocationAuthorization {
   {
     nearbyModel.locationFilter.isNearby
       ? artistsNearby(distanceThreshold)
-      : vault.artists().compactMap { vault.rankedArtist(id: $0.id) }
+      : vault.artistIDs().compactMap { vault.rankedArtist(id: $0.0) }
   }
 
   @MainActor
