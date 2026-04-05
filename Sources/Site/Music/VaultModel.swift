@@ -38,7 +38,6 @@ enum LocationAuthorization {
 
   private let distanceFilter: CLLocationDistance
 
-  private var batchGeocodeTotalCount = 0
   private var batchGeocodeCompleted = false
 
   @ObservationIgnored
@@ -123,25 +122,23 @@ enum LocationAuthorization {
   @MainActor
   private func geocodeVenues() async {
     Logger.vaultModel.log("start batch geocode")
-    defer {
-      Logger.vaultModel.log("end batch geocode")
-    }
 
     do {
-      let venues = vault.venues()
-      batchGeocodeTotalCount = venues.count
-      for try await (venue, locatable) in BatchGeocode(atlas: atlas, geocodables: venues) {
-        Logger.vaultModel.log("geocoded: \(venue.id, privacy: .public)")
-        venueLocatables[venue.id] = locatable
+      for try await (id, locatable) in BatchGeocode(atlas: atlas, vault: vault) {
+        Logger.vaultModel.log("geocoded: \(String(describing: id), privacy: .public)")
+        venueLocatables[id] = locatable
       }
     } catch {
       Logger.vaultModel.error("batch geocode error: \(error, privacy: .public)")
     }
     batchGeocodeCompleted = true
+
+    Logger.vaultModel.log("end batch geocode")
   }
 
   var geocodingProgress: Double {
     guard !batchGeocodeCompleted else { return 1.0 }
+    let batchGeocodeTotalCount = vault.venueIDs().count
     guard batchGeocodeTotalCount != 0 else { return 1.0 }
     return Double(venueLocatables.count) / Double(batchGeocodeTotalCount)
   }

@@ -156,6 +156,10 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
     Array(lookup.venueMap.values)
   }
 
+  func venueIDs() -> [(ID, Venue)] {
+    lookup.venueMap.map { ($0, $1) }
+  }
+
   func artists() -> [Artist] {
     Array(lookup.artistMap.values)
   }
