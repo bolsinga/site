@@ -8,15 +8,26 @@
 import Foundation
 import MapKit
 
-struct BatchGeocode: AsyncSequence {
-  typealias Element = (Venue, MKMapItem?)
+struct BatchGeocode<Identifier: ArchiveIdentifier>: AsyncSequence {
+  public typealias ID = Identifier.ID
+
+  typealias Element = (ID, MKMapItem?)
 
   let atlas: Atlas<Venue>
-  let geocodables: [Venue]
+  private let geocodables: [(ID, Venue)]
+
+  /// Create a BatchGeocode.
+  /// - Parameters:
+  ///   - atlas: The Atlas containing the cache for the geocoding.
+  ///   - vault: This is used to find what items will be geocoded, as well as defining ID
+  init(atlas: Atlas<Venue>, vault: Vault<Identifier>) {
+    self.atlas = atlas
+    self.geocodables = vault.venueIDs()
+  }
 
   struct AsyncIterator: AsyncIteratorProtocol {
     let atlas: Atlas<Venue>
-    let geocodables: [Venue]
+    let geocodables: [(ID, Venue)]
 
     var index: Int = 0
 
@@ -25,10 +36,10 @@ struct BatchGeocode: AsyncSequence {
 
       guard index < geocodables.count else { return nil }
 
-      let geocodable = geocodables[index]
+      let (id, geocodable) = geocodables[index]
       let mapItem = try await atlas.geocode(geocodable)
       index += 1
-      return (geocodable, mapItem)
+      return (id, mapItem)
     }
   }
 
