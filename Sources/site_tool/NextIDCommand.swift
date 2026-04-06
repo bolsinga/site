@@ -34,12 +34,12 @@ extension Vault {
   }
 
   fileprivate var nextVenueID: Venue.ID {
-    let nextIndex = max(venues().count, 0)
+    let nextIndex = max(venueIDs().count, 0)
     return "\(ArchivePath.venuePrefix)\(nextIndex)"
   }
 
-  fileprivate var nextArtistID: Venue.ID {
-    let nextIndex = max(artists().count, 0)
+  fileprivate var nextArtistID: Artist.ID {
+    let nextIndex = max(artistIDs().count, 0)
     return "\(ArchivePath.artistPrefix)\(nextIndex)"
   }
 
@@ -48,11 +48,11 @@ extension Vault {
   }
 
   fileprivate var missingVenueIndices: any Collection<Int> {
-    venues().map { $0.id }.missingIndices(prefix: ArchivePath.venuePrefix)
+    venueIDs().map { $0.1.id }.missingIndices(prefix: ArchivePath.venuePrefix)
   }
 
   fileprivate var missingArtistIndices: any Collection<Int> {
-    artists().map { $0.id }.missingIndices(prefix: ArchivePath.artistPrefix)
+    artistIDs().map { $0.1.id }.missingIndices(prefix: ArchivePath.artistPrefix)
   }
 
   fileprivate func printIDs() {
