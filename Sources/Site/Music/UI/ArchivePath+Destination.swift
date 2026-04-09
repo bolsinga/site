@@ -35,3 +35,31 @@ extension ArchivePath {
     }
   }
 }
+
+extension ArchivePath {
+  @MainActor
+  @ViewBuilder func destination(
+    vault: Vault<ArchivePathIdentifier>, isPathNavigable: @escaping (ArchivePath) -> Bool
+  )
+    -> some View
+  {
+    switch self {
+    case .show(_):
+      if let concert = vault.concert(show: self) {
+        ShowDetail(concert: concert, url: vault.url(for: concert), isPathNavigable: isPathNavigable)
+      }
+    case .venue(_):
+      if let digest = vault.digest(venue: self) {
+        VenueDetail(digest: digest, url: vault.url(for: digest), isPathNavigable: isPathNavigable)
+      }
+    case .artist(_):
+      if let digest = vault.digest(artist: self) {
+        ArtistDetail(digest: digest, url: vault.url(for: digest), isPathNavigable: isPathNavigable)
+      }
+    case .year(_):
+      if let digest = vault.digest(annum: self) {
+        YearDetail(digest: digest, url: vault.url(for: digest), isPathNavigable: isPathNavigable)
+      }
+    }
+  }
+}
