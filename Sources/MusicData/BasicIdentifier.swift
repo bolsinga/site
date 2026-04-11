@@ -7,6 +7,9 @@
 
 import Foundation
 
+extension String: ArchiveIdentifiable {}
+extension Annum: ArchiveIdentifiable {}
+
 public struct BasicIdentifier: ArchiveIdentifier {
   public init() {}
 

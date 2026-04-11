@@ -7,6 +7,8 @@
 
 import Foundation
 
+extension ArchivePath: ArchiveIdentifiable {}
+
 public struct ArchivePathIdentifier: ArchiveIdentifier {
   public init() {}
   public func venue(_ id: String) throws -> ArchivePath { try ArchivePath(raw: id) }

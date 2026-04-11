@@ -7,9 +7,11 @@
 
 import Foundation
 
+public protocol ArchiveIdentifiable: Codable, Hashable, Sendable {}
+
 public protocol ArchiveIdentifier: Codable, Sendable {
-  associatedtype ID: Codable, Hashable, Sendable
-  associatedtype AnnumID: Codable, Hashable, Sendable
+  associatedtype ID: ArchiveIdentifiable
+  associatedtype AnnumID: ArchiveIdentifiable
 
   func venue(_ id: String) throws -> ID
   func artist(_ id: String) throws -> ID
