@@ -9,8 +9,7 @@ import SwiftUI
 
 struct RankingList<T, R, ItemContent: View, SectionHeader: View, LabelContent: View>: View
 where T: LibraryComparable, T: Hashable, T: PathRestorable, R: Comparable, R: Hashable {
-  let items: [T]
-  let rankingMapBuilder: ([T]) -> [R: [T]]
+  let rankingMap: [R: [T]]
   let compare: (T, T) -> Bool
   let rankSorted: ((R, R) -> Bool)
   @ViewBuilder let itemContentView: (T) -> ItemContent
@@ -18,7 +17,6 @@ where T: LibraryComparable, T: Hashable, T: PathRestorable, R: Comparable, R: Ha
   @ViewBuilder let itemLabelView: ((T) -> LabelContent)
 
   var body: some View {
-    let rankingMap = rankingMapBuilder(items)
     List {
       ForEach(rankingMap.keys.sorted(by: rankSorted), id: \.self) { ranking in
         if let items = rankingMap[ranking] {
@@ -47,10 +45,7 @@ where T: LibraryComparable, T: Hashable, T: PathRestorable, R: Comparable, R: Ha
 #Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   RankingList(
-    items: Array(model.previewAllArtists),
-    rankingMapBuilder: { artists in
-      [Ranking(rank: .rank(1), value: 3): artists]
-    },
+    rankingMap: [Ranking(rank: .rank(1), value: 3): Array(model.previewAllArtists)],
     compare: model.vault.compare(lhs:rhs:),
     rankSorted: >,
     itemContentView: { _ in
@@ -66,10 +61,7 @@ where T: LibraryComparable, T: Hashable, T: PathRestorable, R: Comparable, R: Ha
 #Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   RankingList(
-    items: Array(model.previewAllVenues),
-    rankingMapBuilder: { venues in
-      [Ranking(rank: .rank(1), value: 3): venues]
-    },
+    rankingMap: [Ranking(rank: .rank(1), value: 3): Array(model.previewAllVenues)],
     compare: model.vault.compare(lhs:rhs:),
     rankSorted: <,
     itemContentView: { _ in },
