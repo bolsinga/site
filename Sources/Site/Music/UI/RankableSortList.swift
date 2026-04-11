@@ -24,24 +24,21 @@ struct RankableSortList<T, SectionHeaderContent: View, LabelContent: View>: View
   @ViewBuilder private var listElement: some View {
     if sort.isAlphabetical {
       RankingList(
-        items: items,
-        rankingMapBuilder: { sectioner.sectionMap(for: $0) },
+        rankingMap: sectioner.sectionMap(for: items),
         compare: compare,
         rankSorted: <,
         itemContentView: { showCount(for: $0) },
         sectionHeaderView: { $0.representingView }, itemLabelView: itemLabelView)
     } else if sort.isFirstSeen {
       RankingList(
-        items: items,
-        rankingMapBuilder: { $0.firstSeen },
+        rankingMap: items.firstSeen,
         compare: compare,
         rankSorted: PartialDate.compareWithUnknownsMuted(lhs:rhs:),
         itemContentView: { Text($0.firstSet.rank.formatted(.hash)) },
         sectionHeaderView: { Text($0.formatted(.compact)) }, itemLabelView: itemLabelView)
     } else {
       RankingList(
-        items: items,
-        rankingMapBuilder: { $0.ranked(by: sort) },
+        rankingMap: items.ranked(by: sort),
         compare: compare,
         rankSorted: <,
         itemContentView: { if sort.isShowYearRange { showCount(for: $0) } },
