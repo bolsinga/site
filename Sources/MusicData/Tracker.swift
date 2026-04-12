@@ -248,8 +248,11 @@ struct Tracker<Identifier: ArchiveIdentifier> {
   }
 
   private func rankDigests<Key>(
-    firstSets: [Key: FirstSet], spanRankings: [Key: Ranking],
-    showRankings: [Key: Ranking], associatedRankings: [Key: Ranking]
+    firstSets: [Key: FirstSet],
+    spanRankings: [Key: Ranking],
+    showRankings: [Key: Ranking],
+    associatedRankings: [Key: Ranking],
+    sections: [Key: LibrarySection]
   ) -> [Key: RankDigest] {
     let ids = Set(firstSets.keys).union(Set(spanRankings.keys)).union(Set(showRankings.keys)).union(
       Set(associatedRankings.keys))
@@ -259,7 +262,8 @@ struct Tracker<Identifier: ArchiveIdentifier> {
         firstSet: firstSets[$1] ?? .empty,
         spanRank: spanRankings[$1] ?? .empty,
         showRank: showRankings[$1] ?? .empty,
-        associatedRank: associatedRankings[$1] ?? .empty)
+        associatedRank: associatedRankings[$1] ?? .empty,
+        section: sections[$1])
     }
   }
 
@@ -267,32 +271,40 @@ struct Tracker<Identifier: ArchiveIdentifier> {
   /// digest for each artist, including first set rank, span rank, show rank,
   /// and associated venue rank.
   ///
+  /// - Parameter sections: A dictionary mapping artist IDs to their `LibrarySection`.
   /// - Returns: A dictionary mapping artist IDs to their rank digests.
-  func artistRankDigests() async -> [ID: RankDigest] {
+  func artistRankDigests(sections: [ID: LibrarySection]) async -> [ID: RankDigest] {
     async let firstSets = await artistFirstSets()
     async let spanRankings = await artistSpanRankings()
     async let showRankings = await artistRankings()
     async let associatedRankings = await artistVenueRankings()
 
     return rankDigests(
-      firstSets: await firstSets, spanRankings: await spanRankings,
-      showRankings: await showRankings, associatedRankings: await associatedRankings)
+      firstSets: await firstSets,
+      spanRankings: await spanRankings,
+      showRankings: await showRankings,
+      associatedRankings: await associatedRankings,
+      sections: sections)
   }
 
   /// Combines multiple ranking dimensions to produce a comprehensive ranking
   /// digest for each venue, including first set rank, span rank, show rank,
   /// and associated artist rank.
   ///
+  /// - Parameter sections: A dictionary mapping venue IDs to their `LibrarySection`.
   /// - Returns: A dictionary mapping venue IDs to their rank digests.
-  func venueRankDigests() async -> [ID: RankDigest] {
+  func venueRankDigests(sections: [ID: LibrarySection]) async -> [ID: RankDigest] {
     async let firstSets = await venueFirstSets()
     async let spanRankings = await venueSpanRankings()
     async let showRankings = await venueRankings()
     async let associatedRankings = await venueArtistRankings()
 
     return rankDigests(
-      firstSets: await firstSets, spanRankings: await spanRankings,
-      showRankings: await showRankings, associatedRankings: await associatedRankings)
+      firstSets: await firstSets,
+      spanRankings: await spanRankings,
+      showRankings: await showRankings,
+      associatedRankings: await associatedRankings,
+      sections: sections)
   }
 
   /// Produces ranking digests for annums combining span rankings, show rankings,
@@ -306,7 +318,10 @@ struct Tracker<Identifier: ArchiveIdentifier> {
     async let associatedRankings = await annumArtistRankings()
 
     return rankDigests(
-      firstSets: [:], spanRankings: await spanRankings, showRankings: await showRankings,
-      associatedRankings: await associatedRankings)
+      firstSets: [:],
+      spanRankings: await spanRankings,
+      showRankings: await showRankings,
+      associatedRankings: await associatedRankings,
+      sections: [:])
   }
 }

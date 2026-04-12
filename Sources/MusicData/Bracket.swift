@@ -16,21 +16,23 @@ extension Music {
   ///
   /// - Parameters:
   ///   - identifier: An `ArchiveIdentifier` that converts model IDs into stable, comparable IDs.
-  /// - Returns: A dictionary mapping `Identifier.ID` to a normalized sort token string.
+  /// - Returns: A tuple containing an artist and venue dictionary mapping `Identifier.ID` to a normalized sort token string.
   /// - Throws: Rethrows any errors encountered while resolving identifiers for artists or venues.
-  fileprivate func librarySortTokenMap<Identifier: ArchiveIdentifier>(_ identifier: Identifier)
-    throws -> [Identifier.ID: String]
+  fileprivate func librarySortTokenMaps<Identifier: ArchiveIdentifier>(_ identifier: Identifier)
+    throws -> (artist: [Identifier.ID: String], venue: [Identifier.ID: String])
   {
     let tokenizer = LibraryCompareTokenizer()
-    return try artists.reduce(
-      into: try venues.reduce(into: [:]) {
+
+    return (
+      artist: try artists.reduce(into: [:]) {
+        $0[try identifier.artist($1.id)] = tokenizer.removeCommonInitialPunctuation(
+          $1.librarySortString)
+      },
+      venue: try venues.reduce(into: [:]) {
         $0[try identifier.venue($1.id)] = tokenizer.removeCommonInitialPunctuation(
           $1.librarySortString)
       }
-    ) {
-      $0[try identifier.artist($1.id)] = tokenizer.removeCommonInitialPunctuation(
-        $1.librarySortString)
-    }
+    )
   }
 }
 
@@ -86,12 +88,14 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
     var signpost = Signpost(category: "bracket", name: "process")
     signpost.start()
 
-    async let librarySortTokenMap = music.librarySortTokenMap(identifier)
+    async let (artistSortTokens, venueSortTokens) = music.librarySortTokenMaps(identifier)
 
     async let tracker = try Tracker(shows: music.shows, identifier: identifier)
 
-    self.artistRankDigestMap = try await tracker.artistRankDigests()
-    self.venueRankDigestMap = try await tracker.venueRankDigests()
+    self.artistRankDigestMap = try await tracker.artistRankDigests(
+      sections: artistSortTokens.mapValues { $0.librarySection })
+    self.venueRankDigestMap = try await tracker.venueRankDigests(
+      sections: venueSortTokens.mapValues { $0.librarySection })
     self.annumRankDigestMap = try await tracker.annumRankDigests()
     self.decadesMap = try await tracker.decadesMap(decade: { identifier.decade($0) })
     self.concertDayMap = try await tracker.dayOfLeapYearShows
@@ -102,6 +106,8 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
     self.showArtists = try await tracker.showArtists.mapValues { $0.reversed() }
     self.showVenue = try await tracker.showVenue
 
-    self.librarySortTokenMap = try await librarySortTokenMap
+    self.librarySortTokenMap = try await artistSortTokens.merging(try await venueSortTokens) {
+      (_, new) in new
+    }
   }
 }

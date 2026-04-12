@@ -9,7 +9,6 @@ import SwiftUI
 
 struct RankableSortList<T, SectionHeaderContent: View, LabelContent: View>: View where T: Rankable {
   let items: [T]
-  let sectioner: LibrarySectioner<T.ID>
   let compare: (T, T) -> Bool
   let title: String
   @ViewBuilder let associatedRankSectionHeader: (Ranking) -> SectionHeaderContent
@@ -24,7 +23,7 @@ struct RankableSortList<T, SectionHeaderContent: View, LabelContent: View>: View
   @ViewBuilder private var listElement: some View {
     if sort.isAlphabetical {
       RankingList(
-        rankingMap: sectioner.sectionMap(for: items),
+        rankingMap: items.sections,
         compare: compare,
         rankSorted: <,
         itemContentView: { showCount(for: $0) },
@@ -63,7 +62,6 @@ struct RankableSortList<T, SectionHeaderContent: View, LabelContent: View>: View
   @Previewable @Environment(VaultModel.self) var model
   RankableSortList(
     items: Array(model.previewAllVenues),
-    sectioner: model.vault.sectioner,
     compare: model.vault.compare(lhs:rhs:),
     title: "Venues", associatedRankSectionHeader: { $0.artistsCountView },
     itemLabelView: { Text($0.name) }, sort: .alphabetical

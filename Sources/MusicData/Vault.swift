@@ -13,7 +13,6 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
 
   private let identifier: Identifier
   private let comparator: LibraryComparator<ID>
-  public let sectioner: LibrarySectioner<ID>
   public let rootURL: URL
 
   private let categoryURLLookup: [ArchiveCategory: URL]
@@ -32,7 +31,6 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
     let comparator = LibraryComparator(tokenMap: lookup.librarySortTokenMap)
 
     self.comparator = comparator
-    self.sectioner = await LibrarySectioner(librarySortTokenMap: lookup.librarySortTokenMap)
     self.rootURL = url
 
     self.categoryURLLookup = ArchiveCategory.allCases.reduce(into: [ArchiveCategory: URL]()) {

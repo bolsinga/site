@@ -10,6 +10,7 @@ import Foundation
 protocol Rankable: LibraryComparable, Hashable, PathRestorable {
   var firstSet: FirstSet { get }
   var showRank: Ranking { get }
+  var section: LibrarySection? { get }
   func ranking(for sort: RankingSort) -> Ranking
 }
 
@@ -33,6 +34,15 @@ extension Array where Element: Rankable {
       $0[$1.key] = $1.value.sorted(by: { lhs, rhs in
         lhs.1.rank < rhs.1.rank
       }).map { $0.0 }
+    }
+  }
+
+  var sections: [LibrarySection: [Element]] {
+    self.reduce(into: [:]) {
+      guard let section = $1.section else { return }
+      var arr = $0[section] ?? []
+      arr.append($1)
+      $0[section] = arr
     }
   }
 }

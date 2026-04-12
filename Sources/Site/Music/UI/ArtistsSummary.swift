@@ -18,7 +18,7 @@ struct ArtistsSummary: View {
   var body: some View {
     let artists = model.nearbyArtists(nearbyModel, distanceThreshold: nearbyDistance)
     ArtistList(
-      artists: artists, sectioner: model.vault.sectioner,
+      artists: artists,
       compare: model.vault.compare(lhs:rhs:),
       filter: { $0.names(filteredBy: $1) }, sort: sort,
       searchString: $searchString
