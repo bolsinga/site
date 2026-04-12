@@ -18,7 +18,7 @@ struct VenuesSummary: View {
   var body: some View {
     let venues = model.nearbyVenues(nearbyModel, distanceThreshold: nearbyDistance)
     VenueList(
-      venues: venues, sectioner: model.vault.sectioner,
+      venues: venues,
       compare: model.vault.compare(lhs:rhs:),
       filter: { $0.names(filteredBy: $1) }, sort: sort,
       searchString: $searchString

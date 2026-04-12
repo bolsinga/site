@@ -9,7 +9,6 @@ import SwiftUI
 
 struct ArtistList<A>: View where A: Rankable {
   let artists: any Collection<A>
-  let sectioner: LibrarySectioner<A.ID>
   let compare: (A, A) -> Bool
   let filter: (any Collection<A>, String) -> [A]
   let sort: RankingSort
@@ -18,7 +17,6 @@ struct ArtistList<A>: View where A: Rankable {
   var body: some View {
     RankableSearchableSortList(
       items: artists,
-      sectioner: sectioner,
       compare: compare,
       filter: filter,
       sort: sort,
@@ -33,7 +31,6 @@ extension ArtistList<ArtistDigest> {
   fileprivate init(model: VaultModel, sort: RankingSort, searchString: Binding<String>) {
     self.init(
       artists: model.previewAllArtists,
-      sectioner: model.vault.sectioner,
       compare: model.vault.compare(lhs:rhs:),
       filter: { $0.names(filteredBy: $1) },
       sort: sort, searchString: searchString)

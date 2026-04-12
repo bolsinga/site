@@ -12,8 +12,10 @@ public struct RankDigest: Codable, Equatable, Hashable, Sendable {
   public let spanRank: Ranking
   public let showRank: Ranking
   public let associatedRank: Ranking
+  public let section: LibrarySection?
 
   public static var empty: RankDigest {
-    .init(firstSet: .empty, spanRank: .empty, showRank: .empty, associatedRank: .empty)
+    .init(
+      firstSet: .empty, spanRank: .empty, showRank: .empty, associatedRank: .empty, section: nil)
   }
 }

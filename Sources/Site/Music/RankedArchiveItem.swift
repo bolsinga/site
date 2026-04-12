@@ -28,6 +28,8 @@ struct RankedArchiveItem: Rankable {
 
   var showRank: Ranking { rank.showRank }
 
+  var section: LibrarySection? { rank.section }
+
   func ranking(for sort: RankingSort) -> Ranking {
     switch sort {
     case .alphabetical, .firstSeen:

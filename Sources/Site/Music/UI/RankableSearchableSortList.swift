@@ -9,7 +9,6 @@ import SwiftUI
 
 struct RankableSearchableSortList<A, SectionHeaderContent: View>: View where A: Rankable {
   let items: any Collection<A>
-  let sectioner: LibrarySectioner<A.ID>
   let compare: (A, A) -> Bool
   let filter: (any Collection<A>, String) -> [A]
   let sort: RankingSort
@@ -21,7 +20,7 @@ struct RankableSearchableSortList<A, SectionHeaderContent: View>: View where A: 
   var body: some View {
     let items = filter(items, searchString)
     RankableSortList(
-      items: items, sectioner: sectioner, compare: compare, title: title,
+      items: items, compare: compare, title: title,
       associatedRankSectionHeader: associatedRankSectionHeader,
       itemLabelView: { Text($0.name.emphasizedAttributed(matching: searchString)) }, sort: sort
     )
@@ -38,7 +37,7 @@ struct RankableSearchableSortList<A, SectionHeaderContent: View>: View where A: 
 
   NavigationStack {
     RankableSearchableSortList(
-      items: model.previewAllArtists, sectioner: model.vault.sectioner,
+      items: model.previewAllArtists,
       compare: model.vault.compare(lhs:rhs:),
       filter: { $0.names(filteredBy: $1) }, sort: .alphabetical, title: "title",
       searchPrompt: "prompt", associatedRankSectionHeader: { Text($0.formatted(.rankOnly)) },

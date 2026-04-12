@@ -10,4 +10,5 @@ import Foundation
 extension ArtistDigest: Rankable {
   var firstSet: FirstSet { rank.firstSet }
   var showRank: Ranking { rank.showRank }
+  var section: LibrarySection? { rank.section }
 }
