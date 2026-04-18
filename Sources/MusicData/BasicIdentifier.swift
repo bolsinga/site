@@ -21,7 +21,7 @@ public struct BasicIdentifier: ArchiveIdentifier {
   public func annum(for id: Annum) -> Annum { id }
   public func relation(_ id: String) throws -> String { id }
 
-  public func libraryCompare<Comparable: LibraryComparable & PathRestorable>(
+  public func libraryCompare<Comparable: Identifiable & LibraryComparable & PathRestorable>(
     lhs: Comparable, rhs: Comparable, comparator: LibraryComparator<String>
   ) -> Bool where Comparable.ID == String {
     comparator.libraryCompare(lhs: lhs, rhs: rhs)

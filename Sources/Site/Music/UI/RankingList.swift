@@ -7,8 +7,13 @@
 
 import SwiftUI
 
-struct RankingList<T, R, ItemContent: View, SectionHeader: View, LabelContent: View>: View
-where T: LibraryComparable, T: Hashable, T: PathRestorable, R: Comparable, R: Hashable {
+struct RankingList<
+  T: Hashable & Identifiable & LibraryComparable & PathRestorable,
+  R: Comparable & Hashable,
+  ItemContent: View,
+  SectionHeader: View,
+  LabelContent: View
+>: View {
   let rankingMap: [R: [T]]
   let compare: (T, T) -> Bool
   let rankSorted: ((R, R) -> Bool)

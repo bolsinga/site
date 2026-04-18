@@ -7,7 +7,9 @@
 
 import SwiftUI
 
-struct RankableSortList<T, SectionHeaderContent: View, LabelContent: View>: View where T: Rankable {
+struct RankableSortList<T: Identifiable & Rankable, SectionHeaderContent: View, LabelContent: View>:
+  View
+{
   let items: [T]
   let compare: (T, T) -> Bool
   let title: String

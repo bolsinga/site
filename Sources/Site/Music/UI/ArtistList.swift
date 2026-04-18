@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ArtistList<A>: View where A: Rankable {
+struct ArtistList<A: Identifiable & Rankable>: View {
   let artists: any Collection<A>
   let compare: (A, A) -> Bool
   let filter: (any Collection<A>, String) -> [A]

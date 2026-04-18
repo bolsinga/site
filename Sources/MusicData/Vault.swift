@@ -52,7 +52,8 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
     item.archivePath.url(using: rootURL)
   }
 
-  func compare<Comparable: LibraryComparable>(lhs: Comparable, rhs: Comparable) -> Bool
+  func compare<Comparable: Identifiable & LibraryComparable>(lhs: Comparable, rhs: Comparable)
+    -> Bool
   where Comparable.ID == ID {
     comparator.libraryCompare(lhs: lhs, rhs: rhs)
   }
@@ -118,7 +119,9 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
   /// - Returns: `true` if `lhs` should be ordered before `rhs`.
   ///
   /// - Note: `Comparable.ID` must be `String`.
-  func compare<Comparable: LibraryComparable & PathRestorable>(lhs: Comparable, rhs: Comparable)
+  func compare<Comparable: Identifiable & LibraryComparable & PathRestorable>(
+    lhs: Comparable, rhs: Comparable
+  )
     -> Bool where Comparable.ID == String
   {
     identifier.libraryCompare(lhs: lhs, rhs: rhs, comparator: comparator)

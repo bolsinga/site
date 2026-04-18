@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct RankedArchiveItem: Rankable {
+struct RankedArchiveItem: Identifiable, Rankable {
   let archivePath: ArchivePath
   let id: String
   let sortname: String?
