@@ -7,7 +7,9 @@
 
 import SwiftUI
 
-struct RankableSortList<T: Identifiable & Rankable, SectionHeaderContent: View, LabelContent: View>:
+struct RankableSortList<
+  T: Hashable & Identifiable & Rankable, SectionHeaderContent: View, LabelContent: View
+>:
   View
 {
   let items: [T]

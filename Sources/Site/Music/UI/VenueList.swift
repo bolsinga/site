@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct VenueList<V: Identifiable & Nameable & Rankable>: View {
+struct VenueList<V: Hashable & Identifiable & Nameable & Rankable>: View {
   let venues: any Collection<V>
   let compare: (V, V) -> Bool
   let filter: (any Collection<V>, String) -> [V]
