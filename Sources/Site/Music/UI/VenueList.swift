@@ -27,7 +27,7 @@ struct VenueList<V: Hashable & Identifiable & Nameable & PathRestorable & Rankab
   }
 }
 
-extension VenueList<VenueDigest> {
+extension VenueList<RankedArchiveItem> {
   fileprivate init(model: VaultModel, sort: RankingSort, searchString: Binding<String>) {
     self.init(
       venues: model.previewAllVenues,

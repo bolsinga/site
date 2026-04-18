@@ -35,16 +35,16 @@ extension VaultModel {
     vault.digest(artist: id)!
   }
 
-  var previewAllArtists: any Collection<ArtistDigest> {
-    vault.artistIDs().compactMap { vault.digest(artist: $0.0) }.shuffled()
+  var previewAllArtists: any Collection<RankedArchiveItem> {
+    vault.artistIDs().compactMap { vault.rankedArtist(id: $0.0) }.shuffled()
   }
 
   func previewVenue(_ id: String) -> VenueDigest {
     vault.digest(venue: id)!
   }
 
-  var previewAllVenues: any Collection<VenueDigest> {
-    vault.venueIDs().compactMap { vault.digest(venue: $0.0) }.shuffled()
+  var previewAllVenues: any Collection<RankedArchiveItem> {
+    vault.venueIDs().compactMap { vault.rankedVenue(id: $0.0) }.shuffled()
   }
 
   func previewConcert(_ id: String) -> Concert {

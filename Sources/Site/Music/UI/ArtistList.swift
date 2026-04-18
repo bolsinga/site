@@ -27,7 +27,7 @@ struct ArtistList<A: Hashable & Identifiable & Nameable & PathRestorable & Ranka
   }
 }
 
-extension ArtistList<ArtistDigest> {
+extension ArtistList<RankedArchiveItem> {
   fileprivate init(model: VaultModel, sort: RankingSort, searchString: Binding<String>) {
     self.init(
       artists: model.previewAllArtists,
