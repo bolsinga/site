@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct RankingList<
-  T: Hashable & Identifiable & PathRestorable,
+  T: Identifiable & PathRestorable,
   R: Comparable & Hashable,
   ItemContent: View,
   SectionHeader: View,
