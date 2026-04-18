@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol Rankable: Hashable, PathRestorable {
+protocol Rankable: PathRestorable {
   var firstSet: FirstSet { get }
   var showRank: Ranking { get }
   var section: LibrarySection? { get }
