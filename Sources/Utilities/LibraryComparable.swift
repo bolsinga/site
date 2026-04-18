@@ -17,16 +17,3 @@ extension LibraryComparable {
     sortname ?? name
   }
 }
-
-extension LibraryComparable {
-  public func filter(by searchString: String) -> Bool {
-    name.localizedStandardContains(searchString)
-  }
-}
-
-extension Collection where Element: LibraryComparable {
-  public func names(filteredBy searchString: String, additive: Bool = false) -> [Element] {
-    guard !searchString.isEmpty else { return additive ? [] : Array(self) }
-    return self.filter { $0.filter(by: searchString) }
-  }
-}
