@@ -23,11 +23,7 @@ private struct SearchResultButton: View {
   }
 }
 
-protocol ArchiveSearchResult: PathRestorable {
-  var displayName: String { get }
-}
-
-struct ArchiveCrossSearchView<A, V>: View where A: ArchiveSearchResult, V: ArchiveSearchResult {
+struct ArchiveCrossSearchView<A: Nameable & PathRestorable, V : Nameable & PathRestorable>: View {
   @Binding var searchString: String
   @Binding var scope: ArchiveScope
   let navigateToPath: (ArchivePath) -> Void
@@ -64,7 +60,7 @@ struct ArchiveCrossSearchView<A, V>: View where A: ArchiveSearchResult, V: Archi
           Section(header: Text(ArchiveCategory.artists.localizedString)) {
             ForEach(artistDigests, id: \.archivePath) { item in
               SearchResultButton(
-                name: Text(item.displayName.emphasizedAttributed(matching: searchString))
+                name: Text(item.name.emphasizedAttributed(matching: searchString))
               ) {
                 navigateToPath(item.archivePath)
               }
@@ -76,7 +72,7 @@ struct ArchiveCrossSearchView<A, V>: View where A: ArchiveSearchResult, V: Archi
           Section(header: Text(ArchiveCategory.venues.localizedString)) {
             ForEach(venueDigests, id: \.archivePath) { item in
               SearchResultButton(
-                name: Text(item.displayName.emphasizedAttributed(matching: searchString))
+                name: Text(item.name.emphasizedAttributed(matching: searchString))
               ) {
                 navigateToPath(item.archivePath)
               }
