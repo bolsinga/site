@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct RankableSearchableSortList<
-  A: Hashable & Identifiable & Nameable & Rankable, SectionHeaderContent: View
+  A: Hashable & Identifiable & Nameable & PathRestorable & Rankable, SectionHeaderContent: View
 >: View {
   let items: any Collection<A>
   let compare: (A, A) -> Bool
