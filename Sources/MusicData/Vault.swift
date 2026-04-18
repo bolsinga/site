@@ -124,9 +124,27 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
     identifier.libraryCompare(lhs: lhs, rhs: rhs, comparator: comparator)
   }
 
+  func artistIDs(filteredBy searchString: String) -> any Sequence<ID> {
+    guard !searchString.isEmpty else { return [] }
+
+    return lookup.artistMap.compactMap {
+      guard $0.value.filter(by: searchString) else { return nil }
+      return $0.key
+    }
+  }
+
   func artists(filteredBy searchString: String) -> [Artist] {
     lookup.artistMap.values.names(filteredBy: searchString, additive: true).sorted(
       by: compare(lhs:rhs:))
+  }
+
+  func venueIDs(filteredBy searchString: String) -> any Sequence<ID> {
+    guard !searchString.isEmpty else { return [] }
+
+    return lookup.venueMap.compactMap {
+      guard $0.value.filter(by: searchString) else { return nil }
+      return $0.key
+    }
   }
 
   func venues(filteredBy searchString: String) -> [Venue] {
