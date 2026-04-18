@@ -14,3 +14,5 @@ extension ArtistDigest: LibraryComparable {
     artist.name
   }
 }
+
+extension ArtistDigest: Nameable {}
