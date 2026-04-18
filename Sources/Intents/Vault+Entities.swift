@@ -33,7 +33,7 @@ extension Vault where Identifier == BasicIdentifier {
   }
 
   func artistEntities(filteredBy searchString: String) -> [ArtistEntity] {
-    artists(filteredBy: searchString).compactMap { artistEntity(for: $0.id) }
+    artistIDs(filteredBy: searchString).compactMap { artistEntity(for: $0) }
   }
 
   var venueEntities: [VenueEntity] {
@@ -41,6 +41,6 @@ extension Vault where Identifier == BasicIdentifier {
   }
 
   func venueEntities(filteredBy searchString: String) -> [VenueEntity] {
-    venues(filteredBy: searchString).compactMap { venueEntity(for: $0.id) }
+    venueIDs(filteredBy: searchString).compactMap { venueEntity(for: $0) }
   }
 }
