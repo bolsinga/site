@@ -7,7 +7,8 @@
 
 import SwiftUI
 
-struct ArchiveCrossSearchContainer<A : Nameable & PathRestorable, V : Nameable & PathRestorable>: View {
+struct ArchiveCrossSearchContainer<A: Nameable & PathRestorable, V: Nameable & PathRestorable>: View
+{
   @Environment(\.isSearching) private var isSearching
 
   @Binding var searchString: String

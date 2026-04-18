@@ -7,5 +7,4 @@
 
 import Foundation
 
-extension Venue: Nameable { }
-
+extension Venue: Nameable {}

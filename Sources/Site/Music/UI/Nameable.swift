@@ -8,5 +8,5 @@
 import Foundation
 
 protocol Nameable {
-  var name : String { get }
+  var name: String { get }
 }

@@ -23,7 +23,7 @@ private struct SearchResultButton: View {
   }
 }
 
-struct ArchiveCrossSearchView<A: Nameable & PathRestorable, V : Nameable & PathRestorable>: View {
+struct ArchiveCrossSearchView<A: Nameable & PathRestorable, V: Nameable & PathRestorable>: View {
   @Binding var searchString: String
   @Binding var scope: ArchiveScope
   let navigateToPath: (ArchivePath) -> Void

@@ -15,4 +15,4 @@ extension VenueDigest: LibraryComparable {
   }
 }
 
-extension VenueDigest : Nameable { }
+extension VenueDigest: Nameable {}

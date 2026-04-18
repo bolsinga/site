@@ -7,4 +7,4 @@
 
 import Foundation
 
-extension Artist: Nameable { }
+extension Artist: Nameable {}
