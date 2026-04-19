@@ -16,7 +16,7 @@ struct ArtistDetail: View {
     HStack {
       Text("First Set")
       Spacer()
-      Text(digest.firstSet.rank.formatted())
+      Text(digest.rank.firstSet.rank.formatted())
     }
   }
 
