@@ -98,7 +98,7 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
 
   func concerts(on dayOfLeapYear: Int) -> [Concert] {
     lookup.concertDayMap[dayOfLeapYear]?.compactMap { lookup.concert(showId: $0) }.sorted(
-      by: compare(lhs:rhs:)) ?? []
+      by: compareConcerts(lhs:rhs:)) ?? []
   }
 
   /// Compares two concerts.
@@ -107,8 +107,24 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
   ///   - lhs: The left-hand concert to compare.
   ///   - rhs: The right-hand concert to compare.
   /// - Returns: `true` if `lhs` should be ordered before `rhs`.
-  func compare(lhs: Concert, rhs: Concert) -> Bool {
-    identifier.compareConcerts(lhs: lhs, rhs: rhs, comparator: comparator)
+  func compareConcerts(lhs: Concert, rhs: Concert) -> Bool {
+    let lhShow = lhs.show
+    let rhShow = rhs.show
+    if lhShow.date == rhShow.date {
+      let lhVenue = lhs.venue
+      let rhVenue = rhs.venue
+      if lhVenue == rhVenue {
+        if let lhHeadliner = lhs.artists.first, let rhHeadliner = rhs.artists.first {
+          if lhHeadliner == rhHeadliner {
+            return lhs.id < rhs.id
+          }
+          return identifier.libraryCompare(
+            lhs: lhHeadliner, rhs: rhHeadliner, comparator: comparator)
+        }
+      }
+      return identifier.libraryCompare(lhs: lhVenue, rhs: rhVenue, comparator: comparator)
+    }
+    return lhShow.date < rhShow.date
   }
 
   /// Compares two library comparables (artists, venues, etc.).

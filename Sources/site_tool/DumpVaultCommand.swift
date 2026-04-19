@@ -19,7 +19,7 @@ extension AbstractVaultModel {
     searchString: String?, concertsForArtist: (Artist) -> any Collection<Concert>
   ) {
     let concerts = vault.showIDs().compactMap { vault.concert(show: $0) }.sorted(
-      by: vault.compare(lhs:rhs:))
+      by: vault.compareConcerts(lhs:rhs:))
     let artists = vault.artistIDs().map { $0.1 }.sorted(by: vault.compare(lhs:rhs:))
     let venues = vault.venueIDs().map { $0.1 }.sorted(by: vault.compare(lhs:rhs:))
 
