@@ -118,11 +118,10 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
           if lhHeadliner == rhHeadliner {
             return lhs.id < rhs.id
           }
-          return identifier.libraryCompare(
-            lhs: lhHeadliner, rhs: rhHeadliner, comparator: comparator)
+          return compare(lhs: lhHeadliner, rhs: rhHeadliner)
         }
       }
-      return identifier.libraryCompare(lhs: lhVenue, rhs: rhVenue, comparator: comparator)
+      return compare(lhs: lhVenue, rhs: rhVenue)
     }
     return lhShow.date < rhShow.date
   }
