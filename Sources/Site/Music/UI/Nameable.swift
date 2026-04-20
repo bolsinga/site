@@ -18,8 +18,11 @@ extension Nameable {
 }
 
 extension Collection where Element: Nameable {
-  internal func names(filteredBy searchString: String, additive: Bool = false) -> [Element] {
-    guard !searchString.isEmpty else { return additive ? [] : Array(self) }
+  internal func names(
+    filteredBy searchString: String,
+    emptySearchReturnsEmptyResults: Bool = false
+  ) -> [Element] {
+    guard !searchString.isEmpty else { return emptySearchReturnsEmptyResults ? [] : Array(self) }
     return self.filter { $0.filter(by: searchString) }
   }
 }
