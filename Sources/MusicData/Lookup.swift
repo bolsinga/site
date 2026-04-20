@@ -146,13 +146,13 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
   /// Returns venues related to the given venue.
   ///
   /// Relatedness is domain-specific (e.g., shared characteristics or associations) and is
-  /// expressed as lightweight `Related` values suitable for UI display.
+  /// expressed as lightweight `ArchiveItem` values suitable for UI display.
   ///
   /// - Parameter venueID: The stable venue identifier.
   /// - Returns: A collection of related items.
-  public func related(venueID: ID) -> any Collection<Related> {
+  public func related(venueID: ID) -> any Collection<ArchiveItem> {
     relationMap[venueID]?.compactMap { venueMap[$0] }.map {
-      Related(id: $0.archivePath, name: $0.name)
+      ArchiveItem(id: $0.archivePath, name: $0.name)
     } ?? []
   }
 
@@ -163,9 +163,9 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
   ///
   /// - Parameter artistID: The stable artist identifier.
   /// - Returns: A collection of related items.
-  public func related(artistID: ID) -> any Collection<Related> {
+  public func related(artistID: ID) -> any Collection<ArchiveItem> {
     relationMap[artistID]?.compactMap { artistMap[$0] }.map {
-      Related(id: $0.archivePath, name: $0.name)
+      ArchiveItem(id: $0.archivePath, name: $0.name)
     } ?? []
   }
 

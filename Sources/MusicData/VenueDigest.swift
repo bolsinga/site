@@ -12,10 +12,10 @@ public struct VenueDigest: Codable, Equatable, Hashable, Identifiable, Sendable 
 
   public let venue: Venue
   public let shows: [ShowDigest]
-  public let related: [Related]
+  public let related: [ArchiveItem]
   public let rank: RankDigest
 
-  public init(venue: Venue, shows: [ShowDigest], related: [Related], rank: RankDigest) {
+  public init(venue: Venue, shows: [ShowDigest], related: [ArchiveItem], rank: RankDigest) {
     self.venue = venue
     self.shows = shows
     self.related = related

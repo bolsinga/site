@@ -12,10 +12,10 @@ public struct ArtistDigest: Codable, Equatable, Hashable, Identifiable, Sendable
 
   public let artist: Artist
   public let shows: [ShowDigest]
-  public let related: [Related]
+  public let related: [ArchiveItem]
   public let rank: RankDigest
 
-  public init(artist: Artist, shows: [ShowDigest], related: [Related], rank: RankDigest) {
+  public init(artist: Artist, shows: [ShowDigest], related: [ArchiveItem], rank: RankDigest) {
     self.artist = artist
     self.shows = shows
     self.related = related
