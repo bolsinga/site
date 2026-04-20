@@ -7,17 +7,6 @@
 
 import Foundation
 
-extension Concert {
-  fileprivate var digest: ShowDigest {
-    ShowDigest(
-      id: archivePath,
-      date: date,
-      performers: performers,
-      venue: venueName,
-      location: location)
-  }
-}
-
 extension Lookup {
   fileprivate func showDigest(show: Show, showId: ID) -> ShowDigest? {
     guard let venue = venueForShow(showID: showId) else { return nil }

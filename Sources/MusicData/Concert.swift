@@ -36,10 +36,6 @@ public struct Concert: Equatable, Hashable, Identifiable, Sendable {
     venue.name
   }
 
-  public var location: Location {
-    venue.location
-  }
-
   public var performers: [String] {
     artists.map { $0.name }
   }
