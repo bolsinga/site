@@ -52,12 +52,6 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
     item.archivePath.url(using: rootURL)
   }
 
-  func compare<Comparable: Identifiable & LibraryComparable>(lhs: Comparable, rhs: Comparable)
-    -> Bool
-  where Comparable.ID == ID {
-    comparator.libraryCompare(lhs: lhs, rhs: rhs)
-  }
-
   fileprivate func concertIDs(on dayOfLeapYear: Int, orRecentCount recentCount: Int)
     -> any Collection<ID>
   {
@@ -152,8 +146,15 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
   }
 
   func artists(filteredBy searchString: String) -> [Artist] {
-    lookup.artistMap.values.names(filteredBy: searchString, emptySearchReturnsEmptyResults: true)
-      .sorted(by: compare(lhs:rhs:))
+    guard !searchString.isEmpty else { return [] }
+
+    let matchingPairs: [(ID, Artist)] = artistIDs().compactMap {
+      guard $0.1.filter(by: searchString) else { return nil }
+      return $0
+    }
+    return matchingPairs.sorted(by: {
+      comparator.libraryCompare(lhs: $0.1, lhsID: $0.0, rhs: $1.1, rhsID: $1.0)
+    }).map { $0.1 }
   }
 
   func venueIDs(filteredBy searchString: String) -> any Sequence<ID> {
@@ -166,8 +167,15 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
   }
 
   func venues(filteredBy searchString: String) -> [Venue] {
-    lookup.venueMap.values.names(filteredBy: searchString, emptySearchReturnsEmptyResults: true)
-      .sorted(by: compare(lhs:rhs:))
+    guard !searchString.isEmpty else { return [] }
+
+    let matchingPairs: [(ID, Venue)] = venueIDs().compactMap {
+      guard $0.1.filter(by: searchString) else { return nil }
+      return $0
+    }
+    return matchingPairs.sorted(by: {
+      comparator.libraryCompare(lhs: $0.1, lhsID: $0.0, rhs: $1.1, rhsID: $1.0)
+    }).map { $0.1 }
   }
 
   func digest(annum: AnnumID) -> AnnumDigest? {
