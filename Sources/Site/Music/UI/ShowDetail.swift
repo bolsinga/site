@@ -21,9 +21,9 @@ struct ShowDetail: View {
 
   @ViewBuilder private var lineupElement: some View {
     Section(header: Text("Lineup")) {
-      ForEach(concert.artists) { artist in
+      ForEach(concert.artistItems) { artist in
         ArchivePathLink(
-          archivePath: artist.archivePath, isPathNavigable: isPathNavigable, title: artist.name)
+          archivePath: artist.id, isPathNavigable: isPathNavigable, title: artist.name)
       }
     }
   }

@@ -43,4 +43,8 @@ public struct Concert: Equatable, Hashable, Identifiable, Sendable {
   public var performers: [String] {
     artists.map { $0.name }
   }
+
+  public var artistItems: [ArchiveItem] {
+    artists.map { ArchiveItem(id: $0.archivePath, name: $0.name) }
+  }
 }
