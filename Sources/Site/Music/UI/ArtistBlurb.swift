@@ -25,7 +25,7 @@ struct ArtistBlurb: View {
 extension ArtistBlurb {
   fileprivate init(concert: Concert) {
     self.init(
-      count: concert.show.artists.count, venue: concert.venue.name, date: concert.show.date)
+      count: concert.artistCount, venue: concert.venueName, date: concert.date)
   }
 }
 

@@ -46,7 +46,9 @@ struct ConcertBlurb: View {
 extension ConcertBlurb {
   fileprivate init(concert: Concert, dateFormat: DateFormat) {
     self.init(
-      venue: concert.venue.name, date: concert.show.date, performers: concert.performers,
+      venue: concert.venueName,
+      date: concert.date,
+      performers: concert.performers,
       dateFormat: dateFormat)
   }
 }

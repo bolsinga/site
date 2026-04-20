@@ -13,11 +13,11 @@ struct ShowDetail: View {
   let isPathNavigable: (ArchivePath) -> Bool
 
   private var venueName: String {
-    concert.venue.name
+    concert.venueName
   }
 
-  private var date: PartialDate { concert.show.date }
-  private var comment: String? { concert.show.comment }
+  private var date: PartialDate { concert.date }
+  private var comment: String? { concert.comment }
 
   @ViewBuilder private var lineupElement: some View {
     Section(header: Text("Lineup")) {

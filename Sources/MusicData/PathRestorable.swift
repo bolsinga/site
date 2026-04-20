@@ -40,5 +40,5 @@ extension Show: PathRestorable {
 }
 
 extension Concert: PathRestorable {
-  public var archivePath: ArchivePath { show.archivePath }
+  public var archivePath: ArchivePath { .show(id) }
 }

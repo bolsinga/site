@@ -29,22 +29,22 @@ extension Concert {
 
 extension Concert.FormatStyle: Foundation.FormatStyle {
   public func format(_ value: Concert) -> String {
-    let venue = value.venue
+    let venue = value.venueName
     switch style {
     case .full:
-      let artists = value.artists.map { $0.name }.joined(separator: ", ")
+      let artists = value.performers.joined(separator: ", ")
       return String(
-        localized: "\(artists) @ \(venue.name) : \(value.show.date.formatted(.compact))",
+        localized: "\(artists) @ \(venue) : \(value.date.formatted(.compact))",
         comment: "full.venue")
     case .artistsAndVenue:
-      let artists = value.artists.map { $0.name }.joined(separator: ", ")
+      let artists = value.performers.joined(separator: ", ")
       return String(
-        localized: "\(artists) @ \(venue.name)",
+        localized: "\(artists) @ \(venue)",
         comment: "artistAndVenue.no.venue")
     case .headlinerAndVenue:
-      let headliner = value.artists.first?.name ?? ""
+      let headliner = value.performers.first ?? ""
       return String(
-        localized: "\(headliner), \(venue.name)",
+        localized: "\(headliner), \(venue)",
         comment: "headlinerAndVenue.no.venue")
     }
   }
