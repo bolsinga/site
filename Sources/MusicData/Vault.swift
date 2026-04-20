@@ -152,8 +152,8 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
   }
 
   func artists(filteredBy searchString: String) -> [Artist] {
-    lookup.artistMap.values.names(filteredBy: searchString, additive: true).sorted(
-      by: compare(lhs:rhs:))
+    lookup.artistMap.values.names(filteredBy: searchString, emptySearchReturnsEmptyResults: true)
+      .sorted(by: compare(lhs:rhs:))
   }
 
   func venueIDs(filteredBy searchString: String) -> any Sequence<ID> {
@@ -166,8 +166,8 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
   }
 
   func venues(filteredBy searchString: String) -> [Venue] {
-    lookup.venueMap.values.names(filteredBy: searchString, additive: true).sorted(
-      by: compare(lhs:rhs:))
+    lookup.venueMap.values.names(filteredBy: searchString, emptySearchReturnsEmptyResults: true)
+      .sorted(by: compare(lhs:rhs:))
   }
 
   func digest(annum: AnnumID) -> AnnumDigest? {
