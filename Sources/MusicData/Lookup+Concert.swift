@@ -10,8 +10,11 @@ import Foundation
 extension Concert {
   fileprivate var digest: ShowDigest {
     ShowDigest(
-      id: archivePath, date: show.date, performers: performers, venue: venue.name,
-      location: venue.location)
+      id: archivePath,
+      date: date,
+      performers: performers,
+      venue: venueName,
+      location: location)
   }
 }
 

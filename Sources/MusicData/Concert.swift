@@ -19,4 +19,28 @@ public struct Concert: Equatable, Hashable, Identifiable, Sendable {
     self.venue = venue
     self.artists = artists
   }
+
+  public var date: PartialDate {
+    show.date
+  }
+
+  public var artistCount: Int {
+    show.artists.count
+  }
+
+  public var comment: String? {
+    show.comment
+  }
+
+  public var venueName: String {
+    venue.name
+  }
+
+  public var location: Location {
+    venue.location
+  }
+
+  public var performers: [String] {
+    artists.map { $0.name }
+  }
 }
