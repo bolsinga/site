@@ -29,7 +29,7 @@ struct VenueBlurb: View {
 
 extension VenueBlurb {
   fileprivate init(digest: ShowDigest) {
-    self.init(date: digest.date, performers: digest.performers)
+    self.init(date: digest.date, performers: digest.performerNames)
   }
 }
 

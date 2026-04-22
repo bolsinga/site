@@ -48,7 +48,7 @@ extension ConcertBlurb {
     self.init(
       venue: digest.venue,
       date: digest.date,
-      performers: digest.performers,
+      performers: digest.performerNames,
       dateFormat: dateFormat)
   }
 }

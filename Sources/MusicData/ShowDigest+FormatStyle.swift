@@ -30,19 +30,20 @@ extension ShowDigest {
 extension ShowDigest.FormatStyle: Foundation.FormatStyle {
   public func format(_ value: ShowDigest) -> String {
     let venue = value.venue
+    let names = value.performerNames
     switch style {
     case .full:
-      let artists = value.performers.joined(separator: ", ")
+      let artists = names.joined(separator: ", ")
       return String(
         localized: "\(artists) @ \(venue) : \(value.date.formatted(.compact))",
         comment: "full.venue")
     case .artistsAndVenue:
-      let artists = value.performers.joined(separator: ", ")
+      let artists = names.joined(separator: ", ")
       return String(
         localized: "\(artists) @ \(venue)",
         comment: "artistAndVenue.no.venue")
     case .headlinerAndVenue:
-      let headliner = value.performers.first ?? ""
+      let headliner = names.first ?? ""
       return String(
         localized: "\(headliner), \(venue)",
         comment: "headlinerAndVenue.no.venue")

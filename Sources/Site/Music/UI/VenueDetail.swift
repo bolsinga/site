@@ -45,7 +45,7 @@ struct VenueDetail: View {
     Section(header: Text("Shows")) {
       ForEach(digest.shows.sorted()) { show in
         ArchivePathLink(archivePath: show.id, isPathNavigable: isPathNavigable) {
-          VenueBlurb(date: show.date, performers: show.performers)
+          VenueBlurb(date: show.date, performers: show.performerNames)
         }
       }
     }
