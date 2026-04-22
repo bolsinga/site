@@ -10,7 +10,9 @@ import Foundation
 extension Lookup {
   fileprivate func showDigest(show: Show, showId: ID) -> ShowDigest? {
     guard let venue = venueForShow(showID: showId) else { return nil }
-    let performers = artistsForShow(showID: showId).map { $0.name }
+    let performers = artistsForShow(showID: showId).map {
+      ArchiveItem(id: $0.archivePath, name: $0.name)
+    }
     return ShowDigest(
       id: show.archivePath,
       date: show.date,

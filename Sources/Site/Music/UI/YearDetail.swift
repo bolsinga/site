@@ -26,7 +26,10 @@ struct YearDetail: View {
         ForEach(digest.shows.sorted()) { show in
           ArchivePathLink(archivePath: show.id, isPathNavigable: isPathNavigable) {
             ConcertBlurb(
-              venue: show.venue, date: show.date, performers: show.performers, dateFormat: .noYear)
+              venue: show.venue,
+              date: show.date,
+              performers: show.performerNames,
+              dateFormat: .noYear)
           }
         }
       }
