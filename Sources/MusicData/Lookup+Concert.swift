@@ -32,16 +32,6 @@ extension Lookup {
     return showIDs.compactMap { showDigest(showId: $0) }
   }
 
-  fileprivate func concert(show: Show, showId: ID) -> Concert? {
-    guard let venue = venueForShow(showID: showId) else { return nil }
-    return Concert(show: show, venue: venue, artists: artistsForShow(showID: showId))
-  }
-
-  func concert(showId: ID) -> Concert? {
-    guard let show = showMap[showId] else { return nil }
-    return concert(show: show, showId: showId)
-  }
-
   private func artistDigest(artist: Artist, artistID: ID) -> ArtistDigest {
     ArtistDigest(
       artist: artist,

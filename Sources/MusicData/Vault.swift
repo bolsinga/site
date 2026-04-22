@@ -84,9 +84,9 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
     .suffix(recentCount)
   }
 
-  func concerts(on dayOfLeapYear: Int) throws -> [Concert] {
+  func concerts(on dayOfLeapYear: Int) throws -> [ShowDigest] {
     try sort(showIDs: lookup.concertDayMap[dayOfLeapYear] ?? []).compactMap {
-      lookup.concert(showId: $0)
+      lookup.showDigest(showId: $0)
     }
   }
 
@@ -154,10 +154,6 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
 
   func digest(show: ID) -> ShowDigest? {
     lookup.showDigest(showId: show)
-  }
-
-  func concert(show: ID) -> Concert? {
-    lookup.concert(showId: show)
   }
 
   func venueIDs() -> [(ID, Venue)] {
