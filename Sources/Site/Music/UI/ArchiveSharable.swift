@@ -22,6 +22,11 @@ extension Concert: ArchiveSharable {
   var message: String { self.formatted(.full) }
 }
 
+extension ShowDigest: ArchiveSharable {
+  var subject: String { self.formatted(.headlinerAndVenue) }
+  var message: String { self.formatted(.full) }
+}
+
 extension Venue: ArchiveSharable {
   var subject: String { String(localized: "Shows at \(self.name)") }
   var message: String { subject }
