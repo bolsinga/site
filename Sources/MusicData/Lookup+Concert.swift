@@ -16,7 +16,7 @@ extension Lookup {
       location: venue.location)
   }
 
-  fileprivate func showDigest(showId: ID) -> ShowDigest? {
+  func showDigest(showId: ID) -> ShowDigest? {
     guard let show = showMap[showId] else { return nil }
     return showDigest(show: show, showId: showId)
   }

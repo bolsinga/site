@@ -44,26 +44,26 @@ struct ConcertBlurb: View {
 }
 
 extension ConcertBlurb {
-  fileprivate init(concert: Concert, dateFormat: DateFormat) {
+  fileprivate init(digest: ShowDigest, dateFormat: DateFormat) {
     self.init(
-      venue: concert.venueName,
-      date: concert.date,
-      performers: concert.performers,
+      venue: digest.venue,
+      date: digest.date,
+      performers: digest.performers,
       dateFormat: dateFormat)
   }
 }
 
 #Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
-  ConcertBlurb(concert: model.previewConcert("sh1"), dateFormat: .noYear)
+  ConcertBlurb(digest: model.previewShow("sh1"), dateFormat: .noYear)
 }
 
 #Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
-  ConcertBlurb(concert: model.previewConcert("sh500"), dateFormat: .relative)
+  ConcertBlurb(digest: model.previewShow("sh500"), dateFormat: .relative)
 }
 
 #Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
-  ConcertBlurb(concert: model.previewConcert("sh100"), dateFormat: .noYear)
+  ConcertBlurb(digest: model.previewShow("sh100"), dateFormat: .noYear)
 }

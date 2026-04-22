@@ -26,5 +26,5 @@ struct PerformersView: View {
 
 #Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
-  PerformersView(performers: model.previewConcert("sh1").performers)
+  PerformersView(performers: model.previewShow("sh1").performers)
 }
