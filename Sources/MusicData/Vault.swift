@@ -190,6 +190,10 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
     lookup.venueDigest(id: venue)
   }
 
+  func digest(show: ID) -> ShowDigest? {
+    lookup.showDigest(showId: show)
+  }
+
   func concert(show: ID) -> Concert? {
     lookup.concert(showId: show)
   }

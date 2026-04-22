@@ -28,22 +28,22 @@ struct VenueBlurb: View {
 }
 
 extension VenueBlurb {
-  fileprivate init(concert: Concert) {
-    self.init(date: concert.date, performers: concert.performers)
+  fileprivate init(digest: ShowDigest) {
+    self.init(date: digest.date, performers: digest.performers)
   }
 }
 
 #Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
-  VenueBlurb(concert: model.previewConcert("sh1"))
+  VenueBlurb(digest: model.previewShow("sh1"))
 }
 
 #Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
-  VenueBlurb(concert: model.previewConcert("sh500"))
+  VenueBlurb(digest: model.previewShow("sh500"))
 }
 
 #Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
-  VenueBlurb(concert: model.previewConcert("sh100"))
+  VenueBlurb(digest: model.previewShow("sh100"))
 }

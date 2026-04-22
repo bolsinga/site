@@ -51,6 +51,10 @@ extension VaultModel {
     vault.concert(show: id)!
   }
 
+  func previewShow(_ id: String) -> ShowDigest {
+    vault.digest(show: id)!
+  }
+
   func previewAnnum(_ id: Annum) -> AnnumDigest {
     vault.digest(annum: id)!
   }
