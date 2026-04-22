@@ -12,8 +12,12 @@ extension Lookup {
     guard let venue = venueForShow(showID: showId) else { return nil }
     let performers = artistsForShow(showID: showId).map { $0.name }
     return ShowDigest(
-      id: show.archivePath, date: show.date, performers: performers, venue: venue.name,
-      location: venue.location)
+      id: show.archivePath,
+      date: show.date,
+      performers: performers,
+      venue: venue.name,
+      location: venue.location,
+      comment: show.comment)
   }
 
   func showDigest(showId: ID) -> ShowDigest? {
