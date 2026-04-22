@@ -13,6 +13,7 @@ public struct ShowDigest: Codable, Equatable, Hashable, Identifiable, Sendable {
   let performers: [String]
   let venue: String
   let location: Location
+  let comment: String?
 }
 
 extension ShowDigest: Comparable {
