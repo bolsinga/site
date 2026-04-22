@@ -47,10 +47,6 @@ extension VaultModel {
     vault.venueIDs().compactMap { vault.rankedVenue(id: $0.0) }.shuffled()
   }
 
-  func previewConcert(_ id: String) -> Concert {
-    vault.concert(show: id)!
-  }
-
   func previewShow(_ id: String) -> ShowDigest {
     vault.digest(show: id)!
   }

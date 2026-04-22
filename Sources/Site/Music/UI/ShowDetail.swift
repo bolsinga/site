@@ -8,12 +8,12 @@
 import SwiftUI
 
 struct ShowDetail: View {
-  let concert: Concert
+  let concert: ShowDigest
   let url: URL?
   let isPathNavigable: (ArchivePath) -> Bool
 
   private var venueName: String {
-    concert.venueName
+    concert.venue
   }
 
   private var date: PartialDate { concert.date }
@@ -21,7 +21,7 @@ struct ShowDetail: View {
 
   @ViewBuilder private var lineupElement: some View {
     Section(header: Text("Lineup")) {
-      ForEach(concert.artistItems) { artist in
+      ForEach(concert.performers) { artist in
         ArchivePathLink(
           archivePath: artist.id, isPathNavigable: isPathNavigable, title: artist.name)
       }
@@ -69,7 +69,7 @@ struct ShowDetail: View {
   @Previewable @Environment(VaultModel.self) var model
   NavigationStack {
     ShowDetail(
-      concert: model.previewConcert("sh899"),
+      concert: model.previewShow("sh899"),
       url: nil,
       isPathNavigable: { _ in
         true
