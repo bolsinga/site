@@ -33,6 +33,7 @@ extension ArchivePath {
     public enum Style: Codable, Equatable, Hashable {
       case json
       case urlPath
+      case rawID
     }
 
     let style: Style
@@ -75,6 +76,17 @@ extension ArchivePath.FormatStyle: Foundation.FormatStyle {
       case .year(let annum):
         return "/dates/\(annum.formatted(.urlPath)).html"
       }
+    case .rawID:
+      switch value {
+      case .show(let iD):
+        return iD
+      case .venue(let iD):
+        return iD
+      case .artist(let iD):
+        return iD
+      case .year(let annum):
+        return annum.formatted(.json)
+      }
     }
   }
 }
@@ -93,6 +105,7 @@ extension ArchivePath {
 extension FormatStyle where Self == ArchivePath.FormatStyle {
   public static var json: Self { .init(.json) }
   public static var urlPath: Self { .init(.urlPath) }
+  public static var rawID: Self { .init(.rawID) }
 
   static func archivePath(style: ArchivePath.FormatStyle.Style = .json) -> Self {
     .init(style)
