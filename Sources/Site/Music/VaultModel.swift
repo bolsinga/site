@@ -136,12 +136,12 @@ public typealias VaultModel = AbstractVaultModel<BasicIdentifier>
     }
   }
 
-  func compareConcerts(lhs: Concert, rhs: Concert) -> Bool {
+  func sort(showIDs: any Collection<ID>) -> [ID] {
     do {
-      return try vault.compareConcerts(lhs: lhs, rhs: rhs)
+      return try vault.sort(showIDs: showIDs)
     } catch {
       self.error = error
-      return false
+      return []
     }
   }
 

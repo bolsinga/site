@@ -5,23 +5,13 @@
 //  Created by Greg Bolsinga on 1/11/26.
 //
 
+import Algorithms
 import Foundation
 import OrderedCollections
 import os
 
 extension Logger {
   fileprivate static let libraryComparator = Logger(category: "libraryComparator")
-}
-
-private enum TokenSearchError: LocalizedError {
-  case invalidCompareTokenID(String)
-
-  var errorDescription: String? {
-    switch self {
-    case .invalidCompareTokenID(let string):
-      String(localized: "Invalid Token: \(string).")
-    }
-  }
 }
 
 extension Collection where Element == Artist {
@@ -169,5 +159,42 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
     }
 
     return lhToken.tokenCompare(other: rhToken)
+  }
+
+  func sortedShowIDs() throws -> [ID] {
+    let showDate = {
+      guard let show = showMap[$0] else {
+        throw TokenSearchError.invalidCompareTokenID($0.description)
+      }
+      return show.date
+    }
+
+    let venueInfo = {
+      guard let venueID = showVenue[$0] else {
+        throw TokenSearchError.invalidCompareTokenID($0.description)
+      }
+      return venueID
+    }
+
+    let headlinerInfo = {
+      guard let headlinerID = showArtists[$0]?.first else {
+        throw TokenSearchError.invalidCompareTokenID($0.description)
+      }
+      return headlinerID
+    }
+
+    return try showMap.keys.sorted { (lhs: ID, rhs: ID) in
+      let lhShowDate = try showDate(lhs)
+      let rhShowDate = try showDate(rhs)
+      if lhShowDate == rhShowDate {
+        let lhVenue = try venueInfo(lhs)
+        let rhVenue = try venueInfo(rhs)
+        if lhVenue == rhVenue {
+          return try compareIDs(lhs: try headlinerInfo(lhs), rhs: try headlinerInfo(rhs))
+        }
+        return try compareIDs(lhs: lhVenue, rhs: rhVenue)
+      }
+      return lhShowDate < rhShowDate
+    }
   }
 }

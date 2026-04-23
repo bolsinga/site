@@ -25,6 +25,8 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
   private let relationMap: [ID: Set<ID>]  // Artist/Venue ID : Set<Artist/Venue ID>
   let annumMap: [AnnumID: Annum]
 
+  private let showIDOrderIndex: [ID: Int]
+
   /// Creates a `Lookup` by indexing the provided `Music` archive and preparing derived maps.
   ///
   /// Construction performs work concurrently to minimize initialization time.
@@ -44,10 +46,27 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
     self.relationMap = try await relations
     let annumIDs = try await bracket.decadesMap.values.flatMap { $0.keys }
     self.annumMap = annumIDs.reduce(into: [:]) { $0[$1] = identifier.annum(for: $1) }
+
+    self.showIDOrderIndex = Dictionary(
+      uniqueKeysWithValues: try await bracket.sortedShowIDs().enumerated().map { ($1, $0) })
   }
 
   func compareIDs(lhs: ID, rhs: ID) throws -> Bool {
     try bracket.compareIDs(lhs: lhs, rhs: rhs)
+  }
+
+  func sort(showIDs: any Collection<ID>) throws -> [ID] {
+    try showIDs.sorted { lhs, rhs in
+      guard let lhsIndex = showIDOrderIndex[lhs] else {
+        throw TokenSearchError.invalidCompareTokenID(lhs.description)
+      }
+
+      guard let rhsIndex = showIDOrderIndex[rhs] else {
+        throw TokenSearchError.invalidCompareTokenID(rhs.description)
+      }
+
+      return lhsIndex < rhsIndex
+    }
   }
 
   var showMap: [ID: Show] {

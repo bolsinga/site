@@ -18,8 +18,7 @@ extension AbstractVaultModel {
   fileprivate func dump(
     searchString: String?, concertsForArtist: (Artist) -> any Collection<Concert>
   ) {
-    let concerts = vault.showIDs().compactMap { vault.concert(show: $0) }.sorted(
-      by: compareConcerts(lhs:rhs:))
+    let concerts = sort(showIDs: vault.showIDs()).compactMap { vault.concert(show: $0) }
     let artists = vault.artistIDs().map { $0.1 }.sorted(by: compare(lhs:rhs:))
     let venues = vault.venueIDs().map { $0.1 }.sorted(by: compare(lhs:rhs:))
 
