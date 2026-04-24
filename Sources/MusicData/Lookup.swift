@@ -23,7 +23,6 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
 
   let artistMap: [ID: Artist]
   let venueMap: [ID: Venue]
-  let showMap: [ID: Show]
   private let bracket: Bracket<Identifier>
   private let relationMap: [ID: Set<ID>]  // Artist/Venue ID : Set<Artist/Venue ID>
   let annumMap: [AnnumID: Annum]
@@ -44,14 +43,12 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
       $0[try identifier.artist($1.id)] = $1
     }
     async let venueLookup = music.venues.reduce(into: [:]) { $0[try identifier.venue($1.id)] = $1 }
-    async let showLookup = music.shows.reduce(into: [:]) { $0[try identifier.show($1.id)] = $1 }
 
     async let bracket = await Bracket(music: music, identifier: identifier)
     async let relations = music.relationMap(identifier: identifier)
 
     self.artistMap = try await artistLookup
     self.venueMap = try await venueLookup
-    self.showMap = try await showLookup
     self.bracket = try await bracket
     self.relationMap = try await relations
     let annumIDs = try await bracket.decadesMap.values.flatMap { $0.keys }
@@ -60,6 +57,10 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
 
   var librarySortTokenMap: [ID: String] {
     bracket.librarySortTokenMap
+  }
+
+  var showMap: [ID: Show] {
+    bracket.showMap
   }
 
   /// Groups shows by decade, then by annum (e.g., year), returning the set of show IDs for each.

@@ -97,8 +97,13 @@ struct Tracker<Identifier: ArchiveIdentifier> {
   // Array<ID> of artists for Show ID key (opener to headliner)
   var showArtists = [ID: [ID]]()
 
+  // Show for Show IDs.
+  var showMap = [ID: Show]()
+
   private mutating func track(show: Show, identifier: Identifier) throws {
     let showID = try identifier.show(show.id)
+
+    showMap[showID] = show
 
     let venueID = try identifier.venue(show.venue)
     venueSpanDates.insert(key: venueID, value: show.date)
