@@ -21,8 +21,6 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
   /// Convenience alias for the stable identifier type used for year-like (annum) groupings.
   public typealias AnnumID = Identifier.AnnumID
 
-  let artistMap: [ID: Artist]
-  let venueMap: [ID: Venue]
   private let bracket: Bracket<Identifier>
   private let relationMap: [ID: Set<ID>]  // Artist/Venue ID : Set<Artist/Venue ID>
   let annumMap: [AnnumID: Annum]
@@ -39,16 +37,9 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
     var signpost = Signpost(category: "lookup", name: "process")
     signpost.start()
 
-    async let artistLookup = music.artists.reduce(into: [:]) {
-      $0[try identifier.artist($1.id)] = $1
-    }
-    async let venueLookup = music.venues.reduce(into: [:]) { $0[try identifier.venue($1.id)] = $1 }
-
     async let bracket = await Bracket(music: music, identifier: identifier)
     async let relations = music.relationMap(identifier: identifier)
 
-    self.artistMap = try await artistLookup
-    self.venueMap = try await venueLookup
     self.bracket = try await bracket
     self.relationMap = try await relations
     let annumIDs = try await bracket.decadesMap.values.flatMap { $0.keys }
@@ -61,6 +52,14 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
 
   var showMap: [ID: Show] {
     bracket.showMap
+  }
+
+  var artistMap: [ID: Artist] {
+    bracket.artistMap
+  }
+
+  var venueMap: [ID: Venue] {
+    bracket.venueMap
   }
 
   /// Groups shows by decade, then by annum (e.g., year), returning the set of show IDs for each.

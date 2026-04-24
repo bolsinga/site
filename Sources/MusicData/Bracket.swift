@@ -8,30 +8,52 @@
 import Foundation
 import OrderedCollections
 
+extension Collection where Element == Artist {
+  fileprivate func lookups<Identifier: ArchiveIdentifier>(
+    _ identifier: Identifier, tokenizer: LibraryCompareTokenizer
+  ) throws -> ([Identifier.ID: String], [Identifier.ID: Element]) {
+    var sortTokenMap = [Identifier.ID: String]()
+    var lookup = [Identifier.ID: Element]()
+
+    try forEach {
+      let id = try identifier.artist($0.id)
+      sortTokenMap[id] = tokenizer.removeCommonInitialPunctuation($0.librarySortString)
+      lookup[id] = $0
+    }
+
+    return (sortTokenMap, lookup)
+  }
+}
+
+extension Collection where Element == Venue {
+  fileprivate func lookups<Identifier: ArchiveIdentifier>(
+    _ identifier: Identifier, tokenizer: LibraryCompareTokenizer
+  ) throws -> ([Identifier.ID: String], [Identifier.ID: Element]) {
+    var sortTokenMap = [Identifier.ID: String]()
+    var lookup = [Identifier.ID: Element]()
+
+    try forEach {
+      let id = try identifier.venue($0.id)
+      sortTokenMap[id] = tokenizer.removeCommonInitialPunctuation($0.librarySortString)
+      lookup[id] = $0
+    }
+
+    return (sortTokenMap, lookup)
+  }
+}
+
 extension Music {
-  /// Builds a map from stable archive identifiers to a tokenized library sort string.
-  ///
-  /// This precomputes normalized sort tokens for both artists and venues so that
-  /// higher-level views can sort quickly without repeatedly allocating tokenizers.
-  ///
-  /// - Parameters:
-  ///   - identifier: An `ArchiveIdentifier` that converts model IDs into stable, comparable IDs.
-  /// - Returns: A tuple containing an artist and venue dictionary mapping `Identifier.ID` to a normalized sort token string.
-  /// - Throws: Rethrows any errors encountered while resolving identifiers for artists or venues.
-  fileprivate func librarySortTokenMaps<Identifier: ArchiveIdentifier>(_ identifier: Identifier)
-    throws -> (artist: [Identifier.ID: String], venue: [Identifier.ID: String])
-  {
+  fileprivate func itemMaps<Identifier: ArchiveIdentifier>(_ identifier: Identifier) throws -> (
+    artistTokens: [Identifier.ID: String], artistMap: [Identifier.ID: Artist],
+    venueTokens: [Identifier.ID: String], venueMap: [Identifier.ID: Venue]
+  ) {
     let tokenizer = LibraryCompareTokenizer()
 
+    let (artistTokens, artistMap) = try self.artists.lookups(identifier, tokenizer: tokenizer)
+    let (venueTokens, venueMap) = try self.venues.lookups(identifier, tokenizer: tokenizer)
+
     return (
-      artist: try artists.reduce(into: [:]) {
-        $0[try identifier.artist($1.id)] = tokenizer.removeCommonInitialPunctuation(
-          $1.librarySortString)
-      },
-      venue: try venues.reduce(into: [:]) {
-        $0[try identifier.venue($1.id)] = tokenizer.removeCommonInitialPunctuation(
-          $1.librarySortString)
-      }
+      artistTokens: artistTokens, artistMap: artistMap, venueTokens: venueTokens, venueMap: venueMap
     )
   }
 }
@@ -76,6 +98,10 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
   let showVenue: [ID: ID]
   // Show for Show IDs.
   let showMap: [ID: Show]
+  // Artist for Artist IDs.
+  let artistMap: [ID: Artist]
+  // Venue for Venue IDs.
+  let venueMap: [ID: Venue]
 
   /// Creates a new `Bracket` by deriving ranking and lookup maps from the provided `Music` archive.
   ///
@@ -90,7 +116,8 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
     var signpost = Signpost(category: "bracket", name: "process")
     signpost.start()
 
-    async let (artistSortTokens, venueSortTokens) = music.librarySortTokenMaps(identifier)
+    async let (artistSortTokens, artistMap, venueSortTokens, venueMap) = try music.itemMaps(
+      identifier)
 
     async let tracker = try Tracker(shows: music.shows, identifier: identifier)
 
@@ -108,6 +135,8 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
     self.showArtists = try await tracker.showArtists.mapValues { $0.reversed() }
     self.showVenue = try await tracker.showVenue
     self.showMap = try await tracker.showMap
+    self.artistMap = try await artistMap
+    self.venueMap = try await venueMap
 
     self.librarySortTokenMap = try await artistSortTokens.merging(try await venueSortTokens) {
       (_, new) in new
