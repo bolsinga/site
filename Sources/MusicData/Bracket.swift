@@ -74,6 +74,8 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
   let showArtists: [ID: [ID]]
   // Venue ID for Show IDs.
   let showVenue: [ID: ID]
+  // Show for Show IDs.
+  let showMap: [ID: Show]
 
   /// Creates a new `Bracket` by deriving ranking and lookup maps from the provided `Music` archive.
   ///
@@ -105,6 +107,7 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
     self.showOrder = try await tracker.showOrder
     self.showArtists = try await tracker.showArtists.mapValues { $0.reversed() }
     self.showVenue = try await tracker.showVenue
+    self.showMap = try await tracker.showMap
 
     self.librarySortTokenMap = try await artistSortTokens.merging(try await venueSortTokens) {
       (_, new) in new
