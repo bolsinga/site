@@ -47,12 +47,13 @@ struct VenueEntity: AppEntity {
 
   init(digest: VenueDigest, url: URL) {
     self.id = digest.id
-    self.address = digest.venue.location.formatted(.oneLineNoURL)
+    let location = digest.location
+    self.address = location.formatted(.oneLineNoURL)
 
     self.url = url
     self.name = digest.name
-    self.city = digest.venue.location.city
-    self.state = digest.venue.location.state
+    self.city = location.city
+    self.state = location.state
     self.showCount = digest.shows.count
     self.artistCount = Array(digest.shows.flatMap { $0.performers }.uniqued()).count
     self.related = digest.related.map { $0.name }
