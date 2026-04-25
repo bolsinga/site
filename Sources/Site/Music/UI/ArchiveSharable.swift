@@ -47,12 +47,7 @@ extension AnnumDigest: ArchiveSharable {
   var message: String { annum.message }
 }
 
-extension Artist: ArchiveSharable {
+extension ArtistDigest: ArchiveSharable {
   var subject: String { String(localized: "Shows with \(self.name)") }
   var message: String { subject }
-}
-
-extension ArtistDigest: ArchiveSharable {
-  var subject: String { artist.subject }
-  var message: String { artist.message }
 }
