@@ -42,14 +42,6 @@ where ID: Codable, ID: Hashable, ID: Sendable {
           "\(String(describing: rhs.id), privacy: .public) not in map.")
         return LibraryCompareTokenizer().removeCommonInitialPunctuation(rhs.librarySortString)
       }()
-    return libraryCompareTokens(lhs: lhToken, rhs: rhToken)
-  }
-
-  func libraryCompareTokens(lhs: String, rhs: String) -> Bool {
-    var options = String.CompareOptions()
-    options.insert(.caseInsensitive)
-    options.insert(.diacriticInsensitive)
-
-    return lhs.compare(rhs, options: options) == ComparisonResult.orderedAscending
+    return lhToken.tokenCompare(other: rhToken)
   }
 }
