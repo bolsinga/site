@@ -1,5 +1,5 @@
 //
-//  LibraryComparatorTests.swift
+//  TokenCompareTests.swift
 //
 //
 //  Created by Greg Bolsinga on 2/26/23.
@@ -9,66 +9,61 @@ import Testing
 
 @testable import SiteApp
 
-extension LibraryComparator {
-  func libraryCompare(lhs: String, rhs: String) -> Bool {
-    libraryCompareTokens(
-      lhs: lhs.removeCommonInitialPunctuation, rhs: rhs.removeCommonInitialPunctuation)
-  }
-}
-
 extension String {
   fileprivate var removeCommonInitialPunctuation: String {
     LibraryCompareTokenizer().removeCommonInitialPunctuation(self)
   }
 }
 
-struct LibraryComparatorTests {
-  let comparator = LibraryComparator<String>()
+struct TokenCompareTests {
+  func libraryCompare(lhs: String, rhs: String) -> Bool {
+    lhs.removeCommonInitialPunctuation.tokenCompare(other: rhs.removeCommonInitialPunctuation)
+  }
 
   @Test func stringBasic() {
-    #expect(comparator.libraryCompare(lhs: "A", rhs: "B"))
-    #expect(!comparator.libraryCompare(lhs: "B", rhs: "A"))
+    #expect(libraryCompare(lhs: "A", rhs: "B"))
+    #expect(!libraryCompare(lhs: "B", rhs: "A"))
   }
 
   @Test func stringThePrefix() {
-    #expect(comparator.libraryCompare(lhs: "The White Album", rhs: "White Denim"))
-    #expect(!comparator.libraryCompare(lhs: "White Denim", rhs: "The White Album"))
+    #expect(libraryCompare(lhs: "The White Album", rhs: "White Denim"))
+    #expect(!libraryCompare(lhs: "White Denim", rhs: "The White Album"))
   }
 
   @Test func stringAPrefix() {
     // These should compare as false, since removing the prefix matches the other word.
-    #expect(!comparator.libraryCompare(lhs: "A Cord", rhs: "Cord"))
-    #expect(!comparator.libraryCompare(lhs: "Cord", rhs: "A Cord"))
+    #expect(!libraryCompare(lhs: "A Cord", rhs: "Cord"))
+    #expect(!libraryCompare(lhs: "Cord", rhs: "A Cord"))
   }
 
   @Test func stringAnPrefix() {
     // These should compare as false, since removing the prefix matches the other word.
-    #expect(!comparator.libraryCompare(lhs: "An Other", rhs: "Other"))
-    #expect(!comparator.libraryCompare(lhs: "Other", rhs: "An Other"))
+    #expect(!libraryCompare(lhs: "An Other", rhs: "Other"))
+    #expect(!libraryCompare(lhs: "Other", rhs: "An Other"))
   }
 
   @Test func prefixThreeWords() {
     // These should compare as false, since removing the prefix matches the other words.
-    #expect(!comparator.libraryCompare(lhs: "An Other Test", rhs: "Other Test"))
-    #expect(!comparator.libraryCompare(lhs: "Other Test", rhs: "An Other Test"))
+    #expect(!libraryCompare(lhs: "An Other Test", rhs: "Other Test"))
+    #expect(!libraryCompare(lhs: "Other Test", rhs: "An Other Test"))
   }
 
   @Test func stringPartialPrefix() {
-    #expect(comparator.libraryCompare(lhs: "These", rhs: "They Might"))
-    #expect(!comparator.libraryCompare(lhs: "They Might", rhs: "These"))
+    #expect(libraryCompare(lhs: "These", rhs: "They Might"))
+    #expect(!libraryCompare(lhs: "They Might", rhs: "These"))
 
-    #expect(comparator.libraryCompare(lhs: "Them", rhs: "They Might"))
-    #expect(!comparator.libraryCompare(lhs: "They Might", rhs: "Them"))
+    #expect(libraryCompare(lhs: "Them", rhs: "They Might"))
+    #expect(!libraryCompare(lhs: "They Might", rhs: "Them"))
   }
 
   @Test func stringSmog() {
-    #expect(!comparator.libraryCompare(lhs: "Smog", rhs: "(Smog)"))
-    #expect(!comparator.libraryCompare(lhs: "(Smog)", rhs: "Smog"))
+    #expect(!libraryCompare(lhs: "Smog", rhs: "(Smog)"))
+    #expect(!libraryCompare(lhs: "(Smog)", rhs: "Smog"))
   }
 
   @Test func stringQuotation() {
-    #expect(!comparator.libraryCompare(lhs: "\"Song Title\"", rhs: "Song Title"))
-    #expect(!comparator.libraryCompare(lhs: "Song Title", rhs: "\"Song Title\""))
+    #expect(!libraryCompare(lhs: "\"Song Title\"", rhs: "Song Title"))
+    #expect(!libraryCompare(lhs: "Song Title", rhs: "\"Song Title\""))
   }
 
   @Test func aPrefixChomp() {
