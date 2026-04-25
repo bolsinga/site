@@ -72,8 +72,6 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
   /// Convenience alias for the stable identifier type used for year-like (annum) groupings.
   typealias AnnumID = Identifier.AnnumID
 
-  /// Maps any archive `ID` to a normalized token used for locale-aware, punctuation-tolerant sorting.
-  let librarySortTokenMap: [ID: String]
   /// Aggregated ranking metrics for each artist, used to sort or filter artist lists.
   let artistRankDigestMap: [ID: RankDigest]
   /// Aggregated ranking metrics for each venue, used to sort or filter venue lists.
@@ -102,6 +100,8 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
   let artistMap: [ID: Artist]
   // Venue for Venue IDs.
   let venueMap: [ID: Venue]
+
+  let comparator: LibraryComparator<ID>
 
   /// Creates a new `Bracket` by deriving ranking and lookup maps from the provided `Music` archive.
   ///
@@ -138,8 +138,10 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
     self.artistMap = try await artistMap
     self.venueMap = try await venueMap
 
-    self.librarySortTokenMap = try await artistSortTokens.merging(try await venueSortTokens) {
+    let librarySortTokenMap = try await artistSortTokens.merging(try await venueSortTokens) {
       (_, new) in new
     }
+
+    self.comparator = LibraryComparator(tokenMap: librarySortTokenMap)
   }
 }

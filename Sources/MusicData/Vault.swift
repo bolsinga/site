@@ -12,7 +12,6 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
   public typealias AnnumID = Identifier.AnnumID
 
   private let identifier: Identifier
-  private let comparator: LibraryComparator<ID>
   public let rootURL: URL
 
   private let categoryURLLookup: [ArchiveCategory: URL]
@@ -28,9 +27,7 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
     async let asyncLookup = await Lookup(music: music, identifier: identifier)
     let lookup = try await asyncLookup
     self.lookup = lookup
-    let comparator = LibraryComparator(tokenMap: lookup.librarySortTokenMap)
 
-    self.comparator = comparator
     self.rootURL = url
 
     self.categoryURLLookup = ArchiveCategory.allCases.reduce(into: [ArchiveCategory: URL]()) {
@@ -133,7 +130,7 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
   )
     -> Bool where Comparable.ID == String
   {
-    identifier.libraryCompare(lhs: lhs, rhs: rhs, comparator: comparator)
+    identifier.libraryCompare(lhs: lhs, rhs: rhs, comparator: lookup.comparator)
   }
 
   func artistIDs(filteredBy searchString: String) -> any Sequence<ID> {
@@ -153,7 +150,7 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
       return $0
     }
     return matchingPairs.sorted(by: {
-      comparator.libraryCompare(lhs: $0.1, lhsID: $0.0, rhs: $1.1, rhsID: $1.0)
+      lookup.comparator.libraryCompare(lhs: $0.1, lhsID: $0.0, rhs: $1.1, rhsID: $1.0)
     }).map { $0.1 }
   }
 
@@ -174,7 +171,7 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
       return $0
     }
     return matchingPairs.sorted(by: {
-      comparator.libraryCompare(lhs: $0.1, lhsID: $0.0, rhs: $1.1, rhsID: $1.0)
+      lookup.comparator.libraryCompare(lhs: $0.1, lhsID: $0.0, rhs: $1.1, rhsID: $1.0)
     }).map { $0.1 }
   }
 

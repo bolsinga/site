@@ -14,7 +14,7 @@ private struct OrderedBracket<Identifier: ArchiveIdentifier>: Encodable {
   let formatAnnumId: @Sendable ((Identifier.AnnumID)) -> String
 
   private enum Keys: String, CodingKey {
-    case librarySortTokenMap
+    case comparator
     case artistRankDigestMap
     case venueRankDigestMap
     case annumRankDigestMap
@@ -25,7 +25,7 @@ private struct OrderedBracket<Identifier: ArchiveIdentifier>: Encodable {
     // Specialized encoder so that the keys are formatted.
     //  It seems that .sortedKeys is "lexicographic" sorting.
     var container = encoder.container(keyedBy: Keys.self)
-    try container.encode(bracket.librarySortTokenMap, forKey: .librarySortTokenMap)
+    try container.encode(bracket.comparator, forKey: .comparator)
 
     try container.encode(
       bracket.artistRankDigestMap.reduce(
