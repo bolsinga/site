@@ -22,14 +22,9 @@ extension ShowDigest: ArchiveSharable {
   var message: String { self.formatted(.full) }
 }
 
-extension Venue: ArchiveSharable {
+extension VenueDigest: ArchiveSharable {
   var subject: String { String(localized: "Shows at \(self.name)") }
   var message: String { subject }
-}
-
-extension VenueDigest: ArchiveSharable {
-  var subject: String { venue.subject }
-  var message: String { venue.message }
 }
 
 extension AnnumDigest: ArchiveSharable {

@@ -25,7 +25,7 @@ struct VenueDetail: View {
 
   @ViewBuilder private var locationElement: some View {
     Section(header: Text("Location")) {
-      AddressView(location: digest.venue.location)
+      AddressView(location: digest.location)
       LocationMap(identifier: digest) {
         try await model.geocode(digest.venue)
       }
@@ -73,7 +73,7 @@ struct VenueDetail: View {
     #if os(iOS)
       .listStyle(.grouped)
     #endif
-    .navigationTitle(digest.venue.name)
+    .navigationTitle(digest.name)
     .toolbar { ArchiveSharableToolbarContent(item: digest, url: url) }
   }
 }
