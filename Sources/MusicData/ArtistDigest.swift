@@ -7,16 +7,21 @@
 
 import Foundation
 
-public struct ArtistDigest: Codable, Equatable, Hashable, Identifiable, Sendable {
-  public var id: Artist.ID { artist.id }
+public struct ArtistDigest: Codable, Equatable, Hashable, Identifiable, LibraryComparable, Nameable,
+  Sendable
+{
+  public let id: Artist.ID
 
-  public let artist: Artist
+  public let name: String
+  public let sortname: String?
   public let shows: [ShowDigest]
   public let related: [ArchiveItem]
   public let rank: RankDigest
 
   public init(artist: Artist, shows: [ShowDigest], related: [ArchiveItem], rank: RankDigest) {
-    self.artist = artist
+    self.id = artist.id
+    self.name = artist.name
+    self.sortname = artist.sortname
     self.shows = shows
     self.related = related
     self.rank = rank

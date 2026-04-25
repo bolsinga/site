@@ -66,7 +66,7 @@ struct ArtistDetail: View {
     #if os(iOS)
       .listStyle(.grouped)
     #endif
-    .navigationTitle(digest.artist.name)
+    .navigationTitle(digest.name)
     .toolbar { ArchiveSharableToolbarContent(item: digest, url: url) }
   }
 }
