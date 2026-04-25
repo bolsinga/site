@@ -17,11 +17,6 @@ protocol ArchiveSharable {
   var message: String { get }
 }
 
-extension Concert: ArchiveSharable {
-  var subject: String { self.formatted(.headlinerAndVenue) }
-  var message: String { self.formatted(.full) }
-}
-
 extension ShowDigest: ArchiveSharable {
   var subject: String { self.formatted(.headlinerAndVenue) }
   var message: String { self.formatted(.full) }
@@ -37,14 +32,9 @@ extension VenueDigest: ArchiveSharable {
   var message: String { venue.message }
 }
 
-extension Annum: ArchiveSharable {
-  var subject: String { formatted(.shared) }
-  var message: String { subject }
-}
-
 extension AnnumDigest: ArchiveSharable {
-  var subject: String { annum.subject }
-  var message: String { annum.message }
+  var subject: String { annum.formatted(.shared) }
+  var message: String { subject }
 }
 
 extension ArtistDigest: ArchiveSharable {
