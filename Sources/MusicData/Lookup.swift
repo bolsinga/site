@@ -46,8 +46,8 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
     self.annumMap = annumIDs.reduce(into: [:]) { $0[$1] = identifier.annum(for: $1) }
   }
 
-  var librarySortTokenMap: [ID: String] {
-    bracket.librarySortTokenMap
+  var comparator: LibraryComparator<ID> {
+    bracket.comparator
   }
 
   var showMap: [ID: Show] {
