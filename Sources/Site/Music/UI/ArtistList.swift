@@ -31,7 +31,7 @@ extension ArtistList<RankedArchiveItem> {
   fileprivate init(model: VaultModel, sort: RankingSort, searchString: Binding<String>) {
     self.init(
       artists: model.previewAllArtists,
-      compare: model.vault.compare(lhs:rhs:),
+      compare: model.compare(lhs:rhs:),
       filter: { $0.names(filteredBy: $1) },
       sort: sort, searchString: searchString)
   }

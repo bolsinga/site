@@ -47,7 +47,7 @@ struct DayList: View {
   @Previewable @Environment(VaultModel.self) var model
   NavigationStack {
     let dayOfLeapYear = Date.now.dayOfLeapYear
-    DayList(concerts: model.vault.concerts(on: dayOfLeapYear), dayOfLeapYear: dayOfLeapYear)
+    DayList(concerts: model.concerts(on: dayOfLeapYear), dayOfLeapYear: dayOfLeapYear)
   }
 }
 

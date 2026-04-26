@@ -97,6 +97,24 @@ public typealias VaultModel = AbstractVaultModel<BasicIdentifier>
     vault.concerts(on: dayOfLeapYear)
   }
 
+  func artists(filteredBy searchString: String) -> [Artist] {
+    vault.artists(filteredBy: searchString)
+  }
+
+  func venues(filteredBy searchString: String) -> [Venue] {
+    vault.venues(filteredBy: searchString)
+  }
+
+  func compare<Comparable: Identifiable & LibraryComparable & PathRestorable>(
+    lhs: Comparable, rhs: Comparable
+  ) -> Bool where Comparable.ID == String {
+    vault.compare(lhs: lhs, rhs: rhs)
+  }
+
+  func compareConcerts(lhs: Concert, rhs: Concert) -> Bool {
+    vault.compareConcerts(lhs: lhs, rhs: rhs)
+  }
+
   @MainActor
   private func monitorDayChanges() async {
     Logger.vaultModel.log("start day monitoring")

@@ -51,7 +51,7 @@ struct RankingList<
   @Previewable @Environment(VaultModel.self) var model
   RankingList(
     rankingMap: [Ranking(rank: .rank(1), value: 3): Array(model.previewAllArtists)],
-    compare: model.vault.compare(lhs:rhs:),
+    compare: model.compare(lhs:rhs:),
     rankSorted: >,
     itemContentView: { _ in
       Text(3.formatted(.number))
@@ -67,7 +67,7 @@ struct RankingList<
   @Previewable @Environment(VaultModel.self) var model
   RankingList(
     rankingMap: [Ranking(rank: .rank(1), value: 3): Array(model.previewAllVenues)],
-    compare: model.vault.compare(lhs:rhs:),
+    compare: model.compare(lhs:rhs:),
     rankSorted: <,
     itemContentView: { _ in },
     sectionHeaderView: { section in

@@ -67,7 +67,7 @@ struct RankableSortList<
   @Previewable @Environment(VaultModel.self) var model
   RankableSortList(
     items: Array(model.previewAllVenues),
-    compare: model.vault.compare(lhs:rhs:),
+    compare: model.compare(lhs:rhs:),
     title: "Venues", associatedRankSectionHeader: { $0.artistsCountView },
     itemLabelView: { Text($0.name) }, sort: .alphabetical
   )
