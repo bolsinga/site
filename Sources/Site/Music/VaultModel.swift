@@ -99,25 +99,50 @@ public typealias VaultModel = AbstractVaultModel<BasicIdentifier>
 
   @MainActor
   func concerts(on dayOfLeapYear: Int) -> [Concert] {
-    vault.concerts(on: dayOfLeapYear)
+    do {
+      return try vault.concerts(on: dayOfLeapYear)
+    } catch {
+      self.error = error
+      return []
+    }
   }
 
   func artists(filteredBy searchString: String) -> [Artist] {
-    vault.artists(filteredBy: searchString)
+    do {
+      return try vault.artists(filteredBy: searchString)
+    } catch {
+      self.error = error
+      return []
+    }
   }
 
   func venues(filteredBy searchString: String) -> [Venue] {
-    vault.venues(filteredBy: searchString)
+    do {
+      return try vault.venues(filteredBy: searchString)
+    } catch {
+      self.error = error
+      return []
+    }
   }
 
   func compare<Comparable: Identifiable & LibraryComparable & PathRestorable>(
     lhs: Comparable, rhs: Comparable
   ) -> Bool where Comparable.ID == String {
-    vault.compare(lhs: lhs, rhs: rhs)
+    do {
+      return try vault.compare(lhs: lhs, rhs: rhs)
+    } catch {
+      self.error = error
+      return false
+    }
   }
 
   func compareConcerts(lhs: Concert, rhs: Concert) -> Bool {
-    vault.compareConcerts(lhs: lhs, rhs: rhs)
+    do {
+      return try vault.compareConcerts(lhs: lhs, rhs: rhs)
+    } catch {
+      self.error = error
+      return false
+    }
   }
 
   @MainActor
