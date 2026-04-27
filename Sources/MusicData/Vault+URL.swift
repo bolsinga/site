@@ -33,9 +33,9 @@ extension VaultError: LocalizedError {
   public var errorDescription: String? {
     switch self {
     case .illegalURL(let urlString):
-      return "URL (\(urlString)) is not valid."
+      return String(localized: "URL (\(urlString)) is not valid.")
     case .noRootURL(let urlString):
-      return "URL (\(urlString)) cannot create root URL."
+      return String(localized: "URL (\(urlString)) cannot create root URL.")
     }
   }
 }
