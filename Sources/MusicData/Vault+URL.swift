@@ -41,21 +41,16 @@ extension VaultError: LocalizedError {
 }
 
 extension Vault where Identifier: ArchiveIdentifier {
-  public static func load(_ urlString: String, identifier: Identifier) async throws
-    -> Vault<Identifier>
-  {
-    guard let url = URL(string: urlString) else { throw VaultError.illegalURL(urlString) }
-
-    return try await Vault.load(url: url, identifier: identifier)
-  }
-
-  public static func load(url: URL, artistsWithShowsOnly: Bool = true, identifier: Identifier)
-    async throws -> Vault<Identifier>
-  {
+  public static func load(
+    _ urlString: String, identifier: Identifier, artistsWithShowsOnly: Bool = true
+  ) async throws -> Vault<Identifier> {
     Logger.vault.log("start")
     defer {
       Logger.vault.log("end")
     }
+
+    guard let url = URL(string: urlString) else { throw VaultError.illegalURL(urlString) }
+
     let music = try await Music.load(url: url)
 
     guard let rootURL = url.rootURL else { throw VaultError.noRootURL(url.absoluteString) }
