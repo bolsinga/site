@@ -7,7 +7,11 @@
 
 import Foundation
 
-extension ArchivePath: ArchiveIdentifiable {}
+extension ArchivePath: ArchiveIdentifiable {
+  public var description: String {
+    formatted(.rawID)
+  }
+}
 
 public struct ArchivePathIdentifier: ArchiveIdentifier {
   public init() {}
