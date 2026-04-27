@@ -499,6 +499,12 @@
     "Unable to load data." : {
 
     },
+    "URL (%@) cannot create root URL." : {
+
+    },
+    "URL (%@) is not valid." : {
+
+    },
     "venue" : {
 
     },
