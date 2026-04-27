@@ -7,6 +7,11 @@
 
 import Foundation
 import OrderedCollections
+import os
+
+extension Logger {
+  fileprivate static let libraryComparator = Logger(category: "libraryComparator")
+}
 
 extension Collection where Element == Artist {
   fileprivate func lookups<Identifier: ArchiveIdentifier>(
@@ -101,7 +106,7 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
   // Venue for Venue IDs.
   let venueMap: [ID: Venue]
 
-  private let comparator: LibraryComparator<ID>
+  private let compareTokenMap: [ID: String]
 
   /// Creates a new `Bracket` by deriving ranking and lookup maps from the provided `Music` archive.
   ///
@@ -138,11 +143,9 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
     self.artistMap = try await artistMap
     self.venueMap = try await venueMap
 
-    let librarySortTokenMap = try await artistSortTokens.merging(try await venueSortTokens) {
+    self.compareTokenMap = try await artistSortTokens.merging(try await venueSortTokens) {
       (_, new) in new
     }
-
-    self.comparator = LibraryComparator(tokenMap: librarySortTokenMap)
   }
 
   func compare<Comparable: Identifiable & LibraryComparable & PathRestorable>(
@@ -152,6 +155,20 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
   }
 
   func compare<T: Identifiable & LibraryComparable>(lhs: T, lhsID: ID, rhs: T, rhsID: ID) -> Bool {
-    comparator.libraryCompare(lhs: lhs, lhsID: lhsID, rhs: rhs, rhsID: rhsID)
+    let lhToken =
+      compareTokenMap[lhsID]
+      ?? {
+        Logger.libraryComparator.debug(
+          "\(String(describing: lhs.id), privacy: .public) not in map.")
+        return LibraryCompareTokenizer().removeCommonInitialPunctuation(lhs.librarySortString)
+      }()
+    let rhToken =
+      compareTokenMap[rhsID]
+      ?? {
+        Logger.libraryComparator.debug(
+          "\(String(describing: rhs.id), privacy: .public) not in map.")
+        return LibraryCompareTokenizer().removeCommonInitialPunctuation(rhs.librarySortString)
+      }()
+    return lhToken.tokenCompare(other: rhToken)
   }
 }
