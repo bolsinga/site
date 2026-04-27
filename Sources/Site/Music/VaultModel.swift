@@ -125,7 +125,7 @@ public typealias VaultModel = AbstractVaultModel<BasicIdentifier>
     }
   }
 
-  func compare<Comparable: Identifiable & LibraryComparable & PathRestorable>(
+  func compare<Comparable: Identifiable & PathRestorable>(
     lhs: Comparable, rhs: Comparable
   ) -> Bool where Comparable.ID == String {
     do {

@@ -125,13 +125,10 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
   /// - Returns: `true` if `lhs` should be ordered before `rhs`.
   ///
   /// - Note: `Comparable.ID` must be `String`.
-  func compare<Comparable: Identifiable & LibraryComparable & PathRestorable>(
-    lhs: Comparable, rhs: Comparable
-  )
-    throws -> Bool where Comparable.ID == String
+  func compare<Comparable: Identifiable & PathRestorable>(lhs: Comparable, rhs: Comparable) throws
+    -> Bool where Comparable.ID == String
   {
-    try identifier.libraryCompare(
-      lhs: lhs, rhs: rhs, comparator: lookup.compare(lhs:lhsID:rhs:rhsID:))
+    try identifier.compare(lhs: lhs, rhs: rhs, comparator: lookup.compareIDs(lhs:rhs:))
   }
 
   func artistIDs(filteredBy searchString: String) -> any Sequence<ID> {
@@ -151,7 +148,7 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
       return $0
     }
     return try matchingPairs.sorted(by: {
-      try lookup.compare(lhs: $0.1, lhsID: $0.0, rhs: $1.1, rhsID: $1.0)
+      try lookup.compareIDs(lhs: $0.0, rhs: $1.0)
     }).map { $0.1 }
   }
 
@@ -172,7 +169,7 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
       return $0
     }
     return try matchingPairs.sorted(by: {
-      try lookup.compare(lhs: $0.1, lhsID: $0.0, rhs: $1.1, rhsID: $1.0)
+      try lookup.compareIDs(lhs: $0.0, rhs: $1.0)
     }).map { $0.1 }
   }
 

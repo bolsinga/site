@@ -28,11 +28,11 @@ public struct ArchivePathIdentifier: ArchiveIdentifier {
   }
   public func relation(_ id: String) throws -> ArchivePath { try ArchivePath(raw: id) }
 
-  public func libraryCompare<Comparable: Identifiable & LibraryComparable & PathRestorable>(
+  public func compare<Comparable: Identifiable & PathRestorable>(
     lhs: Comparable,
     rhs: Comparable,
-    comparator: (Comparable, ID, Comparable, ID) throws -> Bool
+    comparator: (ID, ID) throws -> Bool
   ) throws -> Bool where Comparable.ID == String {
-    try comparator(lhs, lhs.archivePath, rhs, rhs.archivePath)
+    try comparator(lhs.archivePath, rhs.archivePath)
   }
 }

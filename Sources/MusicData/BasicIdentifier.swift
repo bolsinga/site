@@ -25,11 +25,11 @@ public struct BasicIdentifier: ArchiveIdentifier {
   public func annum(for id: Annum) -> Annum { id }
   public func relation(_ id: String) throws -> String { id }
 
-  public func libraryCompare<Comparable: Identifiable & LibraryComparable & PathRestorable>(
+  public func compare<Comparable: Identifiable & PathRestorable>(
     lhs: Comparable,
     rhs: Comparable,
-    comparator: (Comparable, ID, Comparable, ID) throws -> Bool
+    comparator: (ID, ID) throws -> Bool
   ) throws -> Bool where Comparable.ID == String {
-    try comparator(lhs, lhs.id, rhs, rhs.id)
+    try comparator(lhs.id, rhs.id)
   }
 }
