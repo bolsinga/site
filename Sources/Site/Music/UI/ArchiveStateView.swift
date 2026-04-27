@@ -6,6 +6,11 @@
 //
 
 import SwiftUI
+import os
+
+extension Logger {
+  fileprivate static let dataError = Logger(category: "dataError")
+}
 
 struct ArchiveStateView: View {
   @Environment(VaultModel.self) var model
@@ -18,25 +23,44 @@ struct ArchiveStateView: View {
   let reloadModel: @MainActor () async -> Void
 
   @ViewBuilder private var archiveBody: some View {
-    ArchiveTabView(
-      showsMode: $archiveNavigation.mode,
-      venueSort: $venueSort, artistSort: $artistSort,
-      activeCategory: $archiveNavigation.category,
-      pathForCategory: {
-        switch $0 {
-        case .today:
-          return $archiveNavigation.state.todayPath
-        case .stats, .settings, .search:
-          return .constant([])
-        case .shows:
-          return $archiveNavigation.state.showsPath
-        case .venues:
-          return $archiveNavigation.state.venuesPath
-        case .artists:
-          return $archiveNavigation.state.artistsPath
+    Group {
+      if let error = model.error {
+        VStack(alignment: .center) {
+          ContentUnavailableView(
+            error.localizedDescription, systemImage: "gear.badge.questionmark",
+            description: Text("Invalid Data."))
+          Button {
+            Task {
+              Logger.dataError.log("User retry")
+              await reloadModel()
+            }
+          } label: {
+            Label(String(localized: "Retry"), systemImage: "arrow.clockwise")
+          }
+          .buttonStyle(.borderedProminent)
         }
-      }, reloadModel: reloadModel
-    ) { archiveNavigation.navigate(to: $0) }
+      } else {
+        ArchiveTabView(
+          showsMode: $archiveNavigation.mode,
+          venueSort: $venueSort, artistSort: $artistSort,
+          activeCategory: $archiveNavigation.category,
+          pathForCategory: {
+            switch $0 {
+            case .today:
+              return $archiveNavigation.state.todayPath
+            case .stats, .settings, .search:
+              return .constant([])
+            case .shows:
+              return $archiveNavigation.state.showsPath
+            case .venues:
+              return $archiveNavigation.state.venuesPath
+            case .artists:
+              return $archiveNavigation.state.artistsPath
+            }
+          }, reloadModel: reloadModel
+        ) { archiveNavigation.navigate(to: $0) }
+      }
+    }
     .environment(nearbyModel)
   }
 
@@ -58,6 +82,10 @@ struct ArchiveStateView: View {
   }
 }
 
-#Preview(traits: .vaultModel) {
+#Preview("App", traits: .vaultModel) {
+  ArchiveStateView {}
+}
+
+#Preview("Error", traits: .vaultModelWithError) {
   ArchiveStateView {}
 }

@@ -7,11 +7,11 @@
 
 import SwiftUI
 
-struct VaultPreviewModifier: PreviewModifier {
-  fileprivate enum VaultPreviewError: Error {
-    case noModel
-  }
+private enum VaultPreviewError: Error {
+  case noModel
+}
 
+struct VaultPreviewModifier: PreviewModifier {
   static func makeSharedContext() async throws -> VaultModel {
     let siteModel = SiteModel(urlString: "https://www.bolsinga.com/json/shows.json")
     await siteModel.load(executeAsynchronousTasks: false)
@@ -26,8 +26,31 @@ struct VaultPreviewModifier: PreviewModifier {
   }
 }
 
+struct VaultErrorPreviewModifier: PreviewModifier {
+  let error: Error
+
+  static func makeSharedContext() async throws -> VaultModel {
+    let siteModel = SiteModel(urlString: "https://www.bolsinga.com/json/shows.json")
+    await siteModel.load(executeAsynchronousTasks: false)
+    guard siteModel.error == nil else { throw siteModel.error! }
+    guard let vaultModel = siteModel.vaultModel else { throw VaultPreviewError.noModel }
+    return vaultModel
+  }
+
+  func body(content: Content, context: VaultModel) -> some View {
+    content
+      .task {
+        context.error = error
+      }
+      .environment(context)
+  }
+}
+
 extension PreviewTrait where T == Preview.ViewTraits {
   static var vaultModel: Self = .modifier(VaultPreviewModifier())
+
+  static var vaultModelWithError: Self = .modifier(
+    VaultErrorPreviewModifier(error: VaultError.illegalURL("preview error")))
 }
 
 extension VaultModel {

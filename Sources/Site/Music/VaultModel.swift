@@ -29,6 +29,8 @@ public typealias VaultModel = AbstractVaultModel<BasicIdentifier>
 
   public let vault: Vault<Identifier>
 
+  internal var error: Error?
+
   internal var todayDayOfLeapYear: Int = Date.now.dayOfLeapYear
   private var venueLocatables: [ID: Locatable] = [:]
   private var currentLocation: CLLocation?
@@ -56,7 +58,8 @@ public typealias VaultModel = AbstractVaultModel<BasicIdentifier>
   internal init(
     _ vault: Vault<Identifier>,
     executeAsynchronousTasks: Bool,
-    distanceFilter: CLLocationDistance = 10
+    distanceFilter: CLLocationDistance = 10,
+    error: Error? = nil
   ) {
     self.vault = vault
     self.distanceFilter = distanceFilter
@@ -65,6 +68,8 @@ public typealias VaultModel = AbstractVaultModel<BasicIdentifier>
       distanceFilter: distanceFilter,
       desiredAccuracy: kCLLocationAccuracyHundredMeters,
       access: .inUse)
+
+    self.error = error
 
     guard executeAsynchronousTasks else {
       Logger.vaultModel.log("Ignoring Asynchronous Tasks")
