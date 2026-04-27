@@ -46,8 +46,14 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
     self.annumMap = annumIDs.reduce(into: [:]) { $0[$1] = identifier.annum(for: $1) }
   }
 
-  var comparator: LibraryComparator<ID> {
-    bracket.comparator
+  func compare<Comparable: Identifiable & LibraryComparable & PathRestorable>(
+    lhs: Comparable, rhs: Comparable
+  ) -> Bool where Comparable.ID == String, Identifier.ID == Comparable.ID {
+    bracket.compare(lhs: lhs, rhs: rhs)
+  }
+
+  func compare<T: Identifiable & LibraryComparable>(lhs: T, lhsID: ID, rhs: T, rhsID: ID) -> Bool {
+    bracket.compare(lhs: lhs, lhsID: lhsID, rhs: rhs, rhsID: rhsID)
   }
 
   var showMap: [ID: Show] {

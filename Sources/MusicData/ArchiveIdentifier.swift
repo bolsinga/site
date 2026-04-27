@@ -22,6 +22,8 @@ public protocol ArchiveIdentifier: Codable, Sendable {
   func relation(_ id: String) throws -> ID
 
   func libraryCompare<Comparable: Identifiable & LibraryComparable & PathRestorable>(
-    lhs: Comparable, rhs: Comparable, comparator: LibraryComparator<ID>
+    lhs: Comparable,
+    rhs: Comparable,
+    comparator: (Comparable, ID, Comparable, ID) -> Bool
   ) -> Bool where Comparable.ID == String
 }

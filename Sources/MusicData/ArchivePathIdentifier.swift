@@ -25,8 +25,10 @@ public struct ArchivePathIdentifier: ArchiveIdentifier {
   public func relation(_ id: String) throws -> ArchivePath { try ArchivePath(raw: id) }
 
   public func libraryCompare<Comparable: Identifiable & LibraryComparable & PathRestorable>(
-    lhs: Comparable, rhs: Comparable, comparator: LibraryComparator<ArchivePath>
+    lhs: Comparable,
+    rhs: Comparable,
+    comparator: (Comparable, ID, Comparable, ID) -> Bool
   ) -> Bool where Comparable.ID == String {
-    comparator.libraryCompare(lhs: lhs, lhsID: lhs.archivePath, rhs: rhs, rhsID: rhs.archivePath)
+    comparator(lhs, lhs.archivePath, rhs, rhs.archivePath)
   }
 }
