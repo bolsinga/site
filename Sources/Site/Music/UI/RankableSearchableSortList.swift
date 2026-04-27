@@ -40,7 +40,7 @@ struct RankableSearchableSortList<
   NavigationStack {
     RankableSearchableSortList(
       items: model.previewAllArtists,
-      compare: model.vault.compare(lhs:rhs:),
+      compare: model.compare(lhs:rhs:),
       filter: { $0.names(filteredBy: $1) }, sort: .alphabetical, title: "title",
       searchPrompt: "prompt", associatedRankSectionHeader: { Text($0.formatted(.rankOnly)) },
       searchString: $searchString)
