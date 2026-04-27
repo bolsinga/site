@@ -8,7 +8,11 @@
 import Foundation
 
 extension String: ArchiveIdentifiable {}
-extension Annum: ArchiveIdentifiable {}
+extension Annum: ArchiveIdentifiable {
+  public var description: String {
+    formatted()
+  }
+}
 
 public struct BasicIdentifier: ArchiveIdentifier {
   public init() {}

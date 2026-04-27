@@ -7,7 +7,7 @@
 
 import Foundation
 
-public protocol ArchiveIdentifiable: Codable, Hashable, Sendable {}
+public protocol ArchiveIdentifiable: Codable, Hashable, Sendable, CustomStringConvertible {}
 
 public protocol ArchiveIdentifier: Codable, Sendable {
   associatedtype ID: ArchiveIdentifiable
