@@ -101,7 +101,7 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
   // Venue for Venue IDs.
   let venueMap: [ID: Venue]
 
-  let comparator: LibraryComparator<ID>
+  private let comparator: LibraryComparator<ID>
 
   /// Creates a new `Bracket` by deriving ranking and lookup maps from the provided `Music` archive.
   ///
@@ -143,5 +143,15 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
     }
 
     self.comparator = LibraryComparator(tokenMap: librarySortTokenMap)
+  }
+
+  func compare<Comparable: Identifiable & LibraryComparable & PathRestorable>(
+    lhs: Comparable, rhs: Comparable
+  ) -> Bool where Comparable.ID == String, Identifier.ID == Comparable.ID {
+    compare(lhs: lhs, lhsID: lhs.id, rhs: rhs, rhsID: rhs.id)
+  }
+
+  func compare<T: Identifiable & LibraryComparable>(lhs: T, lhsID: ID, rhs: T, rhsID: ID) -> Bool {
+    comparator.libraryCompare(lhs: lhs, lhsID: lhsID, rhs: rhs, rhsID: rhsID)
   }
 }

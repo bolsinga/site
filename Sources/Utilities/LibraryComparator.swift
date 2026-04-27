@@ -20,11 +20,6 @@ where ID: Codable, ID: Hashable, ID: Sendable {
     self.tokenMap = tokenMap
   }
 
-  public func libraryCompare<T: Identifiable & LibraryComparable>(lhs: T, rhs: T) -> Bool
-  where T.ID == ID {
-    libraryCompare(lhs: lhs, lhsID: lhs.id, rhs: rhs, rhsID: rhs.id)
-  }
-
   public func libraryCompare<T: Identifiable & LibraryComparable>(
     lhs: T, lhsID: ID, rhs: T, rhsID: ID
   ) -> Bool {

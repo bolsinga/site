@@ -130,7 +130,7 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
   )
     -> Bool where Comparable.ID == String
   {
-    identifier.libraryCompare(lhs: lhs, rhs: rhs, comparator: lookup.comparator)
+    identifier.libraryCompare(lhs: lhs, rhs: rhs, comparator: lookup.compare(lhs:lhsID:rhs:rhsID:))
   }
 
   func artistIDs(filteredBy searchString: String) -> any Sequence<ID> {
@@ -150,7 +150,7 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
       return $0
     }
     return matchingPairs.sorted(by: {
-      lookup.comparator.libraryCompare(lhs: $0.1, lhsID: $0.0, rhs: $1.1, rhsID: $1.0)
+      lookup.compare(lhs: $0.1, lhsID: $0.0, rhs: $1.1, rhsID: $1.0)
     }).map { $0.1 }
   }
 
@@ -171,7 +171,7 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
       return $0
     }
     return matchingPairs.sorted(by: {
-      lookup.comparator.libraryCompare(lhs: $0.1, lhsID: $0.0, rhs: $1.1, rhsID: $1.0)
+      lookup.compare(lhs: $0.1, lhsID: $0.0, rhs: $1.1, rhsID: $1.0)
     }).map { $0.1 }
   }
 
