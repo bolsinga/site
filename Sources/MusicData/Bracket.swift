@@ -159,21 +159,13 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
     }
   }
 
-  func compare<Comparable: Identifiable & LibraryComparable & PathRestorable>(
-    lhs: Comparable, rhs: Comparable
-  ) throws -> Bool where Comparable.ID == String, Identifier.ID == Comparable.ID {
-    try compare(lhs: lhs, lhsID: lhs.id, rhs: rhs, rhsID: rhs.id)
-  }
-
-  func compare<T: Identifiable & LibraryComparable>(lhs: T, lhsID: ID, rhs: T, rhsID: ID) throws
-    -> Bool
-  {
-    guard let lhToken = compareTokenMap[lhsID] else {
-      throw TokenSearchError.invalidCompareTokenID(lhsID.description)
+  func compareIDs(lhs: ID, rhs: ID) throws -> Bool {
+    guard let lhToken = compareTokenMap[lhs] else {
+      throw TokenSearchError.invalidCompareTokenID(lhs.description)
     }
 
-    guard let rhToken = compareTokenMap[rhsID] else {
-      throw TokenSearchError.invalidCompareTokenID(rhsID.description)
+    guard let rhToken = compareTokenMap[rhs] else {
+      throw TokenSearchError.invalidCompareTokenID(rhs.description)
     }
 
     return lhToken.tokenCompare(other: rhToken)

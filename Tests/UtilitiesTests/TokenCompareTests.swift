@@ -16,7 +16,7 @@ extension String {
 }
 
 struct TokenCompareTests {
-  func libraryCompare(lhs: String, rhs: String) -> Bool {
+  private func libraryCompare(lhs: String, rhs: String) -> Bool {
     lhs.removeCommonInitialPunctuation.tokenCompare(other: rhs.removeCommonInitialPunctuation)
   }
 
