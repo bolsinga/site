@@ -13,6 +13,17 @@ extension Logger {
   fileprivate static let libraryComparator = Logger(category: "libraryComparator")
 }
 
+private enum TokenSearchError: LocalizedError {
+  case invalidCompareTokenID(String)
+
+  var errorDescription: String? {
+    switch self {
+    case .invalidCompareTokenID(let string):
+      String(localized: "Invalid Token: \(string).")
+    }
+  }
+}
+
 extension Collection where Element == Artist {
   fileprivate func lookups<Identifier: ArchiveIdentifier>(
     _ identifier: Identifier, tokenizer: LibraryCompareTokenizer
@@ -150,25 +161,21 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
 
   func compare<Comparable: Identifiable & LibraryComparable & PathRestorable>(
     lhs: Comparable, rhs: Comparable
-  ) -> Bool where Comparable.ID == String, Identifier.ID == Comparable.ID {
-    compare(lhs: lhs, lhsID: lhs.id, rhs: rhs, rhsID: rhs.id)
+  ) throws -> Bool where Comparable.ID == String, Identifier.ID == Comparable.ID {
+    try compare(lhs: lhs, lhsID: lhs.id, rhs: rhs, rhsID: rhs.id)
   }
 
-  func compare<T: Identifiable & LibraryComparable>(lhs: T, lhsID: ID, rhs: T, rhsID: ID) -> Bool {
-    let lhToken =
-      compareTokenMap[lhsID]
-      ?? {
-        Logger.libraryComparator.debug(
-          "\(String(describing: lhs.id), privacy: .public) not in map.")
-        return LibraryCompareTokenizer().removeCommonInitialPunctuation(lhs.librarySortString)
-      }()
-    let rhToken =
-      compareTokenMap[rhsID]
-      ?? {
-        Logger.libraryComparator.debug(
-          "\(String(describing: rhs.id), privacy: .public) not in map.")
-        return LibraryCompareTokenizer().removeCommonInitialPunctuation(rhs.librarySortString)
-      }()
+  func compare<T: Identifiable & LibraryComparable>(lhs: T, lhsID: ID, rhs: T, rhsID: ID) throws
+    -> Bool
+  {
+    guard let lhToken = compareTokenMap[lhsID] else {
+      throw TokenSearchError.invalidCompareTokenID(lhsID.description)
+    }
+
+    guard let rhToken = compareTokenMap[rhsID] else {
+      throw TokenSearchError.invalidCompareTokenID(rhsID.description)
+    }
+
     return lhToken.tokenCompare(other: rhToken)
   }
 }

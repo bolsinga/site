@@ -31,8 +31,8 @@ public struct ArchivePathIdentifier: ArchiveIdentifier {
   public func libraryCompare<Comparable: Identifiable & LibraryComparable & PathRestorable>(
     lhs: Comparable,
     rhs: Comparable,
-    comparator: (Comparable, ID, Comparable, ID) -> Bool
-  ) -> Bool where Comparable.ID == String {
-    comparator(lhs, lhs.archivePath, rhs, rhs.archivePath)
+    comparator: (Comparable, ID, Comparable, ID) throws -> Bool
+  ) throws -> Bool where Comparable.ID == String {
+    try comparator(lhs, lhs.archivePath, rhs, rhs.archivePath)
   }
 }

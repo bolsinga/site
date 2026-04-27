@@ -24,6 +24,6 @@ public protocol ArchiveIdentifier: Codable, Sendable {
   func libraryCompare<Comparable: Identifiable & LibraryComparable & PathRestorable>(
     lhs: Comparable,
     rhs: Comparable,
-    comparator: (Comparable, ID, Comparable, ID) -> Bool
-  ) -> Bool where Comparable.ID == String
+    comparator: (Comparable, ID, Comparable, ID) throws -> Bool
+  ) throws -> Bool where Comparable.ID == String
 }
