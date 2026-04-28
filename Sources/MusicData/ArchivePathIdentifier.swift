@@ -27,12 +27,4 @@ public struct ArchivePathIdentifier: ArchiveIdentifier {
     return annum
   }
   public func relation(_ id: String) throws -> ArchivePath { try ArchivePath(raw: id) }
-
-  public func compare<Comparable: Identifiable & PathRestorable>(
-    lhs: Comparable,
-    rhs: Comparable,
-    comparator: (ID, ID) throws -> Bool
-  ) throws -> Bool where Comparable.ID == String {
-    try comparator(lhs.archivePath, rhs.archivePath)
-  }
 }

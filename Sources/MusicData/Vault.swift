@@ -11,7 +11,6 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
   public typealias ID = Identifier.ID
   public typealias AnnumID = Identifier.AnnumID
 
-  private let identifier: Identifier
   public let rootURL: URL
 
   private let categoryURLLookup: [ArchiveCategory: URL]
@@ -21,8 +20,6 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
   public init(music: Music, url: URL, identifier: Identifier) async throws {
     var signpost = Signpost(category: "vault", name: "process")
     signpost.start()
-
-    self.identifier = identifier
 
     async let asyncLookup = await Lookup(music: music, identifier: identifier)
     let lookup = try await asyncLookup
@@ -97,18 +94,8 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
     try lookup.sort(showIDs: showIDs)
   }
 
-  /// Compares two library comparables (artists, venues, etc.).
-  ///
-  /// - Parameters:
-  ///   - lhs: The left-hand item to compare.
-  ///   - rhs: The right-hand item to compare.
-  /// - Returns: `true` if `lhs` should be ordered before `rhs`.
-  ///
-  /// - Note: `Comparable.ID` must be `String`.
-  func compare<Comparable: Identifiable & PathRestorable>(lhs: Comparable, rhs: Comparable) throws
-    -> Bool where Comparable.ID == String
-  {
-    try identifier.compare(lhs: lhs, rhs: rhs, comparator: lookup.compareIDs(lhs:rhs:))
+  func compareIDs(lhs: ID, rhs: ID) throws -> Bool {
+    try lookup.compareIDs(lhs: lhs, rhs: rhs)
   }
 
   func artistIDs(filteredBy searchString: String) -> any Sequence<ID> {
