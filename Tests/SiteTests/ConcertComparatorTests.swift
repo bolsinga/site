@@ -42,8 +42,11 @@ struct ConcertComparatorTests {
     let concert2 = vaultTest.concert(show: show2.id)!
 
     #expect(concert1 != concert2)
-    #expect(try vaultTest.compareConcerts(lhs: concert1, rhs: concert2))
-    #expect(try !vaultTest.compareConcerts(lhs: concert2, rhs: concert1))
+
+    let sorted = try [concert1, concert2].shuffled().sorted(by: vaultTest.compareConcerts(lhs:rhs:))
+    #expect(sorted.count == 2)
+    #expect(try #require(sorted.first).id == concert1.id)
+    #expect(try #require(sorted.last).id == concert2.id)
   }
 
   @Test func sameDates_differentVenues() async throws {
@@ -57,8 +60,11 @@ struct ConcertComparatorTests {
     let concert2 = vaultTest.concert(show: show2.id)!
 
     #expect(concert1 != concert2)
-    #expect(try !vaultTest.compareConcerts(lhs: concert1, rhs: concert2))
-    #expect(try vaultTest.compareConcerts(lhs: concert2, rhs: concert1))
+
+    let sorted = try [concert1, concert2].shuffled().sorted(by: vaultTest.compareConcerts(lhs:rhs:))
+    #expect(sorted.count == 2)
+    #expect(try #require(sorted.first).id == concert2.id)
+    #expect(try #require(sorted.last).id == concert1.id)
   }
 
   @Test func sameDates_sameVenues_differentArtists() async throws {
@@ -72,6 +78,12 @@ struct ConcertComparatorTests {
     let concert2 = vaultTest.concert(show: show2.id)!
 
     #expect(concert1 != concert2)
+
+    let sorted = try [concert1, concert2].shuffled().sorted(by: vaultTest.compareConcerts(lhs:rhs:))
+    #expect(sorted.count == 2)
+    #expect(try #require(sorted.first).id == concert1.id)
+    #expect(try #require(sorted.last).id == concert2.id)
+
     #expect(try vaultTest.compareConcerts(lhs: concert1, rhs: concert2))
     #expect(try !vaultTest.compareConcerts(lhs: concert2, rhs: concert1))
   }
@@ -87,6 +99,12 @@ struct ConcertComparatorTests {
     let concert2 = vaultTest.concert(show: show2.id)!
 
     #expect(concert1 != concert2)
+
+    let sorted = try [concert1, concert2].shuffled().sorted(by: vaultTest.compareConcerts(lhs:rhs:))
+    #expect(sorted.count == 2)
+    #expect(try #require(sorted.first).id == concert1.id)
+    #expect(try #require(sorted.last).id == concert2.id)
+
     #expect(try vaultTest.compareConcerts(lhs: concert1, rhs: concert2))
     #expect(try !vaultTest.compareConcerts(lhs: concert2, rhs: concert1))
   }
@@ -102,7 +120,10 @@ struct ConcertComparatorTests {
     let concert2 = vaultTest.concert(show: show2.id)!
 
     #expect(concert1 == concert2)
-    #expect(try !vaultTest.compareConcerts(lhs: concert1, rhs: concert2))
-    #expect(try !vaultTest.compareConcerts(lhs: concert2, rhs: concert1))
+
+    let sorted = try [concert1, concert2].shuffled().sorted(by: vaultTest.compareConcerts(lhs:rhs:))
+    #expect(sorted.count == 2)
+    #expect(try #require(sorted.first).id == concert2.id)
+    #expect(try #require(sorted.last).id == concert1.id)
   }
 }
