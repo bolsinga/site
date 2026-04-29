@@ -190,7 +190,12 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
         let lhVenue = try venueInfo(lhs)
         let rhVenue = try venueInfo(rhs)
         if lhVenue == rhVenue {
-          return try compareIDs(lhs: try headlinerInfo(lhs), rhs: try headlinerInfo(rhs))
+          let lhHeadliner = try headlinerInfo(lhs)
+          let rhHeadliner = try headlinerInfo(rhs)
+          if lhHeadliner == rhHeadliner {
+            return lhs.description < rhs.description
+          }
+          return try compareIDs(lhs: lhHeadliner, rhs: rhHeadliner)
         }
         return try compareIDs(lhs: lhVenue, rhs: rhVenue)
       }
