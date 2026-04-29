@@ -9,16 +9,16 @@ import ArgumentParser
 import Foundation
 
 extension Vault {
-  fileprivate func concertsForArtist(artistID: ID) -> any Collection<Concert> {
-    self.shows(artistID: artistID).compactMap { concert(show: $0) }
+  fileprivate func concertsForArtist(artistID: ID) -> any Collection<ShowDigest> {
+    self.shows(artistID: artistID).compactMap { digest(show: $0) }
   }
 }
 
 extension AbstractVaultModel {
   fileprivate func dump(
-    searchString: String?, concertsForArtist: (Artist) -> any Collection<Concert>
+    searchString: String?, concertsForArtist: (Artist) -> any Collection<ShowDigest>
   ) {
-    let concerts = sort(showIDs: vault.showIDs()).compactMap { vault.concert(show: $0) }
+    let concerts = sort(showIDs: vault.showIDs()).compactMap { vault.digest(show: $0) }
     let artists = vault.artistIDs().sorted(by: { compareIDs(lhs: $0.0, rhs: $1.0) }).map { $0.1 }
     let venues = vault.venueIDs().sorted(by: { compareIDs(lhs: $0.0, rhs: $1.0) }).map { $0.1 }
 

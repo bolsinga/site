@@ -11,7 +11,7 @@ extension Vault where Identifier == BasicIdentifier {
   func restorableSharableLinkable(for path: ArchivePath) -> PathRestorableUserActivity? {
     switch path {
     case .show(let iD):
-      return concert(show: iD)
+      return digest(show: iD)
     case .venue(let iD):
       return digest(venue: iD)
     case .artist(let iD):
@@ -26,7 +26,7 @@ extension Vault where Identifier == ArchivePathIdentifier {
   func restorableSharableLinkable(for path: ArchivePath) -> PathRestorableUserActivity? {
     switch path {
     case .show(_):
-      return concert(show: path)
+      return digest(show: path)
     case .venue(_):
       return digest(venue: path)
     case .artist(_):
