@@ -24,12 +24,4 @@ public struct BasicIdentifier: ArchiveIdentifier {
   public func decade(_ annum: Annum) -> Decade { annum.decade }
   public func annum(for id: Annum) -> Annum { id }
   public func relation(_ id: String) throws -> String { id }
-
-  public func compare<Comparable: Identifiable & PathRestorable>(
-    lhs: Comparable,
-    rhs: Comparable,
-    comparator: (ID, ID) throws -> Bool
-  ) throws -> Bool where Comparable.ID == String {
-    try comparator(lhs.id, rhs.id)
-  }
 }
