@@ -1,5 +1,5 @@
 //
-//  Concert+NSUserActivity.swift
+//  ShowDigest+NSUserActivity.swift
 //
 //
 //  Created by Greg Bolsinga on 6/21/23.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension Concert: PathRestorableUserActivity {
+extension ShowDigest: PathRestorableUserActivity {
   func updateActivity(_ userActivity: NSUserActivity, url: URL?) {
     userActivity.isEligibleForHandoff = true
 

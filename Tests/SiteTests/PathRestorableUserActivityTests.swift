@@ -16,9 +16,9 @@ struct PathRestorableUserActivityTests {
   @Test func show() throws {
     let userActivity = NSUserActivity(activityType: "test-type")
 
-    let concert = Concert(
-      show: Show(artists: [], date: PartialDate(), id: "sh17", venue: "v0"),
-      venue: Venue(id: "v0", location: Location(city: "c", state: "s"), name: "V0"), artists: [])
+    let concert = ShowDigest(
+      id: .show("sh17"), date: PartialDate(), performers: [], venue: "v",
+      location: Location(city: "c", state: "s"), comment: nil)
     userActivity.update(concert, url: rootURL)
 
     #expect(userActivity.isEligibleForHandoff)
@@ -99,9 +99,9 @@ struct PathRestorableUserActivityTests {
   @Test func show_withURL() {
     let userActivity = NSUserActivity(activityType: "test-type")
 
-    let concert = Concert(
-      show: Show(artists: [], date: PartialDate(), id: "sh17", venue: "v0"),
-      venue: Venue(id: "v0", location: Location(city: "c", state: "s"), name: "V0"), artists: [])
+    let concert = ShowDigest(
+      id: .show("sh17"), date: PartialDate(), performers: [], venue: "V",
+      location: Location(city: "c", state: "s"), comment: nil)
 
     userActivity.update(concert, url: rootURL)
 
