@@ -38,8 +38,8 @@ struct ConcertComparatorTests {
     let vaultTest = try await createVault(
       artists: [artist1, artist2], shows: [show1, show2], venues: [venue1, venue2])
 
-    let concert1 = vaultTest.concert(show: show1.id)!
-    let concert2 = vaultTest.concert(show: show2.id)!
+    let concert1 = try #require(vaultTest.concert(show: show1.id))
+    let concert2 = try #require(vaultTest.concert(show: show2.id))
 
     #expect(concert1 != concert2)
 
@@ -56,8 +56,8 @@ struct ConcertComparatorTests {
     let vaultTest = try await createVault(
       artists: [artist1, artist2], shows: [show1, show2], venues: [venue1, venue2])
 
-    let concert1 = vaultTest.concert(show: show1.id)!
-    let concert2 = vaultTest.concert(show: show2.id)!
+    let concert1 = try #require(vaultTest.concert(show: show1.id))
+    let concert2 = try #require(vaultTest.concert(show: show2.id))
 
     #expect(concert1 != concert2)
 
@@ -74,8 +74,8 @@ struct ConcertComparatorTests {
     let vaultTest = try await createVault(
       artists: [artist1, artist2], shows: [show1, show2], venues: [venue1, venue2])
 
-    let concert1 = vaultTest.concert(show: show1.id)!
-    let concert2 = vaultTest.concert(show: show2.id)!
+    let concert1 = try #require(vaultTest.concert(show: show1.id))
+    let concert2 = try #require(vaultTest.concert(show: show2.id))
 
     #expect(concert1 != concert2)
 
@@ -92,8 +92,8 @@ struct ConcertComparatorTests {
     let vaultTest = try await createVault(
       artists: [artist1, artist2], shows: [show1, show2], venues: [venue1, venue2])
 
-    let concert1 = vaultTest.concert(show: show1.id)!
-    let concert2 = vaultTest.concert(show: show2.id)!
+    let concert1 = try #require(vaultTest.concert(show: show1.id))
+    let concert2 = try #require(vaultTest.concert(show: show2.id))
 
     #expect(concert1 != concert2)
 
@@ -110,8 +110,8 @@ struct ConcertComparatorTests {
     let vaultTest = try await createVault(
       artists: [artist1, artist2], shows: [show1, show2], venues: [venue1, venue2])
 
-    let concert1 = vaultTest.concert(show: show1.id)!
-    let concert2 = vaultTest.concert(show: show2.id)!
+    let concert1 = try #require(vaultTest.concert(show: show1.id))
+    let concert2 = try #require(vaultTest.concert(show: show2.id))
 
     #expect(concert1 == concert2)
 
