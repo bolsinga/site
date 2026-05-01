@@ -38,7 +38,3 @@ extension AnnumDigest: PathRestorable {
 extension Show: PathRestorable {
   public var archivePath: ArchivePath { .show(id) }
 }
-
-extension Concert: PathRestorable {
-  public var archivePath: ArchivePath { .show(id) }
-}

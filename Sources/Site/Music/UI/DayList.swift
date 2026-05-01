@@ -8,10 +8,10 @@
 import SwiftUI
 
 struct DayList: View {
-  fileprivate let concerts: [Concert]
+  fileprivate let concerts: [ShowDigest]
   let dayOfLeapYear: Int
 
-  internal init(concerts: [Concert], dayOfLeapYear: Int) {
+  internal init(concerts: [ShowDigest], dayOfLeapYear: Int) {
     self.concerts = concerts
     self.dayOfLeapYear = dayOfLeapYear
   }
@@ -30,9 +30,9 @@ struct DayList: View {
         List(concerts) { concert in
           NavigationLink(value: concert.archivePath) {
             ConcertBlurb(
-              venue: concert.venueName,
+              venue: concert.venue,
               date: concert.date,
-              performers: concert.performers,
+              performers: concert.performerNames,
               dateFormat: .relative)
           }
         }

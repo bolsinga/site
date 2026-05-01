@@ -98,7 +98,7 @@ public typealias VaultModel = AbstractVaultModel<BasicIdentifier>
   }
 
   @MainActor
-  func concerts(on dayOfLeapYear: Int) -> [Concert] {
+  func concerts(on dayOfLeapYear: Int) -> [ShowDigest] {
     do {
       return try vault.concerts(on: dayOfLeapYear)
     } catch {
