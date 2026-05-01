@@ -82,9 +82,30 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
     bracket.venueMap
   }
 
-  /// Groups shows by decade, then by annum (e.g., year), returning the set of show IDs for each.
-  public var decadesMap: [Decade: [AnnumID: Set<ID>]] {
-    bracket.decadesMap
+  /// Groups shows by decade, then by annum (e.g., year), returning the count of Shows for each.
+  public func decadesMap(showIDs: Set<ID>) -> [Decade: [Annum: Int]] {
+    let matchingAnnumShows = annumShows.reduce(into: [AnnumID: Set<ID>]()) {
+      let (key, value) = $1
+      let matchedShowIDs = value.intersection(showIDs)
+      if !matchedShowIDs.isEmpty {
+        $0[key] = matchedShowIDs
+      }
+    }
+    return decadesMap(for: matchingAnnumShows)
+  }
+
+  public func decadesMap(for annumShows: [AnnumID: Set<ID>]) -> [Decade: [Annum: Int]] {
+    annumShows.reduce(into: [Decade: [Annum: Int]]()) {
+      guard let annum = annumMap[$1.key] else { return }
+      let decade = annum.decade
+      var arr = $0[decade] ?? [:]
+      arr[annum] = $1.value.count
+      $0[decade] = arr
+    }
+  }
+
+  public var decadesMap: [Decade: [Annum: Int]] {
+    decadesMap(for: annumShows)
   }
 
   public var annumShows: [AnnumID: Set<ID>] {

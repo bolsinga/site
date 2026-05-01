@@ -280,26 +280,11 @@ public typealias VaultModel = AbstractVaultModel<BasicIdentifier>
     return nearbyArtistIDs.compactMap { vault.rankedArtist(id: $0) }
   }
 
-  private func decadesMapsNearby(_ distanceThreshold: CLLocationDistance)
-    -> [Decade: [AnnumID: Set<ID>]]
+  private func decadesMapsNearby(_ distanceThreshold: CLLocationDistance) -> [Decade: [Annum: Int]]
   {
-    let nearbyVenueIDs = venueIDsNearby(distanceThreshold)
-    let nearbyConcertIDs = nearbyVenueIDs.flatMap { vault.shows(venueID: $0) }
-    return [Decade: [AnnumID: Set<ID>]](
-      uniqueKeysWithValues: vault.decadesMap.compactMap {
-        let nearbyAnnums = [AnnumID: Set<ID>](
-          uniqueKeysWithValues: $0.value.compactMap {
-            let nearbyIDs = $0.value.filter { nearbyConcertIDs.contains($0) }
-            if nearbyIDs.isEmpty {
-              return nil
-            }
-            return ($0.key, nearbyIDs)
-          })
-        if nearbyAnnums.isEmpty {
-          return nil
-        }
-        return ($0.key, nearbyAnnums)
-      })
+    let nearbyConcertIDs = Set(
+      venueIDsNearby(distanceThreshold).flatMap { vault.shows(venueID: $0) })
+    return vault.decadesMap(showIDs: nearbyConcertIDs)
   }
 
   private func venues(nearby location: CLLocation, distanceThreshold: CLLocationDistance)
@@ -312,7 +297,7 @@ public typealias VaultModel = AbstractVaultModel<BasicIdentifier>
   }
 
   func filteredDecadesMap(_ nearbyModel: NearbyModel, distanceThreshold: CLLocationDistance)
-    -> [Decade: [AnnumID: Set<ID>]]
+    -> [Decade: [Annum: Int]]
   {
     nearbyModel.locationFilter.isNearby ? decadesMapsNearby(distanceThreshold) : vault.decadesMap
   }
