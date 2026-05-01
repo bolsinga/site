@@ -27,8 +27,8 @@ extension Lookup {
     return showDigest(show: show, showId: showId)
   }
 
-  fileprivate func showDigests(annum: Annum, annumID: AnnumID) -> [ShowDigest] {
-    let showIDs = decadesMap[annum.decade]?[annumID] ?? []
+  fileprivate func showDigests(annumID: AnnumID) -> [ShowDigest] {
+    let showIDs = annumShows[annumID] ?? []
     return showIDs.compactMap { showDigest(showId: $0) }
   }
 
@@ -61,7 +61,6 @@ extension Lookup {
   func annumDigest(id annumID: AnnumID) -> AnnumDigest? {
     guard let annum = annumMap[annumID] else { return nil }
     return AnnumDigest(
-      annum: annum, shows: showDigests(annum: annum, annumID: annumID),
-      rank: rankDigest(annum: annumID))
+      annum: annum, shows: showDigests(annumID: annumID), rank: rankDigest(annum: annumID))
   }
 }
