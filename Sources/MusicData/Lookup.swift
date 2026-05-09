@@ -44,8 +44,9 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
 
     self.bracket = try await bracket
     self.relationMap = try await relations
-    let annumIDs = try await bracket.decadesMap.values.flatMap { $0.keys }
-    self.annumMap = annumIDs.reduce(into: [:]) { $0[$1] = identifier.annum(for: $1) }
+    self.annumMap = try await bracket.annumShows.keys.reduce(into: [:]) {
+      $0[$1] = identifier.annum(for: $1)
+    }
 
     self.showIDOrderIndex = Dictionary(
       uniqueKeysWithValues: try await bracket.sortedShowIDs().enumerated().map { ($1, $0) })
@@ -84,6 +85,10 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
   /// Groups shows by decade, then by annum (e.g., year), returning the set of show IDs for each.
   public var decadesMap: [Decade: [AnnumID: Set<ID>]] {
     bracket.decadesMap
+  }
+
+  public var annumShows: [AnnumID: Set<ID>] {
+    bracket.annumShows
   }
 
   /// Maps a day-of-leap-year index (1...366) to the set of show IDs that occurred on that day.

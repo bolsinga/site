@@ -209,21 +209,6 @@ struct Tracker<Identifier: ArchiveIdentifier> {
     await computeRankings { annumArtists.mapValues { $0.count }.map { $0 } }
   }
 
-  /// Groups all annum shows by decade, producing a nested dictionary keyed first
-  /// by decade, then by annum ID, each mapping to the set of show IDs.
-  ///
-  /// - Parameter decade: A closure that converts an `AnnumID` into its `Decade`.
-  /// - Returns: A dictionary mapping decades to their contained annum shows.
-  func decadesMap(decade: @Sendable (AnnumID) -> Decade) async -> [Decade: [AnnumID: Set<ID>]] {
-    async let r = annumShows.reduce(into: [Decade: [AnnumID: Set<ID>]]()) {
-      let decade = decade($1.key)
-      var d = $0[decade] ?? [AnnumID: Set<ID>]()
-      d[$1.key] = $1.value
-      $0[decade] = d
-    }
-    return await r
-  }
-
   private func artistFirstSets() async -> [ID: FirstSet] {
     var order = 1
     async let r = artistOrder.reduce(into: [ID: FirstSet]()) {
