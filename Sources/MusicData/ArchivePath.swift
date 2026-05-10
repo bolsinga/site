@@ -8,8 +8,10 @@
 import Foundation
 
 public enum ArchivePath: Hashable, Sendable {
-  case show(String)
-  case venue(String)
-  case artist(String)
+  public typealias ID = String
+
+  case show(ID)
+  case venue(ID)
+  case artist(ID)
   case year(Annum)
 }
