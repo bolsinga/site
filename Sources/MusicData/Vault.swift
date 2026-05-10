@@ -33,8 +33,12 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
     }
   }
 
-  var decadesMap: [Decade: [AnnumID: Set<ID>]] {
+  var decadesMap: [Decade: [Annum: Int]] {
     lookup.decadesMap
+  }
+
+  func decadesMap(showIDs: Set<ID>) -> [Decade: [Annum: Int]] {
+    lookup.decadesMap(showIDs: showIDs)
   }
 
   /// The URL for this category.

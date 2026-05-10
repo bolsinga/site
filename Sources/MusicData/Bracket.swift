@@ -84,8 +84,6 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
   let venueRankDigestMap: [ID: RankDigest]
   /// Aggregated ranking metrics for each annum (e.g., year), keyed by `AnnumID`.
   let annumRankDigestMap: [AnnumID: RankDigest]
-  /// Groups annums by decade and lists the set of show `ID`s that belong to each annum.
-  let decadesMap: [Decade: [AnnumID: Set<ID>]]
   /// Shows grouped by year (annum).
   let annumShows: [AnnumID: Set<ID>]
   /// Maps a day-of-leap-year index (1...366) to the set of show `ID`s that occurred on that day.
@@ -135,8 +133,6 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
       sections: venueSortTokens.mapValues { $0.librarySection })
     self.annumRankDigestMap = try await tracker.annumRankDigests()
     self.annumShows = try await tracker.annumShows
-    self.decadesMap = await Self.decadesMap(
-      annumShows: self.annumShows, decade: { identifier.decade($0) })
     self.concertDayMap = try await tracker.dayOfLeapYearShows
     self.artistShows = try await tracker.artistShows
     self.venueShows = try await tracker.venueShows
@@ -205,24 +201,5 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
       }
       return lhShowDate < rhShowDate
     }
-  }
-
-  /// Groups all annum shows by decade, producing a nested dictionary keyed first
-  /// by decade, then by annum ID, each mapping to the set of show IDs.
-  ///
-  /// - Parameter annumShows: A lookup from `AnnumID` to `Set<ID>` show ids.
-  /// - Parameter decade: A closure that converts an `AnnumID` into its `Decade`.
-  /// - Returns: A dictionary mapping decades to their contained annum shows.
-  private static func decadesMap(
-    annumShows: [AnnumID: Set<ID>],
-    decade: @Sendable (AnnumID) -> Decade
-  ) async -> [Decade: [AnnumID: Set<ID>]] {
-    async let r = annumShows.reduce(into: [Decade: [AnnumID: Set<ID>]]()) {
-      let decade = decade($1.key)
-      var d = $0[decade] ?? [AnnumID: Set<ID>]()
-      d[$1.key] = $1.value
-      $0[decade] = d
-    }
-    return await r
   }
 }

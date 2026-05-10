@@ -7,13 +7,13 @@
 
 import SwiftUI
 
-struct ShowYearList<ID: Hashable>: View {
-  let decadesMap: [Decade: [Annum: Set<ID>]]
+struct ShowYearList: View {
+  let decadesMap: [Decade: [Annum: Int]]
 
   @SceneStorage("shows.sort.descending") private var descending: Bool = false
 
-  private func showCount(_ annumShows: [Annum: Set<ID>]) -> Int {
-    annumShows.values.compactMap { $0.count }.reduce(0, { $0 + $1 })
+  private func showCount(_ annumShows: [Annum: Int]) -> Int {
+    annumShows.values.reduce(0, { $0 + $1 })
   }
 
   var body: some View {
@@ -30,11 +30,11 @@ struct ShowYearList<ID: Hashable>: View {
               descending ? Annum.compareDescendingUnknownLast(lhs: lhs, rhs: rhs) : lhs < rhs
             }, id: \.self
           ) { annum in
-            let concerts = decadeMap[annum] ?? Set<ID>()
+            let concertsCount = decadeMap[annum] ?? 0
             NavigationLink(value: annum.archivePath) {
               LabeledContent(
                 annum.formatted(),
-                value: String(localized: "\(concerts.count) Show(s)"))
+                value: String(localized: "\(concertsCount) Show(s)"))
             }
           }
         } header: {
