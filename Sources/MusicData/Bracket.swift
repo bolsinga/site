@@ -109,6 +109,8 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
 
   private let compareTokenMap: [ID: String]
 
+  let relationMap: [ID: Set<ID>]  // Artist/Venue ID : Set<Artist/Venue ID>
+
   /// Creates a new `Bracket` by deriving ranking and lookup maps from the provided `Music` archive.
   ///
   /// Work is performed concurrently where possible to minimize construction time. Prefer creating
@@ -124,6 +126,8 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
 
     async let (artistSortTokens, artistMap, venueSortTokens, venueMap) = try music.itemMaps(
       identifier)
+
+    async let relations = music.relationMap(identifier: identifier)
 
     async let tracker = try Tracker(shows: music.shows, identifier: identifier)
 
@@ -147,6 +151,7 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
     self.compareTokenMap = try await artistSortTokens.merging(try await venueSortTokens) {
       (_, new) in new
     }
+    self.relationMap = try await relations
   }
 
   func compareIDs(lhs: ID, rhs: ID) throws -> Bool {
