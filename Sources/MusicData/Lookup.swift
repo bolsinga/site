@@ -22,7 +22,6 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
   public typealias AnnumID = Identifier.AnnumID
 
   private let bracket: Bracket<Identifier>
-  private let relationMap: [ID: Set<ID>]  // Artist/Venue ID : Set<Artist/Venue ID>
   let annumMap: [AnnumID: Annum]
 
   private let showIDOrderIndex: [ID: Int]
@@ -40,10 +39,8 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
     signpost.start()
 
     async let bracket = await Bracket(music: music, identifier: identifier)
-    async let relations = music.relationMap(identifier: identifier)
 
     self.bracket = try await bracket
-    self.relationMap = try await relations
     self.annumMap = try await bracket.annumShows.keys.reduce(into: [:]) {
       $0[$1] = identifier.annum(for: $1)
     }
@@ -196,7 +193,7 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
   /// - Parameter venueID: The stable venue identifier.
   /// - Returns: A collection of related items.
   public func related(venueID: ID) -> any Collection<ArchiveItem> {
-    relationMap[venueID]?.compactMap { venueMap[$0] }.map {
+    bracket.relationMap[venueID]?.compactMap { venueMap[$0] }.map {
       ArchiveItem(id: $0.archivePath, name: $0.name)
     } ?? []
   }
@@ -209,7 +206,7 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
   /// - Parameter artistID: The stable artist identifier.
   /// - Returns: A collection of related items.
   public func related(artistID: ID) -> any Collection<ArchiveItem> {
-    relationMap[artistID]?.compactMap { artistMap[$0] }.map {
+    bracket.relationMap[artistID]?.compactMap { artistMap[$0] }.map {
       ArchiveItem(id: $0.archivePath, name: $0.name)
     } ?? []
   }
