@@ -126,7 +126,7 @@ public typealias VaultModel = AbstractVaultModel<BasicIdentifier>
   }
 
   func compare<Comparable: Identifiable & PathRestorable>(lhs: Comparable, rhs: Comparable)
-    -> Bool where Comparable.ID == String, ID == String
+    -> Bool where Comparable.ID == ID
   {
     do {
       return try vault.compareIDs(lhs: lhs.id, rhs: rhs.id)
@@ -141,6 +141,17 @@ public typealias VaultModel = AbstractVaultModel<BasicIdentifier>
   {
     do {
       return try vault.compareIDs(lhs: lhs.archivePath, rhs: rhs.archivePath)
+    } catch {
+      self.error = error
+      return false
+    }
+  }
+
+  func compare<Comparable: Identifiable>(lhs: Comparable, rhs: Comparable)
+    -> Bool where Comparable.ID == ArchivePath, ID == ArchivePath.ID
+  {
+    do {
+      return try vault.compareIDs(lhs: lhs.id.formatted(.rawID), rhs: rhs.id.formatted(.rawID))
     } catch {
       self.error = error
       return false

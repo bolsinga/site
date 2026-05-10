@@ -10,21 +10,21 @@ import Foundation
 struct RankedArchiveItem: Hashable, Identifiable, LibraryComparable, Nameable, PathRestorable,
   Rankable
 {
-  let archivePath: ArchivePath
-  let id: String
+  let id: ArchivePath
   let sortname: String?
   let name: String
   private let rank: RankDigest
 
   internal init(
-    archivePath: ArchivePath, id: String, sortname: String?, name: String, rank: RankDigest
+    archivePath: ArchivePath, sortname: String?, name: String, rank: RankDigest
   ) {
-    self.archivePath = archivePath
-    self.id = id
+    self.id = archivePath
     self.sortname = sortname
     self.name = name
     self.rank = rank
   }
+
+  var archivePath: ArchivePath { id }
 
   var firstSet: FirstSet { rank.firstSet }
 
@@ -48,12 +48,12 @@ struct RankedArchiveItem: Hashable, Identifiable, LibraryComparable, Nameable, P
 
 extension Artist {
   func rankedArchiveItem(_ rank: RankDigest) -> RankedArchiveItem {
-    RankedArchiveItem(archivePath: archivePath, id: id, sortname: sortname, name: name, rank: rank)
+    RankedArchiveItem(archivePath: archivePath, sortname: sortname, name: name, rank: rank)
   }
 }
 
 extension Venue {
   func rankedArchiveItem(_ rank: RankDigest) -> RankedArchiveItem {
-    RankedArchiveItem(archivePath: archivePath, id: id, sortname: sortname, name: name, rank: rank)
+    RankedArchiveItem(archivePath: archivePath, sortname: sortname, name: name, rank: rank)
   }
 }
