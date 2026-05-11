@@ -41,9 +41,9 @@ extension VaultError: LocalizedError {
 }
 
 extension Vault where Identifier: ArchiveIdentifier {
-  public static func load(
-    _ urlString: String, identifier: Identifier, artistsWithShowsOnly: Bool = true
-  ) async throws -> Vault<Identifier> {
+  public static func load(_ urlString: String, identifier: Identifier) async throws
+    -> Vault<Identifier>
+  {
     Logger.vault.log("start")
     defer {
       Logger.vault.log("end")
@@ -55,7 +55,6 @@ extension Vault where Identifier: ArchiveIdentifier {
 
     guard let rootURL = url.rootURL else { throw VaultError.noRootURL(url.absoluteString) }
 
-    return try await Vault(
-      music: artistsWithShowsOnly ? music.showsOnly : music, url: rootURL, identifier: identifier)
+    return try await Vault(music: music, url: rootURL, identifier: identifier)
   }
 }

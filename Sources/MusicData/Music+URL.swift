@@ -14,7 +14,7 @@ extension Logger {
 }
 
 extension Music {
-  public static func load(url: URL) async throws -> Music {
+  public static func load(url: URL, artistsWithShowsOnly: Bool = true) async throws -> Music {
     Logger.music.log("start")
     defer {
       Logger.music.log("end")
@@ -25,6 +25,6 @@ extension Music {
     Logger.url.log("end")
 
     let music: Music = try data.fromJSON()
-    return music
+    return artistsWithShowsOnly ? music.showsOnly : music
   }
 }
