@@ -31,14 +31,14 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
   /// Construction performs work concurrently to minimize initialization time.
   ///
   /// - Parameters:
-  ///   - music: The source archive from which to derive lookups.
+  ///   - url: The `URL` where the JSON music data is.
   ///   - identifier: An `ArchiveIdentifier` used to generate stable IDs for all lookups.
   /// - Throws: Any error encountered while reading the archive or computing derived structures.
-  public init(music: Music, identifier: Identifier) async throws {
+  public init(url: URL, identifier: Identifier) async throws {
     var signpost = Signpost(category: "lookup", name: "process")
     signpost.start()
 
-    async let bracket = await Bracket(music: music, identifier: identifier)
+    async let bracket = await Bracket(url: url, identifier: identifier)
 
     self.bracket = try await bracket
     self.annumMap = try await bracket.annumShows.keys.reduce(into: [:]) {

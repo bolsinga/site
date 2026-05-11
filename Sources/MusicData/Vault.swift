@@ -17,15 +17,17 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
 
   private let lookup: Lookup<Identifier>
 
-  public init(music: Music, url: URL, identifier: Identifier) async throws {
+  public init(url: URL, identifier: Identifier) async throws {
     var signpost = Signpost(category: "vault", name: "process")
     signpost.start()
 
-    async let asyncLookup = await Lookup(music: music, identifier: identifier)
+    guard let rootURL = url.rootURL else { throw VaultError.noRootURL(url.absoluteString) }
+
+    async let asyncLookup = await Lookup(url: url, identifier: identifier)
     let lookup = try await asyncLookup
     self.lookup = lookup
 
-    self.rootURL = url
+    self.rootURL = rootURL
 
     self.categoryURLLookup = ArchiveCategory.allCases.reduce(into: [ArchiveCategory: URL]()) {
       guard let url = $1.url(rootURL: url) else { return }

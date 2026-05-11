@@ -117,12 +117,14 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
   /// this snapshot off the main thread and then passing it into views.
   ///
   /// - Parameters:
-  ///   - music: The source archive from which to derive ranks and relationships.
+  ///   - url: The `URL` where the JSON music data is.
   ///   - identifier: An `ArchiveIdentifier` used to generate stable IDs for all derived maps.
   /// - Throws: Any error encountered while reading the archive or computing derived structures.
-  init(music: Music, identifier: Identifier) async throws {
-    var signpost = Signpost(category: "bracket", name: "process")
+  init(url: URL, identifier: Identifier) async throws {
+    var signpost = Signpost(category: "bracket", name: "url")
     signpost.start()
+
+    let music = try await Music.load(url: url)
 
     async let (artistSortTokens, artistMap, venueSortTokens, venueMap) = try music.itemMaps(
       identifier)
