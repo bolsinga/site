@@ -22,7 +22,6 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
   public typealias AnnumID = Identifier.AnnumID
 
   private let bracket: Bracket<Identifier>
-  let annumMap: [AnnumID: Annum]
 
   private let showIDOrderIndex: [ID: Int]
 
@@ -41,9 +40,6 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
     async let bracket = await Bracket(music: music, identifier: identifier)
 
     self.bracket = try await bracket
-    self.annumMap = try await bracket.annumShows.keys.reduce(into: [:]) {
-      $0[$1] = identifier.annum(for: $1)
-    }
 
     self.showIDOrderIndex = Dictionary(
       uniqueKeysWithValues: try await bracket.sortedShowIDs().enumerated().map { ($1, $0) })
@@ -107,6 +103,10 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
 
   public var annumShows: [AnnumID: Set<ID>] {
     bracket.annumShows
+  }
+
+  public var annumMap: [AnnumID: Annum] {
+    bracket.annumMap
   }
 
   /// Maps a day-of-leap-year index (1...366) to the set of show IDs that occurred on that day.
