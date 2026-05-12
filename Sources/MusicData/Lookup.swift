@@ -26,6 +26,15 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
 
   private let showIDOrderIndex: [ID: Int]
 
+  init(bracket: Bracket<Identifier>, annumMap: [AnnumID: Annum]) async throws {
+    self.bracket = bracket
+    self.annumMap = annumMap
+
+    async let ordered = Dictionary(
+      uniqueKeysWithValues: try bracket.sortedShowIDs().enumerated().map { ($1, $0) })
+    self.showIDOrderIndex = try await ordered
+  }
+
   /// Creates a `Lookup` by indexing the provided `Music` archive and preparing derived maps.
   ///
   /// Construction performs work concurrently to minimize initialization time.
@@ -39,14 +48,11 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
     signpost.start()
 
     async let bracket = await Bracket(url: url, identifier: identifier)
-
-    self.bracket = try await bracket
-    self.annumMap = try await bracket.annumShows.keys.reduce(into: [:]) {
+    let annumMap = try await bracket.annumShows.keys.reduce(into: [:]) {
       $0[$1] = identifier.annum(for: $1)
     }
 
-    self.showIDOrderIndex = Dictionary(
-      uniqueKeysWithValues: try await bracket.sortedShowIDs().enumerated().map { ($1, $0) })
+    try await self.init(bracket: try await bracket, annumMap: annumMap)
   }
 
   func compareIDs(lhs: ID, rhs: ID) throws -> Bool {

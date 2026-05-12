@@ -17,6 +17,16 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
 
   private let lookup: Lookup<Identifier>
 
+  init(lookup: Lookup<Identifier>, rootURL: URL) {
+    self.lookup = lookup
+    self.rootURL = rootURL
+
+    self.categoryURLLookup = ArchiveCategory.allCases.reduce(into: [ArchiveCategory: URL]()) {
+      guard let url = $1.url(rootURL: rootURL) else { return }
+      $0[$1] = url
+    }
+  }
+
   public init(url: URL, identifier: Identifier) async throws {
     var signpost = Signpost(category: "vault", name: "process")
     signpost.start()
@@ -24,15 +34,7 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
     guard let rootURL = url.rootURL else { throw VaultError.noRootURL(url.absoluteString) }
 
     async let asyncLookup = await Lookup(url: url, identifier: identifier)
-    let lookup = try await asyncLookup
-    self.lookup = lookup
-
-    self.rootURL = rootURL
-
-    self.categoryURLLookup = ArchiveCategory.allCases.reduce(into: [ArchiveCategory: URL]()) {
-      guard let url = $1.url(rootURL: url) else { return }
-      $0[$1] = url
-    }
+    self.init(lookup: try await asyncLookup, rootURL: rootURL)
   }
 
   var decadesMap: [Decade: [Annum: Int]] {

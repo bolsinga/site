@@ -22,11 +22,13 @@ struct ShowDigestComparisonTests {
   func createVault(artists: [Artist], shows: [Show], venues: [Venue]) async throws
     -> Vault<ArchivePathIdentifier>
   {
-    try await Vault(
-      music: Music(
-        albums: [], artists: artists, relations: [], shows: shows, songs: [], timestamp: Date(),
-        venues: venues), url: URL(string: "https://www.example.com/")!,
-      identifier: ArchivePathIdentifier())
+    Vault(
+      lookup: try await Lookup(
+        bracket: try await Bracket(
+          music: Music(
+            albums: [], artists: artists, relations: [], shows: shows, songs: [], timestamp: Date(),
+            venues: venues), identifier: ArchivePathIdentifier()), annumMap: [:]),
+      rootURL: URL(string: "https://www.example.com/")!)
   }
 
   @Test func differentDates() async throws {
