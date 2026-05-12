@@ -86,6 +86,8 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
   let annumRankDigestMap: [AnnumID: RankDigest]
   /// Shows grouped by year (annum).
   let annumShows: [AnnumID: Set<ID>]
+  /// mapping AnnumID to Annum
+  let annumMap: [AnnumID: Annum]
   /// Maps a day-of-leap-year index (1...366) to the set of show `ID`s that occurred on that day.
   let concertDayMap: [Int: Set<ID>]
   /// For each artist `ID`, the set of show `ID`s they performed.
@@ -125,6 +127,7 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
       sections: venueSortTokens.mapValues { $0.librarySection })
     self.annumRankDigestMap = try await tracker.annumRankDigests()
     self.annumShows = try await tracker.annumShows
+    self.annumMap = try await tracker.annumMap
     self.concertDayMap = try await tracker.dayOfLeapYearShows
     self.artistShows = try await tracker.artistShows
     self.venueShows = try await tracker.venueShows

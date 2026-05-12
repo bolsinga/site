@@ -26,8 +26,14 @@ struct ShowDigestComparisonTests {
       lookup: try await Lookup(
         bracket: try await Bracket(
           music: Music(
-            albums: [], artists: artists, relations: [], shows: shows, songs: [], timestamp: Date(),
-            venues: venues), identifier: ArchivePathIdentifier()), annumMap: [:]),
+            albums: [],
+            artists: artists,
+            relations: [],
+            shows: shows,
+            songs: [],
+            timestamp: Date(),
+            venues: venues),
+          identifier: ArchivePathIdentifier())),
       rootURL: URL(string: "https://www.example.com/")!)
   }
 
