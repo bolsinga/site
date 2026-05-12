@@ -113,19 +113,7 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
 
   let relationMap: [ID: Set<ID>]  // Artist/Venue ID : Set<Artist/Venue ID>
 
-  /// Creates a new `Bracket` by deriving ranking and lookup maps from the provided `Music` archive.
-  ///
-  /// Work is performed concurrently where possible to minimize construction time. Prefer creating
-  /// this snapshot off the main thread and then passing it into views.
-  ///
-  /// - Parameters:
-  ///   - music: The source archive from which to derive ranks and relationships.
-  ///   - identifier: An `ArchiveIdentifier` used to generate stable IDs for all derived maps.
-  /// - Throws: Any error encountered while reading the archive or computing derived structures.
   init(music: Music, identifier: Identifier) async throws {
-    var signpost = Signpost(category: "bracket", name: "process")
-    signpost.start()
-
     async let (artistSortTokens, artistMap, venueSortTokens, venueMap) = try music.itemMaps(
       identifier)
 
@@ -155,6 +143,23 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
       (_, new) in new
     }
     self.relationMap = try await relations
+  }
+
+  /// Creates a new `Bracket` by deriving ranking and lookup maps from the provided `Music` archive.
+  ///
+  /// Work is performed concurrently where possible to minimize construction time. Prefer creating
+  /// this snapshot off the main thread and then passing it into views.
+  ///
+  /// - Parameters:
+  ///   - url: The `URL` where the JSON music data is.
+  ///   - identifier: An `ArchiveIdentifier` used to generate stable IDs for all derived maps.
+  /// - Throws: Any error encountered while reading the archive or computing derived structures.
+  init(url: URL, identifier: Identifier) async throws {
+    var signpost = Signpost(category: "bracket", name: "url")
+    signpost.start()
+
+    let music = try await Music.load(url: url)
+    try await self.init(music: music, identifier: identifier)
   }
 
   func compareIDs(lhs: ID, rhs: ID) throws -> Bool {

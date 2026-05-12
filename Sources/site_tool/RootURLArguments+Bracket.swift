@@ -11,6 +11,6 @@ extension RootURLArguments {
   func bracket<Identifier: ArchiveIdentifier>(identifier: Identifier) async throws
     -> Bracket<Identifier>
   {
-    try await Bracket(music: try await music().showsOnly, identifier: identifier)
+    try await Bracket(url: showsURL, identifier: identifier)
   }
 }
