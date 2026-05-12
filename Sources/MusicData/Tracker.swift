@@ -84,6 +84,8 @@ struct Tracker<Identifier: ArchiveIdentifier> {
   var annumArtists = [AnnumID: Set<ID>]()
   /// Venues grouped by year (annum).
   var annumVenues = [AnnumID: Set<ID>]()
+  /// mapping AnnumID to Annum
+  var annumMap = [AnnumID: Annum]()
 
   /// Shows indexed by the day of leap year (1...366).
   var dayOfLeapYearShows = [Int: Set<ID>]()
@@ -112,7 +114,9 @@ struct Tracker<Identifier: ArchiveIdentifier> {
     insert(into: &venueShows, key: venueID, value: showID)
     showVenue[showID] = venueID
 
-    let annumID = try identifier.annum(show.date.annum)
+    let annum = show.date.annum
+    let annumID = try identifier.annum(annum)
+    annumMap[annumID] = annum
 
     try show.artists.reversed().forEach {
       let artistID = try identifier.artist($0)
