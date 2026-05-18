@@ -27,13 +27,16 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
     }
   }
 
-  public init(url: URL, identifier: Identifier) async throws {
+  public init(url: URL, identifier: Identifier, previousModified: Date) async throws {
     var signpost = Signpost(category: "vault", name: "process")
     signpost.start()
 
     guard let rootURL = url.rootURL else { throw VaultError.noRootURL(url.absoluteString) }
 
-    async let asyncLookup = await Lookup(url: url, identifier: identifier)
+    async let asyncLookup = await Lookup(
+      url: url,
+      identifier: identifier,
+      previousModified: previousModified)
     self.init(lookup: try await asyncLookup, rootURL: rootURL)
   }
 
@@ -212,5 +215,9 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
         Array(repeating: venue.location, count: self.shows(venueID: id).count)
       }.stateCounts
     )
+  }
+
+  var timestamp: Date {
+    lookup.timestamp
   }
 }

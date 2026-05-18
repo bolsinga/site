@@ -12,6 +12,9 @@ extension RootURLArguments {
     async throws
     -> Vault<Identifier>
   {
-    try await Vault.load(url.appending(path: fileName).absoluteString, identifier: identifier)
+    try await Vault.load(
+      url.appending(path: fileName).absoluteString,
+      identifier: identifier,
+      previousModified: .distantPast)
   }
 }

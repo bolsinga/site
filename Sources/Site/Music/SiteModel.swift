@@ -15,7 +15,7 @@ extension Logger {
 @Observable public final class SiteModel {
   public enum Reason {
     case preview
-    case initial
+    case initial(Date)
     case refresh
     case errorRetry
 
@@ -34,10 +34,23 @@ extension Logger {
   public var vaultModel: VaultModel?
   internal var error: Error?
 
+  var lastModified: Date = .distantPast
+
   public init(urlString: String, vaultModel: VaultModel? = nil, error: Error? = nil) {
     self.urlString = urlString
     self.vaultModel = vaultModel
     self.error = error
+  }
+
+  private func modifiedDate(_ reason: Reason) -> Date {
+    switch reason {
+    case .preview, .errorRetry:
+      .distantPast
+    case .initial(let date):
+      date
+    case .refresh:
+      lastModified
+    }
   }
 
   @MainActor
@@ -49,7 +62,11 @@ extension Logger {
     do {
       error = nil
 
-      let vault = try await Vault.load(urlString, identifier: BasicIdentifier())
+      let vault = try await Vault.load(
+        urlString,
+        identifier: BasicIdentifier(),
+        previousModified: modifiedDate(reason))
+      self.lastModified = vault.timestamp
 
       vaultModel?.cancelTasks()
       vaultModel = VaultModel(vault, executeAsynchronousTasks: reason.executeAsynchronousTasks)

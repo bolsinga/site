@@ -13,9 +13,11 @@ extension Logger {
 }
 
 extension Vault where Identifier: ArchiveIdentifier {
-  public static func load(_ urlString: String, identifier: Identifier) async throws
-    -> Vault<Identifier>
-  {
+  public static func load(
+    _ urlString: String,
+    identifier: Identifier,
+    previousModified: Date
+  ) async throws -> Vault<Identifier> {
     Logger.vault.log("start")
     defer {
       Logger.vault.log("end")
@@ -23,6 +25,6 @@ extension Vault where Identifier: ArchiveIdentifier {
 
     guard let url = URL(string: urlString) else { throw VaultError.illegalURL(urlString) }
 
-    return try await Vault(url: url, identifier: identifier)
+    return try await Vault(url: url, identifier: identifier, previousModified: previousModified)
   }
 }

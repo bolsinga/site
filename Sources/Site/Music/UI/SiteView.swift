@@ -8,6 +8,7 @@
 import SwiftUI
 
 public struct SiteView: View {
+  @AppStorage("music.last.modified") private var musicLastModified: Date = .distantPast
   private let model: SiteModel
 
   public init(_ model: SiteModel) {
@@ -41,7 +42,10 @@ public struct SiteView: View {
     }.task {
       guard model.vaultModel == nil, model.error == nil else { return }
 
-      await model.load(.initial)
+      await model.load(.initial(musicLastModified))
+    }
+    .onChange(of: model.lastModified) { _, newValue in
+      musicLastModified = newValue
     }
   }
 }
