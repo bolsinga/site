@@ -113,6 +113,8 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
 
   let relationMap: [ID: Set<ID>]  // Artist/Venue ID : Set<Artist/Venue ID>
 
+  let timestamp: Date
+
   init(music: Music, identifier: Identifier) async throws {
     async let (artistSortTokens, artistMap, venueSortTokens, venueMap) = try music.itemMaps(
       identifier)
@@ -143,6 +145,7 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
       (_, new) in new
     }
     self.relationMap = try await relations
+    self.timestamp = music.timestamp
   }
 
   /// Creates a new `Bracket` by deriving ranking and lookup maps from the provided `Music` archive.
