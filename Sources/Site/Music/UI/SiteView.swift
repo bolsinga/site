@@ -6,11 +6,6 @@
 //
 
 import SwiftUI
-import os
-
-extension Logger {
-  fileprivate static let vaultLoad = Logger(category: "vaultLoad")
-}
 
 public struct SiteView: View {
   private let model: SiteModel
@@ -23,11 +18,7 @@ public struct SiteView: View {
     Group {
       if let vaultModel = model.vaultModel {
         ArchiveStateView {
-          Logger.vaultLoad.log("start refresh")
-          defer {
-            Logger.vaultLoad.log("end refresh")
-          }
-          await model.load()
+          await model.load(logString: "userRefresh")
         }
         .environment(vaultModel)
       } else if let error = model.error {
@@ -37,8 +28,7 @@ public struct SiteView: View {
             description: Text("Unable to load data."))
           Button {
             Task {
-              Logger.vaultLoad.log("User retry")
-              await model.load()
+              await model.load(logString: "errorRetry")
             }
           } label: {
             Label(String(localized: "Retry"), systemImage: "arrow.clockwise")
@@ -51,11 +41,7 @@ public struct SiteView: View {
     }.task {
       guard model.vaultModel == nil, model.error == nil else { return }
 
-      Logger.vaultLoad.log("start task")
-      defer {
-        Logger.vaultLoad.log("end task")
-      }
-      await model.load()
+      await model.load(logString: "initial")
     }
   }
 }

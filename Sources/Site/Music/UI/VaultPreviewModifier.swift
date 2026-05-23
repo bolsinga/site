@@ -14,7 +14,7 @@ private enum VaultPreviewError: Error {
 struct VaultPreviewModifier: PreviewModifier {
   static func makeSharedContext() async throws -> VaultModel {
     let siteModel = SiteModel(urlString: "https://www.bolsinga.com/json/shows.json")
-    await siteModel.load(executeAsynchronousTasks: false)
+    await siteModel.load(logString: "preview", executeAsynchronousTasks: false)
     guard siteModel.error == nil else { throw siteModel.error! }
     guard let vaultModel = siteModel.vaultModel else { throw VaultPreviewError.noModel }
     return vaultModel
@@ -31,7 +31,7 @@ struct VaultErrorPreviewModifier: PreviewModifier {
 
   static func makeSharedContext() async throws -> VaultModel {
     let siteModel = SiteModel(urlString: "https://www.bolsinga.com/json/shows.json")
-    await siteModel.load(executeAsynchronousTasks: false)
+    await siteModel.load(logString: "errorPreview", executeAsynchronousTasks: false)
     guard siteModel.error == nil else { throw siteModel.error! }
     guard let vaultModel = siteModel.vaultModel else { throw VaultPreviewError.noModel }
     return vaultModel
