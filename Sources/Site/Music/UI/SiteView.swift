@@ -18,7 +18,7 @@ public struct SiteView: View {
     Group {
       if let vaultModel = model.vaultModel {
         ArchiveStateView {
-          await model.load(logString: "userRefresh")
+          await model.load(.refresh)
         }
         .environment(vaultModel)
       } else if let error = model.error {
@@ -28,7 +28,7 @@ public struct SiteView: View {
             description: Text("Unable to load data."))
           Button {
             Task {
-              await model.load(logString: "errorRetry")
+              await model.load(.errorRetry)
             }
           } label: {
             Label(String(localized: "Retry"), systemImage: "arrow.clockwise")
@@ -41,7 +41,7 @@ public struct SiteView: View {
     }.task {
       guard model.vaultModel == nil, model.error == nil else { return }
 
-      await model.load(logString: "initial")
+      await model.load(.initial)
     }
   }
 }
