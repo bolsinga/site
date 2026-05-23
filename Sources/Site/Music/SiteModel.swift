@@ -25,11 +25,7 @@ extension Logger {
   }
 
   @MainActor
-  public func load(executeAsynchronousTasks: Bool = true) async {
-    Logger.vaultLoader.log("start")
-    defer {
-      Logger.vaultLoader.log("end")
-    }
+  private func load(executeAsynchronousTasks: Bool = true) async {
     do {
       error = nil
 
@@ -41,5 +37,14 @@ extension Logger {
       Logger.vaultLoader.fault("error: \(error.localizedDescription, privacy: .public)")
       self.error = error
     }
+  }
+
+  @MainActor
+  public func load(logString: String, executeAsynchronousTasks: Bool = true) async {
+    Logger.vaultLoader.log("start: \(logString, privacy: .public)")
+    defer {
+      Logger.vaultLoader.log("end: \(logString, privacy: .public)")
+    }
+    await load(executeAsynchronousTasks: executeAsynchronousTasks)
   }
 }
