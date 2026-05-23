@@ -20,7 +20,7 @@ struct SiteAppApp: App {
     }
     #if !os(tvOS)
       .commands {
-        RefreshCommand { await model.load(logString: "refreshCommand") }
+        RefreshCommand { await model.load(.refresh) }
       }
     #endif
     #if os(macOS)
