@@ -9,22 +9,27 @@ import Foundation
 import os
 
 extension Logger {
-  fileprivate static let url = Logger(category: "url")
   fileprivate static let music = Logger(category: "music")
 }
 
 extension Music {
-  public static func load(url: URL, artistsWithShowsOnly: Bool = true) async throws -> Music {
-    Logger.music.log("start")
+  public static func load(
+    url: URL,
+    artistsWithShowsOnly: Bool = true
+  ) async throws -> (Music, Date) {
+    Logger.music.log("start: \(String(describing: url))")
     defer {
       Logger.music.log("end")
     }
 
-    Logger.url.log("start: \(url.absoluteString, privacy: .public)")
-    let (data, _) = try await URLSession.shared.data(from: url)
-    Logger.url.log("end")
+    let (data, response) = try await URLSession.shared.data(from: url)
+
+    var lastModified = Date.distantPast
+    if let lastModifiedDate = try response.lastModified() {
+      lastModified = lastModifiedDate
+    }
 
     let music: Music = try data.fromJSON()
-    return artistsWithShowsOnly ? music.showsOnly : music
+    return artistsWithShowsOnly ? (music.showsOnly, lastModified) : (music, lastModified)
   }
 }

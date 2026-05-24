@@ -11,6 +11,6 @@ extension RootURLArguments {
   func lookup<Identifier: ArchiveIdentifier>(identifier: Identifier) async throws
     -> Lookup<Identifier>
   {
-    try await Lookup(url: showsURL, identifier: identifier)
+    try await Lookup(url: showsURL, identifier: identifier, previousModified: .distantPast)
   }
 }

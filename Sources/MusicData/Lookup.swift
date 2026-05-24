@@ -6,6 +6,11 @@
 //
 
 import Foundation
+import os
+
+extension Logger {
+  fileprivate static let bracketCache = Logger(category: "bracketCache")
+}
 
 /// A public facade for querying archive data by stable identifiers.
 ///
@@ -40,14 +45,29 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
   /// - Parameters:
   ///   - url: The `URL` where the JSON music data is.
   ///   - identifier: An `ArchiveIdentifier` used to generate stable IDs for all lookups.
+  ///   - previousModified: The `Date` saved as the last modified date of the music data.
   /// - Throws: Any error encountered while reading the archive or computing derived structures.
-  public init(url: URL, identifier: Identifier) async throws {
+  public init(
+    url: URL,
+    identifier: Identifier,
+    previousModified: Date
+  ) async throws {
     var signpost = Signpost(category: "lookup", name: "process")
     signpost.start()
 
-    async let bracket = await Bracket(url: url, identifier: identifier)
+    if try await url.isUpdated(since: previousModified) {
+      Logger.bracketCache.info("loading")
+      let bracket = try await Bracket(url: url, identifier: identifier)
+      try bracket.save()
+      try await self.init(bracket: bracket)
+    } else {
+      var signpost = Signpost(category: "bracket", name: "cache")
+      signpost.start()
 
-    try await self.init(bracket: try await bracket)
+      Logger.bracketCache.info("cached")
+      async let bracket = try Bracket<Identifier>.read()
+      try await self.init(bracket: bracket)
+    }
   }
 
   func compareIDs(lhs: ID, rhs: ID) throws -> Bool {
@@ -224,5 +244,9 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
   /// - Returns: An array of show IDs ordered from oldest to newest within the requested window.
   public func recentConcerts(_ count: Int) -> [ID] {
     bracket.showOrder.suffix(count)
+  }
+
+  public var timestamp: Date {
+    bracket.timestamp
   }
 }

@@ -110,7 +110,7 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
 
   let timestamp: Date
 
-  init(music: Music, identifier: Identifier) async throws {
+  init(music: Music, identifier: Identifier, timestamp: Date) async throws {
     async let (artistSortTokens, artistMap, venueSortTokens, venueMap) = try music.itemMaps(
       identifier)
 
@@ -140,7 +140,7 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
       (_, new) in new
     }
     self.relationMap = try await relations
-    self.timestamp = music.timestamp
+    self.timestamp = timestamp
   }
 
   /// Creates a new `Bracket` by deriving ranking and lookup maps from the provided `Music` archive.
@@ -156,8 +156,8 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
     var signpost = Signpost(category: "bracket", name: "url")
     signpost.start()
 
-    let music = try await Music.load(url: url)
-    try await self.init(music: music, identifier: identifier)
+    let (music, lastModified) = try await Music.load(url: url)
+    try await self.init(music: music, identifier: identifier, timestamp: lastModified)
   }
 
   func compareIDs(lhs: ID, rhs: ID) throws -> Bool {
@@ -212,5 +212,19 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
       }
       return lhShowDate < rhShowDate
     }
+  }
+}
+
+private let bracketFileName = "bracket.json"
+
+extension Bracket {
+  static func read(fileManager: FileManager = .default, deleteFile: Bool = false)
+    throws -> Self
+  {
+    try fileManager.readCache(fileName: bracketFileName, deleteFile: deleteFile)
+  }
+
+  func save(fileManager: FileManager = .default) throws {
+    try fileManager.saveCache(cacheData: self, fileName: bracketFileName)
   }
 }

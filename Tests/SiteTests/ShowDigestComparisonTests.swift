@@ -33,7 +33,8 @@ struct ShowDigestComparisonTests {
             songs: [],
             timestamp: Date(),
             venues: venues),
-          identifier: ArchivePathIdentifier())),
+          identifier: ArchivePathIdentifier(),
+          timestamp: .now)),
       rootURL: URL(string: "https://www.example.com/")!)
   }
 
