@@ -34,7 +34,7 @@ struct ShowDigestComparisonTests {
             timestamp: Date(),
             venues: venues),
           identifier: ArchivePathIdentifier(),
-          previousModified: .now)),
+          timestamp: .now)),
       rootURL: URL(string: "https://www.example.com/")!)
   }
 
