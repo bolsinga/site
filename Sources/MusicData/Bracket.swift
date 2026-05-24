@@ -8,11 +8,6 @@
 import Algorithms
 import Foundation
 import OrderedCollections
-import os
-
-extension Logger {
-  fileprivate static let libraryComparator = Logger(category: "libraryComparator")
-}
 
 extension Collection where Element == Artist {
   fileprivate func lookups<Identifier: ArchiveIdentifier>(
