@@ -14,7 +14,7 @@ struct DaysShowsSummary: View {
   var body: some View {
     Picker(selection: $mode) {
       ForEach(ShowsMode.allCases, id: \.self) {
-        Image(systemName: $0.systemImage)
+        Image(systemName: $0.systemImage(dayOfLeapYear: dayOfLeapYear))
       }
     } label: {
     }

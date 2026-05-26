@@ -40,7 +40,7 @@ public enum ArchiveCategory: String, CaseIterable, Codable, Sendable {
   public var systemImage: String {
     switch self {
     case .today:
-      "calendar.circle"
+      .nowCalendarSystemImage
     case .stats:
       "chart.bar"
     case .shows:

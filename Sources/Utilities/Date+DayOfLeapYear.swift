@@ -51,6 +51,12 @@ extension Int {
     return dayOfLeapYearDate.formatted(.dateTime.month(.defaultDigits).day())
   }
 
+  var dayOfLeapYearMonthDay: Int? {
+    guard isValidDayOfLeapYear else { return nil }
+    guard let dayOfLeapYearDate = dayOfLeapYearComponents.date else { return nil }
+    return Calendar.autoupdatingCurrent.component(.day, from: dayOfLeapYearDate)
+  }
+
   private func offsetDayOfLeapYear(by offset: Int) -> Int {
     guard let leapYeapDayRange = leapYeapDayRange else { return -1 }
 
