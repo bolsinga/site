@@ -20,9 +20,7 @@ enum LocationAuthorizationError: Error {
 extension CLAuthorizationStatus {
   @discardableResult func isStreamable() throws -> Bool {
     switch self {
-    case .notDetermined:
-      fatalError("CLocationAuthorizationState.notDetermined not streamable")
-    case .restricted:
+    case .notDetermined, .restricted:
       throw LocationAuthorizationError.restricted
     case .denied:
       throw LocationAuthorizationError.denied
@@ -33,28 +31,41 @@ extension CLAuthorizationStatus {
         return true
     #endif
     @unknown default:
-      fatalError("CLocationAuthorizationState unknown not streamable")
+      throw LocationAuthorizationError.restricted
     }
   }
 }
 
 actor LocationManager {
-  enum Access: String {
+  enum AccessRequest: String {
     case inUse
     case always
+
+    func request(_ manager: CLLocationManager) {
+      #if os(tvOS)
+        manager.requestWhenInUseAuthorization()
+      #else
+        switch self {
+        case .inUse:
+          manager.requestWhenInUseAuthorization()
+        case .always:
+          manager.requestAlwaysAuthorization()
+        }
+      #endif
+    }
   }
 
   typealias LocationStream = AsyncThrowingStream<CLLocation, Error>
 
   private let manager: CLLocationManager
   private let delegate = Delegate()
-  private let access: Access
+  private let accessRequest: AccessRequest
 
   init(
     activityType: CLActivityType = .other,
     distanceFilter: CLLocationDistance = kCLDistanceFilterNone,
     desiredAccuracy: CLLocationAccuracy = kCLLocationAccuracyBest,
-    access: Access = .inUse
+    accessRequest: AccessRequest = .inUse
   ) {
     manager = CLLocationManager()
     #if !os(tvOS)
@@ -62,32 +73,28 @@ actor LocationManager {
     #endif
     manager.distanceFilter = distanceFilter
     manager.desiredAccuracy = desiredAccuracy
-    self.access = access
+    self.accessRequest = accessRequest
     manager.delegate = delegate
   }
 
   private func requestAuthorization() async -> CLAuthorizationStatus {
-    Logger.location.log("start authorization - access: \(self.access.rawValue, privacy: .public)")
+    Logger.location.log(
+      "start authorization - accessRequest: \(self.accessRequest.rawValue, privacy: .public)")
     defer {
       Logger.location.log("end authorization")
     }
-    guard manager.authorizationStatus == .notDetermined else {
-      Logger.location.log("authorization known")
-      return manager.authorizationStatus
+
+    let authorizationStatus = manager.authorizationStatus
+    Logger.location.log("authorizationStatus: \(String(describing: authorizationStatus))")
+
+    guard authorizationStatus == .notDetermined else {
+      return authorizationStatus
     }
 
     return await withCheckedContinuation { continuation in
       delegate.authorizationStreamContinuation = continuation
-      #if !os(tvOS)
-        switch access {
-        case .inUse:
-          manager.requestWhenInUseAuthorization()
-        case .always:
-          manager.requestAlwaysAuthorization()
-        }
-      #else
-        manager.requestWhenInUseAuthorization()
-      #endif
+      Logger.location.log("request authorization")
+      accessRequest.request(manager)
     }
   }
 
@@ -103,8 +110,9 @@ actor LocationManager {
     var authorizationStreamContinuation: AuthorizationContinuation?
 
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-      Logger.location.log("delegate authorization")
-      authorizationStreamContinuation?.resume(returning: manager.authorizationStatus)
+      let authorizationStatus = manager.authorizationStatus
+      Logger.location.log("delegate authorization : \(String(describing: authorizationStatus))")
+      authorizationStreamContinuation?.resume(returning: authorizationStatus)
       authorizationStreamContinuation = nil
     }
 
