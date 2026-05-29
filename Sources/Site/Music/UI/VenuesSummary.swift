@@ -14,6 +14,7 @@ struct VenuesSummary: View {
 
   let sort: RankingSort
   @Binding var searchString: String
+  @Binding var mode: VenuesMode
 
   var body: some View {
     let venues = model.nearbyVenues(nearbyModel, distanceThreshold: nearbyDistance)
@@ -29,7 +30,8 @@ struct VenuesSummary: View {
 
 #Preview(traits: .nearbyModel, .vaultModel) {
   @Previewable @State var searchString = ""
+  @Previewable @State var mode = VenuesMode.default
   NavigationStack {
-    VenuesSummary(sort: .alphabetical, searchString: $searchString)
+    VenuesSummary(sort: .alphabetical, searchString: $searchString, mode: $mode)
   }
 }
