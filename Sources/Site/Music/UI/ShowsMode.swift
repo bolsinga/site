@@ -14,10 +14,10 @@ enum ShowsMode: Int, CaseIterable, Codable, Sendable {
 
   static var `default`: Self { .ordinal }
 
-  var systemImage: String {
+  func systemImage(dayOfLeapYear: Int) -> String {
     switch self {
     case .ordinal:
-      "calendar"
+      .dayOfLeapYearCalendarSystemImage(dayOfLeapYear: dayOfLeapYear)
     case .grouped:
       "list.bullet"
     }
