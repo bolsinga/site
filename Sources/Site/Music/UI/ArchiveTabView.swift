@@ -119,7 +119,8 @@ struct ArchiveTabView: View {
               artistSort: $artistSort,
               venuesMode: $venuesMode,
               dayOfLeapYear: $dayOfLeapYear,
-              reloadModel: reloadModel)
+              reloadModel: reloadModel,
+              navigateToPath: navigateToPath)
           }
           #if !os(tvOS)
             .badge(category.badge(model))

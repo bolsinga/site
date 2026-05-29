@@ -58,6 +58,16 @@ extension MKMapRect {
   }
 }
 
+extension CLLocationCoordinate2D {
+  var rect: MKMapRect {
+    let unitSize = MKMapSize(width: 1.0, height: 1.0)
+    let centerPoint = MKMapPoint(self)
+    let originPoint = MKMapPoint(
+      x: centerPoint.x - unitSize.width / 2.0, y: centerPoint.y - unitSize.height / 2.0)
+    return MKMapRect(origin: originPoint, size: unitSize)
+  }
+}
+
 extension MKMapItem {
   fileprivate var center: CLLocationCoordinate2D {
     self.location.coordinate
@@ -67,15 +77,23 @@ extension MKMapItem {
     let centerCoordinate = center
     guard CLLocationCoordinate2DIsValid(centerCoordinate) else { return .null }
 
-    let unitSize = MKMapSize(width: 1.0, height: 1.0)
-    let centerPoint = MKMapPoint(centerCoordinate)
-    let originPoint = MKMapPoint(
-      x: centerPoint.x - unitSize.width / 2.0, y: centerPoint.y - unitSize.height / 2.0)
-    return MKMapRect(origin: originPoint, size: unitSize)
+    return centerCoordinate.rect
+  }
+}
+
+extension MKAnnotation {
+  var rect: MKMapRect {
+    coordinate.rect
   }
 }
 
 extension Collection where Element == MKMapItem {
+  var rect: MKMapRect {
+    reduce(into: MKMapRect.null) { $0 = $0.union($1.rect) }
+  }
+}
+
+extension Collection where Element == MKAnnotation {
   var rect: MKMapRect {
     reduce(into: MKMapRect.null) { $0 = $0.union($1.rect) }
   }
