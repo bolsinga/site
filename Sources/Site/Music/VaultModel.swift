@@ -245,6 +245,7 @@ public typealias VaultModel = AbstractVaultModel<BasicIdentifier>
 
     do {
       let locationStream = try await locationManager.locationStream()
+      locationAuthorization = .allowed
       do {
         Logger.vaultModel.log("start locationstream")
         defer {
