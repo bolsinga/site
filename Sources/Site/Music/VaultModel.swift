@@ -67,7 +67,7 @@ public typealias VaultModel = AbstractVaultModel<BasicIdentifier>
       activityType: .other,
       distanceFilter: distanceFilter,
       desiredAccuracy: kCLLocationAccuracyHundredMeters,
-      access: .inUse)
+      accessRequest: .inUse)
 
     self.error = error
 
