@@ -61,6 +61,9 @@ struct ShowDetail: View {
       .listStyle(.grouped)
     #endif
     .navigationTitle(venueName)
+    #if os(iOS)
+      .navigationBarTitleDisplayMode(.inline)
+    #endif
     .toolbar { ArchiveSharableToolbarContent(item: concert, url: url) }
   }
 }

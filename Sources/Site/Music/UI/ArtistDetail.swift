@@ -67,6 +67,9 @@ struct ArtistDetail: View {
       .listStyle(.grouped)
     #endif
     .navigationTitle(digest.name)
+    #if os(iOS)
+      .navigationBarTitleDisplayMode(.inline)
+    #endif
     .toolbar { ArchiveSharableToolbarContent(item: digest, url: url) }
   }
 }
