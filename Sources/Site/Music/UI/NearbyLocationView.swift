@@ -7,12 +7,33 @@
 
 import SwiftUI
 
+private enum Authorization {
+  case allowed
+  case denied
+}
+
+extension LocationAuthorization {
+  fileprivate var authorization: Authorization {
+    switch self {
+    case .allowed:
+      .allowed
+    case .restricted, .denied:
+      .denied
+    }
+  }
+}
+
 struct NearbyLocationView: View {
-  let locationAuthorization: LocationAuthorization
+  internal init(locationAuthorization: LocationAuthorization, filteredDataIsEmpty: Bool) {
+    self.authorization = locationAuthorization.authorization
+    self.filteredDataIsEmpty = filteredDataIsEmpty
+  }
+
+  private let authorization: Authorization
   let filteredDataIsEmpty: Bool
 
   var body: some View {
-    switch locationAuthorization {
+    switch authorization {
     case .allowed:
       if filteredDataIsEmpty {
         ContentUnavailableView(
@@ -23,19 +44,12 @@ struct NearbyLocationView: View {
           )
         )
       }
-    case .restricted:
-      ContentUnavailableView(
-        String(localized: "Location Disabled"),
-        systemImage: "location.slash.circle",
-        description: Text(
-          "Location Services are disabled. Disable the Location Filter.")
-      )
     case .denied:
       ContentUnavailableView(
         String(localized: "Location Unavailable"),
         systemImage: "location.slash.circle",
         description: Text(
-          "Location Services are not available. Disable the Location Filter.")
+          "Location Services are disabled. Enable access in Settings.")
       )
     }
   }

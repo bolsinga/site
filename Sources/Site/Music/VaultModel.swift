@@ -19,6 +19,15 @@ enum LocationAuthorization {
   case allowed
   case restricted  // Locations are not possible.
   case denied  // Locations denied by user.
+
+  var uiEnabled: Bool {
+    switch self {
+    case .allowed, .denied:
+      true
+    case .restricted:
+      false
+    }
+  }
 }
 
 public typealias VaultModel = AbstractVaultModel<BasicIdentifier>
@@ -34,7 +43,7 @@ public typealias VaultModel = AbstractVaultModel<BasicIdentifier>
   internal var todayDayOfLeapYear: Int = Date.now.dayOfLeapYear
   private var venueLocatables: [ID: Locatable] = [:]
   private var currentLocation: CLLocation?
-  internal var locationAuthorization = LocationAuthorization.allowed
+  internal var locationAuthorization = LocationAuthorization.restricted
 
   @ObservationIgnored
   private var dayChangeTask: Task<Void, Never>?
