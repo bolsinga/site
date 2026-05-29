@@ -40,8 +40,10 @@ struct ArchiveCategoryToolbarContent: ToolbarContent {
         }
       }
     }
-    if category.isLocationFilterable {
-      LocationFilterToolbarContent { showNearbyDistanceSettings = true }
+    if category.isLocationFilterable, model.locationAuthorization.uiEnabled {
+      LocationFilterToolbarContent(locationAuthorization: model.locationAuthorization) {
+        showNearbyDistanceSettings = true
+      }
     }
     ArchiveSharableToolbarContent(
       item: ArchiveCategorySharable(
