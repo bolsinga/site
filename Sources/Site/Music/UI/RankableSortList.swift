@@ -60,6 +60,9 @@ struct RankableSortList<
   var body: some View {
     listElement
       .navigationTitle(Text(title))
+      #if os(iOS)
+        .navigationBarTitleDisplayMode(.inline)
+      #endif
   }
 }
 
