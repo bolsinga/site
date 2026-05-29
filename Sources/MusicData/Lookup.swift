@@ -30,6 +30,100 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
 
   private let showIDOrderIndex: [ID: Int]
 
+  private enum LoadAttempt {
+    // URL, identifier, previousModified, cacheLoadFailed
+    case networkLoad(URL, Identifier, Date, Bool)
+    // URL, identifier, previousModified, networkLoadFailed
+    case cacheRead(URL, Identifier, Date, Bool)
+    case complete(Bracket<Identifier>)
+
+    private func load() async throws -> LoadAttempt {
+      switch self {
+      case .networkLoad(let url, let identifier, let previousModified, let cacheLoadFailed):
+        var signpost = Signpost(category: "bracket", name: "network")
+        signpost.start()
+
+        do {
+          var loadDataFromURL = cacheLoadFailed
+          if !loadDataFromURL {
+            loadDataFromURL = try await url.isUpdated(since: previousModified)
+          }
+
+          if loadDataFromURL {
+            Logger.bracketCache.info("loading")
+
+            let bracket = try await Bracket(url: url, identifier: identifier)
+            try bracket.save()
+            return .complete(bracket)
+          } else {
+            Logger.bracketCache.info("not updated - read from cache")
+
+            return .cacheRead(url, identifier, previousModified, false)
+          }
+        } catch {
+          Logger.bracketCache.info(
+            "network error: \(error.localizedDescription, privacy: .public) cacheLoadFailed: \(cacheLoadFailed, privacy: .public)"
+          )
+
+          if cacheLoadFailed {
+            // The previous cache load failed, so go ahead and throw this error
+            throw error
+          }
+
+          // Try the cache
+          return .cacheRead(url, identifier, previousModified, true)
+        }
+
+      case .cacheRead(let url, let identifier, let previousModified, let networkLoadFailed):
+        var signpost = Signpost(category: "bracket", name: "cache")
+        signpost.start()
+
+        do {
+          Logger.bracketCache.info("cache")
+
+          async let bracket = try Bracket<Identifier>.read()
+          return .complete(try await bracket)
+        } catch {
+          Logger.bracketCache.info(
+            "cache error: \(error.localizedDescription, privacy: .public) networkLoadFailed: \(networkLoadFailed, privacy: .public)"
+          )
+
+          if networkLoadFailed {
+            // Networking has already failed, so throw this error.
+            throw error
+          }
+
+          // Go back to the network, since the cache did not work.
+          return .networkLoad(url, identifier, previousModified, true)
+        }
+      case .complete(_):
+        return self
+      }
+    }
+
+    var bracket: Bracket<Identifier>? {
+      switch self {
+      case .networkLoad(_, _, _, _), .cacheRead(_, _, _, _):
+        nil
+      case .complete(let bracket):
+        bracket
+      }
+    }
+
+    static func load(url: URL, identifier: Identifier, previousModified: Date) async throws
+      -> Bracket<Identifier>
+    {
+      var attempt = LoadAttempt.networkLoad(url, identifier, previousModified, false)
+
+      repeat {
+        attempt = try await attempt.load()
+        if let bracket = attempt.bracket {
+          return bracket
+        }
+      } while true
+    }
+  }
+
   init(bracket: Bracket<Identifier>) async throws {
     self.bracket = bracket
 
@@ -52,22 +146,9 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
     identifier: Identifier,
     previousModified: Date
   ) async throws {
-    var signpost = Signpost(category: "lookup", name: "process")
-    signpost.start()
-
-    if try await url.isUpdated(since: previousModified) {
-      Logger.bracketCache.info("loading")
-      let bracket = try await Bracket(url: url, identifier: identifier)
-      try bracket.save()
-      try await self.init(bracket: bracket)
-    } else {
-      var signpost = Signpost(category: "bracket", name: "cache")
-      signpost.start()
-
-      Logger.bracketCache.info("cached")
-      async let bracket = try Bracket<Identifier>.read()
-      try await self.init(bracket: bracket)
-    }
+    try await self.init(
+      bracket: try await LoadAttempt.load(
+        url: url, identifier: identifier, previousModified: previousModified))
   }
 
   func compareIDs(lhs: ID, rhs: ID) throws -> Bool {
