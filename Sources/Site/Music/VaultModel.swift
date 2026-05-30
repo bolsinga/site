@@ -41,7 +41,7 @@ public typealias VaultModel = AbstractVaultModel<BasicIdentifier>
   internal var error: Error?
 
   internal var todayDayOfLeapYear: Int = Date.now.dayOfLeapYear
-  private var venueLocatables: [ID: Locatable] = [:]
+  private var venueMapItemMap: [ID: MKMapItem] = [:]
   private var currentLocation: CLLocation?
   internal var locationAuthorization = LocationAuthorization.restricted
 
@@ -217,9 +217,9 @@ public typealias VaultModel = AbstractVaultModel<BasicIdentifier>
     Logger.vaultModel.log("start batch geocode")
 
     do {
-      for try await (id, locatable) in BatchGeocode(atlas: atlas, vault: vault) {
+      for try await (id, mapItem) in BatchGeocode(atlas: atlas, vault: vault) {
         Logger.vaultModel.log("geocoded: \(String(describing: id), privacy: .public)")
-        venueLocatables[id] = locatable
+        venueMapItemMap[id] = mapItem
       }
     } catch {
       Logger.vaultModel.error("batch geocode error: \(error, privacy: .public)")
@@ -233,7 +233,7 @@ public typealias VaultModel = AbstractVaultModel<BasicIdentifier>
     guard !batchGeocodeCompleted else { return 1.0 }
     let batchGeocodeTotalCount = vault.venueIDs().count
     guard batchGeocodeTotalCount != 0 else { return 1.0 }
-    return Double(venueLocatables.count) / Double(batchGeocodeTotalCount)
+    return Double(venueMapItemMap.count) / Double(batchGeocodeTotalCount)
   }
 
   @MainActor
@@ -311,8 +311,8 @@ public typealias VaultModel = AbstractVaultModel<BasicIdentifier>
   private func venues(nearby location: CLLocation, distanceThreshold: CLLocationDistance)
     -> any Collection<ID>
   {
-    venueLocatables.compactMap { (id, locatable) in
-      guard locatable.nearby(to: location, distanceThreshold: distanceThreshold) else { return nil }
+    venueMapItemMap.compactMap { (id, mapItem) in
+      guard mapItem.location.distance(from: location) <= distanceThreshold else { return nil }
       return id
     }
   }
