@@ -41,7 +41,7 @@ public typealias VaultModel = AbstractVaultModel<BasicIdentifier>
   internal var error: Error?
 
   internal var todayDayOfLeapYear: Int = Date.now.dayOfLeapYear
-  private var venueMapItemMap: [ID: MKMapItem] = [:]
+  internal var venueMapItemMap: [ID: MKMapItem] = [:]
   private var currentLocation: CLLocation?
   internal var locationAuthorization = LocationAuthorization.restricted
 
@@ -236,6 +236,10 @@ public typealias VaultModel = AbstractVaultModel<BasicIdentifier>
     return Double(venueMapItemMap.count) / Double(batchGeocodeTotalCount)
   }
 
+  var geocodingInProgress: Bool {
+    geocodingProgress < 1.0
+  }
+
   @MainActor
   private func monitorUserLocation() async {
     Logger.vaultModel.log("start location monitoring")
@@ -337,10 +341,5 @@ public typealias VaultModel = AbstractVaultModel<BasicIdentifier>
     nearbyModel.locationFilter.isNearby
       ? artistsNearby(distanceThreshold)
       : vault.artistIDs().compactMap { vault.rankedArtist(id: $0.0) }
-  }
-
-  @MainActor
-  func geocode(_ venue: Venue) async throws -> MKMapItem? {
-    try await atlas.geocode(venue)
   }
 }

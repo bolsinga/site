@@ -15,6 +15,8 @@ struct VenueDetail: View {
   let url: URL?
   let isPathNavigable: (ArchivePath) -> Bool
 
+  @State private var mapItem: MKMapItem?
+
   @ViewBuilder private var firstSetElement: some View {
     HStack {
       Text("First Set")
@@ -26,9 +28,7 @@ struct VenueDetail: View {
   @ViewBuilder private var locationElement: some View {
     Section(header: Text("Location")) {
       AddressView(location: digest.location)
-      LocationMap(identifier: digest) {
-        try await model.geocode(digest.venue)
-      }
+      LocationMap(geocodingInProgress: model.geocodingInProgress, item: $mapItem)
     }
   }
 
@@ -78,6 +78,12 @@ struct VenueDetail: View {
       .navigationBarTitleDisplayMode(.inline)
     #endif
     .toolbar { ArchiveSharableToolbarContent(item: digest, url: url) }
+    .onAppear {
+      self.mapItem = model.venueMapItemMap[digest.id]
+    }
+    .onChange(of: model.venueMapItemMap) { _, newValue in
+      self.mapItem = newValue[digest.id]
+    }
   }
 }
 

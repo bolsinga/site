@@ -8,13 +8,9 @@
 import MapKit
 import SwiftUI
 
-struct LocationMap<T: Equatable>: View {
-  typealias geocoder = @MainActor () async throws -> MKMapItem?
-
-  let identifier: T
-  let geocode: geocoder?
-  @State var item: MKMapItem?
-  @State var error: Error?
+struct LocationMap: View {
+  let geocodingInProgress: Bool
+  @Binding var item: MKMapItem?
 
   var body: some View {
     ZStack {
@@ -31,24 +27,17 @@ struct LocationMap<T: Equatable>: View {
             item.openInMaps()
           #endif
         }
-      } else if let error = error {
-        ContentUnavailableView(
-          error.localizedDescription, systemImage: "exclamationmark.magnifyingglass",
-          description: Text("Unable to determine map location."))
-      } else {
+      } else if geocodingInProgress {
         HStack {
           Spacer()
           ProgressView()
           Spacer()
         }
-      }
-    }
-    .task(id: identifier) {
-      guard let geocode else { return }
-      do {
-        item = try await geocode()
-      } catch {
-        self.error = error
+      } else {
+        ContentUnavailableView(
+          String(localized: "Map Location Unavailable"),
+          systemImage: "mappin.slash.circle",
+          description: Text("Unable to determine map location."))
       }
     }
     .frame(minHeight: 300)
@@ -56,15 +45,14 @@ struct LocationMap<T: Equatable>: View {
 }
 
 #Preview("Progress View") {
-  LocationMap(identifier: "hey", geocode: nil)
+  LocationMap(geocodingInProgress: true, item: .constant(nil))
 }
 
-#Preview("Error") {
-  @Previewable @State var error = NSError(domain: "domain", code: 0)
-  LocationMap(identifier: "hey", geocode: nil, error: error)
+#Preview("Unavailable View") {
+  LocationMap(geocodingInProgress: false, item: .constant(nil))
 }
 
 #Preview("Current Location") {
   @Previewable @State var item = MKMapItem.forCurrentLocation()
-  LocationMap(identifier: "hey", geocode: nil, item: item)
+  LocationMap(geocodingInProgress: false, item: .constant(item))
 }
