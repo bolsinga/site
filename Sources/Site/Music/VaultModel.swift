@@ -297,7 +297,7 @@ public typealias VaultModel = AbstractVaultModel<BasicIdentifier>
     -> any Collection<RankedArchiveItem>
   {
     let nearbyVenueIDs = venueIDsNearby(distanceThreshold)
-    let nearbyArtistIDs = nearbyVenueIDs.flatMap { vault.artists(venueID: $0) }
+    let nearbyArtistIDs = Set(nearbyVenueIDs.flatMap { vault.artists(venueID: $0) })
     return nearbyArtistIDs.compactMap { vault.rankedArtist(id: $0) }
   }
 
