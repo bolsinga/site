@@ -9,7 +9,7 @@ import Foundation
 import MapKit
 
 struct BatchGeocode<Identifier: ArchiveIdentifier>: AsyncSequence {
-  public typealias ID = Identifier.ID
+  public typealias ID = ArchivePath
 
   typealias Element = (ID, MKMapItem?)
 
@@ -22,7 +22,7 @@ struct BatchGeocode<Identifier: ArchiveIdentifier>: AsyncSequence {
   ///   - vault: This is used to find what items will be geocoded, as well as defining ID
   init(atlas: Atlas<Venue>, vault: Vault<Identifier>) {
     self.atlas = atlas
-    self.geocodables = vault.venueIDs()
+    self.geocodables = vault.venueIDs().map { ($0.1.archivePath, $0.1) }
   }
 
   struct AsyncIterator: AsyncIteratorProtocol {

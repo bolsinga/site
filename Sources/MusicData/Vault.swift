@@ -220,4 +220,8 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
   var timestamp: Date {
     lookup.timestamp
   }
+
+  var venueArchivePathMap: [ArchivePath: ID] {
+    lookup.venueArchivePathMap
+  }
 }

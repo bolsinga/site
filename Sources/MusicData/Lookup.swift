@@ -30,6 +30,8 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
 
   private let showIDOrderIndex: [ID: Int]
 
+  let venueArchivePathMap: [ArchivePath: ID]
+
   private enum LoadAttempt {
     // URL, identifier, previousModified, cacheLoadFailed
     case networkLoad(URL, Identifier, Date, Bool)
@@ -130,6 +132,9 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
     async let ordered = Dictionary(
       uniqueKeysWithValues: try bracket.sortedShowIDs().enumerated().map { ($1, $0) })
     self.showIDOrderIndex = try await ordered
+    self.venueArchivePathMap = bracket.venueMap.reduce(into: [:]) {
+      $0[$1.value.archivePath] = $1.key
+    }
   }
 
   /// Creates a `Lookup` by indexing the provided `Music` archive and preparing derived maps.

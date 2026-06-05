@@ -41,7 +41,7 @@ public typealias VaultModel = AbstractVaultModel<BasicIdentifier>
   internal var error: Error?
 
   internal var todayDayOfLeapYear: Int = Date.now.dayOfLeapYear
-  internal var venueMapItemMap: [ID: MKMapItem] = [:]
+  internal var venueMapItemMap: [ArchivePath: MKMapItem] = [:]
   private var currentLocation: CLLocation?
   internal var locationAuthorization = LocationAuthorization.restricted
 
@@ -317,7 +317,7 @@ public typealias VaultModel = AbstractVaultModel<BasicIdentifier>
   {
     venueMapItemMap.compactMap { (id, mapItem) in
       guard mapItem.location.distance(from: location) <= distanceThreshold else { return nil }
-      return id
+      return vault.venueArchivePathMap[id]
     }
   }
 
