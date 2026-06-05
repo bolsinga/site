@@ -79,10 +79,10 @@ struct VenueDetail: View {
     #endif
     .toolbar { ArchiveSharableToolbarContent(item: digest, url: url) }
     .onAppear {
-      self.mapItem = model.venueMapItemMap[digest.id]
+      self.mapItem = model.venueMapItemMap[digest.archivePath]
     }
     .onChange(of: model.venueMapItemMap) { _, newValue in
-      self.mapItem = newValue[digest.id]
+      self.mapItem = newValue[digest.archivePath]
     }
   }
 }
