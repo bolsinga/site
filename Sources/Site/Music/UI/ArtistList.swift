@@ -10,7 +10,6 @@ import SwiftUI
 struct ArtistList<A: Hashable & Identifiable & Nameable & PathRestorable & Rankable>: View {
   let artists: any Collection<A>
   let compare: (A, A) -> Bool
-  let filter: (any Collection<A>, String) -> [A]
   let sort: RankingSort
   @Binding var searchString: String
 
@@ -18,7 +17,6 @@ struct ArtistList<A: Hashable & Identifiable & Nameable & PathRestorable & Ranka
     RankableSearchableSortList(
       items: artists,
       compare: compare,
-      filter: filter,
       sort: sort,
       title: ArchiveCategory.artists.localizedString,
       searchPrompt: String(localized: "Artist Names"),
@@ -32,7 +30,6 @@ extension ArtistList<RankedArchiveItem> {
     self.init(
       artists: model.previewAllArtists,
       compare: model.compare(lhs:rhs:),
-      filter: { $0.names(filteredBy: $1) },
       sort: sort, searchString: searchString)
   }
 }

@@ -10,7 +10,6 @@ import SwiftUI
 struct VenueList<V: Hashable & Identifiable & Nameable & PathRestorable & Rankable>: View {
   let venues: any Collection<V>
   let compare: (V, V) -> Bool
-  let filter: (any Collection<V>, String) -> [V]
   let sort: RankingSort
   @Binding var searchString: String
 
@@ -18,7 +17,6 @@ struct VenueList<V: Hashable & Identifiable & Nameable & PathRestorable & Rankab
     RankableSearchableSortList(
       items: venues,
       compare: compare,
-      filter: filter,
       sort: sort,
       title: ArchiveCategory.venues.localizedString,
       searchPrompt: String(localized: "Venue Names"),
@@ -32,7 +30,6 @@ extension VenueList<RankedArchiveItem> {
     self.init(
       venues: model.previewAllVenues,
       compare: model.compare(lhs:rhs:),
-      filter: { $0.names(filteredBy: $1) },
       sort: sort, searchString: searchString)
   }
 }

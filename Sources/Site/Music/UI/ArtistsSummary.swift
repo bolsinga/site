@@ -20,7 +20,7 @@ struct ArtistsSummary: View {
     ArtistList(
       artists: artists,
       compare: model.compare(lhs:rhs:),
-      filter: { $0.names(filteredBy: $1) }, sort: sort,
+      sort: sort,
       searchString: $searchString
     )
     .nearbyLocation(filteredDataIsEmpty: artists.isEmpty)

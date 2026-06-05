@@ -12,7 +12,6 @@ struct RankableSearchableSortList<
 >: View {
   let items: any Collection<A>
   let compare: (A, A) -> Bool
-  let filter: (any Collection<A>, String) -> [A]
   let sort: RankingSort
   let title: String
   let searchPrompt: String
@@ -20,7 +19,7 @@ struct RankableSearchableSortList<
   @Binding var searchString: String
 
   var body: some View {
-    let items = filter(items, searchString)
+    let items = items.names(filteredBy: searchString)
     RankableSortList(
       items: items, compare: compare, title: title,
       associatedRankSectionHeader: associatedRankSectionHeader,
@@ -41,8 +40,10 @@ struct RankableSearchableSortList<
     RankableSearchableSortList(
       items: model.previewAllArtists,
       compare: model.compare(lhs:rhs:),
-      filter: { $0.names(filteredBy: $1) }, sort: .alphabetical, title: "title",
-      searchPrompt: "prompt", associatedRankSectionHeader: { Text($0.formatted(.rankOnly)) },
+      sort: .alphabetical,
+      title: "title",
+      searchPrompt: "prompt",
+      associatedRankSectionHeader: { Text($0.formatted(.rankOnly)) },
       searchString: $searchString)
   }
 }
