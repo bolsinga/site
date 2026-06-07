@@ -11,15 +11,22 @@ import SwiftUI
 struct LocationMap: View {
   let geocodingInProgress: Bool
   @Binding var item: MKMapItem?
+  let debugShowItemBounds = false
 
   var body: some View {
     ZStack {
       if let item {
+        let rect = item.rect.proportionallyPadded
         Map(
-          initialPosition: .rect(item.paddedRect),
+          initialPosition: .rect(rect),
           interactionModes: MapInteractionModes()
         ) {
           Marker(item: item)
+
+          if debugShowItemBounds {
+            MapPolygon(points: rect.corners)
+              .foregroundStyle(.purple.opacity(0.5))
+          }
         }
         .tint(.accentColor)
         .onTapGesture {
