@@ -42,6 +42,7 @@ struct ArchiveTabView: View {
   @Binding var showsMode: ShowsMode
   @Binding var venueSort: RankingSort
   @Binding var artistSort: RankingSort
+  @Binding var venuesMode: VenuesMode
 
   @Binding var activeCategory: ArchiveCategory
   let pathForCategory: (ArchiveCategory) -> Binding<[ArchivePath]>
@@ -78,9 +79,13 @@ struct ArchiveTabView: View {
         if category != .search {
           Tab(category.localizedString, systemImage: category.systemImage, value: category) {
             ArchiveCategoryStack(
-              category: category, showsMode: $showsMode, path: pathForCategory(category),
+              category: category,
+              showsMode: $showsMode,
+              path: pathForCategory(category),
               venueSort: $venueSort,
-              artistSort: $artistSort, reloadModel: reloadModel)
+              artistSort: $artistSort,
+              venuesMode: $venuesMode,
+              reloadModel: reloadModel)
           }
           #if !os(tvOS)
             .badge(category.badge(model))
@@ -141,9 +146,14 @@ struct ArchiveTabView: View {
   @Previewable @State var venueSort = RankingSort.alphabetical
   @Previewable @State var artistSort = RankingSort.alphabetical
   @Previewable @State var category = ArchiveCategory.defaultCategory
+  @Previewable @State var venuesMode = VenuesMode.default
 
   ArchiveTabView(
-    showsMode: $showsMode, venueSort: $venueSort, artistSort: $artistSort, activeCategory: $category
+    showsMode: $showsMode,
+    venueSort: $venueSort,
+    artistSort: $artistSort,
+    venuesMode: $venuesMode,
+    activeCategory: $category
   ) { _ in
     .constant([])
   } reloadModel: {

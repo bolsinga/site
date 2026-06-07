@@ -19,6 +19,7 @@ struct ArchiveStateView: View {
   @SceneStorage("artist.sort") private var artistSort = RankingSort.alphabetical
   @SceneStorage("navigation.state") private var archiveNavigation = ArchiveNavigation()
   @SceneStorage("nearby.state") private var nearbyModel = NearbyModel()
+  @SceneStorage("venues.mode") private var venuesMode = VenuesMode.default
 
   let reloadModel: @MainActor () async -> Void
 
@@ -42,7 +43,9 @@ struct ArchiveStateView: View {
       } else {
         ArchiveTabView(
           showsMode: $archiveNavigation.mode,
-          venueSort: $venueSort, artistSort: $artistSort,
+          venueSort: $venueSort,
+          artistSort: $artistSort,
+          venuesMode: $venuesMode,
           activeCategory: $archiveNavigation.category,
           pathForCategory: {
             switch $0 {

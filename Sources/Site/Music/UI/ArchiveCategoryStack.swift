@@ -21,6 +21,7 @@ struct ArchiveCategoryStack: View {
   @Binding var path: [ArchivePath]
   @Binding var venueSort: RankingSort
   @Binding var artistSort: RankingSort
+  @Binding var venuesMode: VenuesMode
 
   let reloadModel: @MainActor () async -> Void
 
@@ -53,7 +54,7 @@ struct ArchiveCategoryStack: View {
         ShowsSummary()
       }
     case .venues:
-      VenuesSummary(sort: venueSort, searchString: $venueSearchString)
+      VenuesSummary(sort: venueSort, searchString: $venueSearchString, mode: $venuesMode)
     case .artists:
       ArtistsSummary(sort: artistSort, searchString: $artistSearchString)
     case .settings:
@@ -77,8 +78,11 @@ struct ArchiveCategoryStack: View {
         .toolbar {
           if showToolbar {
             ArchiveCategoryToolbarContent(
-              category: category, venueSort: $venueSort, artistSort: $artistSort,
-              showNearbyDistanceSettings: $showNearbyDistanceSettings)
+              category: category,
+              venueSort: $venueSort,
+              artistSort: $artistSort,
+              showNearbyDistanceSettings: $showNearbyDistanceSettings,
+              venuesMode: $venuesMode)
           }
         }
     }
@@ -95,9 +99,13 @@ struct ArchiveCategoryStack: View {
 extension ArchiveCategoryStack {
   init(withPreviewCategory category: ArchiveCategory) {
     self.init(
-      category: category, showsMode: .constant(.ordinal), path: .constant([]),
+      category: category,
+      showsMode: .constant(.ordinal),
+      path: .constant([]),
       venueSort: .constant(.alphabetical),
-      artistSort: .constant(.alphabetical), reloadModel: {})
+      artistSort: .constant(.alphabetical),
+      venuesMode: .constant(.default),
+      reloadModel: {})
   }
 }
 

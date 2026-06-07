@@ -15,6 +15,7 @@ struct ArchiveCategoryToolbarContent: ToolbarContent {
   @Binding var venueSort: RankingSort
   @Binding var artistSort: RankingSort
   @Binding var showNearbyDistanceSettings: Bool
+  @Binding var venuesMode: VenuesMode
 
   private func sortableData(_ category: ArchiveCategory) -> (
     sort: Binding<RankingSort>, associatedRankName: String
@@ -23,7 +24,12 @@ struct ArchiveCategoryToolbarContent: ToolbarContent {
     case .today, .stats, .shows, .settings, .search:
       nil
     case .venues:
-      ($venueSort, String(localized: "Sort By Artist Count"))
+      switch venuesMode {
+      case .map:
+        nil
+      case .grouped:
+        ($venueSort, String(localized: "Sort By Artist Count"))
+      }
     case .artists:
       ($artistSort, String(localized: "Sort By Venue Count"))
     }
