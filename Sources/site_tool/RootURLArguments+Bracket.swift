@@ -8,9 +8,11 @@
 import Foundation
 
 extension RootURLArguments {
-  func bracket<Identifier: ArchiveIdentifier>(identifier: Identifier) async throws
-    -> Bracket<Identifier>
-  {
-    try await Bracket(url: showsURL, identifier: identifier)
+  func bracket<Identifier: ArchiveIdentifier>(
+    identifier: Identifier,
+    artistsWithShowsOnly: Bool = true
+  ) async throws -> Bracket<Identifier> {
+    try await Bracket(
+      url: musicURL, identifier: identifier, artistsWithShowsOnly: artistsWithShowsOnly)
   }
 }

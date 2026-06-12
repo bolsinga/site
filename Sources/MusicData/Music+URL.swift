@@ -15,7 +15,7 @@ extension Logger {
 extension Music {
   public static func load(
     url: URL,
-    artistsWithShowsOnly: Bool = true
+    artistsWithShowsOnly: Bool
   ) async throws -> (Music, Date) {
     Logger.music.log("start: \(String(describing: url))")
     defer {

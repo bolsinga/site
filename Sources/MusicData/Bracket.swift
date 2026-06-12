@@ -151,12 +151,14 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
   /// - Parameters:
   ///   - url: The `URL` where the JSON music data is.
   ///   - identifier: An `ArchiveIdentifier` used to generate stable IDs for all derived maps.
+  ///   - artistsWithShowsOnly: filter out Artists that do not have shows. Defaults to true.
   /// - Throws: Any error encountered while reading the archive or computing derived structures.
-  init(url: URL, identifier: Identifier) async throws {
+  init(url: URL, identifier: Identifier, artistsWithShowsOnly: Bool = true) async throws {
     var signpost = Signpost(category: "bracket", name: "url")
     signpost.start()
 
-    let (music, lastModified) = try await Music.load(url: url)
+    let (music, lastModified) = try await Music.load(
+      url: url, artistsWithShowsOnly: artistsWithShowsOnly)
     try await self.init(music: music, identifier: identifier, timestamp: lastModified)
   }
 
