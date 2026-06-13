@@ -7,62 +7,40 @@
 import ArgumentParser
 import Foundation
 
-extension String {
-  fileprivate func convertToIndex(prefix: String) -> Int? {
-    guard starts(with: prefix) else { return nil }
-    return Int(replacingOccurrences(of: prefix, with: ""))
-  }
-
-  fileprivate func identifierIndex(prefix: String) -> Int? {
-    guard let index = convertToIndex(prefix: prefix) else { return nil }
-    return index
-  }
-}
-
 extension Collection where Element == String {
-  fileprivate func missingIndices(prefix: String) -> any Collection<Int> {
-    let existingIndices = self.compactMap { $0.identifierIndex(prefix: prefix) }
+  fileprivate var archiveIndices: Set<Int> {
+    let existingIndices = self.compactMap {
+      Int($0.trimmingCharacters(in: .decimalDigits.inverted))
+    }
     let expectedIndices = Set(0...(existingIndices.count - 1))
     return expectedIndices.subtracting(existingIndices)
   }
 }
 
-extension Vault {
-  fileprivate var nextShowID: Show.ID {
-    let nextIndex = max(shows().count, 0)
-    return "\(ArchivePath.showPrefix)\(nextIndex)"
+extension Bracket {
+  fileprivate func nextIndex(_ items: any Collection<ID>) -> Int {
+    guard let first = items.map({ String(describing: $0) }).archiveIndices.sorted().first else {
+      return items.count
+    }
+    return first
   }
 
-  fileprivate var nextVenueID: Venue.ID {
-    let nextIndex = max(venueIDs().count, 0)
-    return "\(ArchivePath.venuePrefix)\(nextIndex)"
+  fileprivate var nextShowIndex: Int {
+    nextIndex(showMap.keys)
   }
 
-  fileprivate var nextArtistID: Artist.ID {
-    let nextIndex = max(artistIDs().count, 0)
-    return "\(ArchivePath.artistPrefix)\(nextIndex)"
+  fileprivate var nextVenueIndex: Int {
+    nextIndex(venueMap.keys)
   }
 
-  fileprivate var missingShowIndices: any Collection<Int> {
-    shows().map { $0.id }.missingIndices(prefix: ArchivePath.showPrefix)
+  fileprivate var nextArtistIndex: Int {
+    nextIndex(artistMap.keys)
   }
 
-  fileprivate var missingVenueIndices: any Collection<Int> {
-    venueIDs().map { $0.1.id }.missingIndices(prefix: ArchivePath.venuePrefix)
-  }
-
-  fileprivate var missingArtistIndices: any Collection<Int> {
-    artistIDs().map { $0.1.id }.missingIndices(prefix: ArchivePath.artistPrefix)
-  }
-
-  fileprivate func printIDs() {
-    print("Next Show: \(nextShowID)")
-    print("Next Venue: \(nextVenueID)")
-    print("Next Artist: \(nextArtistID)")
-
-    print("Missing Show IDs: \(missingShowIndices)")
-    print("Missing Venue IDs: \(missingVenueIndices)")
-    print("Missing Artist IDs: \(missingArtistIndices)")
+  fileprivate func printNextIDs() {
+    print("Next Show: \(nextShowIndex)")
+    print("Next Venue: \(nextVenueIndex)")
+    print("Next Artist: \(nextArtistIndex)")
   }
 }
 
@@ -80,10 +58,11 @@ struct NextIDCommand: AsyncParsableCommand {
   func run() async throws {
     switch identifier {
     case .basic:
-      try await rootURL.vault(identifier: BasicIdentifier(), fileName: "music.json").printIDs()
+      try await rootURL.bracket(identifier: BasicIdentifier(), artistsWithShowsOnly: false)
+        .printNextIDs()
     case .archivePath:
-      try await rootURL.vault(identifier: ArchivePathIdentifier(), fileName: "music.json")
-        .printIDs()
+      try await rootURL.bracket(identifier: ArchivePathIdentifier(), artistsWithShowsOnly: false)
+        .printNextIDs()
     }
   }
 }

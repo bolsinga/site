@@ -11,4 +11,8 @@ extension RootURLArguments {
   var showsURL: URL {
     url.appending(path: "shows.json")
   }
+
+  var musicURL: URL {
+    url.appending(path: "music.json")
+  }
 }
