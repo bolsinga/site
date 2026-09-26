@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 70;
+	objectVersion = 110;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -30,78 +30,59 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		FE00AC872EB848A4003DE0C6 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+		FE00AC872EB848A4003DE0C6 /* Exceptions for "Sources" folder in "SiteApp" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				App/Info.plist,
 			);
 			platformFiltersByRelativePath = {
-				site_tool/AssociatedDomainsCommand.swift = (
-					macos,
-				);
-				site_tool/DumpBracketCommand.swift = (
-					macos,
-				);
-				site_tool/DumpDiaryCommand.swift = (
-					macos,
-				);
-				site_tool/DumpLookupCommand.swift = (
-					macos,
-				);
-				site_tool/DumpVaultCommand.swift = (
-					macos,
-				);
-				site_tool/NextIDCommand.swift = (
-					macos,
-				);
-				site_tool/Program.swift = (
-					macos,
-				);
-				"site_tool/RootURLArguments+Bracket.swift" = (
-					macos,
-				);
-				"site_tool/RootURLArguments+Diary.swift" = (
-					macos,
-				);
-				"site_tool/RootURLArguments+Lookup.swift" = (
-					macos,
-				);
-				"site_tool/RootURLArguments+Music.swift" = (
-					macos,
-				);
-				"site_tool/RootURLArguments+Vault.swift" = (
-					macos,
-				);
-				site_tool/RootURLArguments.swift = (
-					macos,
-				);
+				site_tool/AssociatedDomainsCommand.swift = (macos, );
+				site_tool/DumpBracketCommand.swift = (macos, );
+				site_tool/DumpDiaryCommand.swift = (macos, );
+				site_tool/DumpLookupCommand.swift = (macos, );
+				site_tool/DumpVaultCommand.swift = (macos, );
+				site_tool/NextIDCommand.swift = (macos, );
+				site_tool/Program.swift = (macos, );
+				"site_tool/RootURLArguments+Bracket.swift" = (macos, );
+				"site_tool/RootURLArguments+Diary.swift" = (macos, );
+				"site_tool/RootURLArguments+Lookup.swift" = (macos, );
+				"site_tool/RootURLArguments+Music.swift" = (macos, );
+				"site_tool/RootURLArguments+Vault.swift" = (macos, );
+				site_tool/RootURLArguments.swift = (macos, );
 			};
 			target = FE5360FC29CE82CA00618099 /* SiteApp */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		FE00A63E2EB8486D003DE0C6 /* Tests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Tests; sourceTree = "<group>"; };
-		FE00AB182EB848A4003DE0C6 /* Sources */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (FE00AC872EB848A4003DE0C6 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Sources; sourceTree = "<group>"; };
+		FE00A63E2EB8486D003DE0C6 /* Tests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		FE00AB182EB848A4003DE0C6 /* Sources */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				FE00AC872EB848A4003DE0C6 /* Exceptions for "Sources" folder in "SiteApp" target */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		FE5360FA29CE82CA00618099 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				FED95A502F1D7A9C00E7A555 /* Collections in Frameworks */,
 				FED94E0A2F1D481100E7A555 /* ArgumentParser in Frameworks */,
 				FEB722BE2E776336006A4DA2 /* Algorithms in Frameworks */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		FEE0AEC92E6E74F5005CE1AB /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
@@ -147,8 +128,6 @@
 			);
 			buildRules = (
 			);
-			dependencies = (
-			);
 			fileSystemSynchronizedGroups = (
 				FE00AB182EB848A4003DE0C6 /* Sources */,
 			);
@@ -179,8 +158,6 @@
 				FE00A63E2EB8486D003DE0C6 /* Tests */,
 			);
 			name = Tests;
-			packageProductDependencies = (
-			);
 			productName = Tests;
 			productReference = FEE0AECC2E6E74F5005CE1AB /* Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -205,7 +182,6 @@
 				};
 			};
 			buildConfigurationList = FE5360F829CE82CA00618099 /* Build configuration list for PBXProject "SiteApp" */;
-			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -213,11 +189,13 @@
 				Base,
 			);
 			mainGroup = FE5360F429CE82CA00618099;
+			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				FEB4895C2E6E6E8F0043057D /* XCRemoteSwiftPackageReference "swift-argument-parser" */,
 				FEB722BC2E776336006A4DA2 /* XCRemoteSwiftPackageReference "swift-algorithms" */,
 				FED95A4E2F1D7A9C00E7A555 /* XCRemoteSwiftPackageReference "swift-collections" */,
 			);
+			preferredProjectObjectVersion = 110;
 			productRefGroup = FE5360FE29CE82CA00618099 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -231,34 +209,26 @@
 /* Begin PBXResourcesBuildPhase section */
 		FE5360FB29CE82CA00618099 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		FEE0AECA2E6E74F5005CE1AB /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		FE5360F929CE82CA00618099 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		FEE0AEC82E6E74F5005CE1AB /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
@@ -271,7 +241,7 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		FE53610A29CE82CB00618099 /* Debug */ = {
+		FE53610A29CE82CB00618099 /* Debug configuration for PBXProject "SiteApp" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -335,7 +305,7 @@
 			};
 			name = Debug;
 		};
-		FE53610B29CE82CB00618099 /* Release */ = {
+		FE53610B29CE82CB00618099 /* Release configuration for PBXProject "SiteApp" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -392,7 +362,7 @@
 			};
 			name = Release;
 		};
-		FE53610D29CE82CB00618099 /* Debug */ = {
+		FE53610D29CE82CB00618099 /* Debug configuration for PBXNativeTarget "SiteApp" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = FE9910DC2AC205A70054D229 /* Config.xcconfig */;
 			buildSettings = {
@@ -440,7 +410,7 @@
 			};
 			name = Debug;
 		};
-		FE53610E29CE82CB00618099 /* Release */ = {
+		FE53610E29CE82CB00618099 /* Release configuration for PBXNativeTarget "SiteApp" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = FE9910DC2AC205A70054D229 /* Config.xcconfig */;
 			buildSettings = {
@@ -488,7 +458,7 @@
 			};
 			name = Release;
 		};
-		FEE0AED32E6E74F5005CE1AB /* Debug */ = {
+		FEE0AED32E6E74F5005CE1AB /* Debug configuration for PBXNativeTarget "Tests" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = FE9910DC2AC205A70054D229 /* Config.xcconfig */;
 			buildSettings = {
@@ -513,7 +483,7 @@
 			};
 			name = Debug;
 		};
-		FEE0AED42E6E74F5005CE1AB /* Release */ = {
+		FEE0AED42E6E74F5005CE1AB /* Release configuration for PBXNativeTarget "Tests" */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = FE9910DC2AC205A70054D229 /* Config.xcconfig */;
 			buildSettings = {
@@ -543,28 +513,25 @@
 		FE5360F829CE82CA00618099 /* Build configuration list for PBXProject "SiteApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				FE53610A29CE82CB00618099 /* Debug */,
-				FE53610B29CE82CB00618099 /* Release */,
+				FE53610A29CE82CB00618099 /* Debug configuration for PBXProject "SiteApp" */,
+				FE53610B29CE82CB00618099 /* Release configuration for PBXProject "SiteApp" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 		FE53610C29CE82CB00618099 /* Build configuration list for PBXNativeTarget "SiteApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				FE53610D29CE82CB00618099 /* Debug */,
-				FE53610E29CE82CB00618099 /* Release */,
+				FE53610D29CE82CB00618099 /* Debug configuration for PBXNativeTarget "SiteApp" */,
+				FE53610E29CE82CB00618099 /* Release configuration for PBXNativeTarget "SiteApp" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 		FEE0AED22E6E74F5005CE1AB /* Build configuration list for PBXNativeTarget "Tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				FEE0AED32E6E74F5005CE1AB /* Debug */,
-				FEE0AED42E6E74F5005CE1AB /* Release */,
+				FEE0AED32E6E74F5005CE1AB /* Debug configuration for PBXNativeTarget "Tests" */,
+				FEE0AED42E6E74F5005CE1AB /* Release configuration for PBXNativeTarget "Tests" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
@@ -615,4 +582,5 @@
 /* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = FE5360F529CE82CA00618099 /* Project object */;
+	validationLevel = 1;
 }
