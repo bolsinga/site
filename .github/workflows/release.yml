@@ -8,7 +8,7 @@ on:
 jobs:
   build:
 
-    runs-on: macos-26
+    runs-on: xcode-27
 
     steps:
     - uses: actions/checkout@v7
@@ -16,8 +16,8 @@ jobs:
       run: sw_vers
     - name: Available Xcodes
       run: ls /Applications | grep Xcode
-    - name: Switch to Xcode 26
-      run: sudo xcode-select -s "/Applications/Xcode_26.6.app/Contents/Developer"
+    - name: Switch to Xcode 27
+      run: sudo xcode-select -s "/Applications/Xcode_27.0.app/Contents/Developer"
     - name: Xcode - Accept License
       run: sudo xcodebuild -license accept
     - name: Xcode - First Launch
@@ -35,4 +35,4 @@ jobs:
     - name: Build / Test
       run: xcodebuild test -verbose -skipPackagePluginValidation -scheme SiteApp -destination "platform=macOS,arch=arm64" CODE_SIGNING_ALLOWED=NO
     - name: Build iOS / macOS / tvOS
-      run: xcodebuild -verbose -skipPackagePluginValidation -scheme SiteApp -destination "platform=iOS Simulator,name=iPhone 17,arch=arm64" -destination "platform=macOS,arch=arm64" -destination "platform=tvOS Simulator,name=Apple TV,arch=arm64"
+      run: xcodebuild -verbose -skipPackagePluginValidation -scheme SiteApp -destination "platform=iOS Simulator,name=iPhone 17,arch=arm64" -destination "platform=macOS,arch=arm64" -destination "platform=tvOS Simulator,name=Apple TV 4K (3rd generation),arch=arm64"
