@@ -31,12 +31,40 @@ public struct SettingsView: View {
 
   @AppStorage("nearby.distance") private var nearbyDistance = defaultNearbyDistanceThreshold
 
-  public var body: some View {
-    Form {
-      Section(header: Text("Nearby Distance")) {
-        NearbyDistanceThresholdView(distanceThreshold: $nearbyDistance)
+  private var nearbyDistanceControl: some View {
+    NearbyDistanceThresholdView(distanceThreshold: $nearbyDistance)
+  }
+
+  private var computerView: some View {
+    ComputerView()
+      .accentReactsToInteractionSpeed()
+      .frame(width: 240)
+  }
+
+  #if os(macOS)
+    // Form expands to fill a resizable window, which prevents the
+    // Settings window from sizing tightly to its content.
+    public var body: some View {
+      VStack(spacing: 20) {
+        VStack {
+          Text("Nearby Distance").font(.headline)
+          nearbyDistanceControl
+        }
+        computerView
       }
-      #if !os(macOS)
+      .padding()
+    }
+  #else
+    public var body: some View {
+      Form {
+        Section(header: Text("Nearby Distance")) {
+          nearbyDistanceControl
+        }
+        Section {
+          // Form rows don't center their content by default.
+          computerView
+            .frame(maxWidth: .infinity)
+        }
         Section(header: Text("About")) {
           LabeledContent {
             Text(Bundle.main.version)
@@ -44,9 +72,9 @@ public struct SettingsView: View {
             Text("Version")
           }
         }
-      #endif
+      }
     }
-  }
+  #endif
 }
 
 #Preview {
