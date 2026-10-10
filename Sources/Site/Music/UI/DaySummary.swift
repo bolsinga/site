@@ -19,7 +19,7 @@ struct DaySummary: View {
   @Binding var dayOfLeapYear: Int
 
   var body: some View {
-    #if os(macOS)
+    #if os(macOS) || os(tvOS)
       DayList(model: model, dayOfLeapYear: dayOfLeapYear)
     #else
       DayBrowser(dayOfLeapYear: $dayOfLeapYear)
