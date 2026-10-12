@@ -22,6 +22,7 @@ struct ArchiveCategoryStack: View {
   @Binding var venueSort: RankingSort
   @Binding var artistSort: RankingSort
   @Binding var venuesMode: VenuesMode
+  @Binding var dayOfLeapYear: Int
 
   let reloadModel: @MainActor () async -> Void
 
@@ -29,8 +30,6 @@ struct ArchiveCategoryStack: View {
   @State private var venueSearchString: String = ""
 
   @State private var showNearbyDistanceSettings: Bool = false
-
-  @State private var dayOfLeapYear = 1
 
   private var showToolbar: Bool {
     switch category {
@@ -86,12 +85,6 @@ struct ArchiveCategoryStack: View {
           }
         }
     }
-    .onAppear {
-      self.dayOfLeapYear = model.todayDayOfLeapYear
-    }
-    .onChange(of: model.todayDayOfLeapYear) { _, newValue in
-      self.dayOfLeapYear = newValue
-    }
   }
 }
 
@@ -105,6 +98,7 @@ extension ArchiveCategoryStack {
       venueSort: .constant(.alphabetical),
       artistSort: .constant(.alphabetical),
       venuesMode: .constant(.default),
+      dayOfLeapYear: .constant(Date.now.dayOfLeapYear),
       reloadModel: {})
   }
 }

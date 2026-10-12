@@ -51,7 +51,13 @@ struct ArchiveTabView: View {
 
   @State private var searchString: String = ""
   @State private var scope: ArchiveScope = .all
-  @State private var selectedTab = ArchiveCategory.defaultCategory
+  @State private var dayOfLeapYear = Date.now.dayOfLeapYear
+  @State private var selectedTab = TabSelection(
+    category: ArchiveCategory.defaultCategory, dayOfLeapYear: Date.now.dayOfLeapYear)
+
+  private func tabValue(for category: ArchiveCategory) -> TabSelection {
+    TabSelection(category: category, dayOfLeapYear: model.todayDayOfLeapYear)
+  }
 
   @ViewBuilder private var searchTabContent: some View {
     NavigationStack {
@@ -77,7 +83,7 @@ struct ArchiveTabView: View {
     TabView(selection: $selectedTab) {
       ForEach(ArchiveCategory.ordered, id: \.self) { category in
         if category != .search {
-          Tab(category.localizedString, systemImage: category.systemImage, value: category) {
+          Tab(category.localizedString, systemImage: category.systemImage, value: tabValue(for: category)) {
             ArchiveCategoryStack(
               category: category,
               showsMode: $showsMode,
@@ -85,6 +91,7 @@ struct ArchiveTabView: View {
               venueSort: $venueSort,
               artistSort: $artistSort,
               venuesMode: $venuesMode,
+              dayOfLeapYear: $dayOfLeapYear,
               reloadModel: reloadModel)
           }
           #if !os(tvOS)
@@ -92,22 +99,34 @@ struct ArchiveTabView: View {
           #endif
         } else {
           #if os(macOS)
-            Tab(category.localizedString, systemImage: category.systemImage, value: category) {
+            Tab(category.localizedString, systemImage: category.systemImage, value: tabValue(for: category)) {
               searchTabContent
             }
           #else
-            Tab(value: category, role: .search) { searchTabContent }
+            Tab(value: tabValue(for: category), role: .search) { searchTabContent }
           #endif
         }
       }
 
     }
     .onAppear {
-      selectedTab = activeCategory
+      dayOfLeapYear = model.todayDayOfLeapYear
+      selectedTab = TabSelection(category: activeCategory, dayOfLeapYear: dayOfLeapYear)
+    }
+    .onChange(of: model.todayDayOfLeapYear) { _, newValue in
+      dayOfLeapYear = newValue
+    }
+    .onChange(of: dayOfLeapYear) { _, newValue in
+      if selectedTab.category.tracksDayOfLeapYear {
+        selectedTab = TabSelection(category: selectedTab.category, dayOfLeapYear: newValue)
+      }
     }
     .onChange(of: selectedTab) { _, newValue in
+      if let newDayOfLeapYear = newValue.dayOfLeapYear {
+        dayOfLeapYear = newDayOfLeapYear
+      }
       activeCategory = {
-        switch newValue {
+        switch newValue.category {
         case .today:
           .today
         case .shows:
@@ -135,7 +154,7 @@ struct ArchiveTabView: View {
       }()
     }
     .onChange(of: activeCategory) { _, newValue in
-      selectedTab = newValue
+      selectedTab = TabSelection(category: newValue, dayOfLeapYear: dayOfLeapYear)
     }
     .tabViewStyle(.sidebarAdaptable)
   }
