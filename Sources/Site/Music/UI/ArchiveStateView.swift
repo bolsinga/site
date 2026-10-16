@@ -21,6 +21,7 @@ struct ArchiveStateView: View {
   @SceneStorage("nearby.state") private var nearbyModel = NearbyModel()
   @SceneStorage("venues.mode") private var venuesMode = VenuesMode.default
 
+  @Binding var pendingExternalEvent: ExternalEvent?
   let reloadModel: @MainActor () async -> Void
 
   @ViewBuilder private var archiveBody: some View {
@@ -69,14 +70,18 @@ struct ArchiveStateView: View {
 
   var body: some View {
     archiveBody
-      .onContinueUserActivity(ArchivePath.activityType) { archiveNavigation.pathActivity($0) }
-      .onContinueUserActivity(ArchiveCategory.activityType) {
-        archiveNavigation.categoryActivity($0)
+      .onChange(of: pendingExternalEvent?.id, initial: true) {
+        guard let pendingExternalEvent else { return }
+        switch pendingExternalEvent.kind {
+        case .url(let url):
+          archiveNavigation.openURL(url)
+        case .path(let activity):
+          archiveNavigation.pathActivity(activity)
+        case .category(let activity):
+          archiveNavigation.categoryActivity(activity)
+        }
+        self.pendingExternalEvent = nil
       }
-      .onOpenURL { archiveNavigation.openURL($0) }
-      #if !os(tvOS)
-        .handlesExternalEvents(preferring: ["*"], allowing: ["*"])
-      #endif
       .advertiseUserActivity(
         for: archiveNavigation.activity, urlForCategory: { model.vault.url(for: $0) }
       ) {
@@ -86,9 +91,11 @@ struct ArchiveStateView: View {
 }
 
 #Preview("App", traits: .vaultModel) {
-  ArchiveStateView {}
+  @Previewable @State var pendingExternalEvent: ExternalEvent?
+  ArchiveStateView(pendingExternalEvent: $pendingExternalEvent) {}
 }
 
 #Preview("Error", traits: .vaultModelWithError) {
-  ArchiveStateView {}
+  @Previewable @State var pendingExternalEvent: ExternalEvent?
+  ArchiveStateView(pendingExternalEvent: $pendingExternalEvent) {}
 }
