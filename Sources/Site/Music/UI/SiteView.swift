@@ -5,9 +5,9 @@
 //  Created by Greg Bolsinga on 5/11/23.
 //
 
+import Shared
 import SwiftUI
 import os
-import Shared
 
 extension Logger {
   fileprivate static let siteView = Logger(category: "siteView")

@@ -6,8 +6,8 @@
 //
 
 import MapKit
-import SwiftUI
 import Shared
+import SwiftUI
 
 struct VenueDetail: View {
   @Environment(VaultModel.self) private var model

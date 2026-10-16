@@ -5,8 +5,8 @@
 //  Created by Greg Bolsinga on 6/3/23.
 //
 
-import SwiftUI
 import Shared
+import SwiftUI
 
 struct RankingList<
   T: Identifiable & PathRestorable,

@@ -5,8 +5,8 @@
 //  Created by Greg Bolsinga on 8/6/25.
 //
 
-import SwiftUI
 import Shared
+import SwiftUI
 
 struct ArchiveCategoryToolbarContent: ToolbarContent {
   @Environment(VaultModel.self) var model

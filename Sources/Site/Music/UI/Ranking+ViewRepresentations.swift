@@ -5,8 +5,8 @@
 //  Created by Greg Bolsinga on 5/24/23.
 //
 
-import SwiftUI
 import Shared
+import SwiftUI
 
 extension Ranking {
   @ViewBuilder var showsCountView: some View {

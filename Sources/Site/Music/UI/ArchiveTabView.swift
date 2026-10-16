@@ -5,8 +5,8 @@
 //  Created by Greg Bolsinga on 7/31/24.
 //
 
-import SwiftUI
 import Shared
+import SwiftUI
 
 extension ArchiveCategory {
   @MainActor

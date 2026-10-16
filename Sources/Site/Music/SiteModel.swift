@@ -6,8 +6,8 @@
 //
 
 import Foundation
-import os
 import Shared
+import os
 
 extension Logger {
   fileprivate static let vaultLoader = Logger(category: "vaultLoader")

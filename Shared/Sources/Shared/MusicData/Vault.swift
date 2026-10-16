@@ -73,7 +73,8 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
   ///   - dayOfLeapYear: The day-of-leap-year index (1...366) to query.
   ///   - recentCount: The number of recent shows to consider when there are no shows on that day.
   /// - Returns: A collection of artist IDs, capped to the most recent `recentCount` entries.
-  public func artistIDs(on dayOfLeapYear: Int, orRecentCount recentCount: Int) -> any Collection<ID> {
+  public func artistIDs(on dayOfLeapYear: Int, orRecentCount recentCount: Int) -> any Collection<ID>
+  {
     concertIDs(on: dayOfLeapYear, orRecentCount: recentCount).flatMap { lookup.artists(showID: $0) }
       .suffix(recentCount)
   }
@@ -88,7 +89,8 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
   ///   - dayOfLeapYear: The day-of-leap-year index (1...366) to query.
   ///   - recentCount: The number of recent shows to consider when there are no shows on that day.
   /// - Returns: A collection of venue IDs, capped to the most recent `recentCount` entries.
-  public func venueIDs(on dayOfLeapYear: Int, orRecentCount recentCount: Int) -> any Collection<ID> {
+  public func venueIDs(on dayOfLeapYear: Int, orRecentCount recentCount: Int) -> any Collection<ID>
+  {
     concertIDs(on: dayOfLeapYear, orRecentCount: recentCount).compactMap {
       lookup.venues(showID: $0)
     }

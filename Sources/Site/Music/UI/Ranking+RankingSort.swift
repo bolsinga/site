@@ -5,8 +5,8 @@
 //  Created by Greg Bolsinga on 6/7/24.
 //
 
-import SwiftUI
 import Shared
+import SwiftUI
 
 extension Ranking {
   @ViewBuilder func sectionHeader(for sort: RankingSort) -> some View {

@@ -5,8 +5,8 @@
 //  Created by Greg Bolsinga on 9/23/24.
 //
 
-import SwiftUI
 import Shared
+import SwiftUI
 
 struct VenuesSummary: View {
   @Environment(VaultModel.self) var model

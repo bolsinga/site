@@ -7,8 +7,8 @@
 
 import Foundation
 import Intents
-import os
 import Shared
+import os
 
 extension Logger {
   fileprivate static let updateCategoryActivity = Logger(category: "updateCategoryActivity")

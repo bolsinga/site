@@ -5,8 +5,8 @@
 //  Created by Greg Bolsinga on 1/31/26.
 //
 
-import SwiftUI
 import Shared
+import SwiftUI
 
 struct RankableSearchableSortList<
   A: Hashable & Identifiable & Nameable & PathRestorable & Rankable, SectionHeaderContent: View

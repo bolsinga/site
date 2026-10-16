@@ -5,8 +5,8 @@
 //  Created by Greg Bolsinga on 7/30/25.
 //
 
-import SwiftUI
 import Shared
+import SwiftUI
 
 private struct SearchResultButton: View {
   let name: Text

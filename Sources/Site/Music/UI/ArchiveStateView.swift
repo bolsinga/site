@@ -5,9 +5,9 @@
 //  Created by Greg Bolsinga on 7/31/24.
 //
 
+import Shared
 import SwiftUI
 import os
-import Shared
 
 extension Logger {
   fileprivate static let dataError = Logger(category: "dataError")

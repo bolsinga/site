@@ -5,8 +5,8 @@
 //  Created by Greg Bolsinga on 2/18/23.
 //
 
-import SwiftUI
 import Shared
+import SwiftUI
 
 struct ArtistDetail: View {
   let digest: ArtistDigest

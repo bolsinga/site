@@ -5,8 +5,8 @@
 //  Created by Greg Bolsinga on 4/26/23.
 //
 
-import SwiftUI
 import Shared
+import SwiftUI
 
 struct DayList: View {
   fileprivate let concerts: [ShowDigest]

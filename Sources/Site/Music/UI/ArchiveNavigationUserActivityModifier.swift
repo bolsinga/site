@@ -5,9 +5,9 @@
 //  Created by Greg Bolsinga on 9/29/24.
 //
 
+import Shared
 import SwiftUI
 import os
-import Shared
 
 extension ArchiveCategory {
   static let activityType = "gdb.SiteApp.view-archiveCategory"

@@ -6,8 +6,8 @@
 //
 
 import MapKit
-import SwiftUI
 import Shared
+import SwiftUI
 
 struct LocationMap: View {
   let geocodingInProgress: Bool

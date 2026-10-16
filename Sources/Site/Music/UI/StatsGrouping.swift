@@ -5,8 +5,8 @@
 //  Created by Greg Bolsinga on 5/13/23.
 //
 
-import SwiftUI
 import Shared
+import SwiftUI
 
 struct StatsGrouping: View {
   @Environment(\.statsThreshold) private var statsThreshold: Int

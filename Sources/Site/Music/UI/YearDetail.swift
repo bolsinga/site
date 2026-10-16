@@ -5,8 +5,8 @@
 //  Created by Greg Bolsinga on 3/26/23.
 //
 
-import SwiftUI
 import Shared
+import SwiftUI
 
 struct YearDetail: View {
   let digest: AnnumDigest

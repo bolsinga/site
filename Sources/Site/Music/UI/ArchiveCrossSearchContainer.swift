@@ -5,8 +5,8 @@
 //  Created by Greg Bolsinga on 7/30/25.
 //
 
-import SwiftUI
 import Shared
+import SwiftUI
 
 struct ArchiveCrossSearchContainer<A: Nameable & PathRestorable, V: Nameable & PathRestorable>: View
 {

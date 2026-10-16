@@ -12,7 +12,8 @@ extension FileManager {
     try fileURL(for: fileName, in: .cachesDirectory)
   }
 
-  public func readCache<T>(fileName: String, deleteFile: Bool = false) throws -> T where T: Decodable {
+  public func readCache<T>(fileName: String, deleteFile: Bool = false) throws -> T
+  where T: Decodable {
     let fileURL = try cacheFileURL(for: fileName)
     if deleteFile {
       do { try removeItem(at: fileURL) } catch {}

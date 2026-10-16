@@ -5,8 +5,8 @@
 //  Created by Greg Bolsinga on 7/29/25.
 //
 
-import SwiftUI
 import Shared
+import SwiftUI
 
 private enum VaultPreviewError: Error {
   case noModel
