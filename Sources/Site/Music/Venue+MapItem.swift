@@ -6,6 +6,7 @@
 //
 
 import MapKit
+import Shared
 
 extension Venue {
   fileprivate var mkAddress: MKAddress? {

@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol Rankable {
+public protocol Rankable {
   var firstSet: FirstSet { get }
   var showRank: Ranking { get }
   var section: LibrarySection? { get }
@@ -15,7 +15,7 @@ protocol Rankable {
 }
 
 extension Array where Element: Rankable {
-  func ranked(by sort: RankingSort) -> [Ranking: [Element]] {
+  public func ranked(by sort: RankingSort) -> [Ranking: [Element]] {
     self.reduce(into: [Ranking: [Element]]()) {
       let ranking = $1.ranking(for: sort)
       var arr = ($0[ranking] ?? [])
@@ -24,7 +24,7 @@ extension Array where Element: Rankable {
     }
   }
 
-  var firstSeen: [PartialDate: [Element]] {
+  public var firstSeen: [PartialDate: [Element]] {
     self.reduce(into: [PartialDate: [(Element, FirstSet)]]()) {
       let firstSet = $1.firstSet
       var arr = ($0[firstSet.date] ?? [])
@@ -37,7 +37,7 @@ extension Array where Element: Rankable {
     }
   }
 
-  var sections: [LibrarySection: [Element]] {
+  public var sections: [LibrarySection: [Element]] {
     self.reduce(into: [:]) {
       guard let section = $1.section else { return }
       var arr = $0[section] ?? []

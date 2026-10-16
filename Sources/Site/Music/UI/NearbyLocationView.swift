@@ -5,6 +5,7 @@
 //  Created by Greg Bolsinga on 10/2/24.
 //
 
+import Shared
 import SwiftUI
 
 private enum Authorization {

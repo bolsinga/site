@@ -7,6 +7,7 @@
 
 import Foundation
 import MapKit
+import Shared
 
 extension Atlas where T == Venue {
   nonisolated func geocode(_ venue: T) async throws -> MKMapItem? {

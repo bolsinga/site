@@ -5,6 +5,7 @@
 //  Created by Greg Bolsinga on 5/12/23.
 //
 
+import Shared
 import SwiftUI
 
 struct VenueBlurb: View {

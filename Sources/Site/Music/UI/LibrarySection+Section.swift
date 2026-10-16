@@ -5,6 +5,7 @@
 //  Created by Greg Bolsinga on 5/23/23.
 //
 
+import Shared
 import SwiftUI
 
 extension LibrarySection {

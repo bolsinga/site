@@ -1,0 +1,132 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%@ @ %@" : {
+      "comment" : "artistAndVenue.no.venue",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ @ %2$@"
+          }
+        }
+      }
+    },
+    "%@ @ %@ : %@" : {
+      "comment" : "full.venue",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ @ %2$@ : %3$@"
+          }
+        }
+      }
+    },
+    "%@, %@" : {
+      "comment" : "headlinerAndVenue.no.venue",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@, %2$@"
+          }
+        }
+      }
+    },
+    "%@’s" : {
+      "comment" : "twoDigits"
+    },
+    "%@s" : {
+      "comment" : "defaultDigits"
+    },
+    "All Shows" : {
+
+    },
+    "Artists" : {
+
+    },
+    "Date Unknown" : {
+
+    },
+    "Decade Unknown" : {
+
+    },
+    "Display Shows On This Date" : {
+
+    },
+    "Invalid Token: %@." : {
+
+    },
+    "On Date: %@" : {
+
+    },
+    "Search" : {
+
+    },
+    "Settings" : {
+
+    },
+    "Show Artists" : {
+
+    },
+    "Show Statistics" : {
+
+    },
+    "Show Venues" : {
+
+    },
+    "Shows" : {
+
+    },
+    "Shows from %@" : {
+
+    },
+    "Shows from Unknown Years" : {
+
+    },
+    "Sort Alphabetically" : {
+
+    },
+    "Sort By Associated" : {
+
+    },
+    "Sort By First Show" : {
+
+    },
+    "Sort By Show Count" : {
+
+    },
+    "Sort By Year Range" : {
+
+    },
+    "Stats" : {
+
+    },
+    "Today" : {
+
+    },
+    "Today: %@" : {
+
+    },
+    "Tomorrow: %@" : {
+
+    },
+    "URL (%@) cannot create root URL." : {
+
+    },
+    "URL (%@) is not valid." : {
+
+    },
+    "Venues" : {
+
+    },
+    "Year Unknown" : {
+
+    },
+    "Yesterday: %@" : {
+
+    }
+  },
+  "version" : "1.0"
+}

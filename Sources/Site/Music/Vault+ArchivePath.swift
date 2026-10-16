@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Shared
 
 extension Vault where Identifier == BasicIdentifier {
   func restorableSharableLinkable(for path: ArchivePath) -> PathRestorableUserActivity? {

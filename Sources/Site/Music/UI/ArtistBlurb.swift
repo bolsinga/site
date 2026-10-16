@@ -5,6 +5,7 @@
 //  Created by Greg Bolsinga on 2/28/23.
 //
 
+import Shared
 import SwiftUI
 
 struct ArtistBlurb: View {

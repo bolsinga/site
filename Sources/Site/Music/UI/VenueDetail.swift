@@ -6,6 +6,7 @@
 //
 
 import MapKit
+import Shared
 import SwiftUI
 
 struct VenueDetail: View {

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Shared
 
 extension Vault where Identifier == BasicIdentifier {
   fileprivate func entity(for digest: ArtistDigest) -> ArtistEntity? {

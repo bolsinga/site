@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Shared
 
 protocol PathRestorableUserActivity: PathRestorable {
   func updateActivity(_ userActivity: NSUserActivity, url: URL?)

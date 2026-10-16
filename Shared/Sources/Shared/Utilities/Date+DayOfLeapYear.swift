@@ -11,7 +11,7 @@ extension Date {
   /// This is the dayOfYear **always** adjusted as if it were a leap year.
   /// This will allow day/month pairs 3/1 or later to be matched regardless of leap year.
   /// It also provides a fixed order, regardless of leap year.
-  var dayOfLeapYear: Int {
+  public var dayOfLeapYear: Int {
     let dayOfYear = Calendar.autoupdatingCurrent.component(.dayOfYear, from: self)
     if dayOfYear >= 60,  // Day after 2/28.
       let range = Calendar.autoupdatingCurrent.range(of: .day, in: .year, for: self),
@@ -72,12 +72,12 @@ extension Int {
     return newDayOfLeapYear
   }
 
-  var nextDayOfLeapYear: Int {
+  public var nextDayOfLeapYear: Int {
     guard isValidDayOfLeapYear else { return -1 }
     return offsetDayOfLeapYear(by: 1)
   }
 
-  var previousDayOfLeapYear: Int {
+  public var previousDayOfLeapYear: Int {
     guard isValidDayOfLeapYear else { return -1 }
     return offsetDayOfLeapYear(by: -1)
   }

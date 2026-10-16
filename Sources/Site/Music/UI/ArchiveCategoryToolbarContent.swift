@@ -5,6 +5,7 @@
 //  Created by Greg Bolsinga on 8/6/25.
 //
 
+import Shared
 import SwiftUI
 
 struct ArchiveCategoryToolbarContent: ToolbarContent {

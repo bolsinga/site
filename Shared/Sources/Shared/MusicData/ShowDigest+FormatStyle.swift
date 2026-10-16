@@ -35,17 +35,17 @@ extension ShowDigest.FormatStyle: Foundation.FormatStyle {
     case .full:
       let artists = names.joined(separator: ", ")
       return String(
-        localized: "\(artists) @ \(venue) : \(value.date.formatted(.compact))",
+        localized: "\(artists) @ \(venue) : \(value.date.formatted(.compact))", bundle: #bundle,
         comment: "full.venue")
     case .artistsAndVenue:
       let artists = names.joined(separator: ", ")
       return String(
-        localized: "\(artists) @ \(venue)",
+        localized: "\(artists) @ \(venue)", bundle: #bundle,
         comment: "artistAndVenue.no.venue")
     case .headlinerAndVenue:
       let headliner = names.first ?? ""
       return String(
-        localized: "\(headliner), \(venue)",
+        localized: "\(headliner), \(venue)", bundle: #bundle,
         comment: "headlinerAndVenue.no.venue")
     }
   }

@@ -5,6 +5,7 @@
 //  Created by Greg Bolsinga on 10/1/24.
 //
 
+import Shared
 import SwiftUI
 
 struct SortModifierToolbarContent: ToolbarContent {

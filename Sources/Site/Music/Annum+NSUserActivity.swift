@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Shared
 
 extension Annum: PathRestorableUserActivity {
   func updateActivity(_ userActivity: NSUserActivity, url: URL?) {

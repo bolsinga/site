@@ -5,6 +5,7 @@
 //  Created by Greg Bolsinga on 1/31/26.
 //
 
+import Shared
 import SwiftUI
 
 struct RankableSearchableSortList<

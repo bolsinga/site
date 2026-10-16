@@ -6,6 +6,7 @@
 //
 
 import Charts
+import Shared
 import SwiftUI
 
 extension ChartTitle {

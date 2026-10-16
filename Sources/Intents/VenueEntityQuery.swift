@@ -8,6 +8,7 @@
 import Algorithms
 @preconcurrency import AppIntents
 import Foundation
+import Shared
 import os
 
 extension Logger {

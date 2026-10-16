@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FE8B98233081D3F400FC410D /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = FE8B98223081D3F400FC410D /* Shared */; };
 		FEB722BE2E776336006A4DA2 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = FEB722BD2E776336006A4DA2 /* Algorithms */; };
 		FED94E0A2F1D481100E7A555 /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = FED94E092F1D481100E7A555 /* ArgumentParser */; };
 		FED95A502F1D7A9C00E7A555 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = FED95A4F2F1D7A9C00E7A555 /* Collections */; };
@@ -75,6 +76,7 @@
 			isa = PBXFrameworksBuildPhase;
 			files = (
 				FED95A502F1D7A9C00E7A555 /* Collections in Frameworks */,
+				FE8B98233081D3F400FC410D /* Shared in Frameworks */,
 				FED94E0A2F1D481100E7A555 /* ArgumentParser in Frameworks */,
 				FEB722BE2E776336006A4DA2 /* Algorithms in Frameworks */,
 			);
@@ -136,6 +138,7 @@
 				FEB722BD2E776336006A4DA2 /* Algorithms */,
 				FED94E092F1D481100E7A555 /* ArgumentParser */,
 				FED95A4F2F1D7A9C00E7A555 /* Collections */,
+				FE8B98223081D3F400FC410D /* Shared */,
 			);
 			productName = SiteApp;
 			productReference = FE5360FD29CE82CA00618099 /* SiteApp.app */;
@@ -194,6 +197,7 @@
 				FEB4895C2E6E6E8F0043057D /* XCRemoteSwiftPackageReference "swift-argument-parser" */,
 				FEB722BC2E776336006A4DA2 /* XCRemoteSwiftPackageReference "swift-algorithms" */,
 				FED95A4E2F1D7A9C00E7A555 /* XCRemoteSwiftPackageReference "swift-collections" */,
+				FE8B98213081D3F400FC410D /* XCLocalSwiftPackageReference "Shared" */,
 			);
 			preferredProjectObjectVersion = 110;
 			productRefGroup = FE5360FE29CE82CA00618099 /* Products */;
@@ -536,6 +540,13 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		FE8B98213081D3F400FC410D /* XCLocalSwiftPackageReference "Shared" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Shared;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCRemoteSwiftPackageReference section */
 		FEB4895C2E6E6E8F0043057D /* XCRemoteSwiftPackageReference "swift-argument-parser" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -564,6 +575,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		FE8B98223081D3F400FC410D /* Shared */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Shared;
+		};
 		FEB722BD2E776336006A4DA2 /* Algorithms */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = FEB722BC2E776336006A4DA2 /* XCRemoteSwiftPackageReference "swift-algorithms" */;

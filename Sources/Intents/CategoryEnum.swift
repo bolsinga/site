@@ -7,6 +7,7 @@
 
 import AppIntents
 import Foundation
+import Shared
 
 enum CategoryEnum: String {
   case today

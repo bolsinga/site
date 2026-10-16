@@ -7,6 +7,7 @@
 
 import ArgumentParser
 import Foundation
+import Shared
 
 extension Lookup {
   fileprivate func dump() throws {

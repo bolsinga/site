@@ -12,8 +12,8 @@ extension Logger {
   fileprivate static let throttle = Logger(category: "throttle")
 }
 
-actor Throttle<T: Sendable> {
-  enum Control {
+public actor Throttle<T: Sendable> {
+  public enum Control {
     /// Client requires the throttle to be paused
     case pauseEntry
 
@@ -36,7 +36,7 @@ actor Throttle<T: Sendable> {
   /// Current time to wait until for the next batch through the throttle.
   var waitUntil: ContinuousClock.Instant
 
-  init(batchSize: Int, timeUntilReset: Duration) {
+  public init(batchSize: Int, timeUntilReset: Duration) {
     self.batchSize = batchSize
     self.timeUntilReset = timeUntilReset
     self.count = 0
@@ -55,7 +55,7 @@ actor Throttle<T: Sendable> {
     reset()
   }
 
-  func perform(_ action: @escaping () async throws -> Control) async throws -> T? {
+  public func perform(_ action: @escaping () async throws -> Control) async throws -> T? {
     Logger.throttle.log("start")
     defer {
       Logger.throttle.log("end")

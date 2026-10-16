@@ -5,6 +5,7 @@
 //  Created by Greg Bolsinga on 2/16/23.
 //
 
+import Shared
 import SwiftUI
 
 struct ShowDetail: View {

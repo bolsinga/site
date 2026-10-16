@@ -18,15 +18,15 @@ public struct AnnumDigest: Codable, Sendable {
     self.rank = rank
   }
 
-  var showRank: Ranking {
+  public var showRank: Ranking {
     rank.showRank
   }
 
-  var venueRank: Ranking {
+  public var venueRank: Ranking {
     rank.spanRank
   }
 
-  var artistRank: Ranking {
+  public var artistRank: Ranking {
     rank.associatedRank
   }
 }

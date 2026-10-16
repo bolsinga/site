@@ -7,6 +7,7 @@
 
 import AppIntents
 import Foundation
+import Shared
 
 struct OpenArtist: OpenIntent, URLRepresentableIntent {
   static let title = LocalizedStringResource("Open Artist")

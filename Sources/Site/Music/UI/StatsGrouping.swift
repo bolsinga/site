@@ -5,6 +5,7 @@
 //  Created by Greg Bolsinga on 5/13/23.
 //
 
+import Shared
 import SwiftUI
 
 struct StatsGrouping: View {

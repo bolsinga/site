@@ -67,11 +67,11 @@ extension Music {
 ///
 /// - Generic Parameter Identifier: An `ArchiveIdentifier` that defines the stable ID types used
 ///   throughout the snapshot.
-struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
+public struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
   /// Convenience alias for the stable identifier type used for artists and venues.
-  typealias ID = Identifier.ID
+  public typealias ID = Identifier.ID
   /// Convenience alias for the stable identifier type used for year-like (annum) groupings.
-  typealias AnnumID = Identifier.AnnumID
+  public typealias AnnumID = Identifier.AnnumID
 
   /// Aggregated ranking metrics for each artist, used to sort or filter artist lists.
   let artistRankDigestMap: [ID: RankDigest]
@@ -98,11 +98,11 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
   // Venue ID for Show IDs.
   let showVenue: [ID: ID]
   // Show for Show IDs.
-  let showMap: [ID: Show]
+  public let showMap: [ID: Show]
   // Artist for Artist IDs.
-  let artistMap: [ID: Artist]
+  public let artistMap: [ID: Artist]
   // Venue for Venue IDs.
-  let venueMap: [ID: Venue]
+  public let venueMap: [ID: Venue]
 
   private let compareTokenMap: [ID: String]
 
@@ -153,7 +153,7 @@ struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
   ///   - identifier: An `ArchiveIdentifier` used to generate stable IDs for all derived maps.
   ///   - artistsWithShowsOnly: filter out Artists that do not have shows. Defaults to true.
   /// - Throws: Any error encountered while reading the archive or computing derived structures.
-  init(url: URL, identifier: Identifier, artistsWithShowsOnly: Bool = true) async throws {
+  public init(url: URL, identifier: Identifier, artistsWithShowsOnly: Bool = true) async throws {
     var signpost = Signpost(category: "bracket", name: "url")
     signpost.start()
 

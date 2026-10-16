@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Shared
 
 extension StatsTitles {
   init(artistDigest digest: ArtistDigest) {

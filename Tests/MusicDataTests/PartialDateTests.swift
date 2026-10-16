@@ -7,6 +7,7 @@
 
 import Testing
 
+@testable import Shared
 @testable import SiteApp
 
 struct PartialDateTests {

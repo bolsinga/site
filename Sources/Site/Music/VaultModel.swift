@@ -9,6 +9,7 @@ import AppIntents
 import CoreLocation
 import Foundation
 import MapKit
+import Shared
 import os
 
 extension Logger {

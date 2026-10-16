@@ -7,6 +7,7 @@
 
 import AppIntents
 import Foundation
+import Shared
 
 struct OpenVenue: OpenIntent, URLRepresentableIntent {
   static let title = LocalizedStringResource("Open Venue")

@@ -5,6 +5,7 @@
 //  Created by Greg Bolsinga on 6/7/24.
 //
 
+import Shared
 import SwiftUI
 
 extension Ranking {

@@ -6,6 +6,7 @@
 
 import ArgumentParser
 import Foundation
+import Shared
 
 extension Collection where Element == String {
   fileprivate var archiveIndices: Set<Int> {

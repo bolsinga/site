@@ -5,6 +5,7 @@
 //  Created by Greg Bolsinga on 10/11/24.
 //
 
+import Shared
 import SwiftUI
 
 extension ShowsMode {

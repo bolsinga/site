@@ -6,6 +6,7 @@
 //
 
 import GeoToolbox
+import Shared
 
 extension Venue {
   var placeDescriptor: PlaceDescriptor {

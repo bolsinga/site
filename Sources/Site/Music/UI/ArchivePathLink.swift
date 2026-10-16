@@ -5,6 +5,7 @@
 //  Created by Greg Bolsinga on 8/22/24.
 //
 
+import Shared
 import SwiftUI
 
 struct ArchivePathLink<Label>: View where Label: View {

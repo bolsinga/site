@@ -7,6 +7,7 @@
 
 import ArgumentParser
 import Foundation
+import Shared
 
 extension Bracket {
   fileprivate func dump() throws {

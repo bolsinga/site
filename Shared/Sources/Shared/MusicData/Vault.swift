@@ -40,11 +40,11 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
     self.init(lookup: try await asyncLookup, rootURL: rootURL)
   }
 
-  var decadesMap: [Decade: [Annum: Int]] {
+  public var decadesMap: [Decade: [Annum: Int]] {
     lookup.decadesMap
   }
 
-  func decadesMap(showIDs: Set<ID>) -> [Decade: [Annum: Int]] {
+  public func decadesMap(showIDs: Set<ID>) -> [Decade: [Annum: Int]] {
     lookup.decadesMap(showIDs: showIDs)
   }
 
@@ -73,7 +73,8 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
   ///   - dayOfLeapYear: The day-of-leap-year index (1...366) to query.
   ///   - recentCount: The number of recent shows to consider when there are no shows on that day.
   /// - Returns: A collection of artist IDs, capped to the most recent `recentCount` entries.
-  func artistIDs(on dayOfLeapYear: Int, orRecentCount recentCount: Int) -> any Collection<ID> {
+  public func artistIDs(on dayOfLeapYear: Int, orRecentCount recentCount: Int) -> any Collection<ID>
+  {
     concertIDs(on: dayOfLeapYear, orRecentCount: recentCount).flatMap { lookup.artists(showID: $0) }
       .suffix(recentCount)
   }
@@ -88,28 +89,29 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
   ///   - dayOfLeapYear: The day-of-leap-year index (1...366) to query.
   ///   - recentCount: The number of recent shows to consider when there are no shows on that day.
   /// - Returns: A collection of venue IDs, capped to the most recent `recentCount` entries.
-  func venueIDs(on dayOfLeapYear: Int, orRecentCount recentCount: Int) -> any Collection<ID> {
+  public func venueIDs(on dayOfLeapYear: Int, orRecentCount recentCount: Int) -> any Collection<ID>
+  {
     concertIDs(on: dayOfLeapYear, orRecentCount: recentCount).compactMap {
       lookup.venues(showID: $0)
     }
     .suffix(recentCount)
   }
 
-  func concerts(on dayOfLeapYear: Int) throws -> [ShowDigest] {
+  public func concerts(on dayOfLeapYear: Int) throws -> [ShowDigest] {
     try sort(showIDs: lookup.concertDayMap[dayOfLeapYear] ?? []).compactMap {
       lookup.showDigest(showId: $0)
     }
   }
 
-  func sort(showIDs: any Collection<ID>) throws -> [ID] {
+  public func sort(showIDs: any Collection<ID>) throws -> [ID] {
     try lookup.sort(showIDs: showIDs)
   }
 
-  func compareIDs(lhs: ID, rhs: ID) throws -> Bool {
+  public func compareIDs(lhs: ID, rhs: ID) throws -> Bool {
     try lookup.compareIDs(lhs: lhs, rhs: rhs)
   }
 
-  func artistIDs(filteredBy searchString: String) -> any Sequence<ID> {
+  public func artistIDs(filteredBy searchString: String) -> any Sequence<ID> {
     guard !searchString.isEmpty else { return [] }
 
     return lookup.artistMap.compactMap {
@@ -118,7 +120,7 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
     }
   }
 
-  func artists(filteredBy searchString: String) throws -> [Artist] {
+  public func artists(filteredBy searchString: String) throws -> [Artist] {
     guard !searchString.isEmpty else { return [] }
 
     let matchingPairs: [(ID, Artist)] = artistIDs().compactMap {
@@ -130,7 +132,7 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
     }).map { $0.1 }
   }
 
-  func venueIDs(filteredBy searchString: String) -> any Sequence<ID> {
+  public func venueIDs(filteredBy searchString: String) -> any Sequence<ID> {
     guard !searchString.isEmpty else { return [] }
 
     return lookup.venueMap.compactMap {
@@ -139,7 +141,7 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
     }
   }
 
-  func venues(filteredBy searchString: String) throws -> [Venue] {
+  public func venues(filteredBy searchString: String) throws -> [Venue] {
     guard !searchString.isEmpty else { return [] }
 
     let matchingPairs: [(ID, Venue)] = venueIDs().compactMap {
@@ -151,59 +153,59 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
     }).map { $0.1 }
   }
 
-  func digest(annum: AnnumID) -> AnnumDigest? {
+  public func digest(annum: AnnumID) -> AnnumDigest? {
     lookup.annumDigest(id: annum)
   }
 
-  func digest(artist: ID) -> ArtistDigest? {
+  public func digest(artist: ID) -> ArtistDigest? {
     lookup.artistDigest(id: artist)
   }
 
-  func digest(venue: ID) -> VenueDigest? {
+  public func digest(venue: ID) -> VenueDigest? {
     lookup.venueDigest(id: venue)
   }
 
-  func digest(show: ID) -> ShowDigest? {
+  public func digest(show: ID) -> ShowDigest? {
     lookup.showDigest(showId: show)
   }
 
-  func venueIDs() -> [(ID, Venue)] {
+  public func venueIDs() -> [(ID, Venue)] {
     lookup.venueMap.map { ($0, $1) }
   }
 
-  func artistIDs() -> [(ID, Artist)] {
+  public func artistIDs() -> [(ID, Artist)] {
     lookup.artistMap.map { ($0, $1) }
   }
 
-  func shows() -> [Show] {
+  public func shows() -> [Show] {
     Array(lookup.showMap.values)
   }
 
-  func showIDs() -> Set<ID> {
+  public func showIDs() -> Set<ID> {
     Set(lookup.showMap.keys)
   }
 
-  func artists(venueID: ID) -> Set<ID> {
+  public func artists(venueID: ID) -> Set<ID> {
     lookup.artists(venueID: venueID)
   }
 
-  func shows(artistID: ID) -> Set<ID> {
+  public func shows(artistID: ID) -> Set<ID> {
     lookup.shows(artistID: artistID)
   }
 
-  func shows(venueID: ID) -> Set<ID> {
+  public func shows(venueID: ID) -> Set<ID> {
     lookup.shows(venueID: venueID)
   }
 
-  func rankedArtist(id: ID) -> RankedArchiveItem? {
+  public func rankedArtist(id: ID) -> RankedArchiveItem? {
     lookup.artistMap[id]?.rankedArchiveItem(lookup.rankDigest(artist: id))
   }
 
-  func rankedVenue(id: ID) -> RankedArchiveItem? {
+  public func rankedVenue(id: ID) -> RankedArchiveItem? {
     lookup.venueMap[id]?.rankedArchiveItem(lookup.rankDigest(venue: id))
   }
 
-  var statisticsData:
+  public var statisticsData:
     (showsCount: Int, venueCount: Int, artistCount: Int, dates: [Date], states: [String: Int])
   {
     (
@@ -217,11 +219,11 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
     )
   }
 
-  var timestamp: Date {
+  public var timestamp: Date {
     lookup.timestamp
   }
 
-  var venueArchivePathMap: [ArchivePath: ID] {
+  public var venueArchivePathMap: [ArchivePath: ID] {
     lookup.venueArchivePathMap
   }
 }

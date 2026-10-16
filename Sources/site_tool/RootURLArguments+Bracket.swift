@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Shared
 
 extension RootURLArguments {
   func bracket<Identifier: ArchiveIdentifier>(
