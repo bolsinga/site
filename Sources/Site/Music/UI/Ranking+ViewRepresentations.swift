@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Shared
 
 extension Ranking {
   @ViewBuilder var showsCountView: some View {

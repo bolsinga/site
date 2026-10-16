@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Shared
 
 extension RootURLArguments {
   func vault<Identifier: ArchiveIdentifier>(identifier: Identifier, fileName: String = "shows.json")

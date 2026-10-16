@@ -7,6 +7,7 @@
 
 import AppIntents
 import Foundation
+import Shared
 
 struct ArtistEntity: AppEntity {
   static var typeDisplayRepresentation: TypeDisplayRepresentation {

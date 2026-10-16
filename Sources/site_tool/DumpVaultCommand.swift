@@ -7,6 +7,7 @@
 
 import ArgumentParser
 import Foundation
+import Shared
 
 extension Vault {
   fileprivate func concertsForArtist(artistID: ID) -> any Collection<ShowDigest> {

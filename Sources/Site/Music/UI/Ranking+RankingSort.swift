@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Shared
 
 extension Ranking {
   @ViewBuilder func sectionHeader(for sort: RankingSort) -> some View {

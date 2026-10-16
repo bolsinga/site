@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Shared
 
 struct ArchiveCategoryToolbarContent: ToolbarContent {
   @Environment(VaultModel.self) var model

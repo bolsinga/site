@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import os
+import Shared
 
 extension Logger {
   fileprivate static let archive = Logger(category: "archive")

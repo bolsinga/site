@@ -7,6 +7,7 @@
 
 import MapKit
 import SwiftUI
+import Shared
 
 extension ArchivePath {
   @MainActor

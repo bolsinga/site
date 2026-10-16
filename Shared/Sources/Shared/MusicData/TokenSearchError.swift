@@ -13,7 +13,7 @@ enum TokenSearchError: LocalizedError {
   var errorDescription: String? {
     switch self {
     case .invalidCompareTokenID(let string):
-      String(localized: "Invalid Token: \(string).")
+      String(localized: "Invalid Token: \(string).", bundle: #bundle)
     }
   }
 }

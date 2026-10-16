@@ -10,6 +10,7 @@ import CoreLocation
 import Foundation
 import MapKit
 import os
+import Shared
 
 extension Logger {
   fileprivate static let vaultModel = Logger(category: "vaultModel")

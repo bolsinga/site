@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Shared
 
 struct VenueList<V: Hashable & Identifiable & Nameable & PathRestorable & Rankable>: View {
   let venues: any Collection<V>

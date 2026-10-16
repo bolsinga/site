@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Shared
 
 struct VenuesSummary: View {
   @Environment(VaultModel.self) var model

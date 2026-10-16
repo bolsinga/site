@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Shared
 
 struct VenueBlurb: View {
   let date: PartialDate

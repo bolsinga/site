@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Shared
 
 private enum Authorization {
   case allowed

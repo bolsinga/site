@@ -30,11 +30,11 @@ extension Annum {
 
 extension Annum.FormatStyle: Foundation.FormatStyle {
   private var unknownLocalized: String {
-    return String(localized: "Year Unknown")
+    return String(localized: "Year Unknown", bundle: #bundle)
   }
 
   private var sharedUnknownLocalized: String {
-    return String(localized: "Shows from Unknown Years")
+    return String(localized: "Shows from Unknown Years", bundle: #bundle)
   }
 
   static let unknown = "unknown"
@@ -46,7 +46,8 @@ extension Annum.FormatStyle: Foundation.FormatStyle {
       guard let date = PartialDate(year: year).date else { return unknownLocalized }
       if case .shared = self {
         return String(
-          localized: "Shows from \(Date.FormatStyle.dateTime.year(.defaultDigits).format(date))")
+          localized: "Shows from \(Date.FormatStyle.dateTime.year(.defaultDigits).format(date))",
+          bundle: #bundle)
       } else {
         return Date.FormatStyle.dateTime.year(.defaultDigits).format(date)
       }

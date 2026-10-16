@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Shared
 
 struct SortModifierToolbarContent: ToolbarContent {
   @Binding var algorithm: RankingSort

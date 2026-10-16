@@ -7,6 +7,7 @@
 
 import SwiftUI
 import os
+import Shared
 
 extension Logger {
   fileprivate static let siteView = Logger(category: "siteView")

@@ -11,13 +11,13 @@ public struct ShowDigest: Codable, Equatable, Hashable, Identifiable, PathRestor
   public var archivePath: ArchivePath { id }
 
   public let id: ArchivePath
-  let date: PartialDate
-  let performers: [ArchiveItem]
-  let venue: String
+  public let date: PartialDate
+  public let performers: [ArchiveItem]
+  public let venue: String
   let location: Location
-  let comment: String?
+  public let comment: String?
 
-  var performerNames: [String] { performers.map { $0.name } }
+  public var performerNames: [String] { performers.map { $0.name } }
 }
 
 extension ShowDigest: Comparable {

@@ -7,6 +7,7 @@
 
 import Foundation
 import MapKit
+import Shared
 
 struct BatchGeocode<Identifier: ArchiveIdentifier>: AsyncSequence {
   public typealias ID = ArchivePath

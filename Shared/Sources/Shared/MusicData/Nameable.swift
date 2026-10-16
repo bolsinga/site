@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol Nameable {
+public protocol Nameable {
   var name: String { get }
 }
 
@@ -18,7 +18,7 @@ extension Nameable {
 }
 
 extension Collection where Element: Nameable {
-  internal func names(filteredBy searchString: String) -> [Element] {
+  public func names(filteredBy searchString: String) -> [Element] {
     guard !searchString.isEmpty else { return Array(self) }
     return self.filter { $0.filter(by: searchString) }
   }

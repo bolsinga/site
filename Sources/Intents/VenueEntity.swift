@@ -7,6 +7,7 @@
 
 import AppIntents
 import Foundation
+import Shared
 
 struct VenueEntity: AppEntity {
   static var typeDisplayRepresentation: TypeDisplayRepresentation {

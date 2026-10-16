@@ -28,7 +28,7 @@ extension Int {
     return .unknown
   }
 
-  var isToday: Bool {
+  public var isToday: Bool {
     switch day {
     case .today:
       true
@@ -37,16 +37,20 @@ extension Int {
     }
   }
 
-  var relativeTitle: LocalizedStringResource {
+  private var resourceBundle: LocalizedStringResource.BundleDescription {
+    .atURL(#bundle.bundleURL)
+  }
+
+  public var relativeTitle: LocalizedStringResource {
     switch day {
     case .yesterday:
-      LocalizedStringResource("Yesterday: \(dayOfLeapYearFormatted)")
+      LocalizedStringResource("Yesterday: \(dayOfLeapYearFormatted)", bundle: resourceBundle)
     case .today:
-      LocalizedStringResource("Today: \(dayOfLeapYearFormatted)")
+      LocalizedStringResource("Today: \(dayOfLeapYearFormatted)", bundle: resourceBundle)
     case .tomorrow:
-      LocalizedStringResource("Tomorrow: \(dayOfLeapYearFormatted)")
+      LocalizedStringResource("Tomorrow: \(dayOfLeapYearFormatted)", bundle: resourceBundle)
     case .unknown:
-      LocalizedStringResource("On Date: \(dayOfLeapYearFormatted)")
+      LocalizedStringResource("On Date: \(dayOfLeapYearFormatted)", bundle: resourceBundle)
     }
   }
 }

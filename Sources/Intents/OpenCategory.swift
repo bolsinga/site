@@ -8,6 +8,7 @@
 import AppIntents
 import Foundation
 import os
+import Shared
 
 extension Logger {
   fileprivate static let openCategory = Logger(category: "openCategory")

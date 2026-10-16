@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Shared
 
 struct ArtistList<A: Hashable & Identifiable & Nameable & PathRestorable & Rankable>: View {
   let artists: any Collection<A>

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Shared
 
 extension ShowsMode {
   fileprivate var supportsToolbar: Bool {

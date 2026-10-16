@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Shared
 
 #if canImport(UIKit)
   import UIKit

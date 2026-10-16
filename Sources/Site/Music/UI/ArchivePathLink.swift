@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Shared
 
 struct ArchivePathLink<Label>: View where Label: View {
   private let archivePath: ArchivePath

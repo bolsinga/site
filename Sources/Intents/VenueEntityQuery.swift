@@ -6,6 +6,7 @@
 //
 
 import Algorithms
+import Shared
 @preconcurrency import AppIntents
 import Foundation
 import os

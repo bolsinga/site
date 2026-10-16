@@ -7,14 +7,14 @@
 
 import Foundation
 
-enum RankingSort: Int, CaseIterable {
+public enum RankingSort: Int, CaseIterable {
   case alphabetical
   case showCount
   case showYearRange
   case associatedRank
   case firstSeen
 
-  var isAlphabetical: Bool {
+  public var isAlphabetical: Bool {
     switch self {
     case .alphabetical:
       true
@@ -23,7 +23,7 @@ enum RankingSort: Int, CaseIterable {
     }
   }
 
-  var isShowYearRange: Bool {
+  public var isShowYearRange: Bool {
     switch self {
     case .showYearRange:
       true
@@ -32,7 +32,7 @@ enum RankingSort: Int, CaseIterable {
     }
   }
 
-  var isFirstSeen: Bool {
+  public var isFirstSeen: Bool {
     switch self {
     case .firstSeen:
       true
@@ -41,18 +41,18 @@ enum RankingSort: Int, CaseIterable {
     }
   }
 
-  var localizedString: String {
+  public var localizedString: String {
     switch self {
     case .alphabetical:
-      return String(localized: "Sort Alphabetically")
+      return String(localized: "Sort Alphabetically", bundle: #bundle)
     case .showCount:
-      return String(localized: "Sort By Show Count")
+      return String(localized: "Sort By Show Count", bundle: #bundle)
     case .showYearRange:
-      return String(localized: "Sort By Year Range")
+      return String(localized: "Sort By Year Range", bundle: #bundle)
     case .associatedRank:
-      return String(localized: "Sort By Associated")
+      return String(localized: "Sort By Associated", bundle: #bundle)
     case .firstSeen:
-      return String(localized: "Sort By First Show")
+      return String(localized: "Sort By First Show", bundle: #bundle)
     }
   }
 }

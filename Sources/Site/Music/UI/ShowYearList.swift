@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Shared
 
 struct ShowYearList: View {
   let decadesMap: [Decade: [Annum: Int]]

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Shared
 
 extension RootURLArguments {
   func lookup<Identifier: ArchiveIdentifier>(identifier: Identifier) async throws

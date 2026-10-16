@@ -166,7 +166,7 @@ struct Tracker<Identifier: ArchiveIdentifier> {
   }
 
   private func computeRankings<T: Sendable>(_ items: [(T, Int)]) async -> [T: Ranking] {
-    async let rankings = SiteApp.computeRankings(items: items)
+    async let rankings = Shared.computeRankings(items: items)
     return await rankings
   }
 

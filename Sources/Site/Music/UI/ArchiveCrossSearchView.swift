@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Shared
 
 private struct SearchResultButton: View {
   let name: Text

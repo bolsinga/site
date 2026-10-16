@@ -7,6 +7,7 @@
 
 import Foundation
 import os
+import Shared
 
 extension Logger {
   fileprivate static let atlas = Logger(category: "atlas")

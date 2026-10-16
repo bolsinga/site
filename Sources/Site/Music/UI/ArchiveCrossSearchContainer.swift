@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Shared
 
 struct ArchiveCrossSearchContainer<A: Nameable & PathRestorable, V: Nameable & PathRestorable>: View
 {

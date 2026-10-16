@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Shared
 
 struct RankableSortList<
   T: Hashable & Identifiable & PathRestorable & Rankable, SectionHeaderContent: View,

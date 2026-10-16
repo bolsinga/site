@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Shared
 
 struct ArtistsSummary: View {
   @Environment(VaultModel.self) var model

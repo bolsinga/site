@@ -7,6 +7,7 @@
 
 import Foundation
 import Testing
+@testable import Shared
 
 @testable import SiteApp
 

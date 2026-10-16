@@ -8,6 +8,7 @@
 import Foundation
 import MapKit
 import os
+import Shared
 
 extension Logger {
   fileprivate static let geoToolbox = Logger(category: "geoToolbox")

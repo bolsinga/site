@@ -7,6 +7,7 @@
 
 import SwiftUI
 import os
+import Shared
 
 extension ArchiveCategory {
   static let activityType = "gdb.SiteApp.view-archiveCategory"

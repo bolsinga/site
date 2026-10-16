@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Shared
 
 struct StatsGrouping: View {
   @Environment(\.statsThreshold) private var statsThreshold: Int

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Shared
 
 struct ArtistBlurb: View {
   let count: Int

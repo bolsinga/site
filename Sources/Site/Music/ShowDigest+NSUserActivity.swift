@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Shared
 
 extension ShowDigest: PathRestorableUserActivity {
   func updateActivity(_ userActivity: NSUserActivity, url: URL?) {
