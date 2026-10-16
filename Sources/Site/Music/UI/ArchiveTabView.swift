@@ -83,7 +83,10 @@ struct ArchiveTabView: View {
     TabView(selection: $selectedTab) {
       ForEach(ArchiveCategory.ordered, id: \.self) { category in
         if category != .search {
-          Tab(category.localizedString, systemImage: category.systemImage, value: tabValue(for: category)) {
+          Tab(
+            category.localizedString, systemImage: category.systemImage,
+            value: tabValue(for: category)
+          ) {
             ArchiveCategoryStack(
               category: category,
               showsMode: $showsMode,
@@ -99,7 +102,10 @@ struct ArchiveTabView: View {
           #endif
         } else {
           #if os(macOS)
-            Tab(category.localizedString, systemImage: category.systemImage, value: tabValue(for: category)) {
+            Tab(
+              category.localizedString, systemImage: category.systemImage,
+              value: tabValue(for: category)
+            ) {
               searchTabContent
             }
           #else
