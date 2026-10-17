@@ -46,6 +46,9 @@
     "Artists" : {
 
     },
+    "Check again tomorrow." : {
+
+    },
     "Date Unknown" : {
 
     },
@@ -56,6 +59,12 @@
 
     },
     "Invalid Token: %@." : {
+
+    },
+    "No Shows" : {
+
+    },
+    "No Shows Today" : {
 
     },
     "On Date: %@" : {

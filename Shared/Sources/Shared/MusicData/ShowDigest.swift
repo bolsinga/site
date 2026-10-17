@@ -17,6 +17,18 @@ public struct ShowDigest: Codable, Equatable, Hashable, Identifiable, PathRestor
   let location: Location
   public let comment: String?
 
+  public init(
+    id: ArchivePath, date: PartialDate, performers: [ArchiveItem], venue: String,
+    location: Location, comment: String?
+  ) {
+    self.id = id
+    self.date = date
+    self.performers = performers
+    self.venue = venue
+    self.location = location
+    self.comment = comment
+  }
+
   public var performerNames: [String] { performers.map { $0.name } }
 }
 

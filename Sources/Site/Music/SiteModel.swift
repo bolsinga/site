@@ -71,6 +71,12 @@ extension Logger {
 
       vaultModel?.cancelTasks()
       vaultModel = VaultModel(vault, executeAsynchronousTasks: reason.executeAsynchronousTasks)
+
+      #if !os(tvOS)
+        if reason.executeAsynchronousTasks {
+          publishWidgetSnapshot(vault)
+        }
+      #endif
     } catch {
       Logger.vaultLoader.fault("error: \(error.localizedDescription, privacy: .public)")
       self.error = error

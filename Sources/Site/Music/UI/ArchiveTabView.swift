@@ -53,8 +53,31 @@ struct ArchiveTabView: View {
   @State private var searchString: String = ""
   @State private var scope: ArchiveScope = .all
   @State private var dayOfLeapYear = Date.now.dayOfLeapYear
-  @State private var selectedTab = TabSelection(
-    category: ArchiveCategory.defaultCategory, dayOfLeapYear: Date.now.dayOfLeapYear)
+  @State private var selectedTab: TabSelection
+
+  init(
+    showsMode: Binding<ShowsMode>,
+    venueSort: Binding<RankingSort>,
+    artistSort: Binding<RankingSort>,
+    venuesMode: Binding<VenuesMode>,
+    activeCategory: Binding<ArchiveCategory>,
+    pathForCategory: @escaping (ArchiveCategory) -> Binding<[ArchivePath]>,
+    reloadModel: @escaping @MainActor () async -> Void,
+    navigateToPath: @escaping (ArchivePath) -> Void
+  ) {
+    self._showsMode = showsMode
+    self._venueSort = venueSort
+    self._artistSort = artistSort
+    self._venuesMode = venuesMode
+    self._activeCategory = activeCategory
+    self.pathForCategory = pathForCategory
+    self.reloadModel = reloadModel
+    self.navigateToPath = navigateToPath
+    // Start on the restored category. Assigning it in onAppear instead echoes back through
+    // onChange(of: selectedTab) a frame later, overwriting a deep link handled on cold launch.
+    self.selectedTab = TabSelection(
+      category: activeCategory.wrappedValue, dayOfLeapYear: Date.now.dayOfLeapYear)
+  }
 
   private func tabValue(for category: ArchiveCategory) -> TabSelection {
     TabSelection(category: category, dayOfLeapYear: model.todayDayOfLeapYear)
@@ -118,7 +141,6 @@ struct ArchiveTabView: View {
     }
     .onAppear {
       dayOfLeapYear = model.todayDayOfLeapYear
-      selectedTab = TabSelection(category: activeCategory, dayOfLeapYear: dayOfLeapYear)
     }
     .onChange(of: model.todayDayOfLeapYear) { _, newValue in
       dayOfLeapYear = newValue
