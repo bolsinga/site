@@ -18,6 +18,7 @@ struct DayBrowser: View {
 
   @Binding var dayOfLeapYear: Int
   @State private var selection: DayTab = .today
+  @State private var layoutGeneration = 0
 
   @ViewBuilder private func dayList(_ dayOfLeapYear: Int) -> some View {
     DayList(concerts: model.concerts(on: dayOfLeapYear), dayOfLeapYear: dayOfLeapYear)
@@ -54,6 +55,17 @@ struct DayBrowser: View {
       .indexViewStyle(.page(backgroundDisplayMode: .always))
       .tabViewStyle(.page(indexDisplayMode: .automatic))
     #endif
+    // A paged TabView keeps its scroll offset in points, so a width change (folding, rotating,
+    // resizing) leaves the page partly scrolled and the list shifted sideways. Rebuild it at the
+    // new width; only today is ever selected at rest, so nothing is lost.
+    .id(layoutGeneration)
+    .onGeometryChange(for: CGFloat.self) {
+      $0.size.width
+    } action: { oldWidth, newWidth in
+      if oldWidth > 0, oldWidth != newWidth {
+        layoutGeneration += 1
+      }
+    }
   }
 }
 
