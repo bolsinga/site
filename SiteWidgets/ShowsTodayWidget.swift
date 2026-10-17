@@ -27,7 +27,7 @@ struct ShowsTodayWidget: Widget {
   private static let families: [WidgetFamily] = {
     var families: [WidgetFamily] = [.systemSmall, .systemMedium, .systemLarge, .systemExtraLarge]
     #if os(iOS)
-      families.append(contentsOf: [.accessoryRectangular, .accessoryInline])
+      families.append(contentsOf: [.accessoryRectangular, .accessoryInline, .accessoryCircular])
     #endif
     return families
   }()

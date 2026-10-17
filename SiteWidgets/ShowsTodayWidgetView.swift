@@ -28,6 +28,8 @@ struct ShowsTodayWidgetView: View {
         AccessoryRectangularView(state: entry.state)
       } else if family == .accessoryInline {
         AccessoryInlineView(state: entry.state)
+      } else if family == .accessoryCircular {
+        AccessoryCircularView(state: entry.state)
       } else {
         homeScreenContent
       }
@@ -112,6 +114,42 @@ struct ShowsTodayWidgetView: View {
         Text(NoShowsMessage(isToday: true).title)
       case .needsAppLaunch:
         Text("Open \(String.archiveAppDisplayName)")
+      }
+    }
+  }
+
+  /// Lock Screen circle: the day's show count under a calendar symbol; empty states fit only a symbol.
+  private struct AccessoryCircularView: View {
+    let state: ShowsTodayEntry.State
+
+    var body: some View {
+      ZStack {
+        AccessoryWidgetBackground()
+        switch state {
+        case .shows(_, let others):
+          let count = others.count + 1
+          VStack(spacing: 0) {
+            Image(systemName: "calendar")
+              .font(.caption2)
+              .widgetAccentable()
+            Text(count, format: .number)
+              .font(.title2.weight(.semibold))
+              .minimumScaleFactor(0.5)
+              .lineLimit(1)
+          }
+          .padding(4)
+          .accessibilityElement(children: .ignore)
+          .accessibilityLabel(Text("^[\(count) show](inflect: true) today"))
+        case .noShows:
+          let message = NoShowsMessage(isToday: true)
+          Image(systemName: message.systemImage)
+            .font(.title3)
+            .accessibilityLabel(Text(message.title))
+        case .needsAppLaunch:
+          Image(systemName: "arrow.up.forward.app")
+            .font(.title3)
+            .accessibilityLabel(Text("Open \(String.archiveAppDisplayName)"))
+        }
       }
     }
   }
@@ -674,6 +712,26 @@ extension ShowsTodayEntry {
   }
 
   #Preview("Inline: Needs App Launch", as: .accessoryInline) {
+    ShowsTodayWidget()
+  } timeline: {
+    ShowsTodayEntry.preview(.needsAppLaunch)
+  }
+
+  #Preview("Circular: Shows", as: .accessoryCircular) {
+    ShowsTodayWidget()
+  } timeline: {
+    ShowsTodayEntry.preview(Array(ShowDigest.previewShows.prefix(3)))
+    ShowsTodayEntry.preview(Array(ShowDigest.previewShows.prefix(1)))
+    ShowsTodayEntry.preview(ShowDigest.manyPreviewShows)
+  }
+
+  #Preview("Circular: No Shows", as: .accessoryCircular) {
+    ShowsTodayWidget()
+  } timeline: {
+    ShowsTodayEntry.preview(.noShows)
+  }
+
+  #Preview("Circular: Needs App Launch", as: .accessoryCircular) {
     ShowsTodayWidget()
   } timeline: {
     ShowsTodayEntry.preview(.needsAppLaunch)
