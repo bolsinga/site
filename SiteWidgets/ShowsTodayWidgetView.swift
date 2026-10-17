@@ -26,6 +26,8 @@ struct ShowsTodayWidgetView: View {
     #if os(iOS)
       if family == .accessoryRectangular {
         AccessoryRectangularView(state: entry.state)
+      } else if family == .accessoryInline {
+        AccessoryInlineView(state: entry.state)
       } else {
         homeScreenContent
       }
@@ -94,6 +96,22 @@ struct ShowsTodayWidgetView: View {
       case .needsAppLaunch:
         Text("Open \(String.archiveAppDisplayName)")
           .font(.headline)
+      }
+    }
+  }
+
+  /// Lock Screen, beside the clock: one line whose font and color the system controls.
+  private struct AccessoryInlineView: View {
+    let state: ShowsTodayEntry.State
+
+    var body: some View {
+      switch state {
+      case .shows(_, let others):
+        Label("^[\(others.count + 1) show](inflect: true) today", systemImage: "music.note")
+      case .noShows:
+        Text(NoShowsMessage(isToday: true).title)
+      case .needsAppLaunch:
+        Text("Open \(String.archiveAppDisplayName)")
       }
     }
   }
@@ -632,6 +650,30 @@ extension ShowsTodayEntry {
   }
 
   #Preview("Rectangular: Needs App Launch", as: .accessoryRectangular) {
+    ShowsTodayWidget()
+  } timeline: {
+    ShowsTodayEntry.preview(.needsAppLaunch)
+  }
+
+  #Preview("Inline: Shows", as: .accessoryInline) {
+    ShowsTodayWidget()
+  } timeline: {
+    ShowsTodayEntry.preview(Array(ShowDigest.previewShows.prefix(3)))
+  }
+
+  #Preview("Inline: One Show", as: .accessoryInline) {
+    ShowsTodayWidget()
+  } timeline: {
+    ShowsTodayEntry.preview(Array(ShowDigest.previewShows.prefix(1)))
+  }
+
+  #Preview("Inline: No Shows", as: .accessoryInline) {
+    ShowsTodayWidget()
+  } timeline: {
+    ShowsTodayEntry.preview(.noShows)
+  }
+
+  #Preview("Inline: Needs App Launch", as: .accessoryInline) {
     ShowsTodayWidget()
   } timeline: {
     ShowsTodayEntry.preview(.needsAppLaunch)
