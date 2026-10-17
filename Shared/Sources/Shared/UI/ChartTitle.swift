@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-struct ChartTitle: View {
-  enum Alignment {
+public struct ChartTitle: View {
+  public enum Alignment: Sendable {
     case `default`
     case center
   }
@@ -16,12 +16,17 @@ struct ChartTitle: View {
   let title: LocalizedStringResource
   let alignment: Alignment
 
+  public init(title: LocalizedStringResource, alignment: Alignment) {
+    self.title = title
+    self.alignment = alignment
+  }
+
   @ViewBuilder private var titleText: some View {
     Text(title)
       .font(.title2).fontWeight(.bold)
   }
 
-  var body: some View {
+  public var body: some View {
     switch alignment {
     case .default:
       titleText

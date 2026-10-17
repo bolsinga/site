@@ -6,16 +6,16 @@
 //
 
 import Charts
+import Shared
 import SwiftUI
 
-extension ChartTitle {
-  internal init(title: LocalizedStringResource, presentation: WeekdayChart.Presentation) {
-    self.title = title
-    switch presentation {
+extension WeekdayChart.Presentation {
+  fileprivate var titleAlignment: ChartTitle.Alignment {
+    switch self {
     case .default:
-      self.alignment = .center
+      .center
     case .compact:
-      self.alignment = .default
+      .default
     }
   }
 }
@@ -61,7 +61,7 @@ struct WeekdayChart: View {
 
   var body: some View {
     VStack(alignment: .leading) {
-      ChartTitle(title: title, presentation: presentation)
+      ChartTitle(title: title, alignment: presentation.titleAlignment)
 
       let weekdayCounts = dates.computeWeekdayCounts(firstWeekday)
       subtitle(weekdayCounts)
