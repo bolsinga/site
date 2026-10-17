@@ -27,14 +27,11 @@ struct ShowsTodayProvider: AppIntentTimelineProvider {
   func timeline(for configuration: ShowsTodayConfiguration, in context: Context) async
     -> Timeline<ShowsTodayEntry>
   {
-    let calendar = Calendar.autoupdatingCurrent
-    let today = calendar.startOfDay(for: .now)
-    let midnights = (0...2).compactMap { calendar.date(byAdding: .day, value: $0, to: today) }
+    let midnights = ShowsTodayTimeline.midnights(from: .now)
     let snapshot = ShowsTodaySnapshot.read()
     let entries = midnights.map { entry(for: $0, snapshot: snapshot, order: configuration.order) }
 
-    let reloadDate =
-      midnights.last.flatMap { calendar.date(byAdding: .day, value: 1, to: $0) } ?? today
+    let reloadDate = ShowsTodayTimeline.reloadDate(after: midnights) ?? .now
     return Timeline(entries: entries, policy: .after(reloadDate))
   }
 
