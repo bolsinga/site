@@ -19,6 +19,6 @@ struct ShowsTodayWidget: Widget {
     }
     .configurationDisplayName("Shows Today")
     .description("See which shows happened today across the archive's history.")
-    .supportedFamilies([.systemSmall, .systemMedium])
+    .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
   }
 }

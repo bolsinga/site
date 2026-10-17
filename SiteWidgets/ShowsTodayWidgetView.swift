@@ -25,6 +25,8 @@ struct ShowsTodayWidgetView: View {
         switch family {
         case .systemMedium:
           MediumShowsView(featured: featured, others: others)
+        case .systemLarge:
+          LargeShowsView(shows: [featured] + others, date: entry.date)
         default:
           SmallShowsView(featured: featured, otherCount: others.count)
         }
@@ -172,6 +174,78 @@ private struct MediumShowsView: View {
   }
 }
 
+/// The whole day as a list, like the in-app Today list at a glance. Each row links to its show.
+private struct LargeShowsView: View {
+  /// Rows that fit at default text sizes.
+  private static let maximumRows = 7
+
+  let shows: [ShowDigest]
+  /// The entry's date, so "N years ago" stays fixed for the entry instead of ticking live.
+  let date: Date
+
+  private func rows(_ rowCount: Int) -> some View {
+    VStack(alignment: .leading, spacing: 8) {
+      ForEach(shows.prefix(rowCount)) { show in
+        ShowLink(show: show) { DayListRow(show: show, date: date) }
+      }
+      MoreShowsLabel(count: shows.count - rowCount)
+    }
+  }
+
+  var body: some View {
+    HStack(alignment: .firstTextBaseline) {
+      ShowsTodayCapsule()
+      Spacer(minLength: 0)
+      Text("^[\(shows.count) show](inflect: true)")
+        .font(.caption)
+        .foregroundStyle(.secondary)
+    }
+    // WidgetKit enlarges link tap targets; without this gap, taps on the header open row 1.
+    .padding(.bottom, 8)
+    // Large text sizes fit fewer rows; "+N more" counts whatever doesn't fit.
+    ViewThatFits(in: .vertical) {
+      ForEach((1...Self.maximumRows).reversed(), id: \.self) { rowCount in
+        rows(rowCount)
+      }
+    }
+    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+  }
+}
+
+private struct DayListRow: View {
+  let show: ShowDigest
+  let date: Date
+
+  private var yearsAgo: String? {
+    guard let showDate = show.date.date else { return nil }
+    let formatter = RelativeDateTimeFormatter()
+    formatter.dateTimeStyle = .numeric
+    return formatter.localizedString(for: showDate, relativeTo: date)
+  }
+
+  var body: some View {
+    HStack(alignment: .firstTextBaseline, spacing: 8) {
+      VStack(alignment: .leading, spacing: 1) {
+        Text(show.performerNames.first ?? show.venue)
+          .font(.subheadline)
+          .fontWeight(.semibold)
+          .lineLimit(1)
+        Text(show.venue)
+          .font(.caption)
+          .foregroundStyle(.secondary)
+          .lineLimit(1)
+      }
+      Spacer(minLength: 0)
+      if let yearsAgo {
+        Text(yearsAgo)
+          .font(.caption)
+          .foregroundStyle(.secondary)
+          .lineLimit(1)
+      }
+    }
+  }
+}
+
 /// Links to the show's page when its URL can be built; otherwise falls through to the widget URL.
 private struct ShowLink<Content: View>: View {
   let show: ShowDigest
@@ -255,6 +329,10 @@ extension ShowDigest {
     .preview(5, headliner: "Sixth Artist", year: 2016),
   ]
 
+  /// More shows than the large widget can list.
+  fileprivate static let manyPreviewShows: [ShowDigest] =
+    previewShows + (6..<12).map { .preview($0, headliner: "Artist \($0 + 1)", year: 2016 + $0) }
+
   fileprivate static let longNameShow = ShowDigest.preview(
     99, headliner: "Godspeed You! Black Emperor and the Extraordinarily Long Name Orchestra",
     venue: "The Great American Music Hall of San Francisco", year: 1996)
@@ -327,6 +405,42 @@ extension ShowsTodayEntry {
 }
 
 #Preview("Medium: Needs App Launch", as: .systemMedium) {
+  ShowsTodayWidget()
+} timeline: {
+  ShowsTodayEntry.preview(.needsAppLaunch)
+}
+
+#Preview("Large: One Show", as: .systemLarge) {
+  ShowsTodayWidget()
+} timeline: {
+  ShowsTodayEntry.preview(Array(ShowDigest.previewShows.prefix(1)))
+}
+
+#Preview("Large: Seven Shows", as: .systemLarge) {
+  ShowsTodayWidget()
+} timeline: {
+  ShowsTodayEntry.preview(Array(ShowDigest.manyPreviewShows.prefix(7)))
+}
+
+#Preview("Large: Twelve Shows", as: .systemLarge) {
+  ShowsTodayWidget()
+} timeline: {
+  ShowsTodayEntry.preview(ShowDigest.manyPreviewShows)
+}
+
+#Preview("Large: Long Names", as: .systemLarge) {
+  ShowsTodayWidget()
+} timeline: {
+  ShowsTodayEntry.preview([ShowDigest.longNameShow] + ShowDigest.manyPreviewShows)
+}
+
+#Preview("Large: No Shows", as: .systemLarge) {
+  ShowsTodayWidget()
+} timeline: {
+  ShowsTodayEntry.preview(.noShows)
+}
+
+#Preview("Large: Needs App Launch", as: .systemLarge) {
   ShowsTodayWidget()
 } timeline: {
   ShowsTodayEntry.preview(.needsAppLaunch)
