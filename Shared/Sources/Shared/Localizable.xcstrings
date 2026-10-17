@@ -49,6 +49,9 @@
     "Check again tomorrow." : {
 
     },
+    "Count" : {
+
+    },
     "Date Unknown" : {
 
     },
@@ -59,6 +62,12 @@
 
     },
     "Invalid Token: %@." : {
+
+    },
+    "Most Shows In %@" : {
+
+    },
+    "Multiple States with Most Shows" : {
 
     },
     "No Shows" : {
@@ -107,6 +116,9 @@
 
     },
     "Sort By Year Range" : {
+
+    },
+    "State" : {
 
     },
     "Stats" : {

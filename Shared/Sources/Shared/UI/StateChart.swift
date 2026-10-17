@@ -6,23 +6,21 @@
 //
 
 import Charts
-import Shared
 import SwiftUI
 
-extension ChartTitle {
-  internal init(title: LocalizedStringResource, presentation: StateChart.Presentation) {
-    self.title = title
-    switch presentation {
+extension StateChart.Presentation {
+  fileprivate var titleAlignment: ChartTitle.Alignment {
+    switch self {
     case .default:
-      self.alignment = .center
+      .center
     case .compact:
-      self.alignment = .default
+      .default
     }
   }
 }
 
-struct StateChart: View {
-  enum Presentation {
+public struct StateChart: View {
+  public enum Presentation: Sendable {
     case `default`
     case compact
   }
@@ -31,7 +29,7 @@ struct StateChart: View {
   let title: LocalizedStringResource
   let presentation: Presentation
 
-  internal init(
+  public init(
     counts: [String: Int], title: LocalizedStringResource, presentation: Presentation = .default
   ) {
     self.counts = counts
@@ -43,10 +41,11 @@ struct StateChart: View {
     let tops = computeRankings(items: counts.map { $0 }).filter { $0.value.rank == .rank(1) }.map {
       $0.key
     }
+    // These views also render in the widget extension, so look up strings in this package.
     if tops.count == 1, let topState = tops.first {
-      Text("Most Shows In \(topState)")
+      Text("Most Shows In \(topState)", bundle: #bundle)
     } else {
-      Text("Multiple States with Most Shows")
+      Text("Multiple States with Most Shows", bundle: #bundle)
     }
   }
 
@@ -77,9 +76,9 @@ struct StateChart: View {
     .chartYAxis(.hidden)
   }
 
-  var body: some View {
+  public var body: some View {
     VStack(alignment: .leading) {
-      ChartTitle(title: title, presentation: presentation)
+      ChartTitle(title: title, alignment: presentation.titleAlignment)
 
       subtitle
         .font(.subheadline)
@@ -95,20 +94,14 @@ struct StateChart: View {
   }
 }
 
-#Preview("Default Presentation", traits: .vaultModel) {
-  @Previewable @Environment(VaultModel.self) var model
-  StateChart(
-    counts: Stats(vault: model.vault).stateCounts, title: "States",
-    presentation: .default
-  )
-  .padding()
+private let previewCounts = ["CA": 412, "TX": 38, "NY": 21, "IL": 9, "WA": 6]
+
+#Preview("Default Presentation") {
+  StateChart(counts: previewCounts, title: "States", presentation: .default)
+    .padding()
 }
 
-#Preview("Compact Presentation", traits: .vaultModel) {
-  @Previewable @Environment(VaultModel.self) var model
-  StateChart(
-    counts: Stats(vault: model.vault).stateCounts, title: "States",
-    presentation: .compact
-  )
-  .padding()
+#Preview("Compact Presentation") {
+  StateChart(counts: previewCounts, title: "States", presentation: .compact)
+    .padding()
 }

@@ -6,16 +6,16 @@
 //
 
 import Charts
+import Shared
 import SwiftUI
 
-extension ChartTitle {
-  internal init(title: LocalizedStringResource, presentation: MonthChart.Presentation) {
-    self.title = title
-    switch presentation {
+extension MonthChart.Presentation {
+  fileprivate var titleAlignment: ChartTitle.Alignment {
+    switch self {
     case .default:
-      self.alignment = .center
+      .center
     case .compact:
-      self.alignment = .default
+      .default
     }
   }
 }
@@ -79,7 +79,7 @@ struct MonthChart: View {
     VStack(alignment: .leading) {
       let monthCounts = dates.monthCounts
 
-      ChartTitle(title: title, presentation: presentation)
+      ChartTitle(title: title, alignment: presentation.titleAlignment)
 
       subtitle(monthCounts)
         .font(.subheadline)

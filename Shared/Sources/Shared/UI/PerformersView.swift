@@ -8,13 +8,17 @@
 import Foundation
 import SwiftUI
 
-struct PerformersView: View {
+public struct PerformersView: View {
   let performers: [String]
+
+  public init(performers: [String]) {
+    self.performers = performers
+  }
 
   private var headliner: String { performers[0] }
   private var support: [String] { Array(performers.dropFirst()) }
 
-  var body: some View {
+  public var body: some View {
     VStack(alignment: .leading) {
       Text(headliner).font(.headline)
       ForEach(support, id: \.self) {
@@ -24,7 +28,6 @@ struct PerformersView: View {
   }
 }
 
-#Preview(traits: .vaultModel) {
-  @Previewable @Environment(VaultModel.self) var model
-  PerformersView(performers: model.previewShow("sh1").performerNames)
+#Preview {
+  PerformersView(performers: ["Belle And Sebastian", "The National", "Broken Social Scene"])
 }
