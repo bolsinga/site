@@ -44,7 +44,8 @@ extension ArchiveNavigation {
       Logger.externalEvent.error("url not path")
 
       if let archiveCategory = try? ArchiveCategory(url) {
-        self.navigate(to: archiveCategory)
+        // A link to a category (e.g. the Shows Today widget) means its list, not a page left open.
+        self.navigate(toRootOf: archiveCategory)
       } else {
         Logger.externalEvent.error("url not category")
       }
