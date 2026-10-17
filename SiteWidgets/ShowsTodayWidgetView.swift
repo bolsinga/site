@@ -10,7 +10,32 @@ import SwiftUI
 import WidgetKit
 
 struct ShowsTodayWidgetView: View {
+  @Environment(\.widgetRenderingMode) private var renderingMode
+
   let entry: ShowsTodayEntry
+
+  /// Accented mode (tinted iOS Home Screen, dimmed macOS desktop) recolors the capsule and its text
+  /// alike, so a filled capsule swallows the label; outline it there instead.
+  @ViewBuilder
+  private var capsuleLabel: some View {
+    let label = Text("Shows Today")
+      .font(.caption)
+      .fontWeight(.semibold)
+      .lineLimit(1)
+      .minimumScaleFactor(0.7)
+      .padding(.horizontal, 8)
+      .padding(.vertical, 3)
+
+    if renderingMode == .fullColor {
+      label
+        .foregroundStyle(.white)
+        .background(Color.accent, in: Capsule())
+    } else {
+      label
+        .overlay(Capsule().strokeBorder(lineWidth: 1))
+        .widgetAccentable()
+    }
+  }
 
   var body: some View {
     VStack(alignment: .leading, spacing: 4) {
@@ -20,16 +45,7 @@ struct ShowsTodayWidgetView: View {
           title: Text("Open \(String.archiveAppDisplayName)"), systemImage: "arrow.up.forward.app",
           description: Text("Launch \(String.archiveAppDisplayName) once to load shows."))
       case .show(let show, let otherShows):
-        Text("Shows Today")
-          .font(.caption)
-          .fontWeight(.semibold)
-          .lineLimit(1)
-          .minimumScaleFactor(0.7)
-          .foregroundStyle(.white)
-          .padding(.horizontal, 8)
-          .padding(.vertical, 3)
-          .background(Color.accent, in: Capsule())
-          .widgetAccentable()
+        capsuleLabel
 
         Spacer(minLength: 0)
         if let headliner = show.performerNames.first {
