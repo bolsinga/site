@@ -56,6 +56,7 @@ public struct StateChart: View {
         x: .value("State", state),
         y: .value("Count", count)
       )
+      .foregroundStyle(.tint)
       .annotation(position: .top) {
         if count > 0 {
           Text(count.formatted(.number))
@@ -72,6 +73,7 @@ public struct StateChart: View {
         x: .value("State", state),
         y: .value("Count", count)
       )
+      .foregroundStyle(.tint)
     }
     .chartYAxis(.hidden)
   }

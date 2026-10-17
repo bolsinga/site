@@ -19,6 +19,11 @@ struct ShowsTodayWidget: Widget {
     }
     .configurationDisplayName("Shows Today")
     .description("See which shows happened today across the archive's history.")
-    .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
+    .supportedFamilies(Self.families)
   }
+
+  /// iPhone never offers extra large; iPad and Mac do.
+  private static let families: [WidgetFamily] = [
+    .systemSmall, .systemMedium, .systemLarge, .systemExtraLarge,
+  ]
 }

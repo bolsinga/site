@@ -1,10 +1,26 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "%@–%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@–%2$@"
+          }
+        }
+      }
+    },
     "^[%lld show](inflect: true)" : {
 
     },
+    "^[%lld year](inflect: true) apart" : {
+
+    },
     "+%lld more" : {
+
+    },
+    "+^[%lld artist](inflect: true)" : {
 
     },
     "Artist" : {
@@ -14,6 +30,9 @@
 
     },
     "Launch %@ once to load shows." : {
+
+    },
+    "Most Visited" : {
 
     },
     "Newest" : {
@@ -40,7 +59,13 @@
     "Shows Today" : {
 
     },
+    "States" : {
+
+    },
     "Venue" : {
+
+    },
+    "Years" : {
 
     }
   },
