@@ -32,9 +32,9 @@ public struct ShowsTodaySnapshot: Codable, Equatable, Sendable {
     days[dayOfLeapYear] ?? []
   }
 
-  /// The oldest known show year in the whole archive, which `days` already covers.
-  public var earliestYear: Int? {
-    days.values.lazy.flatMap { $0 }.compactMap { $0.date.year }.min()
+  /// The most shows on any single day of the year; 0 when there are none.
+  public var busiestDayCount: Int {
+    days.values.map(\.count).max() ?? 0
   }
 }
 

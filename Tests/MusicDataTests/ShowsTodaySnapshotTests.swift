@@ -57,19 +57,18 @@ struct ShowsTodaySnapshotTests {
       comment: nil)
   }
 
-  @Test func earliestYearSpansAllDays() {
+  @Test func busiestDayCountIsTheMostShowsOnOneDay() {
     let snapshot = ShowsTodaySnapshot(
       days: [
-        1: [digest("a", year: 2001), digest("b", year: nil)],
-        200: [digest("c", year: 1988)],
-        350: [digest("d", year: 1996)],
+        1: [digest("a", year: 2001)],
+        200: [digest("b", year: 1988), digest("c", year: 1990), digest("d", year: nil)],
+        350: [digest("e", year: 1996), digest("f", year: 1997)],
       ])
-    #expect(snapshot.earliestYear == 1988)
+    #expect(snapshot.busiestDayCount == 3)
   }
 
-  @Test func earliestYearIsNilWithoutKnownYears() {
-    #expect(ShowsTodaySnapshot(days: [:]).earliestYear == nil)
-    #expect(ShowsTodaySnapshot(days: [1: [digest("a", year: nil)]]).earliestYear == nil)
+  @Test func busiestDayCountIsZeroWithoutShows() {
+    #expect(ShowsTodaySnapshot(days: [:]).busiestDayCount == 0)
   }
 
   func temporaryFileURL() -> URL {

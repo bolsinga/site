@@ -12,7 +12,7 @@ struct ShowsTodayProvider: AppIntentTimelineProvider {
   func placeholder(in context: Context) -> ShowsTodayEntry {
     ShowsTodayEntry(
       date: .now, dayOfLeapYear: Date.now.dayOfLeapYear,
-      state: .shows(featured: Self.sampleShow, others: Self.sampleOthers), earliestYear: 1996)
+      state: .shows(featured: Self.sampleShow, others: Self.sampleOthers), busiestDayCount: 12)
   }
 
   func snapshot(for configuration: ShowsTodayConfiguration, in context: Context) async
@@ -23,7 +23,7 @@ struct ShowsTodayProvider: AppIntentTimelineProvider {
     }
     let snapshot = ShowsTodaySnapshot.read()
     return entry(
-      for: .now, snapshot: snapshot, earliestYear: snapshot?.earliestYear,
+      for: .now, snapshot: snapshot, busiestDayCount: snapshot?.busiestDayCount ?? 0,
       order: configuration.order)
   }
 
@@ -32,9 +32,10 @@ struct ShowsTodayProvider: AppIntentTimelineProvider {
   {
     let midnights = ShowsTodayTimeline.midnights(from: .now)
     let snapshot = ShowsTodaySnapshot.read()
-    let earliestYear = snapshot?.earliestYear
+    let busiestDayCount = snapshot?.busiestDayCount ?? 0
     let entries = midnights.map {
-      entry(for: $0, snapshot: snapshot, earliestYear: earliestYear, order: configuration.order)
+      entry(
+        for: $0, snapshot: snapshot, busiestDayCount: busiestDayCount, order: configuration.order)
     }
 
     let reloadDate = ShowsTodayTimeline.reloadDate(after: midnights) ?? .now
@@ -42,7 +43,7 @@ struct ShowsTodayProvider: AppIntentTimelineProvider {
   }
 
   private func entry(
-    for date: Date, snapshot: ShowsTodaySnapshot?, earliestYear: Int?, order: ShowsTodayOrder
+    for date: Date, snapshot: ShowsTodaySnapshot?, busiestDayCount: Int, order: ShowsTodayOrder
   ) -> ShowsTodayEntry {
     let dayOfLeapYear = date.dayOfLeapYear
     guard let snapshot else {
@@ -55,7 +56,7 @@ struct ShowsTodayProvider: AppIntentTimelineProvider {
     return ShowsTodayEntry(
       date: date, dayOfLeapYear: dayOfLeapYear,
       state: .shows(featured: featured, others: Array(shows.dropFirst())),
-      earliestYear: earliestYear)
+      busiestDayCount: busiestDayCount)
   }
 }
 

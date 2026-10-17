@@ -32,6 +32,9 @@
     "Artist" : {
 
     },
+    "Busiest day has %lld" : {
+
+    },
     "Choose which of today's shows to feature." : {
 
     },
@@ -47,9 +50,6 @@
     "Oldest" : {
 
     },
-    "Oldest ^[%lld year](inflect: true) ago" : {
-
-    },
     "Open %@" : {
 
     },
@@ -63,6 +63,9 @@
 
     },
     "Show" : {
+
+    },
+    "Shows" : {
 
     },
     "Shows Today" : {

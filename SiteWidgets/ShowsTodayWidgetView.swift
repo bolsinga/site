@@ -118,35 +118,21 @@ struct ShowsTodayWidgetView: View {
     }
   }
 
-  /// Lock Screen circle: the show count inside a ring that fills with how far back the day's oldest
-  /// show reaches in the archive. Empty states fit only a symbol.
+  /// Lock Screen circle: the show count inside a ring that fills with how busy the day is compared
+  /// with the archive's busiest day. Empty states fit only a symbol.
   private struct AccessoryCircularView: View {
     let entry: ShowsTodayEntry
 
     var body: some View {
       switch entry.state {
-      case .shows(let featured, let others):
-        let shows = [featured] + others
-        ShowCountGauge(
-          count: shows.count, yearsBack: yearsBack(of: shows), span: span)
+      case .shows(_, let others):
+        ShowCountGauge(count: others.count + 1, busiest: entry.busiestDayCount)
       case .noShows:
         let message = NoShowsMessage(isToday: true)
         symbol(message.systemImage, label: Text(message.title))
       case .needsAppLaunch:
         symbol("arrow.up.forward.app", label: Text("Open \(String.archiveAppDisplayName)"))
       }
-    }
-
-    private var currentYear: Int {
-      Calendar.current.component(.year, from: entry.date)
-    }
-
-    private var span: Int? {
-      entry.earliestYear.map { max(currentYear - $0, 1) }
-    }
-
-    private func yearsBack(of shows: [ShowDigest]) -> Int? {
-      ShowsTodayStats(shows: shows).years.map { currentYear - $0.lowerBound }
     }
 
     private func symbol(_ name: String, label: Text) -> some View {
@@ -161,33 +147,23 @@ struct ShowsTodayWidgetView: View {
 
   private struct ShowCountGauge: View {
     let count: Int
-    let yearsBack: Int?
-    let span: Int?
+    let busiest: Int
 
     var body: some View {
-      if let yearsBack, let span {
-        Gauge(value: Double(min(yearsBack, span)), in: 0...Double(span)) {
-          Text("Years")
-        } currentValueLabel: {
-          countLabel
-        }
-        .gaugeStyle(.accessoryCircularCapacity)
-        .accessibilityLabel(Text("^[\(count) show](inflect: true) today"))
-        .accessibilityValue(Text("Oldest ^[\(yearsBack) year](inflect: true) ago"))
-      } else {
-        ZStack {
-          AccessoryWidgetBackground()
-          countLabel
-        }
-        .accessibilityLabel(Text("^[\(count) show](inflect: true) today"))
+      // The snapshot's busiest day is always at least today's count; clamp anyway so a stale
+      // value can't produce an invalid range.
+      let upper = Double(max(busiest, count))
+      Gauge(value: Double(count), in: 0...upper) {
+        Text("Shows")
+      } currentValueLabel: {
+        Text(count, format: .number)
+          .font(.title3.weight(.semibold))
+          .minimumScaleFactor(0.5)
+          .lineLimit(1)
       }
-    }
-
-    private var countLabel: some View {
-      Text(count, format: .number)
-        .font(.title3.weight(.semibold))
-        .minimumScaleFactor(0.5)
-        .lineLimit(1)
+      .gaugeStyle(.accessoryCircularCapacity)
+      .accessibilityLabel(Text("^[\(count) show](inflect: true) today"))
+      .accessibilityValue(Text("Busiest day has \(Int(upper))"))
     }
   }
 #endif
@@ -564,7 +540,7 @@ extension ShowsTodayEntry {
   fileprivate static func preview(_ shows: [ShowDigest]) -> ShowsTodayEntry {
     ShowsTodayEntry(
       date: .now, dayOfLeapYear: Date.now.dayOfLeapYear,
-      state: .shows(featured: shows[0], others: Array(shows.dropFirst())), earliestYear: 1980)
+      state: .shows(featured: shows[0], others: Array(shows.dropFirst())), busiestDayCount: 8)
   }
 
   fileprivate static func preview(_ state: State) -> ShowsTodayEntry {
