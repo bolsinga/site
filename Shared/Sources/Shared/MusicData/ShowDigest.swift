@@ -14,7 +14,7 @@ public struct ShowDigest: Codable, Equatable, Hashable, Identifiable, PathRestor
   public let date: PartialDate
   public let performers: [ArchiveItem]
   public let venue: String
-  let location: Location
+  public let location: Location
   public let comment: String?
 
   public init(

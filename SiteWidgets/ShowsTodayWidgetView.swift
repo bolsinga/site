@@ -27,6 +27,8 @@ struct ShowsTodayWidgetView: View {
           MediumShowsView(featured: featured, others: others)
         case .systemLarge:
           LargeShowsView(shows: [featured] + others, date: entry.date)
+        case .systemExtraLarge:
+          ExtraLargeShowsView(shows: [featured] + others, date: entry.date)
         default:
           SmallShowsView(featured: featured, otherCount: others.count)
         }
@@ -76,7 +78,6 @@ private struct ShowsTodayCapsule: View {
   }
 }
 
-/// Headliner, venue, and year of the featured show.
 private struct FeaturedShowView: View {
   let show: ShowDigest
 
@@ -129,10 +130,7 @@ private struct SmallShowsView: View {
   }
 }
 
-/// The featured show on the left, more of the day's shows on the right. Each show links to its
-/// own page; the rest of the widget opens Today.
 private struct MediumShowsView: View {
-  /// Rows that fit beside the featured show at default text sizes.
   private static let maximumRows = 3
 
   let featured: ShowDigest
@@ -174,34 +172,84 @@ private struct MediumShowsView: View {
   }
 }
 
-/// The whole day as a list, like the in-app Today list at a glance. Each row links to its show.
 private struct LargeShowsView: View {
-  /// Rows that fit at default text sizes.
+  let shows: [ShowDigest]
+  let date: Date
+
+  var body: some View {
+    DayListHeader(showCount: shows.count)
+    DayShowsList(shows: shows, date: date, performerLimit: 1)
+  }
+}
+
+private struct ExtraLargeShowsView: View {
+  /// The headliner plus support acts, so a long bill doesn't crowd out the day's other shows.
+  private static let performerLimit = 4
+
+  let shows: [ShowDigest]
+  let date: Date
+
+  var body: some View {
+    DayListHeader(showCount: shows.count)
+    HStack(alignment: .top, spacing: 16) {
+      DayShowsList(
+        shows: shows, date: date, performerLimit: Self.performerLimit,
+        labelsHiddenPerformers: true)
+      Divider()
+      DayStatsView(stats: ShowsTodayStats(shows: shows))
+        .frame(maxWidth: 220, alignment: .topLeading)
+    }
+  }
+}
+
+private struct DayListHeader: View {
+  let showCount: Int
+
+  var body: some View {
+    HStack(alignment: .firstTextBaseline) {
+      ShowsTodayCapsule()
+      Spacer(minLength: 0)
+      Text("^[\(showCount) show](inflect: true)")
+        .font(.caption)
+        .foregroundStyle(.secondary)
+    }
+    // WidgetKit enlarges link tap targets; without this gap, taps on the header open row 1.
+    .padding(.bottom, 8)
+  }
+}
+
+private struct DayShowsList: View {
   private static let maximumRows = 7
 
   let shows: [ShowDigest]
   /// The entry's date, so "N years ago" stays fixed for the entry instead of ticking live.
   let date: Date
+  let performerLimit: Int
+  var labelsHiddenPerformers = false
 
   private func rows(_ rowCount: Int) -> some View {
     VStack(alignment: .leading, spacing: 8) {
       ForEach(shows.prefix(rowCount)) { show in
-        ShowLink(show: show) { DayListRow(show: show, date: date) }
+        ShowLink(show: show) {
+          VStack(alignment: .leading, spacing: 2) {
+            ConcertBlurb(
+              venue: show.venue, date: show.date,
+              performers: Array(show.performerNames.prefix(performerLimit)),
+              dateFormat: .relativeTo(date))
+            let hidden = show.performerNames.count - performerLimit
+            if labelsHiddenPerformers, hidden > 0 {
+              Text("+^[\(hidden) artist](inflect: true)")
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+            }
+          }
+        }
       }
       MoreShowsLabel(count: shows.count - rowCount)
     }
   }
 
   var body: some View {
-    HStack(alignment: .firstTextBaseline) {
-      ShowsTodayCapsule()
-      Spacer(minLength: 0)
-      Text("^[\(shows.count) show](inflect: true)")
-        .font(.caption)
-        .foregroundStyle(.secondary)
-    }
-    // WidgetKit enlarges link tap targets; without this gap, taps on the header open row 1.
-    .padding(.bottom, 8)
     // Large text sizes fit fewer rows; "+N more" counts whatever doesn't fit.
     ViewThatFits(in: .vertical) {
       ForEach((1...Self.maximumRows).reversed(), id: \.self) { rowCount in
@@ -212,36 +260,58 @@ private struct LargeShowsView: View {
   }
 }
 
-private struct DayListRow: View {
-  let show: ShowDigest
-  let date: Date
-
-  private var yearsAgo: String? {
-    guard let showDate = show.date.date else { return nil }
-    let formatter = RelativeDateTimeFormatter()
-    formatter.dateTimeStyle = .numeric
-    return formatter.localizedString(for: showDate, relativeTo: date)
-  }
+private struct DayStatsView: View {
+  let stats: ShowsTodayStats
 
   var body: some View {
-    HStack(alignment: .firstTextBaseline, spacing: 8) {
-      VStack(alignment: .leading, spacing: 1) {
-        Text(show.performerNames.first ?? show.venue)
-          .font(.subheadline)
-          .fontWeight(.semibold)
-          .lineLimit(1)
-        Text(show.venue)
-          .font(.caption)
-          .foregroundStyle(.secondary)
-          .lineLimit(1)
+    VStack(alignment: .leading, spacing: 14) {
+      if let years = stats.years {
+        DayStat(label: Text("Years")) {
+          if years.lowerBound == years.upperBound {
+            Text(years.lowerBound, format: .number.grouping(.never))
+          } else {
+            Text(
+              "\(years.lowerBound, format: .number.grouping(.never))–\(years.upperBound, format: .number.grouping(.never))"
+            )
+          }
+        } detail: {
+          if years.lowerBound != years.upperBound {
+            Text("^[\(years.upperBound - years.lowerBound) year](inflect: true) apart")
+          }
+        }
       }
-      Spacer(minLength: 0)
-      if let yearsAgo {
-        Text(yearsAgo)
-          .font(.caption)
-          .foregroundStyle(.secondary)
-          .lineLimit(1)
+      if let venue = stats.mostVisitedVenue {
+        DayStat(label: Text("Most Visited")) {
+          Text(venue.name)
+        } detail: {
+          Text("^[\(venue.count) show](inflect: true)")
+        }
       }
+      if stats.hasStateChart {
+        StateChart(counts: stats.stateCounts, title: "States", presentation: .compact)
+          .tint(Color.accent)
+      }
+    }
+  }
+}
+
+private struct DayStat<Value: View, Detail: View>: View {
+  let label: Text
+  @ViewBuilder let value: Value
+  @ViewBuilder let detail: Detail
+
+  var body: some View {
+    VStack(alignment: .leading, spacing: 2) {
+      label
+        .font(.caption)
+        .foregroundStyle(.secondary)
+      value
+        .font(.headline)
+        .lineLimit(2)
+        .minimumScaleFactor(0.8)
+      detail
+        .font(.caption)
+        .foregroundStyle(.secondary)
     }
   }
 }
@@ -309,29 +379,35 @@ private struct WidgetUnavailableView: View {
 
 extension ShowDigest {
   fileprivate static func preview(
-    _ index: Int, headliner: String, venue: String = "Sample Venue", year: Int
+    _ index: Int, headliner: String, support: [String] = [], venue: String = "Sample Venue",
+    year: Int, state: String = "CA"
   ) -> ShowDigest {
     ShowDigest(
       id: .show("sample-\(index)"),
       date: PartialDate(year: year, month: 12, day: 15),
-      performers: [ArchiveItem(id: .artist("sample-artist-\(index)"), name: headliner)],
+      performers: ([headliner] + support).enumerated().map {
+        ArchiveItem(id: .artist("sample-artist-\(index)-\($0.offset)"), name: $0.element)
+      },
       venue: venue,
-      location: Location(city: "San Francisco", state: "CA"),
+      location: Location(city: "San Francisco", state: state),
       comment: nil)
   }
 
   fileprivate static let previewShows: [ShowDigest] = [
-    .preview(0, headliner: "Sample Artist", year: 1988),
-    .preview(1, headliner: "Another Artist", venue: "Another Venue", year: 1993),
-    .preview(2, headliner: "Third Artist", year: 1998),
-    .preview(3, headliner: "Fourth Artist", year: 2001),
+    .preview(0, headliner: "Sample Artist", support: ["Opening Act", "Local Band"], year: 1988),
+    .preview(
+      1, headliner: "Another Artist", support: ["Act Two", "Act Three", "Act Four", "Act Five"],
+      venue: "Another Venue", year: 1993, state: "TX"),
+    .preview(
+      2, headliner: "Third Artist",
+      support: ["Second Act", "Third Act", "Fourth Act", "Fifth Act", "Sixth Act"], year: 1998),
+    .preview(3, headliner: "Fourth Artist", year: 2001, state: "NY"),
     .preview(4, headliner: "Fifth Artist", year: 2010),
     .preview(5, headliner: "Sixth Artist", year: 2016),
   ]
 
-  /// More shows than the large widget can list.
   fileprivate static let manyPreviewShows: [ShowDigest] =
-    previewShows + (6..<12).map { .preview($0, headliner: "Artist \($0 + 1)", year: 2016 + $0) }
+    previewShows + (6..<12).map { .preview($0, headliner: "Artist \($0 + 1)", year: 2011 + $0) }
 
   fileprivate static let longNameShow = ShowDigest.preview(
     99, headliner: "Godspeed You! Black Emperor and the Extraordinarily Long Name Orchestra",
@@ -444,4 +520,35 @@ extension ShowsTodayEntry {
   ShowsTodayWidget()
 } timeline: {
   ShowsTodayEntry.preview(.needsAppLaunch)
+}
+
+#Preview("Extra Large: One Show", as: .systemExtraLarge) {
+  ShowsTodayWidget()
+} timeline: {
+  ShowsTodayEntry.preview(Array(ShowDigest.previewShows.prefix(1)))
+}
+
+#Preview("Extra Large: Busy Day", as: .systemExtraLarge) {
+  ShowsTodayWidget()
+} timeline: {
+  ShowsTodayEntry.preview(ShowDigest.manyPreviewShows)
+}
+
+#Preview("Extra Large: No Shows", as: .systemExtraLarge) {
+  ShowsTodayWidget()
+} timeline: {
+  ShowsTodayEntry.preview(.noShows)
+}
+
+#Preview("Extra Large: Long Bills", as: .systemExtraLarge) {
+  ShowsTodayWidget()
+} timeline: {
+  ShowsTodayEntry.preview([
+    .preview(
+      0, headliner: "Sample Artist",
+      support: ["Act Two", "Act Three", "Act Four", "Act Five", "Act Six"],
+      year: 1988),
+    .preview(1, headliner: "Another Artist", venue: "Another Venue", year: 1993, state: "TX"),
+    .preview(2, headliner: "Third Artist", support: ["Opening Act"], year: 1998, state: "NY"),
+  ])
 }
