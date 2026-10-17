@@ -8,12 +8,23 @@
 
 /* Begin PBXBuildFile section */
 		FE8B98233081D3F400FC410D /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = FE8B98223081D3F400FC410D /* Shared */; };
+		FE8BA5D53082653F00FC410D /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE8BA5D43082653F00FC410D /* WidgetKit.framework */; };
+		FE8BA5D73082653F00FC410D /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE8BA5D63082653F00FC410D /* SwiftUI.framework */; };
+		FE8BA5E43082654000FC410D /* SiteWidgetsExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FE8BA5D33082653F00FC410D /* SiteWidgetsExtension.appex */; platformFilters = (ios, macos, ); settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		FE8BA5EB3082656300FC410D /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = FE8BA5EA3082656300FC410D /* Shared */; };
 		FEB722BE2E776336006A4DA2 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = FEB722BD2E776336006A4DA2 /* Algorithms */; };
 		FED94E0A2F1D481100E7A555 /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = FED94E092F1D481100E7A555 /* ArgumentParser */; };
 		FED95A502F1D7A9C00E7A555 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = FED95A4F2F1D7A9C00E7A555 /* Collections */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		FE8BA5E23082654000FC410D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FE5360F529CE82CA00618099 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FE8BA5D23082653F00FC410D;
+			remoteInfo = SiteWidgetsExtension;
+		};
 		FEE0AED02E6E74F5005CE1AB /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = FE5360F529CE82CA00618099 /* Project object */;
@@ -23,8 +34,24 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		FE8BA5E93082654000FC410D /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			dstPath = "";
+			dstSubfolder = PlugIns;
+			files = (
+				FE8BA5E43082654000FC410D /* SiteWidgetsExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		FE5360FD29CE82CA00618099 /* SiteApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SiteApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FE8BA5D33082653F00FC410D /* SiteWidgetsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SiteWidgetsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		FE8BA5D43082653F00FC410D /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = /System/Library/Frameworks/WidgetKit.framework; sourceTree = "<absolute>"; };
+		FE8BA5D63082653F00FC410D /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = /System/Library/Frameworks/SwiftUI.framework; sourceTree = "<absolute>"; };
+		FE8BA5F430826EEB00FC410D /* SiteWidgetsExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SiteWidgetsExtension.entitlements; sourceTree = "<group>"; };
 		FE9910DC2AC205A70054D229 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		FEC1720F2E70F1E800E8EFC8 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		FEE0AECC2E6E74F5005CE1AB /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -53,6 +80,13 @@
 			};
 			target = FE5360FC29CE82CA00618099 /* SiteApp */;
 		};
+		FE8BA5E83082654000FC410D /* Exceptions for "SiteWidgets" folder in "SiteWidgetsExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = FE8BA5D23082653F00FC410D /* SiteWidgetsExtension */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -69,6 +103,14 @@
 			path = Sources;
 			sourceTree = "<group>";
 		};
+		FE8BA5D83082653F00FC410D /* SiteWidgets */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				FE8BA5E83082654000FC410D /* Exceptions for "SiteWidgets" folder in "SiteWidgetsExtension" target */,
+			);
+			path = SiteWidgets;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +121,14 @@
 				FE8B98233081D3F400FC410D /* Shared in Frameworks */,
 				FED94E0A2F1D481100E7A555 /* ArgumentParser in Frameworks */,
 				FEB722BE2E776336006A4DA2 /* Algorithms in Frameworks */,
+			);
+		};
+		FE8BA5D03082653F00FC410D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+				FE8BA5D73082653F00FC410D /* SwiftUI.framework in Frameworks */,
+				FE8BA5D53082653F00FC410D /* WidgetKit.framework in Frameworks */,
+				FE8BA5EB3082656300FC410D /* Shared in Frameworks */,
 			);
 		};
 		FEE0AEC92E6E74F5005CE1AB /* Frameworks */ = {
@@ -92,10 +142,12 @@
 		FE5360F429CE82CA00618099 = {
 			isa = PBXGroup;
 			children = (
+				FE8BA5F430826EEB00FC410D /* SiteWidgetsExtension.entitlements */,
 				FE9910DC2AC205A70054D229 /* Config.xcconfig */,
 				FEC1720F2E70F1E800E8EFC8 /* README.md */,
 				FE00AB182EB848A4003DE0C6 /* Sources */,
 				FE00A63E2EB8486D003DE0C6 /* Tests */,
+				FE8BA5D83082653F00FC410D /* SiteWidgets */,
 				FED94E082F1D481100E7A555 /* Frameworks */,
 				FE5360FE29CE82CA00618099 /* Products */,
 			);
@@ -106,6 +158,7 @@
 			children = (
 				FE5360FD29CE82CA00618099 /* SiteApp.app */,
 				FEE0AECC2E6E74F5005CE1AB /* Tests.xctest */,
+				FE8BA5D33082653F00FC410D /* SiteWidgetsExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -113,6 +166,8 @@
 		FED94E082F1D481100E7A555 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FE8BA5D43082653F00FC410D /* WidgetKit.framework */,
+				FE8BA5D63082653F00FC410D /* SwiftUI.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -127,8 +182,12 @@
 				FE5360F929CE82CA00618099 /* Sources */,
 				FE5360FA29CE82CA00618099 /* Frameworks */,
 				FE5360FB29CE82CA00618099 /* Resources */,
+				FE8BA5E93082654000FC410D /* Embed Foundation Extensions */,
 			);
 			buildRules = (
+			);
+			dependencies = (
+				FE8BA5E33082654000FC410D /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				FE00AB182EB848A4003DE0C6 /* Sources */,
@@ -143,6 +202,27 @@
 			productName = SiteApp;
 			productReference = FE5360FD29CE82CA00618099 /* SiteApp.app */;
 			productType = "com.apple.product-type.application";
+		};
+		FE8BA5D23082653F00FC410D /* SiteWidgetsExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FE8BA5E53082654000FC410D /* Build configuration list for PBXNativeTarget "SiteWidgetsExtension" */;
+			buildPhases = (
+				FE8BA5CF3082653F00FC410D /* Sources */,
+				FE8BA5D03082653F00FC410D /* Frameworks */,
+				FE8BA5D13082653F00FC410D /* Resources */,
+			);
+			buildRules = (
+			);
+			fileSystemSynchronizedGroups = (
+				FE8BA5D83082653F00FC410D /* SiteWidgets */,
+			);
+			name = SiteWidgetsExtension;
+			packageProductDependencies = (
+				FE8BA5EA3082656300FC410D /* Shared */,
+			);
+			productName = SiteWidgetsExtension;
+			productReference = FE8BA5D33082653F00FC410D /* SiteWidgetsExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 		FEE0AECB2E6E74F5005CE1AB /* Tests */ = {
 			isa = PBXNativeTarget;
@@ -172,11 +252,14 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1640;
+				LastSwiftUpdateCheck = 2700;
 				LastUpgradeCheck = 2600;
 				TargetAttributes = {
 					FE5360FC29CE82CA00618099 = {
 						CreatedOnToolsVersion = 14.2;
+					};
+					FE8BA5D23082653F00FC410D = {
+						CreatedOnToolsVersion = 27.0;
 					};
 					FEE0AECB2E6E74F5005CE1AB = {
 						CreatedOnToolsVersion = 16.4;
@@ -206,12 +289,18 @@
 			targets = (
 				FE5360FC29CE82CA00618099 /* SiteApp */,
 				FEE0AECB2E6E74F5005CE1AB /* Tests */,
+				FE8BA5D23082653F00FC410D /* SiteWidgetsExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		FE5360FB29CE82CA00618099 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+			);
+		};
+		FE8BA5D13082653F00FC410D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			files = (
 			);
@@ -229,6 +318,11 @@
 			files = (
 			);
 		};
+		FE8BA5CF3082653F00FC410D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+			);
+		};
 		FEE0AEC82E6E74F5005CE1AB /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			files = (
@@ -237,6 +331,15 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		FE8BA5E33082654000FC410D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			platformFilters = (
+				ios,
+				macos,
+			);
+			target = FE8BA5D23082653F00FC410D /* SiteWidgetsExtension */;
+			targetProxy = FE8BA5E23082654000FC410D /* PBXContainerItemProxy */;
+		};
 		FEE0AED12E6E74F5005CE1AB /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = FE5360FC29CE82CA00618099 /* SiteApp */;
@@ -404,6 +507,7 @@
 				MARKETING_VERSION = 2.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = gdb.SiteApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "appletvos appletvsimulator iphoneos iphonesimulator macosx";
 				SUPPORTS_MACCATALYST = NO;
@@ -452,6 +556,7 @@
 				MARKETING_VERSION = 2.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = gdb.SiteApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "appletvos appletvsimulator iphoneos iphonesimulator macosx";
 				SUPPORTS_MACCATALYST = NO;
@@ -459,6 +564,103 @@
 				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2,3";
+			};
+			name = Release;
+		};
+		FE8BA5E63082654000FC410D /* Debug configuration for PBXNativeTarget "SiteWidgetsExtension" */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = FE9910DC2AC205A70054D229 /* Config.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = SiteWidgetsExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 23;
+				DEVELOPMENT_TEAM = "$(inherited)";
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SiteWidgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = SiteWidgets;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 27.0;
+				MARKETING_VERSION = 2.0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = gdb.SiteApp.SiteWidgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = auto;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				XROS_DEPLOYMENT_TARGET = 27.0;
+			};
+			name = Debug;
+		};
+		FE8BA5E73082654000FC410D /* Release configuration for PBXNativeTarget "SiteWidgetsExtension" */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = FE9910DC2AC205A70054D229 /* Config.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = SiteWidgetsExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 23;
+				DEVELOPMENT_TEAM = "$(inherited)";
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SiteWidgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = SiteWidgets;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 27.0;
+				MARKETING_VERSION = 2.0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = gdb.SiteApp.SiteWidgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = auto;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				XROS_DEPLOYMENT_TARGET = 27.0;
 			};
 			name = Release;
 		};
@@ -530,6 +732,14 @@
 			);
 			defaultConfigurationName = Release;
 		};
+		FE8BA5E53082654000FC410D /* Build configuration list for PBXNativeTarget "SiteWidgetsExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FE8BA5E63082654000FC410D /* Debug configuration for PBXNativeTarget "SiteWidgetsExtension" */,
+				FE8BA5E73082654000FC410D /* Release configuration for PBXNativeTarget "SiteWidgetsExtension" */,
+			);
+			defaultConfigurationName = Release;
+		};
 		FEE0AED22E6E74F5005CE1AB /* Build configuration list for PBXNativeTarget "Tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -577,6 +787,11 @@
 /* Begin XCSwiftPackageProductDependency section */
 		FE8B98223081D3F400FC410D /* Shared */ = {
 			isa = XCSwiftPackageProductDependency;
+			productName = Shared;
+		};
+		FE8BA5EA3082656300FC410D /* Shared */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FE8B98213081D3F400FC410D /* XCLocalSwiftPackageReference "Shared" */;
 			productName = Shared;
 		};
 		FEB722BD2E776336006A4DA2 /* Algorithms */ = {

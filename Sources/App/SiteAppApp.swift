@@ -5,10 +5,12 @@
 //  Created by Greg Bolsinga on 3/24/23.
 //
 
+import Shared
 import SwiftUI
 
 struct SiteAppApp: App {
-  @State private var model = SiteModel(urlString: "https://www.bolsinga.com/json/shows.json")
+  @State private var model = SiteModel(
+    urlString: URL.archiveRoot?.appendingPathComponent("json/shows.json").absoluteString ?? "")
 
   init() {
     SiteShortcuts.updateAppShortcutParameters()

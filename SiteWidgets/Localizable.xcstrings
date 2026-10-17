@@ -1,0 +1,45 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "+%lld more" : {
+
+    },
+    "Artist" : {
+
+    },
+    "Choose which of today's shows to feature." : {
+
+    },
+    "Launch %@ once to load shows." : {
+
+    },
+    "Newest" : {
+
+    },
+    "Oldest" : {
+
+    },
+    "Open %@" : {
+
+    },
+    "Order" : {
+
+    },
+    "Random" : {
+
+    },
+    "See which shows happened today across the archive's history." : {
+
+    },
+    "Show" : {
+
+    },
+    "Shows Today" : {
+
+    },
+    "Venue" : {
+
+    }
+  },
+  "version" : "1.0"
+}

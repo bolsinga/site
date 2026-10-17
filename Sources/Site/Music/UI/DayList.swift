@@ -17,15 +17,13 @@ struct DayList: View {
     self.dayOfLeapYear = dayOfLeapYear
   }
 
-  private var isToday: Bool { dayOfLeapYear.isToday }
-
   var body: some View {
     Group {
       if concerts.isEmpty {
+        let message = NoShowsMessage(dayOfLeapYear: dayOfLeapYear)
         ContentUnavailableView(
-          isToday ? String(localized: "No Shows Today") : String(localized: "No Shows"),
-          systemImage: "calendar.badge.exclamationmark",
-          description: isToday ? Text("Check again tomorrow.") : nil
+          message.title, systemImage: message.systemImage,
+          description: message.description.map(Text.init)
         )
       } else {
         List(concerts) { concert in
