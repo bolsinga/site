@@ -47,6 +47,9 @@
     "Oldest" : {
 
     },
+    "Oldest ^[%lld year](inflect: true) ago" : {
+
+    },
     "Open %@" : {
 
     },

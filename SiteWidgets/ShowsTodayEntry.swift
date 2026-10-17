@@ -19,4 +19,6 @@ struct ShowsTodayEntry: TimelineEntry {
   let date: Date
   let dayOfLeapYear: Int
   let state: State
+  /// The oldest show year in the archive; the circular widget's gauge scales to it.
+  var earliestYear: Int?
 }

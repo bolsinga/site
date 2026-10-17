@@ -29,7 +29,7 @@ struct ShowsTodayWidgetView: View {
       } else if family == .accessoryInline {
         AccessoryInlineView(state: entry.state)
       } else if family == .accessoryCircular {
-        AccessoryCircularView(state: entry.state)
+        AccessoryCircularView(entry: entry)
       } else {
         homeScreenContent
       }
@@ -118,39 +118,76 @@ struct ShowsTodayWidgetView: View {
     }
   }
 
-  /// Lock Screen circle: the day's show count under a calendar symbol; empty states fit only a symbol.
+  /// Lock Screen circle: the show count inside a ring that fills with how far back the day's oldest
+  /// show reaches in the archive. Empty states fit only a symbol.
   private struct AccessoryCircularView: View {
-    let state: ShowsTodayEntry.State
+    let entry: ShowsTodayEntry
 
     var body: some View {
+      switch entry.state {
+      case .shows(let featured, let others):
+        let shows = [featured] + others
+        ShowCountGauge(
+          count: shows.count, yearsBack: yearsBack(of: shows), span: span)
+      case .noShows:
+        let message = NoShowsMessage(isToday: true)
+        symbol(message.systemImage, label: Text(message.title))
+      case .needsAppLaunch:
+        symbol("arrow.up.forward.app", label: Text("Open \(String.archiveAppDisplayName)"))
+      }
+    }
+
+    private var currentYear: Int {
+      Calendar.current.component(.year, from: entry.date)
+    }
+
+    private var span: Int? {
+      entry.earliestYear.map { max(currentYear - $0, 1) }
+    }
+
+    private func yearsBack(of shows: [ShowDigest]) -> Int? {
+      ShowsTodayStats(shows: shows).years.map { currentYear - $0.lowerBound }
+    }
+
+    private func symbol(_ name: String, label: Text) -> some View {
       ZStack {
         AccessoryWidgetBackground()
-        switch state {
-        case .shows(_, let others):
-          let count = others.count + 1
-          VStack(spacing: 0) {
-            Image(systemName: "calendar")
-              .font(.caption2)
-              .widgetAccentable()
-            Text(count, format: .number)
-              .font(.title2.weight(.semibold))
-              .minimumScaleFactor(0.5)
-              .lineLimit(1)
-          }
-          .padding(4)
-          .accessibilityElement(children: .ignore)
-          .accessibilityLabel(Text("^[\(count) show](inflect: true) today"))
-        case .noShows:
-          let message = NoShowsMessage(isToday: true)
-          Image(systemName: message.systemImage)
-            .font(.title3)
-            .accessibilityLabel(Text(message.title))
-        case .needsAppLaunch:
-          Image(systemName: "arrow.up.forward.app")
-            .font(.title3)
-            .accessibilityLabel(Text("Open \(String.archiveAppDisplayName)"))
-        }
+        Image(systemName: name)
+          .font(.title3)
       }
+      .accessibilityLabel(label)
+    }
+  }
+
+  private struct ShowCountGauge: View {
+    let count: Int
+    let yearsBack: Int?
+    let span: Int?
+
+    var body: some View {
+      if let yearsBack, let span {
+        Gauge(value: Double(min(yearsBack, span)), in: 0...Double(span)) {
+          Text("Years")
+        } currentValueLabel: {
+          countLabel
+        }
+        .gaugeStyle(.accessoryCircularCapacity)
+        .accessibilityLabel(Text("^[\(count) show](inflect: true) today"))
+        .accessibilityValue(Text("Oldest ^[\(yearsBack) year](inflect: true) ago"))
+      } else {
+        ZStack {
+          AccessoryWidgetBackground()
+          countLabel
+        }
+        .accessibilityLabel(Text("^[\(count) show](inflect: true) today"))
+      }
+    }
+
+    private var countLabel: some View {
+      Text(count, format: .number)
+        .font(.title3.weight(.semibold))
+        .minimumScaleFactor(0.5)
+        .lineLimit(1)
     }
   }
 #endif
@@ -527,7 +564,7 @@ extension ShowsTodayEntry {
   fileprivate static func preview(_ shows: [ShowDigest]) -> ShowsTodayEntry {
     ShowsTodayEntry(
       date: .now, dayOfLeapYear: Date.now.dayOfLeapYear,
-      state: .shows(featured: shows[0], others: Array(shows.dropFirst())))
+      state: .shows(featured: shows[0], others: Array(shows.dropFirst())), earliestYear: 1980)
   }
 
   fileprivate static func preview(_ state: State) -> ShowsTodayEntry {

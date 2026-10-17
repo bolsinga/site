@@ -31,6 +31,11 @@ public struct ShowsTodaySnapshot: Codable, Equatable, Sendable {
   public func shows(on dayOfLeapYear: Int) -> [ShowDigest] {
     days[dayOfLeapYear] ?? []
   }
+
+  /// The oldest known show year in the whole archive, which `days` already covers.
+  public var earliestYear: Int? {
+    days.values.lazy.flatMap { $0 }.compactMap { $0.date.year }.min()
+  }
 }
 
 extension ShowsTodaySnapshot {
