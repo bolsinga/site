@@ -74,7 +74,7 @@ extension Logger {
 
       #if !os(tvOS)
         if reason.executeAsynchronousTasks {
-          publishWidgetSnapshot()
+          publishWidgetSnapshot(vault)
         }
       #endif
     } catch {

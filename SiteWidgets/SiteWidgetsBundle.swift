@@ -5,8 +5,8 @@
 //  Created by Greg Bolsinga on 10/16/26.
 //
 
-import WidgetKit
 import SwiftUI
+import WidgetKit
 
 @main
 struct SiteWidgetsBundle: WidgetBundle {

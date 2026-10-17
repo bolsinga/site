@@ -52,9 +52,14 @@ extension ShowsTodaySnapshot {
       .appendingPathComponent(fileName, isDirectory: false)
   }
 
+  /// Returns `nil` for a snapshot written by a different app version, so the widget waits for the
+  /// app to rewrite it rather than misreading it.
   public static func read(fileManager: FileManager = .default) -> ShowsTodaySnapshot? {
-    guard let fileURL = try? fileURL(fileManager: fileManager) else { return nil }
-    return try? Data(contentsOf: fileURL).fromJSON()
+    guard let fileURL = try? fileURL(fileManager: fileManager),
+      let snapshot: ShowsTodaySnapshot = try? Data(contentsOf: fileURL).fromJSON(),
+      snapshot.version == currentVersion
+    else { return nil }
+    return snapshot
   }
 
   /// Returns `true` if the bytes actually changed (or the file didn't exist yet).

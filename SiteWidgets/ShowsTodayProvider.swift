@@ -11,7 +11,8 @@ import WidgetKit
 struct ShowsTodayProvider: AppIntentTimelineProvider {
   func placeholder(in context: Context) -> ShowsTodayEntry {
     ShowsTodayEntry(
-      date: .now, dayOfLeapYear: Date.now.dayOfLeapYear, state: .show(Self.sampleShow, otherShows: 0))
+      date: .now, dayOfLeapYear: Date.now.dayOfLeapYear,
+      state: .show(Self.sampleShow, otherShows: 0))
   }
 
   func snapshot(for configuration: ShowsTodayConfiguration, in context: Context) async
