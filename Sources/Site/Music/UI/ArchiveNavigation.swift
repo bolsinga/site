@@ -243,6 +243,23 @@ extension ShowsMode {
     self.update(state: State(category: category, mode: category.mode))
   }
 
+  /// Shows the category's top-level list, popping anything pushed onto it. Today and Shows share
+  /// one stack on iPhone, so either clears both.
+  func navigate(toRootOf category: ArchiveCategory) {
+    navigate(to: category)
+    switch category {
+    case .today, .shows:
+      state.todayPath = []
+      state.showsPath = []
+    case .venues:
+      state.venuesPath = []
+    case .artists:
+      state.artistsPath = []
+    case .stats, .settings, .search:
+      break
+    }
+  }
+
   var activity: ArchiveActivity {
     let result: ArchiveActivity = {
       guard let last = path.last else { return .category(category) }
