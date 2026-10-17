@@ -17,6 +17,9 @@
     "^[%lld show](inflect: true)" : {
 
     },
+    "^[%lld show](inflect: true) today" : {
+
+    },
     "^[%lld year](inflect: true) apart" : {
 
     },
