@@ -23,14 +23,16 @@ enum ShowsTodayOrder: String, AppEnum {
     .random: "Random",
   ]
 
-  func pick(from shows: [ShowDigest]) -> ShowDigest? {
+  /// The day's shows with the featured one first. Random keeps the rest oldest first.
+  func arrange(_ shows: [ShowDigest]) -> [ShowDigest] {
     switch self {
     case .oldest:
-      shows.min()
+      return shows.sorted()
     case .newest:
-      shows.max()
+      return shows.sorted(by: >)
     case .random:
-      shows.randomElement()
+      guard let featured = shows.randomElement() else { return [] }
+      return [featured] + shows.sorted().filter { $0 != featured }
     }
   }
 }

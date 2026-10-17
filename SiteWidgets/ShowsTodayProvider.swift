@@ -12,7 +12,7 @@ struct ShowsTodayProvider: AppIntentTimelineProvider {
   func placeholder(in context: Context) -> ShowsTodayEntry {
     ShowsTodayEntry(
       date: .now, dayOfLeapYear: Date.now.dayOfLeapYear,
-      state: .show(Self.sampleShow, otherShows: 0))
+      state: .shows(featured: Self.sampleShow, others: Self.sampleOthers))
   }
 
   func snapshot(for configuration: ShowsTodayConfiguration, in context: Context) async
@@ -42,12 +42,13 @@ struct ShowsTodayProvider: AppIntentTimelineProvider {
     guard let snapshot else {
       return ShowsTodayEntry(date: date, dayOfLeapYear: dayOfLeapYear, state: .needsAppLaunch)
     }
-    let shows = snapshot.shows(on: dayOfLeapYear)
-    guard let show = order.pick(from: shows) else {
+    let shows = order.arrange(snapshot.shows(on: dayOfLeapYear))
+    guard let featured = shows.first else {
       return ShowsTodayEntry(date: date, dayOfLeapYear: dayOfLeapYear, state: .noShows)
     }
     return ShowsTodayEntry(
-      date: date, dayOfLeapYear: dayOfLeapYear, state: .show(show, otherShows: shows.count - 1))
+      date: date, dayOfLeapYear: dayOfLeapYear,
+      state: .shows(featured: featured, others: Array(shows.dropFirst())))
   }
 }
 
@@ -59,4 +60,18 @@ extension ShowsTodayProvider {
     venue: String(localized: "Venue"),
     location: Location(city: "San Francisco", state: "CA"),
     comment: nil)
+
+  /// Fills the medium widget's rows in the gallery and placeholder; the small widget shows only
+  /// their count.
+  fileprivate static let sampleOthers: [ShowDigest] = [1, 2, 3].map { index in
+    ShowDigest(
+      id: .show("sample-\(index)"),
+      date: PartialDate(year: 1996 + index * 5, month: 12, day: 15),
+      performers: [
+        ArchiveItem(id: .artist("sample-artist-\(index)"), name: String(localized: "Artist"))
+      ],
+      venue: String(localized: "Venue"),
+      location: Location(city: "San Francisco", state: "CA"),
+      comment: nil)
+  }
 }

@@ -10,8 +10,8 @@ import WidgetKit
 
 struct ShowsTodayEntry: TimelineEntry {
   enum State {
-    /// `otherShows` is how many of the day's shows aren't featured.
-    case show(ShowDigest, otherShows: Int)
+    /// `others` are the rest of the day's shows, in display order.
+    case shows(featured: ShowDigest, others: [ShowDigest])
     case noShows
     case needsAppLaunch
   }
