@@ -19,6 +19,7 @@ struct DaysShowsSummary: View {
     } label: {
     }
     .pickerStyle(.segmented)
+    .padding(.horizontal)
 
     switch mode {
     case .ordinal:
