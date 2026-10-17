@@ -1,6 +1,9 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "^[%lld show](inflect: true)" : {
+
+    },
     "+%lld more" : {
 
     },
