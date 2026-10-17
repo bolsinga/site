@@ -36,66 +36,110 @@ struct ShowsTodaySnapshotTests {
       rootURL: URL(string: "https://www.example.com/")!)
   }
 
-  @Test func snapshotMatchesConcertsOnDay() async throws {
-    let date = PartialDate(year: 1996, month: 12, day: 15)
-    let show = Show(artists: [artist1.id], date: date, id: "sh0", venue: venue1.id)
-
-    let vault = try await createVault(artists: [artist1], shows: [show], venues: [venue1])
-    let snapshot = try vault.showsTodaySnapshot
-
-    let dayOfLeapYear = try #require(date.date).dayOfLeapYear
-    #expect(snapshot.shows(on: dayOfLeapYear) == (try vault.concerts(on: dayOfLeapYear)))
-  }
-
-  @Test func daysWithoutShowsAreAbsent() async throws {
-    let date = PartialDate(year: 1996, month: 12, day: 15)
-    let show = Show(artists: [artist1.id], date: date, id: "sh0", venue: venue1.id)
-
-    let vault = try await createVault(artists: [artist1], shows: [show], venues: [venue1])
-    let snapshot = try vault.showsTodaySnapshot
-
-    let dayOfLeapYear = try #require(date.date).dayOfLeapYear
-    let otherDay = dayOfLeapYear == 1 ? 2 : 1
-    #expect(snapshot.shows(on: otherDay).isEmpty)
-    #expect(snapshot.days[otherDay] == nil)
-  }
-
-  @Test func multipleShowsOnSameDay() async throws {
-    let date = PartialDate(year: 1996, month: 12, day: 15)
-    let show1 = Show(artists: [artist1.id], date: date, id: "sh0", venue: venue1.id)
-    let show2 = Show(artists: [artist2.id], date: date, id: "sh1", venue: venue2.id)
-
-    let vault = try await createVault(
-      artists: [artist1, artist2], shows: [show1, show2], venues: [venue1, venue2])
-    let snapshot = try vault.showsTodaySnapshot
-
-    let dayOfLeapYear = try #require(date.date).dayOfLeapYear
-    #expect(snapshot.shows(on: dayOfLeapYear).count == 2)
-  }
-
-  @Test func roundTripsThroughJSON() throws {
+  func sampleSnapshot() -> ShowsTodaySnapshot {
     let show = ShowDigest(
-      id: Show(
-        artists: ["ar0"], date: PartialDate(year: 1996, month: 12, day: 15), id: "sh0",
-        venue: "v0"
-      ).archivePath,
+      id: .show("sh0"),
       date: PartialDate(year: 1996, month: 12, day: 15),
-      performers: [ArchiveItem(id: ArchivePath.artist("ar0"), name: "A Artist")],
+      performers: [ArchiveItem(id: .artist("ar0"), name: "A Artist")],
       venue: "A Venue",
       location: Location(city: "city", state: "CA"),
       comment: nil)
+    return ShowsTodaySnapshot(generated: Date(timeIntervalSince1970: 0), days: [350: [show]])
+  }
 
-    let snapshot = ShowsTodaySnapshot(
-      generated: Date(timeIntervalSince1970: 0), days: [349: [show]])
+  func temporaryFileURL() -> URL {
+    FileManager.default.temporaryDirectory
+      .appendingPathComponent(UUID().uuidString, isDirectory: true)
+      .appendingPathComponent("shows-today.json", isDirectory: false)
+  }
 
-    let encoder = JSONEncoder()
-    encoder.dateEncodingStrategy = .iso8601
-    let data = try encoder.encode(snapshot)
+  @Test func snapshotContainsShowOnItsDay() async throws {
+    let date = PartialDate(year: 1996, month: 12, day: 15)
+    let show = Show(artists: [artist1.id], date: date, id: "sh0", venue: venue1.id)
 
-    let decoder = JSONDecoder()
-    decoder.dateDecodingStrategy = .iso8601
-    let decoded = try decoder.decode(ShowsTodaySnapshot.self, from: data)
+    let vault = try await createVault(artists: [artist1], shows: [show], venues: [venue1])
+    let snapshot = try vault.showsTodaySnapshot
 
-    #expect(decoded == snapshot)
+    let dayOfLeapYear = try #require(date.date).dayOfLeapYear
+    #expect(snapshot.days.keys.sorted() == [dayOfLeapYear])
+
+    let digest = try #require(snapshot.shows(on: dayOfLeapYear).first)
+    #expect(snapshot.shows(on: dayOfLeapYear).count == 1)
+    #expect(digest.date == date)
+    #expect(digest.venue == venue1.name)
+    #expect(digest.performerNames == [artist1.name])
+  }
+
+  @Test func showsWithUnknownDaysAreAbsent() async throws {
+    let show = Show(
+      artists: [artist1.id], date: PartialDate(year: 1996, month: 12), id: "sh0", venue: venue1.id)
+
+    let vault = try await createVault(artists: [artist1], shows: [show], venues: [venue1])
+    let snapshot = try vault.showsTodaySnapshot
+
+    #expect(snapshot.days.isEmpty)
+  }
+
+  @Test func multipleShowsOnSameDayAreOldestFirst() async throws {
+    let newer = Show(
+      artists: [artist2.id], date: PartialDate(year: 2001, month: 12, day: 15), id: "sh1",
+      venue: venue2.id)
+    let older = Show(
+      artists: [artist1.id], date: PartialDate(year: 1996, month: 12, day: 15), id: "sh0",
+      venue: venue1.id)
+
+    let vault = try await createVault(
+      artists: [artist1, artist2], shows: [newer, older], venues: [venue1, venue2])
+    let snapshot = try vault.showsTodaySnapshot
+
+    let dayOfLeapYear = try #require(older.date.date).dayOfLeapYear
+    #expect(snapshot.days.count == 1)
+    #expect(snapshot.shows(on: dayOfLeapYear).map { $0.date.year } == [1996, 2001])
+  }
+
+  @Test func writeThenReadRoundTrips() throws {
+    let fileURL = temporaryFileURL()
+    defer { try? FileManager.default.removeItem(at: fileURL.deletingLastPathComponent()) }
+
+    let snapshot = sampleSnapshot()
+    #expect(try snapshot.write(to: fileURL))
+    #expect(ShowsTodaySnapshot.read(from: fileURL) == snapshot)
+  }
+
+  @Test func unchangedSnapshotIsNotRewritten() throws {
+    let fileURL = temporaryFileURL()
+    defer { try? FileManager.default.removeItem(at: fileURL.deletingLastPathComponent()) }
+
+    #expect(try sampleSnapshot().write(to: fileURL))
+    #expect(try sampleSnapshot().write(to: fileURL) == false)
+  }
+
+  @Test func changedSnapshotIsRewritten() throws {
+    let fileURL = temporaryFileURL()
+    defer { try? FileManager.default.removeItem(at: fileURL.deletingLastPathComponent()) }
+
+    #expect(try sampleSnapshot().write(to: fileURL))
+    // ISO 8601 drops fractional seconds, so use a whole-second date to compare after reading.
+    let changed = ShowsTodaySnapshot(generated: Date(timeIntervalSince1970: 1_000), days: [:])
+    #expect(try changed.write(to: fileURL))
+    #expect(ShowsTodaySnapshot.read(from: fileURL) == changed)
+  }
+
+  @Test func mismatchedVersionIsIgnored() throws {
+    let fileURL = temporaryFileURL()
+    defer { try? FileManager.default.removeItem(at: fileURL.deletingLastPathComponent()) }
+
+    var json = try #require(
+      try JSONSerialization.jsonObject(with: sampleSnapshot().encoded()) as? [String: Any])
+    json["version"] = ShowsTodaySnapshot.currentVersion + 1
+    try FileManager.default.createDirectory(
+      at: fileURL.deletingLastPathComponent(), withIntermediateDirectories: true)
+    try JSONSerialization.data(withJSONObject: json).write(to: fileURL)
+
+    #expect(ShowsTodaySnapshot.read(from: fileURL) == nil)
+  }
+
+  @Test func missingFileReadsAsNil() {
+    #expect(ShowsTodaySnapshot.read(from: temporaryFileURL()) == nil)
   }
 }

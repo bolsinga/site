@@ -52,25 +52,36 @@ extension ShowsTodaySnapshot {
       .appendingPathComponent(fileName, isDirectory: false)
   }
 
-  /// Returns `nil` for a snapshot written by a different app version, so the widget waits for the
-  /// app to rewrite it rather than misreading it.
   public static func read(fileManager: FileManager = .default) -> ShowsTodaySnapshot? {
-    guard let fileURL = try? fileURL(fileManager: fileManager),
-      let snapshot: ShowsTodaySnapshot = try? Data(contentsOf: fileURL).fromJSON(),
-      snapshot.version == currentVersion
-    else { return nil }
-    return snapshot
+    guard let fileURL = try? fileURL(fileManager: fileManager) else { return nil }
+    return read(from: fileURL)
   }
 
   /// Returns `true` if the bytes actually changed (or the file didn't exist yet).
   @discardableResult
   public func write(fileManager: FileManager = .default) throws -> Bool {
-    let fileURL = try Self.fileURL(fileManager: fileManager)
+    try write(to: Self.fileURL(fileManager: fileManager), fileManager: fileManager)
+  }
 
+  /// Returns `nil` for a snapshot written by a different app version, so the widget waits for the
+  /// app to rewrite it rather than misreading it.
+  static func read(from fileURL: URL) -> ShowsTodaySnapshot? {
+    guard let snapshot: ShowsTodaySnapshot = try? Data(contentsOf: fileURL).fromJSON(),
+      snapshot.version == currentVersion
+    else { return nil }
+    return snapshot
+  }
+
+  /// Sorted keys keep the bytes stable, so an unchanged snapshot compares equal on disk.
+  func encoded() throws -> Data {
     let encoder = JSONEncoder()
     encoder.outputFormatting = [.sortedKeys]
     encoder.dateEncodingStrategy = .iso8601
-    let data = try encoder.encode(self)
+    return try encoder.encode(self)
+  }
+
+  func write(to fileURL: URL, fileManager: FileManager = .default) throws -> Bool {
+    let data = try encoded()
 
     if let existing = try? Data(contentsOf: fileURL), existing == data {
       return false
