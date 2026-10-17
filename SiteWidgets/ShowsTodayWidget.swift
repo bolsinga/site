@@ -22,8 +22,13 @@ struct ShowsTodayWidget: Widget {
     .supportedFamilies(Self.families)
   }
 
-  /// iPhone never offers extra large; iPad and Mac do.
-  private static let families: [WidgetFamily] = [
-    .systemSmall, .systemMedium, .systemLarge, .systemExtraLarge,
-  ]
+  /// iPhone never offers extra large; iPad and Mac do. Accessory families are Lock Screen only,
+  /// so they don't exist on macOS.
+  private static let families: [WidgetFamily] = {
+    var families: [WidgetFamily] = [.systemSmall, .systemMedium, .systemLarge, .systemExtraLarge]
+    #if os(iOS)
+      families.append(.accessoryRectangular)
+    #endif
+    return families
+  }()
 }

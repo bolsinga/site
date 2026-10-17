@@ -15,6 +15,26 @@ struct ShowsTodayWidgetView: View {
   let entry: ShowsTodayEntry
 
   var body: some View {
+    content
+      // Fill the widget so short names don't shrink the stack and get centered.
+      .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+      .containerBackground(Color.accent.opacity(0.3).gradient, for: .widget)
+      .widgetURL(URL.archiveRoot.flatMap { ArchiveCategory.today.url(rootURL: $0) })
+  }
+
+  @ViewBuilder private var content: some View {
+    #if os(iOS)
+      if family == .accessoryRectangular {
+        AccessoryRectangularView(state: entry.state)
+      } else {
+        homeScreenContent
+      }
+    #else
+      homeScreenContent
+    #endif
+  }
+
+  private var homeScreenContent: some View {
     VStack(alignment: .leading, spacing: 4) {
       switch entry.state {
       case .needsAppLaunch:
@@ -39,12 +59,45 @@ struct ShowsTodayWidgetView: View {
           description: message.description.map(Text.init))
       }
     }
-    // Fill the widget so short names don't shrink the stack and get centered.
-    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-    .containerBackground(Color.accent.opacity(0.3).gradient, for: .widget)
-    .widgetURL(URL.archiveRoot.flatMap { ArchiveCategory.today.url(rootURL: $0) })
   }
 }
+
+#if os(iOS)
+  /// Lock Screen: three lines at most, in the system's vibrant rendering, so no capsule or fill.
+  private struct AccessoryRectangularView: View {
+    let state: ShowsTodayEntry.State
+
+    var body: some View {
+      switch state {
+      case .shows(let featured, let others):
+        VStack(alignment: .leading, spacing: 1) {
+          Text(featured.performerNames.first ?? featured.venue)
+            .font(.headline)
+            .lineLimit(1)
+            .minimumScaleFactor(0.7)
+            .widgetAccentable()
+          HStack(spacing: 4) {
+            Text(featured.venue)
+              .lineLimit(1)
+            if let year = featured.date.year {
+              Text("·")
+              Text(year, format: .number.grouping(.never))
+                .layoutPriority(1)
+            }
+          }
+          .font(.caption)
+          MoreShowsLabel(count: others.count)
+        }
+      case .noShows:
+        Text(NoShowsMessage(isToday: true).title)
+          .font(.headline)
+      case .needsAppLaunch:
+        Text("Open \(String.archiveAppDisplayName)")
+          .font(.headline)
+      }
+    }
+  }
+#endif
 
 extension ShowDigest {
   fileprivate var url: URL? {
@@ -552,3 +605,35 @@ extension ShowsTodayEntry {
     .preview(2, headliner: "Third Artist", support: ["Opening Act"], year: 1998, state: "NY"),
   ])
 }
+
+#if os(iOS)
+  #Preview("Rectangular: Shows", as: .accessoryRectangular) {
+    ShowsTodayWidget()
+  } timeline: {
+    ShowsTodayEntry.preview(Array(ShowDigest.previewShows.prefix(3)))
+  }
+
+  #Preview("Rectangular: One Show", as: .accessoryRectangular) {
+    ShowsTodayWidget()
+  } timeline: {
+    ShowsTodayEntry.preview(Array(ShowDigest.previewShows.prefix(1)))
+  }
+
+  #Preview("Rectangular: Long Names", as: .accessoryRectangular) {
+    ShowsTodayWidget()
+  } timeline: {
+    ShowsTodayEntry.preview([ShowDigest.longNameShow] + ShowDigest.previewShows)
+  }
+
+  #Preview("Rectangular: No Shows", as: .accessoryRectangular) {
+    ShowsTodayWidget()
+  } timeline: {
+    ShowsTodayEntry.preview(.noShows)
+  }
+
+  #Preview("Rectangular: Needs App Launch", as: .accessoryRectangular) {
+    ShowsTodayWidget()
+  } timeline: {
+    ShowsTodayEntry.preview(.needsAppLaunch)
+  }
+#endif
