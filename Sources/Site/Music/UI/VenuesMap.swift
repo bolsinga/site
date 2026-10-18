@@ -15,12 +15,6 @@ extension Logger {
 }
 
 extension VaultModel {
-  fileprivate func mapItems<V: Hashable & Identifiable & Nameable & PathRestorable>(
-    for items: any Collection<V>
-  ) -> [V: MKMapItem] {
-    items.reduce(into: [:]) { $0[$1] = venueMapItemMap[$1.archivePath] }
-  }
-
   fileprivate func detail<V: Hashable & Identifiable & Nameable & PathRestorable>(for item: V)
     -> Details
   {
@@ -34,47 +28,10 @@ extension VaultModel {
 struct VenuesMap<V: Hashable & Identifiable & Nameable & PathRestorable>: View {
   @Environment(VaultModel.self) private var model
 
-  private let debugShowItemsBounds = true
-  private let useClusterMap = true
-
   let items: any Collection<V>
   @Binding var searchString: String
-  @State private var cameraPosition: MapCameraPosition = .automatic
 
   let navigateToPath: (ArchivePath) -> Void
-
-  private var cMapItemsMap: [V: MKMapItem] {
-    model.mapItems(for: items)
-  }
-
-  private func changing() {
-    let mapItemsMap = cMapItemsMap
-    self.cameraPosition = .rect(mapItemsMap.values.rect.proportionallyPadded)
-
-    Logger.venuesMap.info("changing: Items: \(items.count) mapItems: \(mapItemsMap.count)")
-  }
-
-  @ViewBuilder private var map: some View {
-    let items = Array(cMapItemsMap.values)
-    Map(
-      initialPosition: cameraPosition,
-      interactionModes: MapInteractionModes()
-    ) {
-      ForEach(items, id: \.self) { item in
-        Marker(item: item)
-      }
-
-      if debugShowItemsBounds {
-        let itemsRect = items.rect
-        let rect = itemsRect.proportionallyPadded
-        MapPolygon(points: rect.corners)
-          .foregroundStyle(.purple.opacity(0.5))
-
-        MapPolygon(points: itemsRect.corners)
-          .foregroundStyle(.red.opacity(0.5))
-      }
-    }
-  }
 
   @ViewBuilder private var clusterMap: some View {
     ClusterMap(items: items, anchorY: CategoryAnnotationView.tipOffset) {
@@ -89,16 +46,8 @@ struct VenuesMap<V: Hashable & Identifiable & Nameable & PathRestorable>: View {
     }
   }
 
-  @ViewBuilder private var mapView: some View {
-    if useClusterMap {
-      clusterMap
-    } else {
-      map
-    }
-  }
-
   var body: some View {
-    mapView
+    clusterMap
       .navigationTitle(ArchiveCategory.venues.localizedString)
       #if os(iOS)
         .navigationBarTitleDisplayMode(.inline)
@@ -108,9 +57,6 @@ struct VenuesMap<V: Hashable & Identifiable & Nameable & PathRestorable>: View {
         searchString: $searchString,
         contentsEmpty: items.isEmpty
       )
-      .onChange(of: model.venueMapItemMap) { _, _ in
-        changing()
-      }
   }
 }
 

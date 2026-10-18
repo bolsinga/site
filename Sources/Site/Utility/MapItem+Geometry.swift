@@ -87,12 +87,6 @@ extension MKAnnotation {
   }
 }
 
-extension Collection where Element == MKMapItem {
-  var rect: MKMapRect {
-    reduce(into: MKMapRect.null) { $0 = $0.union($1.rect) }
-  }
-}
-
 extension Collection where Element == MKAnnotation {
   var rect: MKMapRect {
     reduce(into: MKMapRect.null) { $0 = $0.union($1.rect) }
