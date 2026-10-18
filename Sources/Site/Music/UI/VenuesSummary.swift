@@ -31,10 +31,11 @@ struct VenuesSummary: View {
     .pickerStyle(.segmented)
 
     let venues = model.nearbyVenues(nearbyModel, distanceThreshold: nearbyDistance)
+    let mapVenues = venues.names(filteredBy: searchString)
     ZStack {
       // The map stays once it has been shown, so toggling back doesn't rebuild it.
       if mapRequested || mode == .map {
-        VenuesMap(items: venues, navigateToPath: navigateToPath)
+        VenuesMap(items: mapVenues, searchString: searchString, navigateToPath: navigateToPath)
           .opacity(mode == .map ? 1 : 0)
           .allowsHitTesting(mode == .map)
           .accessibilityHidden(mode != .map)
@@ -51,15 +52,20 @@ struct VenuesSummary: View {
       case .map:
         Color.clear
           .allowsHitTesting(false)
+          .overlay(alignment: .bottom) {
+            if !searchString.isEmpty, mapVenues.isEmpty {
+              Text("No Matches")
+                .padding(.horizontal, 16)
+                .padding(.vertical, 8)
+                .background(.regularMaterial, in: .capsule)
+                .padding(.bottom, 16)
+            }
+          }
           .navigationTitle(ArchiveCategory.venues.localizedString)
           #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
           #endif
-          .archiveSearchable(
-            searchPrompt: String(localized: "Venue Names"),
-            searchString: $searchString,
-            contentsEmpty: venues.isEmpty
-          )
+          .searchable(text: $searchString, prompt: String(localized: "Venue Names"))
       }
     }
     .onChange(of: mode, initial: true) { _, mode in
