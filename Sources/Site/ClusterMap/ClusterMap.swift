@@ -218,16 +218,35 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
           size = CGSize(
             width: max(size.width, memberSize.width), height: max(size.height, memberSize.height))
         }
+        // On a small map, padding for the annotation can leave no room for what is being shown.
+        let vertical = min(size.height, mapView.bounds.height / 4.0)
+        let horizontal = min(size.width / 2.0, mapView.bounds.width / 4.0)
         #if canImport(UIKit)
           let insets = UIEdgeInsets(
-            top: size.height, left: size.width / 2.0, bottom: size.height, right: size.width / 2.0)
+            top: vertical, left: horizontal, bottom: vertical, right: horizontal)
         #else
           let insets = NSEdgeInsets(
-            top: size.height, left: size.width / 2.0, bottom: size.height, right: size.width / 2.0)
+            top: vertical, left: horizontal, bottom: vertical, right: horizontal)
         #endif
+        let memberRect = cluster.memberAnnotations.rect
         userMovedMap = true
-        mapView.setVisibleMapRect(
-          cluster.memberAnnotations.rect, edgePadding: insets, animated: true)
+        let visibleRect = mapView.visibleMapRect
+        let fitRect = mapView.mapRectThatFits(memberRect, edgePadding: insets)
+        // Showing all the members is the zoom, unless that is hardly a change. Then they are as
+        // far apart as they will be shown, and the zoom goes on until they no longer overlap.
+        // Zoom toward the tapped cluster; members can be spread far enough that their center is elsewhere.
+        let center = MKMapPoint(cluster.coordinate)
+        var target = fitRect
+        if fitRect.width > visibleRect.width * 0.8 {
+          let factor = separationFactor(of: members, in: fitRect, mapView: mapView, size: size)
+          target = fitRect.zoomed(by: factor, around: center)
+        }
+        if target.isCloseTo(visibleRect) {
+          // Already there, yet they still cluster; keep zooming in on them.
+          target = visibleRect.zoomed(by: 2.0, around: center)
+        }
+        target = showingAMember(of: members, in: target, mapView: mapView, size: size)
+        mapView.setVisibleMapRect(target, animated: true)
         return
       }
       if let annotation = view.annotation as? ItemAnnotation {
@@ -241,6 +260,51 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
         }
       }
     }
+
+    /// Zooming toward the middle of members can leave only the edges of annotations showing. If no
+    /// member is entirely in `rect`, center on the one nearest the middle.
+    private func showingAMember(
+      of members: [ItemAnnotation], in rect: MKMapRect, mapView: MKMapView, size: CGSize
+    ) -> MKMapRect {
+      let pointsPerMapPoint = mapView.bounds.width / rect.width
+      let dx = size.width / 2.0 / pointsPerMapPoint
+      let dy = size.height / pointsPerMapPoint
+      let middle = MKMapPoint(x: rect.midX, y: rect.midY)
+
+      let points = members.map { MKMapPoint($0.coordinate) }
+      let safe = rect.insetBy(dx: dx, dy: dy)
+      guard dx * 2.0 < rect.width, dy * 2.0 < rect.height, !points.contains(where: safe.contains)
+      else { return rect }
+
+      guard let nearest = points.min(by: { $0.distance(to: middle) < $1.distance(to: middle) })
+      else { return rect }
+      return MKMapRect(
+        x: nearest.x - rect.width / 2.0, y: nearest.y - rect.height / 2.0, width: rect.width,
+        height: rect.height)
+    }
+
+    /// How much to zoom in from `rect` for the closest of the members not to overlap each other.
+    private func separationFactor(
+      of members: [ItemAnnotation], in rect: MKMapRect, mapView: MKMapView, size: CGSize
+    ) -> Double {
+      let pointsPerMapPoint = mapView.bounds.width / rect.width
+      let points = members.map { MKMapPoint($0.coordinate) }
+      var factor = 1.0
+      for (index, first) in points.enumerated() {
+        for second in points[(index + 1)...] {
+          let dx = abs(first.x - second.x) * pointsPerMapPoint
+          let dy = abs(first.y - second.y) * pointsPerMapPoint
+          guard dx < size.width, dy < size.height, dx + dy > 0 else { continue }
+          // Zooming scales both distances; one reaching its size is enough to separate.
+          let needed = min(
+            dx > 0 ? size.width / dx : .infinity, dy > 0 ? size.height / dy : .infinity)
+          factor = max(factor, needed)
+        }
+      }
+      return min(factor, Self.maxSeparationFactor)
+    }
+
+    private static var maxSeparationFactor: Double { 4.0 }
 
     private func isAtOneLocation(_ annotations: [ItemAnnotation]) -> Bool {
       guard let first = annotations.first else { return false }
@@ -488,6 +552,21 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
 
     @available(*, unavailable)
     required init?(coder: NSCoder) { fatalError("no coder") }
+  }
+}
+
+extension MKMapRect {
+  fileprivate func zoomed(by factor: Double, around center: MKMapPoint) -> MKMapRect {
+    guard factor > 1.0 else { return self }
+    return MKMapRect(
+      x: center.x - width / factor / 2.0, y: center.y - height / factor / 2.0,
+      width: width / factor, height: height / factor)
+  }
+
+  fileprivate func isCloseTo(_ other: MKMapRect) -> Bool {
+    let tolerance = other.width * 0.001
+    return abs(minX - other.minX) <= tolerance && abs(minY - other.minY) <= tolerance
+      && abs(width - other.width) <= tolerance && abs(height - other.height) <= tolerance
   }
 }
 
