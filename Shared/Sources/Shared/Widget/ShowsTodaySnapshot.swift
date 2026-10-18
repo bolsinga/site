@@ -31,6 +31,11 @@ public struct ShowsTodaySnapshot: Codable, Equatable, Sendable {
   public func shows(on dayOfLeapYear: Int) -> [ShowDigest] {
     days[dayOfLeapYear] ?? []
   }
+
+  /// The most shows on any single day of the year; 0 when there are none.
+  public var busiestDayCount: Int {
+    days.values.map(\.count).max() ?? 0
+  }
 }
 
 extension ShowsTodaySnapshot {

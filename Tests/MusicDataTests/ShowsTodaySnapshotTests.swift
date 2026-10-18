@@ -47,6 +47,30 @@ struct ShowsTodaySnapshotTests {
     return ShowsTodaySnapshot(generated: Date(timeIntervalSince1970: 0), days: [350: [show]])
   }
 
+  func digest(_ id: String, year: Int?) -> ShowDigest {
+    ShowDigest(
+      id: .show(id),
+      date: PartialDate(year: year, month: 1, day: 1),
+      performers: [ArchiveItem(id: .artist("ar0"), name: "A Artist")],
+      venue: "A Venue",
+      location: Location(city: "city", state: "CA"),
+      comment: nil)
+  }
+
+  @Test func busiestDayCountIsTheMostShowsOnOneDay() {
+    let snapshot = ShowsTodaySnapshot(
+      days: [
+        1: [digest("a", year: 2001)],
+        200: [digest("b", year: 1988), digest("c", year: 1990), digest("d", year: nil)],
+        350: [digest("e", year: 1996), digest("f", year: 1997)],
+      ])
+    #expect(snapshot.busiestDayCount == 3)
+  }
+
+  @Test func busiestDayCountIsZeroWithoutShows() {
+    #expect(ShowsTodaySnapshot(days: [:]).busiestDayCount == 0)
+  }
+
   func temporaryFileURL() -> URL {
     FileManager.default.temporaryDirectory
       .appendingPathComponent(UUID().uuidString, isDirectory: true)

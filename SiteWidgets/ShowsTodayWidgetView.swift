@@ -28,6 +28,8 @@ struct ShowsTodayWidgetView: View {
         AccessoryRectangularView(state: entry.state)
       } else if family == .accessoryInline {
         AccessoryInlineView(state: entry.state)
+      } else if family == .accessoryCircular {
+        AccessoryCircularView(entry: entry)
       } else {
         homeScreenContent
       }
@@ -113,6 +115,55 @@ struct ShowsTodayWidgetView: View {
       case .needsAppLaunch:
         Text("Open \(String.archiveAppDisplayName)")
       }
+    }
+  }
+
+  /// Lock Screen circle: the show count inside a ring that fills with how busy the day is compared
+  /// with the archive's busiest day. Empty states fit only a symbol.
+  private struct AccessoryCircularView: View {
+    let entry: ShowsTodayEntry
+
+    var body: some View {
+      switch entry.state {
+      case .shows(_, let others):
+        ShowCountGauge(count: others.count + 1, busiest: entry.busiestDayCount)
+      case .noShows:
+        let message = NoShowsMessage(isToday: true)
+        symbol(message.systemImage, label: Text(message.title))
+      case .needsAppLaunch:
+        symbol("arrow.up.forward.app", label: Text("Open \(String.archiveAppDisplayName)"))
+      }
+    }
+
+    private func symbol(_ name: String, label: Text) -> some View {
+      ZStack {
+        AccessoryWidgetBackground()
+        Image(systemName: name)
+          .font(.title3)
+      }
+      .accessibilityLabel(label)
+    }
+  }
+
+  private struct ShowCountGauge: View {
+    let count: Int
+    let busiest: Int
+
+    var body: some View {
+      // The snapshot's busiest day is always at least today's count; clamp anyway so a stale
+      // value can't produce an invalid range.
+      let upper = Double(max(busiest, count))
+      Gauge(value: Double(count), in: 0...upper) {
+        Text("Shows")
+      } currentValueLabel: {
+        Text(count, format: .number)
+          .font(.title3.weight(.semibold))
+          .minimumScaleFactor(0.5)
+          .lineLimit(1)
+      }
+      .gaugeStyle(.accessoryCircularCapacity)
+      .accessibilityLabel(Text("^[\(count) show](inflect: true) today"))
+      .accessibilityValue(Text("Busiest day has \(Int(upper))"))
     }
   }
 #endif
@@ -489,7 +540,7 @@ extension ShowsTodayEntry {
   fileprivate static func preview(_ shows: [ShowDigest]) -> ShowsTodayEntry {
     ShowsTodayEntry(
       date: .now, dayOfLeapYear: Date.now.dayOfLeapYear,
-      state: .shows(featured: shows[0], others: Array(shows.dropFirst())))
+      state: .shows(featured: shows[0], others: Array(shows.dropFirst())), busiestDayCount: 8)
   }
 
   fileprivate static func preview(_ state: State) -> ShowsTodayEntry {
@@ -674,6 +725,26 @@ extension ShowsTodayEntry {
   }
 
   #Preview("Inline: Needs App Launch", as: .accessoryInline) {
+    ShowsTodayWidget()
+  } timeline: {
+    ShowsTodayEntry.preview(.needsAppLaunch)
+  }
+
+  #Preview("Circular: Shows", as: .accessoryCircular) {
+    ShowsTodayWidget()
+  } timeline: {
+    ShowsTodayEntry.preview(Array(ShowDigest.previewShows.prefix(3)))
+    ShowsTodayEntry.preview(Array(ShowDigest.previewShows.prefix(1)))
+    ShowsTodayEntry.preview(ShowDigest.manyPreviewShows)
+  }
+
+  #Preview("Circular: No Shows", as: .accessoryCircular) {
+    ShowsTodayWidget()
+  } timeline: {
+    ShowsTodayEntry.preview(.noShows)
+  }
+
+  #Preview("Circular: Needs App Launch", as: .accessoryCircular) {
     ShowsTodayWidget()
   } timeline: {
     ShowsTodayEntry.preview(.needsAppLaunch)

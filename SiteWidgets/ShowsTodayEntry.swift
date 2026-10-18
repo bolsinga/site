@@ -19,4 +19,6 @@ struct ShowsTodayEntry: TimelineEntry {
   let date: Date
   let dayOfLeapYear: Int
   let state: State
+  /// The most shows on any day of the year; the circular widget's gauge scales to it.
+  var busiestDayCount: Int = 0
 }

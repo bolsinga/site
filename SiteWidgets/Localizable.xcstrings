@@ -32,6 +32,9 @@
     "Artist" : {
 
     },
+    "Busiest day has %lld" : {
+
+    },
     "Choose which of today's shows to feature." : {
 
     },
@@ -60,6 +63,9 @@
 
     },
     "Show" : {
+
+    },
+    "Shows" : {
 
     },
     "Shows Today" : {

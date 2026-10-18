@@ -12,7 +12,7 @@ struct ShowsTodayProvider: AppIntentTimelineProvider {
   func placeholder(in context: Context) -> ShowsTodayEntry {
     ShowsTodayEntry(
       date: .now, dayOfLeapYear: Date.now.dayOfLeapYear,
-      state: .shows(featured: Self.sampleShow, others: Self.sampleOthers))
+      state: .shows(featured: Self.sampleShow, others: Self.sampleOthers), busiestDayCount: 12)
   }
 
   func snapshot(for configuration: ShowsTodayConfiguration, in context: Context) async
@@ -21,7 +21,10 @@ struct ShowsTodayProvider: AppIntentTimelineProvider {
     if context.isPreview {
       return placeholder(in: context)
     }
-    return entry(for: .now, snapshot: ShowsTodaySnapshot.read(), order: configuration.order)
+    let snapshot = ShowsTodaySnapshot.read()
+    return entry(
+      for: .now, snapshot: snapshot, busiestDayCount: snapshot?.busiestDayCount ?? 0,
+      order: configuration.order)
   }
 
   func timeline(for configuration: ShowsTodayConfiguration, in context: Context) async
@@ -29,15 +32,19 @@ struct ShowsTodayProvider: AppIntentTimelineProvider {
   {
     let midnights = ShowsTodayTimeline.midnights(from: .now)
     let snapshot = ShowsTodaySnapshot.read()
-    let entries = midnights.map { entry(for: $0, snapshot: snapshot, order: configuration.order) }
+    let busiestDayCount = snapshot?.busiestDayCount ?? 0
+    let entries = midnights.map {
+      entry(
+        for: $0, snapshot: snapshot, busiestDayCount: busiestDayCount, order: configuration.order)
+    }
 
     let reloadDate = ShowsTodayTimeline.reloadDate(after: midnights) ?? .now
     return Timeline(entries: entries, policy: .after(reloadDate))
   }
 
-  private func entry(for date: Date, snapshot: ShowsTodaySnapshot?, order: ShowsTodayOrder)
-    -> ShowsTodayEntry
-  {
+  private func entry(
+    for date: Date, snapshot: ShowsTodaySnapshot?, busiestDayCount: Int, order: ShowsTodayOrder
+  ) -> ShowsTodayEntry {
     let dayOfLeapYear = date.dayOfLeapYear
     guard let snapshot else {
       return ShowsTodayEntry(date: date, dayOfLeapYear: dayOfLeapYear, state: .needsAppLaunch)
@@ -48,7 +55,8 @@ struct ShowsTodayProvider: AppIntentTimelineProvider {
     }
     return ShowsTodayEntry(
       date: date, dayOfLeapYear: dayOfLeapYear,
-      state: .shows(featured: featured, others: Array(shows.dropFirst())))
+      state: .shows(featured: featured, others: Array(shows.dropFirst())),
+      busiestDayCount: busiestDayCount)
   }
 }
 
