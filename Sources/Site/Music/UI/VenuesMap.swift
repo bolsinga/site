@@ -6,9 +6,9 @@
 //
 
 import MapKit
+import Shared
 import SwiftUI
 import os
-import Shared
 
 extension Logger {
   fileprivate static let venuesMap = Logger(category: "venuesMap")
@@ -33,8 +33,10 @@ struct VenuesMap<V: Hashable & Identifiable & Nameable & PathRestorable>: View {
 
   let navigateToPath: (ArchivePath) -> Void
 
+  @State private var shownID = UUID()
+
   @ViewBuilder private var clusterMap: some View {
-    ClusterMap(items: items, anchorY: CategoryAnnotationView.tipOffset) {
+    ClusterMap(items: items, anchorY: CategoryAnnotationView.tipOffset, resetID: shownID) {
       model.detail(for: $0)
     } onSelect: { item in
       Logger.venuesMap.info("select \(String(describing: item.archivePath))")
@@ -48,6 +50,7 @@ struct VenuesMap<V: Hashable & Identifiable & Nameable & PathRestorable>: View {
 
   var body: some View {
     clusterMap
+      .onAppear { shownID = UUID() }
       .navigationTitle(ArchiveCategory.venues.localizedString)
       #if os(iOS)
         .navigationBarTitleDisplayMode(.inline)

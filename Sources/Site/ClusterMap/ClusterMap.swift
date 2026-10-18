@@ -36,9 +36,13 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
   /// Distance from the top of the content to the point placed on the coordinate. The bottom if nil.
   let anchorY: CGFloat?
 
+  /// Once the user moves the map it is no longer fit as items change. A new value starts over.
+  let resetID: UUID?
+
   init(
     items: any Collection<Item>,
     anchorY: CGFloat? = nil,
+    resetID: UUID? = nil,
     itemDetails: @escaping (Item) -> Details,
     onSelect: @escaping (Item) -> Void,
     @ViewBuilder itemContent: @escaping (Item) -> ItemContent,
@@ -50,6 +54,7 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
     self.clusterContent = clusterContent
     self.onSelect = onSelect
     self.anchorY = anchorY
+    self.resetID = resetID
   }
 
   func makeView(context: Context) -> MKMapView {
@@ -93,6 +98,8 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
     // Changing the annotations lays out their views right away. Doing that while SwiftUI is
     // updating this view lays out the enclosing hosting view reentrantly, so wait a turn.
     Task { @MainActor in
+      coordinator.reset(for: resetID)
+
       guard !coordinator.isApplyingUpdate else {
         Logger.clusterMap.info("isApplyingUpdate - early return")
         return
@@ -121,6 +128,28 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
     private var annotationMap: [Item.ID: ItemAnnotation] = [:]
     private var fittedIDs: Set<Item.ID> = []
     private var needsFit = false
+    private var resetID: UUID?
+    private var didFit = false
+    private var isFitting = false
+    private var userMovedMap = false
+
+    fileprivate func reset(for resetID: UUID?) {
+      guard resetID != self.resetID else { return }
+      self.resetID = resetID
+      userMovedMap = false
+      needsFit = true
+    }
+
+    func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {
+      // Only changes after the first fit that we didn't make are the user's.
+      if didFit && !isFitting {
+        userMovedMap = true
+      }
+    }
+
+    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+      isFitting = false
+    }
 
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
       if let item = annotation as? ItemAnnotation {
@@ -160,6 +189,7 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
           let insets = NSEdgeInsets(
             top: size.height, left: size.width / 2.0, bottom: size.height, right: size.width / 2.0)
         #endif
+        userMovedMap = true
         mapView.setVisibleMapRect(
           cluster.memberAnnotations.rect, edgePadding: insets, animated: true)
         return
@@ -252,7 +282,6 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
     }
 
     fileprivate func synchronize(entries: [(Item, Details)], mapView: MKMapView) {
-      // Items without a valid coordinate, such as venues not yet geocoded, have no annotation.
       let located = entries.filter { CLLocationCoordinate2DIsValid($0.1.coordinate) }
       let newItemIDs = Set(located.map { $0.0.id })
 
@@ -289,7 +318,6 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
         mapView.addAnnotations(annotationsToAdd)
       }
 
-      // Items are located as they are geocoded; show them all whenever that set changes.
       if newItemIDs != fittedIDs {
         fittedIDs = newItemIDs
         needsFit = true
@@ -303,13 +331,20 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
 
     /// Waits for the map to have a size, since fitting a map that hasn't been laid out is wrong.
     private func fitIfNeeded(_ mapView: MKMapView) {
-      guard needsFit, mapView.bounds.size != .zero else { return }
+      guard needsFit, !userMovedMap, mapView.bounds.size != .zero else { return }
       needsFit = false
 
       let rect = annotationMap.values.reduce(MKMapRect.null) { $0.union($1.coordinate.rect) }
       guard !rect.isNull else { return }
 
-      mapView.setVisibleMapRect(rect.proportionallyPadded, animated: true)
+      didFit = true
+      let padded = rect.proportionallyPadded
+      // No region change is reported if the map is already there, so don't wait for one.
+      guard !MKMapRectEqualToRect(mapView.mapRectThatFits(padded), mapView.visibleMapRect) else {
+        return
+      }
+      isFitting = true
+      mapView.setVisibleMapRect(padded, animated: true)
     }
   }
 
@@ -332,8 +367,6 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
     }
   }
 
-  /// Hosts SwiftUI content directly. The content's bottom center is anchored on the coordinate,
-  /// so a pointer drawn at the bottom of the content points at the location.
   private class AnnotationView: MKAnnotationView {
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
       super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
