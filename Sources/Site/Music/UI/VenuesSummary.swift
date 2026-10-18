@@ -52,15 +52,20 @@ struct VenuesSummary: View {
       case .map:
         Color.clear
           .allowsHitTesting(false)
+          .overlay(alignment: .bottom) {
+            if !searchString.isEmpty, mapVenues.isEmpty {
+              Text("No Matches")
+                .padding(.horizontal, 16)
+                .padding(.vertical, 8)
+                .background(.regularMaterial, in: .capsule)
+                .padding(.bottom, 16)
+            }
+          }
           .navigationTitle(ArchiveCategory.venues.localizedString)
           #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
           #endif
-          .archiveSearchable(
-            searchPrompt: String(localized: "Venue Names"),
-            searchString: $searchString,
-            contentsEmpty: mapVenues.isEmpty
-          )
+          .searchable(text: $searchString, prompt: String(localized: "Venue Names"))
       }
     }
     .onChange(of: mode, initial: true) { _, mode in

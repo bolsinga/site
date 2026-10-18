@@ -37,7 +37,10 @@ struct VenuesMap<V: Hashable & Identifiable & Nameable & PathRestorable>: View {
   @State private var openedDetail = false
 
   @ViewBuilder private var clusterMap: some View {
-    ClusterMap(items: items, anchorY: CategoryAnnotationView.tipOffset, resetID: shownID) {
+    ClusterMap(
+      items: items, anchorY: CategoryAnnotationView.tipOffset, resetID: shownID,
+      isSearching: !searchString.isEmpty
+    ) {
       model.detail(for: $0)
     } onSelect: { item in
       Logger.venuesMap.info("select \(String(describing: item.archivePath))")

@@ -41,11 +41,15 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
 
   let animatesFit: Bool
 
+  /// While searching, the map returns to where it was when the search began if nothing matches.
+  let isSearching: Bool
+
   init(
     items: any Collection<Item>,
     anchorY: CGFloat? = nil,
     resetID: UUID? = nil,
     animatesFit: Bool = true,
+    isSearching: Bool = false,
     itemDetails: @escaping (Item) -> Details,
     onSelect: @escaping (Item) -> Void,
     @ViewBuilder itemContent: @escaping (Item) -> ItemContent,
@@ -59,6 +63,7 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
     self.anchorY = anchorY
     self.resetID = resetID
     self.animatesFit = animatesFit
+    self.isSearching = isSearching
   }
 
   func makeView(context: Context) -> MKMapView {
@@ -102,6 +107,7 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
     // Changing the annotations lays out their views right away. Doing that while SwiftUI is
     // updating this view lays out the enclosing hosting view reentrantly, so wait a turn.
     Task { @MainActor in
+      coordinator.setSearching(isSearching, mapView: view)
       coordinator.reset(for: resetID)
 
       guard !coordinator.isApplyingUpdate else {
@@ -138,6 +144,14 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
     private var didFit = false
     private var isFitting = false
     private var userMovedMap = false
+    private var isSearching = false
+    private var rectBeforeSearch: MKMapRect?
+
+    fileprivate func setSearching(_ isSearching: Bool, mapView: MKMapView) {
+      guard isSearching != self.isSearching else { return }
+      self.isSearching = isSearching
+      rectBeforeSearch = isSearching ? mapView.visibleMapRect : nil
+    }
 
     fileprivate func reset(for resetID: UUID?) {
       guard resetID != self.resetID else { return }
@@ -341,16 +355,24 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
       needsFit = false
 
       let rect = annotationMap.values.reduce(MKMapRect.null) { $0.union($1.coordinate.rect) }
-      guard !rect.isNull else { return }
+      guard !rect.isNull else {
+        if let rectBeforeSearch {
+          show(rectBeforeSearch, in: mapView)
+        }
+        return
+      }
 
       didFit = true
-      let padded = rect.proportionallyPadded
+      show(rect.proportionallyPadded, in: mapView)
+    }
+
+    private func show(_ rect: MKMapRect, in mapView: MKMapView) {
       // No region change is reported if the map is already there, so don't wait for one.
-      guard !MKMapRectEqualToRect(mapView.mapRectThatFits(padded), mapView.visibleMapRect) else {
+      guard !MKMapRectEqualToRect(mapView.mapRectThatFits(rect), mapView.visibleMapRect) else {
         return
       }
       isFitting = true
-      mapView.setVisibleMapRect(padded, animated: animatesFit)
+      mapView.setVisibleMapRect(rect, animated: animatesFit)
     }
   }
 
