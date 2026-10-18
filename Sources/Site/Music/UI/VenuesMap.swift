@@ -34,12 +34,14 @@ struct VenuesMap<V: Hashable & Identifiable & Nameable & PathRestorable>: View {
   let navigateToPath: (ArchivePath) -> Void
 
   @State private var shownID = UUID()
+  @State private var openedDetail = false
 
   @ViewBuilder private var clusterMap: some View {
     ClusterMap(items: items, anchorY: CategoryAnnotationView.tipOffset, resetID: shownID) {
       model.detail(for: $0)
     } onSelect: { item in
       Logger.venuesMap.info("select \(String(describing: item.archivePath))")
+      openedDetail = true
       withAnimation { navigateToPath(item.archivePath) }
     } itemContent: { item in
       CategoryAnnotationView(category: .venues, render: .default, title: item.name)
@@ -50,7 +52,14 @@ struct VenuesMap<V: Hashable & Identifiable & Nameable & PathRestorable>: View {
 
   var body: some View {
     clusterMap
-      .onAppear { shownID = UUID() }
+      .onAppear {
+        // Coming back from a venue's detail keeps the map as it was left.
+        if openedDetail {
+          openedDetail = false
+        } else {
+          shownID = UUID()
+        }
+      }
       .navigationTitle(ArchiveCategory.venues.localizedString)
       #if os(iOS)
         .navigationBarTitleDisplayMode(.inline)
