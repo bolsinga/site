@@ -29,7 +29,6 @@ struct VenuesMap<V: Hashable & Identifiable & Nameable & PathRestorable>: View {
   @Environment(VaultModel.self) private var model
 
   let items: any Collection<V>
-  @Binding var searchString: String
 
   let navigateToPath: (ArchivePath) -> Void
 
@@ -60,21 +59,11 @@ struct VenuesMap<V: Hashable & Identifiable & Nameable & PathRestorable>: View {
           shownID = UUID()
         }
       }
-      .navigationTitle(ArchiveCategory.venues.localizedString)
-      #if os(iOS)
-        .navigationBarTitleDisplayMode(.inline)
-      #endif
-      .archiveSearchable(
-        searchPrompt: String(localized: "Venue Names"),
-        searchString: $searchString,
-        contentsEmpty: items.isEmpty
-      )
   }
 }
 
 #Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
-  @Previewable @State var searchString = ""
 
-  VenuesMap(items: model.previewAllVenues, searchString: $searchString) { _ in }
+  VenuesMap(items: model.previewAllVenues) { _ in }
 }
