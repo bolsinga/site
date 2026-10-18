@@ -19,6 +19,8 @@ struct VenuesSummary: View {
   @Binding var mode: VenuesMode
   let navigateToPath: (ArchivePath) -> Void
 
+  @State private var mapRequested = false
+
   var body: some View {
     Picker(selection: $mode) {
       ForEach(VenuesMode.allCases, id: \.self) {
@@ -29,7 +31,15 @@ struct VenuesSummary: View {
     .pickerStyle(.segmented)
 
     let venues = model.nearbyVenues(nearbyModel, distanceThreshold: nearbyDistance)
-    Group {
+    ZStack {
+      // The map stays once it has been shown, so toggling back doesn't rebuild it.
+      if mapRequested || mode == .map {
+        VenuesMap(items: venues, isShown: mode == .map, navigateToPath: navigateToPath)
+          .opacity(mode == .map ? 1 : 0)
+          .allowsHitTesting(mode == .map)
+          .accessibilityHidden(mode != .map)
+      }
+
       switch mode {
       case .grouped:
         VenueList(
@@ -39,7 +49,22 @@ struct VenuesSummary: View {
           searchString: $searchString
         )
       case .map:
-        VenuesMap(items: venues, searchString: $searchString, navigateToPath: navigateToPath)
+        Color.clear
+          .allowsHitTesting(false)
+          .navigationTitle(ArchiveCategory.venues.localizedString)
+          #if os(iOS)
+            .navigationBarTitleDisplayMode(.inline)
+          #endif
+          .archiveSearchable(
+            searchPrompt: String(localized: "Venue Names"),
+            searchString: $searchString,
+            contentsEmpty: venues.isEmpty
+          )
+      }
+    }
+    .onChange(of: mode, initial: true) { _, mode in
+      if mode == .map {
+        mapRequested = true
       }
     }
     .nearbyLocation(filteredDataIsEmpty: venues.isEmpty)
