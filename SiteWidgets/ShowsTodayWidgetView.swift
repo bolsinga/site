@@ -750,3 +750,67 @@ extension ShowsTodayEntry {
     ShowsTodayEntry.preview(.needsAppLaunch)
   }
 #endif
+
+/// StandBy isn't a widget family, so the previews below render the small widget through these
+/// stand-ins, which force the rendering mode StandBy provides (`.vibrant` for night mode) in the
+/// dark appearance over a black background.
+private struct StandByPreviewProvider: TimelineProvider {
+  func placeholder(in context: Context) -> ShowsTodayEntry { .preview(.noShows) }
+
+  func getSnapshot(in context: Context, completion: @escaping (ShowsTodayEntry) -> Void) {
+    completion(.preview(.noShows))
+  }
+
+  func getTimeline(in context: Context, completion: @escaping (Timeline<ShowsTodayEntry>) -> Void) {
+    completion(Timeline(entries: [.preview(.noShows)], policy: .never))
+  }
+}
+
+private func standByPreview(
+  _ entry: ShowsTodayEntry, renderingMode: WidgetRenderingMode
+) -> some View {
+  ShowsTodayWidgetView(entry: entry)
+    .environment(\.widgetRenderingMode, renderingMode)
+    .environment(\.colorScheme, .dark)
+    .containerBackground(.black, for: .widget)
+}
+
+private struct StandByPreviewWidget: Widget {
+  var body: some WidgetConfiguration {
+    StaticConfiguration(kind: "StandByPreview", provider: StandByPreviewProvider()) { entry in
+      standByPreview(entry, renderingMode: .fullColor)
+    }
+  }
+}
+
+private struct StandByNightPreviewWidget: Widget {
+  var body: some WidgetConfiguration {
+    StaticConfiguration(kind: "StandByNightPreview", provider: StandByPreviewProvider()) { entry in
+      standByPreview(entry, renderingMode: .vibrant)
+    }
+  }
+}
+
+#Preview("StandBy: Shows", as: .systemSmall) {
+  StandByPreviewWidget()
+} timeline: {
+  ShowsTodayEntry.preview(Array(ShowDigest.previewShows.prefix(3)))
+}
+
+#Preview("StandBy Night: Shows", as: .systemSmall) {
+  StandByNightPreviewWidget()
+} timeline: {
+  ShowsTodayEntry.preview(Array(ShowDigest.previewShows.prefix(3)))
+}
+
+#Preview("StandBy: No Shows", as: .systemSmall) {
+  StandByPreviewWidget()
+} timeline: {
+  ShowsTodayEntry.preview(.noShows)
+}
+
+#Preview("StandBy Night: No Shows", as: .systemSmall) {
+  StandByNightPreviewWidget()
+} timeline: {
+  ShowsTodayEntry.preview(.noShows)
+}
