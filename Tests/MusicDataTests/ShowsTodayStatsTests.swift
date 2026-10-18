@@ -92,4 +92,15 @@ struct ShowsTodayStatsTests {
     ])
     #expect(stats.mostVisitedVenue == .init(name: "Amoeba", count: 2))
   }
+
+  @Test func relevanceScalesWithBusyness() {
+    #expect(ShowsTodayRelevance.score(showCount: 0, busiestDayCount: 10) == 0)
+    #expect(ShowsTodayRelevance.score(showCount: 5, busiestDayCount: 10) == 0.5)
+    #expect(ShowsTodayRelevance.score(showCount: 10, busiestDayCount: 10) == 1)
+  }
+
+  @Test func relevanceStaysInRangeWithAStaleBusiestDay() {
+    #expect(ShowsTodayRelevance.score(showCount: 4, busiestDayCount: 0) == 1)
+    #expect(ShowsTodayRelevance.score(showCount: 4, busiestDayCount: 2) == 1)
+  }
 }

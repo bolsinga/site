@@ -21,4 +21,16 @@ struct ShowsTodayEntry: TimelineEntry {
   let state: State
   /// The most shows on any day of the year; the circular widget's gauge scales to it.
   var busiestDayCount: Int = 0
+
+  /// Busier days rank higher when the system picks a widget for StandBy or a Smart Stack; it
+  /// applies for the rest of the entry's day.
+  var relevance: TimelineEntryRelevance? {
+    guard case .shows(_, let others) = state else { return TimelineEntryRelevance(score: 0) }
+    let calendar = Calendar.current
+    let nextMidnight = calendar.date(byAdding: .day, value: 1, to: calendar.startOfDay(for: date))
+    return TimelineEntryRelevance(
+      score: ShowsTodayRelevance.score(
+        showCount: others.count + 1, busiestDayCount: busiestDayCount),
+      duration: nextMidnight.map { $0.timeIntervalSince(date) } ?? 0)
+  }
 }
