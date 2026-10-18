@@ -34,7 +34,7 @@ struct VenuesSummary: View {
     ZStack {
       // The map stays once it has been shown, so toggling back doesn't rebuild it.
       if mapRequested || mode == .map {
-        VenuesMap(items: venues, isShown: mode == .map, navigateToPath: navigateToPath)
+        VenuesMap(items: venues, navigateToPath: navigateToPath)
           .opacity(mode == .map ? 1 : 0)
           .allowsHitTesting(mode == .map)
           .accessibilityHidden(mode != .map)
