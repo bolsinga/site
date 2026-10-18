@@ -159,7 +159,7 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
         // Selection is delivered in the middle of MapKit's event handling, where a SwiftUI state
         // change doesn't animate. Defer to the next turn of the run loop, like the menu path.
         let item = annotation.item
-        DispatchQueue.main.async { [onSelect] in
+        Task { @MainActor [onSelect] in
           onSelect(item)
         }
       }
