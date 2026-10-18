@@ -31,10 +31,11 @@ struct VenuesSummary: View {
     .pickerStyle(.segmented)
 
     let venues = model.nearbyVenues(nearbyModel, distanceThreshold: nearbyDistance)
+    let mapVenues = venues.names(filteredBy: searchString)
     ZStack {
       // The map stays once it has been shown, so toggling back doesn't rebuild it.
       if mapRequested || mode == .map {
-        VenuesMap(items: venues, navigateToPath: navigateToPath)
+        VenuesMap(items: mapVenues, searchString: searchString, navigateToPath: navigateToPath)
           .opacity(mode == .map ? 1 : 0)
           .allowsHitTesting(mode == .map)
           .accessibilityHidden(mode != .map)
@@ -58,7 +59,7 @@ struct VenuesSummary: View {
           .archiveSearchable(
             searchPrompt: String(localized: "Venue Names"),
             searchString: $searchString,
-            contentsEmpty: venues.isEmpty
+            contentsEmpty: mapVenues.isEmpty
           )
       }
     }

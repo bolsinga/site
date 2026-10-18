@@ -29,6 +29,7 @@ struct VenuesMap<V: Hashable & Identifiable & Nameable & PathRestorable>: View {
   @Environment(VaultModel.self) private var model
 
   let items: any Collection<V>
+  let searchString: String
 
   let navigateToPath: (ArchivePath) -> Void
 
@@ -59,11 +60,15 @@ struct VenuesMap<V: Hashable & Identifiable & Nameable & PathRestorable>: View {
           shownID = UUID()
         }
       }
+      .onChange(of: searchString) {
+        // A search shows its results, wherever the map was moved to.
+        shownID = UUID()
+      }
   }
 }
 
 #Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
 
-  VenuesMap(items: model.previewAllVenues) { _ in }
+  VenuesMap(items: model.previewAllVenues, searchString: "") { _ in }
 }
