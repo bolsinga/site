@@ -110,6 +110,8 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
 
     fileprivate var isApplyingUpdate = false
     private var annotationMap: [Item.ID: ItemAnnotation] = [:]
+    private var fittedIDs: Set<Item.ID> = []
+    private var needsFit = false
 
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
       if let item = annotation as? ItemAnnotation {
@@ -202,7 +204,8 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
           menuItem.representedObject = annotation
           menu.addItem(menuItem)
         }
-        menu.popUp(positioning: nil, at: NSPoint(x: view.bounds.midX, y: view.bounds.midY), in: view)
+        menu.popUp(
+          positioning: nil, at: NSPoint(x: view.bounds.midX, y: view.bounds.midY), in: view)
       #endif
     }
 
@@ -244,13 +247,15 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
       itemDetails: (Item) -> Details,
       mapView: MKMapView
     ) {
-      let newItemIDs = Set(items.map { $0.id })
+      // Items without a valid coordinate, such as venues not yet geocoded, have no annotation.
+      let located = items.map { ($0, itemDetails($0)) }.filter {
+        CLLocationCoordinate2DIsValid($0.1.coordinate)
+      }
+      let newItemIDs = Set(located.map { $0.0.id })
 
       var annotationsToAdd = [ItemAnnotation]()
 
-      for item in items {
-        let details = itemDetails(item)
-
+      for (item, details) in located {
         if let existingAnnotation = annotationMap[item.id] {
           existingAnnotation.item = item
           existingAnnotation.coordinate = details.coordinate
@@ -280,6 +285,28 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
         Logger.clusterMap.info("adding \(annotationsToAdd.count) annotations.")
         mapView.addAnnotations(annotationsToAdd)
       }
+
+      // Items are located as they are geocoded; show them all whenever that set changes.
+      if newItemIDs != fittedIDs {
+        fittedIDs = newItemIDs
+        needsFit = true
+      }
+      fitIfNeeded(mapView)
+    }
+
+    func mapViewDidFinishLoadingMap(_ mapView: MKMapView) {
+      fitIfNeeded(mapView)
+    }
+
+    /// Waits for the map to have a size, since fitting a map that hasn't been laid out is wrong.
+    private func fitIfNeeded(_ mapView: MKMapView) {
+      guard needsFit, mapView.bounds.size != .zero else { return }
+      needsFit = false
+
+      let rect = annotationMap.values.reduce(MKMapRect.null) { $0.union($1.coordinate.rect) }
+      guard !rect.isNull else { return }
+
+      mapView.setVisibleMapRect(rect.proportionallyPadded, animated: true)
     }
   }
 
