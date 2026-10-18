@@ -68,7 +68,8 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
       ClusterAnnotationView.self,
       forAnnotationViewWithReuseIdentifier: .clusterAnnotationViewReuseIdentifier)
 
-    coordinator.synchronize(items: items, itemDetails: itemDetails, mapView: mapView)
+    let entries = items.map { ($0, itemDetails($0)) }
+    coordinator.synchronize(entries: entries, mapView: mapView)
 
     return mapView
   }
@@ -85,14 +86,22 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
 
     refresh(coordinator)
 
-    guard !coordinator.isApplyingUpdate else {
-      Logger.clusterMap.info("isApplyingUpdate - early return")
-      return
-    }
-    coordinator.isApplyingUpdate = true
-    defer { coordinator.isApplyingUpdate = false }
+    // Reading the details observes the model, so do it here, while SwiftUI is tracking this
+    // update, to be updated again when it changes.
+    let entries = items.map { ($0, itemDetails($0)) }
 
-    coordinator.synchronize(items: items, itemDetails: itemDetails, mapView: view)
+    // Changing the annotations lays out their views right away. Doing that while SwiftUI is
+    // updating this view lays out the enclosing hosting view reentrantly, so wait a turn.
+    Task { @MainActor in
+      guard !coordinator.isApplyingUpdate else {
+        Logger.clusterMap.info("isApplyingUpdate - early return")
+        return
+      }
+      coordinator.isApplyingUpdate = true
+      defer { coordinator.isApplyingUpdate = false }
+
+      coordinator.synchronize(entries: entries, mapView: view)
+    }
   }
 
   private func refresh(_ coordinator: Coordinator) {
@@ -242,15 +251,9 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
       return view
     }
 
-    fileprivate func synchronize(
-      items: any Collection<Item>,
-      itemDetails: (Item) -> Details,
-      mapView: MKMapView
-    ) {
+    fileprivate func synchronize(entries: [(Item, Details)], mapView: MKMapView) {
       // Items without a valid coordinate, such as venues not yet geocoded, have no annotation.
-      let located = items.map { ($0, itemDetails($0)) }.filter {
-        CLLocationCoordinate2DIsValid($0.1.coordinate)
-      }
+      let located = entries.filter { CLLocationCoordinate2DIsValid($0.1.coordinate) }
       let newItemIDs = Set(located.map { $0.0.id })
 
       var annotationsToAdd = [ItemAnnotation]()
