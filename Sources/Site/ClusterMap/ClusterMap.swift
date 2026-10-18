@@ -19,6 +19,14 @@ extension String {
   fileprivate static let clusterAnnotationViewReuseIdentifier = "gdb.map.clusterView.reuse"
 }
 
+extension MKMapRect {
+  fileprivate func isNearlyEqual(to other: MKMapRect) -> Bool {
+    let tolerance = other.width * 0.001
+    return abs(minX - other.minX) <= tolerance && abs(minY - other.minY) <= tolerance
+      && abs(width - other.width) <= tolerance && abs(height - other.height) <= tolerance
+  }
+}
+
 struct Details {
   let coordinate: CLLocationCoordinate2D
   let title: String
@@ -142,7 +150,9 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
     var animatesFit = true
     private var resetID: UUID?
     private var didFit = false
-    private var isFitting = false
+    /// Where the fit in progress is going, so its region changes aren't taken as the user's.
+    private var fitTarget: MKMapRect?
+    private var lastSize = CGSize.zero
     private var userMovedMap = false
     private var isSearching = false
     private var rectBeforeSearch: MKMapRect?
@@ -161,14 +171,20 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
     }
 
     func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {
+      // A new size, such as from rotation or resizing a window, changes the region without the user.
+      let sizeChanged = mapView.bounds.size != lastSize
+      lastSize = mapView.bounds.size
+
       // Only changes after the first fit that we didn't make are the user's.
-      if didFit && !isFitting {
+      if didFit && fitTarget == nil && !sizeChanged {
         userMovedMap = true
       }
     }
 
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-      isFitting = false
+      // A fit that was interrupted by another reports its end too; only the last one is done.
+      guard let fitTarget, mapView.visibleMapRect.isNearlyEqual(to: fitTarget) else { return }
+      self.fitTarget = nil
     }
 
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
@@ -368,10 +384,9 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
 
     private func show(_ rect: MKMapRect, in mapView: MKMapView) {
       // No region change is reported if the map is already there, so don't wait for one.
-      guard !MKMapRectEqualToRect(mapView.mapRectThatFits(rect), mapView.visibleMapRect) else {
-        return
-      }
-      isFitting = true
+      let target = mapView.mapRectThatFits(rect)
+      guard !target.isNearlyEqual(to: mapView.visibleMapRect) else { return }
+      fitTarget = target
       mapView.setVisibleMapRect(rect, animated: animatesFit)
     }
   }
