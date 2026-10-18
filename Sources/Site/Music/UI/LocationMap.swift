@@ -9,31 +9,39 @@ import MapKit
 import Shared
 import SwiftUI
 
+private struct Place: Identifiable {
+  let coordinate: CLLocationCoordinate2D
+
+  var id: String { "\(coordinate.latitude),\(coordinate.longitude)" }
+}
+
 struct LocationMap: View {
   let geocodingInProgress: Bool
   @Binding var item: MKMapItem?
-  let debugShowItemBounds = false
 
   var body: some View {
     ZStack {
       if let item {
-        let rect = item.rect.proportionallyPadded
-        Map(
-          initialPosition: .rect(rect),
-          interactionModes: MapInteractionModes()
+        let place = Place(coordinate: item.location.coordinate)
+        ClusterMap(
+          items: [place], anchorY: CategoryAnnotationView.tipOffset, animatesFit: false
         ) {
-          Marker(item: item)
-
-          if debugShowItemBounds {
-            MapPolygon(points: rect.corners)
-              .foregroundStyle(.purple.opacity(0.5))
-          }
+          Details(coordinate: $0.coordinate, title: "")
+        } onSelect: { _ in
+        } itemContent: { _ in
+          CategoryAnnotationView(category: .venues, render: .default)
+        } clusterContent: {
+          CategoryAnnotationView(category: .venues, render: .badge($0))
         }
-        .tint(.accentColor)
-        .onTapGesture {
-          #if !os(tvOS)
-            item.openInMaps()
-          #endif
+        .allowsHitTesting(false)
+        .overlay {
+          Color.clear
+            .contentShape(.rect)
+            .onTapGesture {
+              #if !os(tvOS)
+                item.openInMaps()
+              #endif
+            }
         }
       } else if geocodingInProgress {
         HStack {

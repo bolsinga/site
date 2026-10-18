@@ -39,10 +39,13 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
   /// Once the user moves the map it is no longer fit as items change. A new value starts over.
   let resetID: UUID?
 
+  let animatesFit: Bool
+
   init(
     items: any Collection<Item>,
     anchorY: CGFloat? = nil,
     resetID: UUID? = nil,
+    animatesFit: Bool = true,
     itemDetails: @escaping (Item) -> Details,
     onSelect: @escaping (Item) -> Void,
     @ViewBuilder itemContent: @escaping (Item) -> ItemContent,
@@ -55,6 +58,7 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
     self.onSelect = onSelect
     self.anchorY = anchorY
     self.resetID = resetID
+    self.animatesFit = animatesFit
   }
 
   func makeView(context: Context) -> MKMapView {
@@ -116,6 +120,7 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
     coordinator.clusterContent = { AnyView(clusterContent($0)) }
     coordinator.onSelect = onSelect
     coordinator.anchorY = anchorY
+    coordinator.animatesFit = animatesFit
   }
 
   final class Coordinator: NSObject, MKMapViewDelegate {
@@ -128,6 +133,7 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
     private var annotationMap: [Item.ID: ItemAnnotation] = [:]
     private var fittedIDs: Set<Item.ID> = []
     private var needsFit = false
+    var animatesFit = true
     private var resetID: UUID?
     private var didFit = false
     private var isFitting = false
@@ -344,7 +350,7 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
         return
       }
       isFitting = true
-      mapView.setVisibleMapRect(padded, animated: true)
+      mapView.setVisibleMapRect(padded, animated: animatesFit)
     }
   }
 
