@@ -30,6 +30,7 @@ struct VenuesMap<V: Hashable & Identifiable & Nameable & PathRestorable>: View {
 
   let items: any Collection<V>
   let searchString: String
+  let isShown: Bool
 
   let navigateToPath: (ArchivePath) -> Void
 
@@ -59,6 +60,7 @@ struct VenuesMap<V: Hashable & Identifiable & Nameable & PathRestorable>: View {
 
   var body: some View {
     clusterMap
+      .ignoresSafeArea()
       .onAppear {
         // Coming back from a venue's detail keeps the map as it was left.
         if openedDetail {
@@ -71,11 +73,16 @@ struct VenuesMap<V: Hashable & Identifiable & Nameable & PathRestorable>: View {
         // A search shows its results, wherever the map was moved to.
         shownID = UUID()
       }
+      .onChange(of: isShown) { _, isShown in
+        if isShown {
+          shownID = UUID()
+        }
+      }
   }
 }
 
 #Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
 
-  VenuesMap(items: model.previewAllVenues, searchString: "") { _ in }
+  VenuesMap(items: model.previewAllVenues, searchString: "", isShown: true) { _ in }
 }

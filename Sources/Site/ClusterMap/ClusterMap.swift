@@ -19,6 +19,12 @@ extension String {
   fileprivate static let clusterAnnotationViewReuseIdentifier = "gdb.map.clusterView.reuse"
 }
 
+#if canImport(UIKit)
+  private typealias MapEdgeInsets = UIEdgeInsets
+#else
+  private typealias MapEdgeInsets = NSEdgeInsets
+#endif
+
 extension MKMapRect {
   fileprivate func isNearlyEqual(to other: MKMapRect) -> Bool {
     let tolerance = other.width * 0.001
@@ -171,7 +177,7 @@ struct ClusterMap<
     private var didFit = false
     /// Where the fit in progress is going, so its region changes aren't taken as the user's.
     private var fitTarget: MKMapRect?
-    private var lastSize = CGSize.zero
+    private var lastLayout: [CGFloat] = []
     private var userMovedMap = false
     private var isSearching = false
     private var rectBeforeSearch: MKMapRect?
@@ -199,12 +205,18 @@ struct ClusterMap<
     }
 
     func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {
-      // A new size, such as from rotation or resizing a window, changes the region without the user.
-      let sizeChanged = mapView.bounds.size != lastSize
-      lastSize = mapView.bounds.size
+      // A new size or safe area, such as from rotation or resizing a window, changes the region
+      // without the user.
+      let safeArea = mapView.safeAreaInsets
+      let layout = [
+        mapView.bounds.width, mapView.bounds.height,
+        safeArea.top, safeArea.left, safeArea.bottom, safeArea.right,
+      ]
+      let layoutChanged = layout != lastLayout
+      lastLayout = layout
 
       // Only changes after the first fit that we didn't make are the user's.
-      if didFit && fitTarget == nil && !sizeChanged {
+      if didFit && fitTarget == nil && !layoutChanged {
         userMovedMap = true
       }
     }
@@ -242,6 +254,16 @@ struct ClusterMap<
         if !covered { keptTitles.append(padded) }
         pin.view.setTitleHidden(covered, animated: !reducesMotion)
       }
+    }
+
+    /// The map extends under bars and controls; keep what is shown clear of them.
+    private func edgePadding(
+      for mapView: MKMapView, top: CGFloat = 0, horizontal: CGFloat = 0, bottom: CGFloat = 0
+    ) -> MapEdgeInsets {
+      let covered = mapView.safeAreaInsets
+      return MapEdgeInsets(
+        top: covered.top + top, left: covered.left + horizontal, bottom: covered.bottom + bottom,
+        right: covered.right + horizontal)
     }
 
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
@@ -288,11 +310,7 @@ struct ClusterMap<
         let top = min(size.height, mapView.bounds.height / 4.0)
         let bottom = min(titleHeight, mapView.bounds.height / 4.0)
         let horizontal = min(extent.width / 2.0, mapView.bounds.width / 4.0)
-        #if canImport(UIKit)
-          let insets = UIEdgeInsets(top: top, left: horizontal, bottom: bottom, right: horizontal)
-        #else
-          let insets = NSEdgeInsets(top: top, left: horizontal, bottom: bottom, right: horizontal)
-        #endif
+        let insets = edgePadding(for: mapView, top: top, horizontal: horizontal, bottom: bottom)
         let memberRect = cluster.memberAnnotations.rect
         userMovedMap = true
         let visibleRect = mapView.visibleMapRect
@@ -520,10 +538,12 @@ struct ClusterMap<
 
     private func show(_ rect: MKMapRect, in mapView: MKMapView) {
       // No region change is reported if the map is already there, so don't wait for one.
-      let target = mapView.mapRectThatFits(rect)
+      let insets = edgePadding(for: mapView)
+      let target = mapView.mapRectThatFits(rect, edgePadding: insets)
       guard !target.isNearlyEqual(to: mapView.visibleMapRect) else { return }
       fitTarget = target
-      mapView.setVisibleMapRect(rect, animated: animatesFit && !reducesMotion)
+      mapView.setVisibleMapRect(
+        rect, edgePadding: insets, animated: animatesFit && !reducesMotion)
     }
   }
 
@@ -599,11 +619,31 @@ struct ClusterMap<
     }
 
     #if canImport(UIKit)
-      private var hostingView: HostingView?
-      fileprivate var titleHostingView: HostingView?
+      private var hostingController: UIHostingController<AnyView>?
+      private var titleController: UIHostingController<AnyView>?
+      fileprivate var titleHostingView: UIView? { titleController?.view }
       private var content: AnyView?
       private var title: AnyView?
       private var anchorY: CGFloat?
+
+      /// Unlike a hosting configuration, a hosting controller can leave the safe area out of its
+      /// layout. Under a bar, the map's safe area would otherwise move the content off its frame.
+      private func hostingController(
+        for content: AnyView, reusing existing: UIHostingController<AnyView>?
+      ) -> UIHostingController<AnyView> {
+        if let existing {
+          existing.rootView = content
+          return existing
+        }
+        let controller = UIHostingController(rootView: content)
+        controller.safeAreaRegions = []
+        controller.sizingOptions = .intrinsicContentSize
+        controller.view.backgroundColor = .clear
+        controller.view.isUserInteractionEnabled = false
+        controller.view.clipsToBounds = false
+        addSubview(controller.view)
+        return controller
+      }
 
       func configure(
         content: AnyView, title: AnyView?, anchorY: CGFloat?, accessibilityLabel: String?
@@ -617,18 +657,10 @@ struct ClusterMap<
         self.accessibilityLabel = accessibilityLabel
         accessibilityTraits = .button
 
-        let configuration = UIHostingConfiguration { content }.margins(.all, 0)
-        let hostingView: HostingView
-        if let existing = self.hostingView {
-          hostingView = existing
-          hostingView.configuration = configuration
-        } else {
-          hostingView = configuration.makeContentView()
-          hostingView.isUserInteractionEnabled = false
-          hostingView.clipsToBounds = false
-          addSubview(hostingView)
-          self.hostingView = hostingView
-
+        let isNew = hostingController == nil
+        let controller = hostingController(for: content, reusing: hostingController)
+        hostingController = controller
+        if isNew {
           // The view is sized once to fit its content, so size it again when the text size changes.
           registerForTraitChanges([UITraitPreferredContentSizeCategory.self]) {
             (view: AnnotationView, _) in
@@ -639,33 +671,24 @@ struct ClusterMap<
           }
         }
 
-        let size = hostingView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+        let size = controller.view.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
         bounds = CGRect(origin: .zero, size: size)
-        hostingView.frame = bounds
+        controller.view.frame = bounds
         // The view is centered on the coordinate by default; shift it so the anchor point is there.
         centerOffset = CGPoint(x: 0, y: size.height / 2.0 - (anchorY ?? size.height))
 
         if let title {
-          let configuration = UIHostingConfiguration { title }.margins(.all, 0)
-          let titleView: HostingView
-          if let existing = titleHostingView {
-            titleView = existing
-            titleView.configuration = configuration
-          } else {
-            titleView = configuration.makeContentView()
-            titleView.isUserInteractionEnabled = false
-            titleView.clipsToBounds = false
-            addSubview(titleView)
-            titleHostingView = titleView
-          }
-          titleView.alpha = isTitleHidden ? 0.0 : 1.0
-          let titleSize = titleView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
-          titleView.frame = CGRect(
+          let controller = hostingController(for: title, reusing: titleController)
+          titleController = controller
+          controller.view.alpha = isTitleHidden ? 0.0 : 1.0
+          let titleSize = controller.view.systemLayoutSizeFitting(
+            UIView.layoutFittingCompressedSize)
+          controller.view.frame = CGRect(
             x: (size.width - titleSize.width) / 2.0, y: size.height + Self.titleSpacing,
             width: titleSize.width, height: titleSize.height)
         } else {
-          titleHostingView?.removeFromSuperview()
-          titleHostingView = nil
+          titleController?.view.removeFromSuperview()
+          titleController = nil
         }
       }
 

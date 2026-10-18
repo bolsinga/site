@@ -27,23 +27,14 @@ struct VenuesSummary: View {
   @State private var mapSearchSettled = false
 
   var body: some View {
-    Picker(selection: $mode) {
-      ForEach(VenuesMode.allCases, id: \.self) {
-        // The label is what VoiceOver reads for the icon.
-        Label($0.localizedString, systemImage: $0.systemImage)
-          .labelStyle(.iconOnly)
-      }
-    } label: {
-    }
-    .pickerStyle(.segmented)
-    .padding(.horizontal)
-
     let venues = model.nearbyVenues(nearbyModel, distanceThreshold: nearbyDistance)
     let mapVenues = venues.names(filteredBy: mapSearchString)
     ZStack {
       // The map stays once it has been shown, so toggling back doesn't rebuild it.
       if mapRequested || mode == .map {
-        VenuesMap(items: mapVenues, searchString: mapSearchString, navigateToPath: navigateToPath)
+        VenuesMap(
+          items: mapVenues, searchString: mapSearchString, isShown: mode == .map,
+          navigateToPath: navigateToPath)
           .opacity(mode == .map ? 1 : 0)
           .allowsHitTesting(mode == .map)
           .accessibilityHidden(mode != .map)
@@ -74,6 +65,9 @@ struct VenuesSummary: View {
             .navigationBarTitleDisplayMode(.inline)
           #endif
           .searchable(text: $searchString, prompt: String(localized: "Venue Names"))
+          #if os(iOS)
+            .searchToolbarBehavior(.minimize)
+          #endif
       }
     }
     .task(id: searchString) {

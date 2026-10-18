@@ -37,6 +37,19 @@ struct ArchiveCategoryToolbarContent: ToolbarContent {
   }
 
   var body: some ToolbarContent {
+    if category == .venues {
+      ToolbarItem(placement: .principal) {
+        Picker(selection: $venuesMode) {
+          ForEach(VenuesMode.allCases, id: \.self) {
+            // The label is what VoiceOver reads for the icon.
+            Label($0.localizedString, systemImage: $0.systemImage)
+              .labelStyle(.iconOnly)
+          }
+        } label: {
+        }
+        .pickerStyle(.segmented)
+      }
+    }
     if let sortableData = sortableData(category) {
       SortModifierToolbarContent(algorithm: sortableData.sort) {
         switch $0 {
