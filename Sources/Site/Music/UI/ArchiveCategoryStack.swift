@@ -26,6 +26,7 @@ struct ArchiveCategoryStack: View {
   @Binding var dayOfLeapYear: Int
 
   let reloadModel: @MainActor () async -> Void
+  let navigateToPath: (ArchivePath) -> Void
 
   @State private var artistSearchString: String = ""
   @State private var venueSearchString: String = ""
@@ -54,7 +55,11 @@ struct ArchiveCategoryStack: View {
         ShowsSummary()
       }
     case .venues:
-      VenuesSummary(sort: venueSort, searchString: $venueSearchString, mode: $venuesMode)
+      VenuesSummary(
+        sort: venueSort,
+        searchString: $venueSearchString,
+        mode: $venuesMode,
+        navigateToPath: navigateToPath)
     case .artists:
       ArtistsSummary(sort: artistSort, searchString: $artistSearchString)
     case .settings:
@@ -100,7 +105,8 @@ extension ArchiveCategoryStack {
       artistSort: .constant(.alphabetical),
       venuesMode: .constant(.default),
       dayOfLeapYear: .constant(Date.now.dayOfLeapYear),
-      reloadModel: {})
+      reloadModel: {},
+      navigateToPath: { _ in })
   }
 }
 
