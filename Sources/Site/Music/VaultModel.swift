@@ -343,8 +343,4 @@ public typealias VaultModel = AbstractVaultModel<BasicIdentifier>
       ? artistsNearby(distanceThreshold)
       : vault.artistIDs().compactMap { vault.rankedArtist(id: $0.0) }
   }
-
-  func coordinate(for id: ID) -> CLLocationCoordinate2D {
-    kCLLocationCoordinate2DInvalid
-  }
 }
