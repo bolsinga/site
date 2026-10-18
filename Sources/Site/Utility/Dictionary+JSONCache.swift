@@ -8,7 +8,7 @@
 import Foundation
 
 extension Dictionary where Key: Codable, Value: Codable {
-  static func read(fileName: String, fileManager: FileManager = .default, deleteFile: Bool = true)
+  static func read(fileName: String, fileManager: FileManager = .default, deleteFile: Bool = false)
     throws -> Self
   {
     try fileManager.readCache(fileName: fileName, deleteFile: deleteFile)
