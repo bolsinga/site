@@ -24,4 +24,13 @@ enum VenuesMode: Int, CaseIterable, Codable, Sendable {
       "list.bullet"
     }
   }
+
+  var localizedString: String {
+    switch self {
+    case .map:
+      String(localized: "Map")
+    case .grouped:
+      String(localized: "List")
+    }
+  }
 }

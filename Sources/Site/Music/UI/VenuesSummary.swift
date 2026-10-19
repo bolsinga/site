@@ -29,11 +29,14 @@ struct VenuesSummary: View {
   var body: some View {
     Picker(selection: $mode) {
       ForEach(VenuesMode.allCases, id: \.self) {
-        Image(systemName: $0.systemImage)
+        // The label is what VoiceOver reads for the icon.
+        Label($0.localizedString, systemImage: $0.systemImage)
+          .labelStyle(.iconOnly)
       }
     } label: {
     }
     .pickerStyle(.segmented)
+    .padding(.horizontal)
 
     let venues = model.nearbyVenues(nearbyModel, distanceThreshold: nearbyDistance)
     let mapVenues = venues.names(filteredBy: mapSearchString)
