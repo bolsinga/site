@@ -38,7 +38,7 @@ struct NearbyLocationModifier: ViewModifier {
       if nearbyModel.locationFilter.isNearby {
         NearbyLocationView(
           locationAuthorization: model.locationAuthorization,
-          filteredDataIsEmpty: filteredDataIsEmpty)
+          filteredDataIsEmpty: filteredDataIsEmpty, overMap: floatsProgress)
       }
     }
   }
