@@ -86,7 +86,7 @@ struct VenuesSummary: View {
         mapRequested = true
       }
     }
-    .nearbyLocation(filteredDataIsEmpty: venues.isEmpty)
+    .nearbyLocation(filteredDataIsEmpty: venues.isEmpty, floatsProgress: mode == .map)
   }
 }
 
