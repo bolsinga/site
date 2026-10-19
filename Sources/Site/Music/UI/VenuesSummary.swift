@@ -21,6 +21,11 @@ struct VenuesSummary: View {
 
   @State private var mapRequested = false
 
+  /// The search as the map sees it. It follows typing once it pauses, so the map doesn't re-fit
+  /// for every keystroke.
+  @State private var mapSearchString = ""
+  @State private var mapSearchSettled = false
+
   var body: some View {
     Picker(selection: $mode) {
       ForEach(VenuesMode.allCases, id: \.self) {
@@ -31,11 +36,11 @@ struct VenuesSummary: View {
     .pickerStyle(.segmented)
 
     let venues = model.nearbyVenues(nearbyModel, distanceThreshold: nearbyDistance)
-    let mapVenues = venues.names(filteredBy: searchString)
+    let mapVenues = venues.names(filteredBy: mapSearchString)
     ZStack {
       // The map stays once it has been shown, so toggling back doesn't rebuild it.
       if mapRequested || mode == .map {
-        VenuesMap(items: mapVenues, searchString: searchString, navigateToPath: navigateToPath)
+        VenuesMap(items: mapVenues, searchString: mapSearchString, navigateToPath: navigateToPath)
           .opacity(mode == .map ? 1 : 0)
           .allowsHitTesting(mode == .map)
           .accessibilityHidden(mode != .map)
@@ -53,7 +58,7 @@ struct VenuesSummary: View {
         Color.clear
           .allowsHitTesting(false)
           .overlay(alignment: .bottom) {
-            if !searchString.isEmpty, mapVenues.isEmpty {
+            if !mapSearchString.isEmpty, mapVenues.isEmpty {
               Text("No Matches")
                 .padding(.horizontal, 16)
                 .padding(.vertical, 8)
@@ -67,6 +72,14 @@ struct VenuesSummary: View {
           #endif
           .searchable(text: $searchString, prompt: String(localized: "Venue Names"))
       }
+    }
+    .task(id: searchString) {
+      if mapSearchSettled {
+        try? await Task.sleep(for: .milliseconds(400))
+      }
+      guard !Task.isCancelled else { return }
+      mapSearchString = searchString
+      mapSearchSettled = true
     }
     .onChange(of: mode, initial: true) { _, mode in
       if mode == .map {
