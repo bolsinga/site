@@ -109,7 +109,7 @@ struct ShowsTodayWidgetView: View {
     var body: some View {
       switch state {
       case .shows(_, let others):
-        Label("^[\(others.count + 1) show](inflect: true) today", systemImage: "music.note")
+        Label("^[\(others.count + 1) Show](inflect: true) Today", systemImage: "music.note")
       case .noShows:
         Text(NoShowsMessage(isToday: true).title)
       case .needsAppLaunch:
@@ -162,7 +162,7 @@ struct ShowsTodayWidgetView: View {
           .lineLimit(1)
       }
       .gaugeStyle(.accessoryCircularCapacity)
-      .accessibilityLabel(Text("^[\(count) show](inflect: true) today"))
+      .accessibilityLabel(Text("^[\(count) Show](inflect: true) Today"))
       .accessibilityValue(Text("Busiest day has \(Int(upper))"))
     }
   }
