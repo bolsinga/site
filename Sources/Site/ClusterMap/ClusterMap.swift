@@ -81,6 +81,10 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
 
     let mapView = MKMapView()
     mapView.delegate = coordinator
+    #if !os(tvOS)
+      mapView.isRotateEnabled = false
+      mapView.isPitchEnabled = false
+    #endif
     refresh(coordinator)
 
     mapView.register(
