@@ -28,6 +28,8 @@ struct LocationMap: View {
         ) {
           Details(coordinate: $0.coordinate, title: "")
         } onSelect: { _ in
+        } clusterLabel: {
+          String(localized: "Cluster, \($0) venues")
         } itemContent: { _ in
           CategoryAnnotationView(category: .venues, render: .default)
         } clusterContent: {

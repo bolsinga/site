@@ -46,6 +46,8 @@ struct VenuesMap<V: Hashable & Identifiable & Nameable & PathRestorable>: View {
       Logger.venuesMap.info("select \(String(describing: item.archivePath))")
       openedDetail = true
       withAnimation { navigateToPath(item.archivePath) }
+    } clusterLabel: {
+      String(localized: "Cluster, \($0) venues")
     } itemContent: { item in
       CategoryAnnotationView(category: .venues, render: .default, title: item.name)
     } clusterContent: {
