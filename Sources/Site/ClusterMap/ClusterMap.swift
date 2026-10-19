@@ -41,6 +41,9 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
 
   let onSelect: (Item) -> Void
 
+  /// What VoiceOver says for a cluster of this many items.
+  let clusterLabel: (Int) -> String
+
   /// Distance from the top of the content to the point placed on the coordinate. The bottom if nil.
   let anchorY: CGFloat?
 
@@ -60,6 +63,7 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
     isSearching: Bool = false,
     itemDetails: @escaping (Item) -> Details,
     onSelect: @escaping (Item) -> Void,
+    clusterLabel: @escaping (Int) -> String,
     @ViewBuilder itemContent: @escaping (Item) -> ItemContent,
     @ViewBuilder clusterContent: @escaping (Int) -> ClusterContent
   ) {
@@ -68,6 +72,7 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
     self.itemContent = itemContent
     self.clusterContent = clusterContent
     self.onSelect = onSelect
+    self.clusterLabel = clusterLabel
     self.anchorY = anchorY
     self.resetID = resetID
     self.animatesFit = animatesFit
@@ -137,6 +142,7 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
     coordinator.itemContent = { AnyView(itemContent($0)) }
     coordinator.clusterContent = { AnyView(clusterContent($0)) }
     coordinator.onSelect = onSelect
+    coordinator.clusterLabel = clusterLabel
     coordinator.anchorY = anchorY
     coordinator.animatesFit = animatesFit
   }
@@ -145,6 +151,7 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
     var itemContent: (Item) -> AnyView = { _ in AnyView(EmptyView()) }
     var clusterContent: (Int) -> AnyView = { _ in AnyView(EmptyView()) }
     var onSelect: (Item) -> Void = { _ in }
+    var clusterLabel: (Int) -> String = { String($0) }
     var anchorY: CGFloat?
 
     fileprivate var isApplyingUpdate = false
@@ -369,7 +376,9 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
           withIdentifier: .itemAnnotationViewReuseIdentifier, for: itemAnnotation)
         as? ItemAnnotationView
       view?.clusteringIdentifier = itemAnnotation.clusteringIdentifier
-      view?.configure(content: itemContent(itemAnnotation.item), anchorY: anchorY)
+      view?.configure(
+        content: itemContent(itemAnnotation.item), anchorY: anchorY,
+        accessibilityLabel: itemAnnotation.title)
       return view
     }
 
@@ -381,7 +390,9 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
         mapView.dequeueReusableAnnotationView(
           withIdentifier: .clusterAnnotationViewReuseIdentifier, for: cluster)
         as? ClusterAnnotationView
-      view?.configure(content: clusterContent(cluster.memberAnnotations.count), anchorY: anchorY)
+      let count = cluster.memberAnnotations.count
+      view?.configure(
+        content: clusterContent(count), anchorY: anchorY, accessibilityLabel: clusterLabel(count))
       return view
     }
 
@@ -398,7 +409,8 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
           existingAnnotation.title = details.title
 
           if let annotationView = mapView.view(for: existingAnnotation) as? ItemAnnotationView {
-            annotationView.configure(content: itemContent(item), anchorY: anchorY)
+            annotationView.configure(
+              content: itemContent(item), anchorY: anchorY, accessibilityLabel: details.title)
           }
         } else {
           let annotation = ItemAnnotation(
@@ -490,7 +502,12 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
     #if canImport(UIKit)
       private var hostingView: HostingView?
 
-      func configure(content: AnyView, anchorY: CGFloat?) {
+      func configure(content: AnyView, anchorY: CGFloat?, accessibilityLabel: String?) {
+        // The hosted content isn't interactive, so the annotation view is the one element.
+        isAccessibilityElement = accessibilityLabel?.isEmpty == false
+        self.accessibilityLabel = accessibilityLabel
+        accessibilityTraits = .button
+
         let configuration = UIHostingConfiguration { content }.margins(.all, 0)
         let hostingView: HostingView
         if let existing = self.hostingView {
@@ -514,7 +531,11 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
     #if canImport(AppKit)
       private var hostingView: HostingView?
 
-      func configure(content: AnyView, anchorY: CGFloat?) {
+      func configure(content: AnyView, anchorY: CGFloat?, accessibilityLabel: String?) {
+        setAccessibilityElement(accessibilityLabel?.isEmpty == false)
+        setAccessibilityRole(.button)
+        setAccessibilityLabel(accessibilityLabel)
+
         let hostingView: HostingView
         if let existing = self.hostingView {
           hostingView = existing
@@ -584,6 +605,8 @@ extension MKMapRect {
       title: $0.name)
   } onSelect: { _ in
 
+  } clusterLabel: {
+    "Cluster, \($0) venues"
   } itemContent: {
     CategoryAnnotationView(category: .venues, render: .default, title: $0.name)
   } clusterContent: {
