@@ -243,6 +243,9 @@
     "Lineup" : {
 
     },
+    "List" : {
+
+    },
     "Location" : {
 
     },
@@ -250,6 +253,9 @@
 
     },
     "Location Unavailable" : {
+
+    },
+    "Map" : {
 
     },
     "Map Location Unavailable" : {
