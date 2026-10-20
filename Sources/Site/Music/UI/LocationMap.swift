@@ -32,6 +32,8 @@ struct LocationMap: View {
           String(localized: "Cluster, \($0) venues")
         } itemContent: { _ in
           CategoryAnnotationView(category: .venues, render: .default)
+        } itemTitle: { _ in
+          EmptyView()
         } clusterContent: {
           CategoryAnnotationView(category: .venues, render: .badge($0))
         }

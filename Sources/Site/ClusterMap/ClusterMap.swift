@@ -32,11 +32,15 @@ struct Details {
   let title: String
 }
 
-struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: ViewRepresentable {
+struct ClusterMap<
+  Item: Identifiable, ItemContent: View, TitleContent: View, ClusterContent: View
+>: ViewRepresentable {
   let items: any Collection<Item>
   let itemDetails: (Item) -> Details
 
   @ViewBuilder let itemContent: (Item) -> ItemContent
+  /// Drawn below the item, outside its frame, so it isn't part of what makes items cluster.
+  @ViewBuilder let itemTitle: (Item) -> TitleContent
   @ViewBuilder let clusterContent: (Int) -> ClusterContent
 
   let onSelect: (Item) -> Void
@@ -65,11 +69,13 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
     onSelect: @escaping (Item) -> Void,
     clusterLabel: @escaping (Int) -> String,
     @ViewBuilder itemContent: @escaping (Item) -> ItemContent,
+    @ViewBuilder itemTitle: @escaping (Item) -> TitleContent,
     @ViewBuilder clusterContent: @escaping (Int) -> ClusterContent
   ) {
     self.items = items
     self.itemDetails = itemDetails
     self.itemContent = itemContent
+    self.itemTitle = itemTitle
     self.clusterContent = clusterContent
     self.onSelect = onSelect
     self.clusterLabel = clusterLabel
@@ -140,6 +146,7 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
 
   private func refresh(_ coordinator: Coordinator) {
     coordinator.itemContent = { AnyView(itemContent($0)) }
+    coordinator.itemTitle = { AnyView(itemTitle($0)) }
     coordinator.clusterContent = { AnyView(clusterContent($0)) }
     coordinator.onSelect = onSelect
     coordinator.clusterLabel = clusterLabel
@@ -149,6 +156,7 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
 
   final class Coordinator: NSObject, MKMapViewDelegate {
     var itemContent: (Item) -> AnyView = { _ in AnyView(EmptyView()) }
+    var itemTitle: (Item) -> AnyView = { _ in AnyView(EmptyView()) }
     var clusterContent: (Int) -> AnyView = { _ in AnyView(EmptyView()) }
     var onSelect: (Item) -> Void = { _ in }
     var clusterLabel: (Int) -> String = { String($0) }
@@ -201,7 +209,43 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
       }
     }
 
+    func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
+      updateTitleVisibility(in: mapView)
+    }
+
+    func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {
+      updateTitleVisibility(in: mapView)
+    }
+
+    /// Hides the title of an item when it would cover another pin, or another title that is kept.
+    /// Titles of the items nearest the middle of the map are kept first.
+    private func updateTitleVisibility(in mapView: MKMapView) {
+      // Hidden views can't cover anything.
+      let pins = mapView.annotations
+        .compactMap { mapView.view(for: $0) as? AnnotationView }
+        .filter { $0.superview != nil && $0.isShown }
+        .map { (view: $0, rect: $0.pinRect(in: mapView)) }
+        .filter { $0.rect.intersects(mapView.bounds) }
+
+      let middle = CGPoint(x: mapView.bounds.midX, y: mapView.bounds.midY)
+      func distance(_ rect: CGRect) -> CGFloat {
+        hypot(rect.midX - middle.x, rect.maxY - middle.y)
+      }
+
+      var keptTitles = [CGRect]()
+      for pin in pins.sorted(by: { distance($0.rect) < distance($1.rect) }) {
+        guard let title = pin.view.titleRect(in: mapView) else { continue }
+        let padded = title.insetBy(dx: -2.0, dy: -1.0)
+        let covered =
+          pins.contains { $0.view !== pin.view && $0.rect.intersects(padded) }
+          || keptTitles.contains { $0.intersects(padded) }
+        if !covered { keptTitles.append(padded) }
+        pin.view.setTitleHidden(covered, animated: !reducesMotion)
+      }
+    }
+
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+      updateTitleVisibility(in: mapView)
       // A fit that was interrupted by another reports its end too; only the last one is done.
       guard let fitTarget, mapView.visibleMapRect.isNearlyEqual(to: fitTarget) else { return }
       self.fitTarget = nil
@@ -231,22 +275,23 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
           return
         }
 
-        var size = view.bounds.size
-        // Member titles can make their annotations wider than the cluster; measure the longest.
+        // Titles are drawn outside the frame, below it. Keep room for the widest on the map.
+        let size = view.bounds.size
+        var titleSize = CGSize.zero
         if let widest = members.max(by: { ($0.title ?? "").count < ($1.title ?? "").count }) {
-          let memberSize = fittingSize(of: itemContent(widest.item))
-          size = CGSize(
-            width: max(size.width, memberSize.width), height: max(size.height, memberSize.height))
+          titleSize = fittingSize(of: itemTitle(widest.item))
         }
+        let titleHeight = titleSize.height > 0 ? titleSize.height + AnnotationView.titleSpacing : 0
+        let extent = CGSize(
+          width: max(size.width, titleSize.width), height: size.height + titleHeight)
         // On a small map, padding for the annotation can leave no room for what is being shown.
-        let vertical = min(size.height, mapView.bounds.height / 4.0)
-        let horizontal = min(size.width / 2.0, mapView.bounds.width / 4.0)
+        let top = min(size.height, mapView.bounds.height / 4.0)
+        let bottom = min(titleHeight, mapView.bounds.height / 4.0)
+        let horizontal = min(extent.width / 2.0, mapView.bounds.width / 4.0)
         #if canImport(UIKit)
-          let insets = UIEdgeInsets(
-            top: vertical, left: horizontal, bottom: vertical, right: horizontal)
+          let insets = UIEdgeInsets(top: top, left: horizontal, bottom: bottom, right: horizontal)
         #else
-          let insets = NSEdgeInsets(
-            top: vertical, left: horizontal, bottom: vertical, right: horizontal)
+          let insets = NSEdgeInsets(top: top, left: horizontal, bottom: bottom, right: horizontal)
         #endif
         let memberRect = cluster.memberAnnotations.rect
         userMovedMap = true
@@ -265,7 +310,7 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
           // Already there, yet they still cluster; keep zooming in on them.
           target = visibleRect.zoomed(by: 2.0, around: center)
         }
-        target = showingAMember(of: members, in: target, mapView: mapView, size: size)
+        target = showingAMember(of: members, in: target, mapView: mapView, size: extent)
         mapView.setVisibleMapRect(target, animated: !reducesMotion)
         return
       }
@@ -386,8 +431,8 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
         as? ItemAnnotationView
       view?.clusteringIdentifier = itemAnnotation.clusteringIdentifier
       view?.configure(
-        content: itemContent(itemAnnotation.item), anchorY: anchorY,
-        accessibilityLabel: itemAnnotation.title)
+        content: itemContent(itemAnnotation.item), title: itemTitle(itemAnnotation.item),
+        anchorY: anchorY, accessibilityLabel: itemAnnotation.title)
       return view
     }
 
@@ -401,7 +446,8 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
         as? ClusterAnnotationView
       let count = cluster.memberAnnotations.count
       view?.configure(
-        content: clusterContent(count), anchorY: anchorY, accessibilityLabel: clusterLabel(count))
+        content: clusterContent(count), title: nil, anchorY: anchorY,
+        accessibilityLabel: clusterLabel(count))
       return view
     }
 
@@ -419,7 +465,8 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
 
           if let annotationView = mapView.view(for: existingAnnotation) as? ItemAnnotationView {
             annotationView.configure(
-              content: itemContent(item), anchorY: anchorY, accessibilityLabel: details.title)
+              content: itemContent(item), title: itemTitle(item), anchorY: anchorY,
+              accessibilityLabel: details.title)
           }
         } else {
           let annotation = ItemAnnotation(
@@ -508,13 +555,61 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
     @available(*, unavailable)
     required init?(coder: NSCoder) { fatalError("no coder") }
 
+    fileprivate static var titleSpacing: CGFloat { 2.0 }
+
+    fileprivate var isTitleHidden = false
+
+    /// MapKit hides views it isn't showing, such as those it has just merged into a cluster.
+    fileprivate var isShown: Bool {
+      #if canImport(UIKit)
+        !isHidden && alpha > 0.01
+      #else
+        !isHidden && alphaValue > 0.01
+      #endif
+    }
+
+    override func prepareForReuse() {
+      super.prepareForReuse()
+      setTitleHidden(false, animated: false)
+    }
+
+    /// The pin's frame, in the map's coordinates, measured down from the top on every platform.
+    fileprivate func pinRect(in mapView: MKMapView) -> CGRect {
+      // The view's frame lags while MapKit moves it, as when a cluster splits, so place it from
+      // the coordinate.
+      guard let annotation else { return .null }
+      var point = mapView.convert(annotation.coordinate, toPointTo: mapView)
+      #if canImport(AppKit)
+        if !mapView.isFlipped { point.y = mapView.bounds.height - point.y }
+      #endif
+      return CGRect(
+        x: point.x + centerOffset.x - bounds.width / 2.0,
+        y: point.y + centerOffset.y - bounds.height / 2.0,
+        width: bounds.width, height: bounds.height)
+    }
+
+    /// The title's frame, below the pin, in the same coordinates. nil if there is no title to show.
+    fileprivate func titleRect(in mapView: MKMapView) -> CGRect? {
+      guard let titleHostingView, !titleHostingView.frame.isEmpty else { return nil }
+      let pin = pinRect(in: mapView)
+      let size = titleHostingView.bounds.size
+      return CGRect(
+        x: pin.midX - size.width / 2.0, y: pin.maxY + Self.titleSpacing,
+        width: size.width, height: size.height)
+    }
+
     #if canImport(UIKit)
       private var hostingView: HostingView?
+      fileprivate var titleHostingView: HostingView?
       private var content: AnyView?
+      private var title: AnyView?
       private var anchorY: CGFloat?
 
-      func configure(content: AnyView, anchorY: CGFloat?, accessibilityLabel: String?) {
+      func configure(
+        content: AnyView, title: AnyView?, anchorY: CGFloat?, accessibilityLabel: String?
+      ) {
         self.content = content
+        self.title = title
         self.anchorY = anchorY
 
         // The hosted content isn't interactive, so the annotation view is the one element.
@@ -539,7 +634,8 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
             (view: AnnotationView, _) in
             guard let content = view.content else { return }
             view.configure(
-              content: content, anchorY: view.anchorY, accessibilityLabel: view.accessibilityLabel)
+              content: content, title: view.title, anchorY: view.anchorY,
+              accessibilityLabel: view.accessibilityLabel)
           }
         }
 
@@ -548,12 +644,50 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
         hostingView.frame = bounds
         // The view is centered on the coordinate by default; shift it so the anchor point is there.
         centerOffset = CGPoint(x: 0, y: size.height / 2.0 - (anchorY ?? size.height))
+
+        if let title {
+          let configuration = UIHostingConfiguration { title }.margins(.all, 0)
+          let titleView: HostingView
+          if let existing = titleHostingView {
+            titleView = existing
+            titleView.configuration = configuration
+          } else {
+            titleView = configuration.makeContentView()
+            titleView.isUserInteractionEnabled = false
+            titleView.clipsToBounds = false
+            addSubview(titleView)
+            titleHostingView = titleView
+          }
+          titleView.alpha = isTitleHidden ? 0.0 : 1.0
+          let titleSize = titleView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+          titleView.frame = CGRect(
+            x: (size.width - titleSize.width) / 2.0, y: size.height + Self.titleSpacing,
+            width: titleSize.width, height: titleSize.height)
+        } else {
+          titleHostingView?.removeFromSuperview()
+          titleHostingView = nil
+        }
+      }
+
+      fileprivate func setTitleHidden(_ hidden: Bool, animated: Bool) {
+        guard hidden != isTitleHidden else { return }
+        isTitleHidden = hidden
+        guard let titleHostingView else { return }
+        let alpha = hidden ? 0.0 : 1.0
+        if animated {
+          UIView.animate(withDuration: 0.15) { titleHostingView.alpha = alpha }
+        } else {
+          titleHostingView.alpha = alpha
+        }
       }
     #endif
     #if canImport(AppKit)
       private var hostingView: HostingView?
+      fileprivate var titleHostingView: HostingView?
 
-      func configure(content: AnyView, anchorY: CGFloat?, accessibilityLabel: String?) {
+      func configure(
+        content: AnyView, title: AnyView?, anchorY: CGFloat?, accessibilityLabel: String?
+      ) {
         setAccessibilityElement(accessibilityLabel?.isEmpty == false)
         setAccessibilityRole(.button)
         setAccessibilityLabel(accessibilityLabel)
@@ -573,6 +707,43 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
         hostingView.frame = bounds
         // The view is centered on the coordinate by default; shift it so the anchor point is there.
         centerOffset = CGPoint(x: 0, y: size.height / 2.0 - (anchorY ?? size.height))
+
+        if let title {
+          let titleView: HostingView
+          if let existing = titleHostingView {
+            titleView = existing
+            titleView.rootView = title
+          } else {
+            titleView = createHostingView(content: title)
+            addSubview(titleView)
+            titleHostingView = titleView
+          }
+          titleView.alphaValue = isTitleHidden ? 0.0 : 1.0
+          let titleSize = titleView.fittingSize
+          // AppKit's y axis points up here, unlike UIKit's; the bottom of the frame is y = 0.
+          titleView.frame = CGRect(
+            x: (size.width - titleSize.width) / 2.0,
+            y: isFlipped ? size.height + Self.titleSpacing : -titleSize.height - Self.titleSpacing,
+            width: titleSize.width, height: titleSize.height)
+        } else {
+          titleHostingView?.removeFromSuperview()
+          titleHostingView = nil
+        }
+      }
+
+      fileprivate func setTitleHidden(_ hidden: Bool, animated: Bool) {
+        guard hidden != isTitleHidden else { return }
+        isTitleHidden = hidden
+        guard let titleHostingView else { return }
+        let alpha = hidden ? 0.0 : 1.0
+        if animated {
+          NSAnimationContext.runAnimationGroup { context in
+            context.duration = 0.15
+            titleHostingView.animator().alphaValue = alpha
+          }
+        } else {
+          titleHostingView.alphaValue = alpha
+        }
       }
 
       override func hitTest(_ point: NSPoint) -> NSView? {
@@ -629,8 +800,10 @@ extension MKMapRect {
 
   } clusterLabel: {
     "Cluster, \($0) venues"
-  } itemContent: {
-    CategoryAnnotationView(category: .venues, render: .default, title: $0.name)
+  } itemContent: { _ in
+    CategoryAnnotationView(category: .venues, render: .default)
+  } itemTitle: {
+    CategoryTitleView(title: $0.name)
   } clusterContent: {
     CategoryAnnotationView(category: .venues, render: .badge($0))
   }
