@@ -57,22 +57,19 @@ struct CategoryAnnotationView: View {
 
   internal init(
     category: ArchiveCategory,
-    render: CategoryAnnotationView.Render,
-    title: String? = nil
+    render: CategoryAnnotationView.Render
   ) {
     self.systemImageName = category.systemImage
     self.render = render
-    self.title = title
   }
 
   private let systemImageName: String
   let render: Render
-  let title: String?
 
-  /// Distance from the top of the view to the pointer's tip, wherever a title may follow it.
+  /// Distance from the top of the view to the pointer's tip.
   static let tipOffset = annotationSize + pointerTipExtent
 
-  private var pin: some View {
+  var body: some View {
     ZStack {
       Path { path in
         path.move(to: .init(x: annotationSize / 2.0, y: annotationSize + pointerTipExtent))
@@ -95,25 +92,27 @@ struct CategoryAnnotationView: View {
     .frame(width: annotationSize, height: annotationSize)
     // The pointer's tip extends below the circle; include it so the tip is the bottom of the pin.
     .padding(.bottom, pointerTipExtent)
+    // A map is crowded, so stop growing before the pin covers its neighbors.
+    .dynamicTypeSize(...DynamicTypeSize.accessibility1)
   }
+}
+
+/// The name shown below a pin. The map draws it outside the pin's frame, so it doesn't make
+/// pins cluster sooner.
+struct CategoryTitleView: View {
+  let title: String
 
   var body: some View {
-    VStack(spacing: 2) {
-      pin
-      if let title {
-        Text(title)
-          .font(.caption2)
-          .lineLimit(1)
-          .fixedSize()
-          .padding(.horizontal, 4)
-          .foregroundStyle(.black)
-          .background(Color.accentColor.opacity(0.3), in: .capsule)
-          .background(.white, in: .capsule)
-          .overlay(Capsule().strokeBorder(.black, lineWidth: 1))
-      }
-    }
-    // A map is crowded, so stop growing before the title covers its neighbors.
-    .dynamicTypeSize(...DynamicTypeSize.accessibility1)
+    Text(title)
+      .font(.caption2)
+      .lineLimit(1)
+      .fixedSize()
+      .padding(.horizontal, 4)
+      .foregroundStyle(.black)
+      .background(Color.accentColor.opacity(0.3), in: .capsule)
+      .background(.white, in: .capsule)
+      .overlay(Capsule().strokeBorder(.black, lineWidth: 1))
+      .dynamicTypeSize(...DynamicTypeSize.accessibility1)
   }
 }
 
@@ -126,7 +125,10 @@ struct CategoryAnnotationView: View {
 }
 
 #Preview("Title") {
-  CategoryAnnotationView(category: .venues, render: .default, title: "The Fillmore")
+  VStack(spacing: 2) {
+    CategoryAnnotationView(category: .venues, render: .default)
+    CategoryTitleView(title: "The Fillmore")
+  }
 }
 
 #Preview("3") {

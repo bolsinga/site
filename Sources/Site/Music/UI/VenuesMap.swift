@@ -49,7 +49,9 @@ struct VenuesMap<V: Hashable & Identifiable & Nameable & PathRestorable>: View {
     } clusterLabel: {
       String(localized: "Cluster, \($0) venues")
     } itemContent: { item in
-      CategoryAnnotationView(category: .venues, render: .default, title: item.name)
+      CategoryAnnotationView(category: .venues, render: .default)
+    } itemTitle: { item in
+      CategoryTitleView(title: item.name)
     } clusterContent: {
       CategoryAnnotationView(category: .venues, render: .badge($0))
     }
