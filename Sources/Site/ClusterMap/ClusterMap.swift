@@ -211,27 +211,10 @@ struct ClusterMap<
 
     func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
       updateTitleVisibility(in: mapView)
-      scheduleTitleUpdate(in: mapView)
     }
 
     func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {
-      scheduleTitleUpdate(in: mapView)
-    }
-
-    private var titleTask: Task<Void, Never>?
-
-    /// Looks again once the map has settled. Views are placed and animated after the region
-    /// changes, so a check made while they move can leave a title hidden that no longer collides.
-    private func scheduleTitleUpdate(in mapView: MKMapView) {
-      titleTask?.cancel()
-      titleTask = Task { @MainActor [weak self, weak mapView] in
-        // The first turn is for views just added to be placed; the second is for animations.
-        for delay in [Duration.zero, .milliseconds(400)] {
-          try? await Task.sleep(for: delay)
-          guard !Task.isCancelled, let self, let mapView else { return }
-          updateTitleVisibility(in: mapView)
-        }
-      }
+      updateTitleVisibility(in: mapView)
     }
 
     /// Hides the title of an item when it would cover another pin, or another title that is kept.
@@ -264,7 +247,7 @@ struct ClusterMap<
     }
 
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-      scheduleTitleUpdate(in: mapView)
+      updateTitleVisibility(in: mapView)
       // A fit that was interrupted by another reports its end too; only the last one is done.
       guard let fitTarget, mapView.visibleMapRect.isNearlyEqual(to: fitTarget) else { return }
       self.fitTarget = nil
