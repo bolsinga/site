@@ -168,6 +168,15 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
     private var isSearching = false
     private var rectBeforeSearch: MKMapRect?
 
+    /// Fits and zooms jump instead of gliding when the person asks for less motion.
+    private var reducesMotion: Bool {
+      #if os(macOS)
+        NSWorkspace.shared.accessibilityDisplayShouldReduceMotion
+      #else
+        UIAccessibility.isReduceMotionEnabled
+      #endif
+    }
+
     fileprivate func setSearching(_ isSearching: Bool, mapView: MKMapView) {
       guard isSearching != self.isSearching else { return }
       self.isSearching = isSearching
@@ -257,7 +266,7 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
           target = visibleRect.zoomed(by: 2.0, around: center)
         }
         target = showingAMember(of: members, in: target, mapView: mapView, size: size)
-        mapView.setVisibleMapRect(target, animated: true)
+        mapView.setVisibleMapRect(target, animated: !reducesMotion)
         return
       }
       if let annotation = view.annotation as? ItemAnnotation {
@@ -467,7 +476,7 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
       let target = mapView.mapRectThatFits(rect)
       guard !target.isNearlyEqual(to: mapView.visibleMapRect) else { return }
       fitTarget = target
-      mapView.setVisibleMapRect(rect, animated: animatesFit)
+      mapView.setVisibleMapRect(rect, animated: animatesFit && !reducesMotion)
     }
   }
 
