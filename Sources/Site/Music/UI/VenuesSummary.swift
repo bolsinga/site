@@ -82,6 +82,19 @@ struct VenuesSummary: View {
       }
     }
     .nearbyLocation(filteredDataIsEmpty: venues.isEmpty, floatsProgress: mode == .map)
+    .toolbar {
+      ToolbarItem(placement: .principal) {
+        Picker(selection: $mode) {
+          ForEach(VenuesMode.allCases, id: \.self) {
+            // The label is what VoiceOver reads for the icon.
+            Label($0.localizedString, systemImage: $0.systemImage)
+              .labelStyle(.iconOnly)
+          }
+        } label: {
+        }
+        .pickerStyle(.segmented)
+      }
+    }
   }
 }
 
