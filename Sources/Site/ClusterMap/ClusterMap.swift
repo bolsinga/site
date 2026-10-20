@@ -220,13 +220,12 @@ struct ClusterMap<
     /// Hides the title of an item when it would cover another pin, or another title that is kept.
     /// Titles of the items nearest the middle of the map are kept first.
     private func updateTitleVisibility(in mapView: MKMapView) {
-      // A view not yet placed in the map reports its frame in its own coordinates; skip it.
-      // MapKit hides views it isn't showing, such as those it just merged into a cluster, but
-      // still returns them. They can't cover anything.
-      let views = mapView.annotations.compactMap { mapView.view(for: $0) as? AnnotationView }
+      // Hidden views can't cover anything.
+      let pins = mapView.annotations
+        .compactMap { mapView.view(for: $0) as? AnnotationView }
         .filter { $0.superview != nil && $0.isShown }
-      let pins = views.map { ($0, $0.pinRect(in: mapView)) }
-        .filter { $0.1.intersects(mapView.bounds) }
+        .map { (view: $0, rect: $0.pinRect(in: mapView)) }
+        .filter { $0.rect.intersects(mapView.bounds) }
 
       let middle = CGPoint(x: mapView.bounds.midX, y: mapView.bounds.midY)
       func distance(_ rect: CGRect) -> CGFloat {
@@ -234,15 +233,14 @@ struct ClusterMap<
       }
 
       var keptTitles = [CGRect]()
-      for (view, _) in pins.sorted(by: { distance($0.1) < distance($1.1) }) {
-        guard let title = view.titleRect(in: mapView) else { continue }
-        // A little room so titles don't touch.
+      for pin in pins.sorted(by: { distance($0.rect) < distance($1.rect) }) {
+        guard let title = pin.view.titleRect(in: mapView) else { continue }
         let padded = title.insetBy(dx: -2.0, dy: -1.0)
         let covered =
-          pins.contains { $0.0 !== view && $0.1.intersects(padded) }
+          pins.contains { $0.view !== pin.view && $0.rect.intersects(padded) }
           || keptTitles.contains { $0.intersects(padded) }
         if !covered { keptTitles.append(padded) }
-        view.setTitleHidden(covered, animated: !reducesMotion)
+        pin.view.setTitleHidden(covered, animated: !reducesMotion)
       }
     }
 
@@ -284,7 +282,6 @@ struct ClusterMap<
           titleSize = fittingSize(of: itemTitle(widest.item))
         }
         let titleHeight = titleSize.height > 0 ? titleSize.height + AnnotationView.titleSpacing : 0
-        // What an annotation takes up around its coordinate, with its title.
         let extent = CGSize(
           width: max(size.width, titleSize.width), height: size.height + titleHeight)
         // On a small map, padding for the annotation can leave no room for what is being shown.
@@ -558,7 +555,6 @@ struct ClusterMap<
     @available(*, unavailable)
     required init?(coder: NSCoder) { fatalError("no coder") }
 
-    /// Space between the bottom of the frame and the title drawn below it.
     fileprivate static var titleSpacing: CGFloat { 2.0 }
 
     fileprivate var isTitleHidden = false
@@ -577,34 +573,29 @@ struct ClusterMap<
       setTitleHidden(false, animated: false)
     }
 
-    /// The pin's frame, in the map's coordinates.
+    /// The pin's frame, in the map's coordinates, measured down from the top on every platform.
     fileprivate func pinRect(in mapView: MKMapView) -> CGRect {
-      #if canImport(UIKit)
-        // Place it from the coordinate. The view's frame lags while MapKit moves it around, as when
-        // a cluster splits, and that left titles hidden by pins that were no longer there.
-        guard let annotation else { return convert(bounds, to: mapView) }
-        let point = mapView.convert(annotation.coordinate, toPointTo: mapView)
-        return CGRect(
-          x: point.x + centerOffset.x - bounds.width / 2.0,
-          y: point.y + centerOffset.y - bounds.height / 2.0,
-          width: bounds.width, height: bounds.height)
-      #else
-        convert(bounds, to: mapView)
+      // The view's frame lags while MapKit moves it, as when a cluster splits, so place it from
+      // the coordinate.
+      guard let annotation else { return .null }
+      var point = mapView.convert(annotation.coordinate, toPointTo: mapView)
+      #if canImport(AppKit)
+        if !mapView.isFlipped { point.y = mapView.bounds.height - point.y }
       #endif
+      return CGRect(
+        x: point.x + centerOffset.x - bounds.width / 2.0,
+        y: point.y + centerOffset.y - bounds.height / 2.0,
+        width: bounds.width, height: bounds.height)
     }
 
-    /// The title's frame, in the map's coordinates. nil if there is no title to show.
+    /// The title's frame, below the pin, in the same coordinates. nil if there is no title to show.
     fileprivate func titleRect(in mapView: MKMapView) -> CGRect? {
       guard let titleHostingView, !titleHostingView.frame.isEmpty else { return nil }
-      #if canImport(UIKit)
-        let pin = pinRect(in: mapView)
-        let size = titleHostingView.bounds.size
-        return CGRect(
-          x: pin.midX - size.width / 2.0, y: pin.maxY + Self.titleSpacing,
-          width: size.width, height: size.height)
-      #else
-        return titleHostingView.convert(titleHostingView.bounds, to: mapView)
-      #endif
+      let pin = pinRect(in: mapView)
+      let size = titleHostingView.bounds.size
+      return CGRect(
+        x: pin.midX - size.width / 2.0, y: pin.maxY + Self.titleSpacing,
+        width: size.width, height: size.height)
     }
 
     #if canImport(UIKit)
@@ -654,7 +645,6 @@ struct ClusterMap<
         // The view is centered on the coordinate by default; shift it so the anchor point is there.
         centerOffset = CGPoint(x: 0, y: size.height / 2.0 - (anchorY ?? size.height))
 
-        // The title is a subview past the bottom of the frame. The frame is what the map clusters on.
         if let title {
           let configuration = UIHostingConfiguration { title }.margins(.all, 0)
           let titleView: HostingView
@@ -679,7 +669,6 @@ struct ClusterMap<
         }
       }
 
-      /// Fades the title out when it would collide, and back in when it no longer does.
       fileprivate func setTitleHidden(_ hidden: Bool, animated: Bool) {
         guard hidden != isTitleHidden else { return }
         isTitleHidden = hidden
@@ -719,7 +708,6 @@ struct ClusterMap<
         // The view is centered on the coordinate by default; shift it so the anchor point is there.
         centerOffset = CGPoint(x: 0, y: size.height / 2.0 - (anchorY ?? size.height))
 
-        // The title is a subview past the bottom of the frame. The frame is what the map clusters on.
         if let title {
           let titleView: HostingView
           if let existing = titleHostingView {
@@ -743,7 +731,6 @@ struct ClusterMap<
         }
       }
 
-      /// Fades the title out when it would collide, and back in when it no longer does.
       fileprivate func setTitleHidden(_ hidden: Bool, animated: Bool) {
         guard hidden != isTitleHidden else { return }
         isTitleHidden = hidden
