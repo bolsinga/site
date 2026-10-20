@@ -705,8 +705,25 @@ struct ClusterMap<
       }
     #endif
     #if canImport(AppKit)
-      private var hostingView: HostingView?
-      fileprivate var titleHostingView: HostingView?
+      private var hostingController: NSHostingController<AnyView>?
+      private var titleController: NSHostingController<AnyView>?
+      fileprivate var titleHostingView: NSView? { titleController?.view }
+
+      /// Like on UIKit, a hosting controller can leave the safe area out of its layout. Under the
+      /// toolbar, the map's safe area would otherwise move the content off its frame.
+      private func hostingController(
+        for content: AnyView, reusing existing: NSHostingController<AnyView>?
+      ) -> NSHostingController<AnyView> {
+        if let existing {
+          existing.rootView = content
+          return existing
+        }
+        let controller = NSHostingController(rootView: content)
+        controller.safeAreaRegions = []
+        controller.sizingOptions = .intrinsicContentSize
+        addSubview(controller.view)
+        return controller
+      }
 
       func configure(
         content: AnyView, title: AnyView?, anchorY: CGFloat?, accessibilityLabel: String?
@@ -715,42 +732,28 @@ struct ClusterMap<
         setAccessibilityRole(.button)
         setAccessibilityLabel(accessibilityLabel)
 
-        let hostingView: HostingView
-        if let existing = self.hostingView {
-          hostingView = existing
-          hostingView.rootView = content
-        } else {
-          hostingView = createHostingView(content: content)
-          addSubview(hostingView)
-          self.hostingView = hostingView
-        }
+        let controller = hostingController(for: content, reusing: hostingController)
+        hostingController = controller
 
-        let size = hostingView.fittingSize
+        let size = controller.view.fittingSize
         setFrameSize(size)
-        hostingView.frame = bounds
+        controller.view.frame = bounds
         // The view is centered on the coordinate by default; shift it so the anchor point is there.
         centerOffset = CGPoint(x: 0, y: size.height / 2.0 - (anchorY ?? size.height))
 
         if let title {
-          let titleView: HostingView
-          if let existing = titleHostingView {
-            titleView = existing
-            titleView.rootView = title
-          } else {
-            titleView = createHostingView(content: title)
-            addSubview(titleView)
-            titleHostingView = titleView
-          }
-          titleView.alphaValue = isTitleHidden ? 0.0 : 1.0
-          let titleSize = titleView.fittingSize
+          let controller = hostingController(for: title, reusing: titleController)
+          titleController = controller
+          controller.view.alphaValue = isTitleHidden ? 0.0 : 1.0
+          let titleSize = controller.view.fittingSize
           // AppKit's y axis points up here, unlike UIKit's; the bottom of the frame is y = 0.
-          titleView.frame = CGRect(
+          controller.view.frame = CGRect(
             x: (size.width - titleSize.width) / 2.0,
             y: isFlipped ? size.height + Self.titleSpacing : -titleSize.height - Self.titleSpacing,
             width: titleSize.width, height: titleSize.height)
         } else {
-          titleHostingView?.removeFromSuperview()
-          titleHostingView = nil
+          titleController?.view.removeFromSuperview()
+          titleController = nil
         }
       }
 
