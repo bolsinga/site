@@ -59,6 +59,7 @@ struct VenuesMap<V: Hashable & Identifiable & Nameable & PathRestorable>: View {
 
   var body: some View {
     clusterMap
+      .ignoresSafeArea()
       .onAppear {
         // Coming back from a venue's detail keeps the map as it was left.
         if openedDetail {
