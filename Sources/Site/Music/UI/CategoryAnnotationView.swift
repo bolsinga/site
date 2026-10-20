@@ -5,8 +5,8 @@
 //  Created by Greg Bolsinga on 6/14/26.
 //
 
-import SwiftUI
 import Shared
+import SwiftUI
 
 private let annotationSize: CGFloat = 45
 private let imageSize = annotationSize * 2.0 / 3.0
@@ -19,6 +19,10 @@ private let pointerTipExtent: CGFloat = 4.0
 private struct Badge: View {
   let count: Int
 
+  // The count is text, so its circle grows with the text size.
+  @ScaledMetric(relativeTo: .caption2) private var scaledBadgeSize = badgeSize
+  @ScaledMetric(relativeTo: .caption2) private var scaledFontSize = fontSize
+
   var body: some View {
     ZStack {
       Circle()
@@ -27,11 +31,11 @@ private struct Badge: View {
       Circle()
         .foregroundStyle(.red)
       Text(String(count))
-        .font(.system(size: fontSize))
+        .font(.system(size: scaledFontSize))
         .bold()
         .foregroundStyle(.white)
     }
-    .frame(width: badgeSize, height: badgeSize)
+    .frame(width: scaledBadgeSize, height: scaledBadgeSize)
     .offset(x: badgeOffsetX, y: badgeOffsetY)
   }
 }
@@ -108,6 +112,8 @@ struct CategoryAnnotationView: View {
           .overlay(Capsule().strokeBorder(.black, lineWidth: 1))
       }
     }
+    // A map is crowded, so stop growing before the title covers its neighbors.
+    .dynamicTypeSize(...DynamicTypeSize.accessibility1)
   }
 }
 

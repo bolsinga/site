@@ -501,8 +501,13 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
 
     #if canImport(UIKit)
       private var hostingView: HostingView?
+      private var content: AnyView?
+      private var anchorY: CGFloat?
 
       func configure(content: AnyView, anchorY: CGFloat?, accessibilityLabel: String?) {
+        self.content = content
+        self.anchorY = anchorY
+
         // The hosted content isn't interactive, so the annotation view is the one element.
         isAccessibilityElement = accessibilityLabel?.isEmpty == false
         self.accessibilityLabel = accessibilityLabel
@@ -519,6 +524,14 @@ struct ClusterMap<Item: Identifiable, ItemContent: View, ClusterContent: View>: 
           hostingView.clipsToBounds = false
           addSubview(hostingView)
           self.hostingView = hostingView
+
+          // The view is sized once to fit its content, so size it again when the text size changes.
+          registerForTraitChanges([UITraitPreferredContentSizeCategory.self]) {
+            (view: AnnotationView, _) in
+            guard let content = view.content else { return }
+            view.configure(
+              content: content, anchorY: view.anchorY, accessibilityLabel: view.accessibilityLabel)
+          }
         }
 
         let size = hostingView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
