@@ -130,8 +130,14 @@ struct VenueDetail: View {
       }
     }
     .ignoresSafeArea(edges: .top)
-    .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
-    .toolbar(removing: .title)
+    #if os(macOS)
+      .toolbarBackgroundVisibility(.hidden, for: .windowToolbar)
+    #else
+      .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
+    #endif
+    #if !os(tvOS)
+      .toolbar(removing: .title)
+    #endif
     .toolbar { ArchiveSharableToolbarContent(item: digest, url: url) }
     .onAppear {
       self.mapItem = model.venueMapItemMap[digest.archivePath]
