@@ -23,7 +23,7 @@ struct ArtistDetail: View {
 
   @ViewBuilder private var statsElement: some View {
     if !digest.shows.isEmpty {
-      DetailCard(title: Text(ArchiveCategory.stats.localizedString)) {
+      DetailCard(title: Text("Stats")) {
         firstSetElement
         StatsGrouping(artistDigest: digest)
       }

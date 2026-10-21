@@ -20,8 +20,4 @@ extension StatsGrouping {
   init(annumDigest digest: AnnumDigest) {
     self.init(stats: Stats(annumDigest: digest), titles: StatsTitles(annum: digest.annum))
   }
-
-  init<Identifier: ArchiveIdentifier>(vault: Vault<Identifier>, including: [StatsCategory]? = nil) {
-    self.init(stats: Stats(vault: vault), titles: StatsTitles(vault: vault), including: including)
-  }
 }

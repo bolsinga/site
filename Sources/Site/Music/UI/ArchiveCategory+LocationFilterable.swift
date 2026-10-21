@@ -10,7 +10,7 @@ import Shared
 extension ArchiveCategory {
   var isLocationFilterable: Bool {
     switch self {
-    case .today, .stats, .settings, .search:
+    case .today, .settings, .search:
       false
     case .shows, .venues, .artists:
       true

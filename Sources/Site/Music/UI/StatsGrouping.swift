@@ -13,7 +13,6 @@ struct StatsGrouping: View {
 
   let stats: Stats
   let titles: StatsTitles
-  var including: [StatsCategory]?
 
   @State private var showWeekdays = false
   @State private var showMonths = false
@@ -79,7 +78,6 @@ struct StatsGrouping: View {
 
   var body: some View {
     let statsCategoryCases = stats.categories(weekdayOrMonthChartConcertThreshold: statsThreshold)
-      .filter { including?.contains($0) ?? true }
     ForEach(statsCategoryCases, id: \.self) { category in
       Group {
         switch category {
@@ -110,12 +108,6 @@ struct StatsGrouping: View {
       }
     }
   }
-}
-
-#Preview("Concerts", traits: .vaultModel) {
-  @Previewable @Environment(VaultModel.self) var model
-  StatsGrouping(vault: model.vault)
-    .padding()
 }
 
 #Preview("Artists", traits: .vaultModel) {

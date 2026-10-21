@@ -13,7 +13,7 @@ import Testing
 
 let categoryPaths = [
   "/dates/today.html", "/dates/stats.html", "/venues/stats.html", "/bands/stats.html",
-  "/stats.html", "/settings.html", "/search.html",
+  "/settings.html", "/search.html",
 ]
 
 struct ArchiveCategoryTests {
@@ -31,9 +31,6 @@ struct ArchiveCategoryTests {
       try ArchiveCategory(URL(string: "https://www.example.com/dates/today.html")!)
         == ArchiveCategory.today)
     #expect(
-      try ArchiveCategory(URL(string: "https://www.example.com/stats.html")!)
-        == ArchiveCategory.stats)
-    #expect(
       try ArchiveCategory(URL(string: "https://www.example.com/dates/stats.html")!)
         == ArchiveCategory.shows)
     #expect(
@@ -43,6 +40,9 @@ struct ArchiveCategoryTests {
       try ArchiveCategory(URL(string: "https://www.example.com/bands/stats.html")!)
         == ArchiveCategory.artists)
 
+    #expect(throws: (any Error).self) {
+      try ArchiveCategory(URL(string: "https://www.example.com/stats.html")!)
+    }
     #expect(throws: (any Error).self) {
       try ArchiveCategory(URL(string: "https://www.example.com/today.html")!)
     }

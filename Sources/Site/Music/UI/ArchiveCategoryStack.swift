@@ -35,7 +35,7 @@ struct ArchiveCategoryStack: View {
 
   private var showToolbar: Bool {
     switch category {
-    case .today, .venues, .artists, .stats, .settings, .search:
+    case .today, .venues, .artists, .settings, .search:
       true
     case .shows:
       !combineTodayAndShowSummary || showsMode.supportsToolbar
@@ -46,8 +46,6 @@ struct ArchiveCategoryStack: View {
     switch category {
     case .today:
       DaySummary(dayOfLeapYear: $dayOfLeapYear)
-    case .stats:
-      StatsSummary()
     case .shows:
       if combineTodayAndShowSummary {
         DaysShowsSummary(mode: $showsMode, dayOfLeapYear: $dayOfLeapYear)
@@ -112,10 +110,6 @@ extension ArchiveCategoryStack {
 
 #Preview("Today", traits: .nearbyModel, .vaultModel) {
   ArchiveCategoryStack(withPreviewCategory: .today)
-}
-
-#Preview("Stats", traits: .nearbyModel, .vaultModel) {
-  ArchiveCategoryStack(withPreviewCategory: .stats)
 }
 
 #Preview("Shows", traits: .nearbyModel, .vaultModel) {

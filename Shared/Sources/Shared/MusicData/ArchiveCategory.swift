@@ -12,7 +12,6 @@ public enum ArchiveCategory: String, CaseIterable, Codable, Sendable {
   case shows
   case venues
   case artists
-  case stats
   case settings
   case search
 
@@ -22,8 +21,6 @@ public enum ArchiveCategory: String, CaseIterable, Codable, Sendable {
     switch self {
     case .today:
       return String(localized: "Today", bundle: #bundle)
-    case .stats:
-      return String(localized: "Stats", bundle: #bundle)
     case .shows:
       return String(localized: "Shows", bundle: #bundle)
     case .venues:
@@ -41,8 +38,6 @@ public enum ArchiveCategory: String, CaseIterable, Codable, Sendable {
     switch self {
     case .today:
       .nowCalendarSystemImage
-    case .stats:
-      "chart.bar"
     case .shows:
       "person.and.background.dotted"
     case .venues:
@@ -60,8 +55,6 @@ public enum ArchiveCategory: String, CaseIterable, Codable, Sendable {
     switch self {
     case .today:
       return String(localized: "Display Shows On This Date", bundle: #bundle)
-    case .stats:
-      return String(localized: "Show Statistics", bundle: #bundle)
     case .shows:
       return String(localized: "All Shows", bundle: #bundle)
     case .venues:

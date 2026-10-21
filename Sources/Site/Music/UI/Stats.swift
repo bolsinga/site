@@ -18,7 +18,6 @@ struct Stats {
   let showRanking: Ranking?
   let artistVenuesRanking: Ranking?
   let venueArtistsRanking: Ranking?
-  let displayArchiveCategoryCounts: Bool  // Basically do not want this at the ArchiveCategory.stats.
   let alwaysShowVenuesArtistsStats: Bool
 
   internal init(
@@ -32,7 +31,6 @@ struct Stats {
     showRanking: Ranking?,
     artistVenuesRanking: Ranking?,
     venueArtistsRanking: Ranking?,
-    displayArchiveCategoryCounts: Bool,
     alwaysShowVenuesArtistsStats: Bool
   ) {
     self.concertsCount = concertsCount
@@ -44,7 +42,6 @@ struct Stats {
     self.showRanking = showRanking
     self.artistVenuesRanking = artistVenuesRanking
     self.venueArtistsRanking = venueArtistsRanking
-    self.displayArchiveCategoryCounts = displayArchiveCategoryCounts
     self.alwaysShowVenuesArtistsStats = alwaysShowVenuesArtistsStats
   }
 
@@ -59,16 +56,14 @@ struct Stats {
 
     // This needs to be broken down like this or the swift compiler says it is too complex.
     var statsCategoryCases = [StatsCategory]()
-    if displayArchiveCategoryCounts {
-      statsCategoryCases.append(.shows)
-    }
-    if displayArchiveCategoryCounts && (yearsSpanRanking?.value ?? 0) > 1 {
+    statsCategoryCases.append(.shows)
+    if (yearsSpanRanking?.value ?? 0) > 1 {
       statsCategoryCases.append(.years)
     }
-    if displayArchiveCategoryCounts && showVenues {
+    if showVenues {
       statsCategoryCases.append(.venues)
     }
-    if displayArchiveCategoryCounts && showArtists {
+    if showArtists {
       statsCategoryCases.append(.artists)
     }
     if showWeekdayOrMonthChart {
