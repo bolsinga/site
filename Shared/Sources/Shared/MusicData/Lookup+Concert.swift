@@ -18,6 +18,7 @@ extension Lookup {
       date: show.date,
       performers: performers,
       venue: venue.name,
+      venueID: venue.archivePath,
       location: venue.location,
       comment: show.comment)
   }

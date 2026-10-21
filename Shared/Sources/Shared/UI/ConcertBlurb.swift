@@ -82,6 +82,7 @@ private let previewShow = ShowDigest(
     ArchiveItem(id: .artist("ar1"), name: "The National"),
   ],
   venue: "Treasure Island",
+  venueID: .venue("v0"),
   location: Location(city: "San Francisco", state: "CA"),
   comment: nil)
 

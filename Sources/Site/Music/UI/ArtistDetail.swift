@@ -8,10 +8,59 @@
 import Shared
 import SwiftUI
 
+private struct MapHeaderStyle: ViewModifier {
+  let hasMap: Bool
+  let title: String
+
+  func body(content: Content) -> some View {
+    if hasMap {
+      content
+        .ignoresSafeArea(edges: .top)
+        #if os(macOS)
+          .toolbarBackgroundVisibility(.hidden, for: .windowToolbar)
+        #else
+          .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
+        #endif
+        #if !os(tvOS)
+          .toolbar(removing: .title)
+        #endif
+    } else {
+      content
+        .navigationTitle(title)
+        #if os(iOS)
+          .navigationBarTitleDisplayMode(.inline)
+        #endif
+    }
+  }
+}
+
 struct ArtistDetail: View {
   let digest: ArtistDigest
   let url: URL?
   let isPathNavigable: (ArchivePath) -> Bool
+
+  @ViewBuilder private var headerElement: some View {
+    if hasMap {
+      mapHeader
+    }
+  }
+
+  private var hasMap: Bool { !digest.shows.isEmpty }
+
+  private var mapHeader: some View {
+    ArtistMap(shows: digest.shows)
+      .containerRelativeFrame(.vertical) { height, _ in height * 0.45 }
+      .mask(
+        LinearGradient(
+          stops: [.init(color: .black, location: 0.6), .init(color: .clear, location: 1)],
+          startPoint: .top, endPoint: .bottom)
+      )
+      .overlay(alignment: .bottomLeading) {
+        Text(digest.name)
+          .font(.largeTitle.bold())
+          .padding(.horizontal)
+      }
+  }
 
   @ViewBuilder private var statsElement: some View {
     if !digest.shows.isEmpty {
@@ -61,18 +110,18 @@ struct ArtistDetail: View {
   var body: some View {
     ScrollView {
       VStack(spacing: 16) {
-        statsElement
-        showsElement
-        relatedsElement
+        headerElement
+        VStack(spacing: 16) {
+          statsElement
+          showsElement
+          relatedsElement
+        }
+        .padding(.horizontal)
       }
-      .padding(.horizontal)
     }
     // A ScrollView is transparent, so the view beneath can show through.
     .background(.background)
-    .navigationTitle(digest.name)
-    #if os(iOS)
-      .navigationBarTitleDisplayMode(.inline)
-    #endif
+    .modifier(MapHeaderStyle(hasMap: hasMap, title: digest.name))
     .toolbar { ArchiveSharableToolbarContent(item: digest, url: url) }
   }
 }

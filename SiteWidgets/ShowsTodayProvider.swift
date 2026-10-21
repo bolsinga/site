@@ -66,6 +66,7 @@ extension ShowsTodayProvider {
     date: PartialDate(year: 1996, month: 12, day: 15),
     performers: [ArchiveItem(id: .artist("sample-artist"), name: String(localized: "Artist"))],
     venue: String(localized: "Venue"),
+    venueID: .venue("sample-venue"),
     location: Location(city: "San Francisco", state: "CA"),
     comment: nil)
 
@@ -79,6 +80,7 @@ extension ShowsTodayProvider {
         ArchiveItem(id: .artist("sample-artist-\(index)"), name: String(localized: "Artist"))
       ],
       venue: String(localized: "Venue"),
+      venueID: .venue("sample-venue"),
       location: Location(city: "San Francisco", state: "CA"),
       comment: nil)
   }

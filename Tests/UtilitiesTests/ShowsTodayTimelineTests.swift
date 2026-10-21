@@ -58,6 +58,7 @@ struct ShowsTodayTimelineTests {
       date: PartialDate(year: 1996, month: 3, day: 1),
       performers: [ArchiveItem(id: .artist("ar0"), name: "A Artist")],
       venue: "A Venue",
+      venueID: .venue("v0"),
       location: Location(city: "city", state: "CA"),
       comment: nil)
     let snapshot = ShowsTodaySnapshot(days: [61: [show]])
