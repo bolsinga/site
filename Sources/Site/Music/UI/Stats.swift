@@ -18,7 +18,7 @@ struct Stats {
   let showRanking: Ranking?
   let artistVenuesRanking: Ranking?
   let venueArtistsRanking: Ranking?
-  let displayArchiveCategoryCounts: Bool  // Basically do not want this at the ArchiveCategory.stats.
+  let displayArchiveCategoryCounts: Bool
   let alwaysShowVenuesArtistsStats: Bool
 
   internal init(

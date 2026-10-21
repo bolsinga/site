@@ -13,7 +13,7 @@ extension ArchiveCategory {
       true
     case .shows:
       combineTodayAndShowSummary
-    case .venues, .artists, .stats, .settings, .search:
+    case .venues, .artists, .settings, .search:
       false
     }
   }

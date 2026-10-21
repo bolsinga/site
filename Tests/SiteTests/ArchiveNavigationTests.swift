@@ -12,7 +12,6 @@ import Testing
 
 extension ArchiveCategory {
   var isRegularActivity: Bool {
-    if case .stats = self { return false }
     if case .settings = self { return false }
     if case .search = self { return false }
     return true

@@ -47,7 +47,7 @@ struct VenueDetail: View {
   }
 
   @ViewBuilder private var statsElement: some View {
-    DetailCard(title: Text(ArchiveCategory.stats.localizedString)) {
+    DetailCard(title: Text("Stats")) {
       firstSetElement
       if digest.shows.count > 1 {
         StatsGrouping(venueDigest: digest)

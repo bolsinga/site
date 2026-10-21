@@ -22,7 +22,7 @@ struct ArchiveCategoryToolbarContent: ToolbarContent {
     sort: Binding<RankingSort>, associatedRankName: String
   )? {
     switch category {
-    case .today, .stats, .shows, .settings, .search:
+    case .today, .shows, .settings, .search:
       nil
     case .venues:
       switch venuesMode {

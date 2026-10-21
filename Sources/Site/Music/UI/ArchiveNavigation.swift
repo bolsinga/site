@@ -21,7 +21,7 @@ extension ArchiveCategory {
       .ordinal
     case .shows:
       .grouped
-    case .venues, .artists, .stats, .settings, .search:
+    case .venues, .artists, .settings, .search:
       nil
     }
   }
@@ -82,7 +82,7 @@ extension ShowsMode {
       switch category {
       case .today:
         self.init(category: category, mode: category.mode, todayPath: [path])
-      case .stats, .settings, .search:
+      case .settings, .search:
         self.init(category: category, mode: category.mode)
       case .shows:
         self.init(category: category, mode: category.mode, showsPath: [path])
@@ -129,7 +129,7 @@ extension ShowsMode {
         State(
           category: other.category, mode: mode, todayPath: todayPath, showsPath: showsPath,
           venuesPath: venuesPath, artistsPath: other.artistsPath)
-      case .stats, .settings, .search:
+      case .settings, .search:
         State(
           category: other.category, mode: mode, todayPath: todayPath, showsPath: showsPath,
           venuesPath: venuesPath, artistsPath: artistsPath)
@@ -164,7 +164,7 @@ extension ShowsMode {
       switch category {
       case .today:
         return state.todayPath
-      case .stats, .settings, .search:
+      case .settings, .search:
         return []
       case .shows:
         return state.showsPath
@@ -178,7 +178,7 @@ extension ShowsMode {
       switch category {
       case .today:
         state.todayPath = newValue
-      case .stats, .settings, .search:
+      case .settings, .search:
         break
       case .shows:
         state.showsPath = newValue
@@ -255,7 +255,7 @@ extension ShowsMode {
       state.venuesPath = []
     case .artists:
       state.artistsPath = []
-    case .stats, .settings, .search:
+    case .settings, .search:
       break
     }
   }

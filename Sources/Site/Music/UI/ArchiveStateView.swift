@@ -53,7 +53,7 @@ struct ArchiveStateView: View {
             switch $0 {
             case .today:
               return $archiveNavigation.state.todayPath
-            case .stats, .settings, .search:
+            case .settings, .search:
               return .constant([])
             case .shows:
               return $archiveNavigation.state.showsPath

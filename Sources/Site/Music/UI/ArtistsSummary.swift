@@ -24,7 +24,7 @@ struct ArtistsSummary: View {
       sort: sort,
       searchString: $searchString,
       summary: .counts(
-        title: ArchiveCategory.stats.localizedString,
+        title: String(localized: "Stats"),
         counts: [String(localized: "\(artists.count) Artist(s)")])
     )
     .nearbyLocation(filteredDataIsEmpty: artists.isEmpty)

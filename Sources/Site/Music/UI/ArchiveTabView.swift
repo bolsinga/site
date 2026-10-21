@@ -22,7 +22,7 @@ extension ArchiveCategory {
       } else {
         return nil
       }
-    case .stats, .venues, .artists, .settings, .search:
+    case .venues, .artists, .settings, .search:
       return nil
     }
   }
@@ -174,8 +174,6 @@ struct ArchiveTabView: View {
           .venues
         case .artists:
           .artists
-        case .stats:
-          .stats
         case .settings:
           .settings
         case .search:

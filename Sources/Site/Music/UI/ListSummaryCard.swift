@@ -9,7 +9,7 @@ import Shared
 import SwiftUI
 
 enum ListSummary {
-  case counts(title: String, counts: [String], charts: [StatsCategory] = [])
+  case counts(title: String, counts: [String])
   case venues(count: Int)
   case shows(count: Int, years: Int)
 }
@@ -27,15 +27,11 @@ struct ListSummaryCard: View {
 
   var body: some View {
     switch summary {
-    case .counts(let title, let counts, let charts):
+    case .counts(let title, let counts):
       DetailCard(title: Text(title)) {
         ForEach(counts, id: \.self) { count in
           Text(count)
             .font(.title2.bold())
-        }
-        if !charts.isEmpty {
-          Divider()
-          StatsGrouping(vault: model.vault, including: charts)
         }
       }
     case .venues(let count):
