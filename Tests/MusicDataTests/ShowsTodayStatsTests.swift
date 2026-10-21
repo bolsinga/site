@@ -17,6 +17,7 @@ struct ShowsTodayStatsTests {
       date: PartialDate(year: year, month: 10, day: 17),
       performers: [ArchiveItem(id: .artist("ar\(index)"), name: "Artist \(index)")],
       venue: venue,
+      venueID: .venue(venue),
       location: Location(city: "city", state: state),
       comment: nil)
   }

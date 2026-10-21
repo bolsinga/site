@@ -42,6 +42,7 @@ struct ShowsTodaySnapshotTests {
       date: PartialDate(year: 1996, month: 12, day: 15),
       performers: [ArchiveItem(id: .artist("ar0"), name: "A Artist")],
       venue: "A Venue",
+      venueID: .venue("v0"),
       location: Location(city: "city", state: "CA"),
       comment: nil)
     return ShowsTodaySnapshot(generated: Date(timeIntervalSince1970: 0), days: [350: [show]])
@@ -53,6 +54,7 @@ struct ShowsTodaySnapshotTests {
       date: PartialDate(year: year, month: 1, day: 1),
       performers: [ArchiveItem(id: .artist("ar0"), name: "A Artist")],
       venue: "A Venue",
+      venueID: .venue("v0"),
       location: Location(city: "city", state: "CA"),
       comment: nil)
   }

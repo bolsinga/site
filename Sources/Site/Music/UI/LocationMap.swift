@@ -15,6 +15,9 @@ private struct Place: Identifiable {
   var id: String { "\(coordinate.latitude),\(coordinate.longitude)" }
 }
 
+/// How much wider than its venues a detail map shows; the venue and artist details match.
+let detailMapFitZoomOutFactor = 2.0
+
 struct LocationMap: View {
   let geocodingInProgress: Bool
   @Binding var item: MKMapItem?
@@ -26,7 +29,7 @@ struct LocationMap: View {
         let place = Place(coordinate: item.location.coordinate)
         ClusterMap(
           items: [place], anchorY: CategoryAnnotationView.tipOffset, animatesFit: false,
-          fitZoomOutFactor: 2.0, isSubdued: true
+          fitZoomOutFactor: detailMapFitZoomOutFactor, isSubdued: true
         ) {
           Details(coordinate: $0.coordinate, title: "")
         } onSelect: { _ in

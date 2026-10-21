@@ -511,6 +511,7 @@ extension ShowDigest {
         ArchiveItem(id: .artist("sample-artist-\(index)-\($0.offset)"), name: $0.element)
       },
       venue: venue,
+      venueID: .venue(venue),
       location: Location(city: "San Francisco", state: state),
       comment: nil)
   }

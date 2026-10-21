@@ -14,17 +14,19 @@ public struct ShowDigest: Codable, Equatable, Hashable, Identifiable, PathRestor
   public let date: PartialDate
   public let performers: [ArchiveItem]
   public let venue: String
+  public let venueID: ArchivePath
   public let location: Location
   public let comment: String?
 
   public init(
     id: ArchivePath, date: PartialDate, performers: [ArchiveItem], venue: String,
-    location: Location, comment: String?
+    venueID: ArchivePath, location: Location, comment: String?
   ) {
     self.id = id
     self.date = date
     self.performers = performers
     self.venue = venue
+    self.venueID = venueID
     self.location = location
     self.comment = comment
   }

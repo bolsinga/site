@@ -65,6 +65,9 @@ struct ClusterMap<
   /// How many times wider than the items the fit shows; one fits them as closely as it can.
   let fitZoomOutFactor: Double
 
+  /// Whether items that overlap merge into a cluster.
+  let clustersItems: Bool
+
   /// A quieter base map: muted, without points of interest.
   let isSubdued: Bool
 
@@ -77,6 +80,7 @@ struct ClusterMap<
     resetID: UUID? = nil,
     animatesFit: Bool = true,
     fitZoomOutFactor: Double = 1.0,
+    clustersItems: Bool = true,
     isSubdued: Bool = false,
     isSearching: Bool = false,
     itemDetails: @escaping (Item) -> Details,
@@ -97,6 +101,7 @@ struct ClusterMap<
     self.resetID = resetID
     self.animatesFit = animatesFit
     self.fitZoomOutFactor = fitZoomOutFactor
+    self.clustersItems = clustersItems
     self.isSubdued = isSubdued
     self.isSearching = isSearching
   }
@@ -174,6 +179,7 @@ struct ClusterMap<
     coordinator.anchorY = anchorY
     coordinator.animatesFit = animatesFit
     coordinator.fitZoomOutFactor = fitZoomOutFactor
+    coordinator.clustersItems = clustersItems
   }
 
   final class Coordinator: NSObject, MKMapViewDelegate {
@@ -190,6 +196,7 @@ struct ClusterMap<
     private var needsFit = false
     var animatesFit = true
     var fitZoomOutFactor = 1.0
+    var clustersItems = true
     private var resetID: UUID?
     private var didFit = false
     /// Where the fit in progress is going, so its region changes aren't taken as the user's.
@@ -507,7 +514,7 @@ struct ClusterMap<
           let annotation = ItemAnnotation(
             coordinate: details.coordinate,
             item: item,
-            clusteringIdentifier: .itemClusterIdentifier)
+            clusteringIdentifier: clustersItems ? .itemClusterIdentifier : nil)
           annotation.title = details.title
           annotationMap[item.id] = annotation
           annotationsToAdd.append(annotation)

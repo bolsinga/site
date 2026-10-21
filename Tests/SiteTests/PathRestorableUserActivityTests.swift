@@ -19,7 +19,7 @@ struct PathRestorableUserActivityTests {
 
     let concert = ShowDigest(
       id: .show("sh17"), date: PartialDate(), performers: [], venue: "v",
-      location: Location(city: "c", state: "s"), comment: nil)
+      venueID: .venue("v0"), location: Location(city: "c", state: "s"), comment: nil)
     userActivity.update(concert, url: rootURL)
 
     #expect(userActivity.isEligibleForHandoff)
@@ -102,7 +102,7 @@ struct PathRestorableUserActivityTests {
 
     let concert = ShowDigest(
       id: .show("sh17"), date: PartialDate(), performers: [], venue: "V",
-      location: Location(city: "c", state: "s"), comment: nil)
+      venueID: .venue("v0"), location: Location(city: "c", state: "s"), comment: nil)
 
     userActivity.update(concert, url: rootURL)
 

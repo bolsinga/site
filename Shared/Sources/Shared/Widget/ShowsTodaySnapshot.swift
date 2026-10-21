@@ -10,7 +10,7 @@ import Foundation
 /// Written by the host app into an App Group container so the widget extension can read it
 /// without a network fetch or a loaded `Vault`.
 public struct ShowsTodaySnapshot: Codable, Equatable, Sendable {
-  public static let currentVersion = 1
+  public static let currentVersion = 2
 
   fileprivate static let appGroup = "group.gdb.SiteApp"
 
