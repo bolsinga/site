@@ -26,15 +26,41 @@ struct VenueDetail: View {
     }
   }
 
-  @ViewBuilder private var locationElement: some View {
-    Section(header: Text("Location")) {
-      AddressView(location: digest.location)
-      LocationMap(geocodingInProgress: model.geocodingInProgress, item: $mapItem)
+  /// The map runs edge to edge under the toolbar, fading into the background where the venue's name and address sit.
+  @ViewBuilder private var headerElement: some View {
+    LocationMap(geocodingInProgress: model.geocodingInProgress, item: $mapItem, minHeight: 0)
+      .containerRelativeFrame(.vertical) { height, _ in height * 0.45 }
+      .mask(
+        LinearGradient(
+          stops: [.init(color: .black, location: 0.6), .init(color: .clear, location: 1)],
+          startPoint: .top, endPoint: .bottom)
+      )
+      .overlay(alignment: .bottomLeading) {
+        VStack(alignment: .leading) {
+          Text(digest.name)
+            .font(.largeTitle.bold())
+          AddressView(location: digest.location)
+            .foregroundStyle(.secondary)
+        }
+        .padding(.horizontal)
+      }
+  }
+
+  @ViewBuilder private func card<Content: View>(
+    _ title: Text, @ViewBuilder content: () -> Content
+  ) -> some View {
+    VStack(alignment: .leading, spacing: 12) {
+      title
+        .font(.title3.bold())
+      content()
     }
+    .padding()
+    .frame(maxWidth: .infinity, alignment: .leading)
+    .background(.background.secondary, in: .rect(cornerRadius: 20))
   }
 
   @ViewBuilder private var statsElement: some View {
-    Section(header: Text(ArchiveCategory.stats.localizedString)) {
+    card(Text(ArchiveCategory.stats.localizedString)) {
       firstSetElement
       if digest.shows.count > 1 {
         StatsGrouping(venueDigest: digest)
@@ -43,40 +69,76 @@ struct VenueDetail: View {
   }
 
   @ViewBuilder private var showsElement: some View {
-    Section(header: Text("Shows")) {
-      ForEach(digest.shows.sorted()) { show in
+    card(Text("Shows")) {
+      let shows = digest.shows.sorted()
+      ForEach(shows) { show in
         ArchivePathLink(archivePath: show.id, isPathNavigable: isPathNavigable) {
-          VenueBlurb(date: show.date, performers: show.performerNames)
+          HStack {
+            VenueBlurb(date: show.date, performers: show.performerNames)
+            if isPathNavigable(show.id) {
+              Spacer()
+              Image(systemName: "chevron.right")
+                .font(.footnote.bold())
+                .foregroundStyle(.tertiary)
+            }
+          }
+          .contentShape(.rect)
+        }
+        if show.id != shows.last?.id {
+          Divider()
         }
       }
+      .buttonStyle(.plain)
     }
   }
 
   @ViewBuilder private var relatedsElement: some View {
     if !digest.related.isEmpty {
-      Section(header: Text("Related Venues")) {
+      card(Text("Related Venues")) {
         ForEach(digest.related) { relatedVenue in
-          ArchivePathLink(
-            archivePath: relatedVenue.id, isPathNavigable: isPathNavigable,
-            title: relatedVenue.name)
+          ArchivePathLink(archivePath: relatedVenue.id, isPathNavigable: isPathNavigable) {
+            HStack {
+              Text(relatedVenue.name)
+              if isPathNavigable(relatedVenue.id) {
+                Spacer()
+                Image(systemName: "chevron.right")
+                  .font(.footnote.bold())
+                  .foregroundStyle(.tertiary)
+              }
+            }
+            .contentShape(.rect)
+          }
+          if relatedVenue.id != digest.related.last?.id {
+            Divider()
+          }
         }
+        .buttonStyle(.plain)
       }
     }
   }
 
   var body: some View {
-    List {
-      locationElement
-      statsElement
-      showsElement
-      relatedsElement
+    ScrollView {
+      VStack(spacing: 16) {
+        headerElement
+        VStack(spacing: 16) {
+          statsElement
+          showsElement
+          relatedsElement
+        }
+        .padding(.horizontal)
+      }
     }
-    #if os(iOS)
-      .listStyle(.grouped)
+    // A ScrollView is transparent, so on macOS the view beneath (the venues map) shows through.
+    .background(.background)
+    .ignoresSafeArea(edges: .top)
+    #if os(macOS)
+      .toolbarBackgroundVisibility(.hidden, for: .windowToolbar)
+    #else
+      .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
     #endif
-    .navigationTitle(digest.name)
-    #if os(iOS)
-      .navigationBarTitleDisplayMode(.inline)
+    #if !os(tvOS)
+      .toolbar(removing: .title)
     #endif
     .toolbar { ArchiveSharableToolbarContent(item: digest, url: url) }
     .onAppear {
