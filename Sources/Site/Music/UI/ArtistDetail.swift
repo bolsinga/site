@@ -23,7 +23,7 @@ struct ArtistDetail: View {
 
   @ViewBuilder private var statsElement: some View {
     if !digest.shows.isEmpty {
-      Section(header: Text(ArchiveCategory.stats.localizedString)) {
+      DetailCard(title: Text(ArchiveCategory.stats.localizedString)) {
         firstSetElement
         StatsGrouping(artistDigest: digest)
       }
@@ -32,41 +32,52 @@ struct ArtistDetail: View {
 
   @ViewBuilder private var showsElement: some View {
     if !digest.shows.isEmpty {
-      Section(
-        header: Text("Shows")
-      ) {
-        ForEach(digest.shows.sorted()) { show in
+      DetailCard(title: Text("Shows")) {
+        let shows = digest.shows.sorted()
+        ForEach(shows) { show in
           ArchivePathLink(archivePath: show.id, isPathNavigable: isPathNavigable) {
-            ArtistBlurb(count: show.performers.count, venue: show.venue, date: show.date)
+            DetailRowLabel(isNavigable: isPathNavigable(show.id)) {
+              ArtistBlurb(count: show.performers.count, venue: show.venue, date: show.date)
+            }
+          }
+          if show.id != shows.last?.id {
+            Divider()
           }
         }
+        .buttonStyle(.plain)
       }
     }
   }
 
   @ViewBuilder private var relatedsElement: some View {
     if !digest.related.isEmpty {
-      Section(
-        header: Text("Related Artists")
-      ) {
+      DetailCard(title: Text("Related Artists")) {
         ForEach(digest.related) { relatedArtist in
-          ArchivePathLink(
-            archivePath: relatedArtist.id, isPathNavigable: isPathNavigable,
-            title: relatedArtist.name)
+          ArchivePathLink(archivePath: relatedArtist.id, isPathNavigable: isPathNavigable) {
+            DetailRowLabel(isNavigable: isPathNavigable(relatedArtist.id)) {
+              Text(relatedArtist.name)
+            }
+          }
+          if relatedArtist.id != digest.related.last?.id {
+            Divider()
+          }
         }
+        .buttonStyle(.plain)
       }
     }
   }
 
   var body: some View {
-    List {
-      statsElement
-      showsElement
-      relatedsElement
+    ScrollView {
+      VStack(spacing: 16) {
+        statsElement
+        showsElement
+        relatedsElement
+      }
+      .padding(.horizontal)
     }
-    #if os(iOS)
-      .listStyle(.grouped)
-    #endif
+    // A ScrollView is transparent, so the view beneath can show through.
+    .background(.background)
     .navigationTitle(digest.name)
     #if os(iOS)
       .navigationBarTitleDisplayMode(.inline)

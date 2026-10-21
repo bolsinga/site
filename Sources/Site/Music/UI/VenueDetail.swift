@@ -46,21 +46,8 @@ struct VenueDetail: View {
       }
   }
 
-  @ViewBuilder private func card<Content: View>(
-    _ title: Text, @ViewBuilder content: () -> Content
-  ) -> some View {
-    VStack(alignment: .leading, spacing: 12) {
-      title
-        .font(.title3.bold())
-      content()
-    }
-    .padding()
-    .frame(maxWidth: .infinity, alignment: .leading)
-    .background(.background.secondary, in: .rect(cornerRadius: 20))
-  }
-
   @ViewBuilder private var statsElement: some View {
-    card(Text(ArchiveCategory.stats.localizedString)) {
+    DetailCard(title: Text(ArchiveCategory.stats.localizedString)) {
       firstSetElement
       if digest.shows.count > 1 {
         StatsGrouping(venueDigest: digest)
@@ -69,20 +56,13 @@ struct VenueDetail: View {
   }
 
   @ViewBuilder private var showsElement: some View {
-    card(Text("Shows")) {
+    DetailCard(title: Text("Shows")) {
       let shows = digest.shows.sorted()
       ForEach(shows) { show in
         ArchivePathLink(archivePath: show.id, isPathNavigable: isPathNavigable) {
-          HStack {
+          DetailRowLabel(isNavigable: isPathNavigable(show.id)) {
             VenueBlurb(date: show.date, performers: show.performerNames)
-            if isPathNavigable(show.id) {
-              Spacer()
-              Image(systemName: "chevron.right")
-                .font(.footnote.bold())
-                .foregroundStyle(.tertiary)
-            }
           }
-          .contentShape(.rect)
         }
         if show.id != shows.last?.id {
           Divider()
@@ -94,19 +74,12 @@ struct VenueDetail: View {
 
   @ViewBuilder private var relatedsElement: some View {
     if !digest.related.isEmpty {
-      card(Text("Related Venues")) {
+      DetailCard(title: Text("Related Venues")) {
         ForEach(digest.related) { relatedVenue in
           ArchivePathLink(archivePath: relatedVenue.id, isPathNavigable: isPathNavigable) {
-            HStack {
+            DetailRowLabel(isNavigable: isPathNavigable(relatedVenue.id)) {
               Text(relatedVenue.name)
-              if isPathNavigable(relatedVenue.id) {
-                Spacer()
-                Image(systemName: "chevron.right")
-                  .font(.footnote.bold())
-                  .foregroundStyle(.tertiary)
-              }
             }
-            .contentShape(.rect)
           }
           if relatedVenue.id != digest.related.last?.id {
             Divider()
