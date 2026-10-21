@@ -52,7 +52,8 @@ struct Stats {
 
     let showState = stateCounts.keys.count > 1
 
-    let showWeekdayOrMonthChart = concertsCount > weekdayOrMonthChartConcertThreshold
+    let showWeekdayOrMonthChart =
+      !dates.isEmpty && concertsCount > weekdayOrMonthChartConcertThreshold
 
     // This needs to be broken down like this or the swift compiler says it is too complex.
     var statsCategoryCases = [StatsCategory]()
