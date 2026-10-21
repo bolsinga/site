@@ -50,6 +50,10 @@ struct MonthChart: View {
     }
   }
 
+  private var currentMonth: Int {
+    Calendar.autoupdatingCurrent.component(.month, from: .now)
+  }
+
   @ViewBuilder private func subtitle(_ monthCounts: [Int: (Date, Int)]) -> some View {
     if let topDate = monthCounts.map({ $0 }).topDate {
       Text("Most Shows During \(Date.FormatStyle.dateTime.month(.wide).format(topDate))")
@@ -93,7 +97,7 @@ struct MonthChart: View {
           x: .value("Month", date, unit: .month),
           y: .value("Count", count)
         )
-        .foregroundStyle(.tint)
+        .chartBarStyle(isCurrent: item.key == currentMonth)
         .annotation(position: .top) {
           if count > 0, presentation == .default {
             Text(count.formatted(.number))
