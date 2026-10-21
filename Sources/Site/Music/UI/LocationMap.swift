@@ -26,7 +26,7 @@ struct LocationMap: View {
         let place = Place(coordinate: item.location.coordinate)
         ClusterMap(
           items: [place], anchorY: CategoryAnnotationView.tipOffset, animatesFit: false,
-          isSubdued: true
+          fitZoomOutFactor: 2.0, isSubdued: true
         ) {
           Details(coordinate: $0.coordinate, title: "")
         } onSelect: { _ in

@@ -62,6 +62,9 @@ struct ClusterMap<
 
   let animatesFit: Bool
 
+  /// How many times wider than the items the fit shows; one fits them as closely as it can.
+  let fitZoomOutFactor: Double
+
   /// A quieter base map: muted, without points of interest.
   let isSubdued: Bool
 
@@ -73,6 +76,7 @@ struct ClusterMap<
     anchorY: CGFloat? = nil,
     resetID: UUID? = nil,
     animatesFit: Bool = true,
+    fitZoomOutFactor: Double = 1.0,
     isSubdued: Bool = false,
     isSearching: Bool = false,
     itemDetails: @escaping (Item) -> Details,
@@ -92,6 +96,7 @@ struct ClusterMap<
     self.anchorY = anchorY
     self.resetID = resetID
     self.animatesFit = animatesFit
+    self.fitZoomOutFactor = fitZoomOutFactor
     self.isSubdued = isSubdued
     self.isSearching = isSearching
   }
@@ -168,6 +173,7 @@ struct ClusterMap<
     coordinator.clusterLabel = clusterLabel
     coordinator.anchorY = anchorY
     coordinator.animatesFit = animatesFit
+    coordinator.fitZoomOutFactor = fitZoomOutFactor
   }
 
   final class Coordinator: NSObject, MKMapViewDelegate {
@@ -183,6 +189,7 @@ struct ClusterMap<
     private var fittedIDs: Set<Item.ID> = []
     private var needsFit = false
     var animatesFit = true
+    var fitZoomOutFactor = 1.0
     private var resetID: UUID?
     private var didFit = false
     /// Where the fit in progress is going, so its region changes aren't taken as the user's.
@@ -543,7 +550,7 @@ struct ClusterMap<
       }
 
       didFit = true
-      show(rect.proportionallyPadded, in: mapView)
+      show(rect.proportionallyPadded.zoomedOut(by: fitZoomOutFactor), in: mapView)
     }
 
     private func show(_ rect: MKMapRect, in mapView: MKMapView) {
@@ -810,6 +817,13 @@ struct ClusterMap<
 }
 
 extension MKMapRect {
+  fileprivate func zoomedOut(by factor: Double) -> MKMapRect {
+    guard factor > 1.0 else { return self }
+    return MKMapRect(
+      x: midX - width * factor / 2.0, y: midY - height * factor / 2.0,
+      width: width * factor, height: height * factor)
+  }
+
   fileprivate func zoomed(by factor: Double, around center: MKMapPoint) -> MKMapRect {
     guard factor > 1.0 else { return self }
     return MKMapRect(
