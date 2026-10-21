@@ -79,7 +79,7 @@ extension Stats {
       showRanking: nil,
       artistVenuesRanking: nil,
       venueArtistsRanking: nil,
-      displayArchiveCategoryCounts: true,
+      displayArchiveCategoryCounts: false,
       alwaysShowVenuesArtistsStats: false)
   }
 }

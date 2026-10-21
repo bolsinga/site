@@ -13,7 +13,8 @@ struct StatsSummary: View {
 
   var body: some View {
     List {
-      StatsGrouping(vault: model.vault)
+      // The category totals and charts now live with their lists.
+      StatsGrouping(vault: model.vault, including: [])
     }
     .navigationTitle(Text(ArchiveCategory.stats.localizedString))
   }

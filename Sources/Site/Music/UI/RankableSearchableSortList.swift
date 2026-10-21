@@ -18,13 +18,15 @@ struct RankableSearchableSortList<
   let searchPrompt: String
   @ViewBuilder let associatedRankSectionHeader: (Ranking) -> SectionHeaderContent
   @Binding var searchString: String
+  var summary: ListSummary?
 
   var body: some View {
     let items = items.names(filteredBy: searchString)
     RankableSortList(
       items: items, compare: compare, title: title,
       associatedRankSectionHeader: associatedRankSectionHeader,
-      itemLabelView: { Text($0.name.emphasizedAttributed(matching: searchString)) }, sort: sort
+      itemLabelView: { Text($0.name.emphasizedAttributed(matching: searchString)) }, sort: sort,
+      summary: summary
     )
     .archiveSearchable(
       searchPrompt: searchPrompt,

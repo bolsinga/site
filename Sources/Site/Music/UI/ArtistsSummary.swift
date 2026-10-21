@@ -22,7 +22,10 @@ struct ArtistsSummary: View {
       artists: artists,
       compare: model.compare(lhs:rhs:),
       sort: sort,
-      searchString: $searchString
+      searchString: $searchString,
+      summary: .counts(
+        title: ArchiveCategory.stats.localizedString,
+        counts: [String(localized: "\(artists.count) Artist(s)")])
     )
     .nearbyLocation(filteredDataIsEmpty: artists.isEmpty)
   }

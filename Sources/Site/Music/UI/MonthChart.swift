@@ -14,7 +14,7 @@ extension MonthChart.Presentation {
     switch self {
     case .default:
       .center
-    case .compact:
+    case .compact, .card:
       .default
     }
   }
@@ -24,6 +24,7 @@ struct MonthChart: View {
   enum Presentation {
     case `default`
     case compact
+    case card
   }
 
   @Environment(\.horizontalSizeClass) private var horizontalSizeClass
@@ -44,7 +45,7 @@ struct MonthChart: View {
     switch presentation {
     case .default:
       horizontalSizeClass == .compact ? .narrow : .abbreviated
-    case .compact:
+    case .compact, .card:
       .narrow
     }
   }
@@ -70,7 +71,7 @@ struct MonthChart: View {
         titleText
         Spacer()
       }
-    case .compact:
+    case .compact, .card:
       titleText
     }
   }
@@ -79,10 +80,12 @@ struct MonthChart: View {
     VStack(alignment: .leading) {
       let monthCounts = dates.monthCounts
 
-      ChartTitle(title: title, alignment: presentation.titleAlignment)
+      if presentation != .card {
+        ChartTitle(title: title, alignment: presentation.titleAlignment)
 
-      subtitle(monthCounts)
-        .font(.subheadline)
+        subtitle(monthCounts)
+          .font(.subheadline)
+      }
 
       Chart(monthCounts.sorted { $0.key < $1.key }, id: \.key) { item in  // array of dictionary elements
         let (date, count) = item.value
@@ -97,15 +100,17 @@ struct MonthChart: View {
           }
         }
       }
-      .chartYAxis(presentation == .compact ? .hidden : .automatic)
+      .chartYAxis(presentation == .default ? .automatic : .hidden)
       .chartXAxis {
+        if presentation != .card {
         AxisMarks(values: .stride(by: .month)) { _ in
           AxisGridLine()
           AxisTick()
           AxisValueLabel(format: .dateTime.month(format), centered: true)
         }
+        }
       }
-      .frame(height: presentation == .default ? nil : 100)
+      .frame(height: presentation == .compact ? 100 : nil)
     }
   }
 }

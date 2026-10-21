@@ -21,6 +21,7 @@ struct RankableSortList<
   @ViewBuilder let itemLabelView: ((T) -> LabelContent)
 
   let sort: RankingSort
+  var summary: ListSummary?
 
   @ViewBuilder private func showCount(for venueDigest: T) -> some View {
     Text("\(venueDigest.showRank.value) Show(s)")
@@ -33,14 +34,16 @@ struct RankableSortList<
         compare: compare,
         rankSorted: <,
         itemContentView: { showCount(for: $0) },
-        sectionHeaderView: { $0.representingView }, itemLabelView: itemLabelView)
+        sectionHeaderView: { $0.representingView }, itemLabelView: itemLabelView,
+        summary: summary)
     } else if sort.isFirstSeen {
       RankingList(
         rankingMap: items.firstSeen,
         compare: compare,
         rankSorted: PartialDate.compareWithUnknownsMuted(lhs:rhs:),
         itemContentView: { Text($0.firstSet.rank.formatted(.hash)) },
-        sectionHeaderView: { Text($0.formatted(.compact)) }, itemLabelView: itemLabelView)
+        sectionHeaderView: { Text($0.formatted(.compact)) }, itemLabelView: itemLabelView,
+        summary: summary)
     } else {
       RankingList(
         rankingMap: items.ranked(by: sort),
@@ -54,7 +57,7 @@ struct RankableSortList<
           default:
             $0.sectionHeader(for: sort)
           }
-        }, itemLabelView: itemLabelView)
+        }, itemLabelView: itemLabelView, summary: summary)
     }
   }
 

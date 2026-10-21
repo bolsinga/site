@@ -5,6 +5,7 @@
 //  Created by Greg Bolsinga on 9/23/24.
 //
 
+import Shared
 import SwiftUI
 
 struct ShowsSummary: View {
@@ -14,7 +15,12 @@ struct ShowsSummary: View {
 
   var body: some View {
     let decadesMap = model.filteredDecadesMap(nearbyModel, distanceThreshold: nearbyDistance)
-    ShowYearList(decadesMap: decadesMap)
+    let years = decadesMap.values.reduce(0) { $0 + $1.count }
+    let shows = decadesMap.values.reduce(0) { $0 + $1.values.reduce(0, +) }
+    ShowYearList(
+      decadesMap: decadesMap,
+      summary: .shows(count: shows, years: years)
+    )
       .nearbyLocation(filteredDataIsEmpty: decadesMap.isEmpty)
   }
 }
