@@ -15,7 +15,9 @@ struct DetailCard<Content: View>: View {
   var body: some View {
     VStack(alignment: .leading, spacing: 12) {
       title
-        .font(.title3.bold())
+        .font(.subheadline.weight(.semibold))
+        .textCase(.uppercase)
+        .foregroundStyle(.secondary)
       content()
     }
     .padding()
