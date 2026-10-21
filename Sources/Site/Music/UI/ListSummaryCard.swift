@@ -60,16 +60,18 @@ struct ListSummaryCard: View {
       CountTile(title: String(localized: "Years"), count: years)
       if categories.contains(.weekday) {
         ChartTile(title: titles.weekday) {
-          WeekdayChart(dates: stats.dates, title: titles.weekday, presentation: .card)
+          WeekdayChart(
+            dates: stats.dates, title: titles.weekday, presentation: .card, highlightsCurrent: true)
         } sheet: {
-          WeekdayChart(dates: stats.dates, title: titles.weekday)
+          WeekdayChart(dates: stats.dates, title: titles.weekday, highlightsCurrent: true)
         }
       }
       if categories.contains(.month) {
         ChartTile(title: titles.month) {
-          MonthChart(dates: stats.dates, title: titles.month, presentation: .card)
+          MonthChart(
+            dates: stats.dates, title: titles.month, presentation: .card, highlightsCurrent: true)
         } sheet: {
-          MonthChart(dates: stats.dates, title: titles.month)
+          MonthChart(dates: stats.dates, title: titles.month, highlightsCurrent: true)
         }
       }
     }

@@ -32,13 +32,16 @@ struct WeekdayChart: View {
   let dates: [Date]
   let title: LocalizedStringResource
   let presentation: Presentation
+  let highlightsCurrent: Bool
 
   internal init(
-    dates: [Date], title: LocalizedStringResource, presentation: Presentation = .default
+    dates: [Date], title: LocalizedStringResource, presentation: Presentation = .default,
+    highlightsCurrent: Bool = false
   ) {
     self.dates = dates
     self.title = title
     self.presentation = presentation
+    self.highlightsCurrent = highlightsCurrent
   }
 
   private var format: Date.FormatStyle.Symbol.Weekday {
@@ -82,7 +85,7 @@ struct WeekdayChart: View {
           x: .value("Weekday", date, unit: .day),
           y: .value("Count", count)
         )
-        .chartBarStyle(isCurrent: item.0 == currentWeekday)
+        .chartBarStyle(isCurrent: highlightsCurrent && item.0 == currentWeekday)
         .annotation(position: .top) {
           if count > 0, presentation == .default {
             Text(count.formatted(.number))
