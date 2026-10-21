@@ -354,6 +354,9 @@
     "See Shows With This Artist" : {
 
     },
+    "Show" : {
+
+    },
     "Show Count" : {
 
     },
@@ -439,6 +442,9 @@
 
     },
     "Weekdays with %@" : {
+
+    },
+    "Year" : {
 
     },
     "Years" : {

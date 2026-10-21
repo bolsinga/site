@@ -72,7 +72,8 @@ public struct StateChart: View {
       let (state, count) = item
       BarMark(
         x: .value("State", state),
-        y: .value("Count", count)
+        y: .value("Count", count),
+        width: presentation == .card ? .fixed(3) : .automatic
       )
       .foregroundStyle(.tint)
     }

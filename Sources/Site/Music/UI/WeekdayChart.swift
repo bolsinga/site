@@ -83,7 +83,8 @@ struct WeekdayChart: View {
         let (date, count) = item.1
         BarMark(
           x: .value("Weekday", date, unit: .day),
-          y: .value("Count", count)
+          y: .value("Count", count),
+          width: presentation == .card ? .fixed(3) : .automatic
         )
         .chartBarStyle(isCurrent: highlightsCurrent && item.0 == currentWeekday)
         .annotation(position: .top) {
