@@ -13,6 +13,14 @@ struct YearDetail: View {
   let url: URL?
   let isPathNavigable: (ArchivePath) -> Bool
 
+  private var hasMap: Bool { !digest.shows.isEmpty }
+
+  @ViewBuilder private var headerElement: some View {
+    if hasMap {
+      ShowsMapHeader(shows: digest.shows, title: digest.annum.formatted())
+    }
+  }
+
   @ViewBuilder private var statsElement: some View {
     if !digest.shows.isEmpty {
       StatsCard(stats: Stats(annumDigest: digest), titles: StatsTitles(annum: digest.annum))
@@ -45,17 +53,17 @@ struct YearDetail: View {
   var body: some View {
     ScrollView {
       VStack(spacing: 16) {
-        statsElement
-        showsElement
+        headerElement
+        VStack(spacing: 16) {
+          statsElement
+          showsElement
+        }
+        .padding(.horizontal)
       }
-      .padding(.horizontal)
     }
     // A ScrollView is transparent, so the view beneath can show through.
     .background(.background)
-    .navigationTitle(Text(digest.annum.formatted()))
-    #if os(iOS)
-      .navigationBarTitleDisplayMode(.inline)
-    #endif
+    .modifier(MapHeaderStyle(hasMap: hasMap, title: digest.annum.formatted()))
     .toolbar { ArchiveSharableToolbarContent(item: digest, url: url) }
   }
 }

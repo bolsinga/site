@@ -1,5 +1,5 @@
 //
-//  ArtistMap.swift
+//  ShowsMapHeader.swift
 //
 //
 //  Created by Greg Bolsinga on 10/21/26.
@@ -25,7 +25,7 @@ private struct VenueDot: View {
   }
 }
 
-struct ArtistMap: View {
+struct ShowsMap: View {
   @Environment(VaultModel.self) private var model
 
   let shows: [ShowDigest]
@@ -65,5 +65,53 @@ struct ArtistMap: View {
       }
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
+  }
+}
+
+/// A map of the venues of some shows that fades into the page, with a title over the fade.
+struct ShowsMapHeader: View {
+  let shows: [ShowDigest]
+  let title: String
+
+  var body: some View {
+    ShowsMap(shows: shows)
+      .containerRelativeFrame(.vertical) { height, _ in height * 0.45 }
+      .mask(
+        LinearGradient(
+          stops: [.init(color: .black, location: 0.6), .init(color: .clear, location: 1)],
+          startPoint: .top, endPoint: .bottom)
+      )
+      .overlay(alignment: .bottomLeading) {
+        Text(title)
+          .font(.largeTitle.bold())
+          .padding(.horizontal)
+      }
+  }
+}
+
+/// Lets a page's content run under the toolbar when it has a map header; otherwise the title goes in the navigation bar.
+struct MapHeaderStyle: ViewModifier {
+  let hasMap: Bool
+  let title: String
+
+  func body(content: Content) -> some View {
+    if hasMap {
+      content
+        .ignoresSafeArea(edges: .top)
+        #if os(macOS)
+          .toolbarBackgroundVisibility(.hidden, for: .windowToolbar)
+        #else
+          .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
+        #endif
+        #if !os(tvOS)
+          .toolbar(removing: .title)
+        #endif
+    } else {
+      content
+        .navigationTitle(title)
+        #if os(iOS)
+          .navigationBarTitleDisplayMode(.inline)
+        #endif
+    }
   }
 }

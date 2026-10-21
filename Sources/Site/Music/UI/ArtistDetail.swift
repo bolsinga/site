@@ -8,32 +8,6 @@
 import Shared
 import SwiftUI
 
-private struct MapHeaderStyle: ViewModifier {
-  let hasMap: Bool
-  let title: String
-
-  func body(content: Content) -> some View {
-    if hasMap {
-      content
-        .ignoresSafeArea(edges: .top)
-        #if os(macOS)
-          .toolbarBackgroundVisibility(.hidden, for: .windowToolbar)
-        #else
-          .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
-        #endif
-        #if !os(tvOS)
-          .toolbar(removing: .title)
-        #endif
-    } else {
-      content
-        .navigationTitle(title)
-        #if os(iOS)
-          .navigationBarTitleDisplayMode(.inline)
-        #endif
-    }
-  }
-}
-
 struct ArtistDetail: View {
   let digest: ArtistDigest
   let url: URL?
@@ -41,26 +15,11 @@ struct ArtistDetail: View {
 
   @ViewBuilder private var headerElement: some View {
     if hasMap {
-      mapHeader
+      ShowsMapHeader(shows: digest.shows, title: digest.name)
     }
   }
 
   private var hasMap: Bool { !digest.shows.isEmpty }
-
-  private var mapHeader: some View {
-    ArtistMap(shows: digest.shows)
-      .containerRelativeFrame(.vertical) { height, _ in height * 0.45 }
-      .mask(
-        LinearGradient(
-          stops: [.init(color: .black, location: 0.6), .init(color: .clear, location: 1)],
-          startPoint: .top, endPoint: .bottom)
-      )
-      .overlay(alignment: .bottomLeading) {
-        Text(digest.name)
-          .font(.largeTitle.bold())
-          .padding(.horizontal)
-      }
-  }
 
   @ViewBuilder private var statsElement: some View {
     if !digest.shows.isEmpty {
