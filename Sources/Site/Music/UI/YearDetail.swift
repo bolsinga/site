@@ -15,7 +15,7 @@ struct YearDetail: View {
 
   @ViewBuilder private var statsElement: some View {
     if !digest.shows.isEmpty {
-      Section(header: Text(ArchiveCategory.stats.localizedString)) {
+      DetailCard(title: Text(ArchiveCategory.stats.localizedString)) {
         StatsGrouping(annumDigest: digest)
       }
     }
@@ -23,29 +23,41 @@ struct YearDetail: View {
 
   @ViewBuilder private var showsElement: some View {
     if !digest.shows.isEmpty {
-      Section(header: Text("Shows")) {
-        ForEach(digest.shows.sorted()) { show in
+      DetailCard(title: Text("Shows")) {
+        let shows = digest.shows.sorted()
+        ForEach(shows) { show in
           ArchivePathLink(archivePath: show.id, isPathNavigable: isPathNavigable) {
-            ConcertBlurb(
-              venue: show.venue,
-              date: show.date,
-              performers: show.performerNames,
-              dateFormat: .noYear)
+            DetailRowLabel(isNavigable: isPathNavigable(show.id)) {
+              ConcertBlurb(
+                venue: show.venue,
+                date: show.date,
+                performers: show.performerNames,
+                dateFormat: .noYear)
+            }
+          }
+          if show.id != shows.last?.id {
+            Divider()
           }
         }
+        .buttonStyle(.plain)
       }
     }
   }
 
   var body: some View {
-    List {
-      statsElement
-      showsElement
+    ScrollView {
+      VStack(spacing: 16) {
+        statsElement
+        showsElement
+      }
+      .padding(.horizontal)
     }
-    #if os(iOS)
-      .listStyle(.grouped)
-    #endif
+    // A ScrollView is transparent, so the view beneath can show through.
+    .background(.background)
     .navigationTitle(Text(digest.annum.formatted()))
+    #if os(iOS)
+      .navigationBarTitleDisplayMode(.inline)
+    #endif
     .toolbar { ArchiveSharableToolbarContent(item: digest, url: url) }
   }
 }
