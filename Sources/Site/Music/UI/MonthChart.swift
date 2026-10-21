@@ -93,6 +93,7 @@ struct MonthChart: View {
           x: .value("Month", date, unit: .month),
           y: .value("Count", count)
         )
+        .foregroundStyle(.tint)
         .annotation(position: .top) {
           if count > 0, presentation == .default {
             Text(count.formatted(.number))
