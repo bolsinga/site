@@ -328,6 +328,15 @@ public typealias VaultModel = AbstractVaultModel<BasicIdentifier>
     nearbyModel.locationFilter.isNearby ? decadesMapsNearby(distanceThreshold) : vault.decadesMap
   }
 
+  /// The statistics of what the nearby filter leaves, or of everything if it is off.
+  func filteredStatisticsData(_ nearbyModel: NearbyModel, distanceThreshold: CLLocationDistance)
+    -> (showsCount: Int, venueCount: Int, artistCount: Int, dates: [Date], states: [String: Int])
+  {
+    nearbyModel.locationFilter.isNearby
+      ? vault.statisticsData(venueIDs: venueIDsNearby(distanceThreshold))
+      : vault.statisticsData
+  }
+
   func nearbyVenues(_ nearbyModel: NearbyModel, distanceThreshold: CLLocationDistance)
     -> any Collection<RankedArchiveItem>
   {

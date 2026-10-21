@@ -10,8 +10,8 @@ import SwiftUI
 
 enum ListSummary {
   case artists(count: Int)
-  case venues(count: Int)
-  case shows(count: Int, years: Int)
+  case venues(count: Int, stats: Stats)
+  case shows(count: Int, years: Int, stats: Stats)
 }
 
 struct ListSummaryCard: View {
@@ -26,15 +26,14 @@ struct ListSummaryCard: View {
       DetailCard(title: Text("Stats")) {
         StatRow(count: count, kind: .artists)
       }
-    case .venues(let count):
-      venuesCards(count: count)
-    case .shows(let count, let years):
-      showsCards(count: count, years: years)
+    case .venues(let count, let stats):
+      venuesCards(count: count, stats: stats)
+    case .shows(let count, let years, let stats):
+      showsCards(count: count, years: years, stats: stats)
     }
   }
 
-  @ViewBuilder private func venuesCards(count: Int) -> some View {
-    let stats = Stats(vault: model.vault)
+  @ViewBuilder private func venuesCards(count: Int, stats: Stats) -> some View {
     DetailCard(title: Text("Stats")) {
       StatRows {
         StatRow(count: count, kind: .venues)
@@ -50,8 +49,7 @@ struct ListSummaryCard: View {
     }
   }
 
-  @ViewBuilder private func showsCards(count: Int, years: Int) -> some View {
-    let stats = Stats(vault: model.vault)
+  @ViewBuilder private func showsCards(count: Int, years: Int, stats: Stats) -> some View {
     let titles = StatsTitles.generic
     let categories = stats.categories(weekdayOrMonthChartConcertThreshold: statsThreshold)
     DetailCard(title: Text("Stats")) {
