@@ -69,7 +69,7 @@ struct StatsTiles: View {
 
   var body: some View {
     SummaryTiles {
-      if let firstSetRank {
+      if let firstSetRank, firstSetRank != .unknown {
         firstSetTile(rank: firstSetRank)
       }
       if includesCategories {
@@ -82,7 +82,7 @@ struct StatsTiles: View {
 
   @ViewBuilder private func firstSetTile(rank: Rank) -> some View {
     DetailCard(title: Text("First Set"), fillsHeight: true) {
-      Text(rank == .unknown ? "–" : rank.formatted())
+      Text(rank.formatted())
         .font(.largeTitle.bold())
         .lineLimit(1)
         .minimumScaleFactor(0.3)

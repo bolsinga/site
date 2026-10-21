@@ -41,7 +41,11 @@ struct RankableSortList<
         rankingMap: items.firstSeen,
         compare: compare,
         rankSorted: PartialDate.compareWithUnknownsMuted(lhs:rhs:),
-        itemContentView: { Text($0.firstSet.rank.formatted(.hash)) },
+        itemContentView: {
+          if $0.firstSet.rank != .unknown {
+            Text($0.firstSet.rank.formatted(.hash))
+          }
+        },
         sectionHeaderView: { Text($0.formatted(.compact)) }, itemLabelView: itemLabelView,
         summary: summary)
     } else {
