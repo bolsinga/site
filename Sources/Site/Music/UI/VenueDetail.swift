@@ -129,6 +129,8 @@ struct VenueDetail: View {
         .padding(.horizontal)
       }
     }
+    // A ScrollView is transparent, so on macOS the view beneath (the venues map) shows through.
+    .background(.background)
     .ignoresSafeArea(edges: .top)
     #if os(macOS)
       .toolbarBackgroundVisibility(.hidden, for: .windowToolbar)
