@@ -11,16 +11,12 @@ import SwiftUI
 enum StatKind {
   case shows, years, venues, artists
 
-  func label(count: Int) -> String {
-    switch (self, count == 1) {
-    case (.shows, true): String(localized: "Show")
-    case (.shows, false): String(localized: "Shows")
-    case (.years, true): String(localized: "Year")
-    case (.years, false): String(localized: "Years")
-    case (.venues, true): String(localized: "Venue")
-    case (.venues, false): String(localized: "Venues")
-    case (.artists, true): String(localized: "Artist")
-    case (.artists, false): String(localized: "Artists")
+  func text(count: Int) -> AttributedString {
+    switch self {
+    case .shows: AttributedString(localized: "**\(count)** Shows")
+    case .years: AttributedString(localized: "**\(count)** Years")
+    case .venues: AttributedString(localized: "**\(count)** Venues")
+    case .artists: AttributedString(localized: "**\(count)** Artists")
     }
   }
 }
@@ -28,33 +24,40 @@ enum StatKind {
 struct StatRow: View {
   @ScaledMetric(relativeTo: .largeTitle) private var rowHeight = 44
 
-  let value: String
-  let label: String
+  let text: AttributedString
   var ranking: Ranking?
 
-  init(value: String, label: String, ranking: Ranking? = nil) {
-    self.value = value
-    self.label = label
+  init(text: AttributedString, ranking: Ranking? = nil) {
+    self.text = text
     self.ranking = ranking
   }
 
   init(count: Int, kind: StatKind, ranking: Ranking? = nil) {
-    self.init(value: count.formatted(), label: kind.label(count: count), ranking: ranking)
+    self.init(text: kind.text(count: count), ranking: ranking)
+  }
+
+  private var styledText: AttributedString {
+    var styled = text
+    for run in text.runs {
+      if run.inlinePresentationIntent?.contains(.stronglyEmphasized) == true {
+        styled[run.range].font = .largeTitle.bold()
+        styled[run.range].foregroundColor = .primary
+        let last = text.characters.index(before: run.range.upperBound)
+        styled[last..<run.range.upperBound].kern = 6
+      } else {
+        styled[run.range].font = .subheadline.weight(.semibold)
+        styled[run.range].foregroundColor = .secondary
+      }
+    }
+    return styled
   }
 
   var body: some View {
     HStack(alignment: .firstTextBaseline) {
-      Text(value)
-        .font(.largeTitle.bold())
+      Text(styledText)
+        .textCase(.uppercase)
         .lineLimit(1)
         .minimumScaleFactor(0.3)
-        .layoutPriority(1)
-      Text(label)
-        .font(.subheadline.weight(.semibold))
-        .textCase(.uppercase)
-        .foregroundStyle(.secondary)
-        .lineLimit(1)
-        .minimumScaleFactor(0.7)
         .frame(maxWidth: .infinity, alignment: .leading)
       if let ranking, ranking.rank != .unknown {
         Text(ranking.formatted(.rankOnly))
@@ -168,7 +171,7 @@ struct StatsCard: View {
     DetailCard(title: Text("Stats")) {
       StatRows {
         if let firstSetRank, firstSetRank != .unknown {
-          StatRow(value: firstSetRank.formatted(), label: String(localized: "First Set"))
+          StatRow(text: AttributedString(localized: "**\(firstSetRank.formatted())** First Set"))
         }
         if includesCategories {
           ForEach(stats.categories(weekdayOrMonthChartConcertThreshold: statsThreshold), id: \.self) {
