@@ -29,7 +29,6 @@ extension Stats {
       showRanking: showRanking,
       artistVenuesRanking: artistVenuesRanking,
       venueArtistsRanking: venueArtistsRanking,
-      displayArchiveCategoryCounts: true,
       alwaysShowVenuesArtistsStats: alwaysShowVenuesArtistsStats)
   }
 
@@ -79,7 +78,6 @@ extension Stats {
       showRanking: nil,
       artistVenuesRanking: nil,
       venueArtistsRanking: nil,
-      displayArchiveCategoryCounts: false,
       alwaysShowVenuesArtistsStats: false)
   }
 }
