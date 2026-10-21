@@ -18,6 +18,8 @@ struct DetailCard<Content: View>: View {
       title
         .font(.subheadline.weight(.semibold))
         .textCase(.uppercase)
+        .lineLimit(1)
+        .minimumScaleFactor(0.7)
         .foregroundStyle(.secondary)
       content()
     }

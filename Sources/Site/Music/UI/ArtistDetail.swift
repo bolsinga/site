@@ -13,20 +13,11 @@ struct ArtistDetail: View {
   let url: URL?
   let isPathNavigable: (ArchivePath) -> Bool
 
-  @ViewBuilder private var firstSetElement: some View {
-    HStack {
-      Text("First Set")
-      Spacer()
-      Text(digest.rank.firstSet.rank.formatted())
-    }
-  }
-
   @ViewBuilder private var statsElement: some View {
     if !digest.shows.isEmpty {
-      DetailCard(title: Text("Stats")) {
-        firstSetElement
-        StatsGrouping(artistDigest: digest)
-      }
+      StatsTiles(
+        stats: Stats(artistDigest: digest), titles: StatsTitles(artistDigest: digest),
+        firstSetRank: digest.rank.firstSet.rank)
     }
   }
 

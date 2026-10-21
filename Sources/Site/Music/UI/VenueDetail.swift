@@ -18,14 +18,6 @@ struct VenueDetail: View {
 
   @State private var mapItem: MKMapItem?
 
-  @ViewBuilder private var firstSetElement: some View {
-    HStack {
-      Text("First Set")
-      Spacer()
-      Text(digest.rank.firstSet.rank.formatted())
-    }
-  }
-
   /// The map runs edge to edge under the toolbar, fading into the background where the venue's name and address sit.
   @ViewBuilder private var headerElement: some View {
     LocationMap(geocodingInProgress: model.geocodingInProgress, item: $mapItem, minHeight: 0)
@@ -47,12 +39,9 @@ struct VenueDetail: View {
   }
 
   @ViewBuilder private var statsElement: some View {
-    DetailCard(title: Text("Stats")) {
-      firstSetElement
-      if digest.shows.count > 1 {
-        StatsGrouping(venueDigest: digest)
-      }
-    }
+    StatsTiles(
+      stats: Stats(venueDigest: digest), titles: StatsTitles(venueDigest: digest),
+      firstSetRank: digest.rank.firstSet.rank, includesCategories: digest.shows.count > 1)
   }
 
   @ViewBuilder private var showsElement: some View {
