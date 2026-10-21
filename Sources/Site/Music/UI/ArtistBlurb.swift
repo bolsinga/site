@@ -14,11 +14,17 @@ struct ArtistBlurb: View {
   let date: PartialDate
 
   var body: some View {
-    LabeledContent {
+    // Laid out explicitly: outside of a List, LabeledContent doesn't push the value to the trailing edge or make it secondary.
+    HStack {
+      VStack(alignment: .leading) {
+        Text(venue)
+        Text(date.formatted(.compact))
+          .font(.subheadline)
+          .foregroundStyle(.secondary)
+      }
+      Spacer()
       Text("\(count) Artist(s)")
-    } label: {
-      Text(venue)
-      Text(date.formatted(.compact))
+        .foregroundStyle(.secondary)
     }
   }
 }
