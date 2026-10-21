@@ -50,6 +50,10 @@ struct WeekdayChart: View {
     }
   }
 
+  private var currentWeekday: Int {
+    Calendar.autoupdatingCurrent.component(.weekday, from: .now)
+  }
+
   @State private var firstWeekday = Calendar.autoupdatingCurrent.firstWeekday
 
   @ViewBuilder private func subtitle(_ weekdayCounts: [(Int, (Date, Int))]) -> some View {
@@ -78,7 +82,7 @@ struct WeekdayChart: View {
           x: .value("Weekday", date, unit: .day),
           y: .value("Count", count)
         )
-        .foregroundStyle(.tint)
+        .chartBarStyle(isCurrent: item.0 == currentWeekday)
         .annotation(position: .top) {
           if count > 0, presentation == .default {
             Text(count.formatted(.number))
