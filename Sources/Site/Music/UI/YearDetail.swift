@@ -15,9 +15,7 @@ struct YearDetail: View {
 
   @ViewBuilder private var statsElement: some View {
     if !digest.shows.isEmpty {
-      DetailCard(title: Text("Stats")) {
-        StatsGrouping(annumDigest: digest)
-      }
+      StatsTiles(stats: Stats(annumDigest: digest), titles: StatsTitles(annum: digest.annum))
     }
   }
 

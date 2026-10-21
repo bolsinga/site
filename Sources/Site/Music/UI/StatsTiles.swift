@@ -64,12 +64,14 @@ struct StatsTiles: View {
 
   let stats: Stats
   let titles: StatsTitles
-  let firstSetRank: Rank
+  var firstSetRank: Rank?
   var includesCategories = true
 
   var body: some View {
     SummaryTiles {
-      firstSetTile
+      if let firstSetRank {
+        firstSetTile(rank: firstSetRank)
+      }
       if includesCategories {
         ForEach(stats.categories(weekdayOrMonthChartConcertThreshold: statsThreshold), id: \.self) {
           tile(for: $0)
@@ -78,9 +80,9 @@ struct StatsTiles: View {
     }
   }
 
-  @ViewBuilder private var firstSetTile: some View {
+  @ViewBuilder private func firstSetTile(rank: Rank) -> some View {
     DetailCard(title: Text("First Set"), fillsHeight: true) {
-      Text(firstSetRank == .unknown ? "–" : firstSetRank.formatted())
+      Text(rank == .unknown ? "–" : rank.formatted())
         .font(.largeTitle.bold())
         .lineLimit(1)
         .minimumScaleFactor(0.3)
