@@ -16,14 +16,9 @@ enum ListSummary {
 
 struct ListSummaryCard: View {
   @Environment(VaultModel.self) private var model
-
-  let summary: ListSummary
-
   @Environment(\.statsThreshold) private var statsThreshold: Int
 
-  @State private var showStates = false
-  @State private var showWeekdays = false
-  @State private var showMonths = false
+  let summary: ListSummary
 
   var body: some View {
     switch summary {
@@ -44,21 +39,12 @@ struct ListSummaryCard: View {
   @ViewBuilder private func venuesCards(count: Int) -> some View {
     let stats = Stats(vault: model.vault)
     SummaryTiles {
-      DetailCard(title: Text(ArchiveCategory.venues.localizedString), fillsHeight: true) {
-        Text(count.formatted())
-          .font(.largeTitle.bold())
-      }
+      CountTile(title: ArchiveCategory.venues.localizedString, count: count)
       if stats.stateCounts.keys.count > 1 {
-        Button {
-          showStates = true
-        } label: {
-          DetailCard(title: Text(StatsTitles.generic.state), fillsHeight: true) {
-            StateChart(
-              counts: stats.stateCounts, title: StatsTitles.generic.state, presentation: .card)
-          }
-        }
-        .buttonStyle(.plain)
-        .dismissibleSheet(isPresented: $showStates) {
+        ChartTile(title: StatsTitles.generic.state) {
+          StateChart(
+            counts: stats.stateCounts, title: StatsTitles.generic.state, presentation: .card)
+        } sheet: {
           StateChart(counts: stats.stateCounts, title: StatsTitles(vault: model.vault).state)
         }
       }
@@ -70,37 +56,19 @@ struct ListSummaryCard: View {
     let titles = StatsTitles.generic
     let categories = stats.categories(weekdayOrMonthChartConcertThreshold: statsThreshold)
     SummaryTiles {
-      DetailCard(title: Text(ArchiveCategory.shows.localizedString), fillsHeight: true) {
-        Text(count.formatted())
-          .font(.largeTitle.bold())
-      }
-      DetailCard(title: Text("Years"), fillsHeight: true) {
-        Text(years.formatted())
-          .font(.largeTitle.bold())
-      }
+      CountTile(title: ArchiveCategory.shows.localizedString, count: count)
+      CountTile(title: String(localized: "Years"), count: years)
       if categories.contains(.weekday) {
-        Button {
-          showWeekdays = true
-        } label: {
-          DetailCard(title: Text(titles.weekday), fillsHeight: true) {
-            WeekdayChart(dates: stats.dates, title: titles.weekday, presentation: .card)
-          }
-        }
-        .buttonStyle(.plain)
-        .dismissibleSheet(isPresented: $showWeekdays) {
+        ChartTile(title: titles.weekday) {
+          WeekdayChart(dates: stats.dates, title: titles.weekday, presentation: .card)
+        } sheet: {
           WeekdayChart(dates: stats.dates, title: titles.weekday)
         }
       }
       if categories.contains(.month) {
-        Button {
-          showMonths = true
-        } label: {
-          DetailCard(title: Text(titles.month), fillsHeight: true) {
-            MonthChart(dates: stats.dates, title: titles.month, presentation: .card)
-          }
-        }
-        .buttonStyle(.plain)
-        .dismissibleSheet(isPresented: $showMonths) {
+        ChartTile(title: titles.month) {
+          MonthChart(dates: stats.dates, title: titles.month, presentation: .card)
+        } sheet: {
           MonthChart(dates: stats.dates, title: titles.month)
         }
       }
@@ -108,65 +76,78 @@ struct ListSummaryCard: View {
   }
 }
 
-private let summaryTilesWideWidth: CGFloat = 520
+private let summaryTileSpacing: CGFloat = 16
+private let summaryTileMinWidth: CGFloat = 150
+private let summaryTileMaxHeight: CGFloat = 180
 
-private struct SummaryTiles<Content: View>: View {
+private func summaryTileColumns(width: CGFloat, count: Int) -> Int {
+  guard count > 1 else { return 1 }
+  for rows in 1...count {
+    let columns = (count + rows - 1) / rows
+    let tileWidth = (width - summaryTileSpacing * CGFloat(columns - 1)) / CGFloat(columns)
+    if tileWidth >= summaryTileMinWidth || columns <= 2 {
+      return columns
+    }
+  }
+  return 1
+}
+
+struct SummaryTiles<Content: View>: View {
   @ViewBuilder let content: () -> Content
 
-  @State private var isWide = false
+  @State private var columns = 2
   @State private var isMeasured = false
 
   var body: some View {
-    SummaryTileLayout(isWide: isWide) {
-      content()
-    }
-    .onGeometryChange(for: Bool.self) {
-      $0.size.width >= summaryTilesWideWidth
-    } action: { newValue in
-      // The first measurement settles in place; later ones animate.
-      if isMeasured {
-        withAnimation { isWide = newValue }
-      } else {
-        isWide = newValue
-        isMeasured = true
+    Group(subviews: content()) { subviews in
+      let count = subviews.count
+      SummaryTileLayout(columns: columns) {
+        ForEach(subviews) { $0 }
+      }
+      .onGeometryChange(for: Int.self) {
+        summaryTileColumns(width: $0.size.width, count: count)
+      } action: { newValue in
+        // The first measurement settles in place; later ones animate.
+        if isMeasured {
+          withAnimation { columns = newValue }
+        } else {
+          columns = newValue
+          isMeasured = true
+        }
       }
     }
   }
 }
 
 private struct SummaryTileLayout: Layout {
-  let isWide: Bool
+  let columns: Int
 
-  private let spacing: CGFloat = 16
-  private let maxWideHeight: CGFloat = 160
-
-  private func metrics(width: CGFloat, count: Int) -> (columns: Int, size: CGSize) {
-    guard count > 0 else { return (1, .zero) }
-    let columns = isWide ? count : min(2, count)
-    let tileWidth = (width - spacing * CGFloat(columns - 1)) / CGFloat(columns)
-    let tileHeight = isWide ? min(tileWidth, maxWideHeight) : tileWidth
-    return (columns, CGSize(width: tileWidth, height: tileHeight))
+  private func tileSize(width: CGFloat) -> CGSize {
+    let columns = CGFloat(max(columns, 1))
+    let tileWidth = (width - summaryTileSpacing * (columns - 1)) / columns
+    return CGSize(width: tileWidth, height: min(tileWidth, summaryTileMaxHeight))
   }
 
   func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
     let width = proposal.width ?? 0
-    let (columns, size) = metrics(width: width, count: subviews.count)
+    guard !subviews.isEmpty else { return CGSize(width: width, height: 0) }
+    let size = tileSize(width: width)
     let rows = (subviews.count + columns - 1) / columns
     return CGSize(
-      width: width, height: CGFloat(rows) * size.height + CGFloat(max(rows - 1, 0)) * spacing)
+      width: width, height: CGFloat(rows) * size.height + CGFloat(rows - 1) * summaryTileSpacing)
   }
 
   func placeSubviews(
     in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()
   ) {
-    let (columns, size) = metrics(width: bounds.width, count: subviews.count)
+    let size = tileSize(width: bounds.width)
     for (index, subview) in subviews.enumerated() {
       let row = index / columns
       let column = index % columns
       subview.place(
         at: CGPoint(
-          x: bounds.minX + CGFloat(column) * (size.width + spacing),
-          y: bounds.minY + CGFloat(row) * (size.height + spacing)),
+          x: bounds.minX + CGFloat(column) * (size.width + summaryTileSpacing),
+          y: bounds.minY + CGFloat(row) * (size.height + summaryTileSpacing)),
         anchor: .topLeading,
         proposal: ProposedViewSize(size))
     }
