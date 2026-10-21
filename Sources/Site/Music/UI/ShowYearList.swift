@@ -10,6 +10,7 @@ import SwiftUI
 
 struct ShowYearList: View {
   let decadesMap: [Decade: [Annum: Int]]
+  var summary: ListSummary?
 
   @SceneStorage("shows.sort.descending") private var descending: Bool = false
 
@@ -19,6 +20,10 @@ struct ShowYearList: View {
 
   var body: some View {
     List {
+      if let summary {
+        ListSummaryCard(summary: summary)
+          .listSummaryRowStyle()
+      }
       ForEach(
         decadesMap.keys.sorted { lhs, rhs in
           descending ? Decade.compareDescendingUnknownLast(lhs: lhs, rhs: rhs) : lhs < rhs

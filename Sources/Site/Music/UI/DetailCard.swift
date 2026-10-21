@@ -10,6 +10,7 @@ import SwiftUI
 /// A titled, rounded card holding a detail view's section of content.
 struct DetailCard<Content: View>: View {
   let title: Text
+  var fillsHeight = false
   @ViewBuilder let content: () -> Content
 
   var body: some View {
@@ -21,7 +22,9 @@ struct DetailCard<Content: View>: View {
       content()
     }
     .padding()
-    .frame(maxWidth: .infinity, alignment: .leading)
+    .frame(
+      maxWidth: .infinity, maxHeight: fillsHeight ? .infinity : nil, alignment: .topLeading
+    )
     .background(.background.secondary, in: .rect(cornerRadius: 20))
   }
 }

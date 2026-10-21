@@ -13,7 +13,7 @@ extension StateChart.Presentation {
     switch self {
     case .default:
       .center
-    case .compact:
+    case .compact, .card:
       .default
     }
   }
@@ -23,6 +23,7 @@ public struct StateChart: View {
   public enum Presentation: Sendable {
     case `default`
     case compact
+    case card
   }
 
   let counts: [String: Int]
@@ -79,6 +80,15 @@ public struct StateChart: View {
   }
 
   public var body: some View {
+    if presentation == .card {
+      compactChart
+        .chartXAxis(.hidden)
+    } else {
+      titledBody
+    }
+  }
+
+  @ViewBuilder private var titledBody: some View {
     VStack(alignment: .leading) {
       ChartTitle(title: title, alignment: presentation.titleAlignment)
 
@@ -91,6 +101,8 @@ public struct StateChart: View {
       case .compact:
         compactChart
           .frame(height: 100)
+      case .card:
+        EmptyView()
       }
     }
   }

@@ -14,7 +14,7 @@ extension WeekdayChart.Presentation {
     switch self {
     case .default:
       .center
-    case .compact:
+    case .compact, .card:
       .default
     }
   }
@@ -24,6 +24,7 @@ struct WeekdayChart: View {
   enum Presentation {
     case `default`
     case compact
+    case card
   }
 
   @Environment(\.horizontalSizeClass) private var horizontalSizeClass
@@ -44,7 +45,7 @@ struct WeekdayChart: View {
     switch presentation {
     case .default:
       horizontalSizeClass == .compact ? .narrow : .abbreviated
-    case .compact:
+    case .compact, .card:
       .narrow
     }
   }
@@ -61,11 +62,15 @@ struct WeekdayChart: View {
 
   var body: some View {
     VStack(alignment: .leading) {
-      ChartTitle(title: title, alignment: presentation.titleAlignment)
+      if presentation != .card {
+        ChartTitle(title: title, alignment: presentation.titleAlignment)
+      }
 
       let weekdayCounts = dates.computeWeekdayCounts(firstWeekday)
-      subtitle(weekdayCounts)
-        .font(.subheadline)
+      if presentation != .card {
+        subtitle(weekdayCounts)
+          .font(.subheadline)
+      }
 
       Chart(weekdayCounts, id: \.0) { item in
         let (date, count) = item.1
@@ -73,6 +78,7 @@ struct WeekdayChart: View {
           x: .value("Weekday", date, unit: .day),
           y: .value("Count", count)
         )
+        .foregroundStyle(.tint)
         .annotation(position: .top) {
           if count > 0, presentation == .default {
             Text(count.formatted(.number))
@@ -80,15 +86,17 @@ struct WeekdayChart: View {
           }
         }
       }
-      .chartYAxis(presentation == .compact ? .hidden : .automatic)
+      .chartYAxis(presentation == .default ? .automatic : .hidden)
       .chartXAxis {
+        if presentation != .card {
         AxisMarks(values: .stride(by: .day)) { _ in
           AxisGridLine()
           AxisTick()
           AxisValueLabel(format: .dateTime.weekday(format), centered: true)
         }
+        }
       }
-      .frame(height: presentation == .default ? nil : 100)
+      .frame(height: presentation == .compact ? 100 : nil)
       .onNotification(name: NSLocale.currentLocaleDidChangeNotification) {
         firstWeekday = Calendar.autoupdatingCurrent.firstWeekday
       }

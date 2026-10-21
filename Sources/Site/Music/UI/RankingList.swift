@@ -21,9 +21,14 @@ struct RankingList<
   @ViewBuilder let itemContentView: (T) -> ItemContent
   @ViewBuilder let sectionHeaderView: (R) -> SectionHeader
   @ViewBuilder let itemLabelView: ((T) -> LabelContent)
+  var summary: ListSummary?
 
   var body: some View {
     List {
+      if let summary {
+        ListSummaryCard(summary: summary)
+          .listSummaryRowStyle()
+      }
       ForEach(rankingMap.keys.sorted(by: rankSorted), id: \.self) { ranking in
         if let items = rankingMap[ranking] {
           Section {

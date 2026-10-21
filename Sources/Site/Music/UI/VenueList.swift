@@ -13,6 +13,7 @@ struct VenueList<V: Hashable & Identifiable & Nameable & PathRestorable & Rankab
   let compare: (V, V) -> Bool
   let sort: RankingSort
   @Binding var searchString: String
+  var summary: ListSummary?
 
   var body: some View {
     RankableSearchableSortList(
@@ -22,7 +23,7 @@ struct VenueList<V: Hashable & Identifiable & Nameable & PathRestorable & Rankab
       title: ArchiveCategory.venues.localizedString,
       searchPrompt: String(localized: "Venue Names"),
       associatedRankSectionHeader: { $0.artistsCountView },
-      searchString: $searchString)
+      searchString: $searchString, summary: summary)
   }
 }
 
