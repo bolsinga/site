@@ -21,46 +21,52 @@ struct ShowDetail: View {
   private var comment: String? { concert.comment }
 
   @ViewBuilder private var lineupElement: some View {
-    Section(header: Text("Lineup")) {
+    DetailCard(title: Text("Lineup")) {
       ForEach(concert.performers) { artist in
-        ArchivePathLink(
-          archivePath: artist.id, isPathNavigable: isPathNavigable, title: artist.name)
+        ArchivePathLink(archivePath: artist.id, isPathNavigable: isPathNavigable) {
+          DetailRowLabel(isNavigable: isPathNavigable(artist.id)) {
+            Text(artist.name)
+          }
+        }
+        if artist.id != concert.performers.last?.id {
+          Divider()
+        }
       }
+      .buttonStyle(.plain)
     }
   }
 
+  /// The date leads the page, with how long ago (or until) the show is beneath it.
   @ViewBuilder private var dateElement: some View {
-    Section(header: Text("Date")) {
-      let showDate = date
-      if !showDate.isUnknown, let date = showDate.date {
-        LabeledContent {
-          Text(date.formatted(.relative(presentation: .numeric)))
-        } label: {
-          Text(showDate.formatted(.compact))
-        }
-      } else {
-        Text(showDate.formatted(.compact))
+    VStack(alignment: .leading) {
+      Text(date.formatted(.compact))
+        .font(.largeTitle.bold())
+      if !date.isUnknown, let showDate = date.date {
+        Text(showDate.formatted(.relative(presentation: .numeric)))
+          .foregroundStyle(.secondary)
       }
     }
+    .frame(maxWidth: .infinity, alignment: .leading)
   }
 
   @ViewBuilder private var commentElement: some View {
     if let comment {
-      Section(header: Text("Comment")) {
+      DetailCard(title: Text("Comment")) {
         Text(comment.asAttributedString)
       }
     }
   }
 
   var body: some View {
-    List {
-      lineupElement
-      dateElement
-      commentElement
+    ScrollView {
+      VStack(spacing: 16) {
+        dateElement
+        lineupElement
+        commentElement
+      }
+      .padding(.horizontal)
     }
-    #if os(iOS)
-      .listStyle(.grouped)
-    #endif
+    .background(.background)
     .navigationTitle(venueName)
     #if os(iOS)
       .navigationBarTitleDisplayMode(.inline)
