@@ -18,13 +18,15 @@ private struct Place: Identifiable {
 struct LocationMap: View {
   let geocodingInProgress: Bool
   @Binding var item: MKMapItem?
+  var minHeight: CGFloat = 300
 
   var body: some View {
     ZStack {
       if let item {
         let place = Place(coordinate: item.location.coordinate)
         ClusterMap(
-          items: [place], anchorY: CategoryAnnotationView.tipOffset, animatesFit: false
+          items: [place], anchorY: CategoryAnnotationView.tipOffset, animatesFit: false,
+          isSubdued: true
         ) {
           Details(coordinate: $0.coordinate, title: "")
         } onSelect: { _ in
@@ -60,7 +62,7 @@ struct LocationMap: View {
           description: Text("Unable to determine map location."))
       }
     }
-    .frame(minHeight: 300)
+    .frame(minHeight: minHeight)
   }
 }
 

@@ -62,6 +62,9 @@ struct ClusterMap<
 
   let animatesFit: Bool
 
+  /// A quieter base map: muted, without points of interest.
+  let isSubdued: Bool
+
   /// While searching, the map returns to where it was when the search began if nothing matches.
   let isSearching: Bool
 
@@ -70,6 +73,7 @@ struct ClusterMap<
     anchorY: CGFloat? = nil,
     resetID: UUID? = nil,
     animatesFit: Bool = true,
+    isSubdued: Bool = false,
     isSearching: Bool = false,
     itemDetails: @escaping (Item) -> Details,
     onSelect: @escaping (Item) -> Void,
@@ -88,6 +92,7 @@ struct ClusterMap<
     self.anchorY = anchorY
     self.resetID = resetID
     self.animatesFit = animatesFit
+    self.isSubdued = isSubdued
     self.isSearching = isSearching
   }
 
@@ -98,6 +103,11 @@ struct ClusterMap<
 
     let mapView = MKMapView()
     mapView.delegate = coordinator
+    if isSubdued {
+      let configuration = MKStandardMapConfiguration(emphasisStyle: .muted)
+      configuration.pointOfInterestFilter = .excludingAll
+      mapView.preferredConfiguration = configuration
+    }
     #if !os(tvOS)
       mapView.isRotateEnabled = false
       mapView.isPitchEnabled = false
