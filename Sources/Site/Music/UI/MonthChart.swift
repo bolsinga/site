@@ -98,7 +98,8 @@ struct MonthChart: View {
         let (date, count) = item.value
         BarMark(
           x: .value("Month", date, unit: .month),
-          y: .value("Count", count)
+          y: .value("Count", count),
+          width: presentation == .card ? .fixed(3) : .automatic
         )
         .chartBarStyle(isCurrent: highlightsCurrent && item.key == currentMonth)
         .annotation(position: .top) {

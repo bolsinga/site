@@ -7,31 +7,45 @@
 
 import SwiftUI
 
-/// A titled, rounded card holding a detail view's section of content.
 struct DetailCard<Content: View>: View {
   let title: Text
-  var fillsHeight = false
   @ViewBuilder let content: () -> Content
 
   var body: some View {
-    VStack(alignment: .leading, spacing: 12) {
-      title
-        .font(.subheadline.weight(.semibold))
-        .textCase(.uppercase)
-        .lineLimit(1)
-        .minimumScaleFactor(0.7)
-        .foregroundStyle(.secondary)
-      content()
+    ClampedWidth {
+      VStack(alignment: .leading, spacing: 12) {
+        title
+          .font(.subheadline.weight(.semibold))
+          .textCase(.uppercase)
+          .lineLimit(1)
+          .minimumScaleFactor(0.7)
+          .foregroundStyle(.secondary)
+        content()
+      }
+      .padding()
+      .frame(maxWidth: .infinity, alignment: .leading)
+      .background(.background.secondary, in: .rect(cornerRadius: 20))
     }
-    .padding()
-    .frame(
-      maxWidth: .infinity, maxHeight: fillsHeight ? .infinity : nil, alignment: .topLeading
-    )
-    .background(.background.secondary, in: .rect(cornerRadius: 20))
   }
 }
 
-/// The label of a row in a ``DetailCard``: a trailing chevron when the row navigates, and the whole row tappable.
+/// Takes the width it is offered, whatever its content reports, so that a sub-pixel overshoot in the content can't widen a scroll view.
+private struct ClampedWidth: Layout {
+  func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
+    guard let subview = subviews.first else { return .zero }
+    let size = subview.sizeThatFits(proposal)
+    return CGSize(width: proposal.width ?? size.width, height: size.height)
+  }
+
+  func placeSubviews(
+    in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()
+  ) {
+    subviews.first?.place(
+      at: bounds.origin, anchor: .topLeading,
+      proposal: ProposedViewSize(width: bounds.width, height: bounds.height))
+  }
+}
+
 struct DetailRowLabel<Content: View>: View {
   let isNavigable: Bool
   @ViewBuilder let content: () -> Content

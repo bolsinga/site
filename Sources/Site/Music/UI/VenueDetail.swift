@@ -39,7 +39,7 @@ struct VenueDetail: View {
   }
 
   @ViewBuilder private var statsElement: some View {
-    StatsTiles(
+    StatsCard(
       stats: Stats(venueDigest: digest), titles: StatsTitles(venueDigest: digest),
       firstSetRank: digest.rank.firstSet.rank, includesCategories: digest.shows.count > 1)
   }

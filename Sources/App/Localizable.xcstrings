@@ -1,6 +1,97 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "**%@** First Set" : {
+
+    },
+    "**%lld** Artists" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "**%lld** Artist"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "**%lld** Artists"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "**%lld** Shows" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "**%lld** Show"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "**%lld** Shows"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "**%lld** Venues" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "**%lld** Venue"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "**%lld** Venues"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "**%lld** Years" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "**%lld** Year"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "**%lld** Years"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "#%@" : {
       "comment" : "rank.hash"
     },
@@ -228,9 +319,6 @@
     "Filter Nearby" : {
 
     },
-    "First Set" : {
-
-    },
     "Geocoding…" : {
 
     },
@@ -439,9 +527,6 @@
 
     },
     "Weekdays with %@" : {
-
-    },
-    "Years" : {
 
     }
   },

@@ -15,7 +15,7 @@ struct ArtistDetail: View {
 
   @ViewBuilder private var statsElement: some View {
     if !digest.shows.isEmpty {
-      StatsTiles(
+      StatsCard(
         stats: Stats(artistDigest: digest), titles: StatsTitles(artistDigest: digest),
         firstSetRank: digest.rank.firstSet.rank)
     }
