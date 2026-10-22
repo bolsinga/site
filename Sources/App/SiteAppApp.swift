@@ -9,6 +9,9 @@ import Shared
 import SwiftUI
 
 struct SiteAppApp: App {
+  #if os(iOS)
+    @UIApplicationDelegateAdaptor private var appDelegate: SiteAppDelegate
+  #endif
   @State private var model = SiteModel(
     urlString: URL.archiveRoot?.appendingPathComponent("json/shows.json").absoluteString ?? "")
 
