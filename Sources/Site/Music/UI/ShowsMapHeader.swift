@@ -128,6 +128,10 @@ struct MapHeaderStyle: ViewModifier {
         #if !os(tvOS)
           .toolbar(removing: .title)
         #endif
+        // A large title would show again, as the pushing page's title can set the mode for this one.
+        #if os(iOS)
+          .navigationBarTitleDisplayMode(.inline)
+        #endif
     } else {
       content
         .navigationTitle(title)
