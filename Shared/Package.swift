@@ -27,6 +27,9 @@ let package = Package(
       ],
       resources: [
         .process("Localizable.xcstrings")
+      ],
+      swiftSettings: [
+        .treatAllWarnings(as: .error)
       ])
   ]
 )
