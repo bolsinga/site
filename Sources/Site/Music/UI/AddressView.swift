@@ -18,7 +18,11 @@ struct AddressView: View {
         Spacer()
         Link(destination: web) {
           Image(systemName: "safari")
-        }.help(web.absoluteString)
+            .font(.title2)
+            .padding(12)
+            .contentShape(.rect)
+        }
+        .help(web.absoluteString)
       }
     }
   }
