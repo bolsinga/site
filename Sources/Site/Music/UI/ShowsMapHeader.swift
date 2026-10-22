@@ -16,6 +16,13 @@ private struct VenuePlace: Identifiable {
 
 private let dotSize: CGFloat = 14
 
+/// Where the header's map is fully shown, from the top, before it fades into the page.
+private let clearFraction = 0.6
+private let fadeFraction = 1.0 - clearFraction
+
+/// A day's venues are spread across the country; fit them closer than a detail map does.
+private let dayMapFitZoomOutFactor = 1.3
+
 private struct VenueDot: View {
   var body: some View {
     Circle()
@@ -29,6 +36,8 @@ struct ShowsMap: View {
   @Environment(VaultModel.self) private var model
 
   let shows: [ShowDigest]
+  /// Keeps the map when there are no shows, and glides and fades as the shows change.
+  var animatesChanges = false
 
   private var places: [VenuePlace] {
     var seen = Set<ArchivePath>()
@@ -43,10 +52,12 @@ struct ShowsMap: View {
   var body: some View {
     let places = places
     ZStack {
-      if !places.isEmpty {
+      if !places.isEmpty || animatesChanges {
         ClusterMap(
-          items: places, anchorY: dotSize / 2.0, animatesFit: false,
-          fitZoomOutFactor: detailMapFitZoomOutFactor, clustersItems: false, isSubdued: true
+          items: places, anchorY: dotSize / 2.0, animatesFit: animatesChanges,
+          fitZoomOutFactor: animatesChanges ? dayMapFitZoomOutFactor : detailMapFitZoomOutFactor,
+          clustersItems: false, isSubdued: true,
+          animatesItems: animatesChanges, fitBottomFraction: animatesChanges ? fadeFraction : 0.0
         ) {
           Details(coordinate: $0.coordinate, title: "")
         } onSelect: { _ in
@@ -60,7 +71,8 @@ struct ShowsMap: View {
           CategoryAnnotationView(category: .venues, render: .badge($0))
         }
         .allowsHitTesting(false)
-      } else if model.geocodingInProgress {
+      }
+      if places.isEmpty && model.geocodingInProgress {
         ProgressView()
       }
     }
@@ -72,19 +84,24 @@ struct ShowsMap: View {
 struct ShowsMapHeader: View {
   let shows: [ShowDigest]
   let title: String
+  var animatesChanges = false
 
   var body: some View {
-    ShowsMap(shows: shows)
+    ShowsMap(shows: shows, animatesChanges: animatesChanges)
       .containerRelativeFrame(.vertical) { height, _ in height * 0.45 }
       .mask(
         LinearGradient(
-          stops: [.init(color: .black, location: 0.6), .init(color: .clear, location: 1)],
+          stops: [
+            .init(color: .black, location: clearFraction), .init(color: .clear, location: 1),
+          ],
           startPoint: .top, endPoint: .bottom)
       )
       .overlay(alignment: .bottomLeading) {
         Text(title)
           .font(.largeTitle.bold())
           .padding(.horizontal)
+          .contentTransition(.opacity)
+          .animation(.default, value: title)
       }
   }
 }
@@ -93,9 +110,13 @@ struct ShowsMapHeader: View {
 struct MapHeaderStyle: ViewModifier {
   let hasMap: Bool
   let title: String
+  /// Leave the page alone when its container applies the style for all its pages.
+  var isApplied = true
 
   func body(content: Content) -> some View {
-    if hasMap {
+    if !isApplied {
+      content
+    } else if hasMap {
       content
         .navigationTitle(title)  // Hidden below, but still titles the back button.
         .ignoresSafeArea(edges: .top)

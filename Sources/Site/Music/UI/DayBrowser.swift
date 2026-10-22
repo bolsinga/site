@@ -19,12 +19,22 @@ struct DayBrowser: View {
   @Binding var dayOfLeapYear: Int
   @State private var selection: DayTab = .today
   @State private var layoutGeneration = 0
+  @State private var mapHeight: CGFloat = 0
+
+  /// The day whose shows the map shows. It is set when the selection changes, not derived from
+  /// it: paging to a day moves `dayOfLeapYear` and resets `selection` as separate steps, and
+  /// deriving the day from both would show a wrong day, and its venues, in between.
+  @State private var mapDayOfLeapYear: Int?
+
+  private var displayedDayOfLeapYear: Int { mapDayOfLeapYear ?? dayOfLeapYear }
 
   @ViewBuilder private func dayList(_ dayOfLeapYear: Int) -> some View {
-    DayList(concerts: model.concerts(on: dayOfLeapYear), dayOfLeapYear: dayOfLeapYear)
+    DayList(
+      concerts: model.concerts(on: dayOfLeapYear), dayOfLeapYear: dayOfLeapYear,
+      hasMapHeader: false)
   }
 
-  var body: some View {
+  private var pages: some View {
     TabView(selection: $selection) {
       Tab(value: DayTab.yesterday) {
         dayList(dayOfLeapYear.previousDayOfLeapYear)
@@ -50,11 +60,12 @@ struct DayBrowser: View {
         dayList(dayOfLeapYear.nextDayOfLeapYear)
       }
     }
-    .navigationTitle(dayOfLeapYear.relativeTitle)  // need this here for ipad
     #if !os(macOS)
       .indexViewStyle(.page(backgroundDisplayMode: .always))
       .tabViewStyle(.page(indexDisplayMode: .automatic))
     #endif
+    // The pages start below the map, and scroll over it.
+    .safeAreaPadding(.top, mapHeight + 16)
     // A paged TabView keeps its scroll offset in points, so a width change (folding, rotating,
     // resizing) leaves the page partly scrolled and the list shifted sideways. Rebuild it at the
     // new width; only today is ever selected at rest, so nothing is lost.
@@ -66,6 +77,38 @@ struct DayBrowser: View {
         layoutGeneration += 1
       }
     }
+  }
+
+  var body: some View {
+    let day = displayedDayOfLeapYear
+    let title = String(localized: day.relativeTitle)
+    // One map stays behind the pages; its shows change as the pages are paged.
+    ZStack(alignment: .top) {
+      ShowsMapHeader(shows: model.concerts(on: day), title: title, animatesChanges: true)
+        .onGeometryChange(for: CGFloat.self) {
+          $0.size.height
+        } action: {
+          mapHeight = $0
+        }
+      pages
+    }
+    .onChange(of: selection) {
+      switch selection {
+      case .yesterday:
+        mapDayOfLeapYear = dayOfLeapYear.previousDayOfLeapYear
+      case .today:
+        mapDayOfLeapYear = dayOfLeapYear
+      case .tomorrow:
+        mapDayOfLeapYear = dayOfLeapYear.nextDayOfLeapYear
+      }
+    }
+    .onChange(of: dayOfLeapYear) {
+      if selection == .today { mapDayOfLeapYear = dayOfLeapYear }
+    }
+    .modifier(MapHeaderStyle(hasMap: true, title: title))  // need this here for ipad
+    #if os(iOS)
+      .navigationBarTitleDisplayMode(.inline)
+    #endif
   }
 }
 

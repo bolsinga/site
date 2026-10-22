@@ -71,6 +71,13 @@ struct ClusterMap<
   /// A quieter base map: muted, without points of interest.
   let isSubdued: Bool
 
+  /// Whether items fade in and out as they are added and removed.
+  let animatesItems: Bool
+
+  /// The fraction of the map's height, from the bottom, that a fit leaves clear, for when
+  /// something covers that part of the map.
+  let fitBottomFraction: Double
+
   /// While searching, the map returns to where it was when the search began if nothing matches.
   let isSearching: Bool
 
@@ -82,6 +89,8 @@ struct ClusterMap<
     fitZoomOutFactor: Double = 1.0,
     clustersItems: Bool = true,
     isSubdued: Bool = false,
+    animatesItems: Bool = false,
+    fitBottomFraction: Double = 0.0,
     isSearching: Bool = false,
     itemDetails: @escaping (Item) -> Details,
     onSelect: @escaping (Item) -> Void,
@@ -103,6 +112,8 @@ struct ClusterMap<
     self.fitZoomOutFactor = fitZoomOutFactor
     self.clustersItems = clustersItems
     self.isSubdued = isSubdued
+    self.animatesItems = animatesItems
+    self.fitBottomFraction = fitBottomFraction
     self.isSearching = isSearching
   }
 
@@ -111,8 +122,16 @@ struct ClusterMap<
 
     let coordinator = context.coordinator
 
-    let mapView = MKMapView()
+    let mapView = SizeReportingMapView()
+    mapView.onSizeChange = { [weak coordinator] in coordinator?.sizeChanged(of: $0) }
     mapView.delegate = coordinator
+    #if canImport(UIKit)
+      // MapKit centers the map in its layout margins, which follow the safe area. A fit that
+      // already leaves room for what covers the map would be moved off center again.
+      if fitBottomFraction > 0 {
+        mapView.insetsLayoutMarginsFromSafeArea = false
+      }
+    #endif
     if isSubdued {
       let configuration = MKStandardMapConfiguration(emphasisStyle: .muted)
       configuration.pointOfInterestFilter = .excludingAll
@@ -180,6 +199,8 @@ struct ClusterMap<
     coordinator.animatesFit = animatesFit
     coordinator.fitZoomOutFactor = fitZoomOutFactor
     coordinator.clustersItems = clustersItems
+    coordinator.animatesItems = animatesItems
+    coordinator.fitBottomFraction = fitBottomFraction
   }
 
   final class Coordinator: NSObject, MKMapViewDelegate {
@@ -197,6 +218,9 @@ struct ClusterMap<
     var animatesFit = true
     var fitZoomOutFactor = 1.0
     var clustersItems = true
+    var animatesItems = false
+    private var fadingIn = Set<ObjectIdentifier>()
+    var fitBottomFraction = 0.0
     private var resetID: UUID?
     private var didFit = false
     /// Where the fit in progress is going, so its region changes aren't taken as the user's.
@@ -219,6 +243,17 @@ struct ClusterMap<
       guard isSearching != self.isSearching else { return }
       self.isSearching = isSearching
       rectBeforeSearch = isSearching ? mapView.visibleMapRect : nil
+    }
+
+    /// A fit made while the map was another size isn't centered in this one, so fit again.
+    fileprivate func sizeChanged(of mapView: MKMapView) {
+      guard fitBottomFraction > 0 else { return }
+      // Changing the region while the map is laying out is reentrant, so wait a turn.
+      Task { @MainActor in
+        guard didFit, !userMovedMap else { return }
+        needsFit = true
+        fitIfNeeded(mapView)
+      }
     }
 
     fileprivate func reset(for resetID: UUID?) {
@@ -251,7 +286,23 @@ struct ClusterMap<
 
     func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {
       updateTitleVisibility(in: mapView)
+      #if canImport(UIKit)
+        guard animatesItems, !reducesMotion else { return }
+        // MapKit also adds views for items that scroll into view or split from a cluster. Only
+        // the items we just added fade in.
+        let itemViews = views.filter { view in
+          guard let annotation = view.annotation as? ItemAnnotation else { return false }
+          return fadingIn.remove(ObjectIdentifier(annotation)) != nil
+        }
+        guard !itemViews.isEmpty else { return }
+        itemViews.forEach { $0.alpha = 0.0 }
+        UIView.animate(withDuration: Self.itemFadeDuration) {
+          itemViews.forEach { $0.alpha = 1.0 }
+        }
+      #endif
     }
+
+    private static var itemFadeDuration: TimeInterval { 0.3 }
 
     /// Hides the title of an item when it would cover another pin, or another title that is kept.
     /// Titles of the items nearest the middle of the map are kept first.
@@ -525,10 +576,25 @@ struct ClusterMap<
       if !removeItemIDs.isEmpty {
         let removed = removeItemIDs.compactMap { annotationMap.removeValue(forKey: $0) }
         Logger.clusterMap.info("removing \(removed.count) annotations.")
-        mapView.removeAnnotations(removed)
+        #if canImport(UIKit)
+          if animatesItems, !reducesMotion {
+            let views = removed.compactMap { mapView.view(for: $0) }
+            UIView.animate(
+              withDuration: Self.itemFadeDuration,
+              animations: { views.forEach { $0.alpha = 0.0 } }
+            ) { _ in mapView.removeAnnotations(removed) }
+          } else {
+            mapView.removeAnnotations(removed)
+          }
+        #else
+          mapView.removeAnnotations(removed)
+        #endif
       }
       if !annotationsToAdd.isEmpty {
         Logger.clusterMap.info("adding \(annotationsToAdd.count) annotations.")
+        if animatesItems {
+          fadingIn.formUnion(annotationsToAdd.map(ObjectIdentifier.init))
+        }
         mapView.addAnnotations(annotationsToAdd)
       }
 
@@ -560,14 +626,46 @@ struct ClusterMap<
       show(rect.proportionallyPadded.zoomedOut(by: fitZoomOutFactor), in: mapView)
     }
 
+    /// The rect of the map that has `rect` centered in the area left after the insets.
+    /// `setVisibleMapRect(_:edgePadding:)` doesn't center it on the bottom inset.
+    private func visibleRect(
+      centering rect: MKMapRect, in mapView: MKMapView, insets: MapEdgeInsets
+    ) -> MKMapRect? {
+      let size = mapView.bounds.size
+      let areaWidth = size.width - insets.left - insets.right
+      let areaHeight = size.height - insets.top - insets.bottom
+      guard areaWidth > 0, areaHeight > 0, rect.width > 0, rect.height > 0 else { return nil }
+      // The area is a thin band between the bars and the fade. Items spread far north to south
+      // can spill a little into both, so size the zoom to a taller area around the same center.
+      let spill = insets.top * Self.spillFraction
+      let mapPointsPerPoint = max(rect.width / areaWidth, rect.height / (areaHeight + spill * 2.0))
+      // The middle of the map, unless the bars leave less room above it than the fade does below.
+      let centerY = max(size.height / 2.0, insets.top + areaHeight / 2.0)
+      return MKMapRect(
+        x: rect.midX - (insets.left + areaWidth / 2.0) * mapPointsPerPoint,
+        y: rect.midY - centerY * mapPointsPerPoint,
+        width: size.width * mapPointsPerPoint, height: size.height * mapPointsPerPoint)
+    }
+
+    /// How much of the top inset, the bars, items may spill into above and below the clear area.
+    private static var spillFraction: CGFloat { 0.45 }
+
     private func show(_ rect: MKMapRect, in mapView: MKMapView) {
       // No region change is reported if the map is already there, so don't wait for one.
-      let insets = edgePadding(for: mapView)
+      let insets = edgePadding(for: mapView, bottom: mapView.bounds.height * fitBottomFraction)
+      let animated = animatesFit && !reducesMotion
+      if fitBottomFraction > 0,
+        let visible = visibleRect(centering: rect, in: mapView, insets: insets)
+      {
+        guard !visible.isNearlyEqual(to: mapView.visibleMapRect) else { return }
+        fitTarget = visible
+        mapView.setVisibleMapRect(visible, animated: animated)
+        return
+      }
       let target = mapView.mapRectThatFits(rect, edgePadding: insets)
       guard !target.isNearlyEqual(to: mapView.visibleMapRect) else { return }
       fitTarget = target
-      mapView.setVisibleMapRect(
-        rect, edgePadding: insets, animated: animatesFit && !reducesMotion)
+      mapView.setVisibleMapRect(rect, edgePadding: insets, animated: animated)
     }
   }
 
@@ -614,6 +712,9 @@ struct ClusterMap<
 
     override func prepareForReuse() {
       super.prepareForReuse()
+      #if canImport(UIKit)
+        alpha = 1.0
+      #endif
       setTitleHidden(false, animated: false)
     }
 
@@ -820,6 +921,29 @@ struct ClusterMap<
 
     @available(*, unavailable)
     required init?(coder: NSCoder) { fatalError("no coder") }
+  }
+}
+
+private final class SizeReportingMapView: MKMapView {
+  var onSizeChange: ((MKMapView) -> Void)?
+  private var lastSize = CGSize.zero
+
+  #if canImport(UIKit)
+    override func layoutSubviews() {
+      super.layoutSubviews()
+      reportSize()
+    }
+  #else
+    override func layout() {
+      super.layout()
+      reportSize()
+    }
+  #endif
+
+  private func reportSize() {
+    guard bounds.size != lastSize else { return }
+    lastSize = bounds.size
+    onSizeChange?(self)
   }
 }
 
