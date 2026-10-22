@@ -13,9 +13,18 @@ struct PresentedSheet {
   let content: AnyView
 }
 
+/// Presents a sheet that stays up only while the navigation state is unchanged.
+struct SheetPresenter: Equatable {
+  let present: (AnyView) -> Void
+
+  func callAsFunction(_ content: AnyView) { present(content) }
+
+  // The action reads current state when called, so a new one never changes what dependents see.
+  static func == (lhs: Self, rhs: Self) -> Bool { true }
+}
+
 extension EnvironmentValues {
-  /// Presents a sheet that stays up only while the navigation state is unchanged.
-  @Entry var presentSheet: (AnyView) -> Void = { _ in }
+  @Entry var presentSheet = SheetPresenter { _ in }
 }
 
 struct DismissibleSheetContent: View {

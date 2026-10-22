@@ -69,9 +69,9 @@ struct ArchiveStateView: View {
       }
     }
     .environment(nearbyModel)
-    .environment(\.presentSheet) {
-      presentedSheet = PresentedSheet(state: archiveNavigation.state, content: $0)
-    }
+    .environment(
+      \.presentSheet,
+      SheetPresenter { presentedSheet = PresentedSheet(state: archiveNavigation.state, content: $0) })
     .sheet(
       isPresented: Binding(
         get: { presentedSheet?.state == archiveNavigation.state },
