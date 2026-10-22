@@ -103,6 +103,9 @@ struct VenueDetail: View {
     #if !os(tvOS)
       .toolbar(removing: .title)
     #endif
+    #if os(iOS)
+      .navigationBarTitleDisplayMode(.inline)
+    #endif
     .toolbar { ArchiveSharableToolbarContent(item: digest, url: url) }
     .onAppear {
       self.mapItem = model.venueMapItemMap[digest.archivePath]
