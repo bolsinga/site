@@ -26,10 +26,6 @@
           return
         }
 
-        Logger.widgetSnapshot.log(
-          "built snapshot: days: \(snapshot.days.count, privacy: .public), generated: \(snapshot.generated, privacy: .public)"
-        )
-
         guard let wrote = try? snapshot.write() else {
           Logger.widgetSnapshot.error("failed to write snapshot")
           return

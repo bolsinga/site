@@ -29,7 +29,7 @@ extension Vault {
       }
 
       Logger.showsTodaySnapshot.log(
-        "built snapshot: days: \(days.count, privacy: .public), generated: \(timestamp, privacy: .public)"
+        "built in memory, not written: \(days.count, privacy: .public) days of the year have shows, archive modified \(timestamp, privacy: .public)"
       )
       return ShowsTodaySnapshot(generated: timestamp, days: days)
     }
