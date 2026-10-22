@@ -22,8 +22,6 @@ struct ArchiveStateView: View {
   @SceneStorage("nearby.state") private var nearbyModel = NearbyModel()
   @SceneStorage("venues.mode") private var venuesMode = VenuesMode.default
 
-  @State private var presentedSheet: PresentedSheet?
-
   @Binding var pendingExternalEvent: ExternalEvent?
   let reloadModel: @MainActor () async -> Void
 
@@ -69,18 +67,7 @@ struct ArchiveStateView: View {
       }
     }
     .environment(nearbyModel)
-    .environment(
-      \.presentSheet,
-      SheetPresenter { presentedSheet = PresentedSheet(state: archiveNavigation.state, content: $0) })
-    .sheet(
-      isPresented: Binding(
-        get: { presentedSheet?.state == archiveNavigation.state },
-        set: { if !$0 { presentedSheet = nil } })
-    ) {
-      if let presentedSheet {
-        DismissibleSheetContent(content: presentedSheet.content)
-      }
-    }
+    .environment(\.archiveNavigationState, archiveNavigation.state)
   }
 
   var body: some View {
