@@ -45,7 +45,7 @@ struct VenuesSummary: View {
           compare: model.compare(lhs:rhs:),
           sort: sort,
           searchString: $searchString,
-          summary: .venues(count: venues.count)
+          summary: venues.isEmpty ? nil : .venues(count: venues.count)
         )
       case .map:
         Color.clear

@@ -23,7 +23,7 @@ struct ArtistsSummary: View {
       compare: model.compare(lhs:rhs:),
       sort: sort,
       searchString: $searchString,
-      summary: .artists(count: artists.count)
+      summary: artists.isEmpty ? nil : .artists(count: artists.count)
     )
     .nearbyLocation(filteredDataIsEmpty: artists.isEmpty)
   }
