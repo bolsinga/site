@@ -36,14 +36,38 @@ struct ShowDetail: View {
     }
   }
 
-  /// The date leads the page, with how long ago (or until) the show is beneath it.
+  @ViewBuilder private var venueElement: some View {
+    DetailCard(title: Text("Venue")) {
+      ArchivePathLink(archivePath: concert.venueID, isPathNavigable: isPathNavigable) {
+        DetailRowLabel(isNavigable: isPathNavigable(concert.venueID)) {
+          VStack(alignment: .leading) {
+            Text(venueName)
+              .font(.title2.bold())
+            Text("\(concert.location.city), \(concert.location.state)")
+              .foregroundStyle(.secondary)
+          }
+          .frame(maxWidth: .infinity, alignment: .leading)
+        }
+      }
+      .buttonStyle(.plain)
+    }
+  }
+
+  /// The date leads the page, with how long ago (or until) the show is at the trailing edge.
   @ViewBuilder private var dateElement: some View {
-    VStack(alignment: .leading) {
+    HStack(alignment: .firstTextBaseline, spacing: 12) {
       Text(date.formatted(.compact))
         .font(.largeTitle.bold())
+        .lineLimit(1)
+        .minimumScaleFactor(0.5)
+      Spacer(minLength: 0)
       if !date.isUnknown, let showDate = date.date {
         Text(showDate.formatted(.relative(presentation: .numeric)))
+          .font(.subheadline.weight(.semibold))
+          .textCase(.uppercase)
           .foregroundStyle(.secondary)
+          .lineLimit(1)
+          .minimumScaleFactor(0.5)
       }
     }
     .frame(maxWidth: .infinity, alignment: .leading)
@@ -61,13 +85,17 @@ struct ShowDetail: View {
     ScrollView {
       VStack(spacing: 16) {
         dateElement
+        venueElement
         lineupElement
         commentElement
       }
       .padding(.horizontal)
     }
     .background(.background)
-    .navigationTitle(venueName)
+    .navigationTitle(concert.formatted(.headlinerAndVenue))  // Hidden below, but still titles the back button.
+    #if !os(tvOS)
+      .toolbar(removing: .title)
+    #endif
     #if os(iOS)
       .navigationBarTitleDisplayMode(.inline)
     #endif

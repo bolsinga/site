@@ -93,6 +93,7 @@ struct VenueDetail: View {
     }
     // A ScrollView is transparent, so on macOS the view beneath (the venues map) shows through.
     .background(.background)
+    .navigationTitle(digest.name)  // Hidden below, but still titles the back button.
     .ignoresSafeArea(edges: .top)
     #if os(macOS)
       .toolbarBackgroundVisibility(.hidden, for: .windowToolbar)
