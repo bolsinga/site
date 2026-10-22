@@ -940,7 +940,7 @@ extension MKAnnotationView {
       { context in
         context.duration = duration
         views.forEach { $0.animator().alphaValue = opacity }
-      }, completionHandler: { completion?() })
+      }, completionHandler: { MainActor.assumeIsolated { completion?() } })
   #endif
 }
 
