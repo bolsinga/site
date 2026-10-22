@@ -11,10 +11,13 @@ import SwiftUI
 struct DayList: View {
   fileprivate let concerts: [ShowDigest]
   let dayOfLeapYear: Int
+  /// Whether the list shows its own map. A container showing one map for several days leaves it out.
+  fileprivate let hasMapHeader: Bool
 
-  internal init(concerts: [ShowDigest], dayOfLeapYear: Int) {
+  internal init(concerts: [ShowDigest], dayOfLeapYear: Int, hasMapHeader: Bool = true) {
     self.concerts = concerts
     self.dayOfLeapYear = dayOfLeapYear
+    self.hasMapHeader = hasMapHeader
   }
 
   var body: some View {
@@ -27,29 +30,37 @@ struct DayList: View {
         )
       } else {
         ScrollView {
-          DetailCard(title: Text("Shows")) {
-            ForEach(concerts) { concert in
-              NavigationLink(value: concert.archivePath) {
-                DetailRowLabel(isNavigable: true) {
-                  ConcertBlurb(
-                    venue: concert.venue,
-                    date: concert.date,
-                    performers: concert.performerNames,
-                    dateFormat: .relative)
+          VStack(spacing: 16) {
+            if hasMapHeader {
+              ShowsMapHeader(shows: concerts, title: String(localized: dayOfLeapYear.relativeTitle))
+            }
+            DetailCard(title: Text("Shows")) {
+              ForEach(concerts) { concert in
+                NavigationLink(value: concert.archivePath) {
+                  DetailRowLabel(isNavigable: true) {
+                    ConcertBlurb(
+                      venue: concert.venue,
+                      date: concert.date,
+                      performers: concert.performerNames,
+                      dateFormat: .relative)
+                  }
+                }
+                if concert.id != concerts.last?.id {
+                  Divider()
                 }
               }
-              if concert.id != concerts.last?.id {
-                Divider()
-              }
+              .buttonStyle(.plain)
             }
-            .buttonStyle(.plain)
+            .padding(.horizontal)
           }
-          .padding(.horizontal)
         }
-        .background(.background)
+        .background(hasMapHeader ? AnyShapeStyle(.background) : AnyShapeStyle(.clear))
       }
     }
-    .navigationTitle(dayOfLeapYear.relativeTitle)
+    .modifier(
+      MapHeaderStyle(
+        hasMap: !concerts.isEmpty, title: String(localized: dayOfLeapYear.relativeTitle),
+        isApplied: hasMapHeader))
   }
 }
 
