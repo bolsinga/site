@@ -36,14 +36,21 @@ struct ShowDetail: View {
     }
   }
 
-  /// The date leads the page, with how long ago (or until) the show is beneath it.
+  /// The date leads the page, with how long ago (or until) the show is at the trailing edge.
   @ViewBuilder private var dateElement: some View {
-    VStack(alignment: .leading) {
+    HStack(alignment: .firstTextBaseline, spacing: 12) {
       Text(date.formatted(.compact))
         .font(.largeTitle.bold())
+        .lineLimit(1)
+        .minimumScaleFactor(0.5)
+      Spacer(minLength: 0)
       if !date.isUnknown, let showDate = date.date {
         Text(showDate.formatted(.relative(presentation: .numeric)))
+          .font(.subheadline.weight(.semibold))
+          .textCase(.uppercase)
           .foregroundStyle(.secondary)
+          .lineLimit(1)
+          .minimumScaleFactor(0.5)
       }
     }
     .frame(maxWidth: .infinity, alignment: .leading)
