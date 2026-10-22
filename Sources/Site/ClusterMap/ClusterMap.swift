@@ -286,20 +286,16 @@ struct ClusterMap<
 
     func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {
       updateTitleVisibility(in: mapView)
-      #if canImport(UIKit)
-        guard animatesItems, !reducesMotion else { return }
-        // MapKit also adds views for items that scroll into view or split from a cluster. Only
-        // the items we just added fade in.
-        let itemViews = views.filter { view in
-          guard let annotation = view.annotation as? ItemAnnotation else { return false }
-          return fadingIn.remove(ObjectIdentifier(annotation)) != nil
-        }
-        guard !itemViews.isEmpty else { return }
-        itemViews.forEach { $0.alpha = 0.0 }
-        UIView.animate(withDuration: Self.itemFadeDuration) {
-          itemViews.forEach { $0.alpha = 1.0 }
-        }
-      #endif
+      guard animatesItems, !reducesMotion else { return }
+      // MapKit also adds views for items that scroll into view or split from a cluster. Only the
+      // items we just added fade in.
+      let itemViews = views.filter { view in
+        guard let annotation = view.annotation as? ItemAnnotation else { return false }
+        return fadingIn.remove(ObjectIdentifier(annotation)) != nil
+      }
+      guard !itemViews.isEmpty else { return }
+      itemViews.forEach { $0.opacity = 0.0 }
+      fade(itemViews, to: 1.0, duration: Self.itemFadeDuration)
     }
 
     private static var itemFadeDuration: TimeInterval { 0.3 }
@@ -576,19 +572,14 @@ struct ClusterMap<
       if !removeItemIDs.isEmpty {
         let removed = removeItemIDs.compactMap { annotationMap.removeValue(forKey: $0) }
         Logger.clusterMap.info("removing \(removed.count) annotations.")
-        #if canImport(UIKit)
-          if animatesItems, !reducesMotion {
-            let views = removed.compactMap { mapView.view(for: $0) }
-            UIView.animate(
-              withDuration: Self.itemFadeDuration,
-              animations: { views.forEach { $0.alpha = 0.0 } }
-            ) { _ in mapView.removeAnnotations(removed) }
-          } else {
+        if animatesItems, !reducesMotion {
+          let views = removed.compactMap { mapView.view(for: $0) }
+          fade(views, to: 0.0, duration: Self.itemFadeDuration) {
             mapView.removeAnnotations(removed)
           }
-        #else
+        } else {
           mapView.removeAnnotations(removed)
-        #endif
+        }
       }
       if !annotationsToAdd.isEmpty {
         Logger.clusterMap.info("adding \(annotationsToAdd.count) annotations.")
@@ -702,19 +693,11 @@ struct ClusterMap<
     fileprivate var isTitleHidden = false
 
     /// MapKit hides views it isn't showing, such as those it has just merged into a cluster.
-    fileprivate var isShown: Bool {
-      #if canImport(UIKit)
-        !isHidden && alpha > 0.01
-      #else
-        !isHidden && alphaValue > 0.01
-      #endif
-    }
+    fileprivate var isShown: Bool { !isHidden && opacity > 0.01 }
 
     override func prepareForReuse() {
       super.prepareForReuse()
-      #if canImport(UIKit)
-        alpha = 1.0
-      #endif
+      opacity = 1.0
       setTitleHidden(false, animated: false)
     }
 
@@ -922,6 +905,43 @@ struct ClusterMap<
     @available(*, unavailable)
     required init?(coder: NSCoder) { fatalError("no coder") }
   }
+}
+
+extension MKAnnotationView {
+  fileprivate var opacity: CGFloat {
+    get {
+      #if canImport(UIKit)
+        alpha
+      #else
+        alphaValue
+      #endif
+    }
+    set {
+      #if canImport(UIKit)
+        alpha = newValue
+      #else
+        alphaValue = newValue
+      #endif
+    }
+  }
+}
+
+/// Fades the views to an opacity over a duration, then calls `completion`.
+@MainActor private func fade(
+  _ views: [MKAnnotationView], to opacity: CGFloat, duration: TimeInterval,
+  completion: (@MainActor () -> Void)? = nil
+) {
+  #if canImport(UIKit)
+    UIView.animate(
+      withDuration: duration, animations: { views.forEach { $0.opacity = opacity } }
+    ) { _ in completion?() }
+  #else
+    NSAnimationContext.runAnimationGroup(
+      { context in
+        context.duration = duration
+        views.forEach { $0.animator().alphaValue = opacity }
+      }, completionHandler: { completion?() })
+  #endif
 }
 
 private final class SizeReportingMapView: MKMapView {
