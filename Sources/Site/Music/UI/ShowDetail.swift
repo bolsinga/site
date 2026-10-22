@@ -36,6 +36,23 @@ struct ShowDetail: View {
     }
   }
 
+  @ViewBuilder private var venueElement: some View {
+    DetailCard(title: Text("Venue")) {
+      ArchivePathLink(archivePath: concert.venueID, isPathNavigable: isPathNavigable) {
+        DetailRowLabel(isNavigable: isPathNavigable(concert.venueID)) {
+          VStack(alignment: .leading) {
+            Text(venueName)
+              .font(.title2.bold())
+            Text("\(concert.location.city), \(concert.location.state)")
+              .foregroundStyle(.secondary)
+          }
+          .frame(maxWidth: .infinity, alignment: .leading)
+        }
+      }
+      .buttonStyle(.plain)
+    }
+  }
+
   /// The date leads the page, with how long ago (or until) the show is at the trailing edge.
   @ViewBuilder private var dateElement: some View {
     HStack(alignment: .firstTextBaseline, spacing: 12) {
@@ -68,13 +85,13 @@ struct ShowDetail: View {
     ScrollView {
       VStack(spacing: 16) {
         dateElement
+        venueElement
         lineupElement
         commentElement
       }
       .padding(.horizontal)
     }
     .background(.background)
-    .navigationTitle(venueName)
     #if os(iOS)
       .navigationBarTitleDisplayMode(.inline)
     #endif
