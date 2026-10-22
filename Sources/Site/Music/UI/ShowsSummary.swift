@@ -25,7 +25,7 @@ struct ShowsSummary: View {
           statisticsData: model.filteredStatisticsData(
             nearbyModel, distanceThreshold: nearbyDistance)))
     )
-      .nearbyLocation(filteredDataIsEmpty: decadesMap.isEmpty)
+    .nearbyLocation(filteredDataIsEmpty: decadesMap.isEmpty)
   }
 }
 

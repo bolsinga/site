@@ -17,10 +17,17 @@ enum ListSummary {
 struct ListSummaryCard: View {
   @Environment(VaultModel.self) private var model
   @Environment(\.statsThreshold) private var statsThreshold: Int
+  @Environment(NearbyModel.self) private var nearbyModel: NearbyModel?
+  @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
   let summary: ListSummary
 
   var body: some View {
+    content
+      .animation(reduceMotion ? nil : .default, value: nearbyModel?.locationFilter.isNearby)
+  }
+
+  @ViewBuilder private var content: some View {
     switch summary {
     case .artists(let count):
       DetailCard(title: Text("Stats")) {
@@ -68,7 +75,8 @@ struct ListSummaryCard: View {
         if categories.contains(.month) {
           ChartRow(label: titles.month) {
             MonthChart(
-              dates: stats.dates, title: titles.month, presentation: .card, highlightsCurrent: true)
+              dates: stats.dates, title: titles.month, presentation: .card,
+              highlightsCurrent: true)
           } sheet: {
             MonthChart(dates: stats.dates, title: titles.month, highlightsCurrent: true)
           }
