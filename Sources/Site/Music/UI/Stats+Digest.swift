@@ -66,7 +66,15 @@ extension Stats {
   }
 
   init<Identifier: ArchiveIdentifier>(vault: Vault<Identifier>) {
-    let (showCount, venueCount, artistCount, dates, states) = vault.statisticsData
+    self.init(statisticsData: vault.statisticsData)
+  }
+
+  init(
+    statisticsData: (
+      showsCount: Int, venueCount: Int, artistCount: Int, dates: [Date], states: [String: Int]
+    )
+  ) {
+    let (showCount, venueCount, artistCount, dates, states) = statisticsData
     self.init(
       concertsCount: showCount,
       venueCount: venueCount,

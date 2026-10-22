@@ -219,6 +219,23 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
     )
   }
 
+  /// The statistics of just these venues and their shows.
+  public func statisticsData(venueIDs: any Collection<ID>)
+    -> (showsCount: Int, venueCount: Int, artistCount: Int, dates: [Date], states: [String: Int])
+  {
+    let venues = venueIDs.compactMap { id in lookup.venueMap[id].map { (id, $0) } }
+    let showIDs = Set(venues.flatMap { shows(venueID: $0.0) })
+    return (
+      showIDs.count,
+      venues.count,
+      Set(venues.flatMap { artists(venueID: $0.0) }).count,
+      showIDs.compactMap { lookup.showMap[$0]?.date }.knownDates,
+      venues.flatMap { (id, venue) in
+        Array(repeating: venue.location, count: self.shows(venueID: id).count)
+      }.stateCounts
+    )
+  }
+
   public var timestamp: Date {
     lookup.timestamp
   }

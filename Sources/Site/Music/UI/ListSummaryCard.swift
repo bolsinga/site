@@ -10,31 +10,37 @@ import SwiftUI
 
 enum ListSummary {
   case artists(count: Int)
-  case venues(count: Int)
-  case shows(count: Int, years: Int)
+  case venues(count: Int, stats: Stats)
+  case shows(count: Int, years: Int, stats: Stats)
 }
 
 struct ListSummaryCard: View {
   @Environment(VaultModel.self) private var model
   @Environment(\.statsThreshold) private var statsThreshold: Int
+  @Environment(NearbyModel.self) private var nearbyModel: NearbyModel?
+  @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
   let summary: ListSummary
 
   var body: some View {
+    content
+      .animation(reduceMotion ? nil : .default, value: nearbyModel?.locationFilter.isNearby)
+  }
+
+  @ViewBuilder private var content: some View {
     switch summary {
     case .artists(let count):
       DetailCard(title: Text("Stats")) {
         StatRow(count: count, kind: .artists)
       }
-    case .venues(let count):
-      venuesCards(count: count)
-    case .shows(let count, let years):
-      showsCards(count: count, years: years)
+    case .venues(let count, let stats):
+      venuesCards(count: count, stats: stats)
+    case .shows(let count, let years, let stats):
+      showsCards(count: count, years: years, stats: stats)
     }
   }
 
-  @ViewBuilder private func venuesCards(count: Int) -> some View {
-    let stats = Stats(vault: model.vault)
+  @ViewBuilder private func venuesCards(count: Int, stats: Stats) -> some View {
     DetailCard(title: Text("Stats")) {
       StatRows {
         StatRow(count: count, kind: .venues)
@@ -50,8 +56,7 @@ struct ListSummaryCard: View {
     }
   }
 
-  @ViewBuilder private func showsCards(count: Int, years: Int) -> some View {
-    let stats = Stats(vault: model.vault)
+  @ViewBuilder private func showsCards(count: Int, years: Int, stats: Stats) -> some View {
     let titles = StatsTitles.generic
     let categories = stats.categories(weekdayOrMonthChartConcertThreshold: statsThreshold)
     DetailCard(title: Text("Stats")) {
@@ -70,7 +75,8 @@ struct ListSummaryCard: View {
         if categories.contains(.month) {
           ChartRow(label: titles.month) {
             MonthChart(
-              dates: stats.dates, title: titles.month, presentation: .card, highlightsCurrent: true)
+              dates: stats.dates, title: titles.month, presentation: .card,
+              highlightsCurrent: true)
           } sheet: {
             MonthChart(dates: stats.dates, title: titles.month, highlightsCurrent: true)
           }

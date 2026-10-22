@@ -19,9 +19,15 @@ struct ShowsSummary: View {
     let shows = decadesMap.values.reduce(0) { $0 + $1.values.reduce(0, +) }
     ShowYearList(
       decadesMap: decadesMap,
-      summary: decadesMap.isEmpty ? nil : .shows(count: shows, years: years)
+      summary: decadesMap.isEmpty
+        ? nil
+        : .shows(
+          count: shows, years: years,
+          stats: Stats(
+            statisticsData: model.filteredStatisticsData(
+              nearbyModel, distanceThreshold: nearbyDistance)))
     )
-      .nearbyLocation(filteredDataIsEmpty: decadesMap.isEmpty)
+    .nearbyLocation(filteredDataIsEmpty: decadesMap.isEmpty)
   }
 }
 
