@@ -16,13 +16,7 @@ extension ArchiveCategory {
     switch self {
     case .today:
       return Text(String(count))
-    case .shows:
-      if combineTodayAndShowSummary {
-        return Text(String(count))
-      } else {
-        return nil
-      }
-    case .venues, .artists, .settings, .search:
+    case .shows, .venues, .artists, .settings, .search:
       return nil
     }
   }
@@ -30,7 +24,6 @@ extension ArchiveCategory {
   @MainActor
   static var ordered: [ArchiveCategory] {
     allCases.filter {
-      if case .today = $0 { return !combineTodayAndShowSummary }
       if case .settings = $0 { return showSettingsInTabView }
       return true
     }
@@ -40,7 +33,6 @@ extension ArchiveCategory {
 struct ArchiveTabView: View {
   @Environment(VaultModel.self) var model
 
-  @Binding var showsMode: ShowsMode
   @Binding var venueSort: RankingSort
   @Binding var artistSort: RankingSort
   @Binding var venuesMode: VenuesMode
@@ -56,7 +48,6 @@ struct ArchiveTabView: View {
   @State private var selectedTab: TabSelection
 
   init(
-    showsMode: Binding<ShowsMode>,
     venueSort: Binding<RankingSort>,
     artistSort: Binding<RankingSort>,
     venuesMode: Binding<VenuesMode>,
@@ -65,7 +56,6 @@ struct ArchiveTabView: View {
     reloadModel: @escaping @MainActor () async -> Void,
     navigateToPath: @escaping (ArchivePath) -> Void
   ) {
-    self._showsMode = showsMode
     self._venueSort = venueSort
     self._artistSort = artistSort
     self._venuesMode = venuesMode
@@ -113,7 +103,6 @@ struct ArchiveTabView: View {
           ) {
             ArchiveCategoryStack(
               category: category,
-              showsMode: $showsMode,
               path: pathForCategory(category),
               venueSort: $venueSort,
               artistSort: $artistSort,
@@ -155,31 +144,7 @@ struct ArchiveTabView: View {
       if let newDayOfLeapYear = newValue.dayOfLeapYear {
         dayOfLeapYear = newDayOfLeapYear
       }
-      activeCategory = {
-        switch newValue.category {
-        case .today:
-          .today
-        case .shows:
-          if combineTodayAndShowSummary {
-            switch showsMode {
-            case .ordinal:
-              .today
-            case .grouped:
-              .shows
-            }
-          } else {
-            .shows
-          }
-        case .venues:
-          .venues
-        case .artists:
-          .artists
-        case .settings:
-          .settings
-        case .search:
-          .search
-        }
-      }()
+      activeCategory = newValue.category
     }
     .onChange(of: activeCategory) { _, newValue in
       selectedTab = TabSelection(category: newValue, dayOfLeapYear: dayOfLeapYear)
@@ -189,14 +154,12 @@ struct ArchiveTabView: View {
 }
 
 #Preview(traits: .nearbyModel, .vaultModel) {
-  @Previewable @State var showsMode = ShowsMode.grouped
   @Previewable @State var venueSort = RankingSort.alphabetical
   @Previewable @State var artistSort = RankingSort.alphabetical
   @Previewable @State var category = ArchiveCategory.defaultCategory
   @Previewable @State var venuesMode = VenuesMode.default
 
   ArchiveTabView(
-    showsMode: $showsMode,
     venueSort: $venueSort,
     artistSort: $artistSort,
     venuesMode: $venuesMode,
