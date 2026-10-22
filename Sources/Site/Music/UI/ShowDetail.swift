@@ -25,7 +25,8 @@ struct ShowDetail: View {
       ForEach(concert.performers) { artist in
         ArchivePathLink(archivePath: artist.id, isPathNavigable: isPathNavigable) {
           DetailRowLabel(isNavigable: isPathNavigable(artist.id)) {
-            Text(artist.name)
+            PerformerName(
+              name: artist.name, isFirstTime: concert.firstTimeArtistIDs.contains(artist.id))
           }
         }
         if artist.id != concert.performers.last?.id {

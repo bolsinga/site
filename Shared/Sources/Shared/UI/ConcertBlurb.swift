@@ -19,12 +19,17 @@ public struct ConcertBlurb: View {
   let date: PartialDate
   let performers: [String]
   let dateFormat: DateFormat
+  let firstTimePerformers: Set<String>
 
-  public init(venue: String, date: PartialDate, performers: [String], dateFormat: DateFormat) {
+  public init(
+    venue: String, date: PartialDate, performers: [String], dateFormat: DateFormat,
+    firstTimePerformers: Set<String> = []
+  ) {
     self.venue = venue
     self.date = date
     self.performers = performers
     self.dateFormat = dateFormat
+    self.firstTimePerformers = firstTimePerformers
   }
 
   @ViewBuilder private var detailsView: some View {
@@ -57,7 +62,7 @@ public struct ConcertBlurb: View {
 
   public var body: some View {
     HStack {
-      PerformersView(performers: performers)
+      PerformersView(performers: performers, firstTimePerformers: firstTimePerformers)
       Spacer()
       detailsView
     }
@@ -70,7 +75,8 @@ extension ConcertBlurb {
       venue: digest.venue,
       date: digest.date,
       performers: digest.performerNames,
-      dateFormat: dateFormat)
+      dateFormat: dateFormat,
+      firstTimePerformers: digest.firstTimePerformerNames)
   }
 }
 
@@ -84,7 +90,8 @@ private let previewShow = ShowDigest(
   venue: "Treasure Island",
   venueID: .venue("v0"),
   location: Location(city: "San Francisco", state: "CA"),
-  comment: nil)
+  comment: nil,
+  firstTimeArtistIDs: [.artist("ar1")])
 
 #Preview("No Year") {
   ConcertBlurb(digest: previewShow, dateFormat: .noYear)

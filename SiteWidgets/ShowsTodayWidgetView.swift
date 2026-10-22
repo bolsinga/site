@@ -16,6 +16,9 @@ struct ShowsTodayWidgetView: View {
 
   var body: some View {
     content
+      // A widget's accent color is the system's unless the view is tinted, and shared views, like
+      // the first time sparkle, tint with it.
+      .tint(Color.accent)
       // Fill the widget so short names don't shrink the stack and get centered.
       .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
       .containerBackground(Color.accent.opacity(0.3).gradient, for: .widget)
@@ -357,7 +360,7 @@ private struct DayShowsList: View {
             ConcertBlurb(
               venue: show.venue, date: show.date,
               performers: Array(show.performerNames.prefix(performerLimit)),
-              dateFormat: .relativeTo(date))
+              dateFormat: .relativeTo(date), firstTimePerformers: show.firstTimePerformerNames)
             let hidden = show.performerNames.count - performerLimit
             if labelsHiddenPerformers, hidden > 0 {
               Text("+^[\(hidden) artist](inflect: true)")

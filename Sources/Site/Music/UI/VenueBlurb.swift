@@ -11,6 +11,7 @@ import SwiftUI
 struct VenueBlurb: View {
   let date: PartialDate
   let performers: [String]
+  var firstTimePerformers: Set<String> = []
 
   @ViewBuilder private var detailsView: some View {
     VStack(alignment: .trailing) {
@@ -21,7 +22,7 @@ struct VenueBlurb: View {
 
   var body: some View {
     HStack {
-      PerformersView(performers: performers)
+      PerformersView(performers: performers, firstTimePerformers: firstTimePerformers)
       Spacer()
       detailsView
     }
@@ -30,7 +31,9 @@ struct VenueBlurb: View {
 
 extension VenueBlurb {
   fileprivate init(digest: ShowDigest) {
-    self.init(date: digest.date, performers: digest.performerNames)
+    self.init(
+      date: digest.date, performers: digest.performerNames,
+      firstTimePerformers: digest.firstTimePerformerNames)
   }
 }
 

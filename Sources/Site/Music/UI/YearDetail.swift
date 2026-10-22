@@ -34,11 +34,7 @@ struct YearDetail: View {
         ForEach(shows) { show in
           ArchivePathLink(archivePath: show.id, isPathNavigable: isPathNavigable) {
             DetailRowLabel(isNavigable: isPathNavigable(show.id)) {
-              ConcertBlurb(
-                venue: show.venue,
-                date: show.date,
-                performers: show.performerNames,
-                dateFormat: .noYear)
+              ConcertBlurb(digest: show, dateFormat: .noYear)
             }
           }
           if show.id != shows.last?.id {
