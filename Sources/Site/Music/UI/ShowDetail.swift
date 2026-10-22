@@ -92,7 +92,7 @@ struct ShowDetail: View {
       .padding(.horizontal)
     }
     .background(.background)
-    .navigationTitle(venueName)  // Hidden below, but still titles the back button.
+    .navigationTitle(concert.formatted(.headlinerAndVenue))  // Hidden below, but still titles the back button.
     #if !os(tvOS)
       .toolbar(removing: .title)
     #endif
