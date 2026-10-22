@@ -80,11 +80,13 @@ struct ChartRow<Chart: View, Sheet: View>: View {
   @ViewBuilder let chart: () -> Chart
   @ViewBuilder let sheet: () -> Sheet
 
-  @Environment(\.presentSheet) private var presentSheet
+  @Environment(\.archiveNavigationState) private var navigationState
+  /// The navigation state the sheet was presented from; it is dismissed once that changes.
+  @State private var presentedState: ArchiveNavigation.State?
 
   var body: some View {
     Button {
-      presentSheet(AnyView(sheet()))
+      presentedState = navigationState
     } label: {
       HStack {
         Text(label)
@@ -99,6 +101,13 @@ struct ChartRow<Chart: View, Sheet: View>: View {
       .contentShape(.rect)
     }
     .buttonStyle(.plain)
+    .dismissibleSheet(
+      isPresented: Binding(
+        get: { presentedState == navigationState },
+        set: { if !$0 { presentedState = nil } })
+    ) {
+      sheet()
+    }
   }
 }
 
