@@ -23,6 +23,7 @@ enum StatKind {
 
 struct StatRow: View {
   @ScaledMetric(relativeTo: .largeTitle) private var rowHeight = 44
+  @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
   let text: AttributedString
   var ranking: Ranking?
@@ -55,6 +56,8 @@ struct StatRow: View {
   var body: some View {
     HStack(alignment: .firstTextBaseline) {
       Text(styledText)
+        .contentTransition(.numericText())
+        .animation(reduceMotion ? nil : .default, value: text)
         .textCase(.uppercase)
         .lineLimit(1)
         .minimumScaleFactor(0.3)
@@ -105,9 +108,9 @@ struct ChartRow<Chart: View, Sheet: View>: View {
 private let statRowsSpacing: CGFloat = 24
 private let statRowsMaxColumns = 3
 
-private func statRowsColumns(width: CGFloat, count: Int, minColumnWidth: CGFloat, limit: Int) -> Int {
+private func statRowsColumns(width: CGFloat, minColumnWidth: CGFloat, limit: Int) -> Int {
   let fit = max(1, Int((width + statRowsSpacing) / (minColumnWidth + statRowsSpacing)))
-  return min(fit, limit, max(count, 1))
+  return min(fit, limit)
 }
 
 struct StatRows<Content: View>: View {
@@ -144,8 +147,7 @@ struct StatRows<Content: View>: View {
       .transition(.opacity)
       .frame(maxWidth: .infinity)
       .onGeometryChange(for: Int.self) {
-        statRowsColumns(
-          width: $0.size.width, count: count, minColumnWidth: minColumnWidth, limit: limit)
+        statRowsColumns(width: $0.size.width, minColumnWidth: minColumnWidth, limit: limit)
       } action: { newValue in
         // The first measurement settles in place; later ones cross-fade, so rows don't slide into their new columns.
         if isMeasured {
