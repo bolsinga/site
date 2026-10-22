@@ -44,7 +44,6 @@ struct ArchiveStateView: View {
         }
       } else {
         ArchiveTabView(
-          showsMode: $archiveNavigation.mode,
           venueSort: $venueSort,
           artistSort: $artistSort,
           venuesMode: $venuesMode,

@@ -8,17 +8,10 @@
 import Shared
 import SwiftUI
 
-extension ShowsMode {
-  fileprivate var supportsToolbar: Bool {
-    self == .grouped
-  }
-}
-
 struct ArchiveCategoryStack: View {
   @Environment(VaultModel.self) var model
 
   let category: ArchiveCategory
-  @Binding var showsMode: ShowsMode
   @Binding var path: [ArchivePath]
   @Binding var venueSort: RankingSort
   @Binding var artistSort: RankingSort
@@ -33,25 +26,12 @@ struct ArchiveCategoryStack: View {
 
   @State private var showNearbyDistanceSettings: Bool = false
 
-  private var showToolbar: Bool {
-    switch category {
-    case .today, .venues, .artists, .settings, .search:
-      true
-    case .shows:
-      !combineTodayAndShowSummary || showsMode.supportsToolbar
-    }
-  }
-
   @ViewBuilder private var summary: some View {
     switch category {
     case .today:
       DaySummary(dayOfLeapYear: $dayOfLeapYear)
     case .shows:
-      if combineTodayAndShowSummary {
-        DaysShowsSummary(mode: $showsMode, dayOfLeapYear: $dayOfLeapYear)
-      } else {
-        ShowsSummary()
-      }
+      ShowsSummary()
     case .venues:
       VenuesSummary(
         sort: venueSort,
@@ -79,14 +59,12 @@ struct ArchiveCategoryStack: View {
           $0.destination(vault: model.vault, isPathNavigable: path.isPathNavigable(_:))
         }
         .toolbar {
-          if showToolbar {
-            ArchiveCategoryToolbarContent(
-              category: category,
-              venueSort: $venueSort,
-              artistSort: $artistSort,
-              showNearbyDistanceSettings: $showNearbyDistanceSettings,
-              venuesMode: $venuesMode)
-          }
+          ArchiveCategoryToolbarContent(
+            category: category,
+            venueSort: $venueSort,
+            artistSort: $artistSort,
+            showNearbyDistanceSettings: $showNearbyDistanceSettings,
+            venuesMode: $venuesMode)
         }
     }
   }
@@ -97,7 +75,6 @@ extension ArchiveCategoryStack {
   init(withPreviewCategory category: ArchiveCategory) {
     self.init(
       category: category,
-      showsMode: .constant(.ordinal),
       path: .constant([]),
       venueSort: .constant(.alphabetical),
       artistSort: .constant(.alphabetical),

@@ -11,9 +11,7 @@ extension ArchiveCategory {
     switch self {
     case .today:
       true
-    case .shows:
-      combineTodayAndShowSummary
-    case .venues, .artists, .settings, .search:
+    case .shows, .venues, .artists, .settings, .search:
       false
     }
   }

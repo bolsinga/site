@@ -23,23 +23,23 @@ struct ArchiveNavigationRootTests {
       categoryPaths: [.today: [show], .shows: [show], .venues: [venue], .artists: [artist]])
   }
 
-  @Test func rootOfTodayClearsTodayAndShows() {
+  @Test func rootOfTodayClearsOnlyToday() {
     let navigation = navigation(category: .artists)
     navigation.navigate(toRootOf: .today)
 
     #expect(navigation.category == .today)
     #expect(navigation.state.todayPath.isEmpty)
-    #expect(navigation.state.showsPath.isEmpty)
+    #expect(navigation.state.showsPath == [show])
     #expect(navigation.state.venuesPath == [venue])
     #expect(navigation.state.artistsPath == [artist])
   }
 
-  @Test func rootOfShowsClearsTodayAndShows() {
+  @Test func rootOfShowsClearsOnlyShows() {
     let navigation = navigation(category: .venues)
     navigation.navigate(toRootOf: .shows)
 
     #expect(navigation.category == .shows)
-    #expect(navigation.state.todayPath.isEmpty)
+    #expect(navigation.state.todayPath == [show])
     #expect(navigation.state.showsPath.isEmpty)
     #expect(navigation.state.venuesPath == [venue])
   }
@@ -69,6 +69,6 @@ struct ArchiveNavigationRootTests {
 
     #expect(navigation.category == .today)
     #expect(navigation.state.todayPath.isEmpty)
-    #expect(navigation.state.showsPath.isEmpty)
+    #expect(navigation.state.showsPath == [show])
   }
 }
