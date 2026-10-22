@@ -7,29 +7,30 @@
 
 import SwiftUI
 
-struct DismissibleSheetModifier<SheetContent>: ViewModifier where SheetContent: View {
-  @Binding var showSheet: Bool
-  @ViewBuilder let sheetContent: () -> SheetContent
-
-  func body(content: Content) -> some View {
-    content
-      .sheet(isPresented: $showSheet) {
-        VStack {
-          sheetContent()
-          #if os(macOS)
-            Button(role: .close) { showSheet = false }
-          #endif
-        }
-        .padding(10)
-        .presentationDetents([.medium, .large])
-      }
-  }
+/// A sheet shown for the navigation state it was presented from.
+struct PresentedSheet {
+  let state: ArchiveNavigation.State
+  let content: AnyView
 }
 
-extension View {
-  func dismissibleSheet<SheetContent: View>(
-    isPresented: Binding<Bool>, sheetContent: @escaping () -> SheetContent
-  ) -> some View {
-    modifier(DismissibleSheetModifier(showSheet: isPresented, sheetContent: sheetContent))
+extension EnvironmentValues {
+  /// Presents a sheet that stays up only while the navigation state is unchanged.
+  @Entry var presentSheet: (AnyView) -> Void = { _ in }
+}
+
+struct DismissibleSheetContent: View {
+  @Environment(\.dismiss) private var dismiss
+
+  let content: AnyView
+
+  var body: some View {
+    VStack {
+      content
+      #if os(macOS)
+        Button(role: .close) { dismiss() }
+      #endif
+    }
+    .padding(10)
+    .presentationDetents([.medium, .large])
   }
 }

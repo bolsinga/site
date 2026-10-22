@@ -80,11 +80,11 @@ struct ChartRow<Chart: View, Sheet: View>: View {
   @ViewBuilder let chart: () -> Chart
   @ViewBuilder let sheet: () -> Sheet
 
-  @State private var isPresented = false
+  @Environment(\.presentSheet) private var presentSheet
 
   var body: some View {
     Button {
-      isPresented = true
+      presentSheet(AnyView(sheet()))
     } label: {
       HStack {
         Text(label)
@@ -99,9 +99,6 @@ struct ChartRow<Chart: View, Sheet: View>: View {
       .contentShape(.rect)
     }
     .buttonStyle(.plain)
-    .dismissibleSheet(isPresented: $isPresented) {
-      sheet()
-    }
   }
 }
 
