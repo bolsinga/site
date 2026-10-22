@@ -23,6 +23,16 @@
         }
       }
     },
+    "%@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ %2$@"
+          }
+        }
+      }
+    },
     "%@, %@" : {
       "comment" : "headlinerAndVenue.no.venue",
       "localizations" : {
@@ -59,6 +69,12 @@
 
     },
     "Display Shows On This Date" : {
+
+    },
+    "First Show" : {
+
+    },
+    "First time seeing %@" : {
 
     },
     "Invalid Token: %@." : {

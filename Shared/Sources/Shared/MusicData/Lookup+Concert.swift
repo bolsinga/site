@@ -10,9 +10,11 @@ import Foundation
 extension Lookup {
   fileprivate func showDigest(show: Show, showId: ID) -> ShowDigest? {
     guard let venue = venueForShow(showID: showId) else { return nil }
-    let performers = artistsForShow(showID: showId).map {
-      ArchiveItem(id: $0.archivePath, name: $0.name)
-    }
+    let artists = artists(showID: showId).compactMap { id in artistMap[id].map { (id, $0) } }
+    let performers = artists.map { ArchiveItem(id: $1.archivePath, name: $1.name) }
+    let firstTimeArtistIDs = Set(
+      artists.filter { rankDigest(artist: $0.0).firstSet.isFirst(on: show.date) }
+        .map { $1.archivePath })
     return ShowDigest(
       id: show.archivePath,
       date: show.date,
@@ -20,7 +22,8 @@ extension Lookup {
       venue: venue.name,
       venueID: venue.archivePath,
       location: venue.location,
-      comment: show.comment)
+      comment: show.comment,
+      firstTimeArtistIDs: firstTimeArtistIDs)
   }
 
   func showDigest(showId: ID) -> ShowDigest? {

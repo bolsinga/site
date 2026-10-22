@@ -38,11 +38,7 @@ struct DayList: View {
               ForEach(concerts) { concert in
                 NavigationLink(value: concert.archivePath) {
                   DetailRowLabel(isNavigable: true) {
-                    ConcertBlurb(
-                      venue: concert.venue,
-                      date: concert.date,
-                      performers: concert.performerNames,
-                      dateFormat: .relative)
+                    ConcertBlurb(digest: concert, dateFormat: .relative)
                   }
                 }
                 if concert.id != concerts.last?.id {

@@ -50,7 +50,9 @@ struct VenueDetail: View {
       ForEach(shows) { show in
         ArchivePathLink(archivePath: show.id, isPathNavigable: isPathNavigable) {
           DetailRowLabel(isNavigable: isPathNavigable(show.id)) {
-            VenueBlurb(date: show.date, performers: show.performerNames)
+            VenueBlurb(
+              date: show.date, performers: show.performerNames,
+              firstTimePerformers: show.firstTimePerformerNames)
           }
         }
         if show.id != shows.last?.id {

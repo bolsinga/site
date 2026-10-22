@@ -357,7 +357,7 @@ private struct DayShowsList: View {
             ConcertBlurb(
               venue: show.venue, date: show.date,
               performers: Array(show.performerNames.prefix(performerLimit)),
-              dateFormat: .relativeTo(date))
+              dateFormat: .relativeTo(date), firstTimePerformers: show.firstTimePerformerNames)
             let hidden = show.performerNames.count - performerLimit
             if labelsHiddenPerformers, hidden > 0 {
               Text("+^[\(hidden) artist](inflect: true)")
