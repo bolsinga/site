@@ -97,6 +97,7 @@ struct MapHeaderStyle: ViewModifier {
   func body(content: Content) -> some View {
     if hasMap {
       content
+        .navigationTitle(title)  // Hidden below, but still titles the back button.
         .ignoresSafeArea(edges: .top)
         #if os(macOS)
           .toolbarBackgroundVisibility(.hidden, for: .windowToolbar)
