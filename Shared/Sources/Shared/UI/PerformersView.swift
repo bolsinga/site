@@ -22,7 +22,7 @@ public struct PerformerName: View {
 
   private var sparkle: Text {
     Text(Image(systemName: "sparkles")).font(.system(size: sparkleSize))
-      .foregroundStyle(Color.accentColor)
+      .foregroundStyle(.tint)
   }
 
   public var body: some View {
