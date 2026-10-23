@@ -362,6 +362,8 @@ private struct DayShowsList: View {
               performers: Array(show.performers.prefix(performerLimit)),
               dateFormat: .relativeTo(date), firstTimeArtistIDs: show.firstTimeArtistIDs,
               isFirstTimeVenue: show.isFirstTimeVenue)
+              // A widget can't grow, so a long name or venue gives up its third line, not another show.
+              .lineLimit(2)
             let hidden = show.performerNames.count - performerLimit
             if labelsHiddenPerformers, hidden > 0 {
               Text("+^[\(hidden) artist](inflect: true)")
