@@ -54,21 +54,32 @@ struct ShowDetail: View {
     }
   }
 
-  /// The date leads the page, with how long ago (or until) the show is at the trailing edge.
+  @ViewBuilder private var dateText: some View {
+    Text(date.formatted(.compact))
+      .font(.largeTitle.bold())
+  }
+
+  @ViewBuilder private var relativeDateText: some View {
+    if !date.isUnknown, let showDate = date.date {
+      Text(showDate.formatted(.relative(presentation: .numeric)))
+        .font(.subheadline.weight(.semibold))
+        .textCase(.uppercase)
+        .foregroundStyle(.secondary)
+    }
+  }
+
+  /// The date leads the page, with how long ago (or until) the show is at the trailing edge. When
+  /// the two don't fit side by side, as at accessibility text sizes, the second goes below.
   @ViewBuilder private var dateElement: some View {
-    HStack(alignment: .firstTextBaseline, spacing: 12) {
-      Text(date.formatted(.compact))
-        .font(.largeTitle.bold())
-        .lineLimit(1)
-        .minimumScaleFactor(0.5)
-      Spacer(minLength: 0)
-      if !date.isUnknown, let showDate = date.date {
-        Text(showDate.formatted(.relative(presentation: .numeric)))
-          .font(.subheadline.weight(.semibold))
-          .textCase(.uppercase)
-          .foregroundStyle(.secondary)
-          .lineLimit(1)
-          .minimumScaleFactor(0.5)
+    ViewThatFits(in: .horizontal) {
+      HStack(alignment: .firstTextBaseline, spacing: 12) {
+        dateText.lineLimit(1)
+        Spacer(minLength: 0)
+        relativeDateText.lineLimit(1)
+      }
+      VStack(alignment: .leading, spacing: 4) {
+        dateText
+        relativeDateText
       }
     }
     .frame(maxWidth: .infinity, alignment: .leading)
@@ -115,4 +126,18 @@ struct ShowDetail: View {
       }
     )
   }
+}
+
+#Preview("Accessibility", traits: .vaultModel) {
+  @Previewable @Environment(VaultModel.self) var model
+  NavigationStack {
+    ShowDetail(
+      concert: model.previewShow("sh899"),
+      url: nil,
+      isPathNavigable: { _ in
+        true
+      }
+    )
+  }
+  .dynamicTypeSize(.accessibility3)
 }
