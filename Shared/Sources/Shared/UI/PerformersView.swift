@@ -27,7 +27,8 @@ public struct PerformerName: View {
 
   public var body: some View {
     if isFirstTime {
-      Text("\(name) \(sparkle)")
+      // A non breaking space keeps the sparkle from wrapping onto a line by itself.
+      Text("\(name)\u{00A0}\(sparkle)")
         .accessibilityLabel(Text("First time seeing \(name)"))
         #if !os(tvOS)
           .help(Text("First Show"))
