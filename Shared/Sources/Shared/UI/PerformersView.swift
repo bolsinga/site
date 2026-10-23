@@ -14,6 +14,7 @@ private struct FirstTimeName: View {
   let isFirstTime: Bool
   let accessibilityLabel: Text
 
+  /// Smaller than the name, and scaled with Dynamic Type.
   @ScaledMetric(relativeTo: .caption2) private var sparkleSize = 9.0
 
   private var sparkle: Text {
@@ -68,34 +69,40 @@ public struct VenueName: View {
 }
 
 public struct PerformersView: View {
-  let performers: [String]
-  let firstTimePerformers: Set<String>
+  let performers: [ArchiveItem]
+  let firstTimeArtistIDs: Set<ArchivePath>
 
-  public init(performers: [String], firstTimePerformers: Set<String> = []) {
+  public init(performers: [ArchiveItem], firstTimeArtistIDs: Set<ArchivePath> = []) {
     self.performers = performers
-    self.firstTimePerformers = firstTimePerformers
+    self.firstTimeArtistIDs = firstTimeArtistIDs
   }
-
-  private var headliner: String { performers[0] }
-  private var support: [String] { Array(performers.dropFirst()) }
 
   public var body: some View {
     VStack(alignment: .leading) {
-      PerformerName(name: headliner, isFirstTime: firstTimePerformers.contains(headliner))
-        .font(.headline)
-      ForEach(support, id: \.self) {
-        PerformerName(name: $0, isFirstTime: firstTimePerformers.contains($0))
+      // Keyed by id, as two performers can share a name.
+      ForEach(Array(performers.enumerated()), id: \.element.id) { index, performer in
+        PerformerName(name: performer.name, isFirstTime: firstTimeArtistIDs.contains(performer.id))
+          .font(index == 0 ? .headline : nil)
       }
     }
   }
 }
 
+private let previewPerformers = [
+  ArchiveItem(id: .artist("ar0"), name: "Belle And Sebastian"),
+  ArchiveItem(id: .artist("ar1"), name: "The National"),
+  ArchiveItem(id: .artist("ar2"), name: "Broken Social Scene"),
+]
+
 #Preview {
-  PerformersView(performers: ["Belle And Sebastian", "The National", "Broken Social Scene"])
+  PerformersView(performers: previewPerformers)
 }
 
 #Preview("First Times") {
   PerformersView(
-    performers: ["Belle And Sebastian", "The National", "Broken Social Scene"],
-    firstTimePerformers: ["Belle And Sebastian", "Broken Social Scene"])
+    performers: previewPerformers, firstTimeArtistIDs: [.artist("ar0"), .artist("ar2")])
+}
+
+#Preview("No Performers") {
+  PerformersView(performers: [])
 }

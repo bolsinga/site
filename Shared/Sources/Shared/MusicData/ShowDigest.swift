@@ -56,11 +56,6 @@ public struct ShowDigest: Codable, Equatable, Hashable, Identifiable, PathRestor
   }
 
   public var performerNames: [String] { performers.map { $0.name } }
-
-  /// The names of the performers this show was the first time seeing.
-  public var firstTimePerformerNames: Set<String> {
-    Set(performers.filter { firstTimeArtistIDs.contains($0.id) }.map(\.name))
-  }
 }
 
 extension ShowDigest: Comparable {

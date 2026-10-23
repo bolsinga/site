@@ -359,8 +359,8 @@ private struct DayShowsList: View {
           VStack(alignment: .leading, spacing: 2) {
             ConcertBlurb(
               venue: show.venue, date: show.date,
-              performers: Array(show.performerNames.prefix(performerLimit)),
-              dateFormat: .relativeTo(date), firstTimePerformers: show.firstTimePerformerNames,
+              performers: Array(show.performers.prefix(performerLimit)),
+              dateFormat: .relativeTo(date), firstTimeArtistIDs: show.firstTimeArtistIDs,
               isFirstTimeVenue: show.isFirstTimeVenue)
             let hidden = show.performerNames.count - performerLimit
             if labelsHiddenPerformers, hidden > 0 {
