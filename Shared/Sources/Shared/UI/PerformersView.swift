@@ -85,6 +85,8 @@ public struct PerformersView: View {
           .font(index == 0 ? .headline : nil)
       }
     }
+    // Each name takes the height its wrapped lines need, rather than truncating to the row's height.
+    .fixedSize(horizontal: false, vertical: true)
   }
 }
 

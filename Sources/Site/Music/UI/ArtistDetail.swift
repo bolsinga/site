@@ -36,7 +36,9 @@ struct ArtistDetail: View {
         ForEach(shows) { show in
           ArchivePathLink(archivePath: show.id, isPathNavigable: isPathNavigable) {
             DetailRowLabel(isNavigable: isPathNavigable(show.id)) {
-              ArtistBlurb(count: show.performers.count, venue: show.venue, date: show.date)
+              ArtistBlurb(
+                count: show.performers.count, venue: show.venue,
+                isFirstTimeVenue: show.isFirstTimeVenue, date: show.date)
             }
           }
           if show.id != shows.last?.id {

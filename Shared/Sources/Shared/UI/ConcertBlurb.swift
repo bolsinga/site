@@ -34,8 +34,12 @@ public struct ConcertBlurb: View {
     self.isFirstTimeVenue = isFirstTimeVenue
   }
 
-  @ViewBuilder private var detailsView: some View {
-    VStack(alignment: .trailing) {
+  @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+  /// The least width the venue and date keep, so a long lineup can't squeeze them into a sliver.
+  @ScaledMetric private var detailsMinimumWidth = 120.0
+
+  @ViewBuilder private func detailsView(alignment: HorizontalAlignment) -> some View {
+    VStack(alignment: alignment) {
       VenueName(name: venue, isFirstTime: isFirstTimeVenue).font(.headline)
       switch dateFormat {
       case .noYear:
@@ -63,10 +67,23 @@ public struct ConcertBlurb: View {
   }
 
   public var body: some View {
-    HStack {
-      PerformersView(performers: performers, firstTimeArtistIDs: firstTimeArtistIDs)
-      Spacer()
-      detailsView
+    if dynamicTypeSize.isAccessibilitySize {
+      // Side by side leaves each column too narrow at these sizes, so the venue and date go below.
+      VStack(alignment: .leading, spacing: 4) {
+        PerformersView(performers: performers, firstTimeArtistIDs: firstTimeArtistIDs)
+        detailsView(alignment: .leading)
+      }
+    } else {
+      HStack {
+        // The lineup wraps before it truncates; the venue wraps in the room that is left.
+        PerformersView(performers: performers, firstTimeArtistIDs: firstTimeArtistIDs)
+          .layoutPriority(1)
+        Spacer(minLength: 8)
+        detailsView(alignment: .trailing)
+          .multilineTextAlignment(.trailing)
+          .frame(minWidth: detailsMinimumWidth, alignment: .trailing)
+          .fixedSize(horizontal: false, vertical: true)
+      }
     }
   }
 }
@@ -107,4 +124,29 @@ private let previewShow = ShowDigest(
 #Preview("Relative To") {
   ConcertBlurb(
     digest: previewShow, dateFormat: .relativeTo(.now.addingTimeInterval(-86_400 * 365)))
+}
+
+private let longNamesShow = ShowDigest(
+  id: .show("sh1"),
+  date: PartialDate(year: 2010, month: 4, day: 6),
+  performers: [
+    ArchiveItem(id: .artist("ar0"), name: "PG-13"),
+    ArchiveItem(id: .artist("ar1"), name: "Concept The Electric Octopus And The Long Name Band"),
+    ArchiveItem(id: .artist("ar2"), name: "The Angels"),
+  ],
+  venue: "Carousel Lounge And Grill At The Corner Of Seventh And Brazos",
+  venueID: .venue("v1"),
+  location: Location(city: "Austin", state: "TX"),
+  comment: nil,
+  firstTimeArtistIDs: [.artist("ar1")], isFirstTimeVenue: true)
+
+#Preview("Long Names") {
+  ConcertBlurb(digest: longNamesShow, dateFormat: .noYear)
+    .padding()
+}
+
+#Preview("Long Names, Accessibility") {
+  ConcertBlurb(digest: longNamesShow, dateFormat: .noYear)
+    .padding()
+    .dynamicTypeSize(.accessibility2)
 }
