@@ -19,11 +19,13 @@ public struct ShowDigest: Codable, Equatable, Hashable, Identifiable, PathRestor
   public let comment: String?
   /// The performers this show was the first time seeing, by id.
   public let firstTimeArtistIDs: Set<ArchivePath>
+  /// Whether this show was the first time at its venue.
+  public let isFirstTimeVenue: Bool
 
   public init(
     id: ArchivePath, date: PartialDate, performers: [ArchiveItem], venue: String,
     venueID: ArchivePath, location: Location, comment: String?,
-    firstTimeArtistIDs: Set<ArchivePath> = []
+    firstTimeArtistIDs: Set<ArchivePath> = [], isFirstTimeVenue: Bool = false
   ) {
     self.id = id
     self.date = date
@@ -33,6 +35,7 @@ public struct ShowDigest: Codable, Equatable, Hashable, Identifiable, PathRestor
     self.location = location
     self.comment = comment
     self.firstTimeArtistIDs = firstTimeArtistIDs
+    self.isFirstTimeVenue = isFirstTimeVenue
   }
 
   /// Snapshots written before the first times were known don't have them.
@@ -47,7 +50,9 @@ public struct ShowDigest: Codable, Equatable, Hashable, Identifiable, PathRestor
       location: try container.decode(Location.self, forKey: .location),
       comment: try container.decodeIfPresent(String.self, forKey: .comment),
       firstTimeArtistIDs: try container.decodeIfPresent(
-        Set<ArchivePath>.self, forKey: .firstTimeArtistIDs) ?? [])
+        Set<ArchivePath>.self, forKey: .firstTimeArtistIDs) ?? [],
+      isFirstTimeVenue: try container.decodeIfPresent(Bool.self, forKey: .isFirstTimeVenue)
+        ?? false)
   }
 
   public var performerNames: [String] { performers.map { $0.name } }

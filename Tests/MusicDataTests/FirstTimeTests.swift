@@ -72,19 +72,37 @@ struct FirstTimeTests {
     #expect(second.firstTimePerformerNames == ["B Artist"])
   }
 
+  @Test func onlyTheFirstShowAtAVenueIsMarked() async throws {
+    let shows = [
+      Show(
+        artists: [artist1.id], date: PartialDate(year: 1996, month: 12, day: 15), id: "sh0",
+        venue: venue.id),
+      Show(
+        artists: [artist2.id], date: PartialDate(year: 1997, month: 1, day: 2), id: "sh1",
+        venue: venue.id),
+    ]
+    let vault = try await createVault(artists: [artist1, artist2], shows: shows, venues: [venue])
+
+    #expect(try #require(vault.digest(show: .show("sh0"))).isFirstTimeVenue)
+    #expect(!(try #require(vault.digest(show: .show("sh1"))).isFirstTimeVenue))
+  }
+
   @Test func decodesWithoutFirstTimes() throws {
     let show = ShowDigest(
       id: .show("sh0"), date: PartialDate(year: 1996, month: 12, day: 15),
       performers: [ArchiveItem(id: .artist("ar0"), name: "A Artist")], venue: "A Venue",
       venueID: .venue("v0"), location: Location(city: "city", state: "CA"), comment: nil,
-      firstTimeArtistIDs: [.artist("ar0")])
+      firstTimeArtistIDs: [.artist("ar0")], isFirstTimeVenue: true)
 
     let data = try JSONEncoder().encode(show)
     #expect(try JSONDecoder().decode(ShowDigest.self, from: data) == show)
 
     var object = try #require(JSONSerialization.jsonObject(with: data) as? [String: Any])
     object.removeValue(forKey: "firstTimeArtistIDs")
+    object.removeValue(forKey: "isFirstTimeVenue")
     let old = try JSONSerialization.data(withJSONObject: object)
-    #expect(try JSONDecoder().decode(ShowDigest.self, from: old).firstTimeArtistIDs.isEmpty)
+    let decoded = try JSONDecoder().decode(ShowDigest.self, from: old)
+    #expect(decoded.firstTimeArtistIDs.isEmpty)
+    #expect(!decoded.isFirstTimeVenue)
   }
 }

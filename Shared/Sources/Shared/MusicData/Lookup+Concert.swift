@@ -9,7 +9,7 @@ import Foundation
 
 extension Lookup {
   fileprivate func showDigest(show: Show, showId: ID) -> ShowDigest? {
-    guard let venue = venueForShow(showID: showId) else { return nil }
+    guard let venueID = venues(showID: showId), let venue = venueMap[venueID] else { return nil }
     let artists = artists(showID: showId).compactMap { id in artistMap[id].map { (id, $0) } }
     let performers = artists.map { ArchiveItem(id: $1.archivePath, name: $1.name) }
     let firstTimeArtistIDs = Set(
@@ -23,7 +23,8 @@ extension Lookup {
       venueID: venue.archivePath,
       location: venue.location,
       comment: show.comment,
-      firstTimeArtistIDs: firstTimeArtistIDs)
+      firstTimeArtistIDs: firstTimeArtistIDs,
+      isFirstTimeVenue: rankDigest(venue: venueID).firstSet.isFirst(on: show.date))
   }
 
   func showDigest(showId: ID) -> ShowDigest? {

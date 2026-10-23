@@ -20,21 +20,23 @@ public struct ConcertBlurb: View {
   let performers: [String]
   let dateFormat: DateFormat
   let firstTimePerformers: Set<String>
+  let isFirstTimeVenue: Bool
 
   public init(
     venue: String, date: PartialDate, performers: [String], dateFormat: DateFormat,
-    firstTimePerformers: Set<String> = []
+    firstTimePerformers: Set<String> = [], isFirstTimeVenue: Bool = false
   ) {
     self.venue = venue
     self.date = date
     self.performers = performers
     self.dateFormat = dateFormat
     self.firstTimePerformers = firstTimePerformers
+    self.isFirstTimeVenue = isFirstTimeVenue
   }
 
   @ViewBuilder private var detailsView: some View {
     VStack(alignment: .trailing) {
-      Text(venue).font(.headline)
+      VenueName(name: venue, isFirstTime: isFirstTimeVenue).font(.headline)
       switch dateFormat {
       case .noYear:
         Text(date.formatted(.noYear))
@@ -76,7 +78,8 @@ extension ConcertBlurb {
       date: digest.date,
       performers: digest.performerNames,
       dateFormat: dateFormat,
-      firstTimePerformers: digest.firstTimePerformerNames)
+      firstTimePerformers: digest.firstTimePerformerNames,
+      isFirstTimeVenue: digest.isFirstTimeVenue)
   }
 }
 
@@ -91,7 +94,7 @@ private let previewShow = ShowDigest(
   venueID: .venue("v0"),
   location: Location(city: "San Francisco", state: "CA"),
   comment: nil,
-  firstTimeArtistIDs: [.artist("ar1")])
+  firstTimeArtistIDs: [.artist("ar1")], isFirstTimeVenue: true)
 
 #Preview("No Year") {
   ConcertBlurb(digest: previewShow, dateFormat: .noYear)

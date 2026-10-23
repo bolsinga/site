@@ -8,6 +8,33 @@
 import Foundation
 import SwiftUI
 
+/// A name, followed by a sparkle when it was the first time.
+private struct FirstTimeName: View {
+  let name: String
+  let isFirstTime: Bool
+  let accessibilityLabel: Text
+
+  @ScaledMetric(relativeTo: .caption2) private var sparkleSize = 9.0
+
+  private var sparkle: Text {
+    Text(Image(systemName: "sparkles")).font(.system(size: sparkleSize))
+      .foregroundStyle(.tint)
+  }
+
+  var body: some View {
+    if isFirstTime {
+      // A non breaking space keeps the sparkle from wrapping onto a line by itself.
+      Text("\(name)\u{00A0}\(sparkle)")
+        .accessibilityLabel(accessibilityLabel)
+        #if !os(tvOS)
+          .help(Text("First Show"))
+        #endif
+    } else {
+      Text(name)
+    }
+  }
+}
+
 /// A performer's name, followed by a sparkle when it was the first time seeing them.
 public struct PerformerName: View {
   let name: String
@@ -18,24 +45,25 @@ public struct PerformerName: View {
     self.isFirstTime = isFirstTime
   }
 
-  @ScaledMetric(relativeTo: .caption2) private var sparkleSize = 9.0
+  public var body: some View {
+    FirstTimeName(
+      name: name, isFirstTime: isFirstTime, accessibilityLabel: Text("First time seeing \(name)"))
+  }
+}
 
-  private var sparkle: Text {
-    Text(Image(systemName: "sparkles")).font(.system(size: sparkleSize))
-      .foregroundStyle(.tint)
+/// A venue's name, followed by a sparkle when it was the first time at it.
+public struct VenueName: View {
+  let name: String
+  let isFirstTime: Bool
+
+  public init(name: String, isFirstTime: Bool) {
+    self.name = name
+    self.isFirstTime = isFirstTime
   }
 
   public var body: some View {
-    if isFirstTime {
-      // A non breaking space keeps the sparkle from wrapping onto a line by itself.
-      Text("\(name)\u{00A0}\(sparkle)")
-        .accessibilityLabel(Text("First time seeing \(name)"))
-        #if !os(tvOS)
-          .help(Text("First Show"))
-        #endif
-    } else {
-      Text(name)
-    }
+    FirstTimeName(
+      name: name, isFirstTime: isFirstTime, accessibilityLabel: Text("First time at \(name)"))
   }
 }
 
