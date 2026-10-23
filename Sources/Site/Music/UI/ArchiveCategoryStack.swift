@@ -10,6 +10,7 @@ import SwiftUI
 
 struct ArchiveCategoryStack: View {
   @Environment(VaultModel.self) var model
+  @Environment(\.archiveNavigationState) private var navigationState
 
   let category: ArchiveCategory
   @Binding var path: [ArchivePath]
@@ -24,7 +25,15 @@ struct ArchiveCategoryStack: View {
   @State private var artistSearchString: String = ""
   @State private var venueSearchString: String = ""
 
-  @State private var showNearbyDistanceSettings: Bool = false
+  /// The navigation state the settings sheet was presented in. The sheet only shows while the
+  /// state is unchanged, so an external URL or activity that navigates dismisses it.
+  @State private var settingsPresentedState: ArchiveNavigation.State?
+
+  private var showNearbyDistanceSettings: Binding<Bool> {
+    Binding(
+      get: { settingsPresentedState == navigationState },
+      set: { settingsPresentedState = $0 ? navigationState : nil })
+  }
 
   @ViewBuilder private var summary: some View {
     switch category {
@@ -51,7 +60,7 @@ struct ArchiveCategoryStack: View {
     NavigationStack(path: $path) {
       summary
         .refreshable { await reloadModel() }
-        .sheet(isPresented: $showNearbyDistanceSettings) {
+        .sheet(isPresented: showNearbyDistanceSettings) {
           SettingsView()
             .presentationDetents([.medium])
         }
@@ -63,7 +72,7 @@ struct ArchiveCategoryStack: View {
             category: category,
             venueSort: $venueSort,
             artistSort: $artistSort,
-            showNearbyDistanceSettings: $showNearbyDistanceSettings,
+            showNearbyDistanceSettings: showNearbyDistanceSettings,
             venuesMode: $venuesMode)
         }
     }
