@@ -17,20 +17,20 @@ public struct ConcertBlurb: View {
 
   let venue: String
   let date: PartialDate
-  let performers: [String]
+  let performers: [ArchiveItem]
   let dateFormat: DateFormat
-  let firstTimePerformers: Set<String>
+  let firstTimeArtistIDs: Set<ArchivePath>
   let isFirstTimeVenue: Bool
 
   public init(
-    venue: String, date: PartialDate, performers: [String], dateFormat: DateFormat,
-    firstTimePerformers: Set<String> = [], isFirstTimeVenue: Bool = false
+    venue: String, date: PartialDate, performers: [ArchiveItem], dateFormat: DateFormat,
+    firstTimeArtistIDs: Set<ArchivePath> = [], isFirstTimeVenue: Bool = false
   ) {
     self.venue = venue
     self.date = date
     self.performers = performers
     self.dateFormat = dateFormat
-    self.firstTimePerformers = firstTimePerformers
+    self.firstTimeArtistIDs = firstTimeArtistIDs
     self.isFirstTimeVenue = isFirstTimeVenue
   }
 
@@ -64,7 +64,7 @@ public struct ConcertBlurb: View {
 
   public var body: some View {
     HStack {
-      PerformersView(performers: performers, firstTimePerformers: firstTimePerformers)
+      PerformersView(performers: performers, firstTimeArtistIDs: firstTimeArtistIDs)
       Spacer()
       detailsView
     }
@@ -76,9 +76,9 @@ extension ConcertBlurb {
     self.init(
       venue: digest.venue,
       date: digest.date,
-      performers: digest.performerNames,
+      performers: digest.performers,
       dateFormat: dateFormat,
-      firstTimePerformers: digest.firstTimePerformerNames,
+      firstTimeArtistIDs: digest.firstTimeArtistIDs,
       isFirstTimeVenue: digest.isFirstTimeVenue)
   }
 }

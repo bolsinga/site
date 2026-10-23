@@ -65,11 +65,9 @@ struct FirstTimeTests {
 
     let first = try #require(vault.digest(show: .show("sh0")))
     #expect(first.firstTimeArtistIDs == [.artist("ar0")])
-    #expect(first.firstTimePerformerNames == ["A Artist"])
 
     let second = try #require(vault.digest(show: .show("sh1")))
     #expect(second.firstTimeArtistIDs == [.artist("ar1")])
-    #expect(second.firstTimePerformerNames == ["B Artist"])
   }
 
   @Test func onlyTheFirstShowAtAVenueIsMarked() async throws {
