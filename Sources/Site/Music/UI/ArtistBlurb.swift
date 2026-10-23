@@ -11,18 +11,21 @@ import SwiftUI
 struct ArtistBlurb: View {
   let count: Int
   let venue: String
+  var isFirstTimeVenue = false
   let date: PartialDate
 
   var body: some View {
     // Laid out explicitly: outside of a List, LabeledContent doesn't push the value to the trailing edge or make it secondary.
     HStack {
       VStack(alignment: .leading) {
-        Text(venue)
+        VenueName(name: venue, isFirstTime: isFirstTimeVenue)
         Text(date.formatted(.compact))
           .font(.subheadline)
           .foregroundStyle(.secondary)
       }
-      Spacer()
+      // The venue wraps before the count does.
+      .layoutPriority(1)
+      Spacer(minLength: 8)
       Text("\(count) Artist(s)")
         .foregroundStyle(.secondary)
     }
@@ -31,7 +34,9 @@ struct ArtistBlurb: View {
 
 extension ArtistBlurb {
   fileprivate init(digest: ShowDigest) {
-    self.init(count: digest.performers.count, venue: digest.venue, date: digest.date)
+    self.init(
+      count: digest.performers.count, venue: digest.venue,
+      isFirstTimeVenue: digest.isFirstTimeVenue, date: digest.date)
   }
 }
 

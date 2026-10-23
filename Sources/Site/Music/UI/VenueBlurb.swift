@@ -23,7 +23,8 @@ struct VenueBlurb: View {
   var body: some View {
     HStack {
       PerformersView(performers: performers, firstTimeArtistIDs: firstTimeArtistIDs)
-      Spacer()
+        .layoutPriority(1)
+      Spacer(minLength: 8)
       detailsView
     }
   }
