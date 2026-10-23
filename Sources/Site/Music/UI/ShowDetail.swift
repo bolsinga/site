@@ -42,7 +42,7 @@ struct ShowDetail: View {
       ArchivePathLink(archivePath: concert.venueID, isPathNavigable: isPathNavigable) {
         DetailRowLabel(isNavigable: isPathNavigable(concert.venueID)) {
           VStack(alignment: .leading) {
-            Text(venueName)
+            VenueName(name: venueName, isFirstTime: concert.isFirstTimeVenue)
               .font(.title2.bold())
             Text("\(concert.location.city), \(concert.location.state)")
               .foregroundStyle(.secondary)
