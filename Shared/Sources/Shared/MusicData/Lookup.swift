@@ -296,6 +296,27 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
     bracket.venueRankDigestMap[venue] ?? .empty
   }
 
+  /// How many of `digests` have their first show in `annum`.
+  ///
+  /// The first set date's year decides, so a first show with just a year still counts. Nothing
+  /// is new in the unknown annum, and neither is anything without a first set.
+  private func newCount(in annum: Annum, digests: [ID: RankDigest]) -> Int {
+    guard case .year(let year) = annum else { return 0 }
+    return digests.values.count {
+      $0.firstSet.rank != .unknown && $0.firstSet.date.year == year
+    }
+  }
+
+  /// The number of artists whose first show was in `annum`.
+  func newArtistCount(in annum: Annum) -> Int {
+    newCount(in: annum, digests: bracket.artistRankDigestMap)
+  }
+
+  /// The number of venues whose first show was in `annum`.
+  func newVenueCount(in annum: Annum) -> Int {
+    newCount(in: annum, digests: bracket.venueRankDigestMap)
+  }
+
   /// Returns venues related to the given venue.
   ///
   /// Relatedness is domain-specific (e.g., shared characteristics or associations) and is
