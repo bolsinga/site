@@ -34,6 +34,8 @@ struct DayList: View {
             if hasMapHeader {
               ShowsMapHeader(shows: concerts, title: String(localized: dayOfLeapYear.relativeTitle))
             }
+            FirstTimesCard(shows: concerts)
+              .padding(.horizontal)
             DetailCard(title: Text("Shows")) {
               ForEach(concerts) { concert in
                 NavigationLink(value: concert.archivePath) {

@@ -140,6 +140,35 @@ struct FirstTimeTests {
     #expect(year1997.newVenueCount == 1)
   }
 
+  @Test func firstTimesAreCountedAcrossShows() async throws {
+    let venue2 = Venue(id: "v1", location: Location(city: "city", state: "CA"), name: "B Venue")
+    let shows = [
+      Show(
+        artists: [artist1.id], date: PartialDate(year: 1996, month: 12, day: 15), id: "sh0",
+        venue: venue.id),
+      Show(
+        artists: [artist1.id, artist2.id], date: PartialDate(year: 1997, month: 1, day: 2),
+        id: "sh1", venue: venue.id),
+      Show(
+        artists: [artist1.id], date: PartialDate(year: 1998, month: 1, day: 2), id: "sh2",
+        venue: venue2.id),
+    ]
+    let vault = try await createVault(
+      artists: [artist1, artist2], shows: shows, venues: [venue, venue2])
+    let digests = try ["sh0", "sh1", "sh2"].map { try #require(vault.digest(show: .show($0))) }
+
+    #expect(digests.firstTimeArtistCount == 2)
+    #expect(digests.firstTimeVenueCount == 2)
+
+    // Seeing the same artist or venue first only counts once, and shows after the first count none.
+    #expect(Array(digests[0...0]).firstTimeArtistCount == 1)
+    #expect(Array(digests[1...1]).firstTimeArtistCount == 1)
+    #expect(Array(digests[1...1]).firstTimeVenueCount == 0)
+    #expect(Array(digests[2...2]).firstTimeArtistCount == 0)
+    #expect(Array(digests[2...2]).firstTimeVenueCount == 1)
+    #expect([ShowDigest]().firstTimeArtistCount == 0)
+  }
+
   @Test func showsOnTheSameDateRankInIDOrder() async throws {
     let date = PartialDate(year: 1997, month: 3, day: 14)
     // Listed out of order, and "sh10" sorts before "sh9" as text.

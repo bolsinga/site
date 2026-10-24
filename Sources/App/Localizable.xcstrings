@@ -26,6 +26,18 @@
         }
       }
     },
+    "**%lld** New Artist" : {
+
+    },
+    "**%lld** New Artists" : {
+
+    },
+    "**%lld** New Venue" : {
+
+    },
+    "**%lld** New Venues" : {
+
+    },
     "**%lld** Shows" : {
       "localizations" : {
         "en" : {
@@ -320,6 +332,9 @@
 
     },
     "Filter Nearby" : {
+
+    },
+    "First Times" : {
 
     },
     "Geocoding…" : {

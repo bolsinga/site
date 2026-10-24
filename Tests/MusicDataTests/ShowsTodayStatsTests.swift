@@ -104,4 +104,26 @@ struct ShowsTodayStatsTests {
     #expect(ShowsTodayRelevance.score(showCount: 4, busiestDayCount: 0) == 1)
     #expect(ShowsTodayRelevance.score(showCount: 4, busiestDayCount: 2) == 1)
   }
+
+  @Test func firstTimesAreCounted() {
+    let first = ShowDigest(
+      id: .show("sh0"), date: PartialDate(year: 1991, month: 10, day: 17),
+      performers: [
+        ArchiveItem(id: .artist("ar0"), name: "A"), ArchiveItem(id: .artist("ar1"), name: "B"),
+      ], venue: "V", venueID: .venue("v0"), location: Location(city: "city", state: "CA"),
+      comment: nil, firstTimeArtistIDs: [.artist("ar0"), .artist("ar1")], isFirstTimeVenue: true)
+    let later = ShowDigest(
+      id: .show("sh1"), date: PartialDate(year: 1996, month: 10, day: 17),
+      performers: [ArchiveItem(id: .artist("ar2"), name: "C")], venue: "W",
+      venueID: .venue("v1"), location: Location(city: "city", state: "CA"), comment: nil,
+      firstTimeArtistIDs: [.artist("ar2")])
+
+    let stats = ShowsTodayStats(shows: [first, later])
+    #expect(stats.newArtistCount == 3)
+    #expect(stats.newVenueCount == 1)
+
+    let none = ShowsTodayStats(shows: [show(0, year: 1991, venue: "A")])
+    #expect(none.newArtistCount == 0)
+    #expect(none.newVenueCount == 0)
+  }
 }
