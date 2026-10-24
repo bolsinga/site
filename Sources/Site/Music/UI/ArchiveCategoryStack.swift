@@ -56,6 +56,12 @@ struct ArchiveCategoryStack: View {
     }
   }
 
+  /// Swiping between years changes the year on the path, so it always names the year shown.
+  private func showAnnum(_ annum: Annum) {
+    guard case .year = path.last, path.last != .year(annum) else { return }
+    path[path.count - 1] = .year(annum)
+  }
+
   var body: some View {
     NavigationStack(path: $path) {
       summary
@@ -65,7 +71,9 @@ struct ArchiveCategoryStack: View {
             .presentationDetents([.medium])
         }
         .navigationDestination(for: ArchivePath.self) {
-          $0.destination(vault: model.vault, isPathNavigable: path.isPathNavigable(_:))
+          $0.destination(
+            vault: model.vault, isPathNavigable: path.isPathNavigable(_:),
+            didShowAnnum: showAnnum(_:))
         }
         .toolbar {
           ArchiveCategoryToolbarContent(
