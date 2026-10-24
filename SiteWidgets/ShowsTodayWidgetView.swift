@@ -78,13 +78,19 @@ struct ShowsTodayWidgetView: View {
       switch state {
       case .shows(let featured, let others):
         VStack(alignment: .leading, spacing: 1) {
-          Text(featured.performerNames.first ?? featured.venue)
-            .font(.headline)
-            .lineLimit(1)
-            .minimumScaleFactor(0.7)
-            .widgetAccentable()
+          Group {
+            if let headliner = featured.performerNames.first {
+              PerformerName(name: headliner, isFirstTime: featured.isFirstTimeHeadliner)
+            } else {
+              VenueName(name: featured.venue, isFirstTime: featured.isFirstTimeVenue)
+            }
+          }
+          .font(.headline)
+          .lineLimit(1)
+          .minimumScaleFactor(0.7)
+          .widgetAccentable()
           HStack(spacing: 4) {
-            Text(featured.venue)
+            VenueName(name: featured.venue, isFirstTime: featured.isFirstTimeVenue)
               .lineLimit(1)
             if let year = featured.date.year {
               Text("·")
@@ -175,6 +181,11 @@ extension ShowDigest {
   fileprivate var url: URL? {
     URL.archiveRoot.flatMap { archivePath.url(using: $0) }
   }
+
+  /// Whether the headliner was seen for the first time at this show.
+  fileprivate var isFirstTimeHeadliner: Bool {
+    performers.first.map { firstTimeArtistIDs.contains($0.id) } ?? false
+  }
 }
 
 /// Accented mode (tinted iOS Home Screen, dimmed macOS desktop) recolors the capsule and its text
@@ -210,13 +221,13 @@ private struct FeaturedShowView: View {
     VStack(alignment: .leading, spacing: 4) {
       if let headliner = show.performerNames.first {
         // Long names shrink a little, then truncate; the headliner wins vertical space.
-        Text(headliner)
+        PerformerName(name: headliner, isFirstTime: show.isFirstTimeHeadliner)
           .font(.headline)
           .lineLimit(2)
           .minimumScaleFactor(0.8)
           .layoutPriority(1)
       }
-      Text(show.venue)
+      VenueName(name: show.venue, isFirstTime: show.isFirstTimeVenue)
         .font(.subheadline)
         .foregroundStyle(.secondary)
         .lineLimit(1)
@@ -508,9 +519,15 @@ private struct ShowRow: View {
   var body: some View {
     HStack(alignment: .firstTextBaseline, spacing: 4) {
       // Truncate rather than shrink, so every row keeps the same text size.
-      Text(show.performerNames.first ?? show.venue)
-        .font(.subheadline)
-        .lineLimit(1)
+      Group {
+        if let headliner = show.performerNames.first {
+          PerformerName(name: headliner, isFirstTime: show.isFirstTimeHeadliner)
+        } else {
+          VenueName(name: show.venue, isFirstTime: show.isFirstTimeVenue)
+        }
+      }
+      .font(.subheadline)
+      .lineLimit(1)
       Spacer(minLength: 0)
       if let year = show.date.year {
         Text(year, format: .number.grouping(.never))
