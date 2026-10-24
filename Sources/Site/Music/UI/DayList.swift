@@ -13,11 +13,17 @@ struct DayList: View {
   let dayOfLeapYear: Int
   /// Whether the list shows its own map. A container showing one map for several days leaves it out.
   fileprivate let hasMapHeader: Bool
+  /// Room left under the last row for something floating over the bottom of the list.
+  fileprivate let bottomContentMargin: CGFloat
 
-  internal init(concerts: [ShowDigest], dayOfLeapYear: Int, hasMapHeader: Bool = true) {
+  internal init(
+    concerts: [ShowDigest], dayOfLeapYear: Int, hasMapHeader: Bool = true,
+    bottomContentMargin: CGFloat = 0
+  ) {
     self.concerts = concerts
     self.dayOfLeapYear = dayOfLeapYear
     self.hasMapHeader = hasMapHeader
+    self.bottomContentMargin = bottomContentMargin
   }
 
   var body: some View {
@@ -52,6 +58,7 @@ struct DayList: View {
             .padding(.horizontal)
           }
         }
+        .contentMargins(.bottom, bottomContentMargin, for: .scrollContent)
         .background(hasMapHeader ? AnyShapeStyle(.background) : AnyShapeStyle(.clear))
       }
     }
