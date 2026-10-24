@@ -66,6 +66,7 @@ extension Lookup {
   func annumDigest(id annumID: AnnumID) -> AnnumDigest? {
     guard let annum = annumMap[annumID] else { return nil }
     return AnnumDigest(
-      annum: annum, shows: showDigests(annumID: annumID), rank: rankDigest(annum: annumID))
+      annum: annum, shows: showDigests(annumID: annumID), rank: rankDigest(annum: annumID),
+      newArtistCount: newArtistCount(in: annum), newVenueCount: newVenueCount(in: annum))
   }
 }

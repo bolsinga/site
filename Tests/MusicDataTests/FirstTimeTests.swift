@@ -47,9 +47,17 @@ struct FirstTimeTests {
     #expect(!FirstSet.empty.isFirst(on: PartialDate(year: 1996, month: 12, day: 15)))
   }
 
-  @Test func partialDateIsNeverFirst() {
-    let date = PartialDate(year: 1996, month: nil, day: nil)
-    #expect(!FirstSet(rank: .rank(1), date: date).isFirst(on: date))
+  @Test func partialDateIsFirstOnItself() {
+    let year = PartialDate(year: 1996, month: nil, day: nil)
+    #expect(FirstSet(rank: .rank(1), date: year).isFirst(on: year))
+    #expect(!FirstSet(rank: .rank(1), date: year).isFirst(on: PartialDate(year: 1996, month: 3, day: 4)))
+
+    let yearMonth = PartialDate(year: 1996, month: 8, day: nil)
+    #expect(FirstSet(rank: .rank(1), date: yearMonth).isFirst(on: yearMonth))
+  }
+
+  @Test func unknownDateIsNeverFirst() {
+    #expect(!FirstSet(rank: .rank(1), date: PartialDate()).isFirst(on: PartialDate()))
   }
 
   @Test func onlyTheFirstShowOfAnArtistIsMarked() async throws {
@@ -83,6 +91,68 @@ struct FirstTimeTests {
 
     #expect(try #require(vault.digest(show: .show("sh0"))).isFirstTimeVenue)
     #expect(!(try #require(vault.digest(show: .show("sh1"))).isFirstTimeVenue))
+  }
+
+  @Test func yearOnlyFirstShowIsFirst() async throws {
+    let shows = [
+      Show(
+        artists: [artist1.id], date: PartialDate(year: 1997, month: nil, day: nil), id: "sh0",
+        venue: venue.id),
+      Show(
+        artists: [artist1.id], date: PartialDate(year: 1997, month: 3, day: 14), id: "sh1",
+        venue: venue.id),
+    ]
+    let vault = try await createVault(artists: [artist1], shows: shows, venues: [venue])
+
+    let first = try #require(vault.digest(show: .show("sh0")))
+    #expect(first.firstTimeArtistIDs == [.artist("ar0")])
+    #expect(first.isFirstTimeVenue)
+
+    let second = try #require(vault.digest(show: .show("sh1")))
+    #expect(second.firstTimeArtistIDs.isEmpty)
+    #expect(!second.isFirstTimeVenue)
+  }
+
+  @Test func newArtistsAndVenuesCountInTheirFirstYear() async throws {
+    let venue2 = Venue(id: "v1", location: Location(city: "city", state: "CA"), name: "B Venue")
+    let shows = [
+      Show(
+        artists: [artist1.id], date: PartialDate(year: 1996, month: 12, day: 15), id: "sh0",
+        venue: venue.id),
+      Show(
+        artists: [artist1.id, artist2.id], date: PartialDate(year: 1997, month: nil, day: nil),
+        id: "sh1", venue: venue2.id),
+      Show(
+        artists: [artist2.id], date: PartialDate(year: 1997, month: 5, day: 6), id: "sh2",
+        venue: venue.id),
+      Show(artists: [artist1.id], date: PartialDate(), id: "sh3", venue: venue.id),
+    ]
+    let vault = try await createVault(
+      artists: [artist1, artist2], shows: shows, venues: [venue, venue2])
+
+    let year1996 = try #require(vault.digest(annum: .year(.year(1996))))
+    #expect(year1996.newArtistCount == 1)
+    #expect(year1996.newVenueCount == 1)
+
+    // The artist and the venue first seen on a show with just a year are new that year.
+    let year1997 = try #require(vault.digest(annum: .year(.year(1997))))
+    #expect(year1997.newArtistCount == 1)
+    #expect(year1997.newVenueCount == 1)
+  }
+
+  @Test func showsOnTheSameDateRankInIDOrder() async throws {
+    let date = PartialDate(year: 1997, month: 3, day: 14)
+    // Listed out of order, and "sh10" sorts before "sh9" as text.
+    let shows = [
+      Show(artists: [artist2.id], date: date, id: "sh10", venue: venue.id),
+      Show(artists: [artist1.id], date: date, id: "sh9", venue: venue.id),
+    ]
+    let vault = try await createVault(artists: [artist1, artist2], shows: shows, venues: [venue])
+
+    let first = try #require(vault.digest(artist: .artist("ar0")))
+    let second = try #require(vault.digest(artist: .artist("ar1")))
+    #expect(first.rank.firstSet.rank == .rank(1))
+    #expect(second.rank.firstSet.rank == .rank(2))
   }
 
   @Test func decodesWithoutFirstTimes() throws {

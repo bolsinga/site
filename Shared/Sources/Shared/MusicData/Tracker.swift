@@ -159,7 +159,11 @@ struct Tracker<Identifier: ArchiveIdentifier> {
     signpost.start()
 
     try shows.sorted { lhs, rhs in
-      PartialDate.compareWithUnknownsMuted(lhs: lhs.date, rhs: rhs.date)
+      if lhs.date == rhs.date {
+        // Shows on the same date keep a fixed order, so the ranks don't depend on the sort.
+        return lhs.id.compare(rhs.id, options: .numeric) == .orderedAscending
+      }
+      return PartialDate.compareWithUnknownsMuted(lhs: lhs.date, rhs: rhs.date)
     }.forEach {
       try track(show: $0, identifier: identifier)
     }

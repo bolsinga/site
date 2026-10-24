@@ -18,8 +18,12 @@ public struct FirstSet: Codable, Equatable, Hashable, Sendable {
 
   /// Whether a show on `showDate` was the first time: the first date is known and is that date.
   /// Two shows on the same date both count, as the first set holds a date, not a show.
+  ///
+  /// A date with only some of its parts, like just a year, still counts: `Tracker` orders the less
+  /// specific date before the more specific ones, so that show is the first. Only a date with
+  /// nothing known can't be first.
   public func isFirst(on showDate: PartialDate) -> Bool {
-    rank != .unknown && !showDate.isPartiallyUnknown && date == showDate
+    rank != .unknown && !showDate.isUnknown && date == showDate
   }
 
   public static var empty: FirstSet {
