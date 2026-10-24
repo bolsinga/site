@@ -173,13 +173,15 @@ struct ClusterMap<
     let coordinator = context.coordinator
 
     refresh(coordinator)
-    #if canImport(UIKit)
-      // MapKit keeps its legal text in its layout margins; let them follow what covers the map.
-      if coordinator.obscuredInsets != MapEdgeInsets() {
+    if coordinator.obscuredInsets != MapEdgeInsets() {
+      #if canImport(UIKit)
+        // MapKit keeps its legal text in its layout margins; let them follow what covers the map.
         view.insetsLayoutMarginsFromSafeArea = false
         view.layoutMargins = coordinator.obscuredInsets
-      }
-    #endif
+      #else
+        view.additionalSafeAreaInsets = coordinator.obscuredInsets
+      #endif
+    }
 
     // Reading the details observes the model, so do it here, while SwiftUI is tracking this
     // update, to be updated again when it changes.
