@@ -16,7 +16,9 @@ extension Stats {
     showRanking: Ranking?,
     artistVenuesRanking: Ranking?,
     venueArtistsRanking: Ranking?,
-    alwaysShowVenuesArtistsStats: Bool
+    alwaysShowVenuesArtistsStats: Bool,
+    newVenueCount: Int? = nil,
+    newArtistCount: Int? = nil
   ) {
     self.init(
       concertsCount: shows.count,
@@ -29,7 +31,9 @@ extension Stats {
       showRanking: showRanking,
       artistVenuesRanking: artistVenuesRanking,
       venueArtistsRanking: venueArtistsRanking,
-      alwaysShowVenuesArtistsStats: alwaysShowVenuesArtistsStats)
+      alwaysShowVenuesArtistsStats: alwaysShowVenuesArtistsStats,
+      newVenueCount: newVenueCount,
+      newArtistCount: newArtistCount)
   }
 
   init(artistDigest digest: ArtistDigest) {
@@ -62,7 +66,9 @@ extension Stats {
       showRanking: digest.showRank,
       artistVenuesRanking: digest.venueRank,
       venueArtistsRanking: digest.artistRank,
-      alwaysShowVenuesArtistsStats: true)
+      alwaysShowVenuesArtistsStats: true,
+      newVenueCount: digest.newVenueCount,
+      newArtistCount: digest.newArtistCount)
   }
 
   init<Identifier: ArchiveIdentifier>(vault: Vault<Identifier>) {

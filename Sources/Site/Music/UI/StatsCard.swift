@@ -27,14 +27,17 @@ struct StatRow: View {
 
   let text: AttributedString
   var ranking: Ranking?
+  /// How many of the count were first seen, shown after it when there are any.
+  var newCount: Int?
 
-  init(text: AttributedString, ranking: Ranking? = nil) {
+  init(text: AttributedString, ranking: Ranking? = nil, newCount: Int? = nil) {
     self.text = text
     self.ranking = ranking
+    self.newCount = newCount
   }
 
-  init(count: Int, kind: StatKind, ranking: Ranking? = nil) {
-    self.init(text: kind.text(count: count), ranking: ranking)
+  init(count: Int, kind: StatKind, ranking: Ranking? = nil, newCount: Int? = nil) {
+    self.init(text: kind.text(count: count), ranking: ranking, newCount: newCount)
   }
 
   private var styledText: AttributedString {
@@ -53,15 +56,30 @@ struct StatRow: View {
     return styled
   }
 
+  /// The new count, when there are any.
+  private var shownNewCount: Int? {
+    guard let newCount, newCount > 0 else { return nil }
+    return newCount
+  }
+
   var body: some View {
     HStack(alignment: .firstTextBaseline) {
-      Text(styledText)
-        .contentTransition(.numericText())
-        .animation(reduceMotion ? nil : .default, value: text)
-        .textCase(.uppercase)
-        .lineLimit(1)
-        .minimumScaleFactor(0.3)
-        .frame(maxWidth: .infinity, alignment: .leading)
+      VStack(alignment: .leading, spacing: 0) {
+        Text(styledText)
+          .contentTransition(.numericText())
+          .animation(reduceMotion ? nil : .default, value: text)
+          .textCase(.uppercase)
+          .lineLimit(1)
+          .minimumScaleFactor(0.3)
+        if let shownNewCount {
+          Text("\(shownNewCount) New")
+            .font(.caption.weight(.semibold))
+            .textCase(.uppercase)
+            .foregroundStyle(.secondary)
+            .lineLimit(1)
+        }
+      }
+      .frame(maxWidth: .infinity, alignment: .leading)
       if let ranking, ranking.rank != .unknown {
         Text(ranking.formatted(.rankOnly))
           .font(.title3)
@@ -69,7 +87,8 @@ struct StatRow: View {
           .lineLimit(1)
       }
     }
-    .frame(maxWidth: .infinity, minHeight: rowHeight, maxHeight: rowHeight)
+    // A row with the caption below its count is allowed to be taller than the others.
+    .frame(maxWidth: .infinity, minHeight: rowHeight, maxHeight: shownNewCount == nil ? rowHeight : nil)
   }
 }
 
@@ -198,9 +217,13 @@ struct StatsCard: View {
       StatRow(
         count: stats.yearsSpanRanking?.value ?? 0, kind: .years, ranking: stats.yearsSpanRanking)
     case .venues:
-      StatRow(count: stats.venueCount, kind: .venues, ranking: stats.artistVenuesRanking)
+      StatRow(
+        count: stats.venueCount, kind: .venues, ranking: stats.artistVenuesRanking,
+        newCount: stats.newVenueCount)
     case .artists:
-      StatRow(count: stats.artistCount, kind: .artists, ranking: stats.venueArtistsRanking)
+      StatRow(
+        count: stats.artistCount, kind: .artists, ranking: stats.venueArtistsRanking,
+        newCount: stats.newArtistCount)
     case .weekday:
       ChartRow(label: StatsTitles.generic.weekday) {
         WeekdayChart(dates: stats.dates, title: titles.weekday, presentation: .card)
