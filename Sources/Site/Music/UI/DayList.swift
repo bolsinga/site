@@ -58,6 +58,9 @@ struct DayList: View {
             .padding(.horizontal)
           }
         }
+        // A pager keeps this list when it pages to another day, with the offset of the day it
+        // came from. A list for each day starts at the top, as the page it paged from did.
+        .id(dayOfLeapYear)
         .contentMargins(.bottom, bottomContentMargin, for: .scrollContent)
         .background(hasMapHeader ? AnyShapeStyle(.background) : AnyShapeStyle(.clear))
       }
