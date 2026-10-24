@@ -16,6 +16,10 @@ struct DayBrowser: View {
     case tomorrow
   }
 
+  /// How far above the bottom of the pages the system page dots reach, which a list leaves clear
+  /// under its last row. The system doesn't say, so this is the dots' size with a little room.
+  private static let pageDotsClearance: CGFloat = 44
+
   @Binding var dayOfLeapYear: Int
   @State private var selection: DayTab = .today
   @State private var layoutGeneration = 0
@@ -31,7 +35,10 @@ struct DayBrowser: View {
   @ViewBuilder private func dayList(_ dayOfLeapYear: Int) -> some View {
     DayList(
       concerts: model.concerts(on: dayOfLeapYear), dayOfLeapYear: dayOfLeapYear,
-      hasMapHeader: false)
+      hasMapHeader: false, bottomContentMargin: Self.pageDotsClearance
+    )
+    // The lists run under the page dots and the tab bar, like the other screens' lists.
+    .ignoresSafeArea(.container, edges: .bottom)
   }
 
   private var pages: some View {
@@ -61,6 +68,7 @@ struct DayBrowser: View {
       }
     }
     #if !os(macOS)
+      // The system page dots, which can be tapped to page, float over the lists.
       .indexViewStyle(.page(backgroundDisplayMode: .always))
       .tabViewStyle(.page(indexDisplayMode: .automatic))
     #endif
