@@ -12,7 +12,8 @@ import SwiftUI
 extension ArchivePath {
   @MainActor
   @ViewBuilder func destination(
-    vault: Vault<BasicIdentifier>, isPathNavigable: @escaping (ArchivePath) -> Bool
+    vault: Vault<BasicIdentifier>, isPathNavigable: @escaping (ArchivePath) -> Bool,
+    didShowAnnum: @escaping (Annum) -> Void = { _ in }
   )
     -> some View
   {
@@ -30,9 +31,10 @@ extension ArchivePath {
         ArtistDetail(digest: digest, url: vault.url(for: digest), isPathNavigable: isPathNavigable)
       }
     case .year(let annum):
-      if let digest = vault.digest(annum: annum) {
-        YearDetail(digest: digest, url: vault.url(for: digest), isPathNavigable: isPathNavigable)
-      }
+      YearBrowser(
+        annum: annum, annums: vault.decadesMap.values.flatMap { $0.keys },
+        digest: { vault.digest(annum: $0) }, url: { vault.url(for: $0) },
+        isPathNavigable: isPathNavigable, didShowAnnum: didShowAnnum)
     }
   }
 }
@@ -57,10 +59,11 @@ extension ArchivePath {
       if let digest = vault.digest(artist: self) {
         ArtistDetail(digest: digest, url: vault.url(for: digest), isPathNavigable: isPathNavigable)
       }
-    case .year(_):
-      if let digest = vault.digest(annum: self) {
-        YearDetail(digest: digest, url: vault.url(for: digest), isPathNavigable: isPathNavigable)
-      }
+    case .year(let annum):
+      YearBrowser(
+        annum: annum, annums: vault.decadesMap.values.flatMap { $0.keys },
+        digest: { vault.digest(annum: .year($0)) }, url: { vault.url(for: $0) },
+        isPathNavigable: isPathNavigable, didShowAnnum: { _ in })
     }
   }
 }

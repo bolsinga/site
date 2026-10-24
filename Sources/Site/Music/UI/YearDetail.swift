@@ -12,14 +12,8 @@ struct YearDetail: View {
   let digest: AnnumDigest
   let url: URL?
   let isPathNavigable: (ArchivePath) -> Bool
-
-  private var hasMap: Bool { !digest.shows.isEmpty }
-
-  @ViewBuilder private var headerElement: some View {
-    if hasMap {
-      ShowsMapHeader(shows: digest.shows, title: digest.annum.formatted())
-    }
-  }
+  /// Room left under the last card for something floating over the bottom of the page.
+  var bottomContentMargin: CGFloat = 0
 
   @ViewBuilder private var statsElement: some View {
     if !digest.shows.isEmpty {
@@ -49,30 +43,24 @@ struct YearDetail: View {
   var body: some View {
     ScrollView {
       VStack(spacing: 16) {
-        headerElement
-        VStack(spacing: 16) {
-          statsElement
-          showsElement
-        }
-        .padding(.horizontal)
+        statsElement
+        showsElement
       }
+      .padding(.horizontal)
     }
-    // A ScrollView is transparent, so the view beneath can show through.
-    .background(.background)
-    .modifier(MapHeaderStyle(hasMap: hasMap, title: digest.annum.formatted()))
-    .toolbar { ArchiveSharableToolbarContent(item: digest, url: url) }
+    // A pager keeps this page when it pages to another year, with the offset of the year it
+    // came from. A scroll view for each year starts at the top, as the page it paged from did.
+    .id(digest.annum)
+    .contentMargins(.bottom, bottomContentMargin, for: .scrollContent)
   }
 }
 
 #Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   NavigationStack {
-    YearDetail(
-      digest: model.previewAnnum(.year(2001)),
-      url: nil,
-      isPathNavigable: { _ in
-        true
-      }
-    )
+    YearBrowser(
+      annum: .year(2001), annums: [.year(2000), .year(2001), .year(2002)],
+      digest: { model.previewAnnum($0) }, url: { _ in nil }, isPathNavigable: { _ in true },
+      didShowAnnum: { _ in })
   }
 }
