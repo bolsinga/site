@@ -29,11 +29,18 @@ struct StatRow: View {
   var ranking: Ranking?
   /// How many of the count were first seen, shown after it when there are any.
   var newCount: Int?
+  /// Whether the count rolls when it changes. A row that is already showing the new value, as a
+  /// page of days does when its neighbor is swiped in, shouldn't roll again once the swipe ends.
+  var animatesChanges: Bool
 
-  init(text: AttributedString, ranking: Ranking? = nil, newCount: Int? = nil) {
+  init(
+    text: AttributedString, ranking: Ranking? = nil, newCount: Int? = nil,
+    animatesChanges: Bool = true
+  ) {
     self.text = text
     self.ranking = ranking
     self.newCount = newCount
+    self.animatesChanges = animatesChanges
   }
 
   init(count: Int, kind: StatKind, ranking: Ranking? = nil, newCount: Int? = nil) {
@@ -66,8 +73,8 @@ struct StatRow: View {
     HStack(alignment: .firstTextBaseline) {
       VStack(alignment: .leading, spacing: 0) {
         Text(styledText)
-          .contentTransition(.numericText())
-          .animation(reduceMotion ? nil : .default, value: text)
+          .contentTransition(animatesChanges ? .numericText() : .identity)
+          .animation(reduceMotion || !animatesChanges ? nil : .default, value: text)
           .textCase(.uppercase)
           .lineLimit(1)
           .minimumScaleFactor(0.3)

@@ -4,6 +4,16 @@
     "·" : {
 
     },
+    "%@ · %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ · %2$@"
+          }
+        }
+      }
+    },
     "%@–%@" : {
       "localizations" : {
         "en" : {
@@ -13,6 +23,12 @@
           }
         }
       }
+    },
+    "^[%lld new artist](inflect: true)" : {
+
+    },
+    "^[%lld new venue](inflect: true)" : {
+
     },
     "^[%lld show](inflect: true)" : {
 
@@ -36,6 +52,9 @@
 
     },
     "Choose which of today's shows to feature." : {
+
+    },
+    "First Times" : {
 
     },
     "Launch %@ once to load shows." : {

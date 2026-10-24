@@ -274,7 +274,11 @@ private struct MediumShowsView: View {
   }
 
   var body: some View {
-    ShowsTodayCapsule()
+    HStack(alignment: .firstTextBaseline, spacing: 8) {
+      ShowsTodayCapsule()
+      Spacer(minLength: 0)
+      FirstTimesLine(stats: ShowsTodayStats(shows: [featured] + others))
+    }
     GeometryReader { geometry in
       HStack(alignment: .top, spacing: 12) {
         ShowLink(show: featured) { FeaturedShowView(show: featured) }
@@ -303,6 +307,9 @@ private struct LargeShowsView: View {
 
   var body: some View {
     DayListHeader(showCount: shows.count)
+    // Sits close to the header, above the shows.
+    FirstTimesLine(stats: ShowsTodayStats(shows: shows))
+      .padding(.bottom, 4)
     DayShowsList(shows: shows, date: date, performerLimit: 1)
   }
 }
@@ -340,6 +347,30 @@ private struct DayListHeader: View {
     }
     // WidgetKit enlarges link tap targets; without this gap, taps on the header open row 1.
     .padding(.bottom, 8)
+  }
+}
+
+/// How many artists and venues were seen for the first time, in one small line.
+private struct FirstTimesLine: View {
+  let stats: ShowsTodayStats
+
+  private var artists: Text { Text("^[\(stats.newArtistCount) new artist](inflect: true)") }
+  private var venues: Text { Text("^[\(stats.newVenueCount) new venue](inflect: true)") }
+
+  var body: some View {
+    Group {
+      switch (stats.newArtistCount > 0, stats.newVenueCount > 0) {
+      case (true, true): Text("\(artists) · \(venues)")
+      case (true, false): artists
+      case (false, true): venues
+      case (false, false): EmptyView()
+      }
+    }
+    .font(.caption)
+    .textCase(.uppercase)
+    .foregroundStyle(.secondary)
+    .lineLimit(1)
+    .minimumScaleFactor(0.8)
   }
 }
 
@@ -405,6 +436,19 @@ private struct DayStatsView: View {
         } detail: {
           if years.lowerBound != years.upperBound {
             Text("^[\(years.upperBound - years.lowerBound) year](inflect: true) apart")
+          }
+        }
+      }
+      if stats.newArtistCount > 0 || stats.newVenueCount > 0 {
+        DayStat(label: Text("First Times")) {
+          if stats.newArtistCount > 0 {
+            Text("^[\(stats.newArtistCount) new artist](inflect: true)").textCase(.uppercase)
+          } else {
+            Text("^[\(stats.newVenueCount) new venue](inflect: true)").textCase(.uppercase)
+          }
+        } detail: {
+          if stats.newArtistCount > 0, stats.newVenueCount > 0 {
+            Text("^[\(stats.newVenueCount) new venue](inflect: true)").textCase(.uppercase)
           }
         }
       }
@@ -508,7 +552,8 @@ private struct WidgetUnavailableView: View {
 extension ShowDigest {
   fileprivate static func preview(
     _ index: Int, headliner: String, support: [String] = [], venue: String = "Sample Venue",
-    year: Int, state: String = "CA"
+    year: Int, state: String = "CA", firstTimePerformers: Set<Int> = [],
+    isFirstTimeVenue: Bool = false
   ) -> ShowDigest {
     ShowDigest(
       id: .show("sample-\(index)"),
@@ -519,18 +564,24 @@ extension ShowDigest {
       venue: venue,
       venueID: .venue(venue),
       location: Location(city: "San Francisco", state: state),
-      comment: nil)
+      comment: nil,
+      // The performers, by position in the bill, that were seen for the first time.
+      firstTimeArtistIDs: Set(firstTimePerformers.map { .artist("sample-artist-\(index)-\($0)") }),
+      isFirstTimeVenue: isFirstTimeVenue)
   }
 
   fileprivate static let previewShows: [ShowDigest] = [
-    .preview(0, headliner: "Sample Artist", support: ["Opening Act", "Local Band"], year: 1988),
+    .preview(
+      0, headliner: "Sample Artist", support: ["Opening Act", "Local Band"], year: 1988,
+      firstTimePerformers: [0, 2], isFirstTimeVenue: true),
     .preview(
       1, headliner: "Another Artist", support: ["Act Two", "Act Three", "Act Four", "Act Five"],
-      venue: "Another Venue", year: 1993, state: "TX"),
+      venue: "Another Venue", year: 1993, state: "TX", firstTimePerformers: [1],
+      isFirstTimeVenue: true),
     .preview(
       2, headliner: "Third Artist",
       support: ["Second Act", "Third Act", "Fourth Act", "Fifth Act", "Sixth Act"], year: 1998),
-    .preview(3, headliner: "Fourth Artist", year: 2001, state: "NY"),
+    .preview(3, headliner: "Fourth Artist", year: 2001, state: "NY", firstTimePerformers: [0]),
     .preview(4, headliner: "Fifth Artist", year: 2010),
     .preview(5, headliner: "Sixth Artist", year: 2016),
   ]
@@ -540,7 +591,8 @@ extension ShowDigest {
 
   fileprivate static let longNameShow = ShowDigest.preview(
     99, headliner: "Godspeed You! Black Emperor and the Extraordinarily Long Name Orchestra",
-    venue: "The Great American Music Hall of San Francisco", year: 1996)
+    venue: "The Great American Music Hall of San Francisco", year: 1996,
+    firstTimePerformers: [0], isFirstTimeVenue: true)
 }
 
 extension ShowsTodayEntry {
