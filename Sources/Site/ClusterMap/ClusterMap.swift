@@ -173,7 +173,7 @@ struct ClusterMap<
     let coordinator = context.coordinator
 
     refresh(coordinator)
-    if coordinator.obscuredInsets != MapEdgeInsets() {
+    if obscuredInsets != EdgeInsets() {
       #if canImport(UIKit)
         // MapKit keeps its legal text in its layout margins; let them follow what covers the map.
         view.insetsLayoutMarginsFromSafeArea = false
