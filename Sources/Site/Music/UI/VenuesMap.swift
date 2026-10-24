@@ -75,6 +75,10 @@ struct VenuesMap<V: Hashable & Identifiable & Nameable & PathRestorable>: View {
       .scrollEdgeEffectHidden(true, for: .all)
       .ignoresSafeArea()
     }
+    #if os(macOS)
+      // The window toolbar frosts its own background there, which the scroll view doesn't stop.
+      .toolbarBackgroundVisibility(.hidden, for: .windowToolbar)
+    #endif
     .onAppear {
       // Coming back from a venue's detail keeps the map as it was left.
       if openedDetail {
