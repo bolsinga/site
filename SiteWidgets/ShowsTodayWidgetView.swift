@@ -80,9 +80,13 @@ struct ShowsTodayWidgetView: View {
         VStack(alignment: .leading, spacing: 1) {
           Group {
             if let headliner = featured.performerNames.first {
-              PerformerName(name: headliner, isFirstTime: featured.isFirstTimeHeadliner)
+              PerformerName(
+                name: headliner, isFirstTime: featured.isFirstTimeHeadliner,
+                isMostRecent: featured.isMostRecentHeadliner)
             } else {
-              VenueName(name: featured.venue, isFirstTime: featured.isFirstTimeVenue)
+              VenueName(
+                name: featured.venue, isFirstTime: featured.isFirstTimeVenue,
+                isMostRecent: featured.isMostRecentVenue)
             }
           }
           .font(.headline)
@@ -90,7 +94,9 @@ struct ShowsTodayWidgetView: View {
           .minimumScaleFactor(0.7)
           .widgetAccentable()
           HStack(spacing: 4) {
-            VenueName(name: featured.venue, isFirstTime: featured.isFirstTimeVenue)
+            VenueName(
+                name: featured.venue, isFirstTime: featured.isFirstTimeVenue,
+                isMostRecent: featured.isMostRecentVenue)
               .lineLimit(1)
             if let year = featured.date.year {
               Text("·")
@@ -186,6 +192,11 @@ extension ShowDigest {
   fileprivate var isFirstTimeHeadliner: Bool {
     performers.first.map { firstTimeArtistIDs.contains($0.id) } ?? false
   }
+
+  /// Whether this show was the most recent time seeing the headliner.
+  fileprivate var isMostRecentHeadliner: Bool {
+    performers.first.map { mostRecentArtistIDs.contains($0.id) } ?? false
+  }
 }
 
 /// Accented mode (tinted iOS Home Screen, dimmed macOS desktop) recolors the capsule and its text
@@ -221,13 +232,16 @@ private struct FeaturedShowView: View {
     VStack(alignment: .leading, spacing: 4) {
       if let headliner = show.performerNames.first {
         // Long names shrink a little, then truncate; the headliner wins vertical space.
-        PerformerName(name: headliner, isFirstTime: show.isFirstTimeHeadliner)
+        PerformerName(
+          name: headliner, isFirstTime: show.isFirstTimeHeadliner,
+          isMostRecent: show.isMostRecentHeadliner)
           .font(.headline)
           .lineLimit(2)
           .minimumScaleFactor(0.8)
           .layoutPriority(1)
       }
-      VenueName(name: show.venue, isFirstTime: show.isFirstTimeVenue)
+      VenueName(
+        name: show.venue, isFirstTime: show.isFirstTimeVenue, isMostRecent: show.isMostRecentVenue)
         .font(.subheadline)
         .foregroundStyle(.secondary)
         .lineLimit(1)
@@ -288,7 +302,7 @@ private struct MediumShowsView: View {
     HStack(alignment: .firstTextBaseline, spacing: 8) {
       ShowsTodayCapsule()
       Spacer(minLength: 0)
-      FirstTimesLine(stats: ShowsTodayStats(shows: [featured] + others))
+      DayCountsLines(stats: ShowsTodayStats(shows: [featured] + others), alignment: .trailing)
     }
     GeometryReader { geometry in
       HStack(alignment: .top, spacing: 12) {
@@ -319,7 +333,7 @@ private struct LargeShowsView: View {
   var body: some View {
     DayListHeader(showCount: shows.count)
     // Sits close to the header, above the shows.
-    FirstTimesLine(stats: ShowsTodayStats(shows: shows))
+    DayCountsLines(stats: ShowsTodayStats(shows: shows), alignment: .leading)
       .padding(.bottom, 4)
     DayShowsList(shows: shows, date: date, performerLimit: 1)
   }
@@ -361,20 +375,45 @@ private struct DayListHeader: View {
   }
 }
 
-/// How many artists and venues were seen for the first time, in one small line.
-private struct FirstTimesLine: View {
+/// How many of the day's artists and venues were new and last seen or visited, in small lines.
+///
+/// An artist or venue count with both reads "ARTISTS 2 NEW 1 LAST SEEN" on a line of its own.
+/// Otherwise the counts are short enough to share one line.
+private struct DayCountsLines: View {
   let stats: ShowsTodayStats
+  let alignment: HorizontalAlignment
 
-  private var artists: Text { Text("^[\(stats.newArtistCount) new artist](inflect: true)") }
-  private var venues: Text { Text("^[\(stats.newVenueCount) new venue](inflect: true)") }
+  private var artists: (text: Text, isCombined: Bool)? {
+    let new = stats.newArtistCount
+    let recent = stats.mostRecentArtistCount
+    switch (new > 0, recent > 0) {
+    case (true, true): return (Text("Artists \(new) new \(recent) last seen"), true)
+    case (true, false): return (Text("^[\(new) new artist](inflect: true)"), false)
+    case (false, true): return (Text("\(recent) last seen"), false)
+    case (false, false): return nil
+    }
+  }
+
+  private var venues: (text: Text, isCombined: Bool)? {
+    let new = stats.newVenueCount
+    let recent = stats.mostRecentVenueCount
+    switch (new > 0, recent > 0) {
+    case (true, true): return (Text("Venues \(new) new \(recent) last visited"), true)
+    case (true, false): return (Text("^[\(new) new venue](inflect: true)"), false)
+    case (false, true): return (Text("\(recent) last visited"), false)
+    case (false, false): return nil
+    }
+  }
 
   var body: some View {
-    Group {
-      switch (stats.newArtistCount > 0, stats.newVenueCount > 0) {
-      case (true, true): Text("\(artists) · \(venues)")
-      case (true, false): artists
-      case (false, true): venues
-      case (false, false): EmptyView()
+    let artists = artists
+    let venues = venues
+    VStack(alignment: alignment, spacing: 0) {
+      if let artists, let venues, !artists.isCombined, !venues.isCombined {
+        Text("\(artists.text) · \(venues.text)")
+      } else {
+        if let artists { artists.text }
+        if let venues { venues.text }
       }
     }
     .font(.caption)
@@ -403,7 +442,9 @@ private struct DayShowsList: View {
               venue: show.venue, date: show.date,
               performers: Array(show.performers.prefix(performerLimit)),
               dateFormat: .relativeTo(date), firstTimeArtistIDs: show.firstTimeArtistIDs,
-              isFirstTimeVenue: show.isFirstTimeVenue)
+              isFirstTimeVenue: show.isFirstTimeVenue,
+              mostRecentArtistIDs: show.mostRecentArtistIDs,
+              isMostRecentVenue: show.isMostRecentVenue)
               // A widget can't grow, so a long name or venue gives up its third line, not another show.
               .lineLimit(2)
             let hidden = show.performerNames.count - performerLimit
@@ -450,16 +491,29 @@ private struct DayStatsView: View {
           }
         }
       }
-      if stats.newArtistCount > 0 || stats.newVenueCount > 0 {
-        DayStat(label: Text("First Times")) {
+      if stats.newArtistCount > 0 || stats.mostRecentArtistCount > 0 {
+        DayStat(label: Text("Artists")) {
           if stats.newArtistCount > 0 {
-            Text("^[\(stats.newArtistCount) new artist](inflect: true)").textCase(.uppercase)
+            Text("\(stats.newArtistCount) new").textCase(.uppercase)
           } else {
-            Text("^[\(stats.newVenueCount) new venue](inflect: true)").textCase(.uppercase)
+            Text("\(stats.mostRecentArtistCount) last seen").textCase(.uppercase)
           }
         } detail: {
-          if stats.newArtistCount > 0, stats.newVenueCount > 0 {
-            Text("^[\(stats.newVenueCount) new venue](inflect: true)").textCase(.uppercase)
+          if stats.newArtistCount > 0, stats.mostRecentArtistCount > 0 {
+            Text("\(stats.mostRecentArtistCount) last seen").textCase(.uppercase)
+          }
+        }
+      }
+      if stats.newVenueCount > 0 || stats.mostRecentVenueCount > 0 {
+        DayStat(label: Text("Venues")) {
+          if stats.newVenueCount > 0 {
+            Text("\(stats.newVenueCount) new").textCase(.uppercase)
+          } else {
+            Text("\(stats.mostRecentVenueCount) last visited").textCase(.uppercase)
+          }
+        } detail: {
+          if stats.newVenueCount > 0, stats.mostRecentVenueCount > 0 {
+            Text("\(stats.mostRecentVenueCount) last visited").textCase(.uppercase)
           }
         }
       }
@@ -521,9 +575,12 @@ private struct ShowRow: View {
       // Truncate rather than shrink, so every row keeps the same text size.
       Group {
         if let headliner = show.performerNames.first {
-          PerformerName(name: headliner, isFirstTime: show.isFirstTimeHeadliner)
+          PerformerName(
+          name: headliner, isFirstTime: show.isFirstTimeHeadliner,
+          isMostRecent: show.isMostRecentHeadliner)
         } else {
-          VenueName(name: show.venue, isFirstTime: show.isFirstTimeVenue)
+          VenueName(
+        name: show.venue, isFirstTime: show.isFirstTimeVenue, isMostRecent: show.isMostRecentVenue)
         }
       }
       .font(.subheadline)
@@ -570,7 +627,8 @@ extension ShowDigest {
   fileprivate static func preview(
     _ index: Int, headliner: String, support: [String] = [], venue: String = "Sample Venue",
     year: Int, state: String = "CA", firstTimePerformers: Set<Int> = [],
-    isFirstTimeVenue: Bool = false
+    isFirstTimeVenue: Bool = false, mostRecentPerformers: Set<Int> = [],
+    isMostRecentVenue: Bool = false
   ) -> ShowDigest {
     ShowDigest(
       id: .show("sample-\(index)"),
@@ -584,13 +642,18 @@ extension ShowDigest {
       comment: nil,
       // The performers, by position in the bill, that were seen for the first time.
       firstTimeArtistIDs: Set(firstTimePerformers.map { .artist("sample-artist-\(index)-\($0)") }),
-      isFirstTimeVenue: isFirstTimeVenue)
+      isFirstTimeVenue: isFirstTimeVenue,
+      // The performers, by position in the bill, that were seen for the most recent time.
+      mostRecentArtistIDs: Set(
+        mostRecentPerformers.map { .artist("sample-artist-\(index)-\($0)") }),
+      isMostRecentVenue: isMostRecentVenue)
   }
 
   fileprivate static let previewShows: [ShowDigest] = [
     .preview(
       0, headliner: "Sample Artist", support: ["Opening Act", "Local Band"], year: 1988,
-      firstTimePerformers: [0, 2], isFirstTimeVenue: true),
+      firstTimePerformers: [0, 2], isFirstTimeVenue: true, mostRecentPerformers: [0],
+      isMostRecentVenue: true),
     .preview(
       1, headliner: "Another Artist", support: ["Act Two", "Act Three", "Act Four", "Act Five"],
       venue: "Another Venue", year: 1993, state: "TX", firstTimePerformers: [1],
@@ -598,8 +661,10 @@ extension ShowDigest {
     .preview(
       2, headliner: "Third Artist",
       support: ["Second Act", "Third Act", "Fourth Act", "Fifth Act", "Sixth Act"], year: 1998),
-    .preview(3, headliner: "Fourth Artist", year: 2001, state: "NY", firstTimePerformers: [0]),
-    .preview(4, headliner: "Fifth Artist", year: 2010),
+    .preview(
+      3, headliner: "Fourth Artist", year: 2001, state: "NY", firstTimePerformers: [0],
+      mostRecentPerformers: [0]),
+    .preview(4, headliner: "Fifth Artist", year: 2010, mostRecentPerformers: [0]),
     .preview(5, headliner: "Sixth Artist", year: 2016),
   ]
 

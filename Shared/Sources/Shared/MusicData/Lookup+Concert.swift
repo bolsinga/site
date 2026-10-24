@@ -15,6 +15,9 @@ extension Lookup {
     let firstTimeArtistIDs = Set(
       artists.filter { rankDigest(artist: $0.0).firstSet.isFirst(on: show.date) }
         .map { $1.archivePath })
+    let mostRecentArtistIDs = Set(
+      artists.filter { rankDigest(artist: $0.0).mostRecentSet.isMostRecent(on: show.date) }
+        .map { $1.archivePath })
     return ShowDigest(
       id: show.archivePath,
       date: show.date,
@@ -24,7 +27,9 @@ extension Lookup {
       location: venue.location,
       comment: show.comment,
       firstTimeArtistIDs: firstTimeArtistIDs,
-      isFirstTimeVenue: rankDigest(venue: venueID).firstSet.isFirst(on: show.date))
+      isFirstTimeVenue: rankDigest(venue: venueID).firstSet.isFirst(on: show.date),
+      mostRecentArtistIDs: mostRecentArtistIDs,
+      isMostRecentVenue: rankDigest(venue: venueID).mostRecentSet.isMostRecent(on: show.date))
   }
 
   func showDigest(showId: ID) -> ShowDigest? {
@@ -67,6 +72,8 @@ extension Lookup {
     guard let annum = annumMap[annumID] else { return nil }
     return AnnumDigest(
       annum: annum, shows: showDigests(annumID: annumID), rank: rankDigest(annum: annumID),
-      newArtistCount: newArtistCount(in: annum), newVenueCount: newVenueCount(in: annum))
+      newArtistCount: newArtistCount(in: annum), newVenueCount: newVenueCount(in: annum),
+      mostRecentArtistCount: mostRecentArtistCount(in: annum),
+      mostRecentVenueCount: mostRecentVenueCount(in: annum))
   }
 }

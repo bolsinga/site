@@ -245,8 +245,17 @@ struct Tracker<Identifier: ArchiveIdentifier> {
     return await r
   }
 
+  /// The most recent known date of each key. Keys with no known date are left out.
+  private func mostRecentSets(_ spanDates: [ID: Set<PartialDate>]) -> [ID: MostRecentSet] {
+    spanDates.reduce(into: [ID: MostRecentSet]()) {
+      guard let mostRecent = $1.value.filter({ !$0.isUnknown }).max() else { return }
+      $0[$1.key] = MostRecentSet(date: mostRecent)
+    }
+  }
+
   private func rankDigests<Key>(
     firstSets: [Key: FirstSet],
+    mostRecentSets: [Key: MostRecentSet] = [:],
     spanRankings: [Key: Ranking],
     showRankings: [Key: Ranking],
     associatedRankings: [Key: Ranking],
@@ -258,6 +267,7 @@ struct Tracker<Identifier: ArchiveIdentifier> {
     return ids.reduce(into: [Key: RankDigest]()) {
       $0[$1] = RankDigest(
         firstSet: firstSets[$1] ?? .empty,
+        mostRecentSet: mostRecentSets[$1] ?? .empty,
         spanRank: spanRankings[$1] ?? .empty,
         showRank: showRankings[$1] ?? .empty,
         associatedRank: associatedRankings[$1] ?? .empty,
@@ -279,6 +289,7 @@ struct Tracker<Identifier: ArchiveIdentifier> {
 
     return rankDigests(
       firstSets: await firstSets,
+      mostRecentSets: mostRecentSets(artistSpanDates),
       spanRankings: await spanRankings,
       showRankings: await showRankings,
       associatedRankings: await associatedRankings,
@@ -299,6 +310,7 @@ struct Tracker<Identifier: ArchiveIdentifier> {
 
     return rankDigests(
       firstSets: await firstSets,
+      mostRecentSets: mostRecentSets(venueSpanDates),
       spanRankings: await spanRankings,
       showRankings: await showRankings,
       associatedRankings: await associatedRankings,

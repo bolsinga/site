@@ -21,10 +21,13 @@ public struct ConcertBlurb: View {
   let dateFormat: DateFormat
   let firstTimeArtistIDs: Set<ArchivePath>
   let isFirstTimeVenue: Bool
+  let mostRecentArtistIDs: Set<ArchivePath>
+  let isMostRecentVenue: Bool
 
   public init(
     venue: String, date: PartialDate, performers: [ArchiveItem], dateFormat: DateFormat,
-    firstTimeArtistIDs: Set<ArchivePath> = [], isFirstTimeVenue: Bool = false
+    firstTimeArtistIDs: Set<ArchivePath> = [], isFirstTimeVenue: Bool = false,
+    mostRecentArtistIDs: Set<ArchivePath> = [], isMostRecentVenue: Bool = false
   ) {
     self.venue = venue
     self.date = date
@@ -32,6 +35,8 @@ public struct ConcertBlurb: View {
     self.dateFormat = dateFormat
     self.firstTimeArtistIDs = firstTimeArtistIDs
     self.isFirstTimeVenue = isFirstTimeVenue
+    self.mostRecentArtistIDs = mostRecentArtistIDs
+    self.isMostRecentVenue = isMostRecentVenue
   }
 
   @Environment(\.dynamicTypeSize) private var dynamicTypeSize
@@ -40,7 +45,8 @@ public struct ConcertBlurb: View {
 
   @ViewBuilder private func detailsView(alignment: HorizontalAlignment) -> some View {
     VStack(alignment: alignment) {
-      VenueName(name: venue, isFirstTime: isFirstTimeVenue).font(.headline)
+      VenueName(name: venue, isFirstTime: isFirstTimeVenue, isMostRecent: isMostRecentVenue)
+        .font(.headline)
       switch dateFormat {
       case .noYear:
         Text(date.formatted(.noYear))
@@ -70,13 +76,17 @@ public struct ConcertBlurb: View {
     if dynamicTypeSize.isAccessibilitySize {
       // Side by side leaves each column too narrow at these sizes, so the venue and date go below.
       VStack(alignment: .leading, spacing: 4) {
-        PerformersView(performers: performers, firstTimeArtistIDs: firstTimeArtistIDs)
+        PerformersView(
+          performers: performers, firstTimeArtistIDs: firstTimeArtistIDs,
+          mostRecentArtistIDs: mostRecentArtistIDs)
         detailsView(alignment: .leading)
       }
     } else {
       HStack {
         // The lineup wraps before it truncates; the venue wraps in the room that is left.
-        PerformersView(performers: performers, firstTimeArtistIDs: firstTimeArtistIDs)
+        PerformersView(
+          performers: performers, firstTimeArtistIDs: firstTimeArtistIDs,
+          mostRecentArtistIDs: mostRecentArtistIDs)
           .layoutPriority(1)
         Spacer(minLength: 8)
         detailsView(alignment: .trailing)
@@ -96,7 +106,9 @@ extension ConcertBlurb {
       performers: digest.performers,
       dateFormat: dateFormat,
       firstTimeArtistIDs: digest.firstTimeArtistIDs,
-      isFirstTimeVenue: digest.isFirstTimeVenue)
+      isFirstTimeVenue: digest.isFirstTimeVenue,
+      mostRecentArtistIDs: digest.mostRecentArtistIDs,
+      isMostRecentVenue: digest.isMostRecentVenue)
   }
 }
 

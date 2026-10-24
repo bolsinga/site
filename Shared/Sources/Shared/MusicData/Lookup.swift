@@ -307,6 +307,25 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
     }
   }
 
+  /// How many of `digests` have their most recent show in `annum`.
+  ///
+  /// The most recent date's year decides, so a most recent show with just a year still counts.
+  /// Nothing is most recent in the unknown annum, and neither is anything without a date.
+  private func mostRecentCount(in annum: Annum, digests: [ID: RankDigest]) -> Int {
+    guard case .year(let year) = annum else { return 0 }
+    return digests.values.count { $0.mostRecentSet.date.year == year }
+  }
+
+  /// The number of artists whose most recent show was in `annum`.
+  func mostRecentArtistCount(in annum: Annum) -> Int {
+    mostRecentCount(in: annum, digests: bracket.artistRankDigestMap)
+  }
+
+  /// The number of venues whose most recent show was in `annum`.
+  func mostRecentVenueCount(in annum: Annum) -> Int {
+    mostRecentCount(in: annum, digests: bracket.venueRankDigestMap)
+  }
+
   /// The number of artists whose first show was in `annum`.
   func newArtistCount(in annum: Annum) -> Int {
     newCount(in: annum, digests: bracket.artistRankDigestMap)

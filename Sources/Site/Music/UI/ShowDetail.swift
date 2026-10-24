@@ -26,7 +26,8 @@ struct ShowDetail: View {
         ArchivePathLink(archivePath: artist.id, isPathNavigable: isPathNavigable) {
           DetailRowLabel(isNavigable: isPathNavigable(artist.id)) {
             PerformerName(
-              name: artist.name, isFirstTime: concert.firstTimeArtistIDs.contains(artist.id))
+              name: artist.name, isFirstTime: concert.firstTimeArtistIDs.contains(artist.id),
+              isMostRecent: concert.mostRecentArtistIDs.contains(artist.id))
           }
         }
         if artist.id != concert.performers.last?.id {
@@ -42,7 +43,9 @@ struct ShowDetail: View {
       ArchivePathLink(archivePath: concert.venueID, isPathNavigable: isPathNavigable) {
         DetailRowLabel(isNavigable: isPathNavigable(concert.venueID)) {
           VStack(alignment: .leading) {
-            VenueName(name: venueName, isFirstTime: concert.isFirstTimeVenue)
+            VenueName(
+              name: venueName, isFirstTime: concert.isFirstTimeVenue,
+              isMostRecent: concert.isMostRecentVenue)
               .font(.title2.bold())
             Text("\(concert.location.city), \(concert.location.state)")
               .foregroundStyle(.secondary)

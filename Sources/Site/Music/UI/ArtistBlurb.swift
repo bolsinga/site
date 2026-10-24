@@ -12,13 +12,14 @@ struct ArtistBlurb: View {
   let count: Int
   let venue: String
   var isFirstTimeVenue = false
+  var isMostRecentVenue = false
   let date: PartialDate
 
   var body: some View {
     // Laid out explicitly: outside of a List, LabeledContent doesn't push the value to the trailing edge or make it secondary.
     HStack {
       VStack(alignment: .leading) {
-        VenueName(name: venue, isFirstTime: isFirstTimeVenue)
+        VenueName(name: venue, isFirstTime: isFirstTimeVenue, isMostRecent: isMostRecentVenue)
         Text(date.formatted(.compact))
           .font(.subheadline)
           .foregroundStyle(.secondary)
@@ -38,7 +39,8 @@ extension ArtistBlurb {
   fileprivate init(digest: ShowDigest) {
     self.init(
       count: digest.performers.count, venue: digest.venue,
-      isFirstTimeVenue: digest.isFirstTimeVenue, date: digest.date)
+      isFirstTimeVenue: digest.isFirstTimeVenue, isMostRecentVenue: digest.isMostRecentVenue,
+      date: digest.date)
   }
 }
 
@@ -61,7 +63,7 @@ extension ArtistBlurb {
   ArtistBlurb(
     count: 30,
     venue: "Speedway Meadow In Golden Gate Park At The Hardly Strictly Bluegrass Festival",
-    isFirstTimeVenue: true, date: PartialDate(year: 2006, month: 10, day: 7)
+    isFirstTimeVenue: true, isMostRecentVenue: true, date: PartialDate(year: 2006, month: 10, day: 7)
   )
   .padding()
 }

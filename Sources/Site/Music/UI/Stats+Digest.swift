@@ -18,7 +18,9 @@ extension Stats {
     venueArtistsRanking: Ranking?,
     alwaysShowVenuesArtistsStats: Bool,
     newVenueCount: Int? = nil,
-    newArtistCount: Int? = nil
+    newArtistCount: Int? = nil,
+    mostRecentVenueCount: Int? = nil,
+    mostRecentArtistCount: Int? = nil
   ) {
     self.init(
       concertsCount: shows.count,
@@ -33,7 +35,9 @@ extension Stats {
       venueArtistsRanking: venueArtistsRanking,
       alwaysShowVenuesArtistsStats: alwaysShowVenuesArtistsStats,
       newVenueCount: newVenueCount,
-      newArtistCount: newArtistCount)
+      newArtistCount: newArtistCount,
+      mostRecentVenueCount: mostRecentVenueCount,
+      mostRecentArtistCount: mostRecentArtistCount)
   }
 
   init(artistDigest digest: ArtistDigest) {
@@ -68,7 +72,32 @@ extension Stats {
       venueArtistsRanking: digest.artistRank,
       alwaysShowVenuesArtistsStats: true,
       newVenueCount: digest.newVenueCount,
-      newArtistCount: digest.newArtistCount)
+      newArtistCount: digest.newArtistCount,
+      mostRecentVenueCount: digest.mostRecentVenueCount,
+      mostRecentArtistCount: digest.mostRecentArtistCount)
+  }
+
+  /// A day's shows, which come from several years: no charts of when they were and no count of
+  /// shows, as they are listed below, but the venues and artists with how many were new and most
+  /// recent.
+  init(dayShows shows: [ShowDigest]) {
+    self.init(
+      concertsCount: shows.count,
+      venueCount: shows.venueCount,
+      artistCount: shows.artistCount,
+      dates: [],
+      stateCounts: shows.stateCounts,
+      shouldCalculateArtistCount: true,
+      yearsSpanRanking: nil,
+      showRanking: nil,
+      artistVenuesRanking: nil,
+      venueArtistsRanking: nil,
+      alwaysShowVenuesArtistsStats: true,
+      newVenueCount: shows.firstTimeVenueCount,
+      newArtistCount: shows.firstTimeArtistCount,
+      mostRecentVenueCount: shows.mostRecentVenueCount,
+      mostRecentArtistCount: shows.mostRecentArtistCount,
+      showsAreCounted: false)
   }
 
   init<Identifier: ArchiveIdentifier>(vault: Vault<Identifier>) {
