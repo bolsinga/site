@@ -151,6 +151,9 @@
         }
       }
     },
+    "%lld New" : {
+
+    },
     "%lld Show(s)" : {
       "localizations" : {
         "en" : {

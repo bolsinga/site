@@ -19,6 +19,9 @@ struct Stats {
   let artistVenuesRanking: Ranking?
   let venueArtistsRanking: Ranking?
   let alwaysShowVenuesArtistsStats: Bool
+  /// The venues and artists whose first show was in what is being summarized, when it is known.
+  let newVenueCount: Int?
+  let newArtistCount: Int?
 
   internal init(
     concertsCount: Int,
@@ -31,7 +34,9 @@ struct Stats {
     showRanking: Ranking?,
     artistVenuesRanking: Ranking?,
     venueArtistsRanking: Ranking?,
-    alwaysShowVenuesArtistsStats: Bool
+    alwaysShowVenuesArtistsStats: Bool,
+    newVenueCount: Int? = nil,
+    newArtistCount: Int? = nil
   ) {
     self.concertsCount = concertsCount
     self.venueCount = venueCount
@@ -43,6 +48,8 @@ struct Stats {
     self.artistVenuesRanking = artistVenuesRanking
     self.venueArtistsRanking = venueArtistsRanking
     self.alwaysShowVenuesArtistsStats = alwaysShowVenuesArtistsStats
+    self.newVenueCount = newVenueCount
+    self.newArtistCount = newArtistCount
   }
 
   func categories(weekdayOrMonthChartConcertThreshold: Int) -> [StatsCategory] {
