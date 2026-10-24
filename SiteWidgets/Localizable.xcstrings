@@ -24,6 +24,15 @@
         }
       }
     },
+    "%lld last seen" : {
+
+    },
+    "%lld last visited" : {
+
+    },
+    "%lld new" : {
+
+    },
     "^[%lld new artist](inflect: true)" : {
 
     },
@@ -48,13 +57,23 @@
     "Artist" : {
 
     },
+    "Artists" : {
+
+    },
+    "Artists %lld new %lld last seen" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Artists %1$lld new %2$lld last seen"
+          }
+        }
+      }
+    },
     "Busiest day has %lld" : {
 
     },
     "Choose which of today's shows to feature." : {
-
-    },
-    "First Times" : {
 
     },
     "Launch %@ once to load shows." : {
@@ -95,6 +114,19 @@
     },
     "Venue" : {
 
+    },
+    "Venues" : {
+
+    },
+    "Venues %lld new %lld last visited" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Venues %1$lld new %2$lld last visited"
+          }
+        }
+      }
     },
     "Years" : {
 

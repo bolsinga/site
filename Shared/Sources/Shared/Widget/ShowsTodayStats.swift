@@ -23,6 +23,9 @@ public struct ShowsTodayStats: Equatable, Sendable {
   /// How many of the day's artists and venues were seen for the first time.
   public let newArtistCount: Int
   public let newVenueCount: Int
+  /// How many of the day's artists and venues were seen for the most recent time.
+  public let mostRecentArtistCount: Int
+  public let mostRecentVenueCount: Int
 
   /// A one-state chart is a single bar, so like the app's Stats, only chart several states.
   public var hasStateChart: Bool { stateCounts.count > 1 }
@@ -31,6 +34,8 @@ public struct ShowsTodayStats: Equatable, Sendable {
     showCount = shows.count
     newArtistCount = shows.firstTimeArtistCount
     newVenueCount = shows.firstTimeVenueCount
+    mostRecentArtistCount = shows.mostRecentArtistCount
+    mostRecentVenueCount = shows.mostRecentVenueCount
     stateCounts = Dictionary(grouping: shows, by: \.location.state).mapValues(\.count)
 
     let knownYears = shows.compactMap { $0.date.year }

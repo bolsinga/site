@@ -34,4 +34,14 @@ extension Collection where Element == ShowDigest {
   public var firstTimeVenueCount: Int {
     Set(self.filter { $0.isFirstTimeVenue }.map { $0.venueID }).count
   }
+
+  /// How many artists were seen for the most recent time in these shows.
+  public var mostRecentArtistCount: Int {
+    Set(self.flatMap { $0.mostRecentArtistIDs }).count
+  }
+
+  /// How many venues were visited for the most recent time in these shows.
+  public var mostRecentVenueCount: Int {
+    Set(self.filter { $0.isMostRecentVenue }.map { $0.venueID }).count
+  }
 }

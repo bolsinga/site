@@ -40,7 +40,7 @@ struct DayList: View {
             if hasMapHeader {
               ShowsMapHeader(shows: concerts, title: String(localized: dayOfLeapYear.relativeTitle))
             }
-            FirstTimesCard(shows: concerts)
+            StatsCard(stats: Stats(dayShows: concerts), titles: .generic)
               .padding(.horizontal)
             DetailCard(title: Text("Shows")) {
               ForEach(concerts) { concert in

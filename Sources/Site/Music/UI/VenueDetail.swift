@@ -52,7 +52,8 @@ struct VenueDetail: View {
           DetailRowLabel(isNavigable: isPathNavigable(show.id)) {
             VenueBlurb(
               date: show.date, performers: show.performers,
-              firstTimeArtistIDs: show.firstTimeArtistIDs)
+              firstTimeArtistIDs: show.firstTimeArtistIDs,
+              mostRecentArtistIDs: show.mostRecentArtistIDs)
           }
         }
         if show.id != shows.last?.id {

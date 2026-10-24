@@ -12,6 +12,7 @@ struct VenueBlurb: View {
   let date: PartialDate
   let performers: [ArchiveItem]
   var firstTimeArtistIDs: Set<ArchivePath> = []
+  var mostRecentArtistIDs: Set<ArchivePath> = []
 
   @ViewBuilder private var detailsView: some View {
     VStack(alignment: .trailing) {
@@ -22,7 +23,9 @@ struct VenueBlurb: View {
 
   var body: some View {
     HStack {
-      PerformersView(performers: performers, firstTimeArtistIDs: firstTimeArtistIDs)
+      PerformersView(
+        performers: performers, firstTimeArtistIDs: firstTimeArtistIDs,
+        mostRecentArtistIDs: mostRecentArtistIDs)
         .layoutPriority(1)
       Spacer(minLength: 8)
       // The date is short, so it keeps its width instead of being squeezed by a long lineup.
@@ -36,7 +39,7 @@ extension VenueBlurb {
   fileprivate init(digest: ShowDigest) {
     self.init(
       date: digest.date, performers: digest.performers,
-      firstTimeArtistIDs: digest.firstTimeArtistIDs)
+      firstTimeArtistIDs: digest.firstTimeArtistIDs, mostRecentArtistIDs: digest.mostRecentArtistIDs)
   }
 }
 
@@ -63,7 +66,8 @@ extension VenueBlurb {
       ArchiveItem(id: .artist("ar1"), name: "Billy Bragg"),
       ArchiveItem(id: .artist("ar2"), name: "T Bone Burnett"),
     ],
-    firstTimeArtistIDs: [.artist("ar0"), .artist("ar2")]
+    firstTimeArtistIDs: [.artist("ar0"), .artist("ar2")],
+    mostRecentArtistIDs: [.artist("ar0"), .artist("ar1")]
   )
   .padding()
 }

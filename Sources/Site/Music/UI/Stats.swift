@@ -22,6 +22,12 @@ struct Stats {
   /// The venues and artists whose first show was in what is being summarized, when it is known.
   let newVenueCount: Int?
   let newArtistCount: Int?
+  /// The venues and artists whose most recent show was in what is being summarized, when it is
+  /// known.
+  let mostRecentVenueCount: Int?
+  let mostRecentArtistCount: Int?
+  /// Whether the number of shows is one of the stats. A day's shows are listed right below.
+  let showsAreCounted: Bool
 
   internal init(
     concertsCount: Int,
@@ -36,7 +42,10 @@ struct Stats {
     venueArtistsRanking: Ranking?,
     alwaysShowVenuesArtistsStats: Bool,
     newVenueCount: Int? = nil,
-    newArtistCount: Int? = nil
+    newArtistCount: Int? = nil,
+    mostRecentVenueCount: Int? = nil,
+    mostRecentArtistCount: Int? = nil,
+    showsAreCounted: Bool = true
   ) {
     self.concertsCount = concertsCount
     self.venueCount = venueCount
@@ -50,6 +59,9 @@ struct Stats {
     self.alwaysShowVenuesArtistsStats = alwaysShowVenuesArtistsStats
     self.newVenueCount = newVenueCount
     self.newArtistCount = newArtistCount
+    self.mostRecentVenueCount = mostRecentVenueCount
+    self.mostRecentArtistCount = mostRecentArtistCount
+    self.showsAreCounted = showsAreCounted
   }
 
   func categories(weekdayOrMonthChartConcertThreshold: Int) -> [StatsCategory] {
@@ -64,7 +76,9 @@ struct Stats {
 
     // This needs to be broken down like this or the swift compiler says it is too complex.
     var statsCategoryCases = [StatsCategory]()
-    statsCategoryCases.append(.shows)
+    if showsAreCounted {
+      statsCategoryCases.append(.shows)
+    }
     if (yearsSpanRanking?.value ?? 0) > 1 {
       statsCategoryCases.append(.years)
     }

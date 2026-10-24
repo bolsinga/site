@@ -33,6 +33,16 @@
         }
       }
     },
+    "%@ %@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ %2$@ %3$@"
+          }
+        }
+      }
+    },
     "%@, %@" : {
       "comment" : "headlinerAndVenue.no.venue",
       "localizations" : {
@@ -71,6 +81,15 @@
     "Display Shows On This Date" : {
 
     },
+    "First and Most Recent Show" : {
+
+    },
+    "First and most recent time at %@" : {
+
+    },
+    "First and most recent time seeing %@" : {
+
+    },
     "First Show" : {
 
     },
@@ -81,6 +100,15 @@
 
     },
     "Invalid Token: %@." : {
+
+    },
+    "Most Recent Show" : {
+
+    },
+    "Most recent time at %@" : {
+
+    },
+    "Most recent time seeing %@" : {
 
     },
     "Most Shows In %@" : {

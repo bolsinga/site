@@ -21,6 +21,27 @@ enum StatKind {
   }
 }
 
+extension StatKind {
+  /// What a count of artists or venues seen for the most recent time is called.
+  func mostRecentCaption(count: Int) -> LocalizedStringResource? {
+    switch self {
+    case .artists: "\(count) Last Seen"
+    case .venues: "\(count) Last Visited"
+    case .shows, .years: nil
+    }
+  }
+}
+
+extension View {
+  fileprivate func captionStyle() -> some View {
+    self
+      .font(.caption.weight(.semibold))
+      .textCase(.uppercase)
+      .foregroundStyle(.secondary)
+      .lineLimit(1)
+  }
+}
+
 struct StatRow: View {
   @ScaledMetric(relativeTo: .largeTitle) private var rowHeight = 44
   @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -29,22 +50,31 @@ struct StatRow: View {
   var ranking: Ranking?
   /// How many of the count were first seen, shown after it when there are any.
   var newCount: Int?
+  /// How many of the count were seen for the most recent time, shown after it when there are any.
+  var mostRecentCaption: LocalizedStringResource?
   /// Whether the count rolls when it changes. A row that is already showing the new value, as a
   /// page of days does when its neighbor is swiped in, shouldn't roll again once the swipe ends.
   var animatesChanges: Bool
 
   init(
     text: AttributedString, ranking: Ranking? = nil, newCount: Int? = nil,
-    animatesChanges: Bool = true
+    mostRecentCaption: LocalizedStringResource? = nil, animatesChanges: Bool = true
   ) {
     self.text = text
     self.ranking = ranking
     self.newCount = newCount
+    self.mostRecentCaption = mostRecentCaption
     self.animatesChanges = animatesChanges
   }
 
-  init(count: Int, kind: StatKind, ranking: Ranking? = nil, newCount: Int? = nil) {
-    self.init(text: kind.text(count: count), ranking: ranking, newCount: newCount)
+  init(
+    count: Int, kind: StatKind, ranking: Ranking? = nil, newCount: Int? = nil,
+    mostRecentCount: Int? = nil
+  ) {
+    self.init(
+      text: kind.text(count: count), ranking: ranking, newCount: newCount,
+      mostRecentCaption: mostRecentCount.flatMap { $0 > 0 ? kind.mostRecentCaption(count: $0) : nil }
+    )
   }
 
   private var styledText: AttributedString {
@@ -63,6 +93,34 @@ struct StatRow: View {
     return styled
   }
 
+  /// The new count and the most recent count, side by side when they fit and stacked when they
+  /// don't.
+  @ViewBuilder private var captions: some View {
+    if let shownNewCount, let mostRecentCaption {
+      ViewThatFits(in: .horizontal) {
+        HStack(spacing: 8) {
+          newCaption(shownNewCount)
+          Text(mostRecentCaption)
+        }
+        VStack(alignment: .leading, spacing: 0) {
+          newCaption(shownNewCount)
+          Text(mostRecentCaption)
+        }
+      }
+      .captionStyle()
+    } else if let shownNewCount {
+      newCaption(shownNewCount).captionStyle()
+    } else if let mostRecentCaption {
+      Text(mostRecentCaption).captionStyle()
+    }
+  }
+
+  private func newCaption(_ count: Int) -> Text {
+    Text("\(count) New")
+  }
+
+  private var hasCaption: Bool { shownNewCount != nil || mostRecentCaption != nil }
+
   /// The new count, when there are any.
   private var shownNewCount: Int? {
     guard let newCount, newCount > 0 else { return nil }
@@ -78,13 +136,7 @@ struct StatRow: View {
           .textCase(.uppercase)
           .lineLimit(1)
           .minimumScaleFactor(0.3)
-        if let shownNewCount {
-          Text("\(shownNewCount) New")
-            .font(.caption.weight(.semibold))
-            .textCase(.uppercase)
-            .foregroundStyle(.secondary)
-            .lineLimit(1)
-        }
+        captions
       }
       .frame(maxWidth: .infinity, alignment: .leading)
       if let ranking, ranking.rank != .unknown {
@@ -96,7 +148,7 @@ struct StatRow: View {
     }
     // A row with the caption below its count is allowed to be taller than the others.
     .frame(
-      maxWidth: .infinity, minHeight: rowHeight, maxHeight: shownNewCount == nil ? rowHeight : nil)
+      maxWidth: .infinity, minHeight: rowHeight, maxHeight: hasCaption ? nil : rowHeight)
   }
 }
 
@@ -228,11 +280,11 @@ struct StatsCard: View {
     case .venues:
       StatRow(
         count: stats.venueCount, kind: .venues, ranking: stats.artistVenuesRanking,
-        newCount: stats.newVenueCount)
+        newCount: stats.newVenueCount, mostRecentCount: stats.mostRecentVenueCount)
     case .artists:
       StatRow(
         count: stats.artistCount, kind: .artists, ranking: stats.venueArtistsRanking,
-        newCount: stats.newArtistCount)
+        newCount: stats.newArtistCount, mostRecentCount: stats.mostRecentArtistCount)
     case .weekday:
       ChartRow(label: StatsTitles.generic.weekday) {
         WeekdayChart(dates: stats.dates, title: titles.weekday, presentation: .card)

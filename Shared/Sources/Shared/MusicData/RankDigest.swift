@@ -9,6 +9,7 @@ import Foundation
 
 public struct RankDigest: Codable, Equatable, Hashable, Sendable {
   public let firstSet: FirstSet
+  public let mostRecentSet: MostRecentSet
   public let spanRank: Ranking
   public let showRank: Ranking
   public let associatedRank: Ranking
@@ -16,6 +17,7 @@ public struct RankDigest: Codable, Equatable, Hashable, Sendable {
 
   public static var empty: RankDigest {
     .init(
-      firstSet: .empty, spanRank: .empty, showRank: .empty, associatedRank: .empty, section: nil)
+      firstSet: .empty, mostRecentSet: .empty, spanRank: .empty, showRank: .empty,
+      associatedRank: .empty, section: nil)
   }
 }

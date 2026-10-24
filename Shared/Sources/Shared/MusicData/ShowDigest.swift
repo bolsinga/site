@@ -21,11 +21,17 @@ public struct ShowDigest: Codable, Equatable, Hashable, Identifiable, PathRestor
   public let firstTimeArtistIDs: Set<ArchivePath>
   /// Whether this show was the first time at its venue.
   public let isFirstTimeVenue: Bool
+  /// The performers this show was the most recent time seeing, by id. A performer seen once
+  /// has its only show as the most recent.
+  public let mostRecentArtistIDs: Set<ArchivePath>
+  /// Whether this show was the most recent time at its venue.
+  public let isMostRecentVenue: Bool
 
   public init(
     id: ArchivePath, date: PartialDate, performers: [ArchiveItem], venue: String,
     venueID: ArchivePath, location: Location, comment: String?,
-    firstTimeArtistIDs: Set<ArchivePath> = [], isFirstTimeVenue: Bool = false
+    firstTimeArtistIDs: Set<ArchivePath> = [], isFirstTimeVenue: Bool = false,
+    mostRecentArtistIDs: Set<ArchivePath> = [], isMostRecentVenue: Bool = false
   ) {
     self.id = id
     self.date = date
@@ -36,9 +42,11 @@ public struct ShowDigest: Codable, Equatable, Hashable, Identifiable, PathRestor
     self.comment = comment
     self.firstTimeArtistIDs = firstTimeArtistIDs
     self.isFirstTimeVenue = isFirstTimeVenue
+    self.mostRecentArtistIDs = mostRecentArtistIDs
+    self.isMostRecentVenue = isMostRecentVenue
   }
 
-  /// Snapshots written before the first times were known don't have them.
+  /// Snapshots written before the first times or most recent were known don't have them.
   public init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
     self.init(
@@ -52,6 +60,10 @@ public struct ShowDigest: Codable, Equatable, Hashable, Identifiable, PathRestor
       firstTimeArtistIDs: try container.decodeIfPresent(
         Set<ArchivePath>.self, forKey: .firstTimeArtistIDs) ?? [],
       isFirstTimeVenue: try container.decodeIfPresent(Bool.self, forKey: .isFirstTimeVenue)
+        ?? false,
+      mostRecentArtistIDs: try container.decodeIfPresent(
+        Set<ArchivePath>.self, forKey: .mostRecentArtistIDs) ?? [],
+      isMostRecentVenue: try container.decodeIfPresent(Bool.self, forKey: .isMostRecentVenue)
         ?? false)
   }
 

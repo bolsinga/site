@@ -126,4 +126,27 @@ struct ShowsTodayStatsTests {
     #expect(none.newArtistCount == 0)
     #expect(none.newVenueCount == 0)
   }
+
+  @Test func mostRecentAreCounted() {
+    let first = ShowDigest(
+      id: .show("sh0"), date: PartialDate(year: 1991, month: 10, day: 17),
+      performers: [
+        ArchiveItem(id: .artist("ar0"), name: "A"), ArchiveItem(id: .artist("ar1"), name: "B"),
+      ], venue: "V", venueID: .venue("v0"), location: Location(city: "city", state: "CA"),
+      comment: nil, mostRecentArtistIDs: [.artist("ar0"), .artist("ar1")],
+      isMostRecentVenue: true)
+    let later = ShowDigest(
+      id: .show("sh1"), date: PartialDate(year: 1996, month: 10, day: 17),
+      performers: [ArchiveItem(id: .artist("ar2"), name: "C")], venue: "W",
+      venueID: .venue("v1"), location: Location(city: "city", state: "CA"), comment: nil,
+      mostRecentArtistIDs: [.artist("ar2")])
+
+    let stats = ShowsTodayStats(shows: [first, later])
+    #expect(stats.mostRecentArtistCount == 3)
+    #expect(stats.mostRecentVenueCount == 1)
+
+    let none = ShowsTodayStats(shows: [show(0, year: 1991, venue: "A")])
+    #expect(none.mostRecentArtistCount == 0)
+    #expect(none.mostRecentVenueCount == 0)
+  }
 }
