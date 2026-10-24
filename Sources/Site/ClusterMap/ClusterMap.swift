@@ -81,6 +81,10 @@ struct ClusterMap<
   /// While searching, the map returns to where it was when the search began if nothing matches.
   let isSearching: Bool
 
+  /// What covers the edges of the map, for a map placed where the system doesn't report the bars
+  /// over it as its safe area. It keeps the legal text clear of them, and fits items between them.
+  let obscuredInsets: EdgeInsets
+
   init(
     items: any Collection<Item>,
     anchorY: CGFloat? = nil,
@@ -92,6 +96,7 @@ struct ClusterMap<
     animatesItems: Bool = false,
     fitBottomFraction: Double = 0.0,
     isSearching: Bool = false,
+    obscuredInsets: EdgeInsets = EdgeInsets(),
     itemDetails: @escaping (Item) -> Details,
     onSelect: @escaping (Item) -> Void,
     clusterLabel: @escaping (Int) -> String,
@@ -115,6 +120,7 @@ struct ClusterMap<
     self.animatesItems = animatesItems
     self.fitBottomFraction = fitBottomFraction
     self.isSearching = isSearching
+    self.obscuredInsets = obscuredInsets
   }
 
   func makeView(context: Context) -> MKMapView {
@@ -167,6 +173,13 @@ struct ClusterMap<
     let coordinator = context.coordinator
 
     refresh(coordinator)
+    #if canImport(UIKit)
+      // MapKit keeps its legal text in its layout margins; let them follow what covers the map.
+      if coordinator.obscuredInsets != MapEdgeInsets() {
+        view.insetsLayoutMarginsFromSafeArea = false
+        view.layoutMargins = coordinator.obscuredInsets
+      }
+    #endif
 
     // Reading the details observes the model, so do it here, while SwiftUI is tracking this
     // update, to be updated again when it changes.
@@ -201,6 +214,9 @@ struct ClusterMap<
     coordinator.clustersItems = clustersItems
     coordinator.animatesItems = animatesItems
     coordinator.fitBottomFraction = fitBottomFraction
+    coordinator.obscuredInsets = MapEdgeInsets(
+      top: obscuredInsets.top, left: obscuredInsets.leading, bottom: obscuredInsets.bottom,
+      right: obscuredInsets.trailing)
   }
 
   final class Coordinator: NSObject, MKMapViewDelegate {
@@ -221,6 +237,8 @@ struct ClusterMap<
     var animatesItems = false
     private var fadingIn = Set<ObjectIdentifier>()
     var fitBottomFraction = 0.0
+    /// What covers the edges of the map beyond its safe area.
+    fileprivate var obscuredInsets = MapEdgeInsets()
     private var resetID: UUID?
     private var didFit = false
     /// Where the fit in progress is going, so its region changes aren't taken as the user's.
@@ -266,7 +284,7 @@ struct ClusterMap<
     func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {
       // A new size or safe area, such as from rotation or resizing a window, changes the region
       // without the user.
-      let safeArea = mapView.safeAreaInsets
+      let safeArea = coveredInsets(in: mapView)
       let layout = [
         mapView.bounds.width, mapView.bounds.height,
         safeArea.top, safeArea.left, safeArea.bottom, safeArea.right,
@@ -331,10 +349,19 @@ struct ClusterMap<
     private func edgePadding(
       for mapView: MKMapView, top: CGFloat = 0, horizontal: CGFloat = 0, bottom: CGFloat = 0
     ) -> MapEdgeInsets {
-      let covered = mapView.safeAreaInsets
+      let covered = coveredInsets(in: mapView)
       return MapEdgeInsets(
         top: covered.top + top, left: covered.left + horizontal, bottom: covered.bottom + bottom,
         right: covered.right + horizontal)
+    }
+
+    /// What covers the map: its safe area, or more where the map is told of more.
+    fileprivate func coveredInsets(in mapView: MKMapView) -> MapEdgeInsets {
+      let safeArea = mapView.safeAreaInsets
+      return MapEdgeInsets(
+        top: max(safeArea.top, obscuredInsets.top), left: max(safeArea.left, obscuredInsets.left),
+        bottom: max(safeArea.bottom, obscuredInsets.bottom),
+        right: max(safeArea.right, obscuredInsets.right))
     }
 
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
