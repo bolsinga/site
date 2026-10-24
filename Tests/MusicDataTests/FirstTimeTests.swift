@@ -50,7 +50,8 @@ struct FirstTimeTests {
   @Test func partialDateIsFirstOnItself() {
     let year = PartialDate(year: 1996, month: nil, day: nil)
     #expect(FirstSet(rank: .rank(1), date: year).isFirst(on: year))
-    #expect(!FirstSet(rank: .rank(1), date: year).isFirst(on: PartialDate(year: 1996, month: 3, day: 4)))
+    #expect(
+      !FirstSet(rank: .rank(1), date: year).isFirst(on: PartialDate(year: 1996, month: 3, day: 4)))
 
     let yearMonth = PartialDate(year: 1996, month: 8, day: nil)
     #expect(FirstSet(rank: .rank(1), date: yearMonth).isFirst(on: yearMonth))

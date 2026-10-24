@@ -59,7 +59,8 @@ extension ArtistBlurb {
 
 #Preview("Long Venue") {
   ArtistBlurb(
-    count: 30, venue: "Speedway Meadow In Golden Gate Park At The Hardly Strictly Bluegrass Festival",
+    count: 30,
+    venue: "Speedway Meadow In Golden Gate Park At The Hardly Strictly Bluegrass Festival",
     isFirstTimeVenue: true, date: PartialDate(year: 2006, month: 10, day: 7)
   )
   .padding()

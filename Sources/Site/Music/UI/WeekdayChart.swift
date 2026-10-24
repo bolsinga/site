@@ -97,11 +97,11 @@ struct WeekdayChart: View {
       .chartYAxis(presentation == .default ? .automatic : .hidden)
       .chartXAxis {
         if presentation != .card {
-        AxisMarks(values: .stride(by: .day)) { _ in
-          AxisGridLine()
-          AxisTick()
-          AxisValueLabel(format: .dateTime.weekday(format), centered: true)
-        }
+          AxisMarks(values: .stride(by: .day)) { _ in
+            AxisGridLine()
+            AxisTick()
+            AxisValueLabel(format: .dateTime.weekday(format), centered: true)
+          }
         }
       }
       .frame(height: presentation == .compact ? 100 : nil)

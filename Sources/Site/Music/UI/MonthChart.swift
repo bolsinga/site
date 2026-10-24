@@ -112,11 +112,11 @@ struct MonthChart: View {
       .chartYAxis(presentation == .default ? .automatic : .hidden)
       .chartXAxis {
         if presentation != .card {
-        AxisMarks(values: .stride(by: .month)) { _ in
-          AxisGridLine()
-          AxisTick()
-          AxisValueLabel(format: .dateTime.month(format), centered: true)
-        }
+          AxisMarks(values: .stride(by: .month)) { _ in
+            AxisGridLine()
+            AxisTick()
+            AxisValueLabel(format: .dateTime.month(format), centered: true)
+          }
         }
       }
       .frame(height: presentation == .compact ? 100 : nil)

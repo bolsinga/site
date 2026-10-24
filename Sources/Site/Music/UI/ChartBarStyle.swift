@@ -11,7 +11,8 @@ import SwiftUI
 extension ChartContent {
   func chartBarStyle(isCurrent: Bool) -> some ChartContent {
     foregroundStyle(
-      isCurrent ? AnyShapeStyle(Color.accentColor.mix(with: .white, by: 0.35)) : AnyShapeStyle(.tint)
+      isCurrent
+        ? AnyShapeStyle(Color.accentColor.mix(with: .white, by: 0.35)) : AnyShapeStyle(.tint)
     )
   }
 }

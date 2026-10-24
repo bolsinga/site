@@ -95,7 +95,8 @@ struct StatRow: View {
       }
     }
     // A row with the caption below its count is allowed to be taller than the others.
-    .frame(maxWidth: .infinity, minHeight: rowHeight, maxHeight: shownNewCount == nil ? rowHeight : nil)
+    .frame(
+      maxWidth: .infinity, minHeight: rowHeight, maxHeight: shownNewCount == nil ? rowHeight : nil)
   }
 }
 
@@ -208,7 +209,8 @@ struct StatsCard: View {
           StatRow(text: AttributedString(localized: "**\(firstSetRank.formatted())** First Set"))
         }
         if includesCategories {
-          ForEach(stats.categories(weekdayOrMonthChartConcertThreshold: statsThreshold), id: \.self) {
+          ForEach(stats.categories(weekdayOrMonthChartConcertThreshold: statsThreshold), id: \.self)
+          {
             row(for: $0)
           }
         }
