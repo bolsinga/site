@@ -25,7 +25,9 @@ struct VenueBlurb: View {
       PerformersView(performers: performers, firstTimeArtistIDs: firstTimeArtistIDs)
         .layoutPriority(1)
       Spacer(minLength: 8)
+      // The date is short, so it keeps its width instead of being squeezed by a long lineup.
       detailsView
+        .fixedSize()
     }
   }
 }
@@ -51,4 +53,17 @@ extension VenueBlurb {
 #Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   VenueBlurb(digest: model.previewShow("sh100"))
+}
+
+#Preview("Long Names") {
+  VenueBlurb(
+    date: PartialDate(year: 2006, month: 10, day: 7),
+    performers: [
+      ArchiveItem(id: .artist("ar0"), name: "Steve Earle & The Bluegrass Dukes"),
+      ArchiveItem(id: .artist("ar1"), name: "Billy Bragg"),
+      ArchiveItem(id: .artist("ar2"), name: "T Bone Burnett"),
+    ],
+    firstTimeArtistIDs: [.artist("ar0"), .artist("ar2")]
+  )
+  .padding()
 }
