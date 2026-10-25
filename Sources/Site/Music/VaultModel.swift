@@ -53,8 +53,6 @@ public typealias VaultModel = AbstractVaultModel<BasicIdentifier>
   @ObservationIgnored
   private var locationTask: Task<Void, Never>?
 
-  private let distanceFilter: CLLocationDistance
-
   private var batchGeocodeCompleted = false
 
   private let locationManager: LocationManager
@@ -69,7 +67,6 @@ public typealias VaultModel = AbstractVaultModel<BasicIdentifier>
     error: Error? = nil
   ) {
     self.vault = vault
-    self.distanceFilter = distanceFilter
     self.locationManager = LocationManager(
       activityType: .other,
       distanceFilter: distanceFilter,
@@ -238,37 +235,18 @@ public typealias VaultModel = AbstractVaultModel<BasicIdentifier>
     }
 
     do {
-      let locationStream = try await locationManager.locationStream()
-      locationAuthorization = .allowed
-      do {
-        Logger.vaultModel.log("start locationstream")
-        defer {
-          Logger.vaultModel.log("end locationstream")
-        }
-        for try await location in locationStream.compactMap({ $0.location }) {
-          guard let curLoc = currentLocation else {
-            Logger.vaultModel.log("location initialized")
-            currentLocation = location
-            continue
-          }
-
-          let distance = curLoc.distance(from: location)
-          guard distance > distanceFilter else { continue }
-
-          Logger.vaultModel.log("location updated. distance: \(distance, privacy: .public)")
+      for try await event in locationManager.events() {
+        switch event {
+        case .denied:
+          locationAuthorization = .denied
+          currentLocation = nil
+        case .location(let location):
+          locationAuthorization = .allowed
           currentLocation = location
         }
-      } catch {
-        Logger.vaultModel.error("locationstream error: \(error, privacy: .public)")
       }
-    } catch is CancellationError {
-      Logger.vaultModel.log("location monitoring cancelled")
-    } catch LocationAuthorizationError.denied {
-      Logger.vaultModel.error("location denied")
-      locationAuthorization = .denied
     } catch {
-      Logger.vaultModel.error("location error: \(error, privacy: .public)")
-      locationAuthorization = .restricted
+      Logger.vaultModel.error("locationstream error: \(error, privacy: .public)")
     }
   }
 
