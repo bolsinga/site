@@ -237,38 +237,39 @@ public typealias VaultModel = AbstractVaultModel<BasicIdentifier>
       Logger.vaultModel.log("end location monitoring")
     }
 
+    await locationManager.requestAuthorization()
+
     do {
-      let locationStream = try await locationManager.locationStream()
-      locationAuthorization = .allowed
-      do {
-        Logger.vaultModel.log("start locationstream")
-        defer {
-          Logger.vaultModel.log("end locationstream")
-        }
-        for try await location in locationStream.compactMap({ $0.location }) {
-          guard let curLoc = currentLocation else {
-            Logger.vaultModel.log("location initialized")
-            currentLocation = location
-            continue
-          }
-
-          let distance = curLoc.distance(from: location)
-          guard distance > distanceFilter else { continue }
-
-          Logger.vaultModel.log("location updated. distance: \(distance, privacy: .public)")
-          currentLocation = location
-        }
-      } catch {
-        Logger.vaultModel.error("locationstream error: \(error, privacy: .public)")
+      Logger.vaultModel.log("start locationstream")
+      defer {
+        Logger.vaultModel.log("end locationstream")
       }
-    } catch is CancellationError {
-      Logger.vaultModel.log("location monitoring cancelled")
-    } catch LocationAuthorizationError.denied {
-      Logger.vaultModel.error("location denied")
-      locationAuthorization = .denied
+      // The updates also report authorization, including a change made in Settings while running.
+      for try await update in locationManager.locationUpdates() {
+        guard !update.authorizationDenied, !update.authorizationDeniedGlobally else {
+          Logger.vaultModel.error("location denied")
+          locationAuthorization = .denied
+          currentLocation = nil
+          continue
+        }
+
+        guard let location = update.location else { continue }
+        locationAuthorization = .allowed
+
+        guard let curLoc = currentLocation else {
+          Logger.vaultModel.log("location initialized")
+          currentLocation = location
+          continue
+        }
+
+        let distance = curLoc.distance(from: location)
+        guard distance > distanceFilter else { continue }
+
+        Logger.vaultModel.log("location updated. distance: \(distance, privacy: .public)")
+        currentLocation = location
+      }
     } catch {
-      Logger.vaultModel.error("location error: \(error, privacy: .public)")
-      locationAuthorization = .restricted
+      Logger.vaultModel.error("locationstream error: \(error, privacy: .public)")
     }
   }
 
