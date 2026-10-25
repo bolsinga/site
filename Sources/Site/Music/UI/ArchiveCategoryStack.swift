@@ -17,6 +17,7 @@ struct ArchiveCategoryStack: View {
   @Binding var venueSort: RankingSort
   @Binding var artistSort: RankingSort
   @Binding var venuesMode: VenuesMode
+  @Binding var showsDescending: Bool
   @Binding var dayOfLeapYear: Int
 
   let reloadModel: @MainActor () async -> Void
@@ -40,7 +41,7 @@ struct ArchiveCategoryStack: View {
     case .today:
       DaySummary(dayOfLeapYear: $dayOfLeapYear)
     case .shows:
-      ShowsSummary()
+      ShowsSummary(descending: $showsDescending)
     case .venues:
       VenuesSummary(
         sort: venueSort,
@@ -96,6 +97,7 @@ extension ArchiveCategoryStack {
       venueSort: .constant(.alphabetical),
       artistSort: .constant(.alphabetical),
       venuesMode: .constant(.default),
+      showsDescending: .constant(false),
       dayOfLeapYear: .constant(Date.now.dayOfLeapYear),
       reloadModel: {},
       navigateToPath: { _ in })

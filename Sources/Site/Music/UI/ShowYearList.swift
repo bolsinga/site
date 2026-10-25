@@ -12,7 +12,7 @@ struct ShowYearList: View {
   let decadesMap: [Decade: [Annum: Int]]
   var summary: ListSummary?
 
-  @SceneStorage("shows.sort.descending") private var descending: Bool = false
+  @Binding var descending: Bool
 
   private func showCount(_ annumShows: [Annum: Int]) -> Int {
     annumShows.values.reduce(0, { $0 + $1 })
@@ -73,6 +73,6 @@ struct ShowYearList: View {
 #Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   NavigationStack {
-    ShowYearList(decadesMap: model.vault.decadesMap)
+    ShowYearList(decadesMap: model.vault.decadesMap, descending: .constant(false))
   }
 }

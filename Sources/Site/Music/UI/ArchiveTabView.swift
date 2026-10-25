@@ -36,6 +36,7 @@ struct ArchiveTabView: View {
   @Binding var venueSort: RankingSort
   @Binding var artistSort: RankingSort
   @Binding var venuesMode: VenuesMode
+  @Binding var showsDescending: Bool
 
   @Binding var activeCategory: ArchiveCategory
   let pathForCategory: (ArchiveCategory) -> Binding<[ArchivePath]>
@@ -51,6 +52,7 @@ struct ArchiveTabView: View {
     venueSort: Binding<RankingSort>,
     artistSort: Binding<RankingSort>,
     venuesMode: Binding<VenuesMode>,
+    showsDescending: Binding<Bool>,
     activeCategory: Binding<ArchiveCategory>,
     pathForCategory: @escaping (ArchiveCategory) -> Binding<[ArchivePath]>,
     reloadModel: @escaping @MainActor () async -> Void,
@@ -59,6 +61,7 @@ struct ArchiveTabView: View {
     self._venueSort = venueSort
     self._artistSort = artistSort
     self._venuesMode = venuesMode
+    self._showsDescending = showsDescending
     self._activeCategory = activeCategory
     self.pathForCategory = pathForCategory
     self.reloadModel = reloadModel
@@ -107,6 +110,7 @@ struct ArchiveTabView: View {
               venueSort: $venueSort,
               artistSort: $artistSort,
               venuesMode: $venuesMode,
+              showsDescending: $showsDescending,
               dayOfLeapYear: $dayOfLeapYear,
               reloadModel: reloadModel,
               navigateToPath: navigateToPath)
@@ -158,11 +162,13 @@ struct ArchiveTabView: View {
   @Previewable @State var artistSort = RankingSort.alphabetical
   @Previewable @State var category = ArchiveCategory.defaultCategory
   @Previewable @State var venuesMode = VenuesMode.default
+  @Previewable @State var showsDescending = false
 
   ArchiveTabView(
     venueSort: $venueSort,
     artistSort: $artistSort,
     venuesMode: $venuesMode,
+    showsDescending: $showsDescending,
     activeCategory: $category
   ) { _ in
     .constant([])

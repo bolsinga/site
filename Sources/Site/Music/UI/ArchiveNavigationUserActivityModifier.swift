@@ -24,6 +24,8 @@ extension Logger {
 struct ArchiveNavigationUserActivityModifier: ViewModifier {
   let activity: ArchiveActivity
   let urlForCategory: (ArchiveCategory) -> URL?
+  /// The sort of the category in `activity`, if it has one.
+  let categorySort: ArchiveCategorySort?
   let activityForPath: (ArchivePath) -> PathRestorableUserActivity?
 
   @Environment(VaultModel.self) private var model
@@ -36,7 +38,7 @@ struct ArchiveNavigationUserActivityModifier: ViewModifier {
         guard let category = activity.category else { return }
 
         Logger.navigationUserActivity.log("update category \(category.rawValue, privacy: .public)")
-        userActivity.update(category, url: urlForCategory(category))
+        userActivity.update(category, url: urlForCategory(category), sort: categorySort)
       }
       .userActivity(ArchivePath.activityType, isActive: activity.isPath) { userActivity in
         guard let path = activity.path else { return }
@@ -52,10 +54,12 @@ extension View {
   func advertiseUserActivity(
     for activity: ArchiveActivity,
     urlForCategory: @escaping (ArchiveCategory) -> URL?,
+    categorySort: ArchiveCategorySort? = nil,
     activityForPath: @escaping (ArchivePath) -> PathRestorableUserActivity?
   ) -> some View {
     modifier(
       ArchiveNavigationUserActivityModifier(
-        activity: activity, urlForCategory: urlForCategory, activityForPath: activityForPath))
+        activity: activity, urlForCategory: urlForCategory, categorySort: categorySort,
+        activityForPath: activityForPath))
   }
 }
