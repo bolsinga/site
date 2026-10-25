@@ -221,7 +221,9 @@ struct ShowsTodaySnapshotTests {
     let show = markedShow(setOrder: ["ar0", "ar1", "ar2"])
     let data = try JSONEncoder().encode(show)
     var object = try #require(JSONSerialization.jsonObject(with: data) as? [String: Any])
-    object["firstTimeArtistIDs"] = (object["firstTimeArtistIDs"] as? [String]).map { Array($0.reversed()) }
+    object["firstTimeArtistIDs"] = (object["firstTimeArtistIDs"] as? [String]).map {
+      Array($0.reversed())
+    }
     let reordered = try JSONSerialization.data(withJSONObject: object)
     #expect(try JSONDecoder().decode(ShowDigest.self, from: reordered) == show)
   }

@@ -72,7 +72,9 @@ struct StatRow: View {
   ) {
     self.init(
       text: kind.text(count: count), ranking: ranking, newCount: newCount,
-      mostRecentCaption: mostRecentCount.flatMap { $0 > 0 ? kind.mostRecentCaption(count: $0) : nil }
+      mostRecentCaption: mostRecentCount.flatMap {
+        $0 > 0 ? kind.mostRecentCaption(count: $0) : nil
+      }
     )
   }
 

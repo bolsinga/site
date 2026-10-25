@@ -25,8 +25,9 @@ struct VenueBlurb: View {
     HStack {
       PerformersView(
         performers: performers, firstTimeArtistIDs: firstTimeArtistIDs,
-        mostRecentArtistIDs: mostRecentArtistIDs)
-        .layoutPriority(1)
+        mostRecentArtistIDs: mostRecentArtistIDs
+      )
+      .layoutPriority(1)
       Spacer(minLength: 8)
       // The date is short, so it keeps its width instead of being squeezed by a long lineup.
       detailsView
@@ -39,7 +40,8 @@ extension VenueBlurb {
   fileprivate init(digest: ShowDigest) {
     self.init(
       date: digest.date, performers: digest.performers,
-      firstTimeArtistIDs: digest.firstTimeArtistIDs, mostRecentArtistIDs: digest.mostRecentArtistIDs)
+      firstTimeArtistIDs: digest.firstTimeArtistIDs, mostRecentArtistIDs: digest.mostRecentArtistIDs
+    )
   }
 }
 

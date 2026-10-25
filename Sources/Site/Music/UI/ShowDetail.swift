@@ -45,8 +45,9 @@ struct ShowDetail: View {
           VStack(alignment: .leading) {
             VenueName(
               name: venueName, isFirstTime: concert.isFirstTimeVenue,
-              isMostRecent: concert.isMostRecentVenue)
-              .font(.title2.bold())
+              isMostRecent: concert.isMostRecentVenue
+            )
+            .font(.title2.bold())
             Text("\(concert.location.city), \(concert.location.state)")
               .foregroundStyle(.secondary)
           }

@@ -97,23 +97,23 @@ struct YearBrowser: View {
 
   private var pages: some View {
     pager
-    #if os(macOS)
-      // A scroll view draws its content through a safe area, so the page would scroll over the
-      // map. Padding moves the page's edge instead, which clips it, as the paged TabView does.
-      .padding(.top, mapHeight + 16)
-    #else
-      .safeAreaPadding(.top, mapHeight + 16)
-    #endif
-    // A paged TabView keeps its scroll offset in points, so a width change leaves the page partly
-    // scrolled. Rebuild it at the new width; only the current year is ever selected at rest.
-    .id(layoutGeneration)
-    .onGeometryChange(for: CGFloat.self) {
-      $0.size.width
-    } action: { oldWidth, newWidth in
-      if oldWidth > 0, oldWidth != newWidth {
-        layoutGeneration += 1
+      #if os(macOS)
+        // A scroll view draws its content through a safe area, so the page would scroll over the
+        // map. Padding moves the page's edge instead, which clips it, as the paged TabView does.
+        .padding(.top, mapHeight + 16)
+      #else
+        .safeAreaPadding(.top, mapHeight + 16)
+      #endif
+      // A paged TabView keeps its scroll offset in points, so a width change leaves the page partly
+      // scrolled. Rebuild it at the new width; only the current year is ever selected at rest.
+      .id(layoutGeneration)
+      .onGeometryChange(for: CGFloat.self) {
+        $0.size.width
+      } action: { oldWidth, newWidth in
+        if oldWidth > 0, oldWidth != newWidth {
+          layoutGeneration += 1
+        }
       }
-    }
   }
 
   var body: some View {

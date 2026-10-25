@@ -63,7 +63,8 @@ extension ArtistBlurb {
   ArtistBlurb(
     count: 30,
     venue: "Speedway Meadow In Golden Gate Park At The Hardly Strictly Bluegrass Festival",
-    isFirstTimeVenue: true, isMostRecentVenue: true, date: PartialDate(year: 2006, month: 10, day: 7)
+    isFirstTimeVenue: true, isMostRecentVenue: true,
+    date: PartialDate(year: 2006, month: 10, day: 7)
   )
   .padding()
 }

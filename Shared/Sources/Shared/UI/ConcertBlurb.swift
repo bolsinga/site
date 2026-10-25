@@ -86,8 +86,9 @@ public struct ConcertBlurb: View {
         // The lineup wraps before it truncates; the venue wraps in the room that is left.
         PerformersView(
           performers: performers, firstTimeArtistIDs: firstTimeArtistIDs,
-          mostRecentArtistIDs: mostRecentArtistIDs)
-          .layoutPriority(1)
+          mostRecentArtistIDs: mostRecentArtistIDs
+        )
+        .layoutPriority(1)
         Spacer(minLength: 8)
         detailsView(alignment: .trailing)
           .multilineTextAlignment(.trailing)
