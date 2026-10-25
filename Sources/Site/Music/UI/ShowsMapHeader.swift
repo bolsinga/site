@@ -56,7 +56,7 @@ struct ShowsMap: View {
         ClusterMap(
           items: places, anchorY: dotSize / 2.0, animatesFit: animatesChanges,
           fitZoomOutFactor: animatesChanges ? dayMapFitZoomOutFactor : detailMapFitZoomOutFactor,
-          clustersItems: false, isSubdued: true,
+          isSubdued: true,
           animatesItems: animatesChanges, fitBottomFraction: animatesChanges ? fadeFraction : 0.0
         ) {
           Details(coordinate: $0.coordinate, title: "")
@@ -67,8 +67,9 @@ struct ShowsMap: View {
           VenueDot()
         } itemTitle: { _ in
           EmptyView()
-        } clusterContent: {
-          CategoryAnnotationView(category: .venues, render: .badge($0))
+        } clusterContent: { _ in
+          // Dots that are close together show as one, with no count.
+          VenueDot()
         }
         .allowsHitTesting(false)
       }
