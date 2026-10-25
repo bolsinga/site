@@ -65,7 +65,6 @@ extension ArtistEntity: URLRepresentableEntity {
       let attributes = defaultAttributeSet
       attributes.contentURL = url
       attributes.alternateNames = related
-      // Free-text search reads the keywords, not the alternate names.
       attributes.keywords = related
       return attributes
     }

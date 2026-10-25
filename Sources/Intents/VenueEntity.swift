@@ -77,7 +77,6 @@ extension VenueEntity: URLRepresentableEntity {
       attributes.city = city
       attributes.stateOrProvince = state
       attributes.namedLocation = address
-      // Free-text search reads the keywords and description, not the location attributes.
       attributes.keywords = [city, state, "\(city), \(state)", address] + related
       attributes.contentDescription = address
       return attributes
