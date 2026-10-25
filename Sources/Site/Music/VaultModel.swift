@@ -57,9 +57,6 @@ public typealias VaultModel = AbstractVaultModel<BasicIdentifier>
 
   private var batchGeocodeCompleted = false
 
-  @ObservationIgnored
-  private var todayUpdatesQuickly: Bool = false
-
   private let locationManager: LocationManager
 
   private let atlas = Atlas<Venue>()
@@ -193,23 +190,12 @@ public typealias VaultModel = AbstractVaultModel<BasicIdentifier>
       Logger.vaultModel.log("end day monitoring")
     }
 
-    if todayUpdatesQuickly {
-      while true {
-        try? await ContinuousClock().sleep(until: .now + Duration.seconds(5))
+    for await _ in NotificationCenter.default.notifications(named: .NSCalendarDayChanged).map({
+      $0.name
+    }) {
+      todayDayOfLeapYear = Date.now.dayOfLeapYear
 
-        todayDayOfLeapYear = todayDayOfLeapYear.nextDayOfLeapYear
-
-        Logger.vaultModel.log(
-          "FAST: Today dayOfLeapYear: \(self.todayDayOfLeapYear, privacy: .public)")
-      }
-    } else {
-      for await _ in NotificationCenter.default.notifications(named: .NSCalendarDayChanged).map({
-        $0.name
-      }) {
-        todayDayOfLeapYear = Date.now.dayOfLeapYear
-
-        Logger.vaultModel.log("Today dayOfLeapYear: \(self.todayDayOfLeapYear, privacy: .public)")
-      }
+      Logger.vaultModel.log("Today dayOfLeapYear: \(self.todayDayOfLeapYear, privacy: .public)")
     }
   }
 
