@@ -79,6 +79,9 @@
       try await index.indexAppEntities(entities)
       let found = Set(entities.map(\.id))
       let missing = ids.filter { !found.contains($0) }
+      Logger.spotlight.log(
+        "reindexed artists: \(entities.count, privacy: .public) missing: \(missing.count, privacy: .public)"
+      )
       guard !missing.isEmpty else { return }
       try await index.deleteAppEntities(identifiedBy: missing, ofType: ArtistEntity.self)
     }
@@ -91,6 +94,9 @@
       try await index.indexAppEntities(entities)
       let found = Set(entities.map(\.id))
       let missing = ids.filter { !found.contains($0) }
+      Logger.spotlight.log(
+        "reindexed venues: \(entities.count, privacy: .public) missing: \(missing.count, privacy: .public)"
+      )
       guard !missing.isEmpty else { return }
       try await index.deleteAppEntities(identifiedBy: missing, ofType: VenueEntity.self)
     }

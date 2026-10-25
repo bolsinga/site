@@ -171,12 +171,15 @@ extension ArtistEntityQuery: EntityPropertyQuery {
     func reindexEntities(
       for identifiers: [ArtistEntity.ID], indexDescription: CSSearchableIndexDescription
     ) async throws {
-      Logger.artistQuery.log("Reindex: \(identifiers.count, privacy: .public)")
+      Logger.artistQuery.log(
+        "Reindex: \(identifiers.count, privacy: .public) \(String(describing: indexDescription), privacy: .public)"
+      )
       try await vault.reindexArtistsForSpotlight(ids: identifiers)
     }
 
     func reindexAllEntities(indexDescription: CSSearchableIndexDescription) async throws {
-      Logger.artistQuery.log("Reindex all")
+      Logger.artistQuery.log(
+        "Reindex all: \(String(describing: indexDescription), privacy: .public)")
       await vault.indexForSpotlight(force: true)
     }
   }

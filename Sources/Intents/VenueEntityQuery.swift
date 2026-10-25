@@ -203,12 +203,15 @@ extension VenueEntityQuery: EntityPropertyQuery {
     func reindexEntities(
       for identifiers: [VenueEntity.ID], indexDescription: CSSearchableIndexDescription
     ) async throws {
-      Logger.venueQuery.log("Reindex: \(identifiers.count, privacy: .public)")
+      Logger.venueQuery.log(
+        "Reindex: \(identifiers.count, privacy: .public) \(String(describing: indexDescription), privacy: .public)"
+      )
       try await vault.reindexVenuesForSpotlight(ids: identifiers)
     }
 
     func reindexAllEntities(indexDescription: CSSearchableIndexDescription) async throws {
-      Logger.venueQuery.log("Reindex all")
+      Logger.venueQuery.log(
+        "Reindex all: \(String(describing: indexDescription), privacy: .public)")
       await vault.indexForSpotlight(force: true)
     }
   }
