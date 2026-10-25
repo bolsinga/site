@@ -11,14 +11,17 @@ import WidgetKit
 
 struct ShowsTodayWidgetView: View {
   @Environment(\.widgetFamily) private var family
+  @Environment(\.widgetRenderingMode) private var renderingMode
 
   let entry: ShowsTodayEntry
 
   var body: some View {
     content
-      // A widget's accent color is the system's unless the view is tinted, and shared views, like
-      // the first time sparkle, tint with it.
+      // A widget's accent color is the system's unless the view is tinted, and shared views tint
+      // with it.
       .tint(Color.accent)
+      // The green and red dots only mean something in color; tinted and vibrant widgets are one color.
+      .environment(\.showsNameMarkers, renderingMode == .fullColor)
       // Fill the widget so short names don't shrink the stack and get centered.
       .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
       .containerBackground(Color.accent.opacity(0.3).gradient, for: .widget)

@@ -5,10 +5,17 @@
 //  Created by Greg Bolsinga on 9/11/25.
 //
 
+import CoreText
 import Foundation
 import SwiftUI
 
-/// A name, followed by a sparkle when it was the first time and a clock when it was the most
+extension EnvironmentValues {
+  /// Whether names are marked with the dots for the first and most recent times. The dots mean
+  /// something only by their color, so a monochrome rendering, like a tinted widget, leaves them out.
+  @Entry public var showsNameMarkers = true
+}
+
+/// A name, followed by a green dot when it was the first time and a red dot when it was the most
 /// recent time.
 private struct MarkedName: View {
   let name: String
@@ -16,18 +23,61 @@ private struct MarkedName: View {
   let isMostRecent: Bool
   let accessibilityLabel: Text
 
-  /// Smaller than the name, and scaled with Dynamic Type.
-  @ScaledMetric(relativeTo: .caption2) private var markerSize = 9.0
+  @Environment(\.showsNameMarkers) private var showsNameMarkers
 
-  private var sparkle: Text {
-    Text(Image(systemName: "sparkles")).font(.system(size: markerSize))
-      .foregroundStyle(.tint)
+  @Environment(\.font) private var environmentFont
+  @Environment(\.fontResolutionContext) private var fontResolutionContext
+
+  private var capHeight: CGFloat {
+    CTFontGetCapHeight((environmentFont ?? .body).resolve(in: fontResolutionContext).ctFont)
   }
 
-  private var recent: Text {
-    Text(Image(systemName: "clock.badge.exclamationmark")).font(.system(size: markerSize))
-      .foregroundStyle(.tint)
+  private var markerSize: CGFloat { capHeight * 0.55 }
+
+  /// How far to lift a dot, whose symbol sits on the baseline at its own small size, so it is
+  /// centered between the baseline and the top of the name's capitals, whatever the font size.
+  private var dotBaselineOffset: CGFloat {
+    (capHeight - markerSize * Self.symbolCapHeightRatio) / 2
   }
+
+  /// The cap height of the system font, as a fraction of its size.
+  private static let symbolCapHeightRatio: CGFloat = 0.705
+
+  /// Softer than the system colors, which are bright beside text.
+  private let firstTimeColor = Color.green.mix(with: .gray, by: 0.4)
+  private let mostRecentColor = Color.red.mix(with: .gray, by: 0.4)
+
+  private func dot(_ color: Color) -> Text {
+    Text(Image(systemName: "circle.fill")).font(.system(size: markerSize))
+      .foregroundStyle(color)
+      .baselineOffset(dotBaselineOffset)
+  }
+
+  @Environment(\.displayScale) private var displayScale
+  @Environment(\.colorScheme) private var colorScheme
+
+  /// Both dots, one above the other. Inline text can't stack two symbols, so they are drawn into
+  /// a single image that sits in the text like one symbol does.
+  private var stackedDots: Text {
+    let dots = VStack(spacing: -markerSize * 0.06) {
+      Image(systemName: "circle.fill").foregroundStyle(firstTimeColor)
+      Image(systemName: "circle.fill").foregroundStyle(mostRecentColor)
+    }
+    .font(.system(size: markerSize))
+    .environment(\.colorScheme, colorScheme)
+    let renderer = ImageRenderer(content: dots)
+    renderer.scale = displayScale
+    guard let image = renderer.cgImage else {
+      return Text("\(firstTime)\u{00A0}\(mostRecent)")
+    }
+    let height = CGFloat(image.height) / displayScale
+    return Text(Image(decorative: image, scale: displayScale))
+      .baselineOffset((capHeight - height) / 2)
+  }
+
+  private var firstTime: Text { dot(firstTimeColor) }
+
+  private var mostRecent: Text { dot(mostRecentColor) }
 
   private var help: Text {
     switch (isFirstTime, isMostRecent) {
@@ -38,7 +88,7 @@ private struct MarkedName: View {
   }
 
   var body: some View {
-    if isFirstTime || isMostRecent {
+    if showsNameMarkers && (isFirstTime || isMostRecent) {
       // A non breaking space keeps the markers from wrapping onto a line by itself.
       markedName
         .accessibilityLabel(accessibilityLabel)
@@ -52,15 +102,14 @@ private struct MarkedName: View {
 
   private var markedName: Text {
     switch (isFirstTime, isMostRecent) {
-    case (true, true): Text("\(name)\u{00A0}\(sparkle)\u{00A0}\(recent)")
-    case (true, false): Text("\(name)\u{00A0}\(sparkle)")
-    default: Text("\(name)\u{00A0}\(recent)")
+    case (true, true): Text("\(name)\u{00A0}\(stackedDots)")
+    case (true, false): Text("\(name)\u{00A0}\(firstTime)")
+    default: Text("\(name)\u{00A0}\(mostRecent)")
     }
   }
 }
 
-/// A performer's name, followed by a sparkle when it was the first time seeing them and a clock when
-/// it was the most recent time.
+/// A performer's name, marked when it was the first or most recent time seeing them.
 public struct PerformerName: View {
   let name: String
   let isFirstTime: Bool
@@ -87,8 +136,7 @@ public struct PerformerName: View {
   }
 }
 
-/// A venue's name, followed by a sparkle when it was the first time at it and a clock when it was
-/// the most recent time.
+/// A venue's name, marked when it was the first or most recent time at it.
 public struct VenueName: View {
   let name: String
   let isFirstTime: Bool
