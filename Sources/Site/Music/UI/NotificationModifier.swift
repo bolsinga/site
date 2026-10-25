@@ -22,10 +22,7 @@ struct NotificationModifier: ViewModifier {
         Logger.notification.log("task: \(name.rawValue, privacy: .public)")
         for await _ in NotificationCenter.default.notifications(named: name).map({ $0.name }) {
           Logger.notification.log("notified: \(name.rawValue, privacy: .public)")
-          Task { @MainActor in
-            Logger.notification.log("main action: \(name.rawValue, privacy: .public)")
-            action()
-          }
+          action()
         }
       }
   }
