@@ -37,6 +37,11 @@ extension Logger {
 
   var lastModified: Date = .distantPast
 
+  #if !os(tvOS)
+    /// The latest widget snapshot publish, so the next one can cancel it.
+    @ObservationIgnored var widgetPublish: Task<Void, Never>?
+  #endif
+
   /// Loads can overlap, as a refresh can start while another load is still going. The one that
   /// started last wins, however the network orders their results.
   @ObservationIgnored
