@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum RankingSort: Int, CaseIterable {
+public enum RankingSort: Int, CaseIterable, Sendable {
   case alphabetical
   case showCount
   case showYearRange

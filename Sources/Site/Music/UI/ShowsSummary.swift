@@ -13,6 +13,8 @@ struct ShowsSummary: View {
   @Environment(NearbyModel.self) var nearbyModel
   @AppStorage("nearby.distance") private var nearbyDistance = defaultNearbyDistanceThreshold
 
+  @Binding var descending: Bool
+
   var body: some View {
     let decadesMap = model.filteredDecadesMap(nearbyModel, distanceThreshold: nearbyDistance)
     let years = decadesMap.values.reduce(0) { $0 + $1.count }
@@ -25,12 +27,13 @@ struct ShowsSummary: View {
           count: shows, years: years,
           stats: Stats(
             statisticsData: model.filteredStatisticsData(
-              nearbyModel, distanceThreshold: nearbyDistance)))
+              nearbyModel, distanceThreshold: nearbyDistance))),
+      descending: $descending
     )
     .nearbyLocation(filteredDataIsEmpty: decadesMap.isEmpty)
   }
 }
 
 #Preview(traits: .nearbyModel, .vaultModel) {
-  ShowsSummary()
+  ShowsSummary(descending: .constant(false))
 }

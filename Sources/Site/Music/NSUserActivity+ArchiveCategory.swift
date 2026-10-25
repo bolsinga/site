@@ -18,7 +18,7 @@ extension Logger {
 extension NSUserActivity {
   internal static let archiveCategoryKey = "archiveCategory"
 
-  func update(_ category: ArchiveCategory, url: URL?) {
+  func update(_ category: ArchiveCategory, url: URL?, sort: ArchiveCategorySort? = nil) {
     let identifier = category.rawValue
     Logger.updateCategoryActivity.log("advertise: \(identifier, privacy: .public)")
     self.targetContentIdentifier = identifier
@@ -45,8 +45,12 @@ extension NSUserActivity {
       self.webpageURL = url
     }
 
-    self.requiredUserInfoKeys = [NSUserActivity.archiveCategoryKey]
-    self.addUserInfoEntries(from: [NSUserActivity.archiveCategoryKey: identifier])
+    var entries: [String: Any] = [NSUserActivity.archiveCategoryKey: identifier]
+    if let sort {
+      entries.merge(NSUserActivity.userInfoEntries(for: sort)) { $1 }
+    }
+    self.requiredUserInfoKeys = Set(entries.keys)
+    self.addUserInfoEntries(from: entries)
 
     self.expirationDate = .now + (60 * 60 * 24)
   }
