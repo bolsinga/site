@@ -194,8 +194,12 @@ public typealias VaultModel = AbstractVaultModel<BasicIdentifier>
     }
 
     if todayUpdatesQuickly {
-      while true {
-        try? await ContinuousClock().sleep(until: .now + Duration.seconds(5))
+      while !Task.isCancelled {
+        do {
+          try await ContinuousClock().sleep(until: .now + Duration.seconds(5))
+        } catch {
+          break
+        }
 
         todayDayOfLeapYear = todayDayOfLeapYear.nextDayOfLeapYear
 
