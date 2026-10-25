@@ -14,26 +14,23 @@
     fileprivate static let widgetSnapshot = Logger(category: "widgetSnapshot")
   }
 
-  /// Builds and writes the widget snapshot off the main actor, one publish at a time: starting a
-  /// new one cancels the one before it, and a cancelled publish doesn't write, so an older
-  /// snapshot can't land after a newer one.
-  @MainActor final class WidgetSnapshotPublisher {
-    static let shared = WidgetSnapshotPublisher()
-
-    private var task: Task<Void, Never>?
-
+  extension SiteModel {
+    /// Builds and writes the widget snapshot off the main actor, one publish at a time: starting a
+    /// new one cancels the one before it, and a cancelled publish doesn't write, so an older
+    /// snapshot can't land after a newer one.
     /// - Parameters:
     ///   - build: Builds the snapshot. Scales with the archive, so it runs off the main actor.
     ///   - write: Writes the snapshot, returning whether the bytes changed.
     ///   - reload: Asks the widget to reload, only when the bytes changed.
     /// - Returns: The publish, so a caller can wait for it.
+    @MainActor
     @discardableResult
-    func publish(
+    func publishWidgetSnapshot(
       build: @escaping @Sendable () throws -> ShowsTodaySnapshot,
       write: @escaping @Sendable (ShowsTodaySnapshot) throws -> Bool,
       reload: @escaping @MainActor @Sendable () -> Void
     ) -> Task<Void, Never> {
-      task?.cancel()
+      widgetPublish?.cancel()
 
       let publish = Task.detached(priority: .utility) {
         Logger.widgetSnapshot.log("start")
@@ -61,15 +58,13 @@
         Logger.widgetSnapshot.log("wrote snapshot, reloading timelines")
         await MainActor.run { reload() }
       }
-      task = publish
+      widgetPublish = publish
       return publish
     }
-  }
 
-  extension SiteModel {
     @MainActor
     func publishWidgetSnapshot(_ vault: Vault<BasicIdentifier>) {
-      WidgetSnapshotPublisher.shared.publish(
+      publishWidgetSnapshot(
         build: { try vault.showsTodaySnapshot },
         write: { try $0.write() },
         reload: { WidgetCenter.shared.reloadTimelines(ofKind: ShowsTodayWidgetKind.kind) })

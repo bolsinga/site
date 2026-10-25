@@ -37,6 +37,11 @@ extension Logger {
 
   var lastModified: Date = .distantPast
 
+  #if !os(tvOS)
+    /// The latest widget snapshot publish, so the next one can cancel it.
+    @ObservationIgnored var widgetPublish: Task<Void, Never>?
+  #endif
+
   public init(urlString: String, vaultModel: VaultModel? = nil, error: Error? = nil) {
     self.urlString = urlString
     self.vaultModel = vaultModel

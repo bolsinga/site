@@ -22,11 +22,11 @@
     }
 
     @Test func aPublishWritesAndReloads() async {
-      let publisher = WidgetSnapshotPublisher()
+      let model = SiteModel(urlString: "")
       let written = Mutex<[ShowsTodaySnapshot]>([])
       let reloads = Mutex(0)
 
-      await publisher.publish(
+      await model.publishWidgetSnapshot(
         build: { Self.snapshot() },
         write: { snapshot in
           written.withLock { $0.append(snapshot) }
@@ -40,10 +40,10 @@
     }
 
     @Test func anUnchangedSnapshotIsNotReloaded() async {
-      let publisher = WidgetSnapshotPublisher()
+      let model = SiteModel(urlString: "")
       let reloads = Mutex(0)
 
-      await publisher.publish(
+      await model.publishWidgetSnapshot(
         build: { Self.snapshot() },
         write: { _ in false },
         reload: { reloads.withLock { $0 += 1 } }
@@ -53,10 +53,10 @@
     }
 
     @Test func aFailedBuildWritesNothing() async {
-      let publisher = WidgetSnapshotPublisher()
+      let model = SiteModel(urlString: "")
       let writes = Mutex(0)
 
-      await publisher.publish(
+      await model.publishWidgetSnapshot(
         build: { throw BuildFailure() },
         write: { _ in
           writes.withLock { $0 += 1 }
@@ -69,12 +69,12 @@
     }
 
     @Test func aNewerPublishSupersedesOneStillBuilding() async {
-      let publisher = WidgetSnapshotPublisher()
+      let model = SiteModel(urlString: "")
       let written = Mutex<[TimeInterval]>([])
       let release = DispatchSemaphore(value: 0)
       let started = Mutex(false)
 
-      let older = publisher.publish(
+      let older = model.publishWidgetSnapshot(
         build: {
           started.withLock { $0 = true }
           release.wait()
@@ -89,7 +89,7 @@
       // Wait until the older one is building, so the newer one starts after it.
       while !started.withLock({ $0 }) { await Task.yield() }
 
-      let newer = publisher.publish(
+      let newer = model.publishWidgetSnapshot(
         build: { Self.snapshot(generated: 2) },
         write: { snapshot in
           written.withLock { $0.append(snapshot.generated.timeIntervalSince1970) }
