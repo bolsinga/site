@@ -225,7 +225,10 @@ public typealias VaultModel = AbstractVaultModel<BasicIdentifier>
     } catch {
       Logger.vaultModel.error("batch geocode error: \(error, privacy: .public)")
     }
-    batchGeocodeCompleted = true
+    // A cancelled batch stopped early; it must not report the progress as complete.
+    if !Task.isCancelled {
+      batchGeocodeCompleted = true
+    }
 
     Logger.vaultModel.log("end batch geocode")
   }
