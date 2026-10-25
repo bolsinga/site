@@ -6,7 +6,6 @@
 //
 
 import CoreLocation
-import Synchronization
 import os
 
 extension Logger {
@@ -92,19 +91,16 @@ actor LocationManager {
       return authorizationStatus
     }
 
-    let waiter = CancellableWaiter<CLAuthorizationStatus>()
-    delegate.pendingAuthorization.withLock { $0 = waiter }
-    defer { delegate.pendingAuthorization.withLock { $0 = nil } }
-
-    // The waiter keeps a status delivered before it is waited on.
     Logger.location.log("request authorization")
     accessRequest.request(manager)
-    let status = await waiter.wait()
-    guard let status else {
-      Logger.location.log("authorization cancelled")
-      throw CancellationError()
+
+    // The stream ends when the task is cancelled. The delegate also reports the status as it is
+    // set up, which is still undetermined.
+    for await status in delegate.authorizationStatuses where status != .notDetermined {
+      return status
     }
-    return status
+    Logger.location.log("authorization cancelled")
+    throw CancellationError()
   }
 
   func locationStream() async throws -> CLLocationUpdate.Updates {
@@ -114,12 +110,18 @@ actor LocationManager {
   }
 
   private class Delegate: NSObject, CLLocationManagerDelegate {
-    let pendingAuthorization = Mutex<CancellableWaiter<CLAuthorizationStatus>?>(nil)
+    let authorizationStatuses: AsyncStream<CLAuthorizationStatus>
+    private let authorizationContinuation: AsyncStream<CLAuthorizationStatus>.Continuation
+
+    override init() {
+      (authorizationStatuses, authorizationContinuation) = AsyncStream.makeStream()
+      super.init()
+    }
 
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
       let authorizationStatus = manager.authorizationStatus
       Logger.location.log("delegate authorization : \(String(describing: authorizationStatus))")
-      pendingAuthorization.withLock { $0 }?.deliver(authorizationStatus)
+      authorizationContinuation.yield(authorizationStatus)
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
