@@ -37,6 +37,11 @@ extension Logger {
 
   var lastModified: Date = .distantPast
 
+  /// Loads can overlap, as a refresh can start while another load is still going. The one that
+  /// started last wins, however the network orders their results.
+  @ObservationIgnored
+  private var loadCount = 0
+
   public init(urlString: String, vaultModel: VaultModel? = nil, error: Error? = nil) {
     self.urlString = urlString
     self.vaultModel = vaultModel
@@ -60,6 +65,8 @@ extension Logger {
     defer {
       Logger.vaultLoader.log("end: \(String(describing: reason), privacy: .public)")
     }
+    loadCount += 1
+    let request = loadCount
     do {
       error = nil
 
@@ -67,6 +74,10 @@ extension Logger {
         urlString,
         identifier: BasicIdentifier(),
         previousModified: modifiedDate(reason))
+      guard request == loadCount else {
+        Logger.vaultLoader.log("superseded: \(String(describing: reason), privacy: .public)")
+        return
+      }
       self.lastModified = vault.timestamp
 
       vaultModel?.cancelTasks()
@@ -78,6 +89,15 @@ extension Logger {
         }
       #endif
     } catch {
+      guard request == loadCount else {
+        Logger.vaultLoader.log("superseded: \(String(describing: reason), privacy: .public)")
+        return
+      }
+      // A cancelled load, such as a pull to refresh that was let go, isn't a failure to show.
+      guard !Task.isCancelled else {
+        Logger.vaultLoader.log("cancelled: \(String(describing: reason), privacy: .public)")
+        return
+      }
       Logger.vaultLoader.fault("error: \(error.localizedDescription, privacy: .public)")
       self.error = error
     }
