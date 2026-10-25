@@ -6,6 +6,7 @@
 //
 
 import CoreLocation
+import Synchronization
 import os
 
 extension Logger {
@@ -77,7 +78,7 @@ actor LocationManager {
     manager.delegate = delegate
   }
 
-  private func requestAuthorization() async -> CLAuthorizationStatus {
+  private func requestAuthorization() async throws -> CLAuthorizationStatus {
     Logger.location.log(
       "start authorization - accessRequest: \(self.accessRequest.rawValue, privacy: .public)")
     defer {
@@ -91,11 +92,19 @@ actor LocationManager {
       return authorizationStatus
     }
 
-    return await withCheckedContinuation { continuation in
-      delegate.authorizationStreamContinuation = continuation
-      Logger.location.log("request authorization")
-      accessRequest.request(manager)
+    let waiter = CancellableWaiter<CLAuthorizationStatus>()
+    delegate.pendingAuthorization.withLock { $0 = waiter }
+    defer { delegate.pendingAuthorization.withLock { $0 = nil } }
+
+    // The waiter keeps a status delivered before it is waited on.
+    Logger.location.log("request authorization")
+    accessRequest.request(manager)
+    let status = await waiter.wait()
+    guard let status else {
+      Logger.location.log("authorization cancelled")
+      throw CancellationError()
     }
+    return status
   }
 
   func locationStream() async throws -> CLLocationUpdate.Updates {
@@ -105,15 +114,12 @@ actor LocationManager {
   }
 
   private class Delegate: NSObject, CLLocationManagerDelegate {
-    typealias AuthorizationContinuation = CheckedContinuation<CLAuthorizationStatus, Never>
-
-    var authorizationStreamContinuation: AuthorizationContinuation?
+    let pendingAuthorization = Mutex<CancellableWaiter<CLAuthorizationStatus>?>(nil)
 
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
       let authorizationStatus = manager.authorizationStatus
       Logger.location.log("delegate authorization : \(String(describing: authorizationStatus))")
-      authorizationStreamContinuation?.resume(returning: authorizationStatus)
-      authorizationStreamContinuation = nil
+      pendingAuthorization.withLock { $0 }?.deliver(authorizationStatus)
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
