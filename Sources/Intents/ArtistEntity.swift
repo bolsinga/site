@@ -6,6 +6,7 @@
 //
 
 import AppIntents
+import CoreSpotlight
 import Foundation
 import Shared
 
@@ -59,5 +60,14 @@ extension ArtistEntity: URLRepresentableEntity {
 }
 
 #if !os(tvOS)
-  extension ArtistEntity: IndexedEntity {}
+  extension ArtistEntity: IndexedEntity {
+    var attributeSet: CSSearchableItemAttributeSet {
+      let attributes = defaultAttributeSet
+      attributes.contentURL = url
+      attributes.alternateNames = related
+      // Free-text search reads the keywords, not the alternate names.
+      attributes.keywords = related
+      return attributes
+    }
+  }
 #endif
