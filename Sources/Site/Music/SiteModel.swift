@@ -40,7 +40,7 @@ extension Logger {
   /// Loads can overlap, as a refresh can start while another load is still going. The one that
   /// started last wins, however the network orders their results.
   @ObservationIgnored
-  private var loads = LatestRequest()
+  private var loadCount = 0
 
   public init(urlString: String, vaultModel: VaultModel? = nil, error: Error? = nil) {
     self.urlString = urlString
@@ -65,7 +65,8 @@ extension Logger {
     defer {
       Logger.vaultLoader.log("end: \(String(describing: reason), privacy: .public)")
     }
-    let request = loads.begin()
+    loadCount += 1
+    let request = loadCount
     do {
       error = nil
 
@@ -73,7 +74,7 @@ extension Logger {
         urlString,
         identifier: BasicIdentifier(),
         previousModified: modifiedDate(reason))
-      guard loads.isLatest(request) else {
+      guard request == loadCount else {
         Logger.vaultLoader.log("superseded: \(String(describing: reason), privacy: .public)")
         return
       }
@@ -88,7 +89,7 @@ extension Logger {
         }
       #endif
     } catch {
-      guard loads.isLatest(request) else {
+      guard request == loadCount else {
         Logger.vaultLoader.log("superseded: \(String(describing: reason), privacy: .public)")
         return
       }
