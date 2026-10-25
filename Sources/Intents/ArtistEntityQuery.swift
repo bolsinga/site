@@ -7,6 +7,7 @@
 
 import Algorithms
 @preconcurrency import AppIntents
+import CoreSpotlight
 import Foundation
 import Shared
 import os
@@ -164,3 +165,22 @@ extension ArtistEntityQuery: EntityPropertyQuery {
     }
   }
 }
+
+#if !os(tvOS)
+  extension ArtistEntityQuery: IndexedEntityQuery {
+    func reindexEntities(
+      for identifiers: [ArtistEntity.ID], indexDescription: CSSearchableIndexDescription
+    ) async throws {
+      Logger.artistQuery.log(
+        "Reindex: \(identifiers.count, privacy: .public) \(String(describing: indexDescription), privacy: .public)"
+      )
+      try await vault.reindexArtistsForSpotlight(ids: identifiers)
+    }
+
+    func reindexAllEntities(indexDescription: CSSearchableIndexDescription) async throws {
+      Logger.artistQuery.log(
+        "Reindex all: \(String(describing: indexDescription), privacy: .public)")
+      await vault.indexForSpotlight(force: true)
+    }
+  }
+#endif

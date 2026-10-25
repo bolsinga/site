@@ -93,6 +93,12 @@ extension Logger {
           publishWidgetSnapshot(vault)
         }
       #endif
+
+      #if !os(tvOS)
+        if reason.executeAsynchronousTasks {
+          await vault.indexForSpotlight()
+        }
+      #endif
     } catch {
       guard request == loadCount else {
         Logger.vaultLoader.log("superseded: \(String(describing: reason), privacy: .public)")

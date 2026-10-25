@@ -6,6 +6,7 @@
 //
 
 import AppIntents
+import CoreSpotlight
 import Foundation
 import Shared
 
@@ -68,5 +69,17 @@ extension VenueEntity: URLRepresentableEntity {
 }
 
 #if !os(tvOS)
-  extension VenueEntity: IndexedEntity {}
+  extension VenueEntity: IndexedEntity {
+    var attributeSet: CSSearchableItemAttributeSet {
+      let attributes = defaultAttributeSet
+      attributes.contentURL = url
+      attributes.alternateNames = related
+      attributes.city = city
+      attributes.stateOrProvince = state
+      attributes.namedLocation = address
+      attributes.keywords = [city, state, "\(city), \(state)", address] + related
+      attributes.contentDescription = address
+      return attributes
+    }
+  }
 #endif
