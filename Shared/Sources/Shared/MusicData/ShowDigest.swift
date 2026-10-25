@@ -46,6 +46,11 @@ public struct ShowDigest: Codable, Equatable, Hashable, Identifiable, PathRestor
     self.isMostRecentVenue = isMostRecentVenue
   }
 
+  private enum CodingKeys: String, CodingKey {
+    case id, date, performers, venue, venueID, location, comment
+    case firstTimeArtistIDs, isFirstTimeVenue, mostRecentArtistIDs, isMostRecentVenue
+  }
+
   /// Snapshots written before the first times or most recent were known don't have them.
   public init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -67,7 +72,31 @@ public struct ShowDigest: Codable, Equatable, Hashable, Identifiable, PathRestor
         ?? false)
   }
 
+  /// A `Set` encodes in its iteration order, which differs between processes, so the sets are
+  /// sorted. Equal shows then always encode to the same bytes, which the widget snapshot relies on
+  /// to tell that nothing changed.
+  public func encode(to encoder: Encoder) throws {
+    var container = encoder.container(keyedBy: CodingKeys.self)
+    try container.encode(id, forKey: .id)
+    try container.encode(date, forKey: .date)
+    try container.encode(performers, forKey: .performers)
+    try container.encode(venue, forKey: .venue)
+    try container.encode(venueID, forKey: .venueID)
+    try container.encode(location, forKey: .location)
+    try container.encodeIfPresent(comment, forKey: .comment)
+    try container.encode(firstTimeArtistIDs.sortedByEncodedID, forKey: .firstTimeArtistIDs)
+    try container.encode(isFirstTimeVenue, forKey: .isFirstTimeVenue)
+    try container.encode(mostRecentArtistIDs.sortedByEncodedID, forKey: .mostRecentArtistIDs)
+    try container.encode(isMostRecentVenue, forKey: .isMostRecentVenue)
+  }
+
   public var performerNames: [String] { performers.map { $0.name } }
+}
+
+extension Set<ArchivePath> {
+  fileprivate var sortedByEncodedID: [ArchivePath] {
+    sorted { $0.formatted(.json) < $1.formatted(.json) }
+  }
 }
 
 extension ShowDigest: Comparable {

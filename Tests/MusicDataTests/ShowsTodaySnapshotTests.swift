@@ -168,4 +168,61 @@ struct ShowsTodaySnapshotTests {
   @Test func missingFileReadsAsNil() {
     #expect(ShowsTodaySnapshot.read(from: temporaryFileURL()) == nil)
   }
+
+  /// Many ids, so two sets built in different orders iterate differently.
+  var manyArtistIDs: [String] { (0..<40).map { "ar\($0)" } }
+
+  /// The same show whatever `setOrder` is, which only changes how the sets are built.
+  func markedShow(setOrder ids: [String]) -> ShowDigest {
+    let artistIDs = Set(ids.map { ArchivePath.artist($0) })
+    return ShowDigest(
+      id: .show("sh0"),
+      date: PartialDate(year: 1996, month: 12, day: 15),
+      performers: manyArtistIDs.map { ArchiveItem(id: .artist($0), name: $0) },
+      venue: "A Venue",
+      venueID: .venue("v0"),
+      location: Location(city: "city", state: "CA"),
+      comment: nil,
+      firstTimeArtistIDs: artistIDs,
+      mostRecentArtistIDs: artistIDs)
+  }
+
+  @Test func equalShowsEncodeToTheSameBytesWhateverOrderTheirSetsWereBuiltIn() throws {
+    let forward = markedShow(setOrder: manyArtistIDs)
+    let backward = markedShow(setOrder: manyArtistIDs.reversed())
+    #expect(forward == backward)
+
+    let encoder = JSONEncoder()
+    encoder.outputFormatting = [.sortedKeys]
+    #expect(try encoder.encode(forward) == encoder.encode(backward))
+  }
+
+  @Test func equalSnapshotsEncodeToTheSameBytes() throws {
+    let generated = Date(timeIntervalSince1970: 0)
+    let forward = ShowsTodaySnapshot(
+      generated: generated, days: [350: [markedShow(setOrder: manyArtistIDs)]])
+    let backward = ShowsTodaySnapshot(
+      generated: generated, days: [350: [markedShow(setOrder: manyArtistIDs.reversed())]])
+    #expect(forward == backward)
+    #expect(try forward.encoded() == backward.encoded())
+  }
+
+  @Test func setsEncodeSortedByTheirEncodedIDs() throws {
+    let data = try JSONEncoder().encode(markedShow(setOrder: manyArtistIDs.reversed()))
+    let object = try #require(JSONSerialization.jsonObject(with: data) as? [String: Any])
+    for key in ["firstTimeArtistIDs", "mostRecentArtistIDs"] {
+      let ids = try #require(object[key] as? [String])
+      #expect(ids == ids.sorted())
+      #expect(ids.count == manyArtistIDs.count)
+    }
+  }
+
+  @Test func showsWithSetsInAnyOrderStillDecode() throws {
+    let show = markedShow(setOrder: ["ar0", "ar1", "ar2"])
+    let data = try JSONEncoder().encode(show)
+    var object = try #require(JSONSerialization.jsonObject(with: data) as? [String: Any])
+    object["firstTimeArtistIDs"] = (object["firstTimeArtistIDs"] as? [String]).map { Array($0.reversed()) }
+    let reordered = try JSONSerialization.data(withJSONObject: object)
+    #expect(try JSONDecoder().decode(ShowDigest.self, from: reordered) == show)
+  }
 }
