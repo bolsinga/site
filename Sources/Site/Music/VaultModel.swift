@@ -261,6 +261,8 @@ public typealias VaultModel = AbstractVaultModel<BasicIdentifier>
       } catch {
         Logger.vaultModel.error("locationstream error: \(error, privacy: .public)")
       }
+    } catch is CancellationError {
+      Logger.vaultModel.log("location monitoring cancelled")
     } catch LocationAuthorizationError.denied {
       Logger.vaultModel.error("location denied")
       locationAuthorization = .denied

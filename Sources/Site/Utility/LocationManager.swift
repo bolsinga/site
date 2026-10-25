@@ -77,7 +77,7 @@ actor LocationManager {
     manager.delegate = delegate
   }
 
-  private func requestAuthorization() async -> CLAuthorizationStatus {
+  private func requestAuthorization() async throws -> CLAuthorizationStatus {
     Logger.location.log(
       "start authorization - accessRequest: \(self.accessRequest.rawValue, privacy: .public)")
     defer {
@@ -91,11 +91,16 @@ actor LocationManager {
       return authorizationStatus
     }
 
-    return await withCheckedContinuation { continuation in
-      delegate.authorizationStreamContinuation = continuation
-      Logger.location.log("request authorization")
-      accessRequest.request(manager)
+    Logger.location.log("request authorization")
+    accessRequest.request(manager)
+
+    // The stream ends when the task is cancelled. The delegate also reports the status as it is
+    // set up, which is still undetermined.
+    for await status in delegate.authorizationStatuses where status != .notDetermined {
+      return status
     }
+    Logger.location.log("authorization cancelled")
+    throw CancellationError()
   }
 
   func locationStream() async throws -> CLLocationUpdate.Updates {
@@ -105,15 +110,18 @@ actor LocationManager {
   }
 
   private class Delegate: NSObject, CLLocationManagerDelegate {
-    typealias AuthorizationContinuation = CheckedContinuation<CLAuthorizationStatus, Never>
+    let authorizationStatuses: AsyncStream<CLAuthorizationStatus>
+    private let authorizationContinuation: AsyncStream<CLAuthorizationStatus>.Continuation
 
-    var authorizationStreamContinuation: AuthorizationContinuation?
+    override init() {
+      (authorizationStatuses, authorizationContinuation) = AsyncStream.makeStream()
+      super.init()
+    }
 
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
       let authorizationStatus = manager.authorizationStatus
       Logger.location.log("delegate authorization : \(String(describing: authorizationStatus))")
-      authorizationStreamContinuation?.resume(returning: authorizationStatus)
-      authorizationStreamContinuation = nil
+      authorizationContinuation.yield(authorizationStatus)
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
