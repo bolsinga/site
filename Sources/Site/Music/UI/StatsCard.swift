@@ -22,7 +22,6 @@ enum StatKind {
 }
 
 extension StatKind {
-  /// What a count of artists or venues seen for the most recent time is called.
   func mostRecentCaption(count: Int) -> LocalizedStringResource? {
     switch self {
     case .artists: "\(count) Last Seen"
@@ -93,8 +92,6 @@ struct StatRow: View {
     return styled
   }
 
-  /// The new count and the most recent count, side by side when they fit and stacked when they
-  /// don't.
   @ViewBuilder private var captions: some View {
     if let shownNewCount, let mostRecentCaption {
       ViewThatFits(in: .horizontal) {
