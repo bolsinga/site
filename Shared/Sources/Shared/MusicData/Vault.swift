@@ -8,8 +8,12 @@
 import Foundation
 
 public struct Vault: Sendable {
-
   public let rootURL: URL
+
+  /// The artists in library order, for paging from one to the next.
+  public let orderedArtistIDs: [ArchivePath]
+  /// The venues in library order, for paging from one to the next.
+  public let orderedVenueIDs: [ArchivePath]
 
   private let categoryURLLookup: [ArchiveCategory: URL]
 
@@ -18,6 +22,8 @@ public struct Vault: Sendable {
   init(lookup: Lookup, rootURL: URL) {
     self.lookup = lookup
     self.rootURL = rootURL
+    self.orderedArtistIDs = lookup.libraryOrder(of: lookup.artistMap.keys)
+    self.orderedVenueIDs = lookup.libraryOrder(of: lookup.venueMap.keys)
 
     self.categoryURLLookup = ArchiveCategory.allCases.reduce(into: [ArchiveCategory: URL]()) {
       guard let url = $1.url(rootURL: rootURL) else { return }

@@ -5,38 +5,14 @@
 //  Created by Greg Bolsinga on 2/16/23.
 //
 
-import MapKit
 import Shared
 import SwiftUI
 
 struct VenueDetail: View {
-  @Environment(VaultModel.self) private var model
-
   let digest: VenueDigest
-  let url: URL?
   let isPathNavigable: (ArchivePath) -> Bool
-
-  @State private var mapItem: MKMapItem?
-
-  /// The map runs edge to edge under the toolbar, fading into the background where the venue's name and address sit.
-  @ViewBuilder private var headerElement: some View {
-    LocationMap(geocodingInProgress: model.geocodingInProgress, item: $mapItem, minHeight: 0)
-      .containerRelativeFrame(.vertical) { height, _ in height * 0.45 }
-      .mask(
-        LinearGradient(
-          stops: [.init(color: .black, location: 0.6), .init(color: .clear, location: 1)],
-          startPoint: .top, endPoint: .bottom)
-      )
-      .overlay(alignment: .bottomLeading) {
-        VStack(alignment: .leading) {
-          Text(digest.name)
-            .font(.largeTitle.bold())
-          AddressView(location: digest.location)
-            .foregroundStyle(.secondary)
-        }
-        .padding(.horizontal)
-      }
-  }
+  /// Room left under the last card for something floating over the bottom of the page.
+  var bottomContentMargin: CGFloat = 0
 
   @ViewBuilder private var statsElement: some View {
     StatsCard(
@@ -85,49 +61,25 @@ struct VenueDetail: View {
   var body: some View {
     ScrollView {
       VStack(spacing: 16) {
-        headerElement
-        VStack(spacing: 16) {
-          statsElement
-          showsElement
-          relatedsElement
-        }
-        .padding(.horizontal)
+        statsElement
+        showsElement
+        relatedsElement
       }
+      .padding(.horizontal)
     }
-    // A ScrollView is transparent, so on macOS the view beneath (the venues map) shows through.
-    .background(.background)
-    .navigationTitle(digest.name)  // Hidden below, but still titles the back button.
-    .ignoresSafeArea(edges: .top)
-    #if os(macOS)
-      .toolbarBackgroundVisibility(.hidden, for: .windowToolbar)
-    #else
-      .toolbarBackgroundVisibility(.hidden, for: .navigationBar)
-    #endif
-    #if !os(tvOS)
-      .toolbar(removing: .title)
-    #endif
-    #if os(iOS)
-      .navigationBarTitleDisplayMode(.inline)
-    #endif
-    .toolbar { ArchiveSharableToolbarContent(item: digest, url: url) }
-    .onAppear {
-      self.mapItem = model.venueMapItemMap[digest.id]
-    }
-    .onChange(of: model.venueMapItemMap) { _, newValue in
-      self.mapItem = newValue[digest.id]
-    }
+    // A pager keeps this page when it pages to another venue, with the offset of the venue it
+    // came from. A scroll view for each venue starts at the top, as the page it paged from did.
+    .id(digest.id)
+    .contentMargins(.bottom, bottomContentMargin, for: .scrollContent)
   }
 }
 
 #Preview(traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   NavigationStack {
-    VenueDetail(
-      digest: model.previewVenue("v103"),
-      url: nil,
-      isPathNavigable: { _ in
-        true
-      }
-    )
+    VenueBrowser(
+      id: .venue("v103"), venueIDs: model.vault.orderedVenueIDs,
+      digest: { model.vault.digest(venue: $0) }, url: { _ in nil }, isPathNavigable: { _ in true },
+      didShow: { _ in })
   }
 }

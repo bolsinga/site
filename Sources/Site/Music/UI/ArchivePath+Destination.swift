@@ -13,28 +13,29 @@ extension ArchivePath {
   @MainActor
   @ViewBuilder func destination(
     vault: Vault, isPathNavigable: @escaping (ArchivePath) -> Bool,
-    didShowAnnum: @escaping (Annum) -> Void = { _ in }
+    didShowPath: @escaping (ArchivePath) -> Void = { _ in }
   )
     -> some View
   {
     switch self {
     case .show(_):
       if let concert = vault.digest(show: self) {
-        ShowDetail(concert: concert, url: vault.url(for: concert.id), isPathNavigable: isPathNavigable)
+        ShowDetail(
+          concert: concert, url: vault.url(for: concert.id), isPathNavigable: isPathNavigable)
       }
     case .venue(_):
-      if let digest = vault.digest(venue: self) {
-        VenueDetail(digest: digest, url: vault.url(for: digest.id), isPathNavigable: isPathNavigable)
-      }
+      VenueBrowser(
+        id: self, venueIDs: vault.orderedVenueIDs, digest: { vault.digest(venue: $0) },
+        url: { vault.url(for: $0.id) }, isPathNavigable: isPathNavigable, didShow: didShowPath)
     case .artist(_):
-      if let digest = vault.digest(artist: self) {
-        ArtistDetail(digest: digest, url: vault.url(for: digest.id), isPathNavigable: isPathNavigable)
-      }
+      ArtistBrowser(
+        id: self, artistIDs: vault.orderedArtistIDs, digest: { vault.digest(artist: $0) },
+        url: { vault.url(for: $0.id) }, isPathNavigable: isPathNavigable, didShow: didShowPath)
     case .year(let annum):
       YearBrowser(
         annum: annum, annums: vault.decadesMap.values.flatMap { $0.keys },
         digest: { vault.digest(annum: $0) }, url: { vault.url(for: $0.id) },
-        isPathNavigable: isPathNavigable, didShowAnnum: didShowAnnum)
+        isPathNavigable: isPathNavigable, didShowAnnum: { didShowPath(.year($0)) })
     }
   }
 }

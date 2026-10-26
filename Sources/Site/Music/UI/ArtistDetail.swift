@@ -10,16 +10,9 @@ import SwiftUI
 
 struct ArtistDetail: View {
   let digest: ArtistDigest
-  let url: URL?
   let isPathNavigable: (ArchivePath) -> Bool
-
-  @ViewBuilder private var headerElement: some View {
-    if hasMap {
-      ShowsMapHeader(shows: digest.shows, title: digest.name)
-    }
-  }
-
-  private var hasMap: Bool { !digest.shows.isEmpty }
+  /// Room left under the last card for something floating over the bottom of the page.
+  var bottomContentMargin: CGFloat = 0
 
   @ViewBuilder private var statsElement: some View {
     if !digest.shows.isEmpty {
@@ -72,57 +65,46 @@ struct ArtistDetail: View {
   var body: some View {
     ScrollView {
       VStack(spacing: 16) {
-        headerElement
-        VStack(spacing: 16) {
-          statsElement
-          showsElement
-          relatedsElement
-        }
-        .padding(.horizontal)
+        statsElement
+        showsElement
+        relatedsElement
       }
+      .padding(.horizontal)
     }
-    // A ScrollView is transparent, so the view beneath can show through.
-    .background(.background)
-    .modifier(MapHeaderStyle(hasMap: hasMap, title: digest.name))
-    .toolbar { ArchiveSharableToolbarContent(item: digest, url: url) }
+    // A pager keeps this page when it pages to another artist, with the offset of the artist it
+    // came from. A scroll view for each artist starts at the top, as the page it paged from did.
+    .id(digest.id)
+    .contentMargins(.bottom, bottomContentMargin, for: .scrollContent)
   }
 }
 
 #Preview("All Navigable", traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   NavigationStack {
-    ArtistDetail(
-      digest: model.previewArtist("ar692"),
-      url: nil,
-      isPathNavigable: { _ in
-        true
-      }
-    )
+    ArtistBrowser(
+      id: .artist("ar692"), artistIDs: model.vault.orderedArtistIDs,
+      digest: { model.vault.digest(artist: $0) }, url: { _ in nil }, isPathNavigable: { _ in true },
+      didShow: { _ in })
   }
 }
 
 #Preview("None Navigable", traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
   NavigationStack {
-    ArtistDetail(
-      digest: model.previewArtist("ar692"),
-      url: nil,
-      isPathNavigable: { _ in
-        false
-      }
-    )
+    ArtistBrowser(
+      id: .artist("ar692"), artistIDs: model.vault.orderedArtistIDs,
+      digest: { model.vault.digest(artist: $0) }, url: { _ in nil },
+      isPathNavigable: { _ in false }, didShow: { _ in })
   }
 }
 
 #Preview("First Navigated", traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
-  let digest = model.previewArtist("ar692")
-  let selectedConcert = digest.shows[0]
+  let selectedConcert = model.previewArtist("ar692").shows[0]
   NavigationStack {
-    ArtistDetail(
-      digest: digest,
-      url: nil,
-      isPathNavigable: { $0 != selectedConcert.id }
-    )
+    ArtistBrowser(
+      id: .artist("ar692"), artistIDs: model.vault.orderedArtistIDs,
+      digest: { model.vault.digest(artist: $0) }, url: { _ in nil },
+      isPathNavigable: { $0 != selectedConcert.id }, didShow: { _ in })
   }
 }
