@@ -32,17 +32,8 @@ struct DumpBracketCommand: AsyncParsableCommand {
 
   @OptionGroup var rootURL: RootURLArguments
 
-  @Flag(help: "Choose the Identifier for Bracket.")
-  var identifier: IdentifierFlag = .archivePath
-
   func run() async throws {
-    switch identifier {
-    case .basic:
-      let bracket = try await rootURL.bracket(identifier: BasicIdentifier())
-      try bracket.dump()
-    case .archivePath:
-      let bracket = try await rootURL.bracket(identifier: ArchivePathIdentifier())
-      try bracket.dump()
-    }
+    let bracket = try await rootURL.bracket(identifier: ArchivePathIdentifier())
+    try bracket.dump()
   }
 }

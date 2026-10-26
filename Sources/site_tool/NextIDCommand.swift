@@ -53,17 +53,8 @@ struct NextIDCommand: AsyncParsableCommand {
 
   @OptionGroup var rootURL: RootURLArguments
 
-  @Flag(help: "Choose the Identifier for the Vault.")
-  var identifier: IdentifierFlag = .archivePath
-
   func run() async throws {
-    switch identifier {
-    case .basic:
-      try await rootURL.bracket(identifier: BasicIdentifier(), artistsWithShowsOnly: false)
-        .printNextIDs()
-    case .archivePath:
-      try await rootURL.bracket(identifier: ArchivePathIdentifier(), artistsWithShowsOnly: false)
-        .printNextIDs()
-    }
+    try await rootURL.bracket(identifier: ArchivePathIdentifier(), artistsWithShowsOnly: false)
+      .printNextIDs()
   }
 }

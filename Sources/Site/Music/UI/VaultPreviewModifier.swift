@@ -56,7 +56,7 @@ extension PreviewTrait where T == Preview.ViewTraits {
 
 extension VaultModel {
   func previewArtist(_ id: String) -> ArtistDigest {
-    vault.digest(artist: id)!
+    vault.digest(artist: .artist(id))!
   }
 
   var previewAllArtists: any Collection<RankedArchiveItem> {
@@ -64,7 +64,7 @@ extension VaultModel {
   }
 
   func previewVenue(_ id: String) -> VenueDigest {
-    vault.digest(venue: id)!
+    vault.digest(venue: .venue(id))!
   }
 
   var previewAllVenues: any Collection<RankedArchiveItem> {
@@ -72,10 +72,10 @@ extension VaultModel {
   }
 
   func previewShow(_ id: String) -> ShowDigest {
-    vault.digest(show: id)!
+    vault.digest(show: .show(id))!
   }
 
   func previewAnnum(_ id: Annum) -> AnnumDigest {
-    vault.digest(annum: id)!
+    vault.digest(annum: .year(id))!
   }
 }

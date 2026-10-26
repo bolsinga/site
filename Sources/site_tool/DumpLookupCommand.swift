@@ -32,16 +32,7 @@ struct DumpLookupCommand: AsyncParsableCommand {
 
   @OptionGroup var rootURL: RootURLArguments
 
-  @Flag(help: "Choose the Identifier for Lookup.")
-  var identifier: IdentifierFlag = .archivePath
-
   func run() async throws {
-    switch identifier {
-    case .basic:
-      try await rootURL.lookup(identifier: BasicIdentifier()).dump()
-
-    case .archivePath:
-      try await rootURL.lookup(identifier: ArchivePathIdentifier()).dump()
-    }
+    try await rootURL.lookup(identifier: ArchivePathIdentifier()).dump()
   }
 }
