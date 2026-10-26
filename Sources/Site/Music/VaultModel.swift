@@ -31,7 +31,9 @@ enum LocationAuthorization {
   }
 }
 
-public typealias VaultModel = AbstractVaultModel<BasicIdentifier>
+/// The identifier the app loads its vault with.
+public typealias AppIdentifier = BasicIdentifier
+public typealias VaultModel = AbstractVaultModel<AppIdentifier>
 
 @Observable public final class AbstractVaultModel<Identifier: ArchiveIdentifier> {
   public typealias ID = Identifier.ID

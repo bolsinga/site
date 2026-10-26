@@ -24,7 +24,7 @@ struct ArtistEntity: AppEntity {
 
   static let defaultQuery = ArtistEntityQuery()
 
-  var id: Artist.ID
+  var id: AppIdentifier.ID
 
   @Property var url: URL
   @Property var name: String
