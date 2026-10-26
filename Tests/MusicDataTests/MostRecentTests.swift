@@ -241,18 +241,18 @@ struct MostRecentTests {
       artists: [artist1, artist2], shows: shows, venues: [venue, venue2])
 
     // Nothing was last seen or visited in 1996; the later shows came after.
-    let year1996 = try #require(vault.digest(annum: .year(.year(1996))))
+    let year1996 = try #require(vault.digest(annum: .year(1996)))
     #expect(year1996.mostRecentArtistCount == 0)
     #expect(year1996.mostRecentVenueCount == 0)
 
     // The artist and the venue last seen on a show with just a year count for that year, as the
     // most recent date of each counts: artist1 on 1997, venue2 on 1997, artist2 on 1997-05-06 and
     // the venue at 1997-05-06.
-    let year1997 = try #require(vault.digest(annum: .year(.year(1997))))
+    let year1997 = try #require(vault.digest(annum: .year(1997)))
     #expect(year1997.mostRecentArtistCount == 2)
     #expect(year1997.mostRecentVenueCount == 2)
 
-    let unknown = try #require(vault.digest(annum: .year(.unknown)))
+    let unknown = try #require(vault.digest(annum: .unknown))
     #expect(unknown.mostRecentArtistCount == 0)
     #expect(unknown.mostRecentVenueCount == 0)
   }

@@ -130,12 +130,12 @@ struct FirstTimeTests {
     let vault = try await createVault(
       artists: [artist1, artist2], shows: shows, venues: [venue, venue2])
 
-    let year1996 = try #require(vault.digest(annum: .year(.year(1996))))
+    let year1996 = try #require(vault.digest(annum: .year(1996)))
     #expect(year1996.newArtistCount == 1)
     #expect(year1996.newVenueCount == 1)
 
     // The artist and the venue first seen on a show with just a year are new that year.
-    let year1997 = try #require(vault.digest(annum: .year(.year(1997))))
+    let year1997 = try #require(vault.digest(annum: .year(1997)))
     #expect(year1997.newArtistCount == 1)
     #expect(year1997.newVenueCount == 1)
   }

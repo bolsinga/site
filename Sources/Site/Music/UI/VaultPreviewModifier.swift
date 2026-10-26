@@ -76,6 +76,6 @@ extension VaultModel {
   }
 
   func previewAnnum(_ id: Annum) -> AnnumDigest {
-    vault.digest(annum: .year(id))!
+    vault.digest(annum: id)!
   }
 }
