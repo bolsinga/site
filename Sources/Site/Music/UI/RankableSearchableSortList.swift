@@ -9,8 +9,8 @@ import Shared
 import SwiftUI
 
 struct RankableSearchableSortList<
-  A: Hashable & Identifiable & Nameable & PathRestorable & Rankable, SectionHeaderContent: View
->: View {
+  A: Hashable & Identifiable & Nameable & Rankable, SectionHeaderContent: View
+>: View where A.ID == ArchivePath {
   let items: any Collection<A>
   let compare: (A, A) -> Bool
   let sort: RankingSort

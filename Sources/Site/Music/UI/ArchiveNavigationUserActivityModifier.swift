@@ -45,7 +45,7 @@ struct ArchiveNavigationUserActivityModifier: ViewModifier {
 
         Logger.navigationUserActivity.log("update path \(path.formatted(.json), privacy: .public)")
         guard let pathUserActivity = activityForPath(path) else { return }
-        userActivity.update(pathUserActivity, url: model.vault.url(for: pathUserActivity))
+        userActivity.update(pathUserActivity, url: model.vault.url(for: path))
       }
   }
 }

@@ -8,7 +8,8 @@
 import Shared
 import SwiftUI
 
-struct ArtistList<A: Hashable & Identifiable & Nameable & PathRestorable & Rankable>: View {
+struct ArtistList<A: Hashable & Identifiable & Nameable & Rankable>: View
+where A.ID == ArchivePath {
   let artists: any Collection<A>
   let compare: (A, A) -> Bool
   let sort: RankingSort

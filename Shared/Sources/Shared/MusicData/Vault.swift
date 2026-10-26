@@ -52,8 +52,8 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
     categoryURLLookup[category]
   }
 
-  public func url(for item: PathRestorable) -> URL? {
-    item.archivePath.url(using: rootURL)
+  public func url(for path: ArchivePath) -> URL? {
+    path.url(using: rootURL)
   }
 
   fileprivate func concertIDs(on dayOfLeapYear: Int, orRecentCount recentCount: Int)
