@@ -9,12 +9,12 @@ import Shared
 import SwiftUI
 
 struct RankingList<
-  T: Identifiable & PathRestorable,
+  T: Identifiable,
   R: Comparable & Hashable,
   ItemContent: View,
   SectionHeader: View,
   LabelContent: View
->: View {
+>: View where T.ID == ArchivePath {
   let rankingMap: [R: [T]]
   let compare: (T, T) -> Bool
   let rankSorted: ((R, R) -> Bool)
@@ -33,7 +33,7 @@ struct RankingList<
         if let items = rankingMap[ranking] {
           Section {
             ForEach(items.sorted(by: compare)) { item in
-              NavigationLink(value: item.archivePath) {
+              NavigationLink(value: item.id) {
                 LabeledContent {
                   itemContentView(item)
                 } label: {

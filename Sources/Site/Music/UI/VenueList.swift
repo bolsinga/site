@@ -8,7 +8,8 @@
 import Shared
 import SwiftUI
 
-struct VenueList<V: Hashable & Identifiable & Nameable & PathRestorable & Rankable>: View {
+struct VenueList<V: Hashable & Identifiable & Nameable & Rankable>: View
+where V.ID == ArchivePath {
   let venues: any Collection<V>
   let compare: (V, V) -> Bool
   let sort: RankingSort

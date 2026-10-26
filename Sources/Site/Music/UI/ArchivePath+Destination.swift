@@ -20,20 +20,20 @@ extension ArchivePath {
     switch self {
     case .show(_):
       if let concert = vault.digest(show: self) {
-        ShowDetail(concert: concert, url: vault.url(for: concert), isPathNavigable: isPathNavigable)
+        ShowDetail(concert: concert, url: vault.url(for: concert.id), isPathNavigable: isPathNavigable)
       }
     case .venue(_):
       if let digest = vault.digest(venue: self) {
-        VenueDetail(digest: digest, url: vault.url(for: digest), isPathNavigable: isPathNavigable)
+        VenueDetail(digest: digest, url: vault.url(for: digest.id), isPathNavigable: isPathNavigable)
       }
     case .artist(_):
       if let digest = vault.digest(artist: self) {
-        ArtistDetail(digest: digest, url: vault.url(for: digest), isPathNavigable: isPathNavigable)
+        ArtistDetail(digest: digest, url: vault.url(for: digest.id), isPathNavigable: isPathNavigable)
       }
     case .year(let annum):
       YearBrowser(
         annum: annum, annums: vault.decadesMap.values.flatMap { $0.keys },
-        digest: { vault.digest(annum: .year($0)) }, url: { vault.url(for: $0) },
+        digest: { vault.digest(annum: .year($0)) }, url: { vault.url(for: $0.id) },
         isPathNavigable: isPathNavigable, didShowAnnum: didShowAnnum)
     }
   }

@@ -15,17 +15,16 @@ extension Logger {
 }
 
 extension VaultModel {
-  fileprivate func detail<V: Hashable & Identifiable & Nameable & PathRestorable>(for item: V)
-    -> Details
-  {
-    guard let mapItem = venueMapItemMap[item.archivePath] else {
+  fileprivate func detail<V: Hashable & Identifiable & Nameable>(for item: V) -> Details
+  where V.ID == ArchivePath {
+    guard let mapItem = venueMapItemMap[item.id] else {
       return .init(coordinate: kCLLocationCoordinate2DInvalid, title: "Unknown")
     }
     return .init(coordinate: mapItem.location.coordinate, title: item.name)
   }
 }
 
-struct VenuesMap<V: Hashable & Identifiable & Nameable & PathRestorable>: View {
+struct VenuesMap<V: Hashable & Identifiable & Nameable>: View where V.ID == ArchivePath {
   @Environment(VaultModel.self) private var model
 
   let items: any Collection<V>
@@ -43,9 +42,9 @@ struct VenuesMap<V: Hashable & Identifiable & Nameable & PathRestorable>: View {
     ) {
       model.detail(for: $0)
     } onSelect: { item in
-      Logger.venuesMap.info("select \(String(describing: item.archivePath))")
+      Logger.venuesMap.info("select \(String(describing: item.id))")
       openedDetail = true
-      withAnimation { navigateToPath(item.archivePath) }
+      withAnimation { navigateToPath(item.id) }
     } clusterLabel: {
       String(localized: "Cluster, \($0) venues")
     } itemContent: { item in
