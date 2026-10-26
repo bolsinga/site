@@ -8,8 +8,6 @@
 import Foundation
 
 public struct ShowDigest: Codable, Equatable, Hashable, Identifiable, Sendable {
-  public var archivePath: ArchivePath { id }
-
   public let id: ArchivePath
   public let date: PartialDate
   public let performers: [ArchiveItem]

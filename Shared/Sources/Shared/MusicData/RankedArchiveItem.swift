@@ -14,15 +14,13 @@ public struct RankedArchiveItem: Hashable, Identifiable, LibraryComparable, Name
   private let rank: RankDigest
 
   init(
-    archivePath: ArchivePath, sortname: String?, name: String, rank: RankDigest
+    id: ArchivePath, sortname: String?, name: String, rank: RankDigest
   ) {
-    self.id = archivePath
+    self.id = id
     self.sortname = sortname
     self.name = name
     self.rank = rank
   }
-
-  public var archivePath: ArchivePath { id }
 
   public var firstSet: FirstSet { rank.firstSet }
 
@@ -45,13 +43,13 @@ public struct RankedArchiveItem: Hashable, Identifiable, LibraryComparable, Name
 }
 
 extension Artist {
-  public func rankedArchiveItem(_ rank: RankDigest) -> RankedArchiveItem {
-    RankedArchiveItem(archivePath: archivePath, sortname: sortname, name: name, rank: rank)
+  public func rankedArchiveItem(id: ArchivePath, _ rank: RankDigest) -> RankedArchiveItem {
+    RankedArchiveItem(id: id, sortname: sortname, name: name, rank: rank)
   }
 }
 
 extension Venue {
-  public func rankedArchiveItem(_ rank: RankDigest) -> RankedArchiveItem {
-    RankedArchiveItem(archivePath: archivePath, sortname: sortname, name: name, rank: rank)
+  public func rankedArchiveItem(id: ArchivePath, _ rank: RankDigest) -> RankedArchiveItem {
+    RankedArchiveItem(id: id, sortname: sortname, name: name, rank: rank)
   }
 }

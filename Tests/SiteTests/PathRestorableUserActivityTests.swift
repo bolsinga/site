@@ -42,7 +42,7 @@ struct PathRestorableUserActivityTests {
 
     let artist = Artist(id: "ar0", name: "AR0")
     let digest = ArtistDigest<ArchivePath>(
-      id: artist.archivePath, artist: artist, shows: [], related: [], rank: .empty)
+      id: .artist(artist.id), artist: artist, shows: [], related: [], rank: .empty)
     userActivity.update(digest, url: rootURL)
 
     #expect(userActivity.isEligibleForHandoff)
@@ -63,7 +63,7 @@ struct PathRestorableUserActivityTests {
 
     let venue = Venue(id: "v10", location: Location(city: "c", state: "s"), name: "V10")
     let digest = VenueDigest<ArchivePath>(
-      id: venue.archivePath, venue: venue, shows: [], related: [], rank: .empty)
+      id: .venue(venue.id), venue: venue, shows: [], related: [], rank: .empty)
     userActivity.update(digest, url: rootURL)
 
     #expect(userActivity.isEligibleForHandoff)
