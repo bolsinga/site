@@ -20,6 +20,9 @@ private let dotSize: CGFloat = 14
 private let clearFraction = 0.6
 private let fadeFraction = 1.0 - clearFraction
 
+/// How much wider than its venues a detail map shows; the venue and artist details match.
+let detailMapFitZoomOutFactor = 2.0
+
 /// A day's venues are spread across the country; fit them closer than a detail map does.
 private let dayMapFitZoomOutFactor = 1.3
 
@@ -84,10 +87,12 @@ struct ShowsMap: View {
   }
 }
 
-/// A map of the venues of some shows that fades into the page, with a title over the fade.
+/// A map of the venues of some shows that fades into the page, with a title over the fade, and a
+/// venue's address under it.
 struct ShowsMapHeader: View {
   let shows: [ShowDigest]
   let title: String
+  var location: Location?
   var animatesChanges = false
 
   var body: some View {
@@ -101,11 +106,17 @@ struct ShowsMapHeader: View {
           startPoint: .top, endPoint: .bottom)
       )
       .overlay(alignment: .bottomLeading) {
-        Text(title)
-          .font(.largeTitle.bold())
-          .padding(.horizontal)
-          .contentTransition(.opacity)
-          .animation(.default, value: title)
+        VStack(alignment: .leading) {
+          Text(title)
+            .font(.largeTitle.bold())
+            .contentTransition(.opacity)
+            .animation(.default, value: title)
+          if let location {
+            AddressView(location: location)
+              .foregroundStyle(.secondary)
+          }
+        }
+        .padding(.horizontal)
       }
   }
 }
