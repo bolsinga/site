@@ -17,8 +17,8 @@ extension Vault {
       return digest(venue: path)
     case .artist(_):
       return digest(artist: path)
-    case .year(_):
-      return digest(annum: path)
+    case .year(let annum):
+      return digest(annum: annum)
     }
   }
 }

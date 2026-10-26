@@ -33,7 +33,7 @@ extension ArchivePath {
     case .year(let annum):
       YearBrowser(
         annum: annum, annums: vault.decadesMap.values.flatMap { $0.keys },
-        digest: { vault.digest(annum: .year($0)) }, url: { vault.url(for: $0.id) },
+        digest: { vault.digest(annum: $0) }, url: { vault.url(for: $0.id) },
         isPathNavigable: isPathNavigable, didShowAnnum: didShowAnnum)
     }
   }
