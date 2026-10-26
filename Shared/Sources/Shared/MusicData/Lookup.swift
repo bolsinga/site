@@ -207,6 +207,17 @@ public struct Lookup: Codable, Sendable {
     decadesMap(for: annumShows)
   }
 
+  /// How every item of a kind ranks for a metric.
+  func rankDistribution(_ kind: RankKind, _ metric: RankMetric) -> RankDistribution {
+    let digests =
+      switch kind {
+      case .artist: bracket.artistRankDigestMap.values
+      case .venue: bracket.venueRankDigestMap.values
+      case .annum: bracket.annumRankDigestMap.values
+      }
+    return RankDistribution(rankings: digests.map { $0.ranking(for: metric) })
+  }
+
   public var annumShows: [ArchivePath: Set<ArchivePath>] {
     bracket.annumShows
   }

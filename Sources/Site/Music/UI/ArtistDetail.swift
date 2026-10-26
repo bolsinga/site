@@ -18,7 +18,7 @@ struct ArtistDetail: View {
     if !digest.shows.isEmpty {
       StatsCard(
         stats: Stats(artistDigest: digest), titles: StatsTitles(artistDigest: digest),
-        firstSetRank: digest.rank.firstSet.rank)
+        rankKind: .artist, firstSetRank: digest.rank.firstSet.rank)
     }
   }
 

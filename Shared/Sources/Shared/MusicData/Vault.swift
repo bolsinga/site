@@ -156,6 +156,10 @@ public struct Vault: Sendable {
     }).map { ArchiveItem(id: $0.0, name: $0.1.name) }
   }
 
+  public func rankDistribution(_ kind: RankKind, _ metric: RankMetric) -> RankDistribution {
+    lookup.rankDistribution(kind, metric)
+  }
+
   public func digest(annum: Annum) -> AnnumDigest? {
     lookup.annumDigest(annum: annum)
   }
