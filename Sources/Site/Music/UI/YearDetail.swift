@@ -17,7 +17,9 @@ struct YearDetail: View {
 
   @ViewBuilder private var statsElement: some View {
     if !digest.shows.isEmpty {
-      StatsCard(stats: Stats(annumDigest: digest), titles: StatsTitles(annum: digest.annum))
+      StatsCard(
+        stats: Stats(annumDigest: digest), titles: StatsTitles(annum: digest.annum),
+        rankKind: .annum)
     }
   }
 

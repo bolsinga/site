@@ -41,12 +41,20 @@ extension View {
   }
 }
 
+/// What the rank of a row is charted against: every item of its kind.
+struct RankChartData {
+  let distribution: RankDistribution
+  let kind: StatKind
+}
+
 struct StatRow: View {
   @ScaledMetric(relativeTo: .largeTitle) private var rowHeight = 44
   @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
   let text: AttributedString
   var ranking: Ranking?
+  /// Where the ranking sits among all the items, shown in place of the rank when there is one.
+  var rankChart: RankChartData?
   /// How many of the count were first seen, shown after it when there are any.
   var newCount: Int?
   /// How many of the count were seen for the most recent time, shown after it when there are any.
@@ -56,22 +64,24 @@ struct StatRow: View {
   var animatesChanges: Bool
 
   init(
-    text: AttributedString, ranking: Ranking? = nil, newCount: Int? = nil,
-    mostRecentCaption: LocalizedStringResource? = nil, animatesChanges: Bool = true
+    text: AttributedString, ranking: Ranking? = nil, rankChart: RankChartData? = nil,
+    newCount: Int? = nil, mostRecentCaption: LocalizedStringResource? = nil,
+    animatesChanges: Bool = true
   ) {
     self.text = text
     self.ranking = ranking
+    self.rankChart = rankChart
     self.newCount = newCount
     self.mostRecentCaption = mostRecentCaption
     self.animatesChanges = animatesChanges
   }
 
   init(
-    count: Int, kind: StatKind, ranking: Ranking? = nil, newCount: Int? = nil,
-    mostRecentCount: Int? = nil
+    count: Int, kind: StatKind, ranking: Ranking? = nil, rankChart: RankChartData? = nil,
+    newCount: Int? = nil, mostRecentCount: Int? = nil
   ) {
     self.init(
-      text: kind.text(count: count), ranking: ranking, newCount: newCount,
+      text: kind.text(count: count), ranking: ranking, rankChart: rankChart, newCount: newCount,
       mostRecentCaption: mostRecentCount.flatMap {
         $0 > 0 ? kind.mostRecentCaption(count: $0) : nil
       }
@@ -126,7 +136,13 @@ struct StatRow: View {
     return newCount
   }
 
-  var body: some View {
+  /// The chart this row's ranking is shown in, when it is ranked and there is something to chart.
+  private var chart: (ranking: Ranking, data: RankChartData)? {
+    guard let ranking, ranking.rank != .unknown, let rankChart else { return nil }
+    return (ranking, rankChart)
+  }
+
+  private var content: some View {
     HStack(alignment: .firstTextBaseline) {
       VStack(alignment: .leading, spacing: 0) {
         Text(styledText)
@@ -138,7 +154,13 @@ struct StatRow: View {
         captions
       }
       .frame(maxWidth: .infinity, alignment: .leading)
-      if let ranking, ranking.rank != .unknown {
+      if let chart {
+        RankSkyline(
+          distribution: chart.data.distribution, ranking: chart.ranking, kind: chart.data.kind,
+          presentation: .card
+        )
+        .frame(width: 96)
+      } else if let ranking, ranking.rank != .unknown {
         Text(ranking.formatted(.rankOnly))
           .font(.title3)
           .foregroundStyle(.secondary)
@@ -149,13 +171,26 @@ struct StatRow: View {
     .frame(
       maxWidth: .infinity, minHeight: rowHeight, maxHeight: hasCaption ? nil : rowHeight)
   }
+
+  var body: some View {
+    if let chart {
+      // The whole row opens the chart, as the weekday and month rows do.
+      SheetButton {
+        content
+          .contentShape(.rect)
+      } sheet: {
+        RankSkyline(
+          distribution: chart.data.distribution, ranking: chart.ranking, kind: chart.data.kind)
+      }
+    } else {
+      content
+    }
+  }
 }
 
-struct ChartRow<Chart: View, Sheet: View>: View {
-  @ScaledMetric(relativeTo: .largeTitle) private var rowHeight = 44
-
-  let label: LocalizedStringResource
-  @ViewBuilder let chart: () -> Chart
+/// A button that presents a sheet, which is dismissed once the navigation state changes.
+struct SheetButton<Label: View, Sheet: View>: View {
+  @ViewBuilder let label: () -> Label
   @ViewBuilder let sheet: () -> Sheet
 
   @Environment(\.archiveNavigationState) private var navigationState
@@ -166,6 +201,28 @@ struct ChartRow<Chart: View, Sheet: View>: View {
     Button {
       presentedState = navigationState
     } label: {
+      label()
+    }
+    .buttonStyle(.plain)
+    .dismissibleSheet(
+      isPresented: Binding(
+        get: { presentedState == navigationState },
+        set: { if !$0 { presentedState = nil } })
+    ) {
+      sheet()
+    }
+  }
+}
+
+struct ChartRow<Chart: View, Sheet: View>: View {
+  @ScaledMetric(relativeTo: .largeTitle) private var rowHeight = 44
+
+  let label: LocalizedStringResource
+  @ViewBuilder let chart: () -> Chart
+  @ViewBuilder let sheet: () -> Sheet
+
+  var body: some View {
+    SheetButton {
       HStack {
         Text(label)
           .font(.subheadline.weight(.semibold))
@@ -177,13 +234,7 @@ struct ChartRow<Chart: View, Sheet: View>: View {
       }
       .frame(height: rowHeight)
       .contentShape(.rect)
-    }
-    .buttonStyle(.plain)
-    .dismissibleSheet(
-      isPresented: Binding(
-        get: { presentedState == navigationState },
-        set: { if !$0 { presentedState = nil } })
-    ) {
+    } sheet: {
       sheet()
     }
   }
@@ -247,11 +298,13 @@ struct StatRows<Content: View>: View {
 
 struct StatsCard: View {
   @Environment(\.statsThreshold) private var statsThreshold: Int
+  @Environment(VaultModel.self) private var model
 
   let stats: Stats
   let titles: StatsTitles
+  /// What kind of item the stats are of, to chart its rankings against all the others.
+  var rankKind: RankKind?
   var firstSetRank: Rank?
-  var includesCategories = true
 
   var body: some View {
     DetailCard(title: Text("Stats")) {
@@ -259,31 +312,50 @@ struct StatsCard: View {
         if let firstSetRank, firstSetRank != .unknown {
           StatRow(text: AttributedString(localized: "**\(firstSetRank.formatted())** First Set"))
         }
-        if includesCategories {
-          ForEach(stats.categories(weekdayOrMonthChartConcertThreshold: statsThreshold), id: \.self)
-          {
-            row(for: $0)
-          }
+        ForEach(stats.categories(weekdayOrMonthChartConcertThreshold: statsThreshold), id: \.self) {
+          row(for: $0)
         }
       }
+    }
+  }
+
+  /// How a row's ranking is charted against every item of the kind, when it can be.
+  private func rankChart(for category: StatsCategory) -> RankChartData? {
+    guard let rankKind else { return nil }
+    let chart: (RankMetric, StatKind)? =
+      switch (rankKind, category) {
+      case (_, .shows): (.shows, .shows)
+      case (.venue, .years), (.artist, .years): (.span, .years)
+      case (.venue, .artists), (.annum, .artists): (.associated, .artists)
+      case (.artist, .venues): (.associated, .venues)
+      case (.annum, .venues): (.span, .venues)
+      default: nil
+      }
+    return chart.map {
+      RankChartData(distribution: model.vault.rankDistribution(rankKind, $0.0), kind: $0.1)
     }
   }
 
   @ViewBuilder private func row(for category: StatsCategory) -> some View {
     switch category {
     case .shows:
-      StatRow(count: stats.concertsCount, kind: .shows, ranking: stats.showRanking)
+      StatRow(
+        count: stats.concertsCount, kind: .shows, ranking: stats.showRanking,
+        rankChart: rankChart(for: category))
     case .years:
       StatRow(
-        count: stats.yearsSpanRanking?.value ?? 0, kind: .years, ranking: stats.yearsSpanRanking)
+        count: stats.yearsSpanRanking?.value ?? 0, kind: .years, ranking: stats.yearsSpanRanking,
+        rankChart: rankChart(for: category))
     case .venues:
       StatRow(
         count: stats.venueCount, kind: .venues, ranking: stats.artistVenuesRanking,
-        newCount: stats.newVenueCount, mostRecentCount: stats.mostRecentVenueCount)
+        rankChart: rankChart(for: category), newCount: stats.newVenueCount,
+        mostRecentCount: stats.mostRecentVenueCount)
     case .artists:
       StatRow(
         count: stats.artistCount, kind: .artists, ranking: stats.venueArtistsRanking,
-        newCount: stats.newArtistCount, mostRecentCount: stats.mostRecentArtistCount)
+        rankChart: rankChart(for: category), newCount: stats.newArtistCount,
+        mostRecentCount: stats.mostRecentArtistCount)
     case .weekday:
       ChartRow(label: StatsTitles.generic.weekday) {
         WeekdayChart(dates: stats.dates, title: titles.weekday, presentation: .card)

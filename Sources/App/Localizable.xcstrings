@@ -1,6 +1,9 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "" : {
+
+    },
     "**%@** First Set" : {
 
     },
@@ -94,6 +97,46 @@
     },
     "#%@" : {
       "comment" : "rank.hash"
+    },
+    "#%lld · %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "#%1$lld · %2$lld"
+          }
+        }
+      }
+    },
+    "#%lld · %lld · %lld tied" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "#%1$lld · %2$lld · %3$lld tied"
+          }
+        }
+      }
+    },
+    "#%lld of %lld ranks" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "#%1$lld of %2$lld ranks"
+          }
+        }
+      }
+    },
+    "#%lld of %lld ranks · %lld tied" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "#%1$lld of %2$lld ranks · %3$lld tied"
+          }
+        }
+      }
     },
     "%@" : {
 
@@ -283,6 +326,9 @@
     "Bands" : {
 
     },
+    "Base" : {
+
+    },
     "Cancel" : {
 
     },
@@ -326,6 +372,9 @@
 
     },
     "Filter Nearby" : {
+
+    },
+    "From" : {
 
     },
     "Geocoding…" : {
@@ -383,6 +432,9 @@
 
     },
     "No Matches" : {
+
+    },
+    "Not ranked" : {
 
     },
     "Nothing is nearby. Disable the Location Filter or increase the nearby distance filter." : {
@@ -493,10 +545,16 @@
     "The category does not have a URL." : {
 
     },
+    "To" : {
+
+    },
     "Today" : {
 
     },
     "Unable to load data." : {
+
+    },
+    "Value" : {
 
     },
     "venue" : {

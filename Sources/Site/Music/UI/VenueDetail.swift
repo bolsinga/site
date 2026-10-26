@@ -17,7 +17,7 @@ struct VenueDetail: View {
   @ViewBuilder private var statsElement: some View {
     StatsCard(
       stats: Stats(venueDigest: digest), titles: StatsTitles(venueDigest: digest),
-      firstSetRank: digest.rank.firstSet.rank, includesCategories: digest.shows.count > 1)
+      rankKind: .venue, firstSetRank: digest.rank.firstSet.rank)
   }
 
   @ViewBuilder private var showsElement: some View {
@@ -81,5 +81,15 @@ struct VenueDetail: View {
       id: .venue("v103"), venueIDs: model.vault.orderedVenueIDs,
       digest: { model.vault.digest(venue: $0) }, url: { _ in nil }, isPathNavigable: { _ in true },
       didShow: { _ in })
+  }
+}
+
+#Preview("One Show", traits: .vaultModel) {
+  @Previewable @Environment(VaultModel.self) var model
+  let id = model.vault.venueIDs().first { model.vault.digest(venue: $0.0)?.shows.count == 1 }!.0
+  NavigationStack {
+    VenueBrowser(
+      id: id, venueIDs: model.vault.orderedVenueIDs, digest: { model.vault.digest(venue: $0) },
+      url: { _ in nil }, isPathNavigable: { _ in true }, didShow: { _ in })
   }
 }
