@@ -64,27 +64,15 @@ struct DumpVaultCommand: AsyncParsableCommand {
 
   @OptionGroup var rootURL: RootURLArguments
 
-  @Flag(help: "Choose the Identifier for the Vault.")
-  var identifier: IdentifierFlag = .archivePath
-
   @Option(help: "Search String to use.")
   var searchString: String?
 
   @MainActor
   func run() async throws {
-    switch identifier {
-    case .basic:
-      let vault = try await rootURL.vault(identifier: BasicIdentifier())
-      let vaultModel = AbstractVaultModel(vault, executeAsynchronousTasks: false)
-      vaultModel.dump(searchString: searchString) {
-        vault.concertsForArtist(artistID: $0.id)
-      }
-    case .archivePath:
-      let vault = try await rootURL.vault(identifier: ArchivePathIdentifier())
-      let vaultModel = AbstractVaultModel(vault, executeAsynchronousTasks: false)
-      vaultModel.dump(searchString: searchString) {
-        vault.concertsForArtist(artistID: $0.archivePath)
-      }
+    let vault = try await rootURL.vault(identifier: ArchivePathIdentifier())
+    let vaultModel = AbstractVaultModel(vault, executeAsynchronousTasks: false)
+    vaultModel.dump(searchString: searchString) {
+      vault.concertsForArtist(artistID: $0.archivePath)
     }
   }
 }

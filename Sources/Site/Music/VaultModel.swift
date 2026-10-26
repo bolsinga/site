@@ -32,7 +32,7 @@ enum LocationAuthorization {
 }
 
 /// The identifier the app loads its vault with.
-public typealias AppIdentifier = BasicIdentifier
+public typealias AppIdentifier = ArchivePathIdentifier
 public typealias VaultModel = AbstractVaultModel<AppIdentifier>
 
 @Observable public final class AbstractVaultModel<Identifier: ArchiveIdentifier> {
@@ -147,17 +147,6 @@ public typealias VaultModel = AbstractVaultModel<AppIdentifier>
   {
     do {
       return try vault.compareIDs(lhs: lhs.archivePath, rhs: rhs.archivePath)
-    } catch {
-      self.error = error
-      return false
-    }
-  }
-
-  func compare<Comparable: Identifiable>(lhs: Comparable, rhs: Comparable)
-    -> Bool where Comparable.ID == ArchivePath, ID == ArchivePath.ID
-  {
-    do {
-      return try vault.compareIDs(lhs: lhs.id.formatted(.rawID), rhs: rhs.id.formatted(.rawID))
     } catch {
       self.error = error
       return false

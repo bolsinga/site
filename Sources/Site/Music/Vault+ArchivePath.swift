@@ -8,22 +8,7 @@
 import Foundation
 import Shared
 
-extension Vault where Identifier == BasicIdentifier {
-  func restorableSharableLinkable(for path: ArchivePath) -> PathRestorableUserActivity? {
-    switch path {
-    case .show(let iD):
-      return digest(show: iD)
-    case .venue(let iD):
-      return digest(venue: iD)
-    case .artist(let iD):
-      return digest(artist: iD)
-    case .year(let annum):
-      return annum
-    }
-  }
-}
-
-extension Vault where Identifier == ArchivePathIdentifier {
+extension Vault where Identifier == AppIdentifier {
   func restorableSharableLinkable(for path: ArchivePath) -> PathRestorableUserActivity? {
     switch path {
     case .show(_):
