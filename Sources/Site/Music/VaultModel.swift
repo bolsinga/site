@@ -116,7 +116,7 @@ typealias VenueDigest = Shared.VenueDigest<AppIdentifier.ID>
     }
   }
 
-  func artists(filteredBy searchString: String) -> [Artist] {
+  func artists(filteredBy searchString: String) -> [ArchiveItem] {
     do {
       return try vault.artists(filteredBy: searchString)
     } catch {
@@ -125,7 +125,7 @@ typealias VenueDigest = Shared.VenueDigest<AppIdentifier.ID>
     }
   }
 
-  func venues(filteredBy searchString: String) -> [Venue] {
+  func venues(filteredBy searchString: String) -> [ArchiveItem] {
     do {
       return try vault.venues(filteredBy: searchString)
     } catch {

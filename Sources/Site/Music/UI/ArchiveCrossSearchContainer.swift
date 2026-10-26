@@ -8,15 +8,14 @@
 import Shared
 import SwiftUI
 
-struct ArchiveCrossSearchContainer<A: Nameable & PathRestorable, V: Nameable & PathRestorable>: View
-{
+struct ArchiveCrossSearchContainer: View {
   @Environment(\.isSearching) private var isSearching
 
   @Binding var searchString: String
   @Binding var scope: ArchiveScope
   let navigateToPath: (ArchivePath) -> Void
-  let artistSearch: (String) -> [A]
-  let venueSearch: (String) -> [V]
+  let artistSearch: (String) -> [ArchiveItem]
+  let venueSearch: (String) -> [ArchiveItem]
 
   var body: some View {
     if isSearching {
