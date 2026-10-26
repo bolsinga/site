@@ -82,8 +82,7 @@ struct ArchivePathUserActivityTests {
   @Test func annum() throws {
     let userActivity = NSUserActivity(activityType: "test-type")
 
-    let item = AnnumDigest(
-      id: .year(.year(1990)), annum: .year(1990), shows: [], rank: .empty)
+    let item = AnnumDigest(annum: .year(1990), shows: [], rank: .empty)
 
     userActivity.update(item, url: rootURL)
 
