@@ -71,18 +71,17 @@ public struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
   /// Convenience alias for the stable identifier type used for artists and venues.
   public typealias ID = Identifier.ID
   /// Convenience alias for the stable identifier type used for year-like (annum) groupings.
-  public typealias AnnumID = Identifier.AnnumID
 
   /// Aggregated ranking metrics for each artist, used to sort or filter artist lists.
   let artistRankDigestMap: [ID: RankDigest]
   /// Aggregated ranking metrics for each venue, used to sort or filter venue lists.
   let venueRankDigestMap: [ID: RankDigest]
-  /// Aggregated ranking metrics for each annum (e.g., year), keyed by `AnnumID`.
-  let annumRankDigestMap: [AnnumID: RankDigest]
+  /// Aggregated ranking metrics for each annum (e.g., year), keyed by `ID`.
+  let annumRankDigestMap: [ID: RankDigest]
   /// Shows grouped by year (annum).
-  let annumShows: [AnnumID: Set<ID>]
-  /// mapping AnnumID to Annum
-  let annumMap: [AnnumID: Annum]
+  let annumShows: [ID: Set<ID>]
+  /// mapping ID to Annum
+  let annumMap: [ID: Annum]
   /// Maps a day-of-leap-year index (1...366) to the set of show `ID`s that occurred on that day.
   let concertDayMap: [Int: Set<ID>]
   /// For each artist `ID`, the set of show `ID`s they performed.

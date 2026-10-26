@@ -11,13 +11,12 @@ public protocol ArchiveIdentifiable: Codable, Hashable, Sendable, CustomStringCo
 
 public protocol ArchiveIdentifier: Codable, Sendable {
   associatedtype ID: ArchiveIdentifiable
-  associatedtype AnnumID: ArchiveIdentifiable
 
   func venue(_ id: String) throws -> ID
   func artist(_ id: String) throws -> ID
   func show(_ id: String) throws -> ID
-  func annum(_ annum: Annum) throws -> AnnumID
-  func decade(_ annum: AnnumID) -> Decade
-  func annum(for annum: AnnumID) -> Annum
+  func annum(_ annum: Annum) throws -> ID
+  func decade(_ id: ID) -> Decade
+  func annum(for id: ID) -> Annum
   func relation(_ id: String) throws -> ID
 }

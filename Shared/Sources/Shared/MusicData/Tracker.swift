@@ -47,7 +47,6 @@ extension Dictionary where Value == Int {
 /// - Flipped dictionaries expose inverse relationships for easy traversal.
 struct Tracker<Identifier: ArchiveIdentifier> {
   typealias ID = Identifier.ID
-  typealias AnnumID = Identifier.AnnumID
 
   // Unsure how to make this generic over whatever Set.Element may be.
   private func insert<Key>(into dictionary: inout [Key: Set<ID>], key: Key, value: ID) {
@@ -79,13 +78,13 @@ struct Tracker<Identifier: ArchiveIdentifier> {
   var artistShows = [ID: Set<ID>]()
 
   /// Shows grouped by year (annum).
-  var annumShows = [AnnumID: Set<ID>]()
+  var annumShows = [ID: Set<ID>]()
   /// Artists grouped by year (annum).
-  var annumArtists = [AnnumID: Set<ID>]()
+  var annumArtists = [ID: Set<ID>]()
   /// Venues grouped by year (annum).
-  var annumVenues = [AnnumID: Set<ID>]()
-  /// mapping AnnumID to Annum
-  var annumMap = [AnnumID: Annum]()
+  var annumVenues = [ID: Set<ID>]()
+  /// mapping ID to Annum
+  var annumMap = [ID: Annum]()
 
   /// Shows indexed by the day of leap year (1...366).
   var dayOfLeapYearShows = [Int: Set<ID>]()
@@ -205,15 +204,15 @@ struct Tracker<Identifier: ArchiveIdentifier> {
     await computeRankings { venueArtists.mapValues { $0.count }.map { $0 } }
   }
 
-  private func annumShowRankings() async -> [AnnumID: Ranking] {
+  private func annumShowRankings() async -> [ID: Ranking] {
     await computeRankings { annumShows.mapValues { $0.count }.map { $0 } }
   }
 
-  private func annumVenueRankings() async -> [AnnumID: Ranking] {
+  private func annumVenueRankings() async -> [ID: Ranking] {
     await computeRankings { annumVenues.mapValues { $0.count }.map { $0 } }
   }
 
-  private func annumArtistRankings() async -> [AnnumID: Ranking] {
+  private func annumArtistRankings() async -> [ID: Ranking] {
     await computeRankings { annumArtists.mapValues { $0.count }.map { $0 } }
   }
 
@@ -321,7 +320,7 @@ struct Tracker<Identifier: ArchiveIdentifier> {
   /// and associated artist rankings. No first set rankings are included for annums.
   ///
   /// - Returns: A dictionary mapping annum IDs to their rank digests.
-  func annumRankDigests() async -> [AnnumID: RankDigest] {
+  func annumRankDigests() async -> [ID: RankDigest] {
     // These names do not quite work.
     async let spanRankings = await annumVenueRankings()
     async let showRankings = await annumShowRankings()
