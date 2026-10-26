@@ -145,6 +145,14 @@ public struct Lookup: Codable, Sendable {
     try bracket.compareIDs(lhs: lhs, rhs: rhs)
   }
 
+  /// The ids in library order. Ids that tie, or that cannot be compared, keep a fixed order by id.
+  func libraryOrder(of ids: some Collection<ArchivePath>) -> [ArchivePath] {
+    let byID = ids.sorted {
+      $0.description.compare($1.description, options: .numeric) == .orderedAscending
+    }
+    return (try? byID.sorted { try compareIDs(lhs: $0, rhs: $1) }) ?? byID
+  }
+
   func sort(showIDs: any Collection<ArchivePath>) throws -> [ArchivePath] {
     try showIDs.sorted { lhs, rhs in
       guard let lhsIndex = showIDOrderIndex[lhs] else {

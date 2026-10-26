@@ -8,6 +8,15 @@
 import Shared
 import SwiftUI
 
+extension ArchivePath {
+  fileprivate func isSameKind(as other: ArchivePath) -> Bool {
+    switch (self, other) {
+    case (.show, .show), (.venue, .venue), (.artist, .artist), (.year, .year): true
+    default: false
+    }
+  }
+}
+
 struct ArchiveCategoryStack: View {
   @Environment(VaultModel.self) var model
   @Environment(\.archiveNavigationState) private var navigationState
@@ -57,10 +66,11 @@ struct ArchiveCategoryStack: View {
     }
   }
 
-  /// Swiping between years changes the year on the path, so it always names the year shown.
-  private func showAnnum(_ annum: Annum) {
-    guard case .year = path.last, path.last != .year(annum) else { return }
-    path[path.count - 1] = .year(annum)
+  /// Swiping between years, artists or venues changes the last path element, so it always names
+  /// the one shown.
+  private func showPath(_ shown: ArchivePath) {
+    guard let last = path.last, last != shown, last.isSameKind(as: shown) else { return }
+    path[path.count - 1] = shown
   }
 
   var body: some View {
@@ -74,7 +84,7 @@ struct ArchiveCategoryStack: View {
         .navigationDestination(for: ArchivePath.self) {
           $0.destination(
             vault: model.vault, isPathNavigable: path.isPathNavigable(_:),
-            didShowAnnum: showAnnum(_:))
+            didShowPath: showPath(_:))
         }
         .toolbar {
           ArchiveCategoryToolbarContent(
