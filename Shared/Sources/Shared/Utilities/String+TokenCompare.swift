@@ -15,4 +15,9 @@ extension String {
 
     return compare(other, options: options) == ComparisonResult.orderedAscending
   }
+
+  /// Orders ids that otherwise tie, comparing the numbers in them by value: `sh9` is before `sh10`.
+  func idCompare(other: String) -> Bool {
+    compare(other, options: .numeric) == ComparisonResult.orderedAscending
+  }
 }

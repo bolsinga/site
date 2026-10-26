@@ -155,7 +155,7 @@ struct Tracker {
     try shows.sorted { lhs, rhs in
       if lhs.date == rhs.date {
         // Shows on the same date keep a fixed order, so the ranks don't depend on the sort.
-        return lhs.id.compare(rhs.id, options: .numeric) == .orderedAscending
+        return lhs.id.idCompare(other: rhs.id)
       }
       return PartialDate.compareWithUnknownsMuted(lhs: lhs.date, rhs: rhs.date)
     }.forEach {

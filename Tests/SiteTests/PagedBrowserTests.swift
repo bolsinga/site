@@ -61,4 +61,24 @@ struct PagedBrowserTests {
     #expect(vault.orderedArtistIDs == [.artist(artistA.id), .artist(artistZ.id)])
     #expect(vault.orderedVenueIDs == [.venue(venueA.id), .venue(venueZ.id)])
   }
+
+  @Test func vaultOrdersTiedNamesByNumericID() async throws {
+    let venue = Venue(id: "v0", location: Location(city: "city", state: "CA"), name: "Venue")
+    let artist9 = Artist(id: "ar9", name: "Same Name")
+    let artist10 = Artist(id: "ar10", name: "Same Name")
+    let show = Show(
+      artists: [artist10.id, artist9.id], date: PartialDate(year: 1996, month: 12, day: 15),
+      id: "sh0", venue: venue.id)
+
+    let vault = Vault(
+      lookup: try await Lookup(
+        bracket: try await Bracket(
+          music: Music(
+            albums: [], artists: [artist10, artist9], relations: [], shows: [show], songs: [],
+            timestamp: Date(), venues: [venue]),
+          timestamp: .now)),
+      rootURL: URL(string: "https://www.example.com/")!)
+
+    #expect(vault.orderedArtistIDs == [.artist(artist9.id), .artist(artist10.id)])
+  }
 }

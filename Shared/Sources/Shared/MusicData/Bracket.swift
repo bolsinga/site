@@ -193,7 +193,7 @@ public struct Bracket: Codable, Sendable {
           let lhHeadliner = try headlinerInfo(lhs)
           let rhHeadliner = try headlinerInfo(rhs)
           if lhHeadliner == rhHeadliner {
-            return lhs.description < rhs.description
+            return lhs.description.idCompare(other: rhs.description)
           }
           return try compareIDs(lhs: lhHeadliner, rhs: rhHeadliner)
         }
