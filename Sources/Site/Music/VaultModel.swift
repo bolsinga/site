@@ -40,7 +40,6 @@ typealias VenueDigest = Shared.VenueDigest<AppIdentifier.ID>
 
 @Observable public final class AbstractVaultModel<Identifier: ArchiveIdentifier> {
   public typealias ID = Identifier.ID
-  public typealias AnnumID = Identifier.AnnumID
 
   public let vault: Vault<Identifier>
 

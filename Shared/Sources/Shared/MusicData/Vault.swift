@@ -9,7 +9,6 @@ import Foundation
 
 public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
   public typealias ID = Identifier.ID
-  public typealias AnnumID = Identifier.AnnumID
 
   public let rootURL: URL
 
@@ -153,7 +152,7 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
     }).map { ArchiveItem(id: $0.1.archivePath, name: $0.1.name) }
   }
 
-  public func digest(annum: AnnumID) -> AnnumDigest? {
+  public func digest(annum: ID) -> AnnumDigest? {
     lookup.annumDigest(id: annum)
   }
 

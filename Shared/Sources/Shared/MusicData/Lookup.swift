@@ -21,10 +21,8 @@ extension Logger {
 /// - Generic Parameter Identifier: An `ArchiveIdentifier` that defines the stable ID types used
 ///   throughout the lookup APIs.
 public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
-  /// Convenience alias for the stable identifier type used for artists, venues, and shows.
+  /// Convenience alias for the stable identifier type used for artists, venues, shows, and annums.
   public typealias ID = Identifier.ID
-  /// Convenience alias for the stable identifier type used for year-like (annum) groupings.
-  public typealias AnnumID = Identifier.AnnumID
 
   private let bracket: Bracket<Identifier>
 
@@ -188,7 +186,7 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
 
   /// Groups shows by decade, then by annum (e.g., year), returning the count of Shows for each.
   public func decadesMap(showIDs: Set<ID>) -> [Decade: [Annum: Int]] {
-    let matchingAnnumShows = annumShows.reduce(into: [AnnumID: Set<ID>]()) {
+    let matchingAnnumShows = annumShows.reduce(into: [ID: Set<ID>]()) {
       let (key, value) = $1
       let matchedShowIDs = value.intersection(showIDs)
       if !matchedShowIDs.isEmpty {
@@ -198,7 +196,7 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
     return decadesMap(for: matchingAnnumShows)
   }
 
-  public func decadesMap(for annumShows: [AnnumID: Set<ID>]) -> [Decade: [Annum: Int]] {
+  public func decadesMap(for annumShows: [ID: Set<ID>]) -> [Decade: [Annum: Int]] {
     annumShows.reduce(into: [Decade: [Annum: Int]]()) {
       guard let annum = annumMap[$1.key] else { return }
       let decade = annum.decade
@@ -212,11 +210,11 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
     decadesMap(for: annumShows)
   }
 
-  public var annumShows: [AnnumID: Set<ID>] {
+  public var annumShows: [ID: Set<ID>] {
     bracket.annumShows
   }
 
-  public var annumMap: [AnnumID: Annum] {
+  public var annumMap: [ID: Annum] {
     bracket.annumMap
   }
 
@@ -284,7 +282,7 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
     artists(showID: showID).compactMap { artistMap[$0] }
   }
 
-  func rankDigest(annum: AnnumID) -> RankDigest {
+  func rankDigest(annum: ID) -> RankDigest {
     bracket.annumRankDigestMap[annum] ?? .empty
   }
 
