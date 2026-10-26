@@ -19,7 +19,7 @@
   /// Bump when what is indexed changes, so an older app's index is replaced.
   private let spotlightIndexVersion = 2
 
-  extension Vault where Identifier == BasicIdentifier {
+  extension Vault where Identifier == AppIdentifier {
     fileprivate var spotlightStamp: Data {
       Data("\(spotlightIndexVersion) \(timestamp.timeIntervalSince1970)".utf8)
     }
