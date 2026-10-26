@@ -41,7 +41,7 @@ struct PathRestorableUserActivityTests {
     let userActivity = NSUserActivity(activityType: "test-type")
 
     let artist = Artist(id: "ar0", name: "AR0")
-    let digest = ArtistDigest<ArchivePath>(
+    let digest = ArtistDigest(
       id: .artist(artist.id), artist: artist, shows: [], related: [], rank: .empty)
     userActivity.update(digest, url: rootURL)
 
@@ -62,7 +62,7 @@ struct PathRestorableUserActivityTests {
     let userActivity = NSUserActivity(activityType: "test-type")
 
     let venue = Venue(id: "v10", location: Location(city: "c", state: "s"), name: "V10")
-    let digest = VenueDigest<ArchivePath>(
+    let digest = VenueDigest(
       id: .venue(venue.id), venue: venue, shows: [], related: [], rank: .empty)
     userActivity.update(digest, url: rootURL)
 
@@ -82,7 +82,7 @@ struct PathRestorableUserActivityTests {
   @Test func annum() throws {
     let userActivity = NSUserActivity(activityType: "test-type")
 
-    let item = AnnumDigest<ArchivePath>(
+    let item = AnnumDigest(
       id: .year(.year(1990)), annum: .year(1990), shows: [], rank: .empty)
 
     userActivity.update(item, url: rootURL)

@@ -15,3 +15,9 @@ public enum ArchivePath: Hashable, Sendable {
   case artist(ID)
   case year(Annum)
 }
+
+extension ArchivePath: CustomStringConvertible {
+  public var description: String {
+    formatted(.rawID)
+  }
+}
