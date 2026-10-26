@@ -77,7 +77,6 @@ extension Logger {
 
       let vault = try await Vault.load(
         urlString,
-        identifier: AppIdentifier(),
         previousModified: modifiedDate(reason))
       guard request == loadCount else {
         Logger.vaultLoader.log("superseded: \(String(describing: reason), privacy: .public)")

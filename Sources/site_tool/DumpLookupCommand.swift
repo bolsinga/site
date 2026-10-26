@@ -33,6 +33,6 @@ struct DumpLookupCommand: AsyncParsableCommand {
   @OptionGroup var rootURL: RootURLArguments
 
   func run() async throws {
-    try await rootURL.lookup(identifier: ArchivePathIdentifier()).dump()
+    try await rootURL.lookup().dump()
   }
 }

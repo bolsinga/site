@@ -33,7 +33,7 @@ struct DumpBracketCommand: AsyncParsableCommand {
   @OptionGroup var rootURL: RootURLArguments
 
   func run() async throws {
-    let bracket = try await rootURL.bracket(identifier: ArchivePathIdentifier())
+    let bracket = try await rootURL.bracket()
     try bracket.dump()
   }
 }

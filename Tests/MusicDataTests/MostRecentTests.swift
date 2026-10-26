@@ -18,7 +18,7 @@ struct MostRecentTests {
   let artist2 = Artist(id: "ar1", name: "B Artist")
 
   func createVault(artists: [Artist], shows: [Show], venues: [Venue]) async throws
-    -> Vault<ArchivePathIdentifier>
+    -> Vault
   {
     Vault(
       lookup: try await Lookup(
@@ -31,7 +31,6 @@ struct MostRecentTests {
             songs: [],
             timestamp: Date(),
             venues: venues),
-          identifier: ArchivePathIdentifier(),
           timestamp: .now)),
       rootURL: URL(string: "https://www.example.com/")!)
   }

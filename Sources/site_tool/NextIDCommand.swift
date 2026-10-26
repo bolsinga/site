@@ -54,7 +54,7 @@ struct NextIDCommand: AsyncParsableCommand {
   @OptionGroup var rootURL: RootURLArguments
 
   func run() async throws {
-    try await rootURL.bracket(identifier: ArchivePathIdentifier(), artistsWithShowsOnly: false)
+    try await rootURL.bracket(artistsWithShowsOnly: false)
       .printNextIDs()
   }
 }

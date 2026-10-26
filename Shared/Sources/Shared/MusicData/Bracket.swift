@@ -10,14 +10,14 @@ import Foundation
 import OrderedCollections
 
 extension Collection where Element == Artist {
-  fileprivate func lookups<Identifier: ArchiveIdentifier>(
-    _ identifier: Identifier, tokenizer: LibraryCompareTokenizer
-  ) throws -> ([Identifier.ID: String], [Identifier.ID: Element]) {
-    var sortTokenMap = [Identifier.ID: String]()
-    var lookup = [Identifier.ID: Element]()
+  fileprivate func lookups(tokenizer: LibraryCompareTokenizer) throws -> (
+    [ArchivePath: String], [ArchivePath: Element]
+  ) {
+    var sortTokenMap = [ArchivePath: String]()
+    var lookup = [ArchivePath: Element]()
 
     try forEach {
-      let id = try identifier.artist($0.id)
+      let id = try ArchivePath(raw: $0.id)
       sortTokenMap[id] = tokenizer.removeCommonInitialPunctuation($0.librarySortString)
       lookup[id] = $0
     }
@@ -27,14 +27,14 @@ extension Collection where Element == Artist {
 }
 
 extension Collection where Element == Venue {
-  fileprivate func lookups<Identifier: ArchiveIdentifier>(
-    _ identifier: Identifier, tokenizer: LibraryCompareTokenizer
-  ) throws -> ([Identifier.ID: String], [Identifier.ID: Element]) {
-    var sortTokenMap = [Identifier.ID: String]()
-    var lookup = [Identifier.ID: Element]()
+  fileprivate func lookups(tokenizer: LibraryCompareTokenizer) throws -> (
+    [ArchivePath: String], [ArchivePath: Element]
+  ) {
+    var sortTokenMap = [ArchivePath: String]()
+    var lookup = [ArchivePath: Element]()
 
     try forEach {
-      let id = try identifier.venue($0.id)
+      let id = try ArchivePath(raw: $0.id)
       sortTokenMap[id] = tokenizer.removeCommonInitialPunctuation($0.librarySortString)
       lookup[id] = $0
     }
@@ -44,14 +44,14 @@ extension Collection where Element == Venue {
 }
 
 extension Music {
-  fileprivate func itemMaps<Identifier: ArchiveIdentifier>(_ identifier: Identifier) throws -> (
-    artistTokens: [Identifier.ID: String], artistMap: [Identifier.ID: Artist],
-    venueTokens: [Identifier.ID: String], venueMap: [Identifier.ID: Venue]
+  fileprivate func itemMaps() throws -> (
+    artistTokens: [ArchivePath: String], artistMap: [ArchivePath: Artist],
+    venueTokens: [ArchivePath: String], venueMap: [ArchivePath: Venue]
   ) {
     let tokenizer = LibraryCompareTokenizer()
 
-    let (artistTokens, artistMap) = try self.artists.lookups(identifier, tokenizer: tokenizer)
-    let (venueTokens, venueMap) = try self.venues.lookups(identifier, tokenizer: tokenizer)
+    let (artistTokens, artistMap) = try self.artists.lookups(tokenizer: tokenizer)
+    let (venueTokens, venueMap) = try self.venues.lookups(tokenizer: tokenizer)
 
     return (
       artistTokens: artistTokens, artistMap: artistMap, venueTokens: venueTokens, venueMap: venueMap
@@ -64,12 +64,9 @@ extension Music {
 /// `Bracket` consolidates several derived maps from the music archive, such as rank digests,
 /// decade groupings, and show relationships. It is intended to be created off the main thread
 /// and then shared read-only across views for efficient access.
-///
-/// - Generic Parameter Identifier: An `ArchiveIdentifier` that defines the stable ID types used
-///   throughout the snapshot.
-public struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
+public struct Bracket: Codable, Sendable {
   /// Convenience alias for the stable identifier type used for artists, venues, and annums.
-  public typealias ID = Identifier.ID
+  public typealias ID = ArchivePath
 
   /// Aggregated ranking metrics for each artist, used to sort or filter artist lists.
   let artistRankDigestMap: [ID: RankDigest]
@@ -108,13 +105,12 @@ public struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
 
   let timestamp: Date
 
-  init(music: Music, identifier: Identifier, timestamp: Date) async throws {
-    async let (artistSortTokens, artistMap, venueSortTokens, venueMap) = try music.itemMaps(
-      identifier)
+  init(music: Music, timestamp: Date) async throws {
+    async let (artistSortTokens, artistMap, venueSortTokens, venueMap) = try music.itemMaps()
 
-    async let relations = music.relationMap(identifier: identifier)
+    async let relations = music.relationMap()
 
-    async let tracker = try Tracker(shows: music.shows, identifier: identifier)
+    async let tracker = try Tracker(shows: music.shows)
 
     self.artistRankDigestMap = try await tracker.artistRankDigests(
       sections: artistSortTokens.mapValues { $0.librarySection })
@@ -148,16 +144,15 @@ public struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
   ///
   /// - Parameters:
   ///   - url: The `URL` where the JSON music data is.
-  ///   - identifier: An `ArchiveIdentifier` used to generate stable IDs for all derived maps.
   ///   - artistsWithShowsOnly: filter out Artists that do not have shows. Defaults to true.
   /// - Throws: Any error encountered while reading the archive or computing derived structures.
-  public init(url: URL, identifier: Identifier, artistsWithShowsOnly: Bool = true) async throws {
+  public init(url: URL, artistsWithShowsOnly: Bool = true) async throws {
     var signpost = Signpost(category: "bracket", name: "url")
     signpost.start()
 
     let (music, lastModified) = try await Music.load(
       url: url, artistsWithShowsOnly: artistsWithShowsOnly)
-    try await self.init(music: music, identifier: identifier, timestamp: lastModified)
+    try await self.init(music: music, timestamp: lastModified)
   }
 
   func compareIDs(lhs: ID, rhs: ID) throws -> Bool {

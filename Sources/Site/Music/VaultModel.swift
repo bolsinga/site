@@ -31,19 +31,14 @@ enum LocationAuthorization {
   }
 }
 
-/// The identifier the app loads its vault with.
-public typealias AppIdentifier = ArchivePathIdentifier
-public typealias VaultModel = AbstractVaultModel<AppIdentifier>
+typealias ArtistDigest = Shared.ArtistDigest<ArchivePath>
+typealias VenueDigest = Shared.VenueDigest<ArchivePath>
+typealias AnnumDigest = Shared.AnnumDigest<ArchivePath>
 
-typealias ArtistDigest = Shared.ArtistDigest<AppIdentifier.ID>
-typealias VenueDigest = Shared.VenueDigest<AppIdentifier.ID>
-typealias AnnumDigest = Shared.AnnumDigest<AppIdentifier.ID>
+@Observable public final class VaultModel {
+  public typealias ID = ArchivePath
 
-@Observable public final class AbstractVaultModel<Identifier: ArchiveIdentifier>
-where Identifier.ID == ArchivePath {
-  public typealias ID = Identifier.ID
-
-  public let vault: Vault<Identifier>
+  public let vault: Vault
 
   internal var error: Error?
 
@@ -67,7 +62,7 @@ where Identifier.ID == ArchivePath {
 
   @MainActor
   internal init(
-    _ vault: Vault<Identifier>,
+    _ vault: Vault,
     executeAsynchronousTasks: Bool,
     distanceFilter: CLLocationDistance = 10,
     error: Error? = nil

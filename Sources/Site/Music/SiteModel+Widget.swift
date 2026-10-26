@@ -63,7 +63,7 @@
     }
 
     @MainActor
-    func publishWidgetSnapshot(_ vault: Vault<AppIdentifier>) {
+    func publishWidgetSnapshot(_ vault: Vault) {
       publishWidgetSnapshot(
         build: { try vault.showsTodaySnapshot },
         write: { try $0.write() },
