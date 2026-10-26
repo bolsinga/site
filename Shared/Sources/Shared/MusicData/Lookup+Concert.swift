@@ -11,19 +11,19 @@ extension Lookup {
   fileprivate func showDigest(show: Show, showId: ID) -> ShowDigest? {
     guard let venueID = venues(showID: showId), let venue = venueMap[venueID] else { return nil }
     let artists = artists(showID: showId).compactMap { id in artistMap[id].map { (id, $0) } }
-    let performers = artists.map { ArchiveItem(id: $1.archivePath, name: $1.name) }
+    let performers = artists.map { ArchiveItem(id: $0, name: $1.name) }
     let firstTimeArtistIDs = Set(
       artists.filter { rankDigest(artist: $0.0).firstSet.isFirst(on: show.date) }
-        .map { $1.archivePath })
+        .map { $0.0 })
     let mostRecentArtistIDs = Set(
       artists.filter { rankDigest(artist: $0.0).mostRecentSet.isMostRecent(on: show.date) }
-        .map { $1.archivePath })
+        .map { $0.0 })
     return ShowDigest(
-      id: show.archivePath,
+      id: showId,
       date: show.date,
       performers: performers,
       venue: venue.name,
-      venueID: venue.archivePath,
+      venueID: venueID,
       location: venue.location,
       comment: show.comment,
       firstTimeArtistIDs: firstTimeArtistIDs,

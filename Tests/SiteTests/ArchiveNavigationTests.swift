@@ -79,10 +79,10 @@ struct ArchiveNavigationTests {
 
   @Test func navigateToCategory_existingPath() {
     let ar = ArchiveNavigation(
-      category: .artists, categoryPaths: [.artists: [Artist(id: "id", name: "name").archivePath]])
+      category: .artists, categoryPaths: [.artists: [ArchivePath.artist("id")]])
     #expect(ar.category == .artists)
     #expect(!ar.path.isEmpty)
-    #expect(ar.path.first! == Artist(id: "id", name: "name").archivePath)
+    #expect(ar.path.first! == ArchivePath.artist("id"))
 
     ar.navigate(to: .venues)
     #expect(ar.category == .venues)

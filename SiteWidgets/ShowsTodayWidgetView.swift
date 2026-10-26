@@ -188,7 +188,7 @@ struct ShowsTodayWidgetView: View {
 
 extension ShowDigest {
   fileprivate var url: URL? {
-    URL.archiveRoot.flatMap { archivePath.url(using: $0) }
+    URL.archiveRoot.flatMap { id.url(using: $0) }
   }
 
   /// Whether the headliner was seen for the first time at this show.

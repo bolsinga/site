@@ -271,7 +271,7 @@ where Identifier.ID == ArchivePath {
   {
     venueMapItemMap.compactMap { (id, mapItem) in
       guard mapItem.location.distance(from: location) <= distanceThreshold else { return nil }
-      return vault.venueArchivePathMap[id]
+      return id
     }
   }
 

@@ -7,7 +7,8 @@
 
 import Foundation
 
-public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
+public struct Vault<Identifier: ArchiveIdentifier>: Sendable
+where Identifier.ID == ArchivePath {
   public typealias ID = Identifier.ID
 
   public let rootURL: URL
@@ -128,7 +129,7 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
     }
     return try matchingPairs.sorted(by: {
       try lookup.compareIDs(lhs: $0.0, rhs: $1.0)
-    }).map { ArchiveItem(id: $0.1.archivePath, name: $0.1.name) }
+    }).map { ArchiveItem(id: $0.0, name: $0.1.name) }
   }
 
   public func venueIDs(filteredBy searchString: String) -> any Sequence<ID> {
@@ -149,7 +150,7 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
     }
     return try matchingPairs.sorted(by: {
       try lookup.compareIDs(lhs: $0.0, rhs: $1.0)
-    }).map { ArchiveItem(id: $0.1.archivePath, name: $0.1.name) }
+    }).map { ArchiveItem(id: $0.0, name: $0.1.name) }
   }
 
   public func digest(annum: ID) -> AnnumDigest<ID>? {
@@ -197,11 +198,11 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
   }
 
   public func rankedArtist(id: ID) -> RankedArchiveItem? {
-    lookup.artistMap[id]?.rankedArchiveItem(lookup.rankDigest(artist: id))
+    lookup.artistMap[id]?.rankedArchiveItem(id: id, lookup.rankDigest(artist: id))
   }
 
   public func rankedVenue(id: ID) -> RankedArchiveItem? {
-    lookup.venueMap[id]?.rankedArchiveItem(lookup.rankDigest(venue: id))
+    lookup.venueMap[id]?.rankedArchiveItem(id: id, lookup.rankDigest(venue: id))
   }
 
   public var statisticsData:
@@ -237,9 +238,5 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
 
   public var timestamp: Date {
     lookup.timestamp
-  }
-
-  public var venueArchivePathMap: [ArchivePath: ID] {
-    lookup.venueArchivePathMap
   }
 }

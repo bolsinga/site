@@ -20,15 +20,14 @@ extension Logger {
 ///
 /// - Generic Parameter Identifier: An `ArchiveIdentifier` that defines the stable ID types used
 ///   throughout the lookup APIs.
-public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
+public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable
+where Identifier.ID == ArchivePath {
   /// Convenience alias for the stable identifier type used for artists, venues, shows, and annums.
   public typealias ID = Identifier.ID
 
   private let bracket: Bracket<Identifier>
 
   private let showIDOrderIndex: [ID: Int]
-
-  let venueArchivePathMap: [ArchivePath: ID]
 
   private enum LoadAttempt {
     // URL, identifier, previousModified, cacheLoadFailed
@@ -130,9 +129,6 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
     async let ordered = Dictionary(
       uniqueKeysWithValues: try bracket.sortedShowIDs().enumerated().map { ($1, $0) })
     self.showIDOrderIndex = try await ordered
-    self.venueArchivePathMap = bracket.venueMap.reduce(into: [:]) {
-      $0[$1.value.archivePath] = $1.key
-    }
   }
 
   /// Creates a `Lookup` by indexing the provided `Music` archive and preparing derived maps.
@@ -342,8 +338,8 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
   /// - Parameter venueID: The stable venue identifier.
   /// - Returns: A collection of related items.
   public func related(venueID: ID) -> any Collection<ArchiveItem> {
-    bracket.relationMap[venueID]?.compactMap { venueMap[$0] }.map {
-      ArchiveItem(id: $0.archivePath, name: $0.name)
+    bracket.relationMap[venueID]?.compactMap { id in
+      venueMap[id].map { ArchiveItem(id: id, name: $0.name) }
     } ?? []
   }
 
@@ -355,8 +351,8 @@ public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
   /// - Parameter artistID: The stable artist identifier.
   /// - Returns: A collection of related items.
   public func related(artistID: ID) -> any Collection<ArchiveItem> {
-    bracket.relationMap[artistID]?.compactMap { artistMap[$0] }.map {
-      ArchiveItem(id: $0.archivePath, name: $0.name)
+    bracket.relationMap[artistID]?.compactMap { id in
+      artistMap[id].map { ArchiveItem(id: id, name: $0.name) }
     } ?? []
   }
 

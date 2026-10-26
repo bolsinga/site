@@ -37,7 +37,7 @@ struct ShowYearList: View {
             }, id: \.self
           ) { annum in
             let concertsCount = decadeMap[annum] ?? 0
-            NavigationLink(value: annum.archivePath) {
+            NavigationLink(value: ArchivePath.year(annum)) {
               LabeledContent(
                 annum.formatted(),
                 value: String(localized: "\(concertsCount) Show(s)"))

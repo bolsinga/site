@@ -44,7 +44,7 @@ struct DayList: View {
               .padding(.horizontal)
             DetailCard(title: Text("Shows")) {
               ForEach(concerts) { concert in
-                NavigationLink(value: concert.archivePath) {
+                NavigationLink(value: concert.id) {
                   DetailRowLabel(isNavigable: true) {
                     ConcertBlurb(digest: concert, dateFormat: .relative)
                   }

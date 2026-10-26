@@ -48,8 +48,8 @@ struct ShowDigestComparisonTests {
     let vaultTest = try await createVault(
       artists: [artist1, artist2], shows: [show1, show2], venues: [venue1, venue2])
 
-    let concert1 = try #require(vaultTest.digest(show: show1.archivePath))
-    let concert2 = try #require(vaultTest.digest(show: show2.archivePath))
+    let concert1 = try #require(vaultTest.digest(show: .show(show1.id)))
+    let concert2 = try #require(vaultTest.digest(show: .show(show2.id)))
 
     #expect(concert1 != concert2)
 
@@ -66,8 +66,8 @@ struct ShowDigestComparisonTests {
     let vaultTest = try await createVault(
       artists: [artist1, artist2], shows: [show1, show2], venues: [venue1, venue2])
 
-    let concert1 = try #require(vaultTest.digest(show: show1.archivePath))
-    let concert2 = try #require(vaultTest.digest(show: show2.archivePath))
+    let concert1 = try #require(vaultTest.digest(show: .show(show1.id)))
+    let concert2 = try #require(vaultTest.digest(show: .show(show2.id)))
 
     #expect(concert1 != concert2)
 
@@ -84,8 +84,8 @@ struct ShowDigestComparisonTests {
     let vaultTest = try await createVault(
       artists: [artist1, artist2], shows: [show1, show2], venues: [venue1, venue2])
 
-    let concert1 = try #require(vaultTest.digest(show: show1.archivePath))
-    let concert2 = try #require(vaultTest.digest(show: show2.archivePath))
+    let concert1 = try #require(vaultTest.digest(show: .show(show1.id)))
+    let concert2 = try #require(vaultTest.digest(show: .show(show2.id)))
 
     #expect(concert1 != concert2)
 
@@ -102,8 +102,8 @@ struct ShowDigestComparisonTests {
     let vaultTest = try await createVault(
       artists: [artist1, artist2], shows: [show1, show2], venues: [venue1, venue2])
 
-    let concert1 = try #require(vaultTest.digest(show: show1.archivePath))
-    let concert2 = try #require(vaultTest.digest(show: show2.archivePath))
+    let concert1 = try #require(vaultTest.digest(show: .show(show1.id)))
+    let concert2 = try #require(vaultTest.digest(show: .show(show2.id)))
 
     #expect(concert1 != concert2)
 
@@ -120,8 +120,8 @@ struct ShowDigestComparisonTests {
     let vaultTest = try await createVault(
       artists: [artist1, artist2], shows: [show1, show2], venues: [venue1, venue2])
 
-    let concert1 = try #require(vaultTest.digest(show: show1.archivePath))
-    let concert2 = try #require(vaultTest.digest(show: show2.archivePath))
+    let concert1 = try #require(vaultTest.digest(show: .show(show1.id)))
+    let concert2 = try #require(vaultTest.digest(show: .show(show2.id)))
 
     #expect(concert1 == concert2)
 

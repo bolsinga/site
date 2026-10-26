@@ -994,7 +994,7 @@ extension MKMapRect {
 
   ClusterMap(items: model.previewAllVenues, anchorY: CategoryAnnotationView.tipOffset) {
     Details(
-      coordinate: model.venueMapItemMap[$0.archivePath]?.location.coordinate
+      coordinate: model.venueMapItemMap[$0.id]?.location.coordinate
         ?? kCLLocationCoordinate2DInvalid,
       title: $0.name)
   } onSelect: { _ in

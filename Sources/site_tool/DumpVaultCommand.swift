@@ -72,7 +72,7 @@ struct DumpVaultCommand: AsyncParsableCommand {
     let vault = try await rootURL.vault(identifier: ArchivePathIdentifier())
     let vaultModel = AbstractVaultModel(vault, executeAsynchronousTasks: false)
     vaultModel.dump(searchString: searchString) {
-      vault.concertsForArtist(artistID: $0.archivePath)
+      vault.concertsForArtist(artistID: .artist($0.id))
     }
   }
 }
