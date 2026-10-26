@@ -8,7 +8,6 @@
 import Foundation
 
 public struct AnnumDigest: Codable, Identifiable, Sendable {
-  public let id: ArchivePath
   public let annum: Annum
   public let shows: [ShowDigest]
   private let rank: RankDigest
@@ -21,11 +20,12 @@ public struct AnnumDigest: Codable, Identifiable, Sendable {
   /// The number of venues whose most recent show was in this annum.
   public let mostRecentVenueCount: Int
 
+  public var id: ArchivePath { .year(annum) }
+
   public init(
-    id: ArchivePath, annum: Annum, shows: [ShowDigest], rank: RankDigest, newArtistCount: Int = 0,
+    annum: Annum, shows: [ShowDigest], rank: RankDigest, newArtistCount: Int = 0,
     newVenueCount: Int = 0, mostRecentArtistCount: Int = 0, mostRecentVenueCount: Int = 0
   ) {
-    self.id = id
     self.annum = annum
     self.shows = shows
     self.rank = rank
