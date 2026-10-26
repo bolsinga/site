@@ -18,7 +18,7 @@ protocol Geocodable {
   func geocode() async throws -> Place
 }
 
-protocol AtlasGeocodable: Geocodable, PathRestorable, Sendable
+protocol AtlasGeocodable: Geocodable, Sendable
 where Place: Codable & Sendable {}
 
 private enum Constants {
@@ -36,14 +36,14 @@ actor Atlas<T: AtlasGeocodable> {
     self.cache = cache
   }
 
-  public func geocode(_ geocodable: T) async throws -> T.Place? {
-    if let result = cache?.get(geocodable) {
+  public func geocode(_ geocodable: T, id: ArchivePath) async throws -> T.Place? {
+    if let result = cache?.get(id) {
       Logger.atlas.log("cached result")
       return result
     }
 
     guard let result = try await gatedGeocode(geocodable) else { return nil }
-    cache?.add(geocodable, value: result)
+    cache?.add(id, value: result)
     return result
   }
 

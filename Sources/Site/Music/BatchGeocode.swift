@@ -21,9 +21,9 @@ struct BatchGeocode<Identifier: ArchiveIdentifier>: AsyncSequence {
   /// - Parameters:
   ///   - atlas: The Atlas containing the cache for the geocoding.
   ///   - vault: This is used to find what items will be geocoded, as well as defining ID
-  init(atlas: Atlas<Venue>, vault: Vault<Identifier>) {
+  init(atlas: Atlas<Venue>, vault: Vault<Identifier>) where Identifier.ID == ArchivePath {
     self.atlas = atlas
-    self.geocodables = vault.venueIDs().map { ($0.1.archivePath, $0.1) }
+    self.geocodables = vault.venueIDs().map { ($0.0, $0.1) }
   }
 
   struct AsyncIterator: AsyncIteratorProtocol {
@@ -38,7 +38,7 @@ struct BatchGeocode<Identifier: ArchiveIdentifier>: AsyncSequence {
       guard index < geocodables.count else { return nil }
 
       let (id, geocodable) = geocodables[index]
-      let mapItem = try await atlas.geocode(geocodable)
+      let mapItem = try await atlas.geocode(geocodable, id: id)
       index += 1
       return (id, mapItem)
     }

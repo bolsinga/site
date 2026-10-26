@@ -45,24 +45,24 @@ struct AtlasCache<T: AtlasGeocodable> {
     }
   }
 
-  func get(_ item: T) -> T.Place? { self[item] }
+  func get(_ id: ArchivePath) -> T.Place? { self[id] }
 
-  mutating func add(_ item: T, value: T.Place) { self[item] = value }
+  mutating func add(_ id: ArchivePath, value: T.Place) { self[id] = value }
 
-  private subscript(index: T) -> T.Place? {
+  private subscript(index: ArchivePath) -> T.Place? {
     get {
-      cache[index.archivePath]?.placemark
+      cache[index]?.placemark
     }
     set(newValue) {
       if let newValue {
-        cache[index.archivePath] = Value(
+        cache[index] = Value(
           placemark: newValue,
           expirationDate: .now + expirationOffset + staggerOffset)
 
         // This allows batch geocodes to be "staggered" in their expiration so they do not run all the time once the day comes.
         staggerOffset += ExpirationStaggerDuration
       } else {
-        cache[index.archivePath] = nil
+        cache[index] = nil
       }
       do {
         try cache.save(fileName: fileName)
