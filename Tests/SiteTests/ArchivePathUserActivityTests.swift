@@ -1,5 +1,5 @@
 //
-//  PathRestorableUserActivityTests.swift
+//  ArchivePathUserActivityTests.swift
 //
 //
 //  Created by Greg Bolsinga on 6/24/23.
@@ -11,7 +11,7 @@ import Testing
 @testable import Shared
 @testable import SiteApp
 
-struct PathRestorableUserActivityTests {
+struct ArchivePathUserActivityTests {
   let rootURL = URL(string: "https://www.example.com/")!
 
   @Test func show() throws {

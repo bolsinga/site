@@ -9,7 +9,7 @@ import AppIntents
 import Foundation
 import Shared
 
-extension VenueDigest: PathRestorableUserActivity {
+extension VenueDigest: ArchivePathUserActivity {
   func updateActivity(_ userActivity: NSUserActivity, url: URL?) {
     userActivity.isEligibleForHandoff = true
 

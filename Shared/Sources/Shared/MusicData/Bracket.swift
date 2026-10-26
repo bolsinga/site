@@ -65,43 +65,40 @@ extension Music {
 /// decade groupings, and show relationships. It is intended to be created off the main thread
 /// and then shared read-only across views for efficient access.
 public struct Bracket: Codable, Sendable {
-  /// Convenience alias for the stable identifier type used for artists, venues, and annums.
-  public typealias ID = ArchivePath
-
   /// Aggregated ranking metrics for each artist, used to sort or filter artist lists.
-  let artistRankDigestMap: [ID: RankDigest]
+  let artistRankDigestMap: [ArchivePath: RankDigest]
   /// Aggregated ranking metrics for each venue, used to sort or filter venue lists.
-  let venueRankDigestMap: [ID: RankDigest]
+  let venueRankDigestMap: [ArchivePath: RankDigest]
   /// Aggregated ranking metrics for each annum (e.g., year), keyed by `ID`.
-  let annumRankDigestMap: [ID: RankDigest]
+  let annumRankDigestMap: [ArchivePath: RankDigest]
   /// Shows grouped by year (annum).
-  let annumShows: [ID: Set<ID>]
+  let annumShows: [ArchivePath: Set<ArchivePath>]
   /// mapping ID to Annum
-  let annumMap: [ID: Annum]
+  let annumMap: [ArchivePath: Annum]
   /// Maps a day-of-leap-year index (1...366) to the set of show `ID`s that occurred on that day.
-  let concertDayMap: [Int: Set<ID>]
+  let concertDayMap: [Int: Set<ArchivePath>]
   /// For each artist `ID`, the set of show `ID`s they performed.
-  let artistShows: [ID: Set<ID>]
+  let artistShows: [ArchivePath: Set<ArchivePath>]
   /// For each venue `ID`, the set of show `ID`s hosted there.
-  let venueShows: [ID: Set<ID>]
+  let venueShows: [ArchivePath: Set<ArchivePath>]
   /// For each venue `ID`, the set of artist `ID`s that have performed at that venue.
-  let venueArtists: [ID: Set<ID>]
+  let venueArtists: [ArchivePath: Set<ArchivePath>]
   /// Ordered sequence of show IDs with fully known dates, used to resolve recency.
-  let showOrder: OrderedSet<ID>
+  let showOrder: OrderedSet<ArchivePath>
   /// For each show `ID`, the array of artist `ID`s that performed at that show, in order from headliner to opener.
-  let showArtists: [ID: [ID]]
+  let showArtists: [ArchivePath: [ArchivePath]]
   // Venue ID for Show IDs.
-  let showVenue: [ID: ID]
+  let showVenue: [ArchivePath: ArchivePath]
   // Show for Show IDs.
-  public let showMap: [ID: Show]
+  public let showMap: [ArchivePath: Show]
   // Artist for Artist IDs.
-  public let artistMap: [ID: Artist]
+  public let artistMap: [ArchivePath: Artist]
   // Venue for Venue IDs.
-  public let venueMap: [ID: Venue]
+  public let venueMap: [ArchivePath: Venue]
 
-  private let compareTokenMap: [ID: String]
+  private let compareTokenMap: [ArchivePath: String]
 
-  let relationMap: [ID: Set<ID>]  // Artist/Venue ID : Set<Artist/Venue ID>
+  let relationMap: [ArchivePath: Set<ArchivePath>]  // Artist/Venue ArchivePath : Set<Artist/Venue ArchivePath>
 
   let timestamp: Date
 
@@ -155,7 +152,7 @@ public struct Bracket: Codable, Sendable {
     try await self.init(music: music, timestamp: lastModified)
   }
 
-  func compareIDs(lhs: ID, rhs: ID) throws -> Bool {
+  func compareIDs(lhs: ArchivePath, rhs: ArchivePath) throws -> Bool {
     guard let lhToken = compareTokenMap[lhs] else {
       throw TokenSearchError.invalidCompareTokenID(lhs.description)
     }
@@ -167,7 +164,7 @@ public struct Bracket: Codable, Sendable {
     return lhToken.tokenCompare(other: rhToken)
   }
 
-  func sortedShowIDs() throws -> [ID] {
+  func sortedShowIDs() throws -> [ArchivePath] {
     let showDate = {
       guard let show = showMap[$0] else {
         throw TokenSearchError.invalidCompareTokenID($0.description)
@@ -189,7 +186,7 @@ public struct Bracket: Codable, Sendable {
       return headlinerID
     }
 
-    return try showMap.keys.sorted { (lhs: ID, rhs: ID) in
+    return try showMap.keys.sorted { (lhs: ArchivePath, rhs: ArchivePath) in
       let lhShowDate = try showDate(lhs)
       let rhShowDate = try showDate(rhs)
       if lhShowDate == rhShowDate {

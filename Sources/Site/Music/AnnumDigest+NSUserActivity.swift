@@ -8,7 +8,7 @@
 import Foundation
 import Shared
 
-extension AnnumDigest: PathRestorableUserActivity {
+extension AnnumDigest: ArchivePathUserActivity {
   func updateActivity(_ userActivity: NSUserActivity, url: URL?) {
     userActivity.isEligibleForHandoff = true
 

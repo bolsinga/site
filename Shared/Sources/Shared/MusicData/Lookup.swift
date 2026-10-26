@@ -18,12 +18,9 @@ extension Logger {
 /// and shows. It wraps internal processing performed by `Bracket` and provides convenient
 /// APIs for `Vault` to fetch related items, sort keys, and date-based groupings.
 public struct Lookup: Codable, Sendable {
-  /// Convenience alias for the stable identifier type used for artists, venues, shows, and annums.
-  public typealias ID = ArchivePath
-
   private let bracket: Bracket
 
-  private let showIDOrderIndex: [ID: Int]
+  private let showIDOrderIndex: [ArchivePath: Int]
 
   private enum LoadAttempt {
     // URL, previousModified, cacheLoadFailed
@@ -144,11 +141,11 @@ public struct Lookup: Codable, Sendable {
         url: url, previousModified: previousModified))
   }
 
-  func compareIDs(lhs: ID, rhs: ID) throws -> Bool {
+  func compareIDs(lhs: ArchivePath, rhs: ArchivePath) throws -> Bool {
     try bracket.compareIDs(lhs: lhs, rhs: rhs)
   }
 
-  func sort(showIDs: any Collection<ID>) throws -> [ID] {
+  func sort(showIDs: any Collection<ArchivePath>) throws -> [ArchivePath] {
     try showIDs.sorted { lhs, rhs in
       guard let lhsIndex = showIDOrderIndex[lhs] else {
         throw TokenSearchError.invalidCompareTokenID(lhs.description)
@@ -162,21 +159,21 @@ public struct Lookup: Codable, Sendable {
     }
   }
 
-  var showMap: [ID: Show] {
+  var showMap: [ArchivePath: Show] {
     bracket.showMap
   }
 
-  var artistMap: [ID: Artist] {
+  var artistMap: [ArchivePath: Artist] {
     bracket.artistMap
   }
 
-  var venueMap: [ID: Venue] {
+  var venueMap: [ArchivePath: Venue] {
     bracket.venueMap
   }
 
   /// Groups shows by decade, then by annum (e.g., year), returning the count of Shows for each.
-  public func decadesMap(showIDs: Set<ID>) -> [Decade: [Annum: Int]] {
-    let matchingAnnumShows = annumShows.reduce(into: [ID: Set<ID>]()) {
+  public func decadesMap(showIDs: Set<ArchivePath>) -> [Decade: [Annum: Int]] {
+    let matchingAnnumShows = annumShows.reduce(into: [ArchivePath: Set<ArchivePath>]()) {
       let (key, value) = $1
       let matchedShowIDs = value.intersection(showIDs)
       if !matchedShowIDs.isEmpty {
@@ -186,7 +183,8 @@ public struct Lookup: Codable, Sendable {
     return decadesMap(for: matchingAnnumShows)
   }
 
-  public func decadesMap(for annumShows: [ID: Set<ID>]) -> [Decade: [Annum: Int]] {
+  public func decadesMap(for annumShows: [ArchivePath: Set<ArchivePath>]) -> [Decade: [Annum: Int]]
+  {
     annumShows.reduce(into: [Decade: [Annum: Int]]()) {
       guard let annum = annumMap[$1.key] else { return }
       let decade = annum.decade
@@ -200,16 +198,16 @@ public struct Lookup: Codable, Sendable {
     decadesMap(for: annumShows)
   }
 
-  public var annumShows: [ID: Set<ID>] {
+  public var annumShows: [ArchivePath: Set<ArchivePath>] {
     bracket.annumShows
   }
 
-  public var annumMap: [ID: Annum] {
+  public var annumMap: [ArchivePath: Annum] {
     bracket.annumMap
   }
 
   /// Maps a day-of-leap-year index (1...366) to the set of show IDs that occurred on that day.
-  public var concertDayMap: [Int: Set<ID>] {
+  public var concertDayMap: [Int: Set<ArchivePath>] {
     bracket.concertDayMap
   }
 
@@ -217,7 +215,7 @@ public struct Lookup: Codable, Sendable {
   ///
   /// - Parameter artistID: The stable artist identifier.
   /// - Returns: A set of show IDs the artist performed.
-  public func shows(artistID: ID) -> Set<ID> {
+  public func shows(artistID: ArchivePath) -> Set<ArchivePath> {
     bracket.artistShows[artistID] ?? []
   }
 
@@ -225,7 +223,7 @@ public struct Lookup: Codable, Sendable {
   ///
   /// - Parameter venueID: The stable venue identifier.
   /// - Returns: A set of show IDs hosted at the venue.
-  public func shows(venueID: ID) -> Set<ID> {
+  public func shows(venueID: ArchivePath) -> Set<ArchivePath> {
     bracket.venueShows[venueID] ?? []
   }
 
@@ -233,7 +231,7 @@ public struct Lookup: Codable, Sendable {
   ///
   /// - Parameter venueID: The stable venue identifier.
   /// - Returns: A set of artist IDs.
-  public func artists(venueID: ID) -> Set<ID> {
+  public func artists(venueID: ArchivePath) -> Set<ArchivePath> {
     bracket.venueArtists[venueID] ?? []
   }
 
@@ -241,7 +239,7 @@ public struct Lookup: Codable, Sendable {
   ///
   /// - Parameter showID: The stable show identifier.
   /// - Returns: An array of artist IDs that appeared in the show, headliner to opener.
-  public func artists(showID: ID) -> [ID] {
+  public func artists(showID: ArchivePath) -> [ArchivePath] {
     bracket.showArtists[showID] ?? []
   }
 
@@ -251,7 +249,7 @@ public struct Lookup: Codable, Sendable {
   ///
   /// - Parameter showID: The stable show identifier.
   /// - Returns: The venue ID for the show, if available; otherwise nil.
-  public func venues(showID: ID) -> ID? {
+  public func venues(showID: ArchivePath) -> ArchivePath? {
     bracket.showVenue[showID]
   }
 
@@ -259,7 +257,7 @@ public struct Lookup: Codable, Sendable {
   ///
   /// - Parameter showID: The stable show identifier.
   /// - Returns: The `Venue` if found, otherwise `nil`.
-  public func venueForShow(showID: ID) -> Venue? {
+  public func venueForShow(showID: ArchivePath) -> Venue? {
     guard let venueID = venues(showID: showID) else { return nil }
     return venueMap[venueID]
   }
@@ -268,19 +266,19 @@ public struct Lookup: Codable, Sendable {
   ///
   /// - Parameter showID: The stable show identifier.
   /// - Returns: An array of `Artist` values, in the order they are stored for the show.
-  public func artistsForShow(showID: ID) -> [Artist] {
+  public func artistsForShow(showID: ArchivePath) -> [Artist] {
     artists(showID: showID).compactMap { artistMap[$0] }
   }
 
-  func rankDigest(annum: ID) -> RankDigest {
+  func rankDigest(annum: ArchivePath) -> RankDigest {
     bracket.annumRankDigestMap[annum] ?? .empty
   }
 
-  func rankDigest(artist: ID) -> RankDigest {
+  func rankDigest(artist: ArchivePath) -> RankDigest {
     bracket.artistRankDigestMap[artist] ?? .empty
   }
 
-  func rankDigest(venue: ID) -> RankDigest {
+  func rankDigest(venue: ArchivePath) -> RankDigest {
     bracket.venueRankDigestMap[venue] ?? .empty
   }
 
@@ -288,7 +286,7 @@ public struct Lookup: Codable, Sendable {
   ///
   /// The first set date's year decides, so a first show with just a year still counts. Nothing
   /// is new in the unknown annum, and neither is anything without a first set.
-  private func newCount(in annum: Annum, digests: [ID: RankDigest]) -> Int {
+  private func newCount(in annum: Annum, digests: [ArchivePath: RankDigest]) -> Int {
     guard case .year(let year) = annum else { return 0 }
     return digests.values.count {
       $0.firstSet.rank != .unknown && $0.firstSet.date.year == year
@@ -299,7 +297,7 @@ public struct Lookup: Codable, Sendable {
   ///
   /// The most recent date's year decides, so a most recent show with just a year still counts.
   /// Nothing is most recent in the unknown annum, and neither is anything without a date.
-  private func mostRecentCount(in annum: Annum, digests: [ID: RankDigest]) -> Int {
+  private func mostRecentCount(in annum: Annum, digests: [ArchivePath: RankDigest]) -> Int {
     guard case .year(let year) = annum else { return 0 }
     return digests.values.count { $0.mostRecentSet.date.year == year }
   }
@@ -331,7 +329,7 @@ public struct Lookup: Codable, Sendable {
   ///
   /// - Parameter venueID: The stable venue identifier.
   /// - Returns: A collection of related items.
-  public func related(venueID: ID) -> any Collection<ArchiveItem> {
+  public func related(venueID: ArchivePath) -> any Collection<ArchiveItem> {
     bracket.relationMap[venueID]?.compactMap { id in
       venueMap[id].map { ArchiveItem(id: id, name: $0.name) }
     } ?? []
@@ -344,7 +342,7 @@ public struct Lookup: Codable, Sendable {
   ///
   /// - Parameter artistID: The stable artist identifier.
   /// - Returns: A collection of related items.
-  public func related(artistID: ID) -> any Collection<ArchiveItem> {
+  public func related(artistID: ArchivePath) -> any Collection<ArchiveItem> {
     bracket.relationMap[artistID]?.compactMap { id in
       artistMap[id].map { ArchiveItem(id: id, name: $0.name) }
     } ?? []
@@ -356,7 +354,7 @@ public struct Lookup: Codable, Sendable {
   ///
   /// - Parameter count: The number of most-recent shows to return.
   /// - Returns: An array of show IDs ordered from oldest to newest within the requested window.
-  public func recentConcerts(_ count: Int) -> [ID] {
+  public func recentConcerts(_ count: Int) -> [ArchivePath] {
     bracket.showOrder.suffix(count)
   }
 

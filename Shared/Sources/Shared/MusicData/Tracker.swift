@@ -45,60 +45,61 @@ extension Dictionary where Value == Int {
 /// - Various dictionaries use sets to track multiple relationships.
 /// - Flipped dictionaries expose inverse relationships for easy traversal.
 struct Tracker {
-  typealias ID = ArchivePath
 
   // Unsure how to make this generic over whatever Set.Element may be.
-  private func insert<Key>(into dictionary: inout [Key: Set<ID>], key: Key, value: ID) {
-    var v = dictionary[key] ?? Set<ID>()
+  private func insert<Key>(
+    into dictionary: inout [Key: Set<ArchivePath>], key: Key, value: ArchivePath
+  ) {
+    var v = dictionary[key] ?? Set<ArchivePath>()
     v.insert(value)
     dictionary[key] = v
   }
 
   /// All the unique partial dates associated with a venue, used to calculate its timespan.
-  var venueSpanDates = [ID: Set<PartialDate>]()
+  var venueSpanDates = [ArchivePath: Set<PartialDate>]()
   /// Counts of how many shows have occurred at each venue.
-  var venueCounts = [ID: Int]()
+  var venueCounts = [ArchivePath: Int]()
   /// The set of artists who have played at each venue.
-  var venueArtists = [ID: Set<ID>]()
+  var venueArtists = [ArchivePath: Set<ArchivePath>]()
   /// Ordered set of venue IDs, preserving insertion order.
-  var venueOrder = OrderedSet<ID>()
+  var venueOrder = OrderedSet<ArchivePath>()
   /// Shows associated with each venue.
-  var venueShows = [ID: Set<ID>]()
+  var venueShows = [ArchivePath: Set<ArchivePath>]()
 
   /// All the unique partial dates associated with an artist, used to calculate its timespan.
-  var artistSpanDates = [ID: Set<PartialDate>]()
+  var artistSpanDates = [ArchivePath: Set<PartialDate>]()
   /// Counts of how many shows each artist has played.
-  var artistCounts = [ID: Int]()
+  var artistCounts = [ArchivePath: Int]()
   /// The set of venues where each artist has performed.
-  var artistVenues = [ID: Set<ID>]()
+  var artistVenues = [ArchivePath: Set<ArchivePath>]()
   /// Ordered set of artist IDs, preserving insertion order.
-  var artistOrder = OrderedSet<ID>()
+  var artistOrder = OrderedSet<ArchivePath>()
   /// Shows associated with each artist.
-  var artistShows = [ID: Set<ID>]()
+  var artistShows = [ArchivePath: Set<ArchivePath>]()
 
   /// Shows grouped by year (annum).
-  var annumShows = [ID: Set<ID>]()
+  var annumShows = [ArchivePath: Set<ArchivePath>]()
   /// Artists grouped by year (annum).
-  var annumArtists = [ID: Set<ID>]()
+  var annumArtists = [ArchivePath: Set<ArchivePath>]()
   /// Venues grouped by year (annum).
-  var annumVenues = [ID: Set<ID>]()
+  var annumVenues = [ArchivePath: Set<ArchivePath>]()
   /// mapping ID to Annum
-  var annumMap = [ID: Annum]()
+  var annumMap = [ArchivePath: Annum]()
 
   /// Shows indexed by the day of leap year (1...366).
-  var dayOfLeapYearShows = [Int: Set<ID>]()
+  var dayOfLeapYearShows = [Int: Set<ArchivePath>]()
 
   /// Ordered sequence of show IDs with fully known dates.
-  var showOrder = OrderedSet<ID>()
+  var showOrder = OrderedSet<ArchivePath>()
 
   // Venue ID for Show IDs.
-  var showVenue = [ID: ID]()
+  var showVenue = [ArchivePath: ArchivePath]()
 
   // Array<ID> of artists for Show ID key (opener to headliner)
-  var showArtists = [ID: [ID]]()
+  var showArtists = [ArchivePath: [ArchivePath]]()
 
   // Show for Show IDs.
-  var showMap = [ID: Show]()
+  var showMap = [ArchivePath: Show]()
 
   private mutating func track(show: Show) throws {
     let showID = try ArchivePath(raw: show.id)
@@ -177,45 +178,45 @@ struct Tracker {
     return await computeRankings(await items)
   }
 
-  private func artistRankings() async -> [ID: Ranking] {
+  private func artistRankings() async -> [ArchivePath: Ranking] {
     await computeRankings { artistCounts.map { $0 } }
   }
 
-  private func venueRankings() async -> [ID: Ranking] {
+  private func venueRankings() async -> [ArchivePath: Ranking] {
     await computeRankings { venueCounts.map { $0 } }
   }
 
-  private func artistSpanRankings() async -> [ID: Ranking] {
+  private func artistSpanRankings() async -> [ArchivePath: Ranking] {
     await computeRankings { artistSpanDates.mapValues { $0.yearSpan }.map { $0 } }
   }
 
-  private func venueSpanRankings() async -> [ID: Ranking] {
+  private func venueSpanRankings() async -> [ArchivePath: Ranking] {
     await computeRankings { venueSpanDates.mapValues { $0.yearSpan }.map { $0 } }
   }
 
-  private func artistVenueRankings() async -> [ID: Ranking] {
+  private func artistVenueRankings() async -> [ArchivePath: Ranking] {
     await computeRankings { artistVenues.mapValues { $0.count }.map { $0 } }
   }
 
-  private func venueArtistRankings() async -> [ID: Ranking] {
+  private func venueArtistRankings() async -> [ArchivePath: Ranking] {
     await computeRankings { venueArtists.mapValues { $0.count }.map { $0 } }
   }
 
-  private func annumShowRankings() async -> [ID: Ranking] {
+  private func annumShowRankings() async -> [ArchivePath: Ranking] {
     await computeRankings { annumShows.mapValues { $0.count }.map { $0 } }
   }
 
-  private func annumVenueRankings() async -> [ID: Ranking] {
+  private func annumVenueRankings() async -> [ArchivePath: Ranking] {
     await computeRankings { annumVenues.mapValues { $0.count }.map { $0 } }
   }
 
-  private func annumArtistRankings() async -> [ID: Ranking] {
+  private func annumArtistRankings() async -> [ArchivePath: Ranking] {
     await computeRankings { annumArtists.mapValues { $0.count }.map { $0 } }
   }
 
-  private func artistFirstSets() async -> [ID: FirstSet] {
+  private func artistFirstSets() async -> [ArchivePath: FirstSet] {
     var order = 1
-    async let r = artistOrder.reduce(into: [ID: FirstSet]()) {
+    async let r = artistOrder.reduce(into: [ArchivePath: FirstSet]()) {
       guard
         let firstDate = artistSpanDates[$1]?.sorted(
           by: PartialDate.compareWithUnknownsMuted(lhs:rhs:)
@@ -227,9 +228,9 @@ struct Tracker {
     return await r
   }
 
-  private func venueFirstSets() async -> [ID: FirstSet] {
+  private func venueFirstSets() async -> [ArchivePath: FirstSet] {
     var order = 1
-    async let r = venueOrder.reduce(into: [ID: FirstSet]()) {
+    async let r = venueOrder.reduce(into: [ArchivePath: FirstSet]()) {
       guard
         let firstDate = venueSpanDates[$1]?.sorted(
           by: PartialDate.compareWithUnknownsMuted(lhs:rhs:)
@@ -242,8 +243,10 @@ struct Tracker {
   }
 
   /// The most recent known date of each key. Keys with no known date are left out.
-  private func mostRecentSets(_ spanDates: [ID: Set<PartialDate>]) -> [ID: MostRecentSet] {
-    spanDates.reduce(into: [ID: MostRecentSet]()) {
+  private func mostRecentSets(_ spanDates: [ArchivePath: Set<PartialDate>]) -> [ArchivePath:
+    MostRecentSet]
+  {
+    spanDates.reduce(into: [ArchivePath: MostRecentSet]()) {
       guard let mostRecent = $1.value.filter({ !$0.isUnknown }).max() else { return }
       $0[$1.key] = MostRecentSet(date: mostRecent)
     }
@@ -277,7 +280,8 @@ struct Tracker {
   ///
   /// - Parameter sections: A dictionary mapping artist IDs to their `LibrarySection`.
   /// - Returns: A dictionary mapping artist IDs to their rank digests.
-  func artistRankDigests(sections: [ID: LibrarySection]) async -> [ID: RankDigest] {
+  func artistRankDigests(sections: [ArchivePath: LibrarySection]) async -> [ArchivePath: RankDigest]
+  {
     async let firstSets = await artistFirstSets()
     async let spanRankings = await artistSpanRankings()
     async let showRankings = await artistRankings()
@@ -298,7 +302,8 @@ struct Tracker {
   ///
   /// - Parameter sections: A dictionary mapping venue IDs to their `LibrarySection`.
   /// - Returns: A dictionary mapping venue IDs to their rank digests.
-  func venueRankDigests(sections: [ID: LibrarySection]) async -> [ID: RankDigest] {
+  func venueRankDigests(sections: [ArchivePath: LibrarySection]) async -> [ArchivePath: RankDigest]
+  {
     async let firstSets = await venueFirstSets()
     async let spanRankings = await venueSpanRankings()
     async let showRankings = await venueRankings()
@@ -317,7 +322,7 @@ struct Tracker {
   /// and associated artist rankings. No first set rankings are included for annums.
   ///
   /// - Returns: A dictionary mapping annum IDs to their rank digests.
-  func annumRankDigests() async -> [ID: RankDigest] {
+  func annumRankDigests() async -> [ArchivePath: RankDigest] {
     // These names do not quite work.
     async let spanRankings = await annumVenueRankings()
     async let showRankings = await annumShowRankings()
