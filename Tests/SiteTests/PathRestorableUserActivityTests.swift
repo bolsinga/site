@@ -82,7 +82,8 @@ struct PathRestorableUserActivityTests {
   @Test func annum() throws {
     let userActivity = NSUserActivity(activityType: "test-type")
 
-    let item = Annum.year(1990)
+    let item = AnnumDigest<ArchivePath>(
+      id: .year(.year(1990)), annum: .year(1990), shows: [], rank: .empty)
 
     userActivity.update(item, url: rootURL)
 

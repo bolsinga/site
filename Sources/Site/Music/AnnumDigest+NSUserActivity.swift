@@ -1,5 +1,5 @@
 //
-//  Annum+NSUserActivity.swift
+//  AnnumDigest+NSUserActivity.swift
 //
 //
 //  Created by Greg Bolsinga on 6/21/23.
@@ -8,12 +8,12 @@
 import Foundation
 import Shared
 
-extension Annum: PathRestorableUserActivity {
+extension AnnumDigest: PathRestorableUserActivity {
   func updateActivity(_ userActivity: NSUserActivity, url: URL?) {
     userActivity.isEligibleForHandoff = true
 
     userActivity.isEligibleForSearch = true
-    userActivity.title = self.formatted()
+    userActivity.title = annum.formatted()
     userActivity.addSearchableContent(
       description: String(localized: "See Shows From This Year"))
   }
