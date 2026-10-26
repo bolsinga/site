@@ -41,7 +41,8 @@ struct PathRestorableUserActivityTests {
     let userActivity = NSUserActivity(activityType: "test-type")
 
     let artist = Artist(id: "ar0", name: "AR0")
-    let digest = ArtistDigest(artist: artist, shows: [], related: [], rank: .empty)
+    let digest = ArtistDigest<ArchivePath>(
+      id: artist.archivePath, artist: artist, shows: [], related: [], rank: .empty)
     userActivity.update(digest, url: rootURL)
 
     #expect(userActivity.isEligibleForHandoff)
@@ -61,7 +62,8 @@ struct PathRestorableUserActivityTests {
     let userActivity = NSUserActivity(activityType: "test-type")
 
     let venue = Venue(id: "v10", location: Location(city: "c", state: "s"), name: "V10")
-    let digest = VenueDigest(venue: venue, shows: [], related: [], rank: .empty)
+    let digest = VenueDigest<ArchivePath>(
+      id: venue.archivePath, venue: venue, shows: [], related: [], rank: .empty)
     userActivity.update(digest, url: rootURL)
 
     #expect(userActivity.isEligibleForHandoff)

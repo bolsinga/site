@@ -15,16 +15,16 @@ extension Venue: PathRestorable {
   public var archivePath: ArchivePath { .venue(id) }
 }
 
-extension VenueDigest: PathRestorable {
-  public var archivePath: ArchivePath { .venue(id) }
+extension VenueDigest: PathRestorable where ID == ArchivePath {
+  public var archivePath: ArchivePath { id }
 }
 
 extension Artist: PathRestorable {
   public var archivePath: ArchivePath { .artist(id) }
 }
 
-extension ArtistDigest: PathRestorable {
-  public var archivePath: ArchivePath { .artist(id) }
+extension ArtistDigest: PathRestorable where ID == ArchivePath {
+  public var archivePath: ArchivePath { id }
 }
 
 extension Annum: PathRestorable {
