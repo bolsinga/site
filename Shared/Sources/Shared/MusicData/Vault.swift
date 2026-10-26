@@ -151,7 +151,7 @@ public struct Vault: Sendable {
   }
 
   public func digest(annum: Annum) -> AnnumDigest? {
-    lookup.annumDigest(id: .year(annum))
+    lookup.annumDigest(annum: annum)
   }
 
   public func digest(artist: ArchivePath) -> ArtistDigest? {

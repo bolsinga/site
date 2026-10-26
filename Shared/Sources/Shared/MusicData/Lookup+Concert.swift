@@ -68,8 +68,9 @@ extension Lookup {
     return venueDigest(venue: venue, venueID: venueID)
   }
 
-  func annumDigest(id annumID: ArchivePath) -> AnnumDigest? {
-    guard let annum = annumMap[annumID] else { return nil }
+  func annumDigest(annum: Annum) -> AnnumDigest? {
+    let annumID = ArchivePath.year(annum)
+    guard annumShows[annumID] != nil else { return nil }
     return AnnumDigest(
       annum: annum, shows: showDigests(annumID: annumID),
       rank: rankDigest(annum: annumID),
