@@ -100,7 +100,7 @@ extension Stats {
       showsAreCounted: false)
   }
 
-  init<Identifier: ArchiveIdentifier>(vault: Vault<Identifier>) {
+  init(vault: Vault) {
     self.init(statisticsData: vault.statisticsData)
   }
 

@@ -35,7 +35,7 @@ struct VenueEntityQuery: EntityQuery {
   }
 
   @Dependency
-  private var vault: Vault<AppIdentifier>
+  private var vault: Vault
 }
 
 extension VenueEntityQuery: EntityStringQuery {

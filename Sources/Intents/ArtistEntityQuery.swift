@@ -35,7 +35,7 @@ struct ArtistEntityQuery: EntityQuery {
   }
 
   @Dependency
-  private var vault: Vault<AppIdentifier>
+  private var vault: Vault
 }
 
 extension ArtistEntityQuery: EntityStringQuery {

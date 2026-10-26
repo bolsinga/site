@@ -7,17 +7,16 @@
 
 import Foundation
 
-public struct Vault<Identifier: ArchiveIdentifier>: Sendable
-where Identifier.ID == ArchivePath {
-  public typealias ID = Identifier.ID
+public struct Vault: Sendable {
+  public typealias ID = ArchivePath
 
   public let rootURL: URL
 
   private let categoryURLLookup: [ArchiveCategory: URL]
 
-  private let lookup: Lookup<Identifier>
+  private let lookup: Lookup
 
-  init(lookup: Lookup<Identifier>, rootURL: URL) {
+  init(lookup: Lookup, rootURL: URL) {
     self.lookup = lookup
     self.rootURL = rootURL
 
@@ -27,16 +26,13 @@ where Identifier.ID == ArchivePath {
     }
   }
 
-  public init(url: URL, identifier: Identifier, previousModified: Date) async throws {
+  public init(url: URL, previousModified: Date) async throws {
     var signpost = Signpost(category: "vault", name: "process")
     signpost.start()
 
     guard let rootURL = url.rootURL else { throw VaultError.noRootURL(url.absoluteString) }
 
-    async let asyncLookup = await Lookup(
-      url: url,
-      identifier: identifier,
-      previousModified: previousModified)
+    async let asyncLookup = await Lookup(url: url, previousModified: previousModified)
     self.init(lookup: try await asyncLookup, rootURL: rootURL)
   }
 

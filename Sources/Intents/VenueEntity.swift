@@ -21,7 +21,7 @@ struct VenueEntity: AppEntity {
 
   static let defaultQuery = VenueEntityQuery()
 
-  var id: AppIdentifier.ID
+  var id: ArchivePath
   var address: String
 
   @Property var url: URL

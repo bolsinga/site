@@ -9,13 +9,9 @@ import Foundation
 import Shared
 
 extension RootURLArguments {
-  func vault<Identifier: ArchiveIdentifier>(identifier: Identifier, fileName: String = "shows.json")
-    async throws
-    -> Vault<Identifier>
-  {
+  func vault(fileName: String = "shows.json") async throws -> Vault {
     try await Vault.load(
       url.appending(path: fileName).absoluteString,
-      identifier: identifier,
       previousModified: .distantPast)
   }
 }

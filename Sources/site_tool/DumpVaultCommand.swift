@@ -15,7 +15,7 @@ extension Vault {
   }
 }
 
-extension AbstractVaultModel {
+extension VaultModel {
   fileprivate func dump(
     searchString: String?, concertsForArtist: (Artist) -> any Collection<ShowDigest>
   ) {
@@ -69,8 +69,8 @@ struct DumpVaultCommand: AsyncParsableCommand {
 
   @MainActor
   func run() async throws {
-    let vault = try await rootURL.vault(identifier: ArchivePathIdentifier())
-    let vaultModel = AbstractVaultModel(vault, executeAsynchronousTasks: false)
+    let vault = try await rootURL.vault()
+    let vaultModel = VaultModel(vault, executeAsynchronousTasks: false)
     vaultModel.dump(searchString: searchString) {
       vault.concertsForArtist(artistID: .artist($0.id))
     }

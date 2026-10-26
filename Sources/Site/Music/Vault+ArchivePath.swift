@@ -8,7 +8,7 @@
 import Foundation
 import Shared
 
-extension Vault where Identifier == AppIdentifier {
+extension Vault {
   func restorableSharableLinkable(for path: ArchivePath) -> (any PathRestorableUserActivity)? {
     switch path {
     case .show(_):

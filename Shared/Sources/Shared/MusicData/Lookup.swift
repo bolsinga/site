@@ -17,28 +17,24 @@ extension Logger {
 /// `Lookup` exposes read-only, precomputed relationships and rankings for artists, venues,
 /// and shows. It wraps internal processing performed by `Bracket` and provides convenient
 /// APIs for `Vault` to fetch related items, sort keys, and date-based groupings.
-///
-/// - Generic Parameter Identifier: An `ArchiveIdentifier` that defines the stable ID types used
-///   throughout the lookup APIs.
-public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable
-where Identifier.ID == ArchivePath {
+public struct Lookup: Codable, Sendable {
   /// Convenience alias for the stable identifier type used for artists, venues, shows, and annums.
-  public typealias ID = Identifier.ID
+  public typealias ID = ArchivePath
 
-  private let bracket: Bracket<Identifier>
+  private let bracket: Bracket
 
   private let showIDOrderIndex: [ID: Int]
 
   private enum LoadAttempt {
-    // URL, identifier, previousModified, cacheLoadFailed
-    case networkLoad(URL, Identifier, Date, Bool)
-    // URL, identifier, previousModified, networkLoadFailed
-    case cacheRead(URL, Identifier, Date, Bool)
-    case complete(Bracket<Identifier>)
+    // URL, previousModified, cacheLoadFailed
+    case networkLoad(URL, Date, Bool)
+    // URL, previousModified, networkLoadFailed
+    case cacheRead(URL, Date, Bool)
+    case complete(Bracket)
 
     private func load() async throws -> LoadAttempt {
       switch self {
-      case .networkLoad(let url, let identifier, let previousModified, let cacheLoadFailed):
+      case .networkLoad(let url, let previousModified, let cacheLoadFailed):
         var signpost = Signpost(category: "bracket", name: "network")
         signpost.start()
 
@@ -51,13 +47,13 @@ where Identifier.ID == ArchivePath {
           if loadDataFromURL {
             Logger.bracketCache.info("loading")
 
-            let bracket = try await Bracket(url: url, identifier: identifier)
+            let bracket = try await Bracket(url: url)
             try bracket.save()
             return .complete(bracket)
           } else {
             Logger.bracketCache.info("not updated - read from cache")
 
-            return .cacheRead(url, identifier, previousModified, false)
+            return .cacheRead(url, previousModified, false)
           }
         } catch {
           Logger.bracketCache.info(
@@ -70,17 +66,17 @@ where Identifier.ID == ArchivePath {
           }
 
           // Try the cache
-          return .cacheRead(url, identifier, previousModified, true)
+          return .cacheRead(url, previousModified, true)
         }
 
-      case .cacheRead(let url, let identifier, let previousModified, let networkLoadFailed):
+      case .cacheRead(let url, let previousModified, let networkLoadFailed):
         var signpost = Signpost(category: "bracket", name: "cache")
         signpost.start()
 
         do {
           Logger.bracketCache.info("cache")
 
-          async let bracket = try Bracket<Identifier>.read()
+          async let bracket = try Bracket.read()
           return .complete(try await bracket)
         } catch {
           Logger.bracketCache.info(
@@ -93,26 +89,26 @@ where Identifier.ID == ArchivePath {
           }
 
           // Go back to the network, since the cache did not work.
-          return .networkLoad(url, identifier, previousModified, true)
+          return .networkLoad(url, previousModified, true)
         }
       case .complete(_):
         return self
       }
     }
 
-    var bracket: Bracket<Identifier>? {
+    var bracket: Bracket? {
       switch self {
-      case .networkLoad(_, _, _, _), .cacheRead(_, _, _, _):
+      case .networkLoad(_, _, _), .cacheRead(_, _, _):
         nil
       case .complete(let bracket):
         bracket
       }
     }
 
-    static func load(url: URL, identifier: Identifier, previousModified: Date) async throws
-      -> Bracket<Identifier>
+    static func load(url: URL, previousModified: Date) async throws
+      -> Bracket
     {
-      var attempt = LoadAttempt.networkLoad(url, identifier, previousModified, false)
+      var attempt = LoadAttempt.networkLoad(url, previousModified, false)
 
       repeat {
         attempt = try await attempt.load()
@@ -123,7 +119,7 @@ where Identifier.ID == ArchivePath {
     }
   }
 
-  init(bracket: Bracket<Identifier>) async throws {
+  init(bracket: Bracket) async throws {
     self.bracket = bracket
 
     async let ordered = Dictionary(
@@ -137,17 +133,15 @@ where Identifier.ID == ArchivePath {
   ///
   /// - Parameters:
   ///   - url: The `URL` where the JSON music data is.
-  ///   - identifier: An `ArchiveIdentifier` used to generate stable IDs for all lookups.
   ///   - previousModified: The `Date` saved as the last modified date of the music data.
   /// - Throws: Any error encountered while reading the archive or computing derived structures.
   public init(
     url: URL,
-    identifier: Identifier,
     previousModified: Date
   ) async throws {
     try await self.init(
       bracket: try await LoadAttempt.load(
-        url: url, identifier: identifier, previousModified: previousModified))
+        url: url, previousModified: previousModified))
   }
 
   func compareIDs(lhs: ID, rhs: ID) throws -> Bool {

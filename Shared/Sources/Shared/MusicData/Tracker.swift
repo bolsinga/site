@@ -37,16 +37,15 @@ extension Dictionary where Value == Int {
 /// supports partial or unknown dates by utilizing `PartialDate` but only indexes
 /// fully known dates for certain operations.
 ///
-/// Typically, a `Tracker` is initialized with a list of shows and an `ArchiveIdentifier`
-/// that provides a consistent way to map show, artist, venue, and year identifiers
-/// into a unified ID namespace used for efficient storage and lookup.
+/// Typically, a `Tracker` is initialized with a list of shows, whose show, artist, venue, and year
+/// identifiers are mapped to `ArchivePath`s used for efficient storage and lookup.
 ///
 /// Usage notes:
 /// - Dates are partially known and can affect ordering and span calculations.
 /// - Various dictionaries use sets to track multiple relationships.
 /// - Flipped dictionaries expose inverse relationships for easy traversal.
-struct Tracker<Identifier: ArchiveIdentifier> {
-  typealias ID = Identifier.ID
+struct Tracker {
+  typealias ID = ArchivePath
 
   // Unsure how to make this generic over whatever Set.Element may be.
   private func insert<Key>(into dictionary: inout [Key: Set<ID>], key: Key, value: ID) {
@@ -101,12 +100,12 @@ struct Tracker<Identifier: ArchiveIdentifier> {
   // Show for Show IDs.
   var showMap = [ID: Show]()
 
-  private mutating func track(show: Show, identifier: Identifier) throws {
-    let showID = try identifier.show(show.id)
+  private mutating func track(show: Show) throws {
+    let showID = try ArchivePath(raw: show.id)
 
     showMap[showID] = show
 
-    let venueID = try identifier.venue(show.venue)
+    let venueID = try ArchivePath(raw: show.venue)
     venueSpanDates.insert(key: venueID, value: show.date)
     venueCounts.increment(key: venueID)
     venueOrder.append(venueID)
@@ -114,11 +113,11 @@ struct Tracker<Identifier: ArchiveIdentifier> {
     showVenue[showID] = venueID
 
     let annum = show.date.annum
-    let annumID = try identifier.annum(annum)
+    let annumID = ArchivePath.year(annum)
     annumMap[annumID] = annum
 
     try show.artists.reversed().forEach {
-      let artistID = try identifier.artist($0)
+      let artistID = try ArchivePath(raw: $0)
 
       var artists = showArtists[showID] ?? []
       artists.append(artistID)
@@ -149,11 +148,9 @@ struct Tracker<Identifier: ArchiveIdentifier> {
   ///
   /// - Parameters:
   ///   - shows: The array of shows to process.
-  ///   - identifier: The `ArchiveIdentifier` instance used to map original IDs
-  ///     to internal unified IDs.
   ///
   /// Throws an error if any identifier conversion fails.
-  init(shows: [Show], identifier: Identifier) throws {
+  init(shows: [Show]) throws {
     var signpost = Signpost(category: "tracker", name: "process")
     signpost.start()
 
@@ -164,7 +161,7 @@ struct Tracker<Identifier: ArchiveIdentifier> {
       }
       return PartialDate.compareWithUnknownsMuted(lhs: lhs.date, rhs: rhs.date)
     }.forEach {
-      try track(show: $0, identifier: identifier)
+      try track(show: $0)
     }
   }
 
