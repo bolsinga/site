@@ -120,7 +120,7 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
     }
   }
 
-  public func artists(filteredBy searchString: String) throws -> [Artist] {
+  public func artists(filteredBy searchString: String) throws -> [ArchiveItem] {
     guard !searchString.isEmpty else { return [] }
 
     let matchingPairs: [(ID, Artist)] = artistIDs().compactMap {
@@ -129,7 +129,7 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
     }
     return try matchingPairs.sorted(by: {
       try lookup.compareIDs(lhs: $0.0, rhs: $1.0)
-    }).map { $0.1 }
+    }).map { ArchiveItem(id: $0.1.archivePath, name: $0.1.name) }
   }
 
   public func venueIDs(filteredBy searchString: String) -> any Sequence<ID> {
@@ -141,7 +141,7 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
     }
   }
 
-  public func venues(filteredBy searchString: String) throws -> [Venue] {
+  public func venues(filteredBy searchString: String) throws -> [ArchiveItem] {
     guard !searchString.isEmpty else { return [] }
 
     let matchingPairs: [(ID, Venue)] = venueIDs().compactMap {
@@ -150,7 +150,7 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
     }
     return try matchingPairs.sorted(by: {
       try lookup.compareIDs(lhs: $0.0, rhs: $1.0)
-    }).map { $0.1 }
+    }).map { ArchiveItem(id: $0.1.archivePath, name: $0.1.name) }
   }
 
   public func digest(annum: AnnumID) -> AnnumDigest? {

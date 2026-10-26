@@ -24,14 +24,14 @@ private struct SearchResultButton: View {
   }
 }
 
-struct ArchiveCrossSearchView<A: Nameable & PathRestorable, V: Nameable & PathRestorable>: View {
+struct ArchiveCrossSearchView: View {
   @Binding var searchString: String
   @Binding var scope: ArchiveScope
   let navigateToPath: (ArchivePath) -> Void
-  let artistSearch: (String) -> [A]
-  let venueSearch: (String) -> [V]
+  let artistSearch: (String) -> [ArchiveItem]
+  let venueSearch: (String) -> [ArchiveItem]
 
-  private var artistDigests: [A] {
+  private var artistItems: [ArchiveItem] {
     switch scope {
     case .venue:
       []
@@ -40,7 +40,7 @@ struct ArchiveCrossSearchView<A: Nameable & PathRestorable, V: Nameable & PathRe
     }
   }
 
-  private var venueDigests: [V] {
+  private var venueItems: [ArchiveItem] {
     switch scope {
     case .all, .venue:
       venueSearch(searchString)
@@ -50,32 +50,32 @@ struct ArchiveCrossSearchView<A: Nameable & PathRestorable, V: Nameable & PathRe
   }
 
   var body: some View {
-    let artistDigests = artistDigests
-    let venueDigests = venueDigests
+    let artistItems = artistItems
+    let venueItems = venueItems
 
-    if artistDigests.isEmpty, venueDigests.isEmpty, !searchString.isEmpty {
+    if artistItems.isEmpty, venueItems.isEmpty, !searchString.isEmpty {
       ContentUnavailableView.search(text: searchString)
     } else {
       List {
-        if !artistDigests.isEmpty {
+        if !artistItems.isEmpty {
           Section(header: Text(ArchiveCategory.artists.localizedString)) {
-            ForEach(artistDigests, id: \.archivePath) { item in
+            ForEach(artistItems) { item in
               SearchResultButton(
                 name: Text(item.name.emphasizedAttributed(matching: searchString))
               ) {
-                navigateToPath(item.archivePath)
+                navigateToPath(item.id)
               }
             }
           }
         }
 
-        if !venueDigests.isEmpty {
+        if !venueItems.isEmpty {
           Section(header: Text(ArchiveCategory.venues.localizedString)) {
-            ForEach(venueDigests, id: \.archivePath) { item in
+            ForEach(venueItems) { item in
               SearchResultButton(
                 name: Text(item.name.emphasizedAttributed(matching: searchString))
               ) {
-                navigateToPath(item.archivePath)
+                navigateToPath(item.id)
               }
             }
           }
