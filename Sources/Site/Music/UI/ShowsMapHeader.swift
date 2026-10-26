@@ -72,6 +72,9 @@ struct ShowsMap: View {
           VenueDot()
         }
         .allowsHitTesting(false)
+        // A kept map with no dots would show the last day's area, so it nearly fades out.
+        .opacity(places.isEmpty ? 0.3 : 1)
+        .animation(.default, value: places.isEmpty)
       }
       if places.isEmpty && model.geocodingInProgress {
         ProgressView()
