@@ -1,5 +1,5 @@
 //
-//  PathRestorable.swift
+//  ArchivePath+Models.swift
 //
 //
 //  Created by Greg Bolsinga on 5/25/23.
@@ -7,23 +7,19 @@
 
 import Foundation
 
-public protocol PathRestorable {
-  var archivePath: ArchivePath { get }
-}
-
-extension Venue: PathRestorable {
+extension Venue {
   public var archivePath: ArchivePath { .venue(id) }
 }
 
-extension VenueDigest: PathRestorable where ID == ArchivePath {
+extension VenueDigest where ID == ArchivePath {
   public var archivePath: ArchivePath { id }
 }
 
-extension Artist: PathRestorable {
+extension Artist {
   public var archivePath: ArchivePath { .artist(id) }
 }
 
-extension ArtistDigest: PathRestorable where ID == ArchivePath {
+extension ArtistDigest where ID == ArchivePath {
   public var archivePath: ArchivePath { id }
 }
 
@@ -31,10 +27,10 @@ extension Annum {
   public var archivePath: ArchivePath { .year(self) }
 }
 
-extension AnnumDigest: PathRestorable where ID == ArchivePath {
+extension AnnumDigest where ID == ArchivePath {
   public var archivePath: ArchivePath { id }
 }
 
-extension Show: PathRestorable {
+extension Show {
   public var archivePath: ArchivePath { .show(id) }
 }
