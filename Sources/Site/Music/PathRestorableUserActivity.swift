@@ -8,6 +8,6 @@
 import Foundation
 import Shared
 
-protocol PathRestorableUserActivity: PathRestorable {
+protocol PathRestorableUserActivity: Identifiable where ID == ArchivePath {
   func updateActivity(_ userActivity: NSUserActivity, url: URL?)
 }

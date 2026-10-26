@@ -26,7 +26,7 @@ struct ArchiveNavigationUserActivityModifier: ViewModifier {
   let urlForCategory: (ArchiveCategory) -> URL?
   /// The sort of the category in `activity`, if it has one.
   let categorySort: ArchiveCategorySort?
-  let activityForPath: (ArchivePath) -> PathRestorableUserActivity?
+  let activityForPath: (ArchivePath) -> (any PathRestorableUserActivity)?
 
   @Environment(VaultModel.self) private var model
 
@@ -45,7 +45,7 @@ struct ArchiveNavigationUserActivityModifier: ViewModifier {
 
         Logger.navigationUserActivity.log("update path \(path.formatted(.json), privacy: .public)")
         guard let pathUserActivity = activityForPath(path) else { return }
-        userActivity.update(pathUserActivity, url: model.vault.url(for: pathUserActivity))
+        userActivity.update(pathUserActivity, url: path.url(using: model.vault.rootURL))
       }
   }
 }
@@ -55,7 +55,7 @@ extension View {
     for activity: ArchiveActivity,
     urlForCategory: @escaping (ArchiveCategory) -> URL?,
     categorySort: ArchiveCategorySort? = nil,
-    activityForPath: @escaping (ArchivePath) -> PathRestorableUserActivity?
+    activityForPath: @escaping (ArchivePath) -> (any PathRestorableUserActivity)?
   ) -> some View {
     modifier(
       ArchiveNavigationUserActivityModifier(
