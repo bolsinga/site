@@ -10,8 +10,8 @@ import MapKit
 import Shared
 
 extension Atlas where T == Venue {
-  nonisolated func geocode(_ venue: T) async throws -> MKMapItem? {
-    guard let placemark: Placemark = try await geocode(venue) else { return nil }
+  nonisolated func geocode(_ venue: T, id: ArchivePath) async throws -> MKMapItem? {
+    guard let placemark: Placemark = try await geocode(venue, id: id) else { return nil }
     return try await placemark.mapItem(for: venue)
   }
 }
