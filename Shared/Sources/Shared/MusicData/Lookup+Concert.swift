@@ -8,7 +8,7 @@
 import Foundation
 
 extension Lookup {
-  fileprivate func showDigest(show: Show, showId: ID) -> ShowDigest? {
+  fileprivate func showDigest(show: Show, showId: ArchivePath) -> ShowDigest? {
     guard let venueID = venues(showID: showId), let venue = venueMap[venueID] else { return nil }
     let artists = artists(showID: showId).compactMap { id in artistMap[id].map { (id, $0) } }
     let performers = artists.map { ArchiveItem(id: $0, name: $1.name) }
@@ -32,17 +32,17 @@ extension Lookup {
       isMostRecentVenue: rankDigest(venue: venueID).mostRecentSet.isMostRecent(on: show.date))
   }
 
-  func showDigest(showId: ID) -> ShowDigest? {
+  func showDigest(showId: ArchivePath) -> ShowDigest? {
     guard let show = showMap[showId] else { return nil }
     return showDigest(show: show, showId: showId)
   }
 
-  fileprivate func showDigests(annumID: ID) -> [ShowDigest] {
+  fileprivate func showDigests(annumID: ArchivePath) -> [ShowDigest] {
     let showIDs = annumShows[annumID] ?? []
     return showIDs.compactMap { showDigest(showId: $0) }
   }
 
-  private func artistDigest(artist: Artist, artistID: ID) -> ArtistDigest {
+  private func artistDigest(artist: Artist, artistID: ArchivePath) -> ArtistDigest {
     ArtistDigest(
       id: artistID, artist: artist,
       shows: shows(artistID: artistID).compactMap { showDigest(showId: $0) },
@@ -50,12 +50,12 @@ extension Lookup {
       rank: rankDigest(artist: artistID))
   }
 
-  func artistDigest(id artistID: ID) -> ArtistDigest? {
+  func artistDigest(id artistID: ArchivePath) -> ArtistDigest? {
     guard let artist = artistMap[artistID] else { return nil }
     return artistDigest(artist: artist, artistID: artistID)
   }
 
-  private func venueDigest(venue: Venue, venueID: ID) -> VenueDigest {
+  private func venueDigest(venue: Venue, venueID: ArchivePath) -> VenueDigest {
     VenueDigest(
       id: venueID, venue: venue,
       shows: shows(venueID: venueID).compactMap { showDigest(showId: $0) },
@@ -63,12 +63,12 @@ extension Lookup {
       rank: rankDigest(venue: venueID))
   }
 
-  func venueDigest(id venueID: ID) -> VenueDigest? {
+  func venueDigest(id venueID: ArchivePath) -> VenueDigest? {
     guard let venue = venueMap[venueID] else { return nil }
     return venueDigest(venue: venue, venueID: venueID)
   }
 
-  func annumDigest(id annumID: ID) -> AnnumDigest? {
+  func annumDigest(id annumID: ArchivePath) -> AnnumDigest? {
     guard let annum = annumMap[annumID] else { return nil }
     return AnnumDigest(
       id: annumID, annum: annum, shows: showDigests(annumID: annumID),

@@ -10,12 +10,11 @@ import MapKit
 import Shared
 
 struct BatchGeocode: AsyncSequence {
-  public typealias ID = ArchivePath
 
-  typealias Element = (ID, MKMapItem?)
+  typealias Element = (ArchivePath, MKMapItem?)
 
   let atlas: Atlas<Venue>
-  private let geocodables: [(ID, Venue)]
+  private let geocodables: [(ArchivePath, Venue)]
 
   /// Create a BatchGeocode.
   /// - Parameters:
@@ -28,7 +27,7 @@ struct BatchGeocode: AsyncSequence {
 
   struct AsyncIterator: AsyncIteratorProtocol {
     let atlas: Atlas<Venue>
-    let geocodables: [(ID, Venue)]
+    let geocodables: [(ArchivePath, Venue)]
 
     var index: Int = 0
 

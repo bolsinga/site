@@ -9,7 +9,7 @@ import Foundation
 import Shared
 
 extension Vault {
-  func restorableSharableLinkable(for path: ArchivePath) -> (any PathRestorableUserActivity)? {
+  func restorableSharableLinkable(for path: ArchivePath) -> (any ArchivePathUserActivity)? {
     switch path {
     case .show(_):
       return digest(show: path)

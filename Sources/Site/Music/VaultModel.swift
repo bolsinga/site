@@ -32,7 +32,6 @@ enum LocationAuthorization {
 }
 
 @Observable public final class VaultModel {
-  public typealias ID = ArchivePath
 
   public let vault: Vault
 
@@ -127,7 +126,7 @@ enum LocationAuthorization {
   }
 
   func compare<Comparable: Identifiable>(lhs: Comparable, rhs: Comparable)
-    -> Bool where Comparable.ID == ID
+    -> Bool where Comparable.ID == ArchivePath
   {
     do {
       return try vault.compareIDs(lhs: lhs.id, rhs: rhs.id)
@@ -137,7 +136,7 @@ enum LocationAuthorization {
     }
   }
 
-  func compareIDs(lhs: ID, rhs: ID) -> Bool {
+  func compareIDs(lhs: ArchivePath, rhs: ArchivePath) -> Bool {
     do {
       return try vault.compareIDs(lhs: lhs, rhs: rhs)
     } catch {
@@ -146,7 +145,7 @@ enum LocationAuthorization {
     }
   }
 
-  func sort(showIDs: any Collection<ID>) -> [ID] {
+  func sort(showIDs: any Collection<ArchivePath>) -> [ArchivePath] {
     do {
       return try vault.sort(showIDs: showIDs)
     } catch {
@@ -225,7 +224,9 @@ enum LocationAuthorization {
     }
   }
 
-  private func venueIDsNearby(_ distanceThreshold: CLLocationDistance) -> any Collection<ID> {
+  private func venueIDsNearby(_ distanceThreshold: CLLocationDistance) -> any Collection<
+    ArchivePath
+  > {
     guard let currentLocation else {
       Logger.vaultModel.log("Nearby: No Location")
       return []
@@ -258,7 +259,7 @@ enum LocationAuthorization {
   }
 
   private func venues(nearby location: CLLocation, distanceThreshold: CLLocationDistance)
-    -> any Collection<ID>
+    -> any Collection<ArchivePath>
   {
     venueMapItemMap.compactMap { (id, mapItem) in
       guard mapItem.location.distance(from: location) <= distanceThreshold else { return nil }

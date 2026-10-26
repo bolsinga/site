@@ -8,7 +8,6 @@
 import Foundation
 
 public struct Vault: Sendable {
-  public typealias ID = ArchivePath
 
   public let rootURL: URL
 
@@ -40,7 +39,7 @@ public struct Vault: Sendable {
     lookup.decadesMap
   }
 
-  public func decadesMap(showIDs: Set<ID>) -> [Decade: [Annum: Int]] {
+  public func decadesMap(showIDs: Set<ArchivePath>) -> [Decade: [Annum: Int]] {
     lookup.decadesMap(showIDs: showIDs)
   }
 
@@ -54,7 +53,7 @@ public struct Vault: Sendable {
   }
 
   fileprivate func concertIDs(on dayOfLeapYear: Int, orRecentCount recentCount: Int)
-    -> any Collection<ID>
+    -> any Collection<ArchivePath>
   {
     lookup.concertDayMap[dayOfLeapYear] ?? lookup.recentConcerts(recentCount)
   }
@@ -69,8 +68,9 @@ public struct Vault: Sendable {
   ///   - dayOfLeapYear: The day-of-leap-year index (1...366) to query.
   ///   - recentCount: The number of recent shows to consider when there are no shows on that day.
   /// - Returns: A collection of artist IDs, capped to the most recent `recentCount` entries.
-  public func artistIDs(on dayOfLeapYear: Int, orRecentCount recentCount: Int) -> any Collection<ID>
-  {
+  public func artistIDs(on dayOfLeapYear: Int, orRecentCount recentCount: Int) -> any Collection<
+    ArchivePath
+  > {
     concertIDs(on: dayOfLeapYear, orRecentCount: recentCount).flatMap { lookup.artists(showID: $0) }
       .suffix(recentCount)
   }
@@ -85,8 +85,9 @@ public struct Vault: Sendable {
   ///   - dayOfLeapYear: The day-of-leap-year index (1...366) to query.
   ///   - recentCount: The number of recent shows to consider when there are no shows on that day.
   /// - Returns: A collection of venue IDs, capped to the most recent `recentCount` entries.
-  public func venueIDs(on dayOfLeapYear: Int, orRecentCount recentCount: Int) -> any Collection<ID>
-  {
+  public func venueIDs(on dayOfLeapYear: Int, orRecentCount recentCount: Int) -> any Collection<
+    ArchivePath
+  > {
     concertIDs(on: dayOfLeapYear, orRecentCount: recentCount).compactMap {
       lookup.venues(showID: $0)
     }
@@ -99,15 +100,15 @@ public struct Vault: Sendable {
     }
   }
 
-  public func sort(showIDs: any Collection<ID>) throws -> [ID] {
+  public func sort(showIDs: any Collection<ArchivePath>) throws -> [ArchivePath] {
     try lookup.sort(showIDs: showIDs)
   }
 
-  public func compareIDs(lhs: ID, rhs: ID) throws -> Bool {
+  public func compareIDs(lhs: ArchivePath, rhs: ArchivePath) throws -> Bool {
     try lookup.compareIDs(lhs: lhs, rhs: rhs)
   }
 
-  public func artistIDs(filteredBy searchString: String) -> any Sequence<ID> {
+  public func artistIDs(filteredBy searchString: String) -> any Sequence<ArchivePath> {
     guard !searchString.isEmpty else { return [] }
 
     return lookup.artistMap.compactMap {
@@ -119,7 +120,7 @@ public struct Vault: Sendable {
   public func artists(filteredBy searchString: String) throws -> [ArchiveItem] {
     guard !searchString.isEmpty else { return [] }
 
-    let matchingPairs: [(ID, Artist)] = artistIDs().compactMap {
+    let matchingPairs: [(ArchivePath, Artist)] = artistIDs().compactMap {
       guard $0.1.filter(by: searchString) else { return nil }
       return $0
     }
@@ -128,7 +129,7 @@ public struct Vault: Sendable {
     }).map { ArchiveItem(id: $0.0, name: $0.1.name) }
   }
 
-  public func venueIDs(filteredBy searchString: String) -> any Sequence<ID> {
+  public func venueIDs(filteredBy searchString: String) -> any Sequence<ArchivePath> {
     guard !searchString.isEmpty else { return [] }
 
     return lookup.venueMap.compactMap {
@@ -140,7 +141,7 @@ public struct Vault: Sendable {
   public func venues(filteredBy searchString: String) throws -> [ArchiveItem] {
     guard !searchString.isEmpty else { return [] }
 
-    let matchingPairs: [(ID, Venue)] = venueIDs().compactMap {
+    let matchingPairs: [(ArchivePath, Venue)] = venueIDs().compactMap {
       guard $0.1.filter(by: searchString) else { return nil }
       return $0
     }
@@ -149,27 +150,27 @@ public struct Vault: Sendable {
     }).map { ArchiveItem(id: $0.0, name: $0.1.name) }
   }
 
-  public func digest(annum: ID) -> AnnumDigest? {
+  public func digest(annum: ArchivePath) -> AnnumDigest? {
     lookup.annumDigest(id: annum)
   }
 
-  public func digest(artist: ID) -> ArtistDigest? {
+  public func digest(artist: ArchivePath) -> ArtistDigest? {
     lookup.artistDigest(id: artist)
   }
 
-  public func digest(venue: ID) -> VenueDigest? {
+  public func digest(venue: ArchivePath) -> VenueDigest? {
     lookup.venueDigest(id: venue)
   }
 
-  public func digest(show: ID) -> ShowDigest? {
+  public func digest(show: ArchivePath) -> ShowDigest? {
     lookup.showDigest(showId: show)
   }
 
-  public func venueIDs() -> [(ID, Venue)] {
+  public func venueIDs() -> [(ArchivePath, Venue)] {
     lookup.venueMap.map { ($0, $1) }
   }
 
-  public func artistIDs() -> [(ID, Artist)] {
+  public func artistIDs() -> [(ArchivePath, Artist)] {
     lookup.artistMap.map { ($0, $1) }
   }
 
@@ -177,27 +178,27 @@ public struct Vault: Sendable {
     Array(lookup.showMap.values)
   }
 
-  public func showIDs() -> Set<ID> {
+  public func showIDs() -> Set<ArchivePath> {
     Set(lookup.showMap.keys)
   }
 
-  public func artists(venueID: ID) -> Set<ID> {
+  public func artists(venueID: ArchivePath) -> Set<ArchivePath> {
     lookup.artists(venueID: venueID)
   }
 
-  public func shows(artistID: ID) -> Set<ID> {
+  public func shows(artistID: ArchivePath) -> Set<ArchivePath> {
     lookup.shows(artistID: artistID)
   }
 
-  public func shows(venueID: ID) -> Set<ID> {
+  public func shows(venueID: ArchivePath) -> Set<ArchivePath> {
     lookup.shows(venueID: venueID)
   }
 
-  public func rankedArtist(id: ID) -> RankedArchiveItem? {
+  public func rankedArtist(id: ArchivePath) -> RankedArchiveItem? {
     lookup.artistMap[id]?.rankedArchiveItem(id: id, lookup.rankDigest(artist: id))
   }
 
-  public func rankedVenue(id: ID) -> RankedArchiveItem? {
+  public func rankedVenue(id: ArchivePath) -> RankedArchiveItem? {
     lookup.venueMap[id]?.rankedArchiveItem(id: id, lookup.rankDigest(venue: id))
   }
 
@@ -216,7 +217,7 @@ public struct Vault: Sendable {
   }
 
   /// The statistics of just these venues and their shows.
-  public func statisticsData(venueIDs: any Collection<ID>)
+  public func statisticsData(venueIDs: any Collection<ArchivePath>)
     -> (showsCount: Int, venueCount: Int, artistCount: Int, dates: [Date], states: [String: Int])
   {
     let venues = venueIDs.compactMap { id in lookup.venueMap[id].map { (id, $0) } }

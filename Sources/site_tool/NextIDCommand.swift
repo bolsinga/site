@@ -19,7 +19,7 @@ extension Collection where Element == String {
 }
 
 extension Bracket {
-  fileprivate func nextIndex(_ items: any Collection<ID>) -> Int {
+  fileprivate func nextIndex(_ items: any Collection<ArchivePath>) -> Int {
     guard let first = items.map({ String(describing: $0) }).archiveIndices.sorted().first else {
       return items.count
     }

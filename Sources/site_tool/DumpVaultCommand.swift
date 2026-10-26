@@ -10,7 +10,7 @@ import Foundation
 import Shared
 
 extension Vault {
-  fileprivate func concertsForArtist(artistID: ID) -> any Collection<ShowDigest> {
+  fileprivate func concertsForArtist(artistID: ArchivePath) -> any Collection<ShowDigest> {
     self.shows(artistID: artistID).compactMap { digest(show: $0) }
   }
 }
