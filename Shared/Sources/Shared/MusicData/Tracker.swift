@@ -83,8 +83,6 @@ struct Tracker {
   var annumArtists = [ArchivePath: Set<ArchivePath>]()
   /// Venues grouped by year (annum).
   var annumVenues = [ArchivePath: Set<ArchivePath>]()
-  /// mapping ID to Annum
-  var annumMap = [ArchivePath: Annum]()
 
   /// Shows indexed by the day of leap year (1...366).
   var dayOfLeapYearShows = [Int: Set<ArchivePath>]()
@@ -115,7 +113,6 @@ struct Tracker {
 
     let annum = show.date.annum
     let annumID = ArchivePath.year(annum)
-    annumMap[annumID] = annum
 
     try show.artists.reversed().forEach {
       let artistID = try ArchivePath(raw: $0)

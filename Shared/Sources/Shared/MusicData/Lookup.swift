@@ -186,7 +186,7 @@ public struct Lookup: Codable, Sendable {
   public func decadesMap(for annumShows: [ArchivePath: Set<ArchivePath>]) -> [Decade: [Annum: Int]]
   {
     annumShows.reduce(into: [Decade: [Annum: Int]]()) {
-      guard let annum = annumMap[$1.key] else { return }
+      guard case .year(let annum) = $1.key else { return }
       let decade = annum.decade
       var arr = $0[decade] ?? [:]
       arr[annum] = $1.value.count
@@ -200,10 +200,6 @@ public struct Lookup: Codable, Sendable {
 
   public var annumShows: [ArchivePath: Set<ArchivePath>] {
     bracket.annumShows
-  }
-
-  public var annumMap: [ArchivePath: Annum] {
-    bracket.annumMap
   }
 
   /// Maps a day-of-leap-year index (1...366) to the set of show IDs that occurred on that day.
