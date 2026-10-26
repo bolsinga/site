@@ -7,10 +7,7 @@
 
 import Foundation
 
-public struct RankedArchiveItem: Hashable, Identifiable, LibraryComparable, Nameable,
-  PathRestorable,
-  Rankable
-{
+public struct RankedArchiveItem: Hashable, Identifiable, LibraryComparable, Nameable, Rankable {
   public let id: ArchivePath
   public let sortname: String?
   public let name: String
