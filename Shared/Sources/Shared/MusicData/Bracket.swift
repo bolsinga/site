@@ -68,9 +68,8 @@ extension Music {
 /// - Generic Parameter Identifier: An `ArchiveIdentifier` that defines the stable ID types used
 ///   throughout the snapshot.
 public struct Bracket<Identifier: ArchiveIdentifier>: Codable, Sendable {
-  /// Convenience alias for the stable identifier type used for artists and venues.
+  /// Convenience alias for the stable identifier type used for artists, venues, and annums.
   public typealias ID = Identifier.ID
-  /// Convenience alias for the stable identifier type used for year-like (annum) groupings.
 
   /// Aggregated ranking metrics for each artist, used to sort or filter artist lists.
   let artistRankDigestMap: [ID: RankDigest]

@@ -21,9 +21,8 @@ extension Logger {
 /// - Generic Parameter Identifier: An `ArchiveIdentifier` that defines the stable ID types used
 ///   throughout the lookup APIs.
 public struct Lookup<Identifier: ArchiveIdentifier>: Codable, Sendable {
-  /// Convenience alias for the stable identifier type used for artists, venues, and shows.
+  /// Convenience alias for the stable identifier type used for artists, venues, shows, and annums.
   public typealias ID = Identifier.ID
-  /// Convenience alias for the stable identifier type used for year-like (annum) groupings.
 
   private let bracket: Bracket<Identifier>
 
