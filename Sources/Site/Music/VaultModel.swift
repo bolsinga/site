@@ -35,6 +35,9 @@ enum LocationAuthorization {
 public typealias AppIdentifier = ArchivePathIdentifier
 public typealias VaultModel = AbstractVaultModel<AppIdentifier>
 
+typealias ArtistDigest = Shared.ArtistDigest<AppIdentifier.ID>
+typealias VenueDigest = Shared.VenueDigest<AppIdentifier.ID>
+
 @Observable public final class AbstractVaultModel<Identifier: ArchiveIdentifier> {
   public typealias ID = Identifier.ID
   public typealias AnnumID = Identifier.AnnumID

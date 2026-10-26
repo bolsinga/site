@@ -157,11 +157,11 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
     lookup.annumDigest(id: annum)
   }
 
-  public func digest(artist: ID) -> ArtistDigest? {
+  public func digest(artist: ID) -> ArtistDigest<ID>? {
     lookup.artistDigest(id: artist)
   }
 
-  public func digest(venue: ID) -> VenueDigest? {
+  public func digest(venue: ID) -> VenueDigest<ID>? {
     lookup.venueDigest(id: venue)
   }
 

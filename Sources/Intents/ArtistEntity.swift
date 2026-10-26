@@ -44,7 +44,7 @@ struct ArtistEntity: AppEntity {
   }
 
   init(digest: ArtistDigest, url: URL) {
-    self.id = digest.archivePath
+    self.id = digest.id
     self.url = url
     self.name = digest.name
     self.showCount = digest.shows.count

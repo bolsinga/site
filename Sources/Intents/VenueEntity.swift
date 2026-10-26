@@ -48,7 +48,7 @@ struct VenueEntity: AppEntity {
   }
 
   init(digest: VenueDigest, url: URL) {
-    self.id = digest.archivePath
+    self.id = digest.id
     let location = digest.location
     self.address = location.formatted(.oneLineNoURL)
 

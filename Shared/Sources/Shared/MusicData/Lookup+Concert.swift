@@ -42,28 +42,28 @@ extension Lookup {
     return showIDs.compactMap { showDigest(showId: $0) }
   }
 
-  private func artistDigest(artist: Artist, artistID: ID) -> ArtistDigest {
+  private func artistDigest(artist: Artist, artistID: ID) -> ArtistDigest<ID> {
     ArtistDigest(
-      artist: artist,
+      id: artistID, artist: artist,
       shows: shows(artistID: artistID).compactMap { showDigest(showId: $0) },
       related: related(artistID: artistID).sorted(by: { $0.name < $1.name }),
       rank: rankDigest(artist: artistID))
   }
 
-  func artistDigest(id artistID: ID) -> ArtistDigest? {
+  func artistDigest(id artistID: ID) -> ArtistDigest<ID>? {
     guard let artist = artistMap[artistID] else { return nil }
     return artistDigest(artist: artist, artistID: artistID)
   }
 
-  private func venueDigest(venue: Venue, venueID: ID) -> VenueDigest {
+  private func venueDigest(venue: Venue, venueID: ID) -> VenueDigest<ID> {
     VenueDigest(
-      venue: venue,
+      id: venueID, venue: venue,
       shows: shows(venueID: venueID).compactMap { showDigest(showId: $0) },
       related: related(venueID: venueID).sorted(by: { $0.name < $1.name }),
       rank: rankDigest(venue: venueID))
   }
 
-  func venueDigest(id venueID: ID) -> VenueDigest? {
+  func venueDigest(id venueID: ID) -> VenueDigest<ID>? {
     guard let venue = venueMap[venueID] else { return nil }
     return venueDigest(venue: venue, venueID: venueID)
   }
