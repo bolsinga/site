@@ -7,7 +7,8 @@
 
 import Foundation
 
-public struct AnnumDigest: Codable, Sendable {
+public struct AnnumDigest<ID: ArchiveIdentifiable>: Codable, Identifiable, Sendable {
+  public let id: ID
   public let annum: Annum
   public let shows: [ShowDigest]
   private let rank: RankDigest
@@ -21,9 +22,10 @@ public struct AnnumDigest: Codable, Sendable {
   public let mostRecentVenueCount: Int
 
   public init(
-    annum: Annum, shows: [ShowDigest], rank: RankDigest, newArtistCount: Int = 0,
+    id: ID, annum: Annum, shows: [ShowDigest], rank: RankDigest, newArtistCount: Int = 0,
     newVenueCount: Int = 0, mostRecentArtistCount: Int = 0, mostRecentVenueCount: Int = 0
   ) {
+    self.id = id
     self.annum = annum
     self.shows = shows
     self.rank = rank

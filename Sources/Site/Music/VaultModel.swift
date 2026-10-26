@@ -37,6 +37,7 @@ public typealias VaultModel = AbstractVaultModel<AppIdentifier>
 
 typealias ArtistDigest = Shared.ArtistDigest<AppIdentifier.ID>
 typealias VenueDigest = Shared.VenueDigest<AppIdentifier.ID>
+typealias AnnumDigest = Shared.AnnumDigest<AppIdentifier.ID>
 
 @Observable public final class AbstractVaultModel<Identifier: ArchiveIdentifier> {
   public typealias ID = Identifier.ID

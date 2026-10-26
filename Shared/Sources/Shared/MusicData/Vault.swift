@@ -152,7 +152,7 @@ public struct Vault<Identifier: ArchiveIdentifier>: Sendable {
     }).map { ArchiveItem(id: $0.1.archivePath, name: $0.1.name) }
   }
 
-  public func digest(annum: ID) -> AnnumDigest? {
+  public func digest(annum: ID) -> AnnumDigest<ID>? {
     lookup.annumDigest(id: annum)
   }
 

@@ -17,8 +17,8 @@ extension Vault where Identifier == AppIdentifier {
       return digest(venue: path)
     case .artist(_):
       return digest(artist: path)
-    case .year(let annum):
-      return annum
+    case .year(_):
+      return digest(annum: path)
     }
   }
 }

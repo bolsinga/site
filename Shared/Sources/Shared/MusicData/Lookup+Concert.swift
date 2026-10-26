@@ -68,10 +68,11 @@ extension Lookup {
     return venueDigest(venue: venue, venueID: venueID)
   }
 
-  func annumDigest(id annumID: ID) -> AnnumDigest? {
+  func annumDigest(id annumID: ID) -> AnnumDigest<ID>? {
     guard let annum = annumMap[annumID] else { return nil }
     return AnnumDigest(
-      annum: annum, shows: showDigests(annumID: annumID), rank: rankDigest(annum: annumID),
+      id: annumID, annum: annum, shows: showDigests(annumID: annumID),
+      rank: rankDigest(annum: annumID),
       newArtistCount: newArtistCount(in: annum), newVenueCount: newVenueCount(in: annum),
       mostRecentArtistCount: mostRecentArtistCount(in: annum),
       mostRecentVenueCount: mostRecentVenueCount(in: annum))

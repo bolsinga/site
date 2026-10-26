@@ -27,12 +27,12 @@ extension ArtistDigest: PathRestorable where ID == ArchivePath {
   public var archivePath: ArchivePath { id }
 }
 
-extension Annum: PathRestorable {
+extension Annum {
   public var archivePath: ArchivePath { .year(self) }
 }
 
-extension AnnumDigest: PathRestorable {
-  public var archivePath: ArchivePath { annum.archivePath }
+extension AnnumDigest: PathRestorable where ID == ArchivePath {
+  public var archivePath: ArchivePath { id }
 }
 
 extension Show: PathRestorable {
