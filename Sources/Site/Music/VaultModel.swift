@@ -31,10 +31,6 @@ enum LocationAuthorization {
   }
 }
 
-typealias ArtistDigest = Shared.ArtistDigest<ArchivePath>
-typealias VenueDigest = Shared.VenueDigest<ArchivePath>
-typealias AnnumDigest = Shared.AnnumDigest<ArchivePath>
-
 @Observable public final class VaultModel {
   public typealias ID = ArchivePath
 

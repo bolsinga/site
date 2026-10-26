@@ -149,15 +149,15 @@ public struct Vault: Sendable {
     }).map { ArchiveItem(id: $0.0, name: $0.1.name) }
   }
 
-  public func digest(annum: ID) -> AnnumDigest<ID>? {
+  public func digest(annum: ID) -> AnnumDigest? {
     lookup.annumDigest(id: annum)
   }
 
-  public func digest(artist: ID) -> ArtistDigest<ID>? {
+  public func digest(artist: ID) -> ArtistDigest? {
     lookup.artistDigest(id: artist)
   }
 
-  public func digest(venue: ID) -> VenueDigest<ID>? {
+  public func digest(venue: ID) -> VenueDigest? {
     lookup.venueDigest(id: venue)
   }
 

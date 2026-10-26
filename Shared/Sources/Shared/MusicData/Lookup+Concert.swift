@@ -42,7 +42,7 @@ extension Lookup {
     return showIDs.compactMap { showDigest(showId: $0) }
   }
 
-  private func artistDigest(artist: Artist, artistID: ID) -> ArtistDigest<ID> {
+  private func artistDigest(artist: Artist, artistID: ID) -> ArtistDigest {
     ArtistDigest(
       id: artistID, artist: artist,
       shows: shows(artistID: artistID).compactMap { showDigest(showId: $0) },
@@ -50,12 +50,12 @@ extension Lookup {
       rank: rankDigest(artist: artistID))
   }
 
-  func artistDigest(id artistID: ID) -> ArtistDigest<ID>? {
+  func artistDigest(id artistID: ID) -> ArtistDigest? {
     guard let artist = artistMap[artistID] else { return nil }
     return artistDigest(artist: artist, artistID: artistID)
   }
 
-  private func venueDigest(venue: Venue, venueID: ID) -> VenueDigest<ID> {
+  private func venueDigest(venue: Venue, venueID: ID) -> VenueDigest {
     VenueDigest(
       id: venueID, venue: venue,
       shows: shows(venueID: venueID).compactMap { showDigest(showId: $0) },
@@ -63,12 +63,12 @@ extension Lookup {
       rank: rankDigest(venue: venueID))
   }
 
-  func venueDigest(id venueID: ID) -> VenueDigest<ID>? {
+  func venueDigest(id venueID: ID) -> VenueDigest? {
     guard let venue = venueMap[venueID] else { return nil }
     return venueDigest(venue: venue, venueID: venueID)
   }
 
-  func annumDigest(id annumID: ID) -> AnnumDigest<ID>? {
+  func annumDigest(id annumID: ID) -> AnnumDigest? {
     guard let annum = annumMap[annumID] else { return nil }
     return AnnumDigest(
       id: annumID, annum: annum, shows: showDigests(annumID: annumID),

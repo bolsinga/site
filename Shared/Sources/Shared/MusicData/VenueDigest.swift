@@ -7,11 +7,11 @@
 
 import Foundation
 
-public struct VenueDigest<ID: ArchiveIdentifiable>: Codable, Equatable, Hashable, Identifiable,
+public struct VenueDigest: Codable, Equatable, Hashable, Identifiable,
   LibraryComparable, Nameable,
   Sendable
 {
-  public let id: ID
+  public let id: ArchivePath
 
   public let venue: Venue  // TODO: This is still public for geocoding.
   public let shows: [ShowDigest]
@@ -22,7 +22,7 @@ public struct VenueDigest<ID: ArchiveIdentifiable>: Codable, Equatable, Hashable
   public var sortname: String? { venue.sortname }
   public var location: Location { venue.location }
 
-  public init(id: ID, venue: Venue, shows: [ShowDigest], related: [ArchiveItem], rank: RankDigest) {
+  public init(id: ArchivePath, venue: Venue, shows: [ShowDigest], related: [ArchiveItem], rank: RankDigest) {
     self.id = id
     self.venue = venue
     self.shows = shows

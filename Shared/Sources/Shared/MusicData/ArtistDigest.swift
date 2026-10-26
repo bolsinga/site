@@ -7,11 +7,11 @@
 
 import Foundation
 
-public struct ArtistDigest<ID: ArchiveIdentifiable>: Codable, Equatable, Hashable, Identifiable,
+public struct ArtistDigest: Codable, Equatable, Hashable, Identifiable,
   LibraryComparable, Nameable,
   Sendable
 {
-  public let id: ID
+  public let id: ArchivePath
 
   public let name: String
   public let sortname: String?
@@ -19,7 +19,7 @@ public struct ArtistDigest<ID: ArchiveIdentifiable>: Codable, Equatable, Hashabl
   public let related: [ArchiveItem]
   public let rank: RankDigest
 
-  public init(id: ID, artist: Artist, shows: [ShowDigest], related: [ArchiveItem], rank: RankDigest)
+  public init(id: ArchivePath, artist: Artist, shows: [ShowDigest], related: [ArchiveItem], rank: RankDigest)
   {
     self.id = id
     self.name = artist.name
