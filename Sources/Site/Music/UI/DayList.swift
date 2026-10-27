@@ -9,6 +9,8 @@ import Shared
 import SwiftUI
 
 struct DayList: View {
+  @Environment(VaultModel.self) private var model
+
   fileprivate let concerts: [ShowDigest]
   let dayOfLeapYear: Int
   /// Whether the list shows its own map. A container showing one map for several days leaves it out.
@@ -40,8 +42,11 @@ struct DayList: View {
             if hasMapHeader {
               ShowsMapHeader(shows: concerts, title: String(localized: dayOfLeapYear.relativeTitle))
             }
-            StatsCard(stats: Stats(dayShows: concerts), titles: .generic)
-              .padding(.horizontal)
+            StatsCard(
+              stats: Stats(dayShows: concerts, rank: model.vault.dayRankDigest(on: dayOfLeapYear)),
+              titles: .generic, rankKind: .day
+            )
+            .padding(.horizontal)
             DetailCard(title: Text("Shows")) {
               ForEach(concerts) { concert in
                 NavigationLink(value: concert.id) {

@@ -326,9 +326,9 @@ struct StatsCard: View {
       switch (rankKind, category) {
       case (_, .shows): (.shows, .shows)
       case (.venue, .years), (.artist, .years): (.span, .years)
-      case (.venue, .artists), (.annum, .artists): (.associated, .artists)
+      case (.venue, .artists), (.annum, .artists), (.day, .artists): (.associated, .artists)
       case (.artist, .venues): (.associated, .venues)
-      case (.annum, .venues): (.span, .venues)
+      case (.annum, .venues), (.day, .venues): (.span, .venues)
       default: nil
       }
     return chart.map {
