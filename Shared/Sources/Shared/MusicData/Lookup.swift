@@ -22,10 +22,6 @@ public struct Lookup: Codable, Sendable {
 
   private let showIDOrderIndex: [ArchivePath: Int]
 
-  /// How each day of the leap year with shows ranks among them: by shows, by venues (as the span
-  /// rank is for a year) and by artists (as the associated rank is).
-  private let dayRankDigestMap: [Int: RankDigest]
-
   private enum LoadAttempt {
     // URL, previousModified, cacheLoadFailed
     case networkLoad(URL, Date, Bool)
@@ -126,32 +122,11 @@ public struct Lookup: Codable, Sendable {
     async let ordered = Dictionary(
       uniqueKeysWithValues: try bracket.sortedShowIDs().enumerated().map { ($1, $0) })
     self.showIDOrderIndex = try await ordered
-    self.dayRankDigestMap = Self.dayRankDigests(bracket)
-  }
-
-  /// Ranks every day of the leap year that has shows against the others.
-  private static func dayRankDigests(_ bracket: Bracket) -> [Int: RankDigest] {
-    let days = bracket.concertDayMap
-    let showRankings = computeRankings(items: days.map { ($0.key, $0.value.count) })
-    let venueRankings = computeRankings(
-      items: days.map { day, showIDs in
-        (day, Set(showIDs.compactMap { bracket.showVenue[$0] }).count)
-      })
-    let artistRankings = computeRankings(
-      items: days.map { day, showIDs in
-        (day, Set(showIDs.flatMap { bracket.showArtists[$0] ?? [] }).count)
-      })
-    return days.keys.reduce(into: [:]) {
-      $0[$1] = RankDigest(
-        firstSet: .empty, mostRecentSet: .empty, spanRank: venueRankings[$1] ?? .empty,
-        showRank: showRankings[$1] ?? .empty, associatedRank: artistRankings[$1] ?? .empty,
-        section: nil)
-    }
   }
 
   /// How a day of the leap year ranks among the days with shows; empty when it has none.
   func dayRankDigest(on dayOfLeapYear: Int) -> RankDigest {
-    dayRankDigestMap[dayOfLeapYear] ?? .empty
+    bracket.dayRankDigestMap[dayOfLeapYear] ?? .empty
   }
 
   /// Creates a `Lookup` by indexing the provided `Music` archive and preparing derived maps.
@@ -244,7 +219,7 @@ public struct Lookup: Codable, Sendable {
       case .artist: Array(bracket.artistRankDigestMap.values)
       case .venue: Array(bracket.venueRankDigestMap.values)
       case .annum: Array(bracket.annumRankDigestMap.values)
-      case .day: Array(dayRankDigestMap.values)
+      case .day: Array(bracket.dayRankDigestMap.values)
       }
     return RankDistribution(rankings: digests.map { $0.ranking(for: metric) })
   }

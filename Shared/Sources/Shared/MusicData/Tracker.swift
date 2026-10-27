@@ -211,6 +211,22 @@ struct Tracker {
     await computeRankings { annumArtists.mapValues { $0.count }.map { $0 } }
   }
 
+  private func dayShowRankings() async -> [Int: Ranking] {
+    await computeRankings { dayOfLeapYearShows.mapValues { $0.count }.map { $0 } }
+  }
+
+  private func dayVenueRankings() async -> [Int: Ranking] {
+    await computeRankings {
+      dayOfLeapYearShows.mapValues { Set($0.compactMap { showVenue[$0] }).count }.map { $0 }
+    }
+  }
+
+  private func dayArtistRankings() async -> [Int: Ranking] {
+    await computeRankings {
+      dayOfLeapYearShows.mapValues { Set($0.flatMap { showArtists[$0] ?? [] }).count }.map { $0 }
+    }
+  }
+
   private func artistFirstSets() async -> [ArchivePath: FirstSet] {
     var order = 1
     async let r = artistOrder.reduce(into: [ArchivePath: FirstSet]()) {
@@ -324,6 +340,24 @@ struct Tracker {
     async let spanRankings = await annumVenueRankings()
     async let showRankings = await annumShowRankings()
     async let associatedRankings = await annumArtistRankings()
+
+    return rankDigests(
+      firstSets: [:],
+      spanRankings: await spanRankings,
+      showRankings: await showRankings,
+      associatedRankings: await associatedRankings,
+      sections: [:])
+  }
+
+  /// Produces ranking digests for the days of the leap year that have shows, combining show
+  /// rankings, venue rankings (as the span ranking is for an annum) and artist rankings (as the
+  /// associated ranking is). No first set rankings are included for days.
+  ///
+  /// - Returns: A dictionary mapping a day of the leap year (1...366) to its rank digest.
+  func dayRankDigests() async -> [Int: RankDigest] {
+    async let spanRankings = await dayVenueRankings()
+    async let showRankings = await dayShowRankings()
+    async let associatedRankings = await dayArtistRankings()
 
     return rankDigests(
       firstSets: [:],
