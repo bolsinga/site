@@ -77,10 +77,10 @@ extension Stats {
       mostRecentArtistCount: digest.mostRecentArtistCount)
   }
 
-  /// A day's shows, which come from several years: no charts of when they were and no count of
-  /// shows, as they are listed below, but the venues and artists with how many were new and most
-  /// recent.
-  init(dayShows shows: [ShowDigest]) {
+  /// A day's shows, which come from several years: no charts of when they were, but the shows,
+  /// venues and artists with how many were new and most recent, and how the day ranks among all
+  /// the days when it is given.
+  init(dayShows shows: [ShowDigest], rank: RankDigest? = nil) {
     self.init(
       concertsCount: shows.count,
       venueCount: shows.venueCount,
@@ -89,15 +89,14 @@ extension Stats {
       stateCounts: shows.stateCounts,
       shouldCalculateArtistCount: true,
       yearsSpanRanking: nil,
-      showRanking: nil,
-      artistVenuesRanking: nil,
-      venueArtistsRanking: nil,
+      showRanking: rank?.showRank,
+      artistVenuesRanking: rank?.spanRank,
+      venueArtistsRanking: rank?.associatedRank,
       alwaysShowVenuesArtistsStats: true,
       newVenueCount: shows.firstTimeVenueCount,
       newArtistCount: shows.firstTimeArtistCount,
       mostRecentVenueCount: shows.mostRecentVenueCount,
-      mostRecentArtistCount: shows.mostRecentArtistCount,
-      showsAreCounted: false)
+      mostRecentArtistCount: shows.mostRecentArtistCount)
   }
 
   init(vault: Vault) {

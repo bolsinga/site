@@ -124,6 +124,11 @@ public struct Lookup: Codable, Sendable {
     self.showIDOrderIndex = try await ordered
   }
 
+  /// How a day of the leap year ranks among the days with shows; empty when it has none.
+  func dayRankDigest(on dayOfLeapYear: Int) -> RankDigest {
+    bracket.dayRankDigestMap[dayOfLeapYear] ?? .empty
+  }
+
   /// Creates a `Lookup` by indexing the provided `Music` archive and preparing derived maps.
   ///
   /// Construction performs work concurrently to minimize initialization time.
@@ -209,11 +214,12 @@ public struct Lookup: Codable, Sendable {
 
   /// How every item of a kind ranks for a metric.
   func rankDistribution(_ kind: RankKind, _ metric: RankMetric) -> RankDistribution {
-    let digests =
+    let digests: [RankDigest] =
       switch kind {
-      case .artist: bracket.artistRankDigestMap.values
-      case .venue: bracket.venueRankDigestMap.values
-      case .annum: bracket.annumRankDigestMap.values
+      case .artist: Array(bracket.artistRankDigestMap.values)
+      case .venue: Array(bracket.venueRankDigestMap.values)
+      case .annum: Array(bracket.annumRankDigestMap.values)
+      case .day: Array(bracket.dayRankDigestMap.values)
       }
     return RankDistribution(rankings: digests.map { $0.ranking(for: metric) })
   }

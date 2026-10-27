@@ -120,4 +120,33 @@ struct RankDistributionTests {
     #expect(distribution.bars.isEmpty)
     #expect(distribution.itemCount == 0)
   }
+
+  @Test func daysAreRankedAmongTheDaysWithShows() async throws {
+    let vault = try await createVault()
+    let may1 = try #require(PartialDate(year: 1996, month: 5, day: 1).date).dayOfLeapYear
+    let jun1 = try #require(PartialDate(year: 1997, month: 6, day: 1).date).dayOfLeapYear
+
+    // May 1 has two shows (one in each year), a venue and two artists.
+    let busy = vault.dayRankDigest(on: may1)
+    #expect(busy.showRank == Ranking(rank: .rank(1), value: 2))
+    #expect(busy.spanRank == Ranking(rank: .rank(1), value: 1))
+    #expect(busy.associatedRank == Ranking(rank: .rank(1), value: 2))
+
+    // June 1 has one show, a venue and one artist.
+    let quiet = vault.dayRankDigest(on: jun1)
+    #expect(quiet.showRank == Ranking(rank: .rank(2), value: 1))
+    #expect(quiet.spanRank == Ranking(rank: .rank(1), value: 1))
+    #expect(quiet.associatedRank == Ranking(rank: .rank(2), value: 1))
+
+    #expect(vault.dayRankDigest(on: 1) == .empty)
+
+    let shows = vault.rankDistribution(.day, .shows)
+    #expect(shows.bars.map(\.value) == [2, 1])
+    #expect(shows.itemCount == 2)
+
+    // Both days have one venue, so they share a bar.
+    let venues = vault.rankDistribution(.day, .span)
+    #expect(venues.bars.map(\.value) == [1])
+    #expect(venues.bars.map(\.count) == [2])
+  }
 }

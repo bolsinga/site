@@ -8,7 +8,7 @@
 import Foundation
 
 public enum RankKind: Sendable {
-  case artist, venue, annum
+  case artist, venue, annum, day
 }
 
 public enum RankMetric: Sendable {

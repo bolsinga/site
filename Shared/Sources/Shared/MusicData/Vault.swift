@@ -156,6 +156,11 @@ public struct Vault: Sendable {
     }).map { ArchiveItem(id: $0.0, name: $0.1.name) }
   }
 
+  /// How a day of the leap year ranks among the days that have shows.
+  public func dayRankDigest(on dayOfLeapYear: Int) -> RankDigest {
+    lookup.dayRankDigest(on: dayOfLeapYear)
+  }
+
   public func rankDistribution(_ kind: RankKind, _ metric: RankMetric) -> RankDistribution {
     lookup.rankDistribution(kind, metric)
   }
