@@ -77,6 +77,7 @@ enum LocationAuthorization {
     }
 
     AppDependencyManager.shared.add(dependency: vault)
+    EntityVault.vault = vault
 
     dayChangeTask = Task {
       await self.monitorDayChanges()

@@ -42,6 +42,12 @@ struct VenueEntity: AppEntity {
   @Property(title: "Name Or Related Names")
   var related: [String]
 
+  // The concerts are linked entities, made only when asked for.
+  @DeferredProperty(title: "Concerts")
+  var concerts: [ConcertEntity] {
+    get async { EntityVault.vault?.concertEntities(venueID: id) ?? [] }
+  }
+
   var displayRepresentation: DisplayRepresentation {
     DisplayRepresentation(
       title: "\(name)", subtitle: "\(address)", image: .init(systemName: "music.note.house"))
@@ -83,3 +89,7 @@ extension VenueEntity: URLRepresentableEntity {
     }
   }
 #endif
+
+extension VenueEntity: Equatable {
+  static func == (lhs: VenueEntity, rhs: VenueEntity) -> Bool { lhs.id == rhs.id }
+}

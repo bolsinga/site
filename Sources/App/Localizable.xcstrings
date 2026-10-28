@@ -347,10 +347,22 @@
     "Comment" : {
 
     },
+    "concert" : {
+
+    },
+    "Concert" : {
+
+    },
     "Concerts" : {
 
     },
     "Count" : {
+
+    },
+    "Date" : {
+
+    },
+    "Day of Month" : {
 
     },
     "Discover" : {
@@ -360,6 +372,9 @@
 
     },
     "Displays Category Details in App." : {
+
+    },
+    "Displays Concert Details in App." : {
 
     },
     "Displays Venue Details in App." : {
@@ -452,6 +467,9 @@
     "Open Category" : {
 
     },
+    "Open Concert" : {
+
+    },
     "Open Venue" : {
 
     },
@@ -482,6 +500,9 @@
     "Search for Artists from Concerts based on complex criteria." : {
 
     },
+    "Search for Concerts based on complex criteria." : {
+
+    },
     "Search for Venues from Concerts based on complex criteria." : {
 
     },
@@ -495,6 +516,9 @@
 
     },
     "See Shows With This Artist" : {
+
+    },
+    "show" : {
 
     },
     "Show Count" : {
@@ -551,6 +575,9 @@
     "Unable to load data." : {
 
     },
+    "Unknown Date" : {
+
+    },
     "Value" : {
 
     },
@@ -585,6 +612,9 @@
 
     },
     "Weekdays with %@" : {
+
+    },
+    "Year" : {
 
     }
   },

@@ -38,6 +38,24 @@
 			<string>%lld artists</string>
 		</dict>
 	</dict>
+	<key>%lld Concert(s)</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@count@</string>
+		<key>count</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>lld</string>
+			<key>zero</key>
+			<string>%lld concerts</string>
+			<key>one</key>
+			<string>%lld concert</string>
+			<key>other</key>
+			<string>%lld concerts</string>
+		</dict>
+	</dict>
 	<key>Venue</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
@@ -106,6 +124,34 @@
 			<string>Band</string>
 			<key>other</key>
 			<string>Bands</string>
+		</dict>
+	</dict>
+	<key>Concert</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>one</key>
+			<string>Concert</string>
+			<key>other</key>
+			<string>Concerts</string>
+		</dict>
+	</dict>
+	<key>Show</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>one</key>
+			<string>Show</string>
+			<key>other</key>
+			<string>Shows</string>
 		</dict>
 	</dict>
 </dict>
