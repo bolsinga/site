@@ -19,7 +19,7 @@ extension Logger {
 extension NSUserActivity {
   internal static let archiveCategoryKey = "archiveCategory"
 
-  /// The categories were once saved as shortcuts. Opening them is an intent now, so the saved ones go.
+  /// The categories were once saved as shortcuts. Opening them is an intent now, so the saved activities go.
   static func deleteSavedCategoryActivities() {
     #if !os(tvOS)
       let key = "deletedSavedCategoryActivities"
@@ -27,10 +27,8 @@ extension NSUserActivity {
         Logger.deleteCategoryActivity.log("skipped: already deleted")
         return
       }
-      let identifiers = ArchiveCategory.allCases.map(\.rawValue)
-      Logger.deleteCategoryActivity.log(
-        "deleting: \(identifiers.joined(separator: ","), privacy: .public)")
-      deleteSavedUserActivities(withPersistentIdentifiers: identifiers) {
+      Logger.deleteCategoryActivity.log("deleting all")
+      deleteAllSavedUserActivities {
         Logger.deleteCategoryActivity.log("deleted")
         UserDefaults.standard.set(true, forKey: key)
       }
