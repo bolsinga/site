@@ -36,6 +36,8 @@ extension NSUserActivity {
     self.targetContentIdentifier = identifier
 
     self.isEligibleForHandoff = true
+    // The description is part of the searchable attributes, which only count when searchable.
+    self.isEligibleForSearch = true
 
     self.title = category.title
     if let description = category.activityDescription {
