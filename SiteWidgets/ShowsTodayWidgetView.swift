@@ -129,7 +129,7 @@ struct ShowsTodayWidgetView: View {
       case .shows(_, let others):
         Label("^[\(others.count + 1) Show](inflect: true) Today", systemImage: "music.note")
       case .noShows:
-        Text(NoShowsMessage(isToday: true).title)
+        Label(NoShowsMessage(isToday: true).title, systemImage: "music.note")
       case .needsAppLaunch:
         Text("Open \(String.archiveAppDisplayName)")
       }
