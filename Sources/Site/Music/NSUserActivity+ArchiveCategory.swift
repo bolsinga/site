@@ -13,6 +13,7 @@ import os
 extension Logger {
   fileprivate static let updateCategoryActivity = Logger(category: "updateCategoryActivity")
   fileprivate static let decodeCategoryActivity = Logger(category: "decodeCategoryActivity")
+  fileprivate static let deleteCategoryActivity = Logger(category: "deleteCategoryActivity")
 }
 
 extension NSUserActivity {
@@ -22,10 +23,15 @@ extension NSUserActivity {
   static func deleteSavedCategoryActivities() {
     #if !os(tvOS)
       let key = "deletedSavedCategoryActivities"
-      guard !UserDefaults.standard.bool(forKey: key) else { return }
-      deleteSavedUserActivities(
-        withPersistentIdentifiers: ArchiveCategory.allCases.map(\.rawValue)
-      ) {
+      guard !UserDefaults.standard.bool(forKey: key) else {
+        Logger.deleteCategoryActivity.log("skipped: already deleted")
+        return
+      }
+      let identifiers = ArchiveCategory.allCases.map(\.rawValue)
+      Logger.deleteCategoryActivity.log(
+        "deleting: \(identifiers.joined(separator: ","), privacy: .public)")
+      deleteSavedUserActivities(withPersistentIdentifiers: identifiers) {
+        Logger.deleteCategoryActivity.log("deleted")
         UserDefaults.standard.set(true, forKey: key)
       }
     #endif
