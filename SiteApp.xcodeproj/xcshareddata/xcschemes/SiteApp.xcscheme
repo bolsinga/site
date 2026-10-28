@@ -67,10 +67,6 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "-deletedSavedCategoryActivities NO"
-            isEnabled = "YES">
-         </CommandLineArgument>
-         <CommandLineArgument
             argument = "dumpDiary"
             isEnabled = "NO">
          </CommandLineArgument>

@@ -17,7 +17,6 @@ struct SiteAppApp: App {
 
   init() {
     SiteShortcuts.updateAppShortcutParameters()
-    NSUserActivity.deleteSavedCategoryActivities()
   }
 
   var body: some Scene {

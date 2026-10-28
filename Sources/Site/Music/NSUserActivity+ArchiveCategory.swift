@@ -13,27 +13,10 @@ import os
 extension Logger {
   fileprivate static let updateCategoryActivity = Logger(category: "updateCategoryActivity")
   fileprivate static let decodeCategoryActivity = Logger(category: "decodeCategoryActivity")
-  fileprivate static let deleteCategoryActivity = Logger(category: "deleteCategoryActivity")
 }
 
 extension NSUserActivity {
   internal static let archiveCategoryKey = "archiveCategory"
-
-  /// The categories were once saved as shortcuts. Opening them is an intent now, so the saved activities go.
-  static func deleteSavedCategoryActivities() {
-    #if !os(tvOS)
-      let key = "deletedSavedCategoryActivities"
-      guard !UserDefaults.standard.bool(forKey: key) else {
-        Logger.deleteCategoryActivity.log("skipped: already deleted")
-        return
-      }
-      Logger.deleteCategoryActivity.log("deleting all")
-      deleteAllSavedUserActivities {
-        Logger.deleteCategoryActivity.log("deleted")
-        UserDefaults.standard.set(true, forKey: key)
-      }
-    #endif
-  }
 
   func update(_ category: ArchiveCategory, url: URL?, sort: ArchiveCategorySort? = nil) {
     let identifier = category.rawValue
