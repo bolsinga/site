@@ -18,6 +18,19 @@ extension Logger {
 extension NSUserActivity {
   internal static let archiveCategoryKey = "archiveCategory"
 
+  /// The categories were once saved as shortcuts. Opening them is an intent now, so the saved ones go.
+  static func deleteSavedCategoryActivities() {
+    #if !os(tvOS)
+      let key = "deletedSavedCategoryActivities"
+      guard !UserDefaults.standard.bool(forKey: key) else { return }
+      deleteSavedUserActivities(
+        withPersistentIdentifiers: ArchiveCategory.allCases.map(\.rawValue)
+      ) {
+        UserDefaults.standard.set(true, forKey: key)
+      }
+    #endif
+  }
+
   func update(_ category: ArchiveCategory, url: URL?, sort: ArchiveCategorySort? = nil) {
     let identifier = category.rawValue
     Logger.updateCategoryActivity.log("advertise: \(identifier, privacy: .public)")
@@ -26,18 +39,6 @@ extension NSUserActivity {
     self.isEligibleForHandoff = true
 
     self.title = category.title
-
-    #if !os(tvOS)
-      self.persistentIdentifier = identifier
-    #endif
-    if category == .today {
-      #if os(iOS)
-        self.isEligibleForPrediction = true
-      #endif
-      #if !os(tvOS)
-        self.suggestedInvocationPhrase = String(localized: "Shows Today")
-      #endif
-    }
 
     if let url {
       Logger.updateCategoryActivity.log("web: \(url.absoluteString, privacy: .public)")
