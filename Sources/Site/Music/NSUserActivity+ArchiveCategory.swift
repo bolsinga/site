@@ -15,18 +15,6 @@ extension Logger {
   fileprivate static let decodeCategoryActivity = Logger(category: "decodeCategoryActivity")
 }
 
-extension ArchiveCategory {
-  fileprivate var activityDescription: String? {
-    switch self {
-    case .today: String(localized: "See Shows On This Date")
-    case .shows: String(localized: "See All Shows")
-    case .venues: String(localized: "See All Venues")
-    case .artists: String(localized: "See All Artists")
-    case .settings, .search: nil
-    }
-  }
-}
-
 extension NSUserActivity {
   internal static let archiveCategoryKey = "archiveCategory"
 
@@ -36,13 +24,8 @@ extension NSUserActivity {
     self.targetContentIdentifier = identifier
 
     self.isEligibleForHandoff = true
-    // The description is part of the searchable attributes, which only count when searchable.
-    self.isEligibleForSearch = true
 
     self.title = category.title
-    if let description = category.activityDescription {
-      self.addSearchableContent(description: description)
-    }
 
     #if !os(tvOS)
       self.persistentIdentifier = identifier
