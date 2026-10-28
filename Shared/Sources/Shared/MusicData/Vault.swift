@@ -58,7 +58,8 @@ public struct Vault: Sendable {
     path.url(using: rootURL)
   }
 
-  fileprivate func concertIDs(on dayOfLeapYear: Int, orRecentCount recentCount: Int)
+  /// The shows on a day-of-leap-year or, if none, the most recent `recentCount` shows.
+  public func concertIDs(on dayOfLeapYear: Int, orRecentCount recentCount: Int)
     -> any Collection<ArchivePath>
   {
     lookup.concertDayMap[dayOfLeapYear] ?? lookup.recentConcerts(recentCount)
