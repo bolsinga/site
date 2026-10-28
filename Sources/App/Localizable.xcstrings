@@ -299,6 +299,9 @@
     "All Weekdays with Shows" : {
 
     },
+    "And %lld more" : {
+
+    },
     "artist" : {
 
     },
@@ -356,6 +359,21 @@
     "Concerts" : {
 
     },
+    "Concerts at Venue" : {
+
+    },
+    "Concerts by Artist" : {
+
+    },
+    "Concerts in City" : {
+
+    },
+    "Concerts on Date" : {
+
+    },
+    "Concerts Today" : {
+
+    },
     "Count" : {
 
     },
@@ -384,6 +402,12 @@
 
     },
     "Filter Nearby" : {
+
+    },
+    "Found %lld concerts." : {
+
+    },
+    "Found 1 concert." : {
 
     },
     "From" : {
@@ -441,6 +465,9 @@
 
     },
     "Nearby Distance" : {
+
+    },
+    "No concerts found." : {
 
     },
     "No Matches" : {
@@ -521,6 +548,39 @@
     "show" : {
 
     },
+    "Show concerts" : {
+
+    },
+    "Show Concerts" : {
+
+    },
+    "Show concerts at ${venue}" : {
+
+    },
+    "Show Concerts at Venue" : {
+
+    },
+    "Show concerts by ${artist}" : {
+
+    },
+    "Show Concerts by Artist" : {
+
+    },
+    "Show concerts in ${city}" : {
+
+    },
+    "Show Concerts in City" : {
+
+    },
+    "Show concerts on ${date}" : {
+
+    },
+    "Show Concerts on Date" : {
+
+    },
+    "Show Concerts Today" : {
+
+    },
     "Show Count" : {
 
     },
@@ -531,6 +591,24 @@
 
     },
     "Shows at %@" : {
+
+    },
+    "Shows concerts by an artist, at a venue, in a city or on a date." : {
+
+    },
+    "Shows the concerts at a venue." : {
+
+    },
+    "Shows the concerts in a city." : {
+
+    },
+    "Shows the concerts of an artist." : {
+
+    },
+    "Shows the concerts on a date." : {
+
+    },
+    "Shows the concerts on this day of any year." : {
 
     },
     "Shows Today" : {
@@ -612,6 +690,9 @@
 
     },
     "Weekdays with %@" : {
+
+    },
+    "Which date?" : {
 
     },
     "Year" : {

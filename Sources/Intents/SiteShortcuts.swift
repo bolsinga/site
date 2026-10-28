@@ -21,5 +21,39 @@ struct SiteShortcuts: AppShortcutsProvider {
         "Show \(\.$target) in \(.applicationName)",
       ],
       shortTitle: "Open Category", systemImageName: "building.columns")
+    AppShortcut(
+      intent: ShowConcertsByArtist(),
+      phrases: [
+        "Show \(\.$artist) concerts in \(.applicationName)",
+        "Show shows by \(\.$artist) in \(.applicationName)",
+      ],
+      shortTitle: "Concerts by Artist", systemImageName: "person.and.background.dotted")
+    AppShortcut(
+      intent: ShowConcertsAtVenue(),
+      phrases: [
+        "Show concerts at \(\.$venue) in \(.applicationName)",
+        "Show shows at \(\.$venue) in \(.applicationName)",
+      ],
+      shortTitle: "Concerts at Venue", systemImageName: "music.note.house")
+    AppShortcut(
+      intent: ShowConcertsInCity(),
+      phrases: [
+        "Show \(.applicationName) concerts in \(\.$city)",
+        "Show shows in \(\.$city) in \(.applicationName)",
+      ],
+      shortTitle: "Concerts in City", systemImageName: "building.2")
+    AppShortcut(
+      intent: ShowConcertsToday(),
+      phrases: [
+        "Show concerts today in \(.applicationName)",
+        "Show today's shows in \(.applicationName)",
+      ],
+      shortTitle: "Concerts Today", systemImageName: "calendar.circle")
+    AppShortcut(
+      intent: ShowConcertsOnDate(),
+      phrases: [
+        "Show concerts on a date in \(.applicationName)"
+      ],
+      shortTitle: "Concerts on Date", systemImageName: "calendar")
   }
 }

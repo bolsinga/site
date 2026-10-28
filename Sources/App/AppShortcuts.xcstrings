@@ -14,6 +14,75 @@
           }
         }
       }
+    },
+    "Show ${applicationName} concerts in ${city}" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringSet" : {
+            "state" : "new",
+            "values" : [
+              "Show ${applicationName} concerts in ${city}",
+              "Show shows in ${city} in ${applicationName}"
+            ]
+          }
+        }
+      }
+    },
+    "Show ${artist} concerts in ${applicationName}" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringSet" : {
+            "state" : "new",
+            "values" : [
+              "Show ${artist} concerts in ${applicationName}",
+              "Show shows by ${artist} in ${applicationName}"
+            ]
+          }
+        }
+      }
+    },
+    "Show concerts at ${venue} in ${applicationName}" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringSet" : {
+            "state" : "new",
+            "values" : [
+              "Show concerts at ${venue} in ${applicationName}",
+              "Show shows at ${venue} in ${applicationName}"
+            ]
+          }
+        }
+      }
+    },
+    "Show concerts on a date in ${applicationName}" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringSet" : {
+            "state" : "new",
+            "values" : [
+              "Show concerts on a date in ${applicationName}"
+            ]
+          }
+        }
+      }
+    },
+    "Show concerts today in ${applicationName}" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringSet" : {
+            "state" : "new",
+            "values" : [
+              "Show concerts today in ${applicationName}",
+              "Show today's shows in ${applicationName}"
+            ]
+          }
+        }
+      }
     }
   },
   "version" : "1.0"
