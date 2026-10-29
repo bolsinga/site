@@ -71,7 +71,6 @@ struct VenueDetail: View {
     // A pager keeps this page when it pages to another venue, with the offset of the venue it
     // came from. A scroll view for each venue starts at the top, as the page it paged from did.
     .id(digest.id)
-    // Siri knows which venue is on screen.
     .appEntityIdentifier(EntityIdentifier(for: VenueEntity.self, identifier: digest.id))
     .contentMargins(.bottom, bottomContentMargin, for: .scrollContent)
   }

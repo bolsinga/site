@@ -75,7 +75,6 @@ struct ArtistDetail: View {
     // A pager keeps this page when it pages to another artist, with the offset of the artist it
     // came from. A scroll view for each artist starts at the top, as the page it paged from did.
     .id(digest.id)
-    // Siri knows which artist is on screen.
     .appEntityIdentifier(EntityIdentifier(for: ArtistEntity.self, identifier: digest.id))
     .contentMargins(.bottom, bottomContentMargin, for: .scrollContent)
   }

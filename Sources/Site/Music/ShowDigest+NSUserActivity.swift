@@ -5,6 +5,7 @@
 //  Created by Greg Bolsinga on 6/21/23.
 //
 
+import AppIntents
 import Foundation
 import Shared
 
@@ -16,5 +17,10 @@ extension ShowDigest: ArchivePathUserActivity {
     userActivity.title = self.formatted(.headlinerAndVenue)
     userActivity.addSearchableContent(
       description: String(localized: "See More About This Show"))
+
+    if let url {
+      userActivity.appEntityIdentifier = EntityIdentifier(
+        for: ConcertEntity(digest: self, url: url))
+    }
   }
 }
