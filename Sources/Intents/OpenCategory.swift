@@ -25,16 +25,6 @@ private enum OpenCategoryError: Error, CustomLocalizedStringResourceConvertible 
   }
 }
 
-@MainActor func openCategory(_ category: ArchiveCategory, vault: Vault) throws -> some IntentResult
-  & OpensIntent
-{
-  guard let categoryURL = vault.url(for: category) else {
-    throw OpenCategoryError.noURL
-  }
-  Logger.openCategory.log("Intent Open URL: \(categoryURL.absoluteString, privacy: .public)")
-  return .result(opensIntent: OpenURLIntent(categoryURL))
-}
-
 struct OpenCategory: AppIntent {
   static let title = LocalizedStringResource("Open Category")
 
@@ -50,7 +40,11 @@ struct OpenCategory: AppIntent {
   var target: CategoryEnum
 
   @MainActor func perform() async throws -> some IntentResult & OpensIntent {
-    try openCategory(target.archiveCategory, vault: vault)
+    guard let categoryURL = vault.url(for: target.archiveCategory) else {
+      throw OpenCategoryError.noURL
+    }
+    Logger.openCategory.log("Intent Open URL: \(categoryURL.absoluteString, privacy: .public)")
+    return .result(opensIntent: OpenURLIntent(categoryURL))
   }
 
   @Dependency
