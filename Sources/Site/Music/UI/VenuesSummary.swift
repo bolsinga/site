@@ -16,6 +16,7 @@ struct VenuesSummary: View {
 
   let sort: RankingSort
   @Binding var searchString: String
+  @Binding var cityString: String
   @Binding var mode: VenuesMode
   let navigateToPath: (ArchivePath) -> Void
 
@@ -26,8 +27,39 @@ struct VenuesSummary: View {
   @State private var mapSearchString = ""
   @State private var mapSearchSettled = false
 
+  private var cityField: some View {
+    HStack {
+      Image(systemName: "mappin.and.ellipse")
+        .foregroundStyle(.secondary)
+        .accessibilityHidden(true)
+      TextField(String(localized: "City Name"), text: $cityString)
+        #if os(iOS)
+          .textInputAutocapitalization(.words)
+          .submitLabel(.done)
+        #endif
+        .autocorrectionDisabled()
+      if !cityString.isEmpty {
+        Button {
+          cityString = ""
+        } label: {
+          Image(systemName: "xmark.circle.fill")
+            .foregroundStyle(.secondary)
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(String(localized: "Clear City"))
+      }
+    }
+    .padding(.horizontal, 12)
+    .padding(.vertical, 8)
+    .background(.regularMaterial, in: .rect(cornerRadius: 10))
+    .padding(.horizontal, 16)
+    .padding(.vertical, 8)
+  }
+
   var body: some View {
     let venues = model.nearbyVenues(nearbyModel, distanceThreshold: nearbyDistance)
+      .cities(filteredBy: cityString)
+    let cityFiltered = !cityString.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     let mapVenues = venues.names(filteredBy: mapSearchString)
     ZStack {
       // The map stays once it has been shown, so toggling back doesn't rebuild it.
@@ -45,7 +77,7 @@ struct VenuesSummary: View {
           compare: model.compare(lhs:rhs:),
           sort: sort,
           searchString: $searchString,
-          summary: venues.isEmpty
+          summary: venues.isEmpty || cityFiltered
             ? nil
             : .venues(
               count: venues.count,
@@ -53,11 +85,16 @@ struct VenuesSummary: View {
                 statisticsData: model.filteredStatisticsData(
                   nearbyModel, distanceThreshold: nearbyDistance)))
         )
+        .overlay {
+          if cityFiltered, venues.isEmpty {
+            ContentUnavailableView.search(text: cityString)
+          }
+        }
       case .map:
         Color.clear
           .allowsHitTesting(false)
           .overlay(alignment: .bottom) {
-            if !mapSearchString.isEmpty, mapVenues.isEmpty {
+            if (!mapSearchString.isEmpty || cityFiltered), mapVenues.isEmpty {
               Text("No Matches")
                 .padding(.horizontal, 16)
                 .padding(.vertical, 8)
@@ -74,6 +111,9 @@ struct VenuesSummary: View {
             .searchToolbarBehavior(.minimize)
           #endif
       }
+    }
+    .safeAreaInset(edge: .top, spacing: 0) {
+      cityField
     }
     .task(id: searchString) {
       if mapSearchSettled {
@@ -107,8 +147,11 @@ struct VenuesSummary: View {
 
 #Preview(traits: .nearbyModel, .vaultModel) {
   @Previewable @State var searchString = ""
+  @Previewable @State var cityString = ""
   @Previewable @State var mode = VenuesMode.default
   NavigationStack {
-    VenuesSummary(sort: .alphabetical, searchString: $searchString, mode: $mode) { _ in }
+    VenuesSummary(
+      sort: .alphabetical, searchString: $searchString, cityString: $cityString, mode: $mode
+    ) { _ in }
   }
 }

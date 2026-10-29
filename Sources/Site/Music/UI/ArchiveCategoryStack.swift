@@ -34,6 +34,7 @@ struct ArchiveCategoryStack: View {
 
   @State private var artistSearchString: String = ""
   @State private var venueSearchString: String = ""
+  @State private var venueCityString: String = ""
 
   /// The navigation state the settings sheet was presented in. The sheet only shows while the
   /// state is unchanged, so an external URL or activity that navigates dismisses it.
@@ -55,6 +56,7 @@ struct ArchiveCategoryStack: View {
       VenuesSummary(
         sort: venueSort,
         searchString: $venueSearchString,
+        cityString: $venueCityString,
         mode: $venuesMode,
         navigateToPath: navigateToPath)
     case .artists:
