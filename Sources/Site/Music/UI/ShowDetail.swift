@@ -5,6 +5,7 @@
 //  Created by Greg Bolsinga on 2/16/23.
 //
 
+import AppIntents
 import Shared
 import SwiftUI
 
@@ -108,6 +109,7 @@ struct ShowDetail: View {
       .padding(.horizontal)
     }
     .background(.background)
+    .appEntityIdentifier(EntityIdentifier(for: ConcertEntity.self, identifier: concert.id))
     .navigationTitle(concert.formatted(.headlinerAndVenue))  // Hidden below, but still titles the back button.
     #if !os(tvOS)
       .toolbar(removing: .title)

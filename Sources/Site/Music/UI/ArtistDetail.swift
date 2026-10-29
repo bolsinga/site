@@ -5,6 +5,7 @@
 //  Created by Greg Bolsinga on 2/18/23.
 //
 
+import AppIntents
 import Shared
 import SwiftUI
 
@@ -74,6 +75,7 @@ struct ArtistDetail: View {
     // A pager keeps this page when it pages to another artist, with the offset of the artist it
     // came from. A scroll view for each artist starts at the top, as the page it paged from did.
     .id(digest.id)
+    .appEntityIdentifier(EntityIdentifier(for: ArtistEntity.self, identifier: digest.id))
     .contentMargins(.bottom, bottomContentMargin, for: .scrollContent)
   }
 }
