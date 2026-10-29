@@ -15,20 +15,6 @@
         }
       }
     },
-    "Show ${applicationName} concerts in ${city}" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringSet" : {
-            "state" : "new",
-            "values" : [
-              "Show ${applicationName} concerts in ${city}",
-              "Show shows in ${city} in ${applicationName}"
-            ]
-          }
-        }
-      }
-    },
     "Show ${artist} concerts in ${applicationName}" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {

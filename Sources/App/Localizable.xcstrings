@@ -365,9 +365,6 @@
     "Concerts by Artist" : {
 
     },
-    "Concerts in City" : {
-
-    },
     "Concerts Today" : {
 
     },
@@ -590,7 +587,7 @@
     "Shows at %@" : {
 
     },
-    "Shows concerts by an artist, at a venue, in a city or on a date." : {
+    "Shows concerts by an artist, at a venue or on a date." : {
 
     },
     "Shows the concerts on this day of any year." : {
