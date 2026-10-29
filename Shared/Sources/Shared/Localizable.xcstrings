@@ -50,9 +50,6 @@
     "%@s" : {
       "comment" : "defaultDigits"
     },
-    "All Shows" : {
-
-    },
     "Artists" : {
 
     },
@@ -120,6 +117,9 @@
 
     },
     "Settings" : {
+
+    },
+    "Show All Shows" : {
 
     },
     "Show Artists" : {
