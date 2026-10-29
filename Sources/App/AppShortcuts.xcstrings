@@ -57,19 +57,6 @@
         }
       }
     },
-    "Show concerts on a date in ${applicationName}" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringSet" : {
-            "state" : "new",
-            "values" : [
-              "Show concerts on a date in ${applicationName}"
-            ]
-          }
-        }
-      }
-    },
     "Show concerts today in ${applicationName}" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
