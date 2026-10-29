@@ -38,11 +38,9 @@ struct ReverseGeocodePolicy {
   }
 }
 
-/// The default city text, only while the person has not typed and it has not been offered before.
-func defaultCity(current: String?, typed: String, alreadySeeded: Bool) -> String? {
-  guard !alreadySeeded, typed.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
-    return nil
-  }
+/// The current city to suggest as a search, only while the search text is blank.
+func currentCitySuggestion(current: String?, searchText: String) -> String? {
+  guard searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return nil }
   let city = current?.trimmingCharacters(in: .whitespacesAndNewlines)
   return city?.isEmpty == false ? city : nil
 }

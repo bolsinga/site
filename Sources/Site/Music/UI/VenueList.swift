@@ -15,6 +15,7 @@ where V.ID == ArchivePath {
   let sort: RankingSort
   @Binding var searchString: String
   var summary: ListSummary?
+  var scope = VenueSearchScope.names
 
   var body: some View {
     RankableSearchableSortList(
@@ -22,9 +23,10 @@ where V.ID == ArchivePath {
       compare: compare,
       sort: sort,
       title: ArchiveCategory.venues.localizedString,
-      searchPrompt: String(localized: "Venue Names"),
+      searchPrompt: scope.searchPrompt,
       associatedRankSectionHeader: { $0.artistsCountView },
-      searchString: $searchString, summary: summary)
+      searchString: $searchString, summary: summary,
+      filtersNames: scope == .names)
   }
 }
 

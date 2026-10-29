@@ -16,7 +16,7 @@ struct VenuesSummary: View {
 
   let sort: RankingSort
   @Binding var searchString: String
-  @Binding var cityString: String
+  @Binding var scope: VenueSearchScope
   @Binding var mode: VenuesMode
   let navigateToPath: (ArchivePath) -> Void
 
@@ -26,62 +26,41 @@ struct VenuesSummary: View {
   /// for every keystroke.
   @State private var mapSearchString = ""
   @State private var mapSearchSettled = false
-  @FocusState private var cityFocused: Bool
 
-  private var cityField: some View {
-    HStack {
-      Image(systemName: "mappin.and.ellipse")
-        .foregroundStyle(.secondary)
-        .accessibilityHidden(true)
-      TextField(String(localized: "City Name"), text: $cityString)
-        #if os(iOS)
-          .textInputAutocapitalization(.words)
-          .submitLabel(.done)
-        #endif
-        .autocorrectionDisabled()
-        .focused($cityFocused)
-      if !cityString.isEmpty {
-        Button {
-          cityString = ""
-        } label: {
-          Image(systemName: "xmark.circle.fill")
-            .foregroundStyle(.secondary)
+  @ViewBuilder private var currentCitySuggestions: some View {
+    if let city = currentCitySuggestion(current: model.currentCity, searchText: searchString) {
+      Button {
+        scope = .cities
+        searchString = city
+      } label: {
+        Label {
+          VStack(alignment: .leading) {
+            Text(city)
+            Text("Current Location")
+              .font(.caption)
+              .foregroundStyle(.secondary)
+          }
+        } icon: {
+          Image(systemName: "location")
         }
-        .buttonStyle(.plain)
-        .accessibilityLabel(String(localized: "Clear City"))
       }
     }
-    .padding(.horizontal, 12)
-    .padding(.vertical, 8)
-    .background(.regularMaterial, in: .rect(cornerRadius: 10))
-    .padding(.horizontal, 16)
-    .padding(.vertical, 8)
   }
 
-  private func seedCity() {
-    guard let city = model.currentCity else { return }
-    if let seed = defaultCity(
-      current: city, typed: cityString, alreadySeeded: model.currentCityOffered)
-    {
-      cityString = seed
-    }
-    model.currentCityOffered = true
-  }
-
-  /// Focusing an empty field offers the current city again.
-  private func fillCityOnFocus() {
-    if let city = defaultCity(
-      current: model.currentCity, typed: cityString, alreadySeeded: false)
-    {
-      cityString = city
+  @ViewBuilder private var scopeOptions: some View {
+    ForEach(VenueSearchScope.allCases, id: \.self) {
+      Text($0.localizedString).tag($0)
     }
   }
 
   var body: some View {
-    let venues = model.nearbyVenues(nearbyModel, distanceThreshold: nearbyDistance)
-      .cities(filteredBy: cityString)
-    let cityFiltered = !cityString.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-    let mapVenues = venues.names(filteredBy: mapSearchString)
+    let nearby = model.nearbyVenues(nearbyModel, distanceThreshold: nearbyDistance)
+    let cityScope = scope == .cities
+    let venues = cityScope ? nearby.cities(filteredBy: searchString) : nearby
+    let cityFiltered = cityScope && !searchString.trimmingCharacters(in: .whitespaces).isEmpty
+    let mapVenues =
+      cityScope
+      ? nearby.cities(filteredBy: mapSearchString) : nearby.names(filteredBy: mapSearchString)
     ZStack {
       // The map stays once it has been shown, so toggling back doesn't rebuild it.
       if mapRequested || mode == .map {
@@ -104,13 +83,9 @@ struct VenuesSummary: View {
               count: venues.count,
               stats: Stats(
                 statisticsData: model.filteredStatisticsData(
-                  nearbyModel, distanceThreshold: nearbyDistance)))
+                  nearbyModel, distanceThreshold: nearbyDistance))),
+          scope: scope
         )
-        .overlay {
-          if cityFiltered, venues.isEmpty {
-            ContentUnavailableView.search(text: cityString)
-          }
-        }
       case .map:
         Color.clear
           .allowsHitTesting(false)
@@ -127,14 +102,19 @@ struct VenuesSummary: View {
           #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
           #endif
-          .searchable(text: $searchString, prompt: String(localized: "Venue Names"))
+          .searchable(text: $searchString, prompt: scope.searchPrompt)
           #if os(iOS)
             .searchToolbarBehavior(.minimize)
           #endif
       }
     }
-    .safeAreaInset(edge: .top, spacing: 0) {
-      cityField
+    #if os(tvOS)
+      .searchScopes($scope) { scopeOptions }
+    #else
+      .searchScopes($scope, activation: .onSearchPresentation) { scopeOptions }
+    #endif
+    .searchSuggestions {
+      currentCitySuggestions
     }
     .task(id: searchString) {
       if mapSearchSettled {
@@ -148,12 +128,6 @@ struct VenuesSummary: View {
       if mode == .map {
         mapRequested = true
       }
-    }
-    .onChange(of: model.currentCity, initial: true) {
-      seedCity()
-    }
-    .onChange(of: cityFocused) { _, focused in
-      if focused { fillCityOnFocus() }
     }
     .nearbyLocation(filteredDataIsEmpty: venues.isEmpty, floatsProgress: mode == .map)
     .toolbar {
@@ -174,11 +148,11 @@ struct VenuesSummary: View {
 
 #Preview(traits: .nearbyModel, .vaultModel) {
   @Previewable @State var searchString = ""
-  @Previewable @State var cityString = ""
+  @Previewable @State var scope = VenueSearchScope.names
   @Previewable @State var mode = VenuesMode.default
   NavigationStack {
     VenuesSummary(
-      sort: .alphabetical, searchString: $searchString, cityString: $cityString, mode: $mode
+      sort: .alphabetical, searchString: $searchString, scope: $scope, mode: $mode
     ) { _ in }
   }
 }

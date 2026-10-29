@@ -43,9 +43,6 @@ enum LocationAuthorization {
   internal var locationAuthorization = LocationAuthorization.restricted
   internal private(set) var currentCity: String?
 
-  /// Whether the Venues city field has been offered the current city this session.
-  @ObservationIgnored
-  internal var currentCityOffered = false
   @ObservationIgnored
   private var lastReverseGeocode: ReverseGeocodePolicy.Attempt?
 

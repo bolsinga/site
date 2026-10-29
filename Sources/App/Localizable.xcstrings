@@ -335,14 +335,14 @@
     "Category" : {
 
     },
+    "Cities" : {
+      "comment" : "VenueSearchScope.cities"
+    },
     "City" : {
 
     },
     "City Name" : {
-
-    },
-    "Clear City" : {
-
+      "comment" : "VenueSearchScope.cities prompt"
     },
     "club" : {
 
@@ -378,6 +378,9 @@
 
     },
     "Count" : {
+
+    },
+    "Current Location" : {
 
     },
     "Date" : {
@@ -633,7 +636,7 @@
 
     },
     "Venue Names" : {
-
+      "comment" : "VenueSearchScope.names\nVenueSearchScope.names prompt"
     },
     "Venues" : {
 

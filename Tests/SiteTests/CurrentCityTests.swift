@@ -43,22 +43,19 @@ struct CurrentCityTests {
         last: attempt, location: near, now: start.addingTimeInterval(600)))
   }
 
-  @Test func seedsWhenEmptyAndNotOffered() {
-    #expect(defaultCity(current: "Oakland", typed: "", alreadySeeded: false) == "Oakland")
-    #expect(defaultCity(current: "Oakland", typed: "  ", alreadySeeded: false) == "Oakland")
+  @Test func suggestsWhenSearchIsEmpty() {
+    #expect(currentCitySuggestion(current: "Oakland", searchText: "") == "Oakland")
+    #expect(currentCitySuggestion(current: " Oakland ", searchText: "  ") == "Oakland")
   }
 
-  @Test func doesNotOverwriteTyped() {
-    #expect(defaultCity(current: "Oakland", typed: "Sea", alreadySeeded: false) == nil)
+  @Test func noSuggestionWhileTyping() {
+    #expect(currentCitySuggestion(current: "Oakland", searchText: "Sea") == nil)
+    #expect(currentCitySuggestion(current: "Oakland", searchText: "Oakland") == nil)
   }
 
-  @Test func doesNotReseedAfterOffered() {
-    #expect(defaultCity(current: "Oakland", typed: "", alreadySeeded: true) == nil)
-  }
-
-  @Test func noCityNoSeed() {
-    #expect(defaultCity(current: nil, typed: "", alreadySeeded: false) == nil)
-    #expect(defaultCity(current: " ", typed: "", alreadySeeded: false) == nil)
+  @Test func noSuggestionWithoutCity() {
+    #expect(currentCitySuggestion(current: nil, searchText: "") == nil)
+    #expect(currentCitySuggestion(current: " ", searchText: "") == nil)
   }
 
   private struct StubResolver: CityResolver {
