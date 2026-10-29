@@ -41,6 +41,13 @@ enum LocationAuthorization {
   internal var venueMapItemMap: [ArchivePath: MKMapItem] = [:]
   private var currentLocation: CLLocation?
   internal var locationAuthorization = LocationAuthorization.restricted
+  internal private(set) var currentCity: String?
+
+  /// Whether the Venues city field has been offered the current city this session.
+  @ObservationIgnored
+  internal var currentCityOffered = false
+  @ObservationIgnored
+  private var lastReverseGeocode: ReverseGeocodePolicy.Attempt?
 
   @ObservationIgnored
   private var dayChangeTask: Task<Void, Never>?
@@ -52,6 +59,7 @@ enum LocationAuthorization {
   private var batchGeocodeCompleted = false
 
   private let locationManager: LocationManager
+  private let cityResolver: any CityResolver
 
   private let atlas = Atlas<Venue>()
 
@@ -60,9 +68,11 @@ enum LocationAuthorization {
     _ vault: Vault,
     executeAsynchronousTasks: Bool,
     distanceFilter: CLLocationDistance = 10,
+    cityResolver: any CityResolver = MapKitCityResolver(),
     error: Error? = nil
   ) {
     self.vault = vault
+    self.cityResolver = cityResolver
     self.locationManager = LocationManager(
       activityType: .other,
       distanceFilter: distanceFilter,
@@ -215,13 +225,33 @@ enum LocationAuthorization {
         case .denied:
           locationAuthorization = .denied
           currentLocation = nil
+          currentCity = nil
         case .location(let location):
           locationAuthorization = .allowed
           currentLocation = location
+          Task { await resolveCity(for: location) }
         }
       }
     } catch {
       Logger.vaultModel.error("locationstream error: \(error, privacy: .public)")
+    }
+  }
+
+  @MainActor
+  private func resolveCity(for location: CLLocation) async {
+    let now = Date.now
+    guard
+      ReverseGeocodePolicy.shouldGeocode(last: lastReverseGeocode, location: location, now: now)
+    else { return }
+    lastReverseGeocode = ReverseGeocodePolicy.Attempt(location: location, date: now)
+    do {
+      if let city = try await cityResolver.city(for: location) {
+        currentCity = city
+      }
+    } catch let error as NSError where error.isGeocodingThrottledError {
+      Logger.vaultModel.log("city geocode throttled")
+    } catch {
+      Logger.vaultModel.error("city geocode error: \(error, privacy: .public)")
     }
   }
 

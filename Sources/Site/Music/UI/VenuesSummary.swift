@@ -56,6 +56,16 @@ struct VenuesSummary: View {
     .padding(.vertical, 8)
   }
 
+  private func seedCity() {
+    guard let city = model.currentCity else { return }
+    if let seed = defaultCity(
+      current: city, typed: cityString, alreadySeeded: model.currentCityOffered)
+    {
+      cityString = seed
+    }
+    model.currentCityOffered = true
+  }
+
   var body: some View {
     let venues = model.nearbyVenues(nearbyModel, distanceThreshold: nearbyDistance)
       .cities(filteredBy: cityString)
@@ -127,6 +137,9 @@ struct VenuesSummary: View {
       if mode == .map {
         mapRequested = true
       }
+    }
+    .onChange(of: model.currentCity, initial: true) {
+      seedCity()
     }
     .nearbyLocation(filteredDataIsEmpty: venues.isEmpty, floatsProgress: mode == .map)
     .toolbar {
