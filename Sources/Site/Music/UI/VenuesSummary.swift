@@ -26,6 +26,7 @@ struct VenuesSummary: View {
   /// for every keystroke.
   @State private var mapSearchString = ""
   @State private var mapSearchSettled = false
+  @FocusState private var cityFocused: Bool
 
   private var cityField: some View {
     HStack {
@@ -38,6 +39,7 @@ struct VenuesSummary: View {
           .submitLabel(.done)
         #endif
         .autocorrectionDisabled()
+        .focused($cityFocused)
       if !cityString.isEmpty {
         Button {
           cityString = ""
@@ -47,17 +49,6 @@ struct VenuesSummary: View {
         }
         .buttonStyle(.plain)
         .accessibilityLabel(String(localized: "Clear City"))
-      } else if let currentCity = model.currentCity {
-        Button {
-          cityString = currentCity
-        } label: {
-          Label(currentCity, systemImage: "location.fill")
-            .labelStyle(.titleAndIcon)
-            .font(.subheadline)
-        }
-        .buttonStyle(.plain)
-        .foregroundStyle(.tint)
-        .accessibilityLabel(String(localized: "Use \(currentCity)"))
       }
     }
     .padding(.horizontal, 12)
@@ -75,6 +66,15 @@ struct VenuesSummary: View {
       cityString = seed
     }
     model.currentCityOffered = true
+  }
+
+  /// Focusing an empty field offers the current city again.
+  private func fillCityOnFocus() {
+    if let city = defaultCity(
+      current: model.currentCity, typed: cityString, alreadySeeded: false)
+    {
+      cityString = city
+    }
   }
 
   var body: some View {
@@ -151,6 +151,9 @@ struct VenuesSummary: View {
     }
     .onChange(of: model.currentCity, initial: true) {
       seedCity()
+    }
+    .onChange(of: cityFocused) { _, focused in
+      if focused { fillCityOnFocus() }
     }
     .nearbyLocation(filteredDataIsEmpty: venues.isEmpty, floatsProgress: mode == .map)
     .toolbar {
