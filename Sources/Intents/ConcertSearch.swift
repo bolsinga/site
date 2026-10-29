@@ -15,8 +15,6 @@ struct ConcertSearch: Equatable, Sendable {
   var cityID: CityEntity.ID?
   /// A calendar day, with its year.
   var date: Date?
-  /// A day of the year, in any year.
-  var dayOfLeapYear: Int?
 
   func matches(_ digest: ShowDigest, calendar: Calendar = .current) -> Bool {
     if let artistID, !digest.performers.contains(where: { $0.id == artistID }) { return false }
@@ -33,16 +31,10 @@ struct ConcertSearch: Equatable, Sendable {
 }
 
 extension Vault {
-  fileprivate func digests(for search: ConcertSearch) -> [ShowDigest] {
-    if let day = search.dayOfLeapYear {
-      return ((try? concerts(on: day)) ?? []).filter { search.matches($0) }
-    }
+  func concertEntities(matching search: ConcertSearch) -> [ConcertEntity] {
     let ids = (try? sort(showIDs: showIDs())) ?? Array(showIDs())
     return ids.compactMap { digest(show: $0) }.filter { search.matches($0) }
-  }
-
-  func concertEntities(matching search: ConcertSearch) -> [ConcertEntity] {
-    digests(for: search).compactMap { concertEntity(for: $0.id) }
+      .compactMap { concertEntity(for: $0.id) }
   }
 
   var cityEntities: [CityEntity] {

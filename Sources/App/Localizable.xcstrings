@@ -386,6 +386,9 @@
     "Discover" : {
 
     },
+    "Display Shows On This Date" : {
+
+    },
     "Displays Artist Details in App." : {
 
     },
@@ -393,6 +396,18 @@
 
     },
     "Displays Concert Details in App." : {
+
+    },
+    "Displays the list of all shows." : {
+
+    },
+    "Displays the list of artists." : {
+
+    },
+    "Displays the list of venues." : {
+
+    },
+    "Displays the shows on this date in any year." : {
 
     },
     "Displays Venue Details in App." : {
@@ -548,6 +563,12 @@
     "show" : {
 
     },
+    "Show All Shows" : {
+
+    },
+    "Show Artists" : {
+
+    },
     "Show concerts" : {
 
     },
@@ -584,6 +605,9 @@
     "Show Count" : {
 
     },
+    "Show Venues" : {
+
+    },
     "Show Years" : {
 
     },
@@ -609,9 +633,6 @@
 
     },
     "Shows the concerts on this day of any year." : {
-
-    },
-    "Shows Today" : {
 
     },
     "Shows with %@" : {

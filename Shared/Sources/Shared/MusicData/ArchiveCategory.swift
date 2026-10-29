@@ -56,7 +56,7 @@ public enum ArchiveCategory: String, CaseIterable, Codable, Sendable {
     case .today:
       return String(localized: "Display Shows On This Date", bundle: #bundle)
     case .shows:
-      return String(localized: "All Shows", bundle: #bundle)
+      return String(localized: "Show All Shows", bundle: #bundle)
     case .venues:
       return String(localized: "Show Venues", bundle: #bundle)
     case .artists:

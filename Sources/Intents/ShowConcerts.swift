@@ -11,10 +11,9 @@ import Shared
 import SwiftUI
 
 /// Answers a request for concerts with a dialog and a list, which Siri can show without the app.
-private func concertResult(for search: ConcertSearch, vault: Vault)
+private func concertResult(_ concerts: [ConcertEntity])
   -> some IntentResult & ReturnsValue<[ConcertEntity]> & ProvidesDialog & ShowsSnippetView
 {
-  let concerts = vault.concertEntities(matching: search)
   let dialog: IntentDialog =
     switch concerts.count {
     case 0: "No concerts found."
@@ -86,8 +85,9 @@ struct ShowConcerts: AppIntent {
     & ShowsSnippetView
   {
     concertResult(
-      for: ConcertSearch(
-        artistID: artist?.id, venueID: venue?.id, cityID: city?.id, date: date), vault: vault)
+      vault.concertEntities(
+        matching: ConcertSearch(
+          artistID: artist?.id, venueID: venue?.id, cityID: city?.id, date: date)))
   }
 }
 
@@ -109,7 +109,7 @@ struct ShowConcertsByArtist: AppIntent {
   func perform() async throws -> some IntentResult & ReturnsValue<[ConcertEntity]> & ProvidesDialog
     & ShowsSnippetView
   {
-    concertResult(for: ConcertSearch(artistID: artist.id), vault: vault)
+    concertResult(vault.concertEntities(matching: ConcertSearch(artistID: artist.id)))
   }
 }
 
@@ -131,7 +131,7 @@ struct ShowConcertsAtVenue: AppIntent {
   func perform() async throws -> some IntentResult & ReturnsValue<[ConcertEntity]> & ProvidesDialog
     & ShowsSnippetView
   {
-    concertResult(for: ConcertSearch(venueID: venue.id), vault: vault)
+    concertResult(vault.concertEntities(matching: ConcertSearch(venueID: venue.id)))
   }
 }
 
@@ -153,7 +153,7 @@ struct ShowConcertsInCity: AppIntent {
   func perform() async throws -> some IntentResult & ReturnsValue<[ConcertEntity]> & ProvidesDialog
     & ShowsSnippetView
   {
-    concertResult(for: ConcertSearch(cityID: city.id), vault: vault)
+    concertResult(vault.concertEntities(matching: ConcertSearch(cityID: city.id)))
   }
 }
 
@@ -175,7 +175,7 @@ struct ShowConcertsOnDate: AppIntent {
   func perform() async throws -> some IntentResult & ReturnsValue<[ConcertEntity]> & ProvidesDialog
     & ShowsSnippetView
   {
-    concertResult(for: ConcertSearch(date: date), vault: vault)
+    concertResult(vault.concertEntities(matching: ConcertSearch(date: date)))
   }
 }
 
@@ -191,6 +191,8 @@ struct ShowConcertsToday: AppIntent {
   func perform() async throws -> some IntentResult & ReturnsValue<[ConcertEntity]> & ProvidesDialog
     & ShowsSnippetView
   {
-    concertResult(for: ConcertSearch(dayOfLeapYear: Date.now.dayOfLeapYear), vault: vault)
+    let day = Date.now.dayOfLeapYear
+    return concertResult(
+      ((try? vault.concerts(on: day)) ?? []).compactMap { vault.concertEntity(for: $0.id) })
   }
 }

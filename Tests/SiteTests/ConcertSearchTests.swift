@@ -77,14 +77,6 @@ struct ConcertSearchTests {
     #expect(vault.concertEntities(matching: ConcertSearch(date: date)).count == 1)
   }
 
-  @Test func dayOfLeapYearIsAnyYear() async throws {
-    let vault = try await createVault()
-    let may1 = try #require(
-      Calendar(identifier: .gregorian).date(from: DateComponents(year: 2000, month: 5, day: 1)))
-    let search = ConcertSearch(dayOfLeapYear: may1.dayOfLeapYear)
-    #expect(vault.concertEntities(matching: search).count == 2)
-  }
-
   @Test func citiesAreUniqueAndSorted() async throws {
     let vault = try await createVault()
     #expect(vault.cityEntities.map(\.id) == ["Chicago, IL", "Seattle, WA"])

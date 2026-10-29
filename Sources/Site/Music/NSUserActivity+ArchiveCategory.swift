@@ -27,18 +27,6 @@ extension NSUserActivity {
 
     self.title = category.title
 
-    #if !os(tvOS)
-      self.persistentIdentifier = identifier
-    #endif
-    if category == .today {
-      #if os(iOS)
-        self.isEligibleForPrediction = true
-      #endif
-      #if !os(tvOS)
-        self.suggestedInvocationPhrase = String(localized: "Shows Today")
-      #endif
-    }
-
     if let url {
       Logger.updateCategoryActivity.log("web: \(url.absoluteString, privacy: .public)")
       self.isEligibleForPublicIndexing = true
