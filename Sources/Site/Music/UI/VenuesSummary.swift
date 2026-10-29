@@ -47,6 +47,17 @@ struct VenuesSummary: View {
         }
         .buttonStyle(.plain)
         .accessibilityLabel(String(localized: "Clear City"))
+      } else if let currentCity = model.currentCity {
+        Button {
+          cityString = currentCity
+        } label: {
+          Label(currentCity, systemImage: "location.fill")
+            .labelStyle(.titleAndIcon)
+            .font(.subheadline)
+        }
+        .buttonStyle(.plain)
+        .foregroundStyle(.tint)
+        .accessibilityLabel(String(localized: "Use \(currentCity)"))
       }
     }
     .padding(.horizontal, 12)
