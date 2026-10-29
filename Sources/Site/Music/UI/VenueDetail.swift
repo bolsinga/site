@@ -5,6 +5,7 @@
 //  Created by Greg Bolsinga on 2/16/23.
 //
 
+import AppIntents
 import Shared
 import SwiftUI
 
@@ -70,6 +71,7 @@ struct VenueDetail: View {
     // A pager keeps this page when it pages to another venue, with the offset of the venue it
     // came from. A scroll view for each venue starts at the top, as the page it paged from did.
     .id(digest.id)
+    .appEntityIdentifier(EntityIdentifier(for: VenueEntity.self, identifier: digest.id))
     .contentMargins(.bottom, bottomContentMargin, for: .scrollContent)
   }
 }
