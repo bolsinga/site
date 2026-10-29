@@ -54,13 +54,14 @@ struct ShowConcerts: AppIntent {
   static let title = LocalizedStringResource("Show Concerts")
 
   static let description = IntentDescription(
-    "Shows concerts by an artist, at a venue or on a date.",
+    "Shows concerts by an artist, at a venue, in a city or on a date.",
     categoryName: "Discover", resultValueName: "Concerts")
 
   static var parameterSummary: some ParameterSummary {
     Summary("Show concerts") {
       \.$artist
       \.$venue
+      \.$city
       \.$date
     }
   }
@@ -70,6 +71,9 @@ struct ShowConcerts: AppIntent {
 
   @Parameter(title: "Venue")
   var venue: VenueEntity?
+
+  @Parameter(title: "City")
+  var city: CityEntity?
 
   @Parameter(title: "Date")
   var date: Date?
@@ -83,7 +87,7 @@ struct ShowConcerts: AppIntent {
     concertResult(
       vault.concertEntities(
         matching: ConcertSearch(
-          artistID: artist?.id, venueID: venue?.id, date: date)))
+          artistID: artist?.id, venueID: venue?.id, cityID: city?.id, date: date)))
   }
 }
 

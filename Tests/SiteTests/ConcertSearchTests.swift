@@ -58,9 +58,15 @@ struct ConcertSearchTests {
     #expect(vault.concertEntities(matching: ConcertSearch(venueID: .venue(chicago.id))).count == 2)
   }
 
+  @Test func cityNarrows() async throws {
+    let vault = try await createVault()
+    #expect(vault.concertEntities(matching: ConcertSearch(cityID: "Seattle, WA")).count == 1)
+    #expect(vault.concertEntities(matching: ConcertSearch(cityID: "Portland, OR")).isEmpty)
+  }
+
   @Test func partsNarrowTogether() async throws {
     let vault = try await createVault()
-    let search = ConcertSearch(artistID: .artist(pavement.id), venueID: .venue(chicago.id))
+    let search = ConcertSearch(artistID: .artist(pavement.id), cityID: "Chicago, IL")
     #expect(vault.concertEntities(matching: search).count == 2)
   }
 
@@ -69,5 +75,10 @@ struct ConcertSearchTests {
     let date = try #require(
       Calendar.current.date(from: DateComponents(year: 1997, month: 5, day: 1)))
     #expect(vault.concertEntities(matching: ConcertSearch(date: date)).count == 1)
+  }
+
+  @Test func citiesAreUniqueAndSorted() async throws {
+    let vault = try await createVault()
+    #expect(vault.cityEntities.map(\.id) == ["Chicago, IL", "Seattle, WA"])
   }
 }

@@ -36,6 +36,13 @@ struct SiteShortcuts: AppShortcutsProvider {
       ],
       shortTitle: "Concerts at Venue", systemImageName: "music.note.house")
     AppShortcut(
+      intent: ShowConcerts(),
+      phrases: [
+        "Show \(.applicationName) concerts in \(\.$city)",
+        "Show shows in \(\.$city) in \(.applicationName)",
+      ],
+      shortTitle: "Concerts in City", systemImageName: "building.2")
+    AppShortcut(
       intent: ShowConcertsToday(),
       phrases: [
         "Show concerts today in \(.applicationName)",
