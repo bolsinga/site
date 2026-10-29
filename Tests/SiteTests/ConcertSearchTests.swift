@@ -57,4 +57,17 @@ struct ConcertSearchTests {
     let vault = try await createVault()
     #expect(vault.concertEntities(matching: ConcertSearch(venueID: .venue(chicago.id))).count == 2)
   }
+
+  @Test func partsNarrowTogether() async throws {
+    let vault = try await createVault()
+    let search = ConcertSearch(artistID: .artist(pavement.id), venueID: .venue(chicago.id))
+    #expect(vault.concertEntities(matching: search).count == 2)
+  }
+
+  @Test func dateIsOneDay() async throws {
+    let vault = try await createVault()
+    let date = try #require(
+      Calendar.current.date(from: DateComponents(year: 1997, month: 5, day: 1)))
+    #expect(vault.concertEntities(matching: ConcertSearch(date: date)).count == 1)
+  }
 }

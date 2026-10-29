@@ -49,39 +49,30 @@ private struct ConcertsSnippetView: View {
   }
 }
 
-struct ShowConcertsByArtist: AppIntent {
-  static let title = LocalizedStringResource("Show Concerts by Artist")
+/// Any mix of what narrows concerts. Each Siri phrase names one part.
+struct ShowConcerts: AppIntent {
+  static let title = LocalizedStringResource("Show Concerts")
 
-  static let description = IntentDescription("Shows the concerts of an artist.")
+  static let description = IntentDescription(
+    "Shows concerts by an artist, at a venue or on a date.",
+    categoryName: "Discover", resultValueName: "Concerts")
 
   static var parameterSummary: some ParameterSummary {
-    Summary("Show concerts by \(\.$artist)")
+    Summary("Show concerts") {
+      \.$artist
+      \.$venue
+      \.$date
+    }
   }
 
   @Parameter(title: "Artist")
-  var artist: ArtistEntity
-
-  @Dependency
-  private var vault: Vault
-
-  func perform() async throws -> some IntentResult & ReturnsValue<[ConcertEntity]> & ProvidesDialog
-    & ShowsSnippetView
-  {
-    concertResult(vault.concertEntities(matching: ConcertSearch(artistID: artist.id)))
-  }
-}
-
-struct ShowConcertsAtVenue: AppIntent {
-  static let title = LocalizedStringResource("Show Concerts at Venue")
-
-  static let description = IntentDescription("Shows the concerts at a venue.")
-
-  static var parameterSummary: some ParameterSummary {
-    Summary("Show concerts at \(\.$venue)")
-  }
+  var artist: ArtistEntity?
 
   @Parameter(title: "Venue")
-  var venue: VenueEntity
+  var venue: VenueEntity?
+
+  @Parameter(title: "Date")
+  var date: Date?
 
   @Dependency
   private var vault: Vault
@@ -89,7 +80,10 @@ struct ShowConcertsAtVenue: AppIntent {
   func perform() async throws -> some IntentResult & ReturnsValue<[ConcertEntity]> & ProvidesDialog
     & ShowsSnippetView
   {
-    concertResult(vault.concertEntities(matching: ConcertSearch(venueID: venue.id)))
+    concertResult(
+      vault.concertEntities(
+        matching: ConcertSearch(
+          artistID: artist?.id, venueID: venue?.id, date: date)))
   }
 }
 

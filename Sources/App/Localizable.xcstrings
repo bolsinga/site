@@ -563,16 +563,10 @@
     "Show Artists" : {
 
     },
-    "Show concerts at ${venue}" : {
+    "Show concerts" : {
 
     },
-    "Show Concerts at Venue" : {
-
-    },
-    "Show concerts by ${artist}" : {
-
-    },
-    "Show Concerts by Artist" : {
+    "Show Concerts" : {
 
     },
     "Show Concerts Today" : {
@@ -593,10 +587,7 @@
     "Shows at %@" : {
 
     },
-    "Shows the concerts at a venue." : {
-
-    },
-    "Shows the concerts of an artist." : {
+    "Shows concerts by an artist, at a venue or on a date." : {
 
     },
     "Shows the concerts on this day of any year." : {

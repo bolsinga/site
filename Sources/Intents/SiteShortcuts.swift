@@ -22,14 +22,14 @@ struct SiteShortcuts: AppShortcutsProvider {
       ],
       shortTitle: "Open Category", systemImageName: "building.columns")
     AppShortcut(
-      intent: ShowConcertsByArtist(),
+      intent: ShowConcerts(),
       phrases: [
         "Show \(\.$artist) concerts in \(.applicationName)",
         "Show shows by \(\.$artist) in \(.applicationName)",
       ],
       shortTitle: "Concerts by Artist", systemImageName: "person.and.background.dotted")
     AppShortcut(
-      intent: ShowConcertsAtVenue(),
+      intent: ShowConcerts(),
       phrases: [
         "Show concerts at \(\.$venue) in \(.applicationName)",
         "Show shows at \(\.$venue) in \(.applicationName)",

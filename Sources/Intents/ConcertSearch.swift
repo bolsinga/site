@@ -12,10 +12,18 @@ import Shared
 struct ConcertSearch: Equatable, Sendable {
   var artistID: ArchivePath?
   var venueID: ArchivePath?
+  /// A calendar day, with its year.
+  var date: Date?
 
-  func matches(_ digest: ShowDigest) -> Bool {
+  func matches(_ digest: ShowDigest, calendar: Calendar = .current) -> Bool {
     if let artistID, !digest.performers.contains(where: { $0.id == artistID }) { return false }
     if let venueID, digest.venueID != venueID { return false }
+    if let date {
+      let parts = calendar.dateComponents([.year, .month, .day], from: date)
+      guard digest.date.year == parts.year, digest.date.month == parts.month,
+        digest.date.day == parts.day
+      else { return false }
+    }
     return true
   }
 }
