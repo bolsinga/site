@@ -158,4 +158,19 @@ struct CityFilterTests {
     filter.isOn = false
     #expect(model.nearbyVenues(filter, distanceThreshold: 100).count == 2)
   }
+
+  @Test func currentCityIsNotStored() {
+    #expect(storedCityName(typed: " denver ", current: "Denver") == "")
+    #expect(storedCityName(typed: "Dénver", current: "Denver") == "")
+  }
+
+  @Test func otherCityIsStoredTrimmed() {
+    #expect(storedCityName(typed: " Chicago ", current: "Denver") == "Chicago")
+    #expect(storedCityName(typed: "Chicago", current: nil) == "Chicago")
+  }
+
+  @Test func blankStoresNothing() {
+    #expect(storedCityName(typed: "  ", current: "Denver") == "")
+    #expect(storedCityName(typed: "", current: nil) == "")
+  }
 }

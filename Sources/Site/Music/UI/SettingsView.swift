@@ -32,28 +32,10 @@ public struct SettingsView: View {
   @AppStorage("nearby.distance") private var nearbyDistance = defaultNearbyDistanceThreshold
 
   @Environment(NearbyModel.self) private var nearbyModel: NearbyModel?
-  @Environment(VaultModel.self) private var model: VaultModel?
-
-  /// The current city when location is allowed, else a plain prompt.
-  private var cityPrompt: String {
-    guard model?.locationAuthorization == .allowed else { return String(localized: "City Name") }
-    return model?.currentCity ?? String(localized: "Current Location")
-  }
 
   @ViewBuilder private var cityControl: some View {
-    if let nearbyModel {
-      @Bindable var bindableNearbyModel = nearbyModel
-      TextField(
-        String(localized: "City"), text: $bindableNearbyModel.cityName,
-        prompt: Text(cityPrompt)
-      )
-      .autocorrectionDisabled()
-      if !nearbyModel.cityName.isEmpty {
-        Button(String(localized: "Use Current Location")) {
-          nearbyModel.cityName = ""
-        }
-        .disabled(model?.locationAuthorization != .allowed)
-      }
+    if nearbyModel != nil {
+      CityNameField()
     }
   }
 
