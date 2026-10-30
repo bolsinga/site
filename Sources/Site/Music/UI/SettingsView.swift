@@ -46,6 +46,7 @@ public struct SettingsView: View {
         Button(String(localized: "Use Current Location")) {
           nearbyModel.cityName = ""
         }
+        .disabled(model?.locationAuthorization != .allowed)
       }
     }
   }
