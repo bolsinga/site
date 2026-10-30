@@ -31,6 +31,25 @@ public struct SettingsView: View {
 
   @AppStorage("nearby.distance") private var nearbyDistance = defaultNearbyDistanceThreshold
 
+  @Environment(NearbyModel.self) private var nearbyModel: NearbyModel?
+  @Environment(VaultModel.self) private var model: VaultModel?
+
+  @ViewBuilder private var cityControl: some View {
+    if let nearbyModel {
+      @Bindable var bindableNearbyModel = nearbyModel
+      TextField(
+        String(localized: "City"), text: $bindableNearbyModel.cityName,
+        prompt: Text(model?.currentCity ?? String(localized: "Current Location"))
+      )
+      .autocorrectionDisabled()
+      if !nearbyModel.cityName.isEmpty {
+        Button(String(localized: "Use Current Location")) {
+          nearbyModel.cityName = ""
+        }
+      }
+    }
+  }
+
   private var nearbyDistanceControl: some View {
     NearbyDistanceThresholdView(distanceThreshold: $nearbyDistance)
   }
@@ -50,6 +69,12 @@ public struct SettingsView: View {
           Text("Nearby Distance").font(.headline)
           nearbyDistanceControl
         }
+        if nearbyModel != nil {
+          VStack {
+            Text("City").font(.headline)
+            cityControl
+          }
+        }
         computerView
       }
       .padding()
@@ -59,6 +84,11 @@ public struct SettingsView: View {
       Form {
         Section(header: Text("Nearby Distance")) {
           nearbyDistanceControl
+        }
+        if nearbyModel != nil {
+          Section(header: Text("City")) {
+            cityControl
+          }
         }
         Section {
           // Form rows don't center their content by default.

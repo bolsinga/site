@@ -24,7 +24,7 @@ struct ListSummaryCard: View {
 
   var body: some View {
     content
-      .animation(reduceMotion ? nil : .default, value: nearbyModel?.locationFilter.isNearby)
+      .animation(reduceMotion ? nil : .default, value: nearbyModel?.locationFilter)
   }
 
   @ViewBuilder private var content: some View {

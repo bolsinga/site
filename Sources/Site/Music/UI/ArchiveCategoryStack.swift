@@ -17,6 +17,25 @@ extension ArchivePath {
   }
 }
 
+private struct LocationSettingsSheet: View {
+  #if os(macOS)
+    @Environment(\.dismiss) private var dismiss
+  #endif
+
+  var body: some View {
+    #if os(macOS)
+      VStack {
+        SettingsView()
+        Button(String(localized: "Done")) { dismiss() }
+          .keyboardShortcut(.defaultAction)
+      }
+      .padding()
+    #else
+      SettingsView()
+    #endif
+  }
+}
+
 struct ArchiveCategoryStack: View {
   @Environment(VaultModel.self) var model
   @Environment(\.archiveNavigationState) private var navigationState
@@ -34,7 +53,6 @@ struct ArchiveCategoryStack: View {
 
   @State private var artistSearchString: String = ""
   @State private var venueSearchString: String = ""
-  @State private var venueSearchScope = VenueSearchScope.names
 
   /// The navigation state the settings sheet was presented in. The sheet only shows while the
   /// state is unchanged, so an external URL or activity that navigates dismisses it.
@@ -56,7 +74,6 @@ struct ArchiveCategoryStack: View {
       VenuesSummary(
         sort: venueSort,
         searchString: $venueSearchString,
-        scope: $venueSearchScope,
         mode: $venuesMode,
         navigateToPath: navigateToPath)
     case .artists:
@@ -80,8 +97,8 @@ struct ArchiveCategoryStack: View {
       summary
         .refreshable { await reloadModel() }
         .sheet(isPresented: showNearbyDistanceSettings) {
-          SettingsView()
-            .presentationDetents([.medium])
+          LocationSettingsSheet()
+            .presentationDetents([.medium, .large])
         }
         .navigationDestination(for: ArchivePath.self) {
           $0.destination(

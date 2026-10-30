@@ -7,22 +7,18 @@
 
 import Foundation
 
-public struct RankedArchiveItem:
-  Hashable, Identifiable, LibraryComparable, Nameable, Cityable, Rankable
-{
+public struct RankedArchiveItem: Hashable, Identifiable, LibraryComparable, Nameable, Rankable {
   public let id: ArchivePath
   public let sortname: String?
   public let name: String
-  public let city: String?
   private let rank: RankDigest
 
   init(
-    id: ArchivePath, sortname: String?, name: String, city: String? = nil, rank: RankDigest
+    id: ArchivePath, sortname: String?, name: String, rank: RankDigest
   ) {
     self.id = id
     self.sortname = sortname
     self.name = name
-    self.city = city
     self.rank = rank
   }
 
@@ -54,7 +50,6 @@ extension Artist {
 
 extension Venue {
   public func rankedArchiveItem(id: ArchivePath, _ rank: RankDigest) -> RankedArchiveItem {
-    RankedArchiveItem(
-      id: id, sortname: sortname, name: name, city: location.city, rank: rank)
+    RankedArchiveItem(id: id, sortname: sortname, name: name, rank: rank)
   }
 }

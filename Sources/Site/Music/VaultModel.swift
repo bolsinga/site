@@ -264,26 +264,33 @@ enum LocationAuthorization {
     return nearbyVenueIDs
   }
 
-  private func venuesNearby(_ distanceThreshold: CLLocationDistance)
-    -> any Collection<RankedArchiveItem>
-  {
-    let nearbyVenueIDs = venueIDsNearby(distanceThreshold)
-    return nearbyVenueIDs.compactMap { vault.rankedVenue(id: $0) }
+  func venueIDsInCity(_ city: String?) -> any Collection<ArchivePath> {
+    guard let city else {
+      Logger.vaultModel.log("City: No City")
+      return []
+    }
+    return vault.venueIDs().compactMap {
+      cityMatches($0.1.location.city, filter: city) ? $0.0 : nil
+    }
   }
 
-  private func artistsNearby(_ distanceThreshold: CLLocationDistance)
-    -> any Collection<RankedArchiveItem>
+  /// The venues the filter leaves, or nil if it is off.
+  private func filteredVenueIDs(_ nearbyModel: NearbyModel, distanceThreshold: CLLocationDistance)
+    -> (any Collection<ArchivePath>)?
   {
-    let nearbyVenueIDs = venueIDsNearby(distanceThreshold)
-    let nearbyArtistIDs = Set(nearbyVenueIDs.flatMap { vault.artists(venueID: $0) })
-    return nearbyArtistIDs.compactMap { vault.rankedArtist(id: $0) }
+    switch nearbyModel.locationFilter {
+    case .none:
+      nil
+    case .nearby:
+      venueIDsNearby(distanceThreshold)
+    case .city:
+      venueIDsInCity(nearbyModel.effectiveCity(current: currentCity))
+    }
   }
 
-  private func decadesMapsNearby(_ distanceThreshold: CLLocationDistance) -> [Decade: [Annum: Int]]
-  {
-    let nearbyConcertIDs = Set(
-      venueIDsNearby(distanceThreshold).flatMap { vault.shows(venueID: $0) })
-    return vault.decadesMap(showIDs: nearbyConcertIDs)
+  private func decadesMap(venueIDs: any Collection<ArchivePath>) -> [Decade: [Annum: Int]] {
+    let concertIDs = Set(venueIDs.flatMap { vault.shows(venueID: $0) })
+    return vault.decadesMap(showIDs: concertIDs)
   }
 
   private func venues(nearby location: CLLocation, distanceThreshold: CLLocationDistance)
@@ -298,31 +305,38 @@ enum LocationAuthorization {
   func filteredDecadesMap(_ nearbyModel: NearbyModel, distanceThreshold: CLLocationDistance)
     -> [Decade: [Annum: Int]]
   {
-    nearbyModel.locationFilter.isNearby ? decadesMapsNearby(distanceThreshold) : vault.decadesMap
+    guard let ids = filteredVenueIDs(nearbyModel, distanceThreshold: distanceThreshold) else {
+      return vault.decadesMap
+    }
+    return decadesMap(venueIDs: ids)
   }
 
-  /// The statistics of what the nearby filter leaves, or of everything if it is off.
+  /// The statistics of what the location filter leaves, or of everything if it is off.
   func filteredStatisticsData(_ nearbyModel: NearbyModel, distanceThreshold: CLLocationDistance)
     -> (showsCount: Int, venueCount: Int, artistCount: Int, dates: [Date], states: [String: Int])
   {
-    nearbyModel.locationFilter.isNearby
-      ? vault.statisticsData(venueIDs: venueIDsNearby(distanceThreshold))
-      : vault.statisticsData
+    guard let ids = filteredVenueIDs(nearbyModel, distanceThreshold: distanceThreshold) else {
+      return vault.statisticsData
+    }
+    return vault.statisticsData(venueIDs: ids)
   }
 
   func nearbyVenues(_ nearbyModel: NearbyModel, distanceThreshold: CLLocationDistance)
     -> any Collection<RankedArchiveItem>
   {
-    nearbyModel.locationFilter.isNearby
-      ? venuesNearby(distanceThreshold)
-      : vault.venueIDs().compactMap { vault.rankedVenue(id: $0.0) }
+    guard let ids = filteredVenueIDs(nearbyModel, distanceThreshold: distanceThreshold) else {
+      return vault.venueIDs().compactMap { vault.rankedVenue(id: $0.0) }
+    }
+    return ids.compactMap { vault.rankedVenue(id: $0) }
   }
 
   func nearbyArtists(_ nearbyModel: NearbyModel, distanceThreshold: CLLocationDistance)
     -> any Collection<RankedArchiveItem>
   {
-    nearbyModel.locationFilter.isNearby
-      ? artistsNearby(distanceThreshold)
-      : vault.artistIDs().compactMap { vault.rankedArtist(id: $0.0) }
+    guard let ids = filteredVenueIDs(nearbyModel, distanceThreshold: distanceThreshold) else {
+      return vault.artistIDs().compactMap { vault.rankedArtist(id: $0.0) }
+    }
+    let artistIDs = Set(ids.flatMap { vault.artists(venueID: $0) })
+    return artistIDs.compactMap { vault.rankedArtist(id: $0) }
   }
 }

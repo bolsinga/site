@@ -37,10 +37,3 @@ struct ReverseGeocodePolicy {
       && now.timeIntervalSince(last.date) >= minimumInterval
   }
 }
-
-/// The current city to suggest as a search, only while the search text is blank.
-func currentCitySuggestion(current: String?, searchText: String) -> String? {
-  guard searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return nil }
-  let city = current?.trimmingCharacters(in: .whitespacesAndNewlines)
-  return city?.isEmpty == false ? city : nil
-}

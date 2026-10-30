@@ -43,21 +43,6 @@ struct CurrentCityTests {
         last: attempt, location: near, now: start.addingTimeInterval(600)))
   }
 
-  @Test func suggestsWhenSearchIsEmpty() {
-    #expect(currentCitySuggestion(current: "Oakland", searchText: "") == "Oakland")
-    #expect(currentCitySuggestion(current: " Oakland ", searchText: "  ") == "Oakland")
-  }
-
-  @Test func noSuggestionWhileTyping() {
-    #expect(currentCitySuggestion(current: "Oakland", searchText: "Sea") == nil)
-    #expect(currentCitySuggestion(current: "Oakland", searchText: "Oakland") == nil)
-  }
-
-  @Test func noSuggestionWithoutCity() {
-    #expect(currentCitySuggestion(current: nil, searchText: "") == nil)
-    #expect(currentCitySuggestion(current: " ", searchText: "") == nil)
-  }
-
   private struct StubResolver: CityResolver {
     struct Failure: Error {}
     let result: Result<String?, Failure>

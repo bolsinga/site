@@ -335,14 +335,8 @@
     "Category" : {
 
     },
-    "Cities" : {
-      "comment" : "VenueSearchScope.cities"
-    },
     "City" : {
 
-    },
-    "City Name" : {
-      "comment" : "VenueSearchScope.cities prompt"
     },
     "club" : {
 
@@ -404,7 +398,19 @@
     "Displays Venue Details in App." : {
 
     },
+    "Done" : {
+
+    },
+    "Edit City…" : {
+
+    },
     "Edit Nearby Distance" : {
+
+    },
+    "Filter City" : {
+
+    },
+    "Filter Mode" : {
 
     },
     "Filter Nearby" : {
@@ -470,7 +476,16 @@
     "Name Or Related Names" : {
 
     },
+    "Nearby" : {
+
+    },
     "Nearby Distance" : {
+
+    },
+    "No City" : {
+
+    },
+    "No city. Allow location or enter a city." : {
 
     },
     "No concerts found." : {
@@ -479,7 +494,13 @@
     "No Matches" : {
 
     },
+    "No venues are in this city. Disable the Location Filter or edit the city." : {
+
+    },
     "Not ranked" : {
+
+    },
+    "Nothing in %@" : {
 
     },
     "Nothing is nearby. Disable the Location Filter or increase the nearby distance filter." : {
@@ -538,9 +559,6 @@
     },
     "Search for Venues from Concerts based on complex criteria." : {
 
-    },
-    "Search Venues" : {
-      "comment" : "VenueSearchScope idle prompt"
     },
     "See More About This Show" : {
 
@@ -624,6 +642,9 @@
 
     },
     "Unknown Date" : {
+
+    },
+    "Use Current Location" : {
 
     },
     "Value" : {
