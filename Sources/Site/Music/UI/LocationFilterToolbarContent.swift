@@ -8,48 +8,18 @@
 import Shared
 import SwiftUI
 
-#if canImport(UIKit)
-  import UIKit
-
-  extension UIDevice {
-    fileprivate var showLocationFilterSettingsMenu: Bool {
-      userInterfaceIdiom == .phone
-    }
-  }
-
-  @MainActor
-  private var showLocationFilterSettingsMenu: Bool {
-    UIDevice.current.showLocationFilterSettingsMenu
-  }
-#else
-  private let showLocationFilterSettingsMenu = false
-#endif
-
 extension LocationAuthorization {
-  fileprivate var toggleSystemImage: String {
-    switch self {
-    case .allowed:
-      "location.circle"
-    case .restricted, .denied:
-      "location.slash.circle"
-    }
-  }
-
-  fileprivate func menuSystemImage(_ isNearby: Bool) -> String {
-    switch self {
-    case .allowed:
-      isNearby ? "location.circle.fill" : "location.circle"
-    case .restricted, .denied:
-      isNearby ? "location.slash.circle.fill" : "location.slash.circle"
-    }
-  }
-
-  fileprivate var uiDisabled: Bool {
-    switch self {
-    case .allowed, .denied:
-      false
-    case .restricted:
-      true
+  fileprivate func menuSystemImage(_ filter: LocationFilter, mode: LocationFilter) -> String {
+    switch mode {
+    case .city:
+      filter.isActive ? "building.2.crop.circle.fill" : "building.2.crop.circle"
+    case .none, .nearby:
+      switch self {
+      case .allowed:
+        filter.isActive ? "location.circle.fill" : "location.circle"
+      case .restricted, .denied:
+        filter.isActive ? "location.slash.circle.fill" : "location.slash.circle"
+      }
     }
   }
 }
@@ -58,54 +28,55 @@ struct LocationFilterToolbarContent: ToolbarContent {
   let locationAuthorization: LocationAuthorization
   let placement: ToolbarItemPlacement
   @Environment(NearbyModel.self) var nearbyModel
-  let editNearbyDistanceAction: @MainActor () -> Void
+  let editSettingsAction: @MainActor () -> Void
 
   internal init(
     locationAuthorization: LocationAuthorization,
     placement: ToolbarItemPlacement = .primaryAction,
-    editNearbyDistanceAction: @escaping @MainActor () -> Void
+    editSettingsAction: @escaping @MainActor () -> Void
   ) {
     self.locationAuthorization = locationAuthorization
     self.placement = placement
-    self.editNearbyDistanceAction = editNearbyDistanceAction
+    self.editSettingsAction = editSettingsAction
   }
 
-  @ViewBuilder private var nearbyToggle: some View {
+  private var title: String {
+    nearbyModel.mode.isCity ? String(localized: "Filter City") : String(localized: "Filter Nearby")
+  }
+
+  @ViewBuilder private var modePicker: some View {
     @Bindable var bindableNearbyModel = nearbyModel
-    Toggle(
-      String(localized: "Filter Nearby"),
-      systemImage: locationAuthorization.toggleSystemImage,
-      isOn: $bindableNearbyModel.locationFilter.toggle
-    )
-    .disabled(locationAuthorization.uiDisabled)
+    Picker(String(localized: "Filter Mode"), selection: $bindableNearbyModel.mode) {
+      Text("Nearby To Me").tag(LocationFilter.nearby)
+      Text("City Limits").tag(LocationFilter.city)
+    }
+    .pickerStyle(.inline)
   }
 
-  @ViewBuilder private var nearbySettingsMenu: some View {
-    Menu {
-      Button {
-        editNearbyDistanceAction()
-      } label: {
-        Label(
-          String(localized: "Edit Nearby Distance"),
-          systemImage: ArchiveCategory.settings.systemImage)
-      }
+  @ViewBuilder private var editButton: some View {
+    Button {
+      editSettingsAction()
     } label: {
       Label(
-        String(localized: "Filter Nearby"),
-        systemImage: locationAuthorization.menuSystemImage(nearbyModel.locationFilter.isNearby))
-    } primaryAction: {
-      nearbyModel.locationFilter.toggle.toggle()
+        String(localized: "Edit Nearby Settings"),
+        systemImage: ArchiveCategory.settings.systemImage)
     }
-    .disabled(locationAuthorization.uiDisabled)
   }
 
   var body: some ToolbarContent {
     ToolbarItem(placement: placement) {
-      if showLocationFilterSettingsMenu {
-        nearbySettingsMenu
-      } else {
-        nearbyToggle
+      Menu {
+        modePicker
+        editButton
+      } label: {
+        Label(
+          title,
+          systemImage: locationAuthorization.menuSystemImage(
+            nearbyModel.locationFilter, mode: nearbyModel.mode))
+      } primaryAction: {
+        nearbyModel.isOn.toggle()
       }
+      .accessibilityValue(nearbyModel.isOn ? String(localized: "On") : String(localized: "Off"))
     }
   }
 }

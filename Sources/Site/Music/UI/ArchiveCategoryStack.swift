@@ -17,6 +17,25 @@ extension ArchivePath {
   }
 }
 
+private struct LocationSettingsSheet: View {
+  #if os(macOS)
+    @Environment(\.dismiss) private var dismiss
+  #endif
+
+  var body: some View {
+    #if os(macOS)
+      VStack {
+        SettingsView()
+        Button(String(localized: "Done")) { dismiss() }
+          .keyboardShortcut(.defaultAction)
+      }
+      .padding()
+    #else
+      SettingsView()
+    #endif
+  }
+}
+
 struct ArchiveCategoryStack: View {
   @Environment(VaultModel.self) var model
   @Environment(\.archiveNavigationState) private var navigationState
@@ -78,8 +97,8 @@ struct ArchiveCategoryStack: View {
       summary
         .refreshable { await reloadModel() }
         .sheet(isPresented: showNearbyDistanceSettings) {
-          SettingsView()
-            .presentationDetents([.medium])
+          LocationSettingsSheet()
+            .presentationDetents([.medium, .large])
         }
         .navigationDestination(for: ArchivePath.self) {
           $0.destination(

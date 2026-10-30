@@ -20,15 +20,6 @@ enum LocationAuthorization {
   case allowed
   case restricted  // Locations are not possible.
   case denied  // Locations denied by user.
-
-  var uiEnabled: Bool {
-    switch self {
-    case .allowed, .denied:
-      true
-    case .restricted:
-      false
-    }
-  }
 }
 
 @Observable public final class VaultModel {
@@ -41,6 +32,13 @@ enum LocationAuthorization {
   internal var venueMapItemMap: [ArchivePath: MKMapItem] = [:]
   private var currentLocation: CLLocation?
   internal var locationAuthorization = LocationAuthorization.restricted
+  internal private(set) var currentCity: String?
+
+  @ObservationIgnored
+  private var lastReverseGeocode: ReverseGeocodePolicy.Attempt?
+  /// The city lookup in flight; a newer one, or losing location, cancels it.
+  @ObservationIgnored
+  internal private(set) var cityTask: Task<Void, Never>?
 
   @ObservationIgnored
   private var dayChangeTask: Task<Void, Never>?
@@ -52,6 +50,7 @@ enum LocationAuthorization {
   private var batchGeocodeCompleted = false
 
   private let locationManager: LocationManager
+  private let cityResolver: any CityResolver
 
   private let atlas = Atlas<Venue>()
 
@@ -60,9 +59,11 @@ enum LocationAuthorization {
     _ vault: Vault,
     executeAsynchronousTasks: Bool,
     distanceFilter: CLLocationDistance = 10,
+    cityResolver: any CityResolver = MapKitCityResolver(),
     error: Error? = nil
   ) {
     self.vault = vault
+    self.cityResolver = cityResolver
     self.locationManager = LocationManager(
       activityType: .other,
       distanceFilter: distanceFilter,
@@ -96,6 +97,7 @@ enum LocationAuthorization {
     dayChangeTask?.cancel()
     geocodeTask?.cancel()
     locationTask?.cancel()
+    cityTask?.cancel()
   }
 
   @MainActor
@@ -206,22 +208,57 @@ enum LocationAuthorization {
   private func monitorUserLocation() async {
     Logger.vaultModel.log("start location monitoring")
     defer {
+      cityTask?.cancel()
       Logger.vaultModel.log("end location monitoring")
     }
 
     do {
       for try await event in locationManager.events() {
-        switch event {
-        case .denied:
-          locationAuthorization = .denied
-          currentLocation = nil
-        case .location(let location):
-          locationAuthorization = .allowed
-          currentLocation = location
-        }
+        handle(event)
       }
     } catch {
       Logger.vaultModel.error("locationstream error: \(error, privacy: .public)")
+    }
+  }
+
+  @MainActor
+  func handle(_ event: LocationManager.Event) {
+    switch event {
+    case .denied:
+      locationAuthorization = .denied
+      currentLocation = nil
+      cityTask?.cancel()
+      cityTask = nil
+      lastReverseGeocode = nil
+      currentCity = nil
+    case .location(let location):
+      locationAuthorization = .allowed
+      currentLocation = location
+      resolveCity(for: location)
+    }
+  }
+
+  @MainActor
+  private func resolveCity(for location: CLLocation) {
+    let now = Date.now
+    guard
+      ReverseGeocodePolicy.shouldGeocode(last: lastReverseGeocode, location: location, now: now)
+    else { return }
+    lastReverseGeocode = ReverseGeocodePolicy.Attempt(location: location, date: now)
+    cityTask?.cancel()
+    cityTask = Task { [cityResolver] in
+      do {
+        let city = try await cityResolver.city(for: location)
+        // A cancelled lookup is stale: a newer one started, or location was lost.
+        guard !Task.isCancelled, let city else { return }
+        Logger.vaultModel.log("current city: \(city, privacy: .public)")
+        currentCity = city
+      } catch is CancellationError {
+      } catch let error as NSError where error.isGeocodingThrottledError {
+        Logger.vaultModel.log("city geocode throttled")
+      } catch {
+        Logger.vaultModel.error("city geocode error: \(error, privacy: .public)")
+      }
     }
   }
 
@@ -237,26 +274,33 @@ enum LocationAuthorization {
     return nearbyVenueIDs
   }
 
-  private func venuesNearby(_ distanceThreshold: CLLocationDistance)
-    -> any Collection<RankedArchiveItem>
-  {
-    let nearbyVenueIDs = venueIDsNearby(distanceThreshold)
-    return nearbyVenueIDs.compactMap { vault.rankedVenue(id: $0) }
+  func venueIDsInCity(_ city: String?) -> any Collection<ArchivePath> {
+    guard let city else {
+      Logger.vaultModel.log("City: No City")
+      return []
+    }
+    return vault.venueIDs().compactMap {
+      cityMatches($0.1.location.city, filter: city) ? $0.0 : nil
+    }
   }
 
-  private func artistsNearby(_ distanceThreshold: CLLocationDistance)
-    -> any Collection<RankedArchiveItem>
+  /// The venues the filter leaves, or nil if it is off.
+  private func filteredVenueIDs(_ nearbyModel: NearbyModel, distanceThreshold: CLLocationDistance)
+    -> (any Collection<ArchivePath>)?
   {
-    let nearbyVenueIDs = venueIDsNearby(distanceThreshold)
-    let nearbyArtistIDs = Set(nearbyVenueIDs.flatMap { vault.artists(venueID: $0) })
-    return nearbyArtistIDs.compactMap { vault.rankedArtist(id: $0) }
+    switch nearbyModel.locationFilter {
+    case .none:
+      nil
+    case .nearby:
+      venueIDsNearby(distanceThreshold)
+    case .city:
+      venueIDsInCity(nearbyModel.effectiveCity(current: currentCity))
+    }
   }
 
-  private func decadesMapsNearby(_ distanceThreshold: CLLocationDistance) -> [Decade: [Annum: Int]]
-  {
-    let nearbyConcertIDs = Set(
-      venueIDsNearby(distanceThreshold).flatMap { vault.shows(venueID: $0) })
-    return vault.decadesMap(showIDs: nearbyConcertIDs)
+  private func decadesMap(venueIDs: any Collection<ArchivePath>) -> [Decade: [Annum: Int]] {
+    let concertIDs = Set(venueIDs.flatMap { vault.shows(venueID: $0) })
+    return vault.decadesMap(showIDs: concertIDs)
   }
 
   private func venues(nearby location: CLLocation, distanceThreshold: CLLocationDistance)
@@ -271,31 +315,38 @@ enum LocationAuthorization {
   func filteredDecadesMap(_ nearbyModel: NearbyModel, distanceThreshold: CLLocationDistance)
     -> [Decade: [Annum: Int]]
   {
-    nearbyModel.locationFilter.isNearby ? decadesMapsNearby(distanceThreshold) : vault.decadesMap
+    guard let ids = filteredVenueIDs(nearbyModel, distanceThreshold: distanceThreshold) else {
+      return vault.decadesMap
+    }
+    return decadesMap(venueIDs: ids)
   }
 
-  /// The statistics of what the nearby filter leaves, or of everything if it is off.
+  /// The statistics of what the location filter leaves, or of everything if it is off.
   func filteredStatisticsData(_ nearbyModel: NearbyModel, distanceThreshold: CLLocationDistance)
     -> (showsCount: Int, venueCount: Int, artistCount: Int, dates: [Date], states: [String: Int])
   {
-    nearbyModel.locationFilter.isNearby
-      ? vault.statisticsData(venueIDs: venueIDsNearby(distanceThreshold))
-      : vault.statisticsData
+    guard let ids = filteredVenueIDs(nearbyModel, distanceThreshold: distanceThreshold) else {
+      return vault.statisticsData
+    }
+    return vault.statisticsData(venueIDs: ids)
   }
 
   func nearbyVenues(_ nearbyModel: NearbyModel, distanceThreshold: CLLocationDistance)
     -> any Collection<RankedArchiveItem>
   {
-    nearbyModel.locationFilter.isNearby
-      ? venuesNearby(distanceThreshold)
-      : vault.venueIDs().compactMap { vault.rankedVenue(id: $0.0) }
+    guard let ids = filteredVenueIDs(nearbyModel, distanceThreshold: distanceThreshold) else {
+      return vault.venueIDs().compactMap { vault.rankedVenue(id: $0.0) }
+    }
+    return ids.compactMap { vault.rankedVenue(id: $0) }
   }
 
   func nearbyArtists(_ nearbyModel: NearbyModel, distanceThreshold: CLLocationDistance)
     -> any Collection<RankedArchiveItem>
   {
-    nearbyModel.locationFilter.isNearby
-      ? artistsNearby(distanceThreshold)
-      : vault.artistIDs().compactMap { vault.rankedArtist(id: $0.0) }
+    guard let ids = filteredVenueIDs(nearbyModel, distanceThreshold: distanceThreshold) else {
+      return vault.artistIDs().compactMap { vault.rankedArtist(id: $0.0) }
+    }
+    let artistIDs = Set(ids.flatMap { vault.artists(venueID: $0) })
+    return artistIDs.compactMap { vault.rankedArtist(id: $0) }
   }
 }

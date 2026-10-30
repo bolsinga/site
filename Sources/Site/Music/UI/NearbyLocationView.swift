@@ -26,7 +26,7 @@ extension LocationAuthorization {
 }
 
 /// Puts the content on a material card, so it stays legible over a map.
-private struct MapCardModifier: ViewModifier {
+struct MapCardModifier: ViewModifier {
   let enabled: Bool
 
   func body(content: Content) -> some View {

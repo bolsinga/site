@@ -338,6 +338,15 @@
     "City" : {
 
     },
+    "City Limits" : {
+
+    },
+    "City Name" : {
+
+    },
+    "Clear City" : {
+
+    },
     "club" : {
 
     },
@@ -374,6 +383,9 @@
     "Count" : {
 
     },
+    "Current Location" : {
+
+    },
     "Date" : {
 
     },
@@ -395,7 +407,16 @@
     "Displays Venue Details in App." : {
 
     },
-    "Edit Nearby Distance" : {
+    "Done" : {
+
+    },
+    "Edit Nearby Settings" : {
+
+    },
+    "Filter City" : {
+
+    },
+    "Filter Mode" : {
 
     },
     "Filter Nearby" : {
@@ -464,13 +485,28 @@
     "Nearby Distance" : {
 
     },
+    "Nearby To Me" : {
+
+    },
+    "No City" : {
+
+    },
+    "No city. Allow location or enter a city." : {
+
+    },
     "No concerts found." : {
 
     },
     "No Matches" : {
 
     },
+    "No venues are in this city. Disable the Location Filter or edit the city." : {
+
+    },
     "Not ranked" : {
+
+    },
+    "Nothing in %@" : {
 
     },
     "Nothing is nearby. Disable the Location Filter or increase the nearby distance filter." : {
@@ -480,6 +516,12 @@
 
     },
     "Numeric" : {
+
+    },
+    "Off" : {
+
+    },
+    "On" : {
 
     },
     "Open ${target}" : {
@@ -627,7 +669,7 @@
 
     },
     "Venue Names" : {
-
+      "comment" : "VenueSearchScope.names\nVenueSearchScope.names prompt"
     },
     "Venues" : {
 
