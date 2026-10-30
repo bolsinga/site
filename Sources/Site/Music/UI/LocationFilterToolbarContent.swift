@@ -22,15 +22,6 @@ extension LocationAuthorization {
       }
     }
   }
-
-  fileprivate var uiDisabled: Bool {
-    switch self {
-    case .allowed, .denied:
-      false
-    case .restricted:
-      true
-    }
-  }
 }
 
 struct LocationFilterToolbarContent: ToolbarContent {
@@ -86,7 +77,6 @@ struct LocationFilterToolbarContent: ToolbarContent {
         nearbyModel.isOn.toggle()
       }
       .accessibilityValue(nearbyModel.isOn ? String(localized: "On") : String(localized: "Off"))
-      .disabled(locationAuthorization.uiDisabled)
     }
   }
 }

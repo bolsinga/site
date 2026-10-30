@@ -20,15 +20,6 @@ enum LocationAuthorization {
   case allowed
   case restricted  // Locations are not possible.
   case denied  // Locations denied by user.
-
-  var uiEnabled: Bool {
-    switch self {
-    case .allowed, .denied:
-      true
-    case .restricted:
-      false
-    }
-  }
 }
 
 @Observable public final class VaultModel {

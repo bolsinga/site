@@ -47,7 +47,7 @@ struct ArchiveCategoryToolbarContent: ToolbarContent {
         }
       }
     }
-    if category.isLocationFilterable, model.locationAuthorization.uiEnabled {
+    if category.isLocationFilterable {
       LocationFilterToolbarContent(locationAuthorization: model.locationAuthorization) {
         showNearbyDistanceSettings = true
       }
