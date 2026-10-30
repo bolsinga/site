@@ -86,6 +86,7 @@ struct LocationFilterToolbarContent: ToolbarContent {
       } primaryAction: {
         nearbyModel.isOn.toggle()
       }
+      .accessibilityValue(nearbyModel.isOn ? String(localized: "On") : String(localized: "Off"))
       .disabled(locationAuthorization.uiDisabled)
     }
   }
