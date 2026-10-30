@@ -338,6 +338,9 @@
     "City" : {
 
     },
+    "City Limits" : {
+
+    },
     "club" : {
 
     },
@@ -404,7 +407,7 @@
     "Edit City…" : {
 
     },
-    "Edit Nearby Distance" : {
+    "Edit Nearby Settings" : {
 
     },
     "Filter City" : {
@@ -476,10 +479,10 @@
     "Name Or Related Names" : {
 
     },
-    "Nearby" : {
+    "Nearby Distance" : {
 
     },
-    "Nearby Distance" : {
+    "Nearby To Me" : {
 
     },
     "No City" : {

@@ -56,8 +56,8 @@ struct LocationFilterToolbarContent: ToolbarContent {
   @ViewBuilder private var modePicker: some View {
     @Bindable var bindableNearbyModel = nearbyModel
     Picker(String(localized: "Filter Mode"), selection: $bindableNearbyModel.mode) {
-      Text("Nearby").tag(LocationFilter.nearby)
-      Text("City").tag(LocationFilter.city)
+      Text("Nearby To Me").tag(LocationFilter.nearby)
+      Text("City Limits").tag(LocationFilter.city)
     }
     .pickerStyle(.inline)
   }
@@ -68,7 +68,7 @@ struct LocationFilterToolbarContent: ToolbarContent {
     } label: {
       Label(
         nearbyModel.mode.isCity
-          ? String(localized: "Edit City…") : String(localized: "Edit Nearby Distance"),
+          ? String(localized: "Edit City…") : String(localized: "Edit Nearby Settings"),
         systemImage: ArchiveCategory.settings.systemImage)
     }
   }
