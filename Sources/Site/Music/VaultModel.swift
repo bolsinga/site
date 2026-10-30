@@ -234,6 +234,7 @@ enum LocationAuthorization {
     lastReverseGeocode = ReverseGeocodePolicy.Attempt(location: location, date: now)
     do {
       if let city = try await cityResolver.city(for: location) {
+        Logger.vaultModel.log("current city: \(city, privacy: .public)")
         currentCity = city
       }
     } catch let error as NSError where error.isGeocodingThrottledError {

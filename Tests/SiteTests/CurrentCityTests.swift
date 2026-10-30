@@ -14,6 +14,7 @@ import Testing
 struct CurrentCityTests {
   private let origin = CLLocation(latitude: 37.0, longitude: -122.0)
   private let far = CLLocation(latitude: 37.1, longitude: -122.0)  // ~11 km
+  private let jump = CLLocation(latitude: 38.0, longitude: -122.0)  // ~111 km
   private let near = CLLocation(latitude: 37.001, longitude: -122.0)  // ~111 m
   private let start = Date(timeIntervalSince1970: 1_000_000)
 
@@ -35,6 +36,12 @@ struct CurrentCityTests {
     #expect(
       !ReverseGeocodePolicy.shouldGeocode(
         last: attempt, location: far, now: start.addingTimeInterval(59)))
+  }
+
+  @Test func jumpGeocodesEvenSoon() {
+    #expect(
+      ReverseGeocodePolicy.shouldGeocode(
+        last: attempt, location: jump, now: start.addingTimeInterval(5)))
   }
 
   @Test func nearAndLaterDoesNot() {

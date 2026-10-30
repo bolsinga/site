@@ -25,6 +25,8 @@ struct MapKitCityResolver: CityResolver {
 struct ReverseGeocodePolicy {
   static let minimumDistance: CLLocationDistance = 1000
   static let minimumInterval: TimeInterval = 60
+  /// A move this far is a new place, so it geocodes without waiting out the interval.
+  static let jumpDistance: CLLocationDistance = 50_000
 
   struct Attempt {
     let location: CLLocation
@@ -33,7 +35,8 @@ struct ReverseGeocodePolicy {
 
   static func shouldGeocode(last: Attempt?, location: CLLocation, now: Date) -> Bool {
     guard let last else { return true }
-    return location.distance(from: last.location) > minimumDistance
-      && now.timeIntervalSince(last.date) >= minimumInterval
+    let distance = location.distance(from: last.location)
+    if distance > jumpDistance { return true }
+    return distance > minimumDistance && now.timeIntervalSince(last.date) >= minimumInterval
   }
 }
