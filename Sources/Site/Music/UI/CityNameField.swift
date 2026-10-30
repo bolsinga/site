@@ -48,7 +48,10 @@ struct CityNameField: View {
       TextField(String(localized: "City"), text: $draft, prompt: Text(prompt))
     #else
       TextField(
-        String(localized: "City"), text: $draft, selection: $selection, prompt: Text(prompt))
+        String(localized: "City"), text: $draft, selection: $selection, prompt: Text(prompt),
+        axis: .vertical
+      )
+      .lineLimit(1)
     #endif
   }
 
@@ -85,7 +88,15 @@ struct CityNameField: View {
     .onChange(of: currentCity) {
       if !focused, nearbyModel?.cityName.isEmpty ?? true { showCity() }
     }
-    .onChange(of: draft) { commit() }
+    .onChange(of: draft) { old, new in
+      // A vertical-axis field turns Return into a newline; that is the submit.
+      if new.contains("\n") {
+        let stripped = new.replacingOccurrences(of: "\n", with: "")
+        draft = stripped.isEmpty ? old : stripped
+        focused = false
+      }
+      commit()
+    }
     .onChange(of: focused) { _, isFocused in
       guard isFocused else { return }
       #if !os(tvOS)
