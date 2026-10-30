@@ -36,6 +36,9 @@ enum LocationAuthorization {
 
   @ObservationIgnored
   private var lastReverseGeocode: ReverseGeocodePolicy.Attempt?
+  /// The city lookup in flight; a newer one, or losing location, cancels it.
+  @ObservationIgnored
+  internal private(set) var cityTask: Task<Void, Never>?
 
   @ObservationIgnored
   private var dayChangeTask: Task<Void, Never>?
@@ -204,21 +207,13 @@ enum LocationAuthorization {
   private func monitorUserLocation() async {
     Logger.vaultModel.log("start location monitoring")
     defer {
+      cityTask?.cancel()
       Logger.vaultModel.log("end location monitoring")
     }
 
     do {
       for try await event in locationManager.events() {
-        switch event {
-        case .denied:
-          locationAuthorization = .denied
-          currentLocation = nil
-          currentCity = nil
-        case .location(let location):
-          locationAuthorization = .allowed
-          currentLocation = location
-          Task { await resolveCity(for: location) }
-        }
+        handle(event)
       }
     } catch {
       Logger.vaultModel.error("locationstream error: \(error, privacy: .public)")
@@ -226,21 +221,43 @@ enum LocationAuthorization {
   }
 
   @MainActor
-  private func resolveCity(for location: CLLocation) async {
+  func handle(_ event: LocationManager.Event) {
+    switch event {
+    case .denied:
+      locationAuthorization = .denied
+      currentLocation = nil
+      cityTask?.cancel()
+      cityTask = nil
+      lastReverseGeocode = nil
+      currentCity = nil
+    case .location(let location):
+      locationAuthorization = .allowed
+      currentLocation = location
+      resolveCity(for: location)
+    }
+  }
+
+  @MainActor
+  private func resolveCity(for location: CLLocation) {
     let now = Date.now
     guard
       ReverseGeocodePolicy.shouldGeocode(last: lastReverseGeocode, location: location, now: now)
     else { return }
     lastReverseGeocode = ReverseGeocodePolicy.Attempt(location: location, date: now)
-    do {
-      if let city = try await cityResolver.city(for: location) {
+    cityTask?.cancel()
+    cityTask = Task { [cityResolver] in
+      do {
+        let city = try await cityResolver.city(for: location)
+        // A cancelled lookup is stale: a newer one started, or location was lost.
+        guard !Task.isCancelled, let city else { return }
         Logger.vaultModel.log("current city: \(city, privacy: .public)")
         currentCity = city
+      } catch is CancellationError {
+      } catch let error as NSError where error.isGeocodingThrottledError {
+        Logger.vaultModel.log("city geocode throttled")
+      } catch {
+        Logger.vaultModel.error("city geocode error: \(error, privacy: .public)")
       }
-    } catch let error as NSError where error.isGeocodingThrottledError {
-      Logger.vaultModel.log("city geocode throttled")
-    } catch {
-      Logger.vaultModel.error("city geocode error: \(error, privacy: .public)")
     }
   }
 

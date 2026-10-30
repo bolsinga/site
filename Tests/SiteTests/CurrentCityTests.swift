@@ -9,6 +9,7 @@ import CoreLocation
 import Foundation
 import Testing
 
+@testable import Shared
 @testable import SiteApp
 
 struct CurrentCityTests {
@@ -71,5 +72,78 @@ struct CurrentCityTests {
     await #expect(throws: StubResolver.Failure.self) {
       try await resolver.city(for: origin)
     }
+  }
+
+  // MARK: In-flight lookups
+
+  private let denver = CLLocation(latitude: 39.74, longitude: -104.99)
+  private let cupertino = CLLocation(latitude: 37.33, longitude: -122.03)
+
+  /// Answers after a delay and, like a lookup that already had its answer, ignores cancellation.
+  private struct DelayedResolver: CityResolver {
+    let answers: [Double: (city: String, delay: Duration)]
+    func city(for location: CLLocation) async throws -> String? {
+      guard let answer = answers[location.coordinate.latitude] else { return nil }
+      try? await Task.sleep(for: answer.delay)
+      return answer.city
+    }
+  }
+
+  @MainActor private func createModel(_ resolver: any CityResolver) async throws -> VaultModel {
+    let vault = Vault(
+      lookup: try await Lookup(
+        bracket: try await Bracket(
+          music: Music(
+            albums: [], artists: [], relations: [], shows: [], songs: [], timestamp: Date(),
+            venues: []),
+          timestamp: .now)),
+      rootURL: URL(string: "https://www.example.com/")!)
+    return VaultModel(vault, executeAsynchronousTasks: false, cityResolver: resolver)
+  }
+
+  @MainActor @Test func locationResolvesCity() async throws {
+    let model = try await createModel(
+      DelayedResolver(answers: [denver.coordinate.latitude: ("Denver", .zero)]))
+    model.handle(.location(denver))
+    await model.cityTask?.value
+    #expect(model.currentCity == "Denver")
+  }
+
+  @MainActor @Test func denialDropsAnInFlightCity() async throws {
+    let model = try await createModel(
+      DelayedResolver(answers: [denver.coordinate.latitude: ("Denver", .milliseconds(100))]))
+    model.handle(.location(denver))
+    let inFlight = try #require(model.cityTask)
+    model.handle(.denied)
+    await inFlight.value
+    #expect(model.currentCity == nil)
+    #expect(model.locationAuthorization == .denied)
+  }
+
+  @MainActor @Test func aNewerLocationReplacesAnInFlightCity() async throws {
+    let model = try await createModel(
+      DelayedResolver(answers: [
+        denver.coordinate.latitude: ("Denver", .milliseconds(150)),
+        cupertino.coordinate.latitude: ("Cupertino", .zero),
+      ]))
+    model.handle(.location(denver))
+    let first = try #require(model.cityTask)
+    model.handle(.location(cupertino))
+    let second = try #require(model.cityTask)
+    await second.value
+    await first.value
+    #expect(model.currentCity == "Cupertino")
+  }
+
+  @MainActor @Test func regrantingLocationGeocodesAgain() async throws {
+    let model = try await createModel(
+      DelayedResolver(answers: [denver.coordinate.latitude: ("Denver", .zero)]))
+    model.handle(.location(denver))
+    await model.cityTask?.value
+    model.handle(.denied)
+    #expect(model.currentCity == nil)
+    model.handle(.location(denver))
+    await model.cityTask?.value
+    #expect(model.currentCity == "Denver")
   }
 }

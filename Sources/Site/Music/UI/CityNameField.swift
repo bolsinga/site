@@ -97,14 +97,12 @@ struct CityNameField: View {
       }
       commit()
     }
-    .onChange(of: focused) { _, isFocused in
-      guard isFocused else { return }
-      #if !os(tvOS)
-        Task {
-          await Task.yield()
-          selectAll()
-        }
-      #endif
-    }
+    #if !os(tvOS)
+      .task(id: focused) {
+        guard focused else { return }
+        await Task.yield()
+        selectAll()
+      }
+    #endif
   }
 }

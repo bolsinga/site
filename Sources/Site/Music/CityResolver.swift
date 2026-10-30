@@ -16,7 +16,13 @@ protocol CityResolver: Sendable {
 struct MapKitCityResolver: CityResolver {
   func city(for location: CLLocation) async throws -> String? {
     guard let request = MKReverseGeocodingRequest(location: location) else { return nil }
-    let mapItems = try await request.mapItems
+    // cancel() is made to be called from another thread.
+    nonisolated(unsafe) let pending = request
+    let mapItems = try await withTaskCancellationHandler {
+      try await pending.mapItems
+    } onCancel: {
+      pending.cancel()
+    }
     return mapItems.lazy.compactMap { $0.addressRepresentations?.cityName }.first
   }
 }
