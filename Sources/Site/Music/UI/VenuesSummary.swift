@@ -26,6 +26,9 @@ struct VenuesSummary: View {
   /// for every keystroke.
   @State private var mapSearchString = ""
   @State private var mapSearchSettled = false
+  #if !os(tvOS)
+    @FocusState private var searchFocused: Bool
+  #endif
 
   @ViewBuilder private var currentCitySuggestions: some View {
     if let city = currentCitySuggestion(current: model.currentCity, searchText: searchString) {
@@ -45,6 +48,15 @@ struct VenuesSummary: View {
         }
       }
     }
+  }
+
+  /// The scope's prompt shows once search is focused.
+  private var searchPrompt: String {
+    #if os(tvOS)
+      scope.searchPrompt
+    #else
+      searchFocused ? scope.searchPrompt : VenueSearchScope.idlePrompt
+    #endif
   }
 
   @ViewBuilder private var scopeOptions: some View {
@@ -84,7 +96,8 @@ struct VenuesSummary: View {
               stats: Stats(
                 statisticsData: model.filteredStatisticsData(
                   nearbyModel, distanceThreshold: nearbyDistance))),
-          scope: scope
+          scope: scope,
+          searchPrompt: searchPrompt
         )
       case .map:
         Color.clear
@@ -102,7 +115,7 @@ struct VenuesSummary: View {
           #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
           #endif
-          .searchable(text: $searchString, prompt: scope.searchPrompt)
+          .searchable(text: $searchString, prompt: searchPrompt)
           #if os(iOS)
             .searchToolbarBehavior(.minimize)
           #endif
@@ -112,6 +125,9 @@ struct VenuesSummary: View {
       .searchScopes($scope) { scopeOptions }
     #else
       .searchScopes($scope, activation: .onSearchPresentation) { scopeOptions }
+    #endif
+    #if !os(tvOS)
+      .searchFocused($searchFocused)
     #endif
     .searchSuggestions {
       currentCitySuggestions

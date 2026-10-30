@@ -20,6 +20,11 @@ enum VenueSearchScope: CaseIterable {
     }
   }
 
+  /// The prompt while search is not active, before a scope is in play.
+  static var idlePrompt: String {
+    String(localized: "Search Venues", comment: "VenueSearchScope idle prompt")
+  }
+
   var searchPrompt: String {
     switch self {
     case .names:

@@ -539,6 +539,9 @@
     "Search for Venues from Concerts based on complex criteria." : {
 
     },
+    "Search Venues" : {
+      "comment" : "VenueSearchScope idle prompt"
+    },
     "See More About This Show" : {
 
     },
