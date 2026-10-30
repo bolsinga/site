@@ -97,6 +97,7 @@ enum LocationAuthorization {
     dayChangeTask?.cancel()
     geocodeTask?.cancel()
     locationTask?.cancel()
+    cityTask?.cancel()
   }
 
   @MainActor

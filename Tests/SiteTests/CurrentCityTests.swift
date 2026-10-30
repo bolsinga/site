@@ -120,6 +120,16 @@ struct CurrentCityTests {
     #expect(model.locationAuthorization == .denied)
   }
 
+  @MainActor @Test func cancellingTheTasksDropsAnInFlightCity() async throws {
+    let model = try await createModel(
+      DelayedResolver(answers: [denver.coordinate.latitude: ("Denver", .milliseconds(100))]))
+    model.handle(.location(denver))
+    let inFlight = try #require(model.cityTask)
+    model.cancelTasks()
+    await inFlight.value
+    #expect(model.currentCity == nil)
+  }
+
   @MainActor @Test func aNewerLocationReplacesAnInFlightCity() async throws {
     let model = try await createModel(
       DelayedResolver(answers: [
