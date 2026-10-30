@@ -67,8 +67,7 @@ struct LocationFilterToolbarContent: ToolbarContent {
       editSettingsAction()
     } label: {
       Label(
-        nearbyModel.mode.isCity
-          ? String(localized: "Edit City…") : String(localized: "Edit Nearby Settings"),
+        String(localized: "Edit Nearby Settings"),
         systemImage: ArchiveCategory.settings.systemImage)
     }
   }
