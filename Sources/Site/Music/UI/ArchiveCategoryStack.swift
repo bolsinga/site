@@ -103,7 +103,10 @@ struct ArchiveCategoryStack: View {
         .navigationDestination(for: ArchivePath.self) {
           $0.destination(
             vault: model.vault, isPathNavigable: path.isPathNavigable(_:),
-            didShowPath: showPath(_:))
+            didShowPath: showPath(_:)
+          )
+          // A pushed page is drawn over the page beneath on macOS, so it needs its own background.
+          .background(.background)
         }
         .toolbar {
           ArchiveCategoryToolbarContent(
