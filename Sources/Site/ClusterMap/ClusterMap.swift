@@ -122,7 +122,7 @@ struct ClusterMap<
     self.memory = memory
   }
 
-  func makeView(context: Context) -> MapContainerView {
+  func makeView(context: Context) -> MapHostView {
     Logger.clusterMap.info("makeView: \(items.count)")
 
     let coordinator = context.coordinator
@@ -159,36 +159,40 @@ struct ClusterMap<
     let entries = items.map { ($0, itemDetails($0)) }
     coordinator.synchronize(entries: entries, mapView: mapView)
 
-    let container = MapContainerView()
-    container.add(mapView)
-    return container
+    #if canImport(UIKit)
+      let container = MapContainerView()
+      container.add(mapView)
+      return container
+    #else
+      return mapView
+    #endif
   }
 
   #if canImport(UIKit)
+    /// SwiftUI keeps a screen's views until it is shown again, so let the map go now.
     static func dismantleUIView(_ uiView: MapContainerView, coordinator: Coordinator) {
-      release(uiView, coordinator: coordinator)
+      guard let mapView = uiView.mapView else { return }
+      coordinator.remember(mapView)
+      uiView.removeMap()
     }
   #else
-    static func dismantleNSView(_ nsView: MapContainerView, coordinator: Coordinator) {
-      release(nsView, coordinator: coordinator)
+    static func dismantleNSView(_ nsView: MKMapView, coordinator: Coordinator) {
+      coordinator.remember(nsView)
     }
   #endif
-
-  /// SwiftUI keeps a screen's views until it is shown again, so let the map go now.
-  private static func release(_ container: MapContainerView, coordinator: Coordinator) {
-    guard let mapView = container.mapView else { return }
-    coordinator.remember(mapView)
-    container.removeMap()
-  }
 
   func makeCoordinator() -> Coordinator {
     Logger.clusterMap.info("makeCoordinator")
     return Coordinator()
   }
 
-  func updateView(_ container: MapContainerView, context: Context) {
+  func updateView(_ host: MapHostView, context: Context) {
     Logger.clusterMap.info("updateView")
-    guard let view = container.mapView else { return }
+    #if canImport(UIKit)
+      guard let view = host.mapView else { return }
+    #else
+      let view = host
+    #endif
 
     let coordinator = context.coordinator
 
@@ -1006,15 +1010,20 @@ struct OnScreenMap<Content: View>: View {
   @State private var isOnScreen = false
 
   var body: some View {
-    Color.clear
-      .background {
-        WindowProbe { isOnScreen = $0 }
-      }
-      .overlay {
-        if isActive && isOnScreen {
-          content(memory)
+    #if os(macOS)
+      // A covered macOS page stays in the window, so only the active state applies.
+      if isActive { content(memory) }
+    #else
+      Color.clear
+        .background {
+          WindowProbe { isOnScreen = $0 }
         }
-      }
+        .overlay {
+          if isActive && isOnScreen {
+            content(memory)
+          }
+        }
+    #endif
   }
 }
 
@@ -1025,31 +1034,30 @@ struct OnScreenMap<Content: View>: View {
 #endif
 
 #if canImport(UIKit)
-  typealias MapContainerBase = UIView
+  typealias MapHostView = MapContainerView
 #else
-  typealias MapContainerBase = NSView
+  // macOS hides a covered page's map view itself, and keeps it in the window.
+  typealias MapHostView = MKMapView
 #endif
 
-/// Holds the map, so the map can be freed while SwiftUI still holds this view.
-final class MapContainerView: MapContainerBase {
-  fileprivate private(set) var mapView: MKMapView?
+#if canImport(UIKit)
+  /// Holds the map, so the map can be freed while SwiftUI still holds this view.
+  final class MapContainerView: UIView {
+    fileprivate private(set) var mapView: MKMapView?
 
-  fileprivate func add(_ mapView: MKMapView) {
-    mapView.frame = bounds
-    #if canImport(UIKit)
+    fileprivate func add(_ mapView: MKMapView) {
+      mapView.frame = bounds
       mapView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-    #else
-      mapView.autoresizingMask = [.width, .height]
-    #endif
-    addSubview(mapView)
-    self.mapView = mapView
-  }
+      addSubview(mapView)
+      self.mapView = mapView
+    }
 
-  fileprivate func removeMap() {
-    mapView?.removeFromSuperview()
-    mapView = nil
+    fileprivate func removeMap() {
+      mapView?.removeFromSuperview()
+      mapView = nil
+    }
   }
-}
+#endif
 
 /// Reports whether it is in a window. A covered page or an unselected tab leaves the window, even
 /// while SwiftUI keeps it.
@@ -1069,6 +1077,7 @@ private struct WindowProbe: ViewRepresentable {
 
 private final class WindowProbeView: PlatformView {
   var onChange: ((Bool) -> Void)?
+  private var pendingReport: Task<Void, Never>?
 
   #if canImport(UIKit)
     override func didMoveToWindow() {
@@ -1083,9 +1092,15 @@ private final class WindowProbeView: PlatformView {
   #endif
 
   private func report(_ isInWindow: Bool) {
+    pendingReport?.cancel()
     // This is called while the window's views are changing, so update SwiftUI a turn later.
-    Task { @MainActor [weak self] in
-      self?.onChange?(isInWindow)
+    pendingReport = Task { @MainActor [weak self] in
+      if !isInWindow {
+        // A page being popped leaves too, and goes away by itself; don't change it mid-pop.
+        try? await Task.sleep(for: .milliseconds(500))
+      }
+      guard !Task.isCancelled, let self, (window != nil) == isInWindow else { return }
+      onChange?(isInWindow)
     }
   }
 }
