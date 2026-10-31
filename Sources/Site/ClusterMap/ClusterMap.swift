@@ -81,6 +81,9 @@ struct ClusterMap<
   /// While searching, the map returns to where it was when the search began if nothing matches.
   let isSearching: Bool
 
+  /// Where the last map for this place was left, so a new one starts there.
+  let memory: MapMemory?
+
   init(
     items: any Collection<Item>,
     anchorY: CGFloat? = nil,
@@ -92,6 +95,7 @@ struct ClusterMap<
     animatesItems: Bool = false,
     fitBottomFraction: Double = 0.0,
     isSearching: Bool = false,
+    memory: MapMemory? = nil,
     itemDetails: @escaping (Item) -> Details,
     onSelect: @escaping (Item) -> Void,
     clusterLabel: @escaping (Int) -> String,
@@ -115,9 +119,10 @@ struct ClusterMap<
     self.animatesItems = animatesItems
     self.fitBottomFraction = fitBottomFraction
     self.isSearching = isSearching
+    self.memory = memory
   }
 
-  func makeView(context: Context) -> MKMapView {
+  func makeView(context: Context) -> MapHostView {
     Logger.clusterMap.info("makeView: \(items.count)")
 
     let coordinator = context.coordinator
@@ -142,6 +147,7 @@ struct ClusterMap<
       mapView.isPitchEnabled = false
     #endif
     refresh(coordinator)
+    coordinator.restore(mapView)
 
     mapView.register(
       ItemAnnotationView.self,
@@ -153,16 +159,40 @@ struct ClusterMap<
     let entries = items.map { ($0, itemDetails($0)) }
     coordinator.synchronize(entries: entries, mapView: mapView)
 
-    return mapView
+    #if canImport(UIKit)
+      let container = MapContainerView()
+      container.add(mapView)
+      return container
+    #else
+      return mapView
+    #endif
   }
+
+  #if canImport(UIKit)
+    /// SwiftUI keeps a screen's views until it is shown again, so let the map go now.
+    static func dismantleUIView(_ uiView: MapContainerView, coordinator: Coordinator) {
+      guard let mapView = uiView.mapView else { return }
+      coordinator.remember(mapView)
+      uiView.removeMap()
+    }
+  #else
+    static func dismantleNSView(_ nsView: MKMapView, coordinator: Coordinator) {
+      coordinator.remember(nsView)
+    }
+  #endif
 
   func makeCoordinator() -> Coordinator {
     Logger.clusterMap.info("makeCoordinator")
     return Coordinator()
   }
 
-  func updateView(_ view: MKMapView, context: Context) {
+  func updateView(_ host: MapHostView, context: Context) {
     Logger.clusterMap.info("updateView")
+    #if canImport(UIKit)
+      guard let view = host.mapView else { return }
+    #else
+      let view = host
+    #endif
 
     let coordinator = context.coordinator
 
@@ -201,6 +231,7 @@ struct ClusterMap<
     coordinator.clustersItems = clustersItems
     coordinator.animatesItems = animatesItems
     coordinator.fitBottomFraction = fitBottomFraction
+    coordinator.memory = memory
   }
 
   final class Coordinator: NSObject, MKMapViewDelegate {
@@ -221,6 +252,7 @@ struct ClusterMap<
     var animatesItems = false
     private var fadingIn = Set<ObjectIdentifier>()
     var fitBottomFraction = 0.0
+    var memory: MapMemory?
     private var resetID: UUID?
     private var didFit = false
     /// Where the fit in progress is going, so its region changes aren't taken as the user's.
@@ -237,6 +269,23 @@ struct ClusterMap<
       #else
         UIAccessibility.isReduceMotionEnabled
       #endif
+    }
+
+    /// Starts a new map where the last one was left, as the person or a fit left it.
+    fileprivate func restore(_ mapView: MKMapView) {
+      guard let memory, let camera = memory.camera else { return }
+      mapView.camera = camera
+      resetID = memory.resetID
+      userMovedMap = memory.userMovedMap
+      didFit = true
+    }
+
+    fileprivate func remember(_ mapView: MKMapView) {
+      mapView.delegate = nil
+      guard let memory else { return }
+      memory.camera = mapView.camera.copy() as? MKMapCamera
+      memory.resetID = resetID
+      memory.userMovedMap = userMovedMap
     }
 
     fileprivate func setSearching(_ isSearching: Bool, mapView: MKMapView) {
@@ -942,6 +991,118 @@ extension MKAnnotationView {
         views.forEach { $0.animator().alphaValue = opacity }
       }, completionHandler: { MainActor.assumeIsolated { completion?() } })
   #endif
+}
+
+/// Where a map was left, kept by the view that shows it while the map itself is released.
+final class MapMemory {
+  fileprivate var camera: MKMapCamera?
+  fileprivate var resetID: UUID?
+  fileprivate var userMovedMap = false
+}
+
+/// Has a map only while it is on screen. A covered or hidden map is released, and the next one
+/// starts where it was left.
+struct OnScreenMap<Content: View>: View {
+  var isActive = true
+  @ViewBuilder let content: (MapMemory) -> Content
+
+  @State private var memory = MapMemory()
+  @State private var isOnScreen = false
+
+  var body: some View {
+    #if os(macOS)
+      // A covered macOS page stays in the window, so only the active state applies.
+      if isActive { content(memory) }
+    #else
+      Color.clear
+        .background {
+          WindowProbe { isOnScreen = $0 }
+        }
+        .overlay {
+          if isActive && isOnScreen {
+            content(memory)
+          }
+        }
+    #endif
+  }
+}
+
+#if canImport(UIKit)
+  private typealias PlatformView = UIView
+#else
+  private typealias PlatformView = NSView
+#endif
+
+#if canImport(UIKit)
+  typealias MapHostView = MapContainerView
+#else
+  // macOS hides a covered page's map view itself, and keeps it in the window.
+  typealias MapHostView = MKMapView
+#endif
+
+#if canImport(UIKit)
+  /// Holds the map, so the map can be freed while SwiftUI still holds this view.
+  final class MapContainerView: UIView {
+    fileprivate private(set) var mapView: MKMapView?
+
+    fileprivate func add(_ mapView: MKMapView) {
+      mapView.frame = bounds
+      mapView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+      addSubview(mapView)
+      self.mapView = mapView
+    }
+
+    fileprivate func removeMap() {
+      mapView?.removeFromSuperview()
+      mapView = nil
+    }
+  }
+#endif
+
+/// Reports whether it is in a window. A covered page or an unselected tab leaves the window, even
+/// while SwiftUI keeps it.
+private struct WindowProbe: ViewRepresentable {
+  let onChange: (Bool) -> Void
+
+  func makeView(context: Context) -> WindowProbeView {
+    let view = WindowProbeView()
+    view.onChange = onChange
+    return view
+  }
+
+  func updateView(_ view: WindowProbeView, context: Context) {
+    view.onChange = onChange
+  }
+}
+
+private final class WindowProbeView: PlatformView {
+  var onChange: ((Bool) -> Void)?
+  private var pendingReport: Task<Void, Never>?
+
+  #if canImport(UIKit)
+    override func didMoveToWindow() {
+      super.didMoveToWindow()
+      report(window != nil)
+    }
+  #else
+    override func viewDidMoveToWindow() {
+      super.viewDidMoveToWindow()
+      report(window != nil)
+    }
+  #endif
+
+  private func report(_ isInWindow: Bool) {
+    pendingReport?.cancel()
+    // This is called while the window's views are changing, so update SwiftUI a turn later.
+    pendingReport = Task { @MainActor [weak self] in
+      if !isInWindow {
+        // A page being popped leaves too, and goes away by itself; don't change it mid-pop.
+        try? await Task.sleep(for: .milliseconds(500))
+      }
+      guard !Task.isCancelled, let self, (window != nil) == isInWindow else { return }
+      onChange?(isInWindow)
+    }
+  }
 }
 
 private final class SizeReportingMapView: MKMapView {
