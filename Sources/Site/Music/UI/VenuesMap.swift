@@ -29,16 +29,18 @@ struct VenuesMap<V: Hashable & Identifiable & Nameable>: View where V.ID == Arch
 
   let items: any Collection<V>
   let searchString: String
+  /// The map is released while it isn't shown.
+  var isActive = true
 
   let navigateToPath: (ArchivePath) -> Void
 
   @State private var shownID = UUID()
   @State private var openedDetail = false
 
-  @ViewBuilder private var clusterMap: some View {
+  @ViewBuilder private func clusterMap(_ memory: MapMemory) -> some View {
     ClusterMap(
       items: items, anchorY: CategoryAnnotationView.tipOffset, resetID: shownID,
-      isSearching: !searchString.isEmpty
+      isSearching: !searchString.isEmpty, memory: memory
     ) {
       model.detail(for: $0)
     } onSelect: { item in
@@ -57,7 +59,7 @@ struct VenuesMap<V: Hashable & Identifiable & Nameable>: View where V.ID == Arch
   }
 
   var body: some View {
-    clusterMap
+    OnScreenMap(isActive: isActive) { clusterMap($0) }
       .ignoresSafeArea()
       .onAppear {
         // Coming back from a venue's detail keeps the map as it was left.

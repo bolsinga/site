@@ -30,12 +30,15 @@ struct VenuesSummary: View {
     let venues = model.nearbyVenues(nearbyModel, distanceThreshold: nearbyDistance)
     let mapVenues = venues.names(filteredBy: mapSearchString)
     ZStack {
-      // The map stays once it has been shown, so toggling back doesn't rebuild it.
+      // The map's place is kept once it has been shown, so toggling back returns to it.
       if mapRequested || mode == .map {
-        VenuesMap(items: mapVenues, searchString: mapSearchString, navigateToPath: navigateToPath)
-          .opacity(mode == .map ? 1 : 0)
-          .allowsHitTesting(mode == .map)
-          .accessibilityHidden(mode != .map)
+        VenuesMap(
+          items: mapVenues, searchString: mapSearchString, isActive: mode == .map,
+          navigateToPath: navigateToPath
+        )
+        .opacity(mode == .map ? 1 : 0)
+        .allowsHitTesting(mode == .map)
+        .accessibilityHidden(mode != .map)
       }
 
       switch mode {

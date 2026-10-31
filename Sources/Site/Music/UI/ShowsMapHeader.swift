@@ -56,23 +56,26 @@ struct ShowsMap: View {
     let places = places
     ZStack {
       if !places.isEmpty || animatesChanges {
-        ClusterMap(
-          items: places, anchorY: dotSize / 2.0, animatesFit: animatesChanges,
-          fitZoomOutFactor: animatesChanges ? dayMapFitZoomOutFactor : detailMapFitZoomOutFactor,
-          isSubdued: true,
-          animatesItems: animatesChanges, fitBottomFraction: animatesChanges ? fadeFraction : 0.0
-        ) {
-          Details(coordinate: $0.coordinate, title: "")
-        } onSelect: { _ in
-        } clusterLabel: {
-          String(localized: "Cluster, \($0) venues")
-        } itemContent: { _ in
-          VenueDot()
-        } itemTitle: { _ in
-          EmptyView()
-        } clusterContent: { _ in
-          // Dots that are close together show as one, with no count.
-          VenueDot()
+        OnScreenMap { memory in
+          ClusterMap(
+            items: places, anchorY: dotSize / 2.0, animatesFit: animatesChanges,
+            fitZoomOutFactor: animatesChanges ? dayMapFitZoomOutFactor : detailMapFitZoomOutFactor,
+            isSubdued: true,
+            animatesItems: animatesChanges, fitBottomFraction: animatesChanges ? fadeFraction : 0.0,
+            memory: memory
+          ) {
+            Details(coordinate: $0.coordinate, title: "")
+          } onSelect: { _ in
+          } clusterLabel: {
+            String(localized: "Cluster, \($0) venues")
+          } itemContent: { _ in
+            VenueDot()
+          } itemTitle: { _ in
+            EmptyView()
+          } clusterContent: { _ in
+            // Dots that are close together show as one, with no count.
+            VenueDot()
+          }
         }
         .allowsHitTesting(false)
         // A kept map with no dots would show the last day's area, so it nearly fades out.
