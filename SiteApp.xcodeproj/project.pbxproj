@@ -51,7 +51,6 @@
 		FE8BA5D33082653F00FC410D /* SiteWidgetsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SiteWidgetsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE8BA5D43082653F00FC410D /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = /System/Library/Frameworks/WidgetKit.framework; sourceTree = "<absolute>"; };
 		FE8BA5D63082653F00FC410D /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = /System/Library/Frameworks/SwiftUI.framework; sourceTree = "<absolute>"; };
-		FE8BA5F430826EEB00FC410D /* SiteWidgetsExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SiteWidgetsExtension.entitlements; sourceTree = "<group>"; };
 		FE9910DC2AC205A70054D229 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		FEC1720F2E70F1E800E8EFC8 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		FEE0AECC2E6E74F5005CE1AB /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -142,7 +141,6 @@
 		FE5360F429CE82CA00618099 = {
 			isa = PBXGroup;
 			children = (
-				FE8BA5F430826EEB00FC410D /* SiteWidgetsExtension.entitlements */,
 				FE9910DC2AC205A70054D229 /* Config.xcconfig */,
 				FEC1720F2E70F1E800E8EFC8 /* README.md */,
 				FE00AB182EB848A4003DE0C6 /* Sources */,
@@ -583,7 +581,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
-				CODE_SIGN_ENTITLEMENTS = SiteWidgetsExtension.entitlements;
+				CODE_SIGN_ENTITLEMENTS = SiteWidgets/SiteWidgetsExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 23;
 				DEVELOPMENT_TEAM = "$(inherited)";
@@ -632,7 +630,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
-				CODE_SIGN_ENTITLEMENTS = SiteWidgetsExtension.entitlements;
+				CODE_SIGN_ENTITLEMENTS = SiteWidgets/SiteWidgetsExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 23;
 				DEVELOPMENT_TEAM = "$(inherited)";
