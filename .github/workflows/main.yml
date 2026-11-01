@@ -25,7 +25,7 @@ jobs:
     - name: Available Xcodes
       run: ls /Applications | grep Xcode
     - name: Switch to Xcode 27
-      run: sudo xcode-select -s "/Applications/Xcode_27.0.app/Contents/Developer"
+      run: sudo xcode-select -s "/Applications/Xcode_27.2.app/Contents/Developer"
     - name: Xcode - Accept License
       run: sudo xcodebuild -license accept
     - name: Xcode - First Launch
@@ -38,6 +38,6 @@ jobs:
       run: xcodebuild -scheme SiteApp -showdestinations
     - name: Build / Test
       if: matrix.destination == 'platform=macOS'
-      run: xcodebuild test -verbose -skipPackagePluginValidation -scheme SiteApp -destination 'platform=macOS' CODE_SIGNING_ALLOWED=NO
+      run: xcodebuild test -verbose -skipPackagePluginValidation -scheme SiteApp -destination 'platform=macOS' CODE_SIGNING_ALLOWED=NO MACOSX_DEPLOYMENT_TARGET="$(sw_vers -productVersion)"
     - name: Build iOS / macOS / tvOS
       run: xcodebuild -verbose -skipPackagePluginValidation -scheme SiteApp -destination '${{ matrix.destination }}'
