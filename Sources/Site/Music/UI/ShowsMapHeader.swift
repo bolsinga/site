@@ -56,22 +56,13 @@ struct ShowsMap: View {
     let places = places
     ZStack {
       if !places.isEmpty || animatesChanges {
-        ClusterMap(
-          items: places, anchorY: dotSize / 2.0, animatesFit: animatesChanges,
+        // Dots that are close together show as one, with no count.
+        SnapshotMap(
+          items: places, coordinate: \.coordinate,
           fitZoomOutFactor: animatesChanges ? dayMapFitZoomOutFactor : detailMapFitZoomOutFactor,
-          isSubdued: true,
-          animatesItems: animatesChanges, fitBottomFraction: animatesChanges ? fadeFraction : 0.0
+          fitBottomFraction: animatesChanges ? fadeFraction : 0.0, dotSize: dotSize,
+          animatesChanges: animatesChanges
         ) {
-          Details(coordinate: $0.coordinate, title: "")
-        } onSelect: { _ in
-        } clusterLabel: {
-          String(localized: "Cluster, \($0) venues")
-        } itemContent: { _ in
-          VenueDot()
-        } itemTitle: { _ in
-          EmptyView()
-        } clusterContent: { _ in
-          // Dots that are close together show as one, with no count.
           VenueDot()
         }
         .allowsHitTesting(false)
