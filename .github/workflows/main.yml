@@ -38,6 +38,6 @@ jobs:
       run: xcodebuild -scheme SiteApp -showdestinations
     - name: Build / Test
       if: matrix.destination == 'platform=macOS'
-      run: xcodebuild test -verbose -skipPackagePluginValidation -scheme SiteApp -destination 'platform=macOS' CODE_SIGNING_ALLOWED=NO
+      run: xcodebuild test -verbose -skipPackagePluginValidation -scheme SiteApp -destination 'platform=macOS' CODE_SIGNING_ALLOWED=NO MACOSX_DEPLOYMENT_TARGET="$(sw_vers -productVersion)"
     - name: Build iOS / macOS / tvOS
       run: xcodebuild -verbose -skipPackagePluginValidation -scheme SiteApp -destination '${{ matrix.destination }}'
