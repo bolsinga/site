@@ -110,6 +110,8 @@ struct SnapshotMap<Item: Identifiable, Dot: View>: View {
   let dotSize: CGFloat
   /// Whether a new map fades in over the last one.
   var animatesChanges = false
+  /// The items of the maps either side, made ahead into the cache so paging shows them at once.
+  var neighborItems: [[Item]] = []
   @ViewBuilder let dot: () -> Dot
 
   @Environment(\.colorScheme) private var colorScheme
@@ -121,7 +123,9 @@ struct SnapshotMap<Item: Identifiable, Dot: View>: View {
   /// How much of the top inset, the bars, items may spill into above and below the clear area.
   private static var spillFraction: CGFloat { 0.45 }
 
-  private var coordinates: [CLLocationCoordinate2D] {
+  private var coordinates: [CLLocationCoordinate2D] { coordinates(of: items) }
+
+  private func coordinates(of items: [Item]) -> [CLLocationCoordinate2D] {
     items.map(coordinate).filter(CLLocationCoordinate2DIsValid)
   }
 
@@ -148,7 +152,9 @@ struct SnapshotMap<Item: Identifiable, Dot: View>: View {
       width: size.width * mapPointsPerPoint, height: size.height * mapPointsPerPoint)
   }
 
-  private var request: SnapshotRequest? {
+  private var request: SnapshotRequest? { request(for: coordinates) }
+
+  private func request(for coordinates: [CLLocationCoordinate2D]) -> SnapshotRequest? {
     let size = CGSize(width: size.width.rounded(), height: size.height.rounded())
     guard size.width > 0, size.height > 0, let mapRect = fittedRect(for: coordinates) else {
       return nil
@@ -156,6 +162,14 @@ struct SnapshotMap<Item: Identifiable, Dot: View>: View {
     return SnapshotRequest(
       mapRect: mapRect, size: size, isDark: colorScheme == .dark, scale: displayScale,
       coordinates: coordinates)
+  }
+
+  /// What to make ahead: the maps either side, at this map's size and appearance.
+  private var neighborRequests: [(SnapshotRequest, [CLLocationCoordinate2D])] {
+    neighborItems.compactMap { items in
+      let coordinates = coordinates(of: items)
+      return request(for: coordinates).map { ($0, coordinates) }
+    }
   }
 
   /// Where the dots go; dots closer together than a dot show as one.
@@ -192,16 +206,25 @@ struct SnapshotMap<Item: Identifiable, Dot: View>: View {
     .onGeometryChange(for: CGSize.self) { $0.size } action: { size = $0 }
     .onGeometryChange(for: EdgeInsets.self) { $0.safeAreaInsets } action: { insets = $0 }
     .task(id: request) {
+      let neighborRequests = neighborRequests
       // With no items there is nothing to fit, so the last map stays.
-      guard let request else { return }
-      await show(request, coordinates: coordinates)
+      if let request, let shown = await snapshot(for: request, coordinates: coordinates) {
+        present(shown)
+      }
+      // One at a time, after this map, and given up when this map changes.
+      for (request, coordinates) in neighborRequests {
+        guard !Task.isCancelled else { return }
+        _ = await snapshot(for: request, coordinates: coordinates)
+      }
     }
   }
 
-  private func show(_ request: SnapshotRequest, coordinates: [CLLocationCoordinate2D]) async {
+  /// The cached map for the request, or a new one, which is cached.
+  private func snapshot(
+    for request: SnapshotRequest, coordinates: [CLLocationCoordinate2D]
+  ) async -> ShownSnapshot? {
     if let cached = snapshotCache.object(forKey: request.cacheKey) {
-      present(cached)
-      return
+      return cached
     }
 
     let options = MKMapSnapshotter.Options()
@@ -226,15 +249,17 @@ struct SnapshotMap<Item: Identifiable, Dot: View>: View {
       } onCancel: {
         snapshotter.cancel()
       }
-      guard !Task.isCancelled else { return }
+      guard !Task.isCancelled else { return nil }
       let shown = ShownSnapshot(
         request: request, image: snapshot.image,
         dotPoints: dotPoints(in: snapshot, for: coordinates))
       snapshotCache.setObject(shown, forKey: request.cacheKey, cost: shown.cost)
-      present(shown)
+      return shown
     } catch {
-      guard !Task.isCancelled else { return }
-      Logger.snapshotMap.error("snapshot failed: \(error, privacy: .public)")
+      if !Task.isCancelled {
+        Logger.snapshotMap.error("snapshot failed: \(error, privacy: .public)")
+      }
+      return nil
     }
   }
 

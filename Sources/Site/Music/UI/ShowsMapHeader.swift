@@ -41,8 +41,12 @@ struct ShowsMap: View {
   let shows: [ShowDigest]
   /// Keeps the map when there are no shows, and glides and fades as the shows change.
   var animatesChanges = false
+  /// The shows of the pages either side, whose maps are made ahead so paging shows them at once.
+  var neighborShows: [[ShowDigest]] = []
 
-  private var places: [VenuePlace] {
+  private var places: [VenuePlace] { places(for: shows) }
+
+  private func places(for shows: [ShowDigest]) -> [VenuePlace] {
     var seen = Set<ArchivePath>()
     return shows.compactMap { show in
       guard seen.insert(show.venueID).inserted,
@@ -61,7 +65,7 @@ struct ShowsMap: View {
           items: places, coordinate: \.coordinate,
           fitZoomOutFactor: animatesChanges ? dayMapFitZoomOutFactor : detailMapFitZoomOutFactor,
           fitBottomFraction: animatesChanges ? fadeFraction : 0.0, dotSize: dotSize,
-          animatesChanges: animatesChanges
+          animatesChanges: animatesChanges, neighborItems: neighborShows.map(places(for:))
         ) {
           VenueDot()
         }
@@ -85,9 +89,10 @@ struct ShowsMapHeader: View {
   let title: String
   var location: Location?
   var animatesChanges = false
+  var neighborShows: [[ShowDigest]] = []
 
   var body: some View {
-    ShowsMap(shows: shows, animatesChanges: animatesChanges)
+    ShowsMap(shows: shows, animatesChanges: animatesChanges, neighborShows: neighborShows)
       .containerRelativeFrame(.vertical) { height, _ in height * 0.45 }
       .mask(
         LinearGradient(

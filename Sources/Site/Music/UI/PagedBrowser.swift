@@ -30,7 +30,8 @@ struct PagedBrowser<Item: Hashable, Digest: ArchiveSharable, Header: View, Page:
   let title: (Item, Digest?) -> String
   /// Called with the item the pager settles on, so the navigation path names the item shown.
   let didShow: (Item) -> Void
-  @ViewBuilder let header: (Item, Digest?) -> Header
+  /// The header for an item, given its neighbors' digests to have ready for paging.
+  @ViewBuilder let header: (Item, Digest?, [Digest]) -> Header
   /// A page for an item's digest, given room to leave clear under its last card.
   @ViewBuilder let page: (Digest, CGFloat) -> Page
 
@@ -121,8 +122,11 @@ struct PagedBrowser<Item: Hashable, Digest: ArchiveSharable, Header: View, Page:
     let displayed = displayedItem
     let displayedDigest = digest(displayed)
     // One header stays behind the pages; its content changes as the pages are paged.
+    let displayedNeighbors = neighbors(displayed)
+    let neighborDigests = [displayedNeighbors.previous, displayedNeighbors.next]
+      .filter { $0 != displayed }.compactMap(digest)
     ZStack(alignment: .top) {
-      header(displayed, displayedDigest)
+      header(displayed, displayedDigest, neighborDigests)
         .onGeometryChange(for: CGFloat.self) {
           $0.size.height
         } action: {

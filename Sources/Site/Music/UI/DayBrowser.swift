@@ -92,7 +92,11 @@ struct DayBrowser: View {
     let title = String(localized: day.relativeTitle)
     // One map stays behind the pages; its shows change as the pages are paged.
     ZStack(alignment: .top) {
-      ShowsMapHeader(shows: model.concerts(on: day), title: title, animatesChanges: true)
+      ShowsMapHeader(
+        shows: model.concerts(on: day), title: title, animatesChanges: true,
+        neighborShows: [
+          model.concerts(on: day.previousDayOfLeapYear), model.concerts(on: day.nextDayOfLeapYear),
+        ])
         .onGeometryChange(for: CGFloat.self) {
           $0.size.height
         } action: {
