@@ -74,6 +74,10 @@ public struct Bracket: Codable, Sendable {
   /// Aggregated ranking metrics for each day of the leap year (1...366) that has shows, keyed by
   /// the day: venues are the span ranking and artists the associated ranking, as for an annum.
   let dayRankDigestMap: [Int: RankDigest]
+  /// How many artists have a first set, which is the rank of the most recent one.
+  let artistFirstSetCount: Int
+  /// How many venues have a first set, which is the rank of the most recent one.
+  let venueFirstSetCount: Int
   /// Shows grouped by year (annum).
   let annumShows: [ArchivePath: Set<ArchivePath>]
   /// Maps a day-of-leap-year index (1...366) to the set of show `ID`s that occurred on that day.
@@ -116,6 +120,12 @@ public struct Bracket: Codable, Sendable {
       sections: venueSortTokens.mapValues { $0.librarySection })
     self.annumRankDigestMap = try await tracker.annumRankDigests()
     self.dayRankDigestMap = try await tracker.dayRankDigests()
+    self.artistFirstSetCount =
+      artistRankDigestMap.values.filter { $0.firstSet.rank != .unknown }
+      .count
+    self.venueFirstSetCount =
+      venueRankDigestMap.values.filter { $0.firstSet.rank != .unknown }
+      .count
     self.annumShows = try await tracker.annumShows
     self.concertDayMap = try await tracker.dayOfLeapYearShows
     self.artistShows = try await tracker.artistShows

@@ -1,7 +1,10 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "**%@** First Set" : {
+    "**%@** Artist" : {
+
+    },
+    "**%@** Venue" : {
 
     },
     "**%lld** Artists" : {
@@ -145,6 +148,16 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "%1$@ Count: %2$@"
+          }
+        }
+      }
+    },
+    "%@ of %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ of %2$lld"
           }
         }
       }

@@ -55,6 +55,8 @@ struct StatRow: View {
   var ranking: Ranking?
   /// Where the ranking sits among all the items, shown in place of the rank when there is one.
   var rankChart: RankChartData?
+  /// Where the item was first seen among all the items, shown as a line on the right.
+  var firstSetOrder: FirstSetOrder?
   /// How many of the count were first seen, shown after it when there are any.
   var newCount: Int?
   /// How many of the count were seen for the most recent time, shown after it when there are any.
@@ -65,12 +67,13 @@ struct StatRow: View {
 
   init(
     text: AttributedString, ranking: Ranking? = nil, rankChart: RankChartData? = nil,
-    newCount: Int? = nil, mostRecentCaption: LocalizedStringResource? = nil,
-    animatesChanges: Bool = true
+    firstSetOrder: FirstSetOrder? = nil, newCount: Int? = nil,
+    mostRecentCaption: LocalizedStringResource? = nil, animatesChanges: Bool = true
   ) {
     self.text = text
     self.ranking = ranking
     self.rankChart = rankChart
+    self.firstSetOrder = firstSetOrder
     self.newCount = newCount
     self.mostRecentCaption = mostRecentCaption
     self.animatesChanges = animatesChanges
@@ -94,6 +97,16 @@ struct StatRow: View {
       if run.inlinePresentationIntent?.contains(.stronglyEmphasized) == true {
         styled[run.range].font = .largeTitle.bold()
         styled[run.range].foregroundColor = .primary
+        // An ordinal's suffix, the "th" of "12th", is in small caps.
+        let characters = text.characters[run.range]
+        if let lastDigit = characters.lastIndex(where: \.isNumber) {
+          let suffixStart = text.characters.index(after: lastDigit)
+          if suffixStart < run.range.upperBound {
+            styled[lastDigit..<suffixStart].kern = 3
+            styled[suffixStart..<run.range.upperBound].font = .largeTitle.bold()
+              .uppercaseSmallCaps()
+          }
+        }
         let last = text.characters.index(before: run.range.upperBound)
         styled[last..<run.range.upperBound].kern = 6
       } else {
@@ -160,6 +173,9 @@ struct StatRow: View {
           presentation: .card
         )
         .frame(width: 96)
+      } else if let firstSetOrder {
+        FirstSetLine(order: firstSetOrder)
+          .frame(width: 96)
       } else if let ranking, ranking.rank != .unknown {
         Text(ranking.formatted(.rankOnly))
           .font(.title3)
@@ -309,14 +325,27 @@ struct StatsCard: View {
   var body: some View {
     DetailCard(title: Text("Stats")) {
       StatRows {
-        if let firstSetRank, firstSetRank != .unknown {
-          StatRow(text: AttributedString(localized: "**\(firstSetRank.formatted())** First Set"))
+        if let firstSetRow {
+          firstSetRow
         }
         ForEach(stats.categories(weekdayOrMonthChartConcertThreshold: statsThreshold), id: \.self) {
           row(for: $0)
         }
       }
     }
+  }
+
+  /// The order the artist or venue was first seen in, as "12th Artist".
+  private var firstSetRow: StatRow? {
+    guard case .rank(let rank) = firstSetRank, let rankKind else { return nil }
+    let order = FirstSetOrder(rank: rank, count: model.vault.firstSetCount(rankKind))
+    let text: AttributedString
+    switch rankKind {
+    case .artist: text = AttributedString(localized: "**\(order.ordinal)** Artist")
+    case .venue: text = AttributedString(localized: "**\(order.ordinal)** Venue")
+    case .annum, .day: return nil
+    }
+    return StatRow(text: text, firstSetOrder: order)
   }
 
   /// How a row's ranking is charted against every item of the kind, when it can be.

@@ -30,9 +30,10 @@ struct YearBrowser: View {
     PagedBrowser(
       item: annum, neighbors: { $0.neighbors(in: annums) }, digest: digest, url: url,
       title: { annum, _ in annum.formatted() }, didShow: didShowAnnum
-    ) { annum, digest in
+    ) { annum, digest, neighbors in
       ShowsMapHeader(
-        shows: digest?.shows ?? [], title: annum.formatted(), animatesChanges: true)
+        shows: digest?.shows ?? [], title: annum.formatted(), animatesChanges: true,
+        neighborShows: neighbors.map(\.shows))
     } page: { digest, bottomContentMargin in
       YearDetail(
         digest: digest, url: url(digest), isPathNavigable: isPathNavigable,

@@ -22,10 +22,10 @@ struct VenueBrowser: View {
     PagedBrowser(
       item: id, neighbors: { venueIDs.wrappingNeighbors(of: $0) }, digest: digest, url: url,
       title: { _, digest in digest?.name ?? "" }, didShow: didShow
-    ) { _, digest in
+    ) { _, digest, neighbors in
       ShowsMapHeader(
         shows: digest?.shows ?? [], title: digest?.name ?? "", location: digest?.location,
-        animatesChanges: true)
+        animatesChanges: true, neighborShows: neighbors.map(\.shows))
     } page: { digest, bottomContentMargin in
       VenueDetail(
         digest: digest, isPathNavigable: isPathNavigable,

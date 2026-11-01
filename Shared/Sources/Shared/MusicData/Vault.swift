@@ -166,6 +166,10 @@ public struct Vault: Sendable {
     lookup.rankDistribution(kind, metric)
   }
 
+  public func firstSetCount(_ kind: RankKind) -> Int {
+    lookup.firstSetCount(kind)
+  }
+
   public func digest(annum: Annum) -> AnnumDigest? {
     lookup.annumDigest(annum: annum)
   }

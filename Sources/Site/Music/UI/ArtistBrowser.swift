@@ -22,9 +22,10 @@ struct ArtistBrowser: View {
     PagedBrowser(
       item: id, neighbors: { artistIDs.wrappingNeighbors(of: $0) }, digest: digest, url: url,
       title: { _, digest in digest?.name ?? "" }, didShow: didShow
-    ) { _, digest in
+    ) { _, digest, neighbors in
       ShowsMapHeader(
-        shows: digest?.shows ?? [], title: digest?.name ?? "", animatesChanges: true)
+        shows: digest?.shows ?? [], title: digest?.name ?? "", animatesChanges: true,
+        neighborShows: neighbors.map(\.shows))
     } page: { digest, bottomContentMargin in
       ArtistDetail(
         digest: digest, isPathNavigable: isPathNavigable,
