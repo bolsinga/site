@@ -178,7 +178,13 @@ struct SnapshotMap<Item: Identifiable, Dot: View>: View {
   ) -> [CGPoint] {
     var points = [CGPoint]()
     for coordinate in coordinates {
-      let point = snapshot.point(for: coordinate)
+      #if canImport(UIKit)
+        let point = snapshot.point(for: coordinate)
+      #else
+        // AppKit's snapshot points start at the bottom of the image; SwiftUI's start at the top.
+        let flipped = snapshot.point(for: coordinate)
+        let point = CGPoint(x: flipped.x, y: snapshot.image.size.height - flipped.y)
+      #endif
       guard !points.contains(where: { hypot($0.x - point.x, $0.y - point.y) < dotSize }) else {
         continue
       }
