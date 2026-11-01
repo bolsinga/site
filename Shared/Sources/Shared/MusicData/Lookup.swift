@@ -224,6 +224,15 @@ public struct Lookup: Codable, Sendable {
     return RankDistribution(rankings: digests.map { $0.ranking(for: metric) })
   }
 
+  /// How many artists or venues have a first set, which is the last first set's rank.
+  func firstSetCount(_ kind: RankKind) -> Int {
+    switch kind {
+    case .artist: bracket.artistFirstSetCount
+    case .venue: bracket.venueFirstSetCount
+    case .annum, .day: 0
+    }
+  }
+
   public var annumShows: [ArchivePath: Set<ArchivePath>] {
     bracket.annumShows
   }
