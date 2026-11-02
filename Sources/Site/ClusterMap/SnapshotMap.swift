@@ -208,7 +208,10 @@ struct SnapshotMap<Item: Identifiable, Dot: View>: View {
         .transition(.opacity)
       }
     }
-    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+    // Takes the size offered, so a map made for a larger size can't keep it that large.
+    .frame(
+      minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading
+    )
     .onGeometryChange(for: CGSize.self) { $0.size } action: { size = $0 }
     .onGeometryChange(for: EdgeInsets.self) { $0.safeAreaInsets } action: { insets = $0 }
     .task(id: request) {
