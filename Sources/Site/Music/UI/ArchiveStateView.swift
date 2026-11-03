@@ -15,6 +15,7 @@ extension Logger {
 
 struct ArchiveStateView: View {
   @Environment(VaultModel.self) var model
+  @Environment(\.scenePhase) private var scenePhase
 
   @SceneStorage("venue.sort") private var venueSort = RankingSort.alphabetical
   @SceneStorage("artist.sort") private var artistSort = RankingSort.alphabetical
@@ -22,6 +23,9 @@ struct ArchiveStateView: View {
   @SceneStorage("nearby.state") private var nearbyModel = NearbyModel()
   @SceneStorage("venues.mode") private var venuesMode = VenuesMode.default
   @SceneStorage("shows.sort.descending") private var showsDescending = false
+
+  /// Changes each time a link asks for today, to show today even when it hasn't changed.
+  @State private var todayRequest = 0
 
   @Binding var pendingExternalEvent: ExternalEvent?
   let reloadModel: @MainActor () async -> Void
@@ -49,6 +53,7 @@ struct ArchiveStateView: View {
           artistSort: $artistSort,
           venuesMode: $venuesMode,
           showsDescending: $showsDescending,
+          todayRequest: todayRequest,
           activeCategory: $archiveNavigation.category,
           pathForCategory: {
             switch $0 {
@@ -95,7 +100,10 @@ struct ArchiveStateView: View {
         guard let pendingExternalEvent else { return }
         switch pendingExternalEvent.kind {
         case .url(let url):
-          archiveNavigation.openURL(url)
+          if archiveNavigation.openURL(url) == .today {
+            model.refreshToday()
+            todayRequest += 1
+          }
         case .path(let activity):
           archiveNavigation.pathActivity(activity)
         case .category(let activity):
@@ -105,6 +113,9 @@ struct ArchiveStateView: View {
           if activity.archiveCategory == .venues { venuesMode = .grouped }
         }
         self.pendingExternalEvent = nil
+      }
+      .onChange(of: scenePhase) {
+        if scenePhase == .active { model.refreshToday() }
       }
       .advertiseUserActivity(
         for: archiveNavigation.activity, urlForCategory: { model.vault.url(for: $0) },

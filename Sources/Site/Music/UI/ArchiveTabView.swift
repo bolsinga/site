@@ -37,6 +37,8 @@ struct ArchiveTabView: View {
   @Binding var artistSort: RankingSort
   @Binding var venuesMode: VenuesMode
   @Binding var showsDescending: Bool
+  /// Changes each time a link asks for today.
+  let todayRequest: Int
 
   @Binding var activeCategory: ArchiveCategory
   let pathForCategory: (ArchiveCategory) -> Binding<[ArchivePath]>
@@ -53,6 +55,7 @@ struct ArchiveTabView: View {
     artistSort: Binding<RankingSort>,
     venuesMode: Binding<VenuesMode>,
     showsDescending: Binding<Bool>,
+    todayRequest: Int,
     activeCategory: Binding<ArchiveCategory>,
     pathForCategory: @escaping (ArchiveCategory) -> Binding<[ArchivePath]>,
     reloadModel: @escaping @MainActor () async -> Void,
@@ -62,6 +65,7 @@ struct ArchiveTabView: View {
     self._artistSort = artistSort
     self._venuesMode = venuesMode
     self._showsDescending = showsDescending
+    self.todayRequest = todayRequest
     self._activeCategory = activeCategory
     self.pathForCategory = pathForCategory
     self.reloadModel = reloadModel
@@ -139,6 +143,9 @@ struct ArchiveTabView: View {
     .onChange(of: model.todayDayOfLeapYear) { _, newValue in
       dayOfLeapYear = newValue
     }
+    .onChange(of: todayRequest) {
+      dayOfLeapYear = model.todayDayOfLeapYear
+    }
     .onChange(of: dayOfLeapYear) { _, newValue in
       if selectedTab.category.tracksDayOfLeapYear {
         selectedTab = TabSelection(category: selectedTab.category, dayOfLeapYear: newValue)
@@ -169,6 +176,7 @@ struct ArchiveTabView: View {
     artistSort: $artistSort,
     venuesMode: $venuesMode,
     showsDescending: $showsDescending,
+    todayRequest: 0,
     activeCategory: $category
   ) { _ in
     .constant([])

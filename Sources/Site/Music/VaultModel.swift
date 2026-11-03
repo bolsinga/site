@@ -167,10 +167,18 @@ enum LocationAuthorization {
     for await _ in NotificationCenter.default.notifications(named: .NSCalendarDayChanged).map({
       $0.name
     }) {
-      todayDayOfLeapYear = Date.now.dayOfLeapYear
-
-      Logger.vaultModel.log("Today dayOfLeapYear: \(self.todayDayOfLeapYear, privacy: .public)")
+      refreshToday()
     }
+  }
+
+  /// Catches up with the calendar, which the day change notification may not have done after a resume.
+  @MainActor
+  func refreshToday() {
+    let today = Date.now.dayOfLeapYear
+    guard today != todayDayOfLeapYear else { return }
+    todayDayOfLeapYear = today
+
+    Logger.vaultModel.log("Today dayOfLeapYear: \(self.todayDayOfLeapYear, privacy: .public)")
   }
 
   @MainActor

@@ -36,19 +36,22 @@ extension ArchiveNavigation {
     self.navigate(to: category)
   }
 
-  func openURL(_ url: URL) {
+  /// Returns the category whose list the URL opened, or nil when it opened a page or nothing.
+  @discardableResult
+  func openURL(_ url: URL) -> ArchiveCategory? {
     Logger.externalEvent.log("openURL: \(url.absoluteString, privacy: .public)")
     if let archivePath = try? ArchivePath(url) {
       self.navigate(to: archivePath)
-    } else {
-      Logger.externalEvent.error("url not path")
-
-      if let archiveCategory = try? ArchiveCategory(url) {
-        // A link to a category (e.g. the Shows Today widget) means its list, not a page left open.
-        self.navigate(toRootOf: archiveCategory)
-      } else {
-        Logger.externalEvent.error("url not category")
-      }
+      return nil
     }
+    Logger.externalEvent.error("url not path")
+
+    guard let archiveCategory = try? ArchiveCategory(url) else {
+      Logger.externalEvent.error("url not category")
+      return nil
+    }
+    // A link to a category (e.g. the Shows Today widget) means its list, not a page left open.
+    self.navigate(toRootOf: archiveCategory)
+    return archiveCategory
   }
 }
