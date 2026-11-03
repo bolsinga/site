@@ -204,6 +204,16 @@
         }
       }
     },
+    "%lld in %@, %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld in %2$@, %3$@"
+          }
+        }
+      }
+    },
     "%lld Last Seen" : {
 
     },
@@ -268,6 +278,9 @@
           }
         }
       }
+    },
+    "%lld Venues" : {
+
     },
     "%lld Year(s)" : {
       "localizations" : {
@@ -459,6 +472,9 @@
     "From" : {
 
     },
+    "Geocoding Venues" : {
+
+    },
     "Geocoding…" : {
 
     },
@@ -531,6 +547,9 @@
     "No concerts found." : {
 
     },
+    "No Longer Shared" : {
+
+    },
     "No Matches" : {
 
     },
@@ -541,6 +560,9 @@
 
     },
     "No Street" : {
+
+    },
+    "No street, so the city center" : {
 
     },
     "No venues are in this city. Disable the Location Filter or edit the city." : {
@@ -625,6 +647,9 @@
     "Retry" : {
 
     },
+    "Same address" : {
+
+    },
     "Search for Artists from Concerts based on complex criteria." : {
 
     },
@@ -644,6 +669,9 @@
 
     },
     "See Shows With This Artist" : {
+
+    },
+    "Shared Locations" : {
 
     },
     "show" : {
@@ -722,6 +750,9 @@
 
     },
     "Unpicked" : {
+
+    },
+    "Vague address" : {
 
     },
     "Value" : {
