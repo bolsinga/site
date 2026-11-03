@@ -66,12 +66,33 @@ extension VenuePickStatus {
   }
 }
 
+extension SharedLocation.Cause {
+  var label: LocalizedStringResource {
+    switch self {
+    case .noStreet: "No street, so the city center"
+    case .sameAddress: "Same address"
+    case .vagueAddress: "Vague address"
+    }
+  }
+}
+
+extension VenuePickStore {
+  func binding(for venueID: String) -> Binding<VenuePick?> {
+    Binding(get: { self[venueID] }, set: { self[venueID] = $0 })
+  }
+}
+
+enum VenuePlacesSelection: Hashable {
+  case venue(ArchivePath)
+  case sharedLocation(SharedLocation.Key)
+}
+
 struct VenuePlacesSplitView: View {
   @Environment(VaultModel.self) private var model
   let store: VenuePickStore
 
   @State private var digests: [VenueDigest] = []
-  @State private var selection: ArchivePath?
+  @State private var selection: VenuePlacesSelection?
   @State private var filter = VenuePlacesFilter.all
   @State private var searchString = ""
 
@@ -82,16 +103,60 @@ struct VenuePlacesSplitView: View {
     }
   }
 
-  private var selectedDigest: VenueDigest? {
-    digests.first { $0.id == selection }
+  private var sharedLocations: [SharedLocation] {
+    SharedLocation.groups(of: digests.map { .init(id: $0.id, location: $0.location) }) {
+      model.venueMapItemMap[$0]?.location.coordinate
+    }
+  }
+
+  private func digest(_ id: ArchivePath) -> VenueDigest? {
+    digests.first { $0.id == id }
+  }
+
+  @ViewBuilder private var sharedLocationsSection: some View {
+    Section("Shared Locations") {
+      if model.geocodingInProgress {
+        ProgressView(value: model.geocodingProgress) {
+          Text("Geocoding Venues")
+        }
+      } else {
+        ForEach(sharedLocations) { sharedLocation in
+          SharedLocationRow(sharedLocation: sharedLocation)
+            .tag(VenuePlacesSelection.sharedLocation(sharedLocation.id))
+        }
+      }
+    }
+  }
+
+  @ViewBuilder private var detail: some View {
+    switch selection {
+    case .venue(let id):
+      if let digest = digest(id) {
+        VenuePlaceDetail(digest: digest, pick: store.binding(for: digest.venue.id))
+      }
+    case .sharedLocation(let key):
+      if let sharedLocation = sharedLocations.first(where: { $0.id == key }) {
+        SharedLocationDetail(
+          sharedLocation: sharedLocation,
+          digests: sharedLocation.venues.compactMap { digest($0.id) }, store: store
+        )
+        .id(key)
+      } else {
+        ContentUnavailableView("No Longer Shared", systemImage: "mappin.slash")
+      }
+    case nil:
+      ContentUnavailableView("Choose a Venue", systemImage: "mappin.and.ellipse")
+    }
   }
 
   var body: some View {
     NavigationSplitView {
       List(selection: $selection) {
+        sharedLocationsSection
         Section("All Venues") {
           ForEach(shownDigests) { digest in
             VenuePlaceRow(digest: digest, status: VenuePickStatus(store[digest.venue.id]))
+              .tag(VenuePlacesSelection.venue(digest.id))
           }
         }
       }
@@ -102,15 +167,7 @@ struct VenuePlacesSplitView: View {
       #endif
       .navigationSplitViewColumnWidth(min: 240, ideal: 300)
     } detail: {
-      if let selectedDigest {
-        VenuePlaceDetail(
-          digest: selectedDigest,
-          pick: Binding(
-            get: { store[selectedDigest.venue.id] },
-            set: { store[selectedDigest.venue.id] = $0 }))
-      } else {
-        ContentUnavailableView("Choose a Venue", systemImage: "mappin.and.ellipse")
-      }
+      detail
     }
     .toolbar {
       Picker("Filter", selection: $filter) {
@@ -122,10 +179,12 @@ struct VenuePlacesSplitView: View {
     }
     .overlay(alignment: .bottom) {
       if let readError = store.readError {
-        Text("The saved picks can't be read, so changes aren't saved: \(readError.localizedDescription)")
-          .padding()
-          .background(.red.opacity(0.2), in: .rect(cornerRadius: 8))
-          .padding()
+        Text(
+          "The saved picks can't be read, so changes aren't saved: \(readError.localizedDescription)"
+        )
+        .padding()
+        .background(.red.opacity(0.2), in: .rect(cornerRadius: 8))
+        .padding()
       }
     }
     .task(id: ObjectIdentifier(model)) {
@@ -134,7 +193,22 @@ struct VenuePlacesSplitView: View {
   }
 }
 
-private struct VenuePlaceRow: View {
+private struct SharedLocationRow: View {
+  let sharedLocation: SharedLocation
+
+  var body: some View {
+    VStack(alignment: .leading) {
+      if let first = sharedLocation.venues.first {
+        Text("\(sharedLocation.venues.count) in \(first.location.city), \(first.location.state)")
+      }
+      Text(sharedLocation.cause.label)
+        .font(.caption)
+        .foregroundStyle(.secondary)
+    }
+  }
+}
+
+struct VenuePlaceRow: View {
   let digest: VenueDigest
   let status: VenuePickStatus
 
