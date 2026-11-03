@@ -30,6 +30,13 @@ struct SiteAppApp: App {
     #endif
     #if os(macOS)
       Settings { SettingsView() }
+      // The command opens it only where the tool is enabled, so the window menu doesn't list it.
+      Window("Venue Places", id: VenuePlaces.windowID) {
+        VenuePlacesView(model: model)
+      }
+      .commandsReplaced { VenuePlacesCommand() }
+      .defaultLaunchBehavior(.suppressed)
+      .restorationBehavior(.disabled)
     #endif
   }
 }

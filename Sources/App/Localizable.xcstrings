@@ -309,6 +309,9 @@
     "All States with Shows" : {
 
     },
+    "All Venues" : {
+
+    },
     "All Weekdays with Shows" : {
 
     },
@@ -348,6 +351,9 @@
     "Category" : {
 
     },
+    "Choose a Venue" : {
+
+    },
     "City" : {
 
     },
@@ -355,6 +361,9 @@
 
     },
     "City Name" : {
+
+    },
+    "Clear" : {
 
     },
     "Clear City" : {
@@ -393,6 +402,9 @@
     "Concerts Today" : {
 
     },
+    "Copy JSON" : {
+
+    },
     "Count" : {
 
     },
@@ -426,6 +438,9 @@
     "Edit Nearby Settings" : {
 
     },
+    "Filter" : {
+
+    },
     "Filter City" : {
 
     },
@@ -433,6 +448,9 @@
 
     },
     "Filter Nearby" : {
+
+    },
+    "First" : {
 
     },
     "Found %lld concerts." : {
@@ -447,7 +465,13 @@
     "Geocoding…" : {
 
     },
+    "Headliners" : {
+
+    },
     "Invalid Data." : {
+
+    },
+    "Last" : {
 
     },
     "Lineup" : {
@@ -513,6 +537,15 @@
     "No Matches" : {
 
     },
+    "No Place" : {
+
+    },
+    "No street" : {
+
+    },
+    "No Street" : {
+
+    },
     "No venues are in this city. Disable the Location Filter or edit the city." : {
 
     },
@@ -556,6 +589,25 @@
 
     },
     "Performers" : {
+
+    },
+    "Pick" : {
+
+    },
+    "Picked" : {
+
+    },
+    "Pin: %lf, %lf" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Pin: %1$lf, %2$lf"
+          }
+        }
+      }
+    },
+    "Place: %@" : {
 
     },
     "Punctuation" : {
@@ -657,6 +709,9 @@
     "The category does not have a URL." : {
 
     },
+    "The saved picks can't be read, so changes aren't saved: %@" : {
+
+    },
     "To" : {
 
     },
@@ -667,6 +722,9 @@
 
     },
     "Unknown Date" : {
+
+    },
+    "Unpicked" : {
 
     },
     "Value" : {
@@ -683,6 +741,12 @@
     },
     "Venue Names" : {
       "comment" : "VenueSearchScope.names\nVenueSearchScope.names prompt"
+    },
+    "Venue Places" : {
+
+    },
+    "Venue Places is only in Debug builds on macOS." : {
+
     },
     "Venues" : {
 
