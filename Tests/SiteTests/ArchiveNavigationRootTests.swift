@@ -65,10 +65,20 @@ struct ArchiveNavigationRootTests {
   @Test func todayURLOpensTodaysList() throws {
     let navigation = navigation(category: .shows)
     let url = try #require(URL(string: "https://www.bolsinga.com/dates/today.html"))
-    navigation.openURL(url)
+    let opened = navigation.openURL(url)
 
+    #expect(opened == .today)
     #expect(navigation.category == .today)
     #expect(navigation.state.todayPath.isEmpty)
     #expect(navigation.state.showsPath == [show])
+  }
+
+  @Test func pathURLOpensNoCategoryList() throws {
+    let navigation = navigation(category: .shows)
+    let root = try #require(URL(string: "https://www.bolsinga.com"))
+    let url = try #require(venue.url(using: root))
+
+    #expect(navigation.openURL(url) == nil)
+    #expect(navigation.category == .venues)
   }
 }
