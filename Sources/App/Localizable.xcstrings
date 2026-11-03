@@ -460,6 +460,9 @@
     "Filter Nearby" : {
 
     },
+    "Find Places" : {
+
+    },
     "First" : {
 
     },
@@ -470,6 +473,9 @@
 
     },
     "From" : {
+
+    },
+    "Geocoded" : {
 
     },
     "Geocoding Venues" : {
@@ -556,6 +562,9 @@
     "No Place" : {
 
     },
+    "No places found." : {
+
+    },
     "No street" : {
 
     },
@@ -626,7 +635,10 @@
         }
       }
     },
-    "Place: %@" : {
+    "Place Card" : {
+
+    },
+    "Places in Maps" : {
 
     },
     "Punctuation" : {
@@ -648,6 +660,9 @@
 
     },
     "Same address" : {
+
+    },
+    "Search Again" : {
 
     },
     "Search for Artists from Concerts based on complex criteria." : {
@@ -734,6 +749,9 @@
     "The category does not have a URL." : {
 
     },
+    "The picked place can't be found: %@" : {
+
+    },
     "The saved picks can't be read, so changes aren't saved: %@" : {
 
     },
@@ -749,7 +767,13 @@
     "Unknown Date" : {
 
     },
+    "Unnamed Place" : {
+
+    },
     "Unpicked" : {
+
+    },
+    "Use This Place" : {
 
     },
     "Vague address" : {

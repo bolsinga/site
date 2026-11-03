@@ -133,6 +133,7 @@ struct VenuePlacesSplitView: View {
     case .venue(let id):
       if let digest = digest(id) {
         VenuePlaceDetail(digest: digest, pick: store.binding(for: digest.venue.id))
+          .id(digest.id)
       }
     case .sharedLocation(let id):
       if let sharedLocation = sharedLocations.first(where: { $0.id == id }) {

@@ -17,7 +17,8 @@ struct VenuePickStoreTests {
   }
 
   @Test(arguments: [
-    VenuePick.place(identifier: "I1234"), .coordinate(latitude: 37.5, longitude: -122.25), .noPlace,
+    VenuePick.place(identifier: "I1234"), .place(identifier: "I5678", address: "1 Main St"),
+    .coordinate(latitude: 37.5, longitude: -122.25), .noPlace,
   ])
   func pickRoundTrips(pick: VenuePick) throws {
     let data = try JSONEncoder().encode(pick)
