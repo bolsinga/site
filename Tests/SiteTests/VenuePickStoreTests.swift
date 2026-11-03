@@ -32,6 +32,28 @@ struct VenuePickStoreTests {
     #expect(VenuePickStatus(.noPlace) == .noPlace)
   }
 
+  @Test func placePickIsAnIdentifierPlacemark() {
+    guard case .identifier(let identifier) = VenuePick.place(identifier: "I1").placemark else {
+      Issue.record("not an identifier")
+      return
+    }
+    #expect(identifier == "I1")
+  }
+
+  @Test func pinPickIsACoordinatePlacemark() {
+    let pick = VenuePick.coordinate(latitude: 37.5, longitude: -122.25)
+    guard case .coordinate(let coordinate) = pick.placemark else {
+      Issue.record("not a coordinate")
+      return
+    }
+    #expect(coordinate.latitude == 37.5)
+    #expect(coordinate.longitude == -122.25)
+  }
+
+  @Test func noPlacePickHasNoPlacemark() {
+    #expect(VenuePick.noPlace.placemark == nil)
+  }
+
   @Test func savedPicksAreReadBack() {
     let fileURL = temporaryFileURL()
     let store = VenuePickStore(fileURL: fileURL)

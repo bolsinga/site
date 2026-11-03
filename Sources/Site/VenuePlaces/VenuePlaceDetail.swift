@@ -20,7 +20,10 @@ struct VenuePlaceDetail: View {
   @State private var isSearching = false
   @State private var hasSearched = false
   @State private var selectedCandidate: String?
-  /// The place picked before, found again from its identifier.
+  /// Whether a click on the map places a pin.
+  @State private var isPlacingPin = false
+  @State private var newPin: CLLocationCoordinate2D?
+  /// Where the pick is, found the way the app finds a venue.
   @State private var pickedPlace: MKMapItem?
   @State private var pickedPlaceError: Error?
 
@@ -59,26 +62,41 @@ struct VenuePlaceDetail: View {
     }
   }
 
+  /// The picked place, unless it is a candidate, which shows it already.
+  private var pickedPlaceIsShown: Bool {
+    guard let pickedIdentifier else { return false }
+    return candidates.contains { $0.identifier?.rawValue == pickedIdentifier }
+  }
+
   @ViewBuilder private var map: some View {
-    Map(selection: $selectedCandidate) {
-      if let geocodedLocation {
-        Marker("Geocoded", systemImage: "scope", coordinate: geocodedLocation.coordinate)
-          .tint(.gray)
-      }
-      if let pickedPlace, let pickedIdentifier,
-        !candidates.contains(where: { $0.identifier?.rawValue == pickedIdentifier })
-      {
-        Marker(item: pickedPlace)
-          .tint(.green)
-          .tag(pickedIdentifier)
-      }
-      ForEach(candidates, id: \.identifier) { candidate in
-        if let identifier = candidate.identifier?.rawValue {
-          Marker(item: candidate)
-            .tint(identifier == pickedIdentifier ? .green : .accentColor)
-            .tag(identifier)
+    MapReader { proxy in
+      Map(selection: $selectedCandidate) {
+        if let geocodedLocation {
+          Marker("Geocoded", systemImage: "scope", coordinate: geocodedLocation.coordinate)
+            .tint(.gray)
+        }
+        if let pickedPlace, !pickedPlaceIsShown {
+          Marker(item: pickedPlace)
+            .tint(.green)
+        }
+        if let newPin {
+          Marker("New Pin", systemImage: "mappin", coordinate: newPin)
+            .tint(.orange)
+        }
+        ForEach(candidates, id: \.identifier) { candidate in
+          if let identifier = candidate.identifier?.rawValue {
+            Marker(item: candidate)
+              .tint(identifier == pickedIdentifier ? .green : .accentColor)
+              .tag(identifier)
+          }
         }
       }
+      #if !os(tvOS)
+        // Only while placing a pin, so clicks otherwise still choose markers.
+        .gesture(
+          SpatialTapGesture().onEnded { newPin = proxy.convert($0.location, from: .local) },
+          isEnabled: isPlacingPin)
+      #endif
     }
     .frame(minHeight: 300)
   }
@@ -126,6 +144,17 @@ struct VenuePlaceDetail: View {
           .foregroundStyle(.orange)
         }
         HStack {
+          #if !os(tvOS)
+            Toggle("Place a Pin", isOn: $isPlacingPin)
+            Button("Use Pin") {
+              if let newPin {
+                pick = .coordinate(latitude: newPin.latitude, longitude: newPin.longitude)
+                self.newPin = nil
+                isPlacingPin = false
+              }
+            }
+            .disabled(newPin == nil)
+          #endif
           Button("No Place") { pick = .noPlace }
           Button("Clear") { pick = nil }
             .disabled(pick == nil)
@@ -164,7 +193,7 @@ struct VenuePlaceDetail: View {
     }
     .formStyle(.grouped)
     .navigationTitle(digest.name)
-    .task(id: pickedIdentifier) {
+    .task(id: pick) {
       await resolvePickedPlace()
     }
   }
@@ -179,14 +208,13 @@ struct VenuePlaceDetail: View {
       .candidates()
   }
 
-  /// Finds the picked place again, which checks that its identifier still resolves.
+  /// Finds the pick the way the app will, which checks that a picked identifier still resolves.
   private func resolvePickedPlace() async {
     pickedPlace = nil
     pickedPlaceError = nil
-    guard let pickedIdentifier else { return }
+    guard let placemark = pick?.placemark else { return }
     do {
-      // The same lookup the app makes for a venue whose place is known.
-      pickedPlace = try await Placemark.identifier(pickedIdentifier).mapItem(for: digest.venue)
+      pickedPlace = try await placemark.mapItem(for: digest.venue)
     } catch {
       pickedPlaceError = error
     }
