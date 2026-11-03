@@ -183,10 +183,10 @@ struct VenuePlaceDetail: View {
   private func resolvePickedPlace() async {
     pickedPlace = nil
     pickedPlaceError = nil
-    guard let pickedIdentifier, let identifier = MKMapItem.Identifier(rawValue: pickedIdentifier)
-    else { return }
+    guard let pickedIdentifier else { return }
     do {
-      pickedPlace = try await MKMapItemRequest(mapItemIdentifier: identifier).mapItem
+      // The same lookup the app makes for a venue whose place is known.
+      pickedPlace = try await Placemark.identifier(pickedIdentifier).mapItem(for: digest.venue)
     } catch {
       pickedPlaceError = error
     }

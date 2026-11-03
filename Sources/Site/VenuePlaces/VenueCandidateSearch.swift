@@ -33,19 +33,15 @@ struct VenueCandidateSearch {
 
   private var hasStreet: Bool { venue.location.street != nil }
 
-  /// The search text: the name with the address, or with only the city when there's no street.
+  /// The search text: the name with the address, which is only the city when there's no street.
   var query: String {
-    let location = venue.location
-    if let street = location.street {
-      return "\(venue.name), \(street), \(location.city), \(location.state)"
-    }
-    return "\(venue.name), \(location.city), \(location.state)"
+    "\(venue.name), \(venue.location.addressString.replacing("\n", with: ", "))"
   }
 
   /// The places found, the best guess first, each once; places without an identifier are left out.
   func candidates() async -> [MKMapItem] {
     var lists = [[MKMapItem]]()
-    lists.append(await run("best guess") { [try await bestGuess()] })
+    lists.append(await run("best guess") { [try await venue.toolboxMapItem()] })
     lists.append(await run("search") { try await search() })
     if hasStreet, let location {
       lists.append(await run("points of interest") { try await pointsOfInterest(near: location) })
@@ -72,10 +68,6 @@ struct VenueCandidateSearch {
         "\(venue.id, privacy: .public) \(name, privacy: .public): \(error, privacy: .public)")
       return []
     }
-  }
-
-  private func bestGuess() async throws -> MKMapItem {
-    try await MKMapItemRequest(placeDescriptor: venue.placeDescriptor).mapItem
   }
 
   private func search() async throws -> [MKMapItem] {

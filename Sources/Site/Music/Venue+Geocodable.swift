@@ -15,8 +15,13 @@ extension Logger {
 }
 
 extension Venue: AtlasGeocodable {
+  /// The place Maps resolves the venue's name and address to.
+  func toolboxMapItem() async throws -> MKMapItem {
+    try await MKMapItemRequest(placeDescriptor: placeDescriptor).mapItem
+  }
+
   private func geocodeToolbox() async throws -> Placemark {
-    let item = try await MKMapItemRequest(placeDescriptor: placeDescriptor).mapItem
+    let item = try await toolboxMapItem()
 
     guard let identifier = item.identifier else {
       return Placemark.coordinate(item.location.coordinate)
