@@ -43,12 +43,6 @@ extension Logger {
     }
   }
 
-  /// The picks as sorted JSON, to copy out.
-  var json: String {
-    guard let data = try? Self.encoder.encode(picks) else { return "" }
-    return String(decoding: data, as: UTF8.self)
-  }
-
   private static var encoder: JSONEncoder {
     let encoder = JSONEncoder()
     encoder.outputFormatting = [.prettyPrinted, .sortedKeys]

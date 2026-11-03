@@ -402,9 +402,6 @@
     "Concerts Today" : {
 
     },
-    "Copy JSON" : {
-
-    },
     "Count" : {
 
     },
@@ -745,7 +742,7 @@
     "Venue Places" : {
 
     },
-    "Venue Places is only in Debug builds on macOS." : {
+    "Venue Places Unavailable" : {
 
     },
     "Venues" : {

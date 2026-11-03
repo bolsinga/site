@@ -61,15 +61,4 @@ struct VenuePickStoreTests {
     store["v1"] = .noPlace
     #expect(try String(contentsOf: fileURL, encoding: .utf8) == "not json")
   }
-
-  @Test func jsonIsSortedByVenue() {
-    let store = VenuePickStore(fileURL: temporaryFileURL())
-    store["v2"] = .noPlace
-    store["v1"] = .place(identifier: "I1")
-    let json = store.json
-    let v1 = json.range(of: "\"v1\"")
-    let v2 = json.range(of: "\"v2\"")
-    #expect(v1 != nil && v2 != nil)
-    if let v1, let v2 { #expect(v1.lowerBound < v2.lowerBound) }
-  }
 }

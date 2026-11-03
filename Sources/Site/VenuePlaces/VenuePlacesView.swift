@@ -8,12 +8,6 @@
 import Shared
 import SwiftUI
 
-#if canImport(AppKit)
-  import AppKit
-#elseif canImport(UIKit)
-  import UIKit
-#endif
-
 /// The gate, then the venues once the archive has loaded.
 struct VenuePlacesView: View {
   let model: SiteModel
@@ -22,7 +16,7 @@ struct VenuePlacesView: View {
 
   var body: some View {
     if !VenuePlaces.isEnabled {
-      ContentUnavailableView("Venue Places is only in Debug builds on macOS.", systemImage: "map")
+      ContentUnavailableView("Venue Places Unavailable", systemImage: "map")
     } else if let vaultModel = model.vaultModel {
       VenuePlacesSplitView(store: store)
         .environment(vaultModel)
@@ -125,9 +119,6 @@ struct VenuePlacesSplitView: View {
         }
       }
       .pickerStyle(.segmented)
-      Button("Copy JSON", systemImage: "doc.on.doc") {
-        copyToPasteboard(store.json)
-      }
     }
     .overlay(alignment: .bottom) {
       if let readError = store.readError {
@@ -140,15 +131,6 @@ struct VenuePlacesSplitView: View {
     .task(id: ObjectIdentifier(model)) {
       digests = model.vault.orderedVenueIDs.compactMap { model.vault.digest(venue: $0) }
     }
-  }
-
-  private func copyToPasteboard(_ string: String) {
-    #if canImport(AppKit)
-      NSPasteboard.general.clearContents()
-      NSPasteboard.general.setString(string, forType: .string)
-    #elseif canImport(UIKit) && !os(tvOS)
-      UIPasteboard.general.string = string
-    #endif
   }
 }
 
