@@ -84,7 +84,7 @@ extension VenuePickStore {
 
 enum VenuePlacesSelection: Hashable {
   case venue(ArchivePath)
-  case sharedLocation(SharedLocation.Key)
+  case sharedLocation(ArchivePath)
 }
 
 struct VenuePlacesSplitView: View {
@@ -105,7 +105,7 @@ struct VenuePlacesSplitView: View {
 
   private var sharedLocations: [SharedLocation] {
     SharedLocation.groups(of: digests.map { .init(id: $0.id, location: $0.location) }) {
-      model.venueMapItemMap[$0]?.location.coordinate
+      model.venueMapItemMap[$0]?.location
     }
   }
 
@@ -134,13 +134,13 @@ struct VenuePlacesSplitView: View {
       if let digest = digest(id) {
         VenuePlaceDetail(digest: digest, pick: store.binding(for: digest.venue.id))
       }
-    case .sharedLocation(let key):
-      if let sharedLocation = sharedLocations.first(where: { $0.id == key }) {
+    case .sharedLocation(let id):
+      if let sharedLocation = sharedLocations.first(where: { $0.id == id }) {
         SharedLocationDetail(
           sharedLocation: sharedLocation,
           digests: sharedLocation.venues.compactMap { digest($0.id) }, store: store
         )
-        .id(key)
+        .id(id)
       } else {
         ContentUnavailableView("No Longer Shared", systemImage: "mappin.slash")
       }

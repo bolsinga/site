@@ -9,26 +9,7 @@ import CoreLocation
 import Shared
 
 /// Venues that geocode to the same point.
-struct SharedLocation: Identifiable, Hashable {
-  /// The point, rounded so that venues within about a meter share it.
-  struct Key: Hashable {
-    let latitude: Int
-    let longitude: Int
-
-    /// Five decimal places of a degree is about a meter.
-    private static var scale: Double { 100_000 }
-
-    init(_ coordinate: CLLocationCoordinate2D) {
-      latitude = Int((coordinate.latitude * Self.scale).rounded())
-      longitude = Int((coordinate.longitude * Self.scale).rounded())
-    }
-
-    var coordinate: CLLocationCoordinate2D {
-      CLLocationCoordinate2D(
-        latitude: Double(latitude) / Self.scale, longitude: Double(longitude) / Self.scale)
-    }
-  }
-
+struct SharedLocation: Identifiable {
   enum Cause: Hashable {
     /// None of the venues has a street, so they geocode to the center of their city.
     case noStreet
@@ -43,11 +24,18 @@ struct SharedLocation: Identifiable, Hashable {
     let location: Location
   }
 
-  let id: Key
+  /// Venues this close to a group's first venue share its point.
+  static var sharedDistance: CLLocationDistance { 1 }
+
+  /// Where the group's first venue is.
+  let location: CLLocation
   /// The venues, in the order given.
   let venues: [Member]
 
-  var coordinate: CLLocationCoordinate2D { id.coordinate }
+  /// The group's first venue, which stays first.
+  var id: ArchivePath { venues[0].id }
+
+  var coordinate: CLLocationCoordinate2D { location.coordinate }
 
   var cause: Cause {
     if venues.allSatisfy({ $0.location.street == nil }) { return .noStreet }
@@ -57,21 +45,22 @@ struct SharedLocation: Identifiable, Hashable {
 
   /// The groups of two or more venues at one point, the biggest first.
   static func groups(
-    of venues: [Member], coordinate: (ArchivePath) -> CLLocationCoordinate2D?
+    of venues: [Member], location: (ArchivePath) -> CLLocation?
   ) -> [SharedLocation] {
-    var keys = [Key]()
-    var grouped = [Key: [Member]]()
+    var groups = [(location: CLLocation, venues: [Member])]()
     for venue in venues {
-      guard let coordinate = coordinate(venue.id) else { continue }
-      let key = Key(coordinate)
-      if grouped[key] == nil { keys.append(key) }
-      grouped[key, default: []].append(venue)
+      guard let venueLocation = location(venue.id) else { continue }
+      if let index = groups.firstIndex(where: {
+        $0.location.distance(from: venueLocation) <= sharedDistance
+      }) {
+        groups[index].venues.append(venue)
+      } else {
+        groups.append((venueLocation, [venue]))
+      }
     }
     // The sort is stable, so ties stay in the order their first venue was given.
-    return keys.compactMap { key in
-      guard let venues = grouped[key], venues.count > 1 else { return nil }
-      return SharedLocation(id: key, venues: venues)
-    }
-    .sorted { $0.venues.count > $1.venues.count }
+    return groups.filter { $0.venues.count > 1 }
+      .map { SharedLocation(location: $0.location, venues: $0.venues) }
+      .sorted { $0.venues.count > $1.venues.count }
   }
 }

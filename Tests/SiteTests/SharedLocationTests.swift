@@ -12,8 +12,8 @@ import Testing
 @testable import SiteApp
 
 struct SharedLocationTests {
-  private let cityCenter = CLLocationCoordinate2D(latitude: 37.871_59, longitude: -122.272_75)
-  private let elsewhere = CLLocationCoordinate2D(latitude: 37.804_36, longitude: -122.271_14)
+  private let cityCenter = CLLocation(latitude: 37.871_59, longitude: -122.272_75)
+  private let elsewhere = CLLocation(latitude: 37.804_36, longitude: -122.271_14)
 
   private func member(_ id: String, street: String? = nil, city: String = "Berkeley")
     -> SharedLocation.Member
@@ -26,7 +26,7 @@ struct SharedLocationTests {
     let a = member("a")
     let b = member("b")
     let c = member("c", street: "1 Main St", city: "Oakland")
-    let coordinates: [ArchivePath: CLLocationCoordinate2D] = [
+    let coordinates: [ArchivePath: CLLocation] = [
       a.id: cityCenter, b.id: cityCenter, c.id: elsewhere,
     ]
 
@@ -36,20 +36,34 @@ struct SharedLocationTests {
     #expect(groups.first?.venues == [a, b])
   }
 
-  @Test func pointsWithinAboutAMeterAreTheSame() {
+  /// A point about the given number of meters north of the city center.
+  private func north(of meters: Double) -> CLLocation {
+    // A degree of latitude is about 111,000 meters.
+    CLLocation(
+      latitude: cityCenter.coordinate.latitude + meters / 111_000,
+      longitude: cityCenter.coordinate.longitude)
+  }
+
+  @Test func pointsWithinAMeterAreTheSame() {
     let a = member("a")
     let b = member("b")
-    let nearby = CLLocationCoordinate2D(
-      latitude: cityCenter.latitude + 0.000_002, longitude: cityCenter.longitude - 0.000_002)
-    let coordinates: [ArchivePath: CLLocationCoordinate2D] = [a.id: cityCenter, b.id: nearby]
+    let coordinates: [ArchivePath: CLLocation] = [a.id: cityCenter, b.id: north(of: 0.5)]
 
     #expect(SharedLocation.groups(of: [a, b]) { coordinates[$0] }.count == 1)
   }
 
-  @Test func venuesWithoutACoordinateAreLeftOut() {
+  @Test func pointsFartherThanAMeterAreNot() {
     let a = member("a")
     let b = member("b")
-    let coordinates: [ArchivePath: CLLocationCoordinate2D] = [a.id: cityCenter]
+    let coordinates: [ArchivePath: CLLocation] = [a.id: cityCenter, b.id: north(of: 2)]
+
+    #expect(SharedLocation.groups(of: [a, b]) { coordinates[$0] }.isEmpty)
+  }
+
+  @Test func venuesWithoutALocationAreLeftOut() {
+    let a = member("a")
+    let b = member("b")
+    let coordinates: [ArchivePath: CLLocation] = [a.id: cityCenter]
 
     #expect(SharedLocation.groups(of: [a, b]) { coordinates[$0] }.isEmpty)
   }
@@ -62,8 +76,8 @@ struct SharedLocationTests {
     let e = member("e")
     let f = member("f")
     let g = member("g")
-    let third = CLLocationCoordinate2D(latitude: 1, longitude: 1)
-    let coordinates: [ArchivePath: CLLocationCoordinate2D] = [
+    let third = CLLocation(latitude: 1, longitude: 1)
+    let coordinates: [ArchivePath: CLLocation] = [
       a.id: elsewhere, b.id: elsewhere, c.id: cityCenter, d.id: cityCenter, e.id: cityCenter,
       f.id: third, g.id: third,
     ]
@@ -75,20 +89,20 @@ struct SharedLocationTests {
 
   @Test func noStreetCause() {
     let group = SharedLocation(
-      id: .init(cityCenter), venues: [member("a"), member("b")])
+      location: cityCenter, venues: [member("a"), member("b")])
     #expect(group.cause == .noStreet)
   }
 
   @Test func sameAddressCause() {
     let group = SharedLocation(
-      id: .init(cityCenter),
+      location: cityCenter,
       venues: [member("a", street: "1 Main St"), member("b", street: "1 Main St")])
     #expect(group.cause == .sameAddress)
   }
 
   @Test func vagueAddressCause() {
     let group = SharedLocation(
-      id: .init(cityCenter), venues: [member("a", street: "1 Main St"), member("b")])
+      location: cityCenter, venues: [member("a", street: "1 Main St"), member("b")])
     #expect(group.cause == .vagueAddress)
   }
 }
