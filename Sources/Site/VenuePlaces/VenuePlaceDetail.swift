@@ -67,45 +67,6 @@ struct VenuePlaceDetail: View {
     }
   }
 
-  /// The picked place, unless it is a candidate, which shows it already.
-  private var pickedPlaceIsShown: Bool {
-    guard let pickedIdentifier else { return false }
-    return candidates.contains { $0.identifier?.rawValue == pickedIdentifier }
-  }
-
-  @ViewBuilder private var map: some View {
-    MapReader { proxy in
-      Map(selection: $selectedCandidate) {
-        if let geocodedLocation {
-          Marker("Geocoded", systemImage: "scope", coordinate: geocodedLocation.coordinate)
-            .tint(.gray)
-        }
-        if let pickedPlace, !pickedPlaceIsShown {
-          Marker(item: pickedPlace)
-            .tint(.green)
-        }
-        if let newPin {
-          Marker("New Pin", systemImage: "mappin", coordinate: newPin)
-            .tint(.orange)
-        }
-        ForEach(candidates, id: \.identifier) { candidate in
-          if let identifier = candidate.identifier?.rawValue {
-            Marker(item: candidate)
-              .tint(identifier == pickedIdentifier ? .green : .accentColor)
-              .tag(identifier)
-          }
-        }
-      }
-      #if !os(tvOS)
-        // Only while placing a pin, so clicks otherwise still choose markers.
-        .gesture(
-          SpatialTapGesture().onEnded { newPin = proxy.convert($0.location, from: .local) },
-          isEnabled: isPlacingPin)
-      #endif
-    }
-    .frame(minHeight: 300)
-  }
-
   var body: some View {
     Form {
       Section {
@@ -122,7 +83,10 @@ struct VenuePlaceDetail: View {
           .font(.title2.bold())
       }
       Section {
-        map
+        VenuePlaceMap(
+          geocodedLocation: geocodedLocation, pickedPlace: pickedPlace,
+          pickedIdentifier: pickedIdentifier, candidates: candidates,
+          selectedCandidate: $selectedCandidate, isPlacingPin: isPlacingPin, newPin: $newPin)
       }
       Section("Shows") {
         LabeledContent("Count", value: shows.count.formatted())
@@ -260,6 +224,56 @@ struct VenuePlaceDetail: View {
     } catch {
       pickedPlaceError = error
     }
+  }
+}
+
+/// Its own view, so a batch updating the detail doesn't redraw the map.
+private struct VenuePlaceMap: View {
+  let geocodedLocation: CLLocation?
+  let pickedPlace: MKMapItem?
+  let pickedIdentifier: String?
+  let candidates: [MKMapItem]
+  @Binding var selectedCandidate: String?
+  let isPlacingPin: Bool
+  @Binding var newPin: CLLocationCoordinate2D?
+
+  /// The picked place, unless it is a candidate, which shows it already.
+  private var pickedPlaceIsShown: Bool {
+    guard let pickedIdentifier else { return false }
+    return candidates.contains { $0.identifier?.rawValue == pickedIdentifier }
+  }
+
+  var body: some View {
+    MapReader { proxy in
+      Map(selection: $selectedCandidate) {
+        if let geocodedLocation {
+          Marker("Geocoded", systemImage: "scope", coordinate: geocodedLocation.coordinate)
+            .tint(.gray)
+        }
+        if let pickedPlace, !pickedPlaceIsShown {
+          Marker(item: pickedPlace)
+            .tint(.green)
+        }
+        if let newPin {
+          Marker("New Pin", systemImage: "mappin", coordinate: newPin)
+            .tint(.orange)
+        }
+        ForEach(candidates, id: \.identifier) { candidate in
+          if let identifier = candidate.identifier?.rawValue {
+            Marker(item: candidate)
+              .tint(identifier == pickedIdentifier ? .green : .accentColor)
+              .tag(identifier)
+          }
+        }
+      }
+      #if !os(tvOS)
+        // Only while placing a pin, so clicks otherwise still choose markers.
+        .gesture(
+          SpatialTapGesture().onEnded { newPin = proxy.convert($0.location, from: .local) },
+          isEnabled: isPlacingPin)
+      #endif
+    }
+    .frame(minHeight: 300)
   }
 }
 
