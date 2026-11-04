@@ -39,7 +39,7 @@ extension Logger {
 
   /// The verification for the pick, if it was the one verified.
   func verification(venueID: String, pick: VenuePick?) -> PickVerification? {
-    guard case .place(let identifier, _) = pick, let check = checks[venueID],
+    guard let identifier = pick?.identifier, let check = checks[venueID],
       check.identifier == identifier
     else { return nil }
     return check.verification
@@ -58,13 +58,18 @@ extension Logger {
   /// Resolves every picked identifier.
   func verifyAll(_ digests: [VenueDigest], store: VenuePickStore) {
     let places: [(ArchivePath, SavedPlace)] = digests.compactMap { digest in
-      guard case .place(let identifier, _) = store[digest.venue.id] else { return nil }
+      guard let identifier = store[digest.venue.id]?.identifier else { return nil }
       return (digest.id, SavedPlace(venue: digest.venue, identifier: identifier))
     }
     run("Verifying Picks", places) { _, place, found in
-      self.checks[place.venue.id] = Check(
-        identifier: place.identifier,
-        verification: PickVerification(identifier: place.identifier, found: found))
+      let verification = PickVerification(identifier: place.identifier, found: found)
+      self.checks[place.venue.id] = Check(identifier: place.identifier, verification: verification)
+      // A verified pick saved without its street gets it from Maps.
+      if verification == .verified, store[place.venue.id]?.street == nil,
+        let foundPick = found?.pick, foundPick.street != nil
+      {
+        store[place.venue.id] = foundPick
+      }
     }
   }
 

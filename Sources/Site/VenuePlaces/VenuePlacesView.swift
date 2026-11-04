@@ -7,6 +7,7 @@
 
 import Shared
 import SwiftUI
+import UniformTypeIdentifiers
 
 /// The gate, then the venues once the archive has loaded.
 struct VenuePlacesView: View {
@@ -120,6 +121,9 @@ struct VenuePlacesSplitView: View {
   @State private var selection: VenuePlacesSelection?
   @State private var filter = VenuePlacesFilter.all
   @State private var searchString = ""
+  @State private var isChoosingVenueMapFolder = false
+  /// What writing venuemap.txt did.
+  @State private var venueMapMessage: String?
 
   private var shownDigests: [VenueDigest] {
     digests.filter { digest in
@@ -131,6 +135,18 @@ struct VenuePlacesSplitView: View {
   private var sharedLocations: [SharedLocation] {
     SharedLocation.groups(of: digests.map { .init(id: $0.id, location: $0.location) }) {
       model.venueMapItemMap[$0]?.location
+    }
+  }
+
+  private func writeVenueMap(to folder: URL) {
+    let contents = VenueMapFile.contents(digests.map(\.venue), picks: store.picks)
+    do {
+      let file = try VenueMapFolder.write(contents, to: folder)
+      venueMapMessage = String(
+        localized: "Wrote \(digests.count) venues to \(file.path(percentEncoded: false)).")
+    } catch {
+      venueMapMessage = String(
+        localized: "venuemap.txt can't be written: \(error.localizedDescription)")
     }
   }
 
@@ -230,6 +246,19 @@ struct VenuePlacesSplitView: View {
         }
         .help("Auto-match")
         .disabled(checks.isRunning || model.geocodingInProgress)
+        Menu {
+          Button("Choose Folder…") { isChoosingVenueMapFolder = true }
+        } label: {
+          Label("Write venuemap.txt", systemImage: "square.and.arrow.down")
+        } primaryAction: {
+          if let folder = VenueMapFolder.remembered {
+            writeVenueMap(to: folder)
+          } else {
+            isChoosingVenueMapFolder = true
+          }
+        }
+        .help("Write venuemap.txt")
+        .disabled(digests.isEmpty)
       }
       ToolbarItem {
         Picker("Filter", selection: $filter) {
@@ -239,6 +268,25 @@ struct VenuePlacesSplitView: View {
         }
         .pickerStyle(.segmented)
       }
+    }
+    #if !os(tvOS)
+      .fileImporter(isPresented: $isChoosingVenueMapFolder, allowedContentTypes: [.folder]) {
+        switch $0 {
+        case .success(let folder):
+          VenueMapFolder.remember(folder)
+          writeVenueMap(to: folder)
+        case .failure(let error):
+          venueMapMessage = error.localizedDescription
+        }
+      }
+    #endif
+    .alert(
+      "venuemap.txt",
+      isPresented: Binding(
+        get: { venueMapMessage != nil }, set: { if !$0 { venueMapMessage = nil } })
+    ) {
+    } message: {
+      Text(venueMapMessage ?? "")
     }
     .overlay(alignment: .bottom) {
       VStack {

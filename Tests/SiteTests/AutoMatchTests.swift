@@ -16,7 +16,7 @@ struct AutoMatchTests {
   /// A place this many meters north of `location`.
   func found(_ name: String?, metersNorth: Double = 0, identifier: String? = "I1") -> FoundPlace {
     FoundPlace(
-      identifier: identifier, name: name, address: nil,
+      identifier: identifier, name: name, address: nil, street: nil,
       latitude: location.coordinate.latitude + metersNorth / 111_320,
       longitude: location.coordinate.longitude)
   }
