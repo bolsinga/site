@@ -13,6 +13,7 @@ struct VenuePlacesView: View {
   let model: SiteModel
 
   @State private var store = VenuePickStore()
+  @State private var checks = VenuePlaceChecks()
 
   var body: some View {
     if !VenuePlaces.isEnabled {
@@ -20,6 +21,7 @@ struct VenuePlacesView: View {
     } else if let vaultModel = model.vaultModel {
       VenuePlacesSplitView(store: store)
         .environment(vaultModel)
+        .environment(checks)
     } else {
       ProgressView()
     }
@@ -29,20 +31,26 @@ struct VenuePlacesView: View {
 enum VenuePlacesFilter: CaseIterable, Hashable {
   case all
   case unpicked
+  case suggested
+  case stale
   case noStreet
 
   var label: LocalizedStringResource {
     switch self {
     case .all: "All"
     case .unpicked: "Unpicked"
+    case .suggested: "Suggested"
+    case .stale: "Stale"
     case .noStreet: "No Street"
     }
   }
 
-  func includes(_ digest: VenueDigest, pick: VenuePick?) -> Bool {
+  func includes(_ digest: VenueDigest, status: VenuePickStatus) -> Bool {
     switch self {
     case .all: true
-    case .unpicked: VenuePickStatus(pick) == .unpicked
+    case .unpicked: status == .unpicked || status == .suggested
+    case .suggested: status == .suggested
+    case .stale: status == .stale
     case .noStreet: digest.location.street == nil
     }
   }
@@ -52,7 +60,10 @@ extension VenuePickStatus {
   var label: LocalizedStringResource {
     switch self {
     case .unpicked: "Unpicked"
+    case .suggested: "Suggested"
     case .picked: "Picked"
+    case .verified: "Verified"
+    case .stale: "Stale"
     case .noPlace: "No Place"
     }
   }
@@ -60,8 +71,21 @@ extension VenuePickStatus {
   var systemImage: String {
     switch self {
     case .unpicked: "circle.dashed"
+    case .suggested: "sparkle.magnifyingglass"
     case .picked: "mappin.circle.fill"
+    case .verified: "checkmark.seal.fill"
+    case .stale: "exclamationmark.triangle.fill"
     case .noPlace: "xmark.circle"
+    }
+  }
+
+  var color: Color {
+    switch self {
+    case .unpicked, .noPlace: .secondary
+    case .suggested: .orange
+    case .picked: .accentColor
+    case .verified: .green
+    case .stale: .red
     }
   }
 }
@@ -89,6 +113,7 @@ enum VenuePlacesSelection: Hashable {
 
 struct VenuePlacesSplitView: View {
   @Environment(VaultModel.self) private var model
+  @Environment(VenuePlaceChecks.self) private var checks
   let store: VenuePickStore
 
   @State private var digests: [VenueDigest] = []
@@ -98,7 +123,7 @@ struct VenuePlacesSplitView: View {
 
   private var shownDigests: [VenueDigest] {
     digests.filter { digest in
-      filter.includes(digest, pick: store[digest.venue.id])
+      filter.includes(digest, status: status(digest))
         && (searchString.isEmpty || digest.name.localizedStandardContains(searchString))
     }
   }
@@ -107,6 +132,10 @@ struct VenuePlacesSplitView: View {
     SharedLocation.groups(of: digests.map { .init(id: $0.id, location: $0.location) }) {
       model.venueMapItemMap[$0]?.location
     }
+  }
+
+  private func status(_ digest: VenueDigest) -> VenuePickStatus {
+    checks.status(venueID: digest.venue.id, pick: store[digest.venue.id])
   }
 
   private func digest(_ id: ArchivePath) -> VenueDigest? {
@@ -156,7 +185,7 @@ struct VenuePlacesSplitView: View {
         sharedLocationsSection
         Section("All Venues") {
           ForEach(shownDigests) { digest in
-            VenuePlaceRow(digest: digest, status: VenuePickStatus(store[digest.venue.id]))
+            VenuePlaceRow(digest: digest, status: status(digest))
               .tag(VenuePlacesSelection.venue(digest.id))
           }
         }
@@ -171,25 +200,54 @@ struct VenuePlacesSplitView: View {
       detail
     }
     .toolbar {
-      Picker("Filter", selection: $filter) {
-        ForEach(VenuePlacesFilter.allCases, id: \.self) {
-          Text($0.label)
+      ToolbarItemGroup {
+        if let progress = checks.progress {
+          ProgressView(value: Double(progress.completed), total: Double(max(progress.total, 1))) {
+            Text(progress.title)
+          }
+          .frame(width: 160)
+          Button("Cancel") { checks.cancel() }
+        } else {
+          Button("Verify All") { checks.verifyAll(digests, store: store) }
+          Button("Auto-match") {
+            checks.autoMatch(digests, store: store) { model.venueMapItemMap[$0]?.location }
+          }
+          .disabled(model.geocodingInProgress)
         }
       }
-      .pickerStyle(.segmented)
+      ToolbarItem {
+        Picker("Filter", selection: $filter) {
+          ForEach(VenuePlacesFilter.allCases, id: \.self) {
+            Text($0.label)
+          }
+        }
+        .pickerStyle(.segmented)
+      }
     }
     .overlay(alignment: .bottom) {
-      if let readError = store.readError {
-        Text(
-          "The saved picks can't be read, so changes aren't saved: \(readError.localizedDescription)"
-        )
-        .padding()
-        .background(.red.opacity(0.2), in: .rect(cornerRadius: 8))
-        .padding()
+      VStack {
+        messages
       }
     }
     .task(id: ObjectIdentifier(model)) {
       digests = model.vault.orderedVenueIDs.compactMap { model.vault.digest(venue: $0) }
+    }
+  }
+
+  @ViewBuilder private var messages: some View {
+    if let error = checks.error {
+      Text("The batch stopped: \(error.localizedDescription)")
+        .padding()
+        .background(.orange.opacity(0.2), in: .rect(cornerRadius: 8))
+        .padding()
+    }
+    if let readError = store.readError {
+      Text(
+        "The saved picks can't be read, so changes aren't saved: \(readError.localizedDescription)"
+      )
+      .padding()
+      .background(.red.opacity(0.2), in: .rect(cornerRadius: 8))
+      .padding()
     }
   }
 }
@@ -223,7 +281,7 @@ struct VenuePlaceRow: View {
       }
       Spacer()
       Image(systemName: status.systemImage)
-        .foregroundStyle(status == .picked ? Color.accentColor : .secondary)
+        .foregroundStyle(status.color)
         .help(Text(status.label))
     }
   }

@@ -70,7 +70,8 @@ struct VenueCandidateSearch {
     }
   }
 
-  private func search() async throws -> [MKMapItem] {
+  /// Points of interest that match the query, near the geocoded point when there is one.
+  func search() async throws -> [MKMapItem] {
     let request = MKLocalSearch.Request()
     request.naturalLanguageQuery = query
     request.resultTypes = .pointOfInterest

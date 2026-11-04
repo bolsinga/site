@@ -11,6 +11,7 @@ import SwiftUI
 
 /// The point a group of venues shares, with the venues, each opening its detail.
 struct SharedLocationDetail: View {
+  @Environment(VenuePlaceChecks.self) private var checks
   let sharedLocation: SharedLocation
   let digests: [VenueDigest]
   let store: VenuePickStore
@@ -47,7 +48,9 @@ struct SharedLocationDetail: View {
           Section {
             ForEach(digests) { digest in
               NavigationLink(value: digest.id) {
-                VenuePlaceRow(digest: digest, status: VenuePickStatus(store[digest.venue.id]))
+                VenuePlaceRow(
+                  digest: digest,
+                  status: checks.status(venueID: digest.venue.id, pick: store[digest.venue.id]))
               }
             }
           } header: {

@@ -6,28 +6,27 @@
 //
 
 import Foundation
-import MapKit
 import Shared
 
-struct BatchGeocode: AsyncSequence {
+struct BatchGeocode<T: AtlasGeocodable>: AsyncSequence {
 
-  typealias Element = (ArchivePath, MKMapItem?)
+  typealias Element = (ArchivePath, T, T.Place?)
 
-  let atlas: Atlas<Venue>
-  private let geocodables: [(ArchivePath, Venue)]
+  let atlas: Atlas<T>
+  private let geocodables: [(ArchivePath, T)]
 
   /// Create a BatchGeocode.
   /// - Parameters:
   ///   - atlas: The Atlas containing the cache for the geocoding.
-  ///   - vault: This is used to find what items will be geocoded, as well as defining ID
-  init(atlas: Atlas<Venue>, vault: Vault) {
+  ///   - geocodables: What will be geocoded, each with its ID.
+  init(atlas: Atlas<T>, geocodables: [(ArchivePath, T)]) {
     self.atlas = atlas
-    self.geocodables = vault.venueIDs().map { ($0.0, $0.1) }
+    self.geocodables = geocodables
   }
 
   struct AsyncIterator: AsyncIteratorProtocol {
-    let atlas: Atlas<Venue>
-    let geocodables: [(ArchivePath, Venue)]
+    let atlas: Atlas<T>
+    let geocodables: [(ArchivePath, T)]
 
     var index: Int = 0
 
@@ -37,13 +36,20 @@ struct BatchGeocode: AsyncSequence {
       guard index < geocodables.count else { return nil }
 
       let (id, geocodable) = geocodables[index]
-      let mapItem = try await atlas.geocode(geocodable, id: id)
+      let place = try await atlas.geocode(geocodable, id: id)
       index += 1
-      return (id, mapItem)
+      return (id, geocodable, place)
     }
   }
 
   func makeAsyncIterator() -> AsyncIterator {
     AsyncIterator(atlas: atlas, geocodables: geocodables)
+  }
+}
+
+extension BatchGeocode where T == Venue {
+  /// Geocodes every venue in the vault.
+  init(atlas: Atlas<Venue>, vault: Vault) {
+    self.init(atlas: atlas, geocodables: vault.venueIDs())
   }
 }
