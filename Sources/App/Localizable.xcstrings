@@ -383,6 +383,9 @@
     "Choose a Venue" : {
 
     },
+    "Choose Folder…" : {
+
+    },
     "City" : {
 
     },
@@ -852,6 +855,12 @@
     "Venue Places Unavailable" : {
 
     },
+    "venuemap.txt" : {
+
+    },
+    "venuemap.txt can't be written: %@" : {
+
+    },
     "Venues" : {
 
     },
@@ -884,6 +893,19 @@
     },
     "Weekdays with %@" : {
 
+    },
+    "Write venuemap.txt" : {
+
+    },
+    "Wrote %lld venues to %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Wrote %1$lld venues to %2$@."
+          }
+        }
+      }
     },
     "Year" : {
 

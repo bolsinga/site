@@ -52,14 +52,13 @@ struct VenuePlaceDetail: View {
   }
 
   private var pickedIdentifier: String? {
-    guard case .place(let identifier, _) = pick else { return nil }
-    return identifier
+    pick?.identifier
   }
 
   private var pickDescription: String {
     switch pick {
     case nil: String(localized: "Unpicked")
-    case .place(let identifier, let address):
+    case .place(let identifier, let address, _):
       [pickedPlace?.name, address, identifier].compactMap { $0 }.joined(separator: "\n")
     case .coordinate(let latitude, let longitude):
       String(localized: "Pin: \(latitude), \(longitude)")
@@ -148,8 +147,8 @@ struct VenuePlaceDetail: View {
             isPicked: candidate.identifier?.rawValue == pickedIdentifier,
             isSelected: candidate.identifier?.rawValue == selectedCandidate
           ) {
-            if let identifier = candidate.identifier?.rawValue {
-              pick = .place(identifier: identifier, address: candidate.singleLineAddress)
+            if let candidatePick = FoundPlace(candidate).pick {
+              pick = candidatePick
             }
           }
         }

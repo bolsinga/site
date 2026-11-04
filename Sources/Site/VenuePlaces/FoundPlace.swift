@@ -14,6 +14,7 @@ struct FoundPlace: Codable, Equatable, Sendable {
   let identifier: String?
   let name: String?
   let address: String?
+  let street: String?
   let latitude: Double
   let longitude: Double
 
@@ -21,7 +22,7 @@ struct FoundPlace: Codable, Equatable, Sendable {
 
   /// The pick that uses this place; none when it has no identifier.
   var pick: VenuePick? {
-    identifier.map { .place(identifier: $0, address: address) }
+    identifier.map { .place(identifier: $0, address: address, street: street) }
   }
 }
 
@@ -29,7 +30,8 @@ extension FoundPlace {
   init(_ item: MKMapItem) {
     self.init(
       identifier: item.identifier?.rawValue, name: item.name, address: item.singleLineAddress,
-      latitude: item.location.coordinate.latitude, longitude: item.location.coordinate.longitude)
+      street: item.street, latitude: item.location.coordinate.latitude,
+      longitude: item.location.coordinate.longitude)
   }
 }
 

@@ -97,6 +97,14 @@ extension MKMapItem {
     addressRepresentations?.fullAddress(includingRegion: false, singleLine: true)
   }
 
+  /// The address's first line, when it has more than the city.
+  var street: String? {
+    let lines = addressRepresentations?.fullAddress(includingRegion: false, singleLine: false)?
+      .split(separator: "\n")
+    guard let lines, lines.count > 1, let first = lines.first else { return nil }
+    return String(first)
+  }
+
   /// The category's name, without its prefix.
   var categoryName: String? {
     pointOfInterestCategory.map { $0.rawValue.replacing("MKPOICategory", with: "") }
