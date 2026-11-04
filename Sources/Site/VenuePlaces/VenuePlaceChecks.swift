@@ -68,19 +68,20 @@ extension Logger {
     }
   }
 
-  /// Finds the best guess for each unpicked venue that has geocoded, suggesting those that match.
+  /// Searches for each unpicked venue that has geocoded, suggesting a place that matches.
   func autoMatch(
     _ digests: [VenueDigest], store: VenuePickStore, location: (ArchivePath) -> CLLocation?
   ) {
-    let guesses: [(ArchivePath, VenuePlaceGuess, CLLocation)] = digests.compactMap { digest in
+    let guesses: [(ArchivePath, VenuePlaceGuess)] = digests.compactMap { digest in
       guard store[digest.venue.id] == nil, let location = location(digest.id) else { return nil }
-      return (digest.id, VenuePlaceGuess(venue: digest.venue), location)
+      return (digest.id, VenuePlaceGuess(venue: digest.venue, location: location))
     }
-    let locations = Dictionary(uniqueKeysWithValues: guesses.map { ($0.0, $0.2) })
-    run("Matching Venues", guesses.map { ($0.0, $0.1) }) { id, guess, found in
-      guard let found, AutoMatch.suggests(found, name: guess.venue.name, location: locations[id])
+    run("Matching Venues", guesses) { _, guess, found in
+      guard
+        let suggestion = AutoMatch.suggestion(
+          found ?? [], name: guess.venue.name, location: guess.location)
       else { return }
-      self.suggestions[guess.venue.id] = found
+      self.suggestions[guess.venue.id] = suggestion
     }
   }
 

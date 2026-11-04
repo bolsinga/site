@@ -67,6 +67,21 @@ struct AutoMatchTests {
       !AutoMatch.suggests(found("Fillmore", identifier: nil), name: "Fillmore", location: location))
   }
 
+  @Test func suggestionIsFirstMatch() {
+    let address = found("1233 17th St", identifier: nil)
+    let far = found("Bottom of the Hill", metersNorth: 200, identifier: "I1")
+    let near = found("Bottom of the Hill", metersNorth: 14, identifier: "I2")
+    #expect(
+      AutoMatch.suggestion([address, far, near], name: "Bottom of the Hill", location: location)
+        == near)
+  }
+
+  @Test func noSuggestionWithoutMatch() {
+    #expect(
+      AutoMatch.suggestion([found("1233 17th St")], name: "Bottom of the Hill", location: location)
+        == nil)
+  }
+
   @Test func verification() {
     #expect(PickVerification(identifier: "I1", found: found("Fillmore")) == .verified)
     let moved = found("Fillmore", identifier: "I2")

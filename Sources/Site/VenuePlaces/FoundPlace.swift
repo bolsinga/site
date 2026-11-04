@@ -33,12 +33,20 @@ extension FoundPlace {
   }
 }
 
-/// The place Maps resolves a venue's name and address to.
+extension VenueCandidateSearch {
+  /// The search's places, as values that can leave the main actor.
+  func foundPlaces() async throws -> [FoundPlace] {
+    try await search().map(FoundPlace.init)
+  }
+}
+
+/// The points of interest a search for a venue's name and address finds near where it geocodes.
 struct VenuePlaceGuess: AtlasGeocodable {
   let venue: Venue
+  let location: CLLocation
 
-  func geocode() async throws -> FoundPlace {
-    FoundPlace(try await venue.toolboxMapItem())
+  func geocode() async throws -> [FoundPlace] {
+    try await VenueCandidateSearch(venue: venue, location: location).foundPlaces()
   }
 }
 
@@ -74,6 +82,11 @@ enum PickVerification: Equatable, Sendable {
 enum AutoMatch {
   /// How far the guess may be from where the venue geocodes.
   static var maximumDistance: CLLocationDistance { 75 }
+
+  /// The first place that can be suggested.
+  static func suggestion(_ found: [FoundPlace], name: String, location: CLLocation) -> FoundPlace? {
+    found.first { suggests($0, name: name, location: location) }
+  }
 
   /// Suggests the guess only when its name closely matches and it is near the geocoded point.
   static func suggests(_ found: FoundPlace, name: String, location: CLLocation?) -> Bool {
