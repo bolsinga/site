@@ -245,7 +245,7 @@ private struct VenuePlaceMap: View {
 
   var body: some View {
     MapReader { proxy in
-      Map(selection: $selectedCandidate) {
+      Map(interactionModes: VenuePlaces.mapInteractionModes, selection: $selectedCandidate) {
         if let geocodedLocation {
           Marker("Geocoded", systemImage: "scope", coordinate: geocodedLocation.coordinate)
             .tint(.gray)
@@ -272,6 +272,7 @@ private struct VenuePlaceMap: View {
           SpatialTapGesture().onEnded { newPin = proxy.convert($0.location, from: .local) },
           isEnabled: isPlacingPin)
       #endif
+      .venuePlacesMap()
     }
     .frame(minHeight: 300)
   }

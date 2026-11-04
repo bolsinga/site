@@ -31,7 +31,8 @@ struct SharedLocationDetail: View {
           initialPosition: .region(
             MKCoordinateRegion(
               center: sharedLocation.coordinate, latitudinalMeters: Self.span,
-              longitudinalMeters: Self.span))
+              longitudinalMeters: Self.span)),
+          interactionModes: VenuePlaces.mapInteractionModes
         ) {
           Marker(
             String(localized: "\(sharedLocation.venues.count) Venues"),
@@ -43,6 +44,7 @@ struct SharedLocationDetail: View {
             }
           }
         }
+        .venuePlacesMap()
         .frame(minHeight: 240)
         List {
           Section {
