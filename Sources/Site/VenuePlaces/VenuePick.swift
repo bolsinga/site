@@ -5,7 +5,7 @@
 //  Created by Greg Bolsinga on 11/3/26.
 //
 
-import Foundation
+import CoreLocation
 
 /// Where a venue was chosen to be.
 enum VenuePick: Codable, Equatable, Sendable {
@@ -15,6 +15,18 @@ enum VenuePick: Codable, Equatable, Sendable {
   case coordinate(latitude: Double, longitude: Double)
   /// No place can be found for the venue.
   case noPlace
+}
+
+extension VenuePick {
+  /// The placemark the app would geocode the venue to with this pick; none for no place.
+  var placemark: Placemark? {
+    switch self {
+    case .place(let identifier, _): .identifier(identifier)
+    case .coordinate(let latitude, let longitude):
+      .coordinate(CLLocationCoordinate2D(latitude: latitude, longitude: longitude))
+    case .noPlace: nil
+    }
+  }
 }
 
 enum VenuePickStatus: CaseIterable, Sendable {

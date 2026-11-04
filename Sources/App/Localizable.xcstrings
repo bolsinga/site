@@ -544,6 +544,9 @@
     "Nearby To Me" : {
 
     },
+    "New Pin" : {
+
+    },
     "No City" : {
 
     },
@@ -634,6 +637,9 @@
           }
         }
       }
+    },
+    "Place a Pin" : {
+
     },
     "Place Card" : {
 
@@ -771,6 +777,9 @@
 
     },
     "Unpicked" : {
+
+    },
+    "Use Pin" : {
 
     },
     "Use This Place" : {

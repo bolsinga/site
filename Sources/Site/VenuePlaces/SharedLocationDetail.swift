@@ -15,8 +15,13 @@ struct SharedLocationDetail: View {
   let digests: [VenueDigest]
   let store: VenuePickStore
 
+  /// Where each picked venue is, found the way the app finds a venue.
+  @State private var pickedPlaces: [ArchivePath: MKMapItem] = [:]
+
   /// How far around the point the map shows.
   private static var span: CLLocationDistance { 3_000 }
+
+  private var picks: [VenuePick?] { digests.map { store[$0.venue.id] } }
 
   var body: some View {
     NavigationStack {
@@ -30,6 +35,12 @@ struct SharedLocationDetail: View {
           Marker(
             String(localized: "\(sharedLocation.venues.count) Venues"),
             coordinate: sharedLocation.coordinate)
+          ForEach(digests) { digest in
+            if let place = pickedPlaces[digest.id] {
+              Marker(digest.name, coordinate: place.location.coordinate)
+                .tint(.green)
+            }
+          }
         }
         .frame(minHeight: 240)
         List {
@@ -50,5 +61,18 @@ struct SharedLocationDetail: View {
         }
       }
     }
+    .task(id: picks) {
+      await resolvePickedPlaces()
+    }
+  }
+
+  /// Picks that can't be found are left off the map; the venue's own detail says why.
+  private func resolvePickedPlaces() async {
+    var places = [ArchivePath: MKMapItem]()
+    for digest in digests {
+      guard let placemark = store[digest.venue.id]?.placemark else { continue }
+      places[digest.id] = try? await placemark.mapItem(for: digest.venue)
+    }
+    pickedPlaces = places
   }
 }
