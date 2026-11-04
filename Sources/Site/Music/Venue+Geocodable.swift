@@ -35,12 +35,23 @@ extension Venue: AtlasGeocodable {
     //  - compare visually / programmatically with the MKGeocodingRequest.
     //  - This will allow the quality and / or logic to be double checked.
     let placemark: Placemark
-    //    if useGeoToolbox {
-    //      placemark = try await geocodeToolbox()
-    //    } else {
-    placemark = try await location.geocode()
-    //    }
+    if let mapKitID {
+      placemark = .identifier(mapKitID)
+    } else {
+      //    if useGeoToolbox {
+      //      placemark = try await geocodeToolbox()
+      //    } else {
+      placemark = try await location.geocode()
+      //    }
+    }
     Logger.geoToolbox.log("\(id, privacy: .public) - \(placemark, privacy: .public)")
     return placemark
+  }
+
+  /// A venue with a MapKit identifier uses it, not a place cached from its address.
+  func isCurrent(_ place: Placemark) -> Bool {
+    guard let mapKitID else { return true }
+    guard case .identifier(let identifier) = place else { return false }
+    return identifier == mapKitID
   }
 }

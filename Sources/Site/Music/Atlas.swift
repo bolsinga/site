@@ -19,7 +19,14 @@ protocol Geocodable {
 }
 
 protocol AtlasGeocodable: Geocodable, Sendable
-where Place: Codable & Sendable {}
+where Place: Codable & Sendable {
+  /// Whether a cached place still holds; one that doesn't is geocoded again.
+  func isCurrent(_ place: Place) -> Bool
+}
+
+extension AtlasGeocodable {
+  func isCurrent(_ place: Place) -> Bool { true }
+}
 
 private enum Constants {
   static let maxRequests = 50
@@ -37,7 +44,7 @@ actor Atlas<T: AtlasGeocodable> {
   }
 
   public func geocode(_ geocodable: T, id: ArchivePath) async throws -> T.Place? {
-    if let result = cache?.get(id) {
+    if let result = cache?.get(id), geocodable.isCurrent(result) {
       Logger.atlas.log("cached result")
       return result
     }

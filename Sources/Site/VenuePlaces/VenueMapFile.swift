@@ -23,10 +23,13 @@ enum VenueMapFile {
     switch pick {
     case .place(let identifier, _, _):
       fields.append(mapKitTag + identifier)
+    case nil:
+      // Unpicked venues keep the identifier the archive already has.
+      if let mapKitID = venue.mapKitID { fields.append(mapKitTag + mapKitID) }
     case .coordinate:
       // TODO: Write pins once venuemap.txt has a coordinate field.
       break
-    case .noPlace, nil:
+    case .noPlace:
       break
     }
     return fields.joined(separator: "*")
