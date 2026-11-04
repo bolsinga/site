@@ -47,8 +47,7 @@ struct ArchiveTabView: View {
 
   @State private var searchString: String = ""
   @State private var scope: ArchiveScope = .all
-  @State private var dayOfLeapYear = Date.now.dayOfLeapYear
-  @State private var selectedTab: TabSelection
+  @State private var tabState: ArchiveTabState
 
   init(
     venueSort: Binding<RankingSort>,
@@ -71,8 +70,8 @@ struct ArchiveTabView: View {
     self.reloadModel = reloadModel
     self.navigateToPath = navigateToPath
     // Start on the restored category. Assigning it in onAppear instead echoes back through
-    // onChange(of: selectedTab) a frame later, overwriting a deep link handled on cold launch.
-    self.selectedTab = TabSelection(
+    // onChange(of: tabState.category) a frame later, overwriting a deep link handled on cold launch.
+    self.tabState = ArchiveTabState(
       category: activeCategory.wrappedValue, dayOfLeapYear: Date.now.dayOfLeapYear)
   }
 
@@ -101,7 +100,7 @@ struct ArchiveTabView: View {
   }
 
   var body: some View {
-    TabView(selection: $selectedTab) {
+    TabView(selection: Binding(get: { tabState.selection }, set: { tabState.select($0) })) {
       ForEach(ArchiveCategory.ordered, id: \.self) { category in
         if category != .search {
           Tab(
@@ -115,7 +114,7 @@ struct ArchiveTabView: View {
               artistSort: $artistSort,
               venuesMode: $venuesMode,
               showsDescending: $showsDescending,
-              dayOfLeapYear: $dayOfLeapYear,
+              dayOfLeapYear: $tabState.dayOfLeapYear,
               reloadModel: reloadModel,
               navigateToPath: navigateToPath)
           }
@@ -138,28 +137,19 @@ struct ArchiveTabView: View {
 
     }
     .onAppear {
-      dayOfLeapYear = model.todayDayOfLeapYear
+      tabState.dayOfLeapYear = model.todayDayOfLeapYear
     }
     .onChange(of: model.todayDayOfLeapYear) { _, newValue in
-      dayOfLeapYear = newValue
+      tabState.dayOfLeapYear = newValue
     }
     .onChange(of: todayRequest) {
-      dayOfLeapYear = model.todayDayOfLeapYear
+      tabState.dayOfLeapYear = model.todayDayOfLeapYear
     }
-    .onChange(of: dayOfLeapYear) { _, newValue in
-      if selectedTab.category.tracksDayOfLeapYear {
-        selectedTab = TabSelection(category: selectedTab.category, dayOfLeapYear: newValue)
-      }
-    }
-    .onChange(of: selectedTab) { oldValue, newValue in
-      // Tapping Today while it's shown goes to today; arriving from another tab keeps the day.
-      if oldValue.category == newValue.category, let newDayOfLeapYear = newValue.dayOfLeapYear {
-        dayOfLeapYear = newDayOfLeapYear
-      }
-      activeCategory = newValue.category
+    .onChange(of: tabState.category) { _, newValue in
+      activeCategory = newValue
     }
     .onChange(of: activeCategory) { _, newValue in
-      selectedTab = TabSelection(category: newValue, dayOfLeapYear: dayOfLeapYear)
+      tabState.activate(newValue)
     }
     .tabViewStyle(.sidebarAdaptable)
   }
