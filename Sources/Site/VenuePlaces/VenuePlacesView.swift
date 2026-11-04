@@ -142,6 +142,24 @@ struct VenuePlacesSplitView: View {
     digests.first { $0.id == id }
   }
 
+  /// The running batch, in the sidebar like the geocoding progress.
+  @ViewBuilder private var checksSection: some View {
+    if let progress = checks.progress {
+      Section {
+        HStack {
+          ProgressView(value: Double(progress.completed), total: Double(max(progress.total, 1))) {
+            Text(progress.title)
+          } currentValueLabel: {
+            Text("\(progress.completed) of \(progress.total)")
+          }
+          Button("Cancel", systemImage: "xmark.circle.fill") { checks.cancel() }
+            .labelStyle(.iconOnly)
+            .buttonStyle(.borderless)
+        }
+      }
+    }
+  }
+
   @ViewBuilder private var sharedLocationsSection: some View {
     Section("Shared Locations") {
       if model.geocodingInProgress {
@@ -182,6 +200,7 @@ struct VenuePlacesSplitView: View {
   var body: some View {
     NavigationSplitView {
       List(selection: $selection) {
+        checksSection
         sharedLocationsSection
         Section("All Venues") {
           ForEach(shownDigests) { digest in
@@ -201,19 +220,16 @@ struct VenuePlacesSplitView: View {
     }
     .toolbar {
       ToolbarItemGroup {
-        if let progress = checks.progress {
-          ProgressView(value: Double(progress.completed), total: Double(max(progress.total, 1))) {
-            Text(progress.title)
-          }
-          .frame(width: 160)
-          Button("Cancel") { checks.cancel() }
-        } else {
-          Button("Verify All") { checks.verifyAll(digests, store: store) }
-          Button("Auto-match") {
-            checks.autoMatch(digests, store: store) { model.venueMapItemMap[$0]?.location }
-          }
-          .disabled(model.geocodingInProgress)
+        Button("Verify All", systemImage: "checkmark.seal") {
+          checks.verifyAll(digests, store: store)
         }
+        .help("Verify All")
+        .disabled(checks.isRunning)
+        Button("Auto-match", systemImage: "sparkle.magnifyingglass") {
+          checks.autoMatch(digests, store: store) { model.venueMapItemMap[$0]?.location }
+        }
+        .help("Auto-match")
+        .disabled(checks.isRunning || model.geocodingInProgress)
       }
       ToolbarItem {
         Picker("Filter", selection: $filter) {
