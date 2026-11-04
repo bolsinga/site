@@ -151,8 +151,9 @@ struct ArchiveTabView: View {
         selectedTab = TabSelection(category: selectedTab.category, dayOfLeapYear: newValue)
       }
     }
-    .onChange(of: selectedTab) { _, newValue in
-      if let newDayOfLeapYear = newValue.dayOfLeapYear {
+    .onChange(of: selectedTab) { oldValue, newValue in
+      // Tapping Today while it's shown goes to today; arriving from another tab keeps the day.
+      if oldValue.category == newValue.category, let newDayOfLeapYear = newValue.dayOfLeapYear {
         dayOfLeapYear = newDayOfLeapYear
       }
       activeCategory = newValue.category

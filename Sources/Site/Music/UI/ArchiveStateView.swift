@@ -94,20 +94,24 @@ struct ArchiveStateView: View {
     }
   }
 
+  /// A link or Handoff to Today shows today, whichever day Today was paged to.
+  private func showToday() {
+    model.refreshToday()
+    todayRequest += 1
+  }
+
   var body: some View {
     archiveBody
       .onChange(of: pendingExternalEvent?.id, initial: true) {
         guard let pendingExternalEvent else { return }
         switch pendingExternalEvent.kind {
         case .url(let url):
-          if archiveNavigation.openURL(url) == .today {
-            model.refreshToday()
-            todayRequest += 1
-          }
+          if archiveNavigation.openURL(url) == .today { showToday() }
         case .path(let activity):
           archiveNavigation.pathActivity(activity)
         case .category(let activity):
           archiveNavigation.categoryActivity(activity)
+          if activity.archiveCategory == .today { showToday() }
           if let sort = activity.archiveCategorySort { apply(sort) }
           // Only the list is sorted, so a map would hide the order that was handed off.
           if activity.archiveCategory == .venues { venuesMode = .grouped }
