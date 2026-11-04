@@ -349,6 +349,12 @@
     "Artists" : {
 
     },
+    "Auto-match" : {
+
+    },
+    "Auto-match Suggestion" : {
+
+    },
     "band" : {
 
     },
@@ -430,6 +436,9 @@
     "Discover" : {
 
     },
+    "Dismiss" : {
+
+    },
     "Displays Artist Details in App." : {
 
     },
@@ -506,6 +515,15 @@
 
     },
     "Map" : {
+
+    },
+    "Maps can't find this place; it may have closed." : {
+
+    },
+    "Maps now knows this place by another identifier." : {
+
+    },
+    "Matching Venues" : {
 
     },
     "Month" : {
@@ -737,6 +755,9 @@
     "Sort By Venue Count" : {
 
     },
+    "Stale" : {
+
+    },
     "State" : {
 
     },
@@ -750,6 +771,15 @@
 
     },
     "Stats" : {
+
+    },
+    "Suggested" : {
+
+    },
+    "Switch to Current Identifier" : {
+
+    },
+    "The batch stopped: %@" : {
 
     },
     "The category does not have a URL." : {
@@ -782,6 +812,9 @@
     "Use Pin" : {
 
     },
+    "Use Suggestion" : {
+
+    },
     "Use This Place" : {
 
     },
@@ -810,6 +843,18 @@
 
     },
     "Venues" : {
+
+    },
+    "Verified" : {
+
+    },
+    "Verified in Maps" : {
+
+    },
+    "Verify All" : {
+
+    },
+    "Verifying Picks" : {
 
     },
     "Version" : {

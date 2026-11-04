@@ -186,7 +186,8 @@ enum LocationAuthorization {
     Logger.vaultModel.log("start batch geocode")
 
     do {
-      for try await (id, mapItem) in BatchGeocode(atlas: atlas, vault: vault) {
+      for try await (id, venue, placemark) in BatchGeocode(atlas: atlas, vault: vault) {
+        let mapItem = try await placemark?.mapItem(for: venue)
         Logger.vaultModel.log("geocoded: \(String(describing: id), privacy: .public)")
         venueMapItemMap[id] = mapItem
       }

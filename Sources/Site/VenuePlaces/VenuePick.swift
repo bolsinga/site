@@ -31,7 +31,13 @@ extension VenuePick {
 
 enum VenuePickStatus: CaseIterable, Sendable {
   case unpicked
+  /// Unpicked, with an Auto-match suggestion to confirm.
+  case suggested
   case picked
+  /// Picked, and Verify All found it in Maps.
+  case verified
+  /// Picked, and Verify All found it moved to another identifier or gone.
+  case stale
   case noPlace
 
   init(_ pick: VenuePick?) {

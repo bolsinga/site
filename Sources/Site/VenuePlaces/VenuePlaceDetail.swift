@@ -12,6 +12,7 @@ import SwiftUI
 /// A venue's address, show history, the places in Maps it might be, and its pick.
 struct VenuePlaceDetail: View {
   @Environment(VaultModel.self) private var model
+  @Environment(VenuePlaceChecks.self) private var checks
 
   let digest: VenueDigest
   @Binding var pick: VenuePick?
@@ -44,6 +45,10 @@ struct VenuePlaceDetail: View {
       return headliner.name
     }
     .prefix(Self.headlinerCount).map { $0 }
+  }
+
+  private var suggestion: FoundPlace? {
+    pick == nil ? checks.suggestions[digest.venue.id] : nil
   }
 
   private var pickedIdentifier: String? {
@@ -143,6 +148,7 @@ struct VenuePlaceDetail: View {
           )
           .foregroundStyle(.orange)
         }
+        verification
         HStack {
           #if !os(tvOS)
             Toggle("Place a Pin", isOn: $isPlacingPin)
@@ -158,6 +164,17 @@ struct VenuePlaceDetail: View {
           Button("No Place") { pick = .noPlace }
           Button("Clear") { pick = nil }
             .disabled(pick == nil)
+        }
+      }
+      if let suggestion, let suggestedPick = suggestion.pick {
+        Section("Auto-match Suggestion") {
+          Text(
+            [suggestion.name, suggestion.address].compactMap { $0 }.joined(separator: "\n")
+          )
+          HStack {
+            Button("Use Suggestion") { pick = suggestedPick }
+            Button("Dismiss") { checks.dismissSuggestion(venueID: digest.venue.id) }
+          }
         }
       }
       Section {
@@ -195,6 +212,31 @@ struct VenuePlaceDetail: View {
     .navigationTitle(digest.name)
     .task(id: pick) {
       await resolvePickedPlace()
+    }
+  }
+
+  /// What Verify All found for the pick.
+  @ViewBuilder private var verification: some View {
+    switch checks.verification(venueID: digest.venue.id, pick: pick) {
+    case .verified:
+      Label("Verified in Maps", systemImage: "checkmark.seal.fill")
+        .foregroundStyle(.green)
+    case .replaced(let found):
+      Label(
+        "Maps now knows this place by another identifier.",
+        systemImage: "exclamationmark.triangle"
+      )
+      .foregroundStyle(.orange)
+      if let currentPick = found.pick {
+        Button("Switch to Current Identifier") { pick = currentPick }
+      }
+    case .notFound:
+      Label(
+        "Maps can't find this place; it may have closed.", systemImage: "exclamationmark.triangle"
+      )
+      .foregroundStyle(.orange)
+    case nil:
+      EmptyView()
     }
   }
 
