@@ -189,12 +189,15 @@ enum LocationAuthorization {
       for try await (id, venue, placemark) in BatchGeocode(atlas: atlas, vault: vault) {
         do {
           let mapItem = try await placemark?.mapItem(for: venue)
-          Logger.vaultModel.log("geocoded: \(String(describing: id), privacy: .public)")
+          Logger.vaultModel.log(
+            "geocoded: \(String(describing: id), privacy: .public) by \(placemark?.origin ?? "nothing", privacy: .public)"
+          )
           venueMapItemMap[id] = mapItem
         } catch {
           // One venue's place not being found leaves the others to be placed.
           Logger.vaultModel.error(
-            "map item: \(String(describing: id), privacy: .public) \(error, privacy: .public)")
+            "map item: \(String(describing: id), privacy: .public) by \(placemark?.origin ?? "nothing", privacy: .public): \(error, privacy: .public)"
+          )
         }
       }
     } catch {
