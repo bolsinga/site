@@ -9,7 +9,7 @@ import Foundation
 
 extension URL {
   private func lastModified() async throws -> Date? {
-    var request = URLRequest(url: self)
+    var request = URLRequest(url: self, cachePolicy: .reloadIgnoringLocalCacheData)
     request.httpMethod = "HEAD"
 
     let (_, response) = try await URLSession.shared.data(for: request)

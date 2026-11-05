@@ -22,7 +22,9 @@ extension Music {
       Logger.music.log("end")
     }
 
-    let (data, response) = try await URLSession.shared.data(from: url)
+    // The server's Last-Modified has already said this is newer, so a cached copy can't be used.
+    let request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData)
+    let (data, response) = try await URLSession.shared.data(for: request)
 
     var lastModified = Date.distantPast
     if let lastModifiedDate = try response.lastModified() {
