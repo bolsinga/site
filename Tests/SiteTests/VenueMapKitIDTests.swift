@@ -48,14 +48,14 @@ struct VenueMapKitIDTests {
   @Test func cachedAddressGivesWayToMapKitID() {
     let venue = Venue(
       id: "v1", location: Location(city: "c", state: "s"), name: "n", mapKitID: "I1")
-    #expect(!venue.isCurrent(.coordinate(CLLocationCoordinate2D(latitude: 1, longitude: 2))))
-    #expect(!venue.isCurrent(.identifier("I2")))
-    #expect(venue.isCurrent(.identifier("I1")))
+    #expect(!venue.canUseCached(.coordinate(CLLocationCoordinate2D(latitude: 1, longitude: 2))))
+    #expect(!venue.canUseCached(.identifier("I2")))
+    #expect(venue.canUseCached(.identifier("I1")))
   }
 
   @Test func cacheHoldsWithoutMapKitID() {
     let venue = Venue(id: "v1", location: Location(city: "c", state: "s"), name: "n")
-    #expect(venue.isCurrent(.coordinate(CLLocationCoordinate2D(latitude: 1, longitude: 2))))
+    #expect(venue.canUseCached(.coordinate(CLLocationCoordinate2D(latitude: 1, longitude: 2))))
   }
 
   @Test func unpickedVenueKeepsArchiveMapKitID() {

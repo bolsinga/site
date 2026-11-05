@@ -32,7 +32,7 @@ extension Venue: AtlasGeocodable {
   }
 
   /// A venue with a MapKit identifier uses it, not a place cached from its address.
-  func isCurrent(_ place: Placemark) -> Bool {
+  func canUseCached(_ place: Placemark) -> Bool {
     guard let mapKitID else { return true }
     guard case .identifier(let identifier) = place else { return false }
     return identifier == mapKitID

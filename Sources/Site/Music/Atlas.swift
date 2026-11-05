@@ -20,12 +20,12 @@ protocol Geocodable {
 
 protocol AtlasGeocodable: Geocodable, Sendable
 where Place: Codable & Sendable {
-  /// Whether a cached place still holds; one that doesn't is geocoded again.
-  func isCurrent(_ place: Place) -> Bool
+  /// Whether the place cached for this item can be used; if not, the item is geocoded again.
+  func canUseCached(_ place: Place) -> Bool
 }
 
 extension AtlasGeocodable {
-  func isCurrent(_ place: Place) -> Bool { true }
+  func canUseCached(_ place: Place) -> Bool { true }
 }
 
 /// MapKit allows the app this many requests of each kind in each period.
@@ -45,7 +45,7 @@ actor Atlas<T: AtlasGeocodable> {
   }
 
   public func geocode(_ geocodable: T, id: ArchivePath) async throws -> T.Place? {
-    if let result = cache?.get(id), geocodable.isCurrent(result) {
+    if let result = cache?.get(id), geocodable.canUseCached(result) {
       Logger.atlas.log("cached result")
       return result
     }
