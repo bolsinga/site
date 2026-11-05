@@ -23,7 +23,15 @@ extension Venue: AtlasGeocodable {
   func geocode() async throws -> Placemark {
     let placemark: Placemark
     if let mapKitID {
-      placemark = .identifier(mapKitID)
+      do {
+        let item = try await Placemark.identifier(mapKitID).mapItem(for: self)
+        placemark = .place(identifier: mapKitID, coordinate: item.location.coordinate)
+      } catch {
+        // Placed by its address until a later launch finds the identifier.
+        Logger.geoToolbox.error(
+          "\(id, privacy: .public) - \(mapKitID, privacy: .public): \(error, privacy: .public)")
+        placemark = try await location.geocode()
+      }
     } else {
       placemark = try await location.geocode()
     }
@@ -31,10 +39,10 @@ extension Venue: AtlasGeocodable {
     return placemark
   }
 
-  /// A venue with a MapKit identifier uses it, not a place cached from its address.
+  /// A venue with a MapKit identifier uses the place found for it, not one from its address.
   func canUseCached(_ place: Placemark) -> Bool {
     guard let mapKitID else { return true }
-    guard case .identifier(let identifier) = place else { return false }
+    guard case .place(let identifier, _) = place else { return false }
     return identifier == mapKitID
   }
 }

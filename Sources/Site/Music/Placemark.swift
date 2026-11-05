@@ -42,10 +42,12 @@ enum Placemark: Codable {
 
   case coordinate(CLLocationCoordinate2D)
   case identifier(String)
+  /// A place in Maps with where it is, so showing it needs no lookup.
+  case place(identifier: String, coordinate: CLLocationCoordinate2D)
 
   func mapItem(for venue: Venue) async throws -> MKMapItem {
     switch self {
-    case .coordinate(let coordinate):
+    case .coordinate(let coordinate), .place(_, let coordinate):
       return MKMapItem(
         venue: venue,
         location: CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude))
@@ -63,7 +65,7 @@ extension Placemark {
   var origin: String {
     switch self {
     case .coordinate: "address"
-    case .identifier(let string): "MapKit identifier \(string)"
+    case .identifier(let string), .place(let string, _): "MapKit identifier \(string)"
     }
   }
 }
@@ -75,6 +77,8 @@ extension Placemark: CustomStringConvertible {
       "\(coordinate)"
     case .identifier(let string):
       string
+    case .place(let identifier, let coordinate):
+      "\(identifier) \(coordinate)"
     }
   }
 }
