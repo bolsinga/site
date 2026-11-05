@@ -20,27 +20,21 @@ extension Venue: AtlasGeocodable {
     try await MKMapItemRequest(placeDescriptor: placeDescriptor).mapItem
   }
 
-  private func geocodeToolbox() async throws -> Placemark {
-    let item = try await toolboxMapItem()
-
-    guard let identifier = item.identifier else {
-      return Placemark.coordinate(item.location.coordinate)
-    }
-
-    return Placemark.identifier(identifier.rawValue)
-  }
-
   func geocode() async throws -> Placemark {
-    // TODO: Add a way to use GeoToolbox
-    //  - compare visually / programmatically with the MKGeocodingRequest.
-    //  - This will allow the quality and / or logic to be double checked.
     let placemark: Placemark
-    //    if useGeoToolbox {
-    //      placemark = try await geocodeToolbox()
-    //    } else {
-    placemark = try await location.geocode()
-    //    }
+    if let mapKitID {
+      placemark = .identifier(mapKitID)
+    } else {
+      placemark = try await location.geocode()
+    }
     Logger.geoToolbox.log("\(id, privacy: .public) - \(placemark, privacy: .public)")
     return placemark
+  }
+
+  /// A venue with a MapKit identifier uses it, not a place cached from its address.
+  func canUseCached(_ place: Placemark) -> Bool {
+    guard let mapKitID else { return true }
+    guard case .identifier(let identifier) = place else { return false }
+    return identifier == mapKitID
   }
 }

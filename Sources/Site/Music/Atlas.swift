@@ -19,9 +19,17 @@ protocol Geocodable {
 }
 
 protocol AtlasGeocodable: Geocodable, Sendable
-where Place: Codable & Sendable {}
+where Place: Codable & Sendable {
+  /// Whether the place cached for this item can be used; if not, the item is geocoded again.
+  func canUseCached(_ place: Place) -> Bool
+}
 
-private enum Constants {
+extension AtlasGeocodable {
+  func canUseCached(_ place: Place) -> Bool { true }
+}
+
+/// MapKit allows the app this many requests of each kind in each period.
+enum MapKitLimits {
   static let maxRequests = 50
   static let timeUntilReset = Duration.seconds(60)
 }
@@ -30,14 +38,14 @@ actor Atlas<T: AtlasGeocodable> {
   private var cache: AtlasCache<T>?
 
   private let throttle = Throttle<T.Place>(
-    batchSize: Constants.maxRequests, timeUntilReset: Constants.timeUntilReset)
+    batchSize: MapKitLimits.maxRequests, timeUntilReset: MapKitLimits.timeUntilReset)
 
   internal init(cache: AtlasCache<T>? = AtlasCache<T>()) {
     self.cache = cache
   }
 
   public func geocode(_ geocodable: T, id: ArchivePath) async throws -> T.Place? {
-    if let result = cache?.get(id) {
+    if let result = cache?.get(id), geocodable.canUseCached(result) {
       Logger.atlas.log("cached result")
       return result
     }
