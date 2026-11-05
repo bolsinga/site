@@ -58,6 +58,51 @@ struct VenueMapKitIDTests {
     #expect(venue.canUseCached(.coordinate(CLLocationCoordinate2D(latitude: 1, longitude: 2))))
   }
 
+  /// An `Atlas` whose cache file holds an address placemark for v1.
+  private func atlasWithCachedAddress(fileName: String) throws -> (Atlas<Venue>, ArchivePath) {
+    let id = try ArchivePath(raw: "v1")
+    var cache = AtlasCache<Venue>(fileName: fileName)
+    cache.add(id, value: .coordinate(CLLocationCoordinate2D(latitude: 1, longitude: 2)))
+    return (Atlas(cache: cache), id)
+  }
+
+  private func removeCache(fileName: String) {
+    _ = try? [ArchivePath: AtlasCache<Venue>.Value].read(fileName: fileName, deleteFile: true)
+  }
+
+  @Test func atlasReplacesCachedAddressWithMapKitID() async throws {
+    let fileName = "atlas-test-\(UUID().uuidString).json"
+    defer { removeCache(fileName: fileName) }
+    let (atlas, id) = try atlasWithCachedAddress(fileName: fileName)
+    let venue = Venue(
+      id: "v1", location: Location(city: "c", state: "s"), name: "n", mapKitID: "I1")
+
+    guard case .identifier(let identifier) = try await atlas.geocode(venue, id: id) else {
+      Issue.record("not an identifier")
+      return
+    }
+    #expect(identifier == "I1")
+
+    guard case .identifier(let saved) = AtlasCache<Venue>(fileName: fileName).get(id) else {
+      Issue.record("the cache file still has the address")
+      return
+    }
+    #expect(saved == "I1")
+  }
+
+  @Test func atlasKeepsCachedAddressWithoutMapKitID() async throws {
+    let fileName = "atlas-test-\(UUID().uuidString).json"
+    defer { removeCache(fileName: fileName) }
+    let (atlas, id) = try atlasWithCachedAddress(fileName: fileName)
+    let venue = Venue(id: "v1", location: Location(city: "c", state: "s"), name: "n")
+
+    guard case .coordinate(let coordinate) = try await atlas.geocode(venue, id: id) else {
+      Issue.record("not the cached address")
+      return
+    }
+    #expect(coordinate.latitude == 1)
+  }
+
   @Test func unpickedVenueKeepsArchiveMapKitID() {
     let venue = Venue(
       id: "v1", location: Location(city: "c", state: "s"), name: "n", mapKitID: "I1")
