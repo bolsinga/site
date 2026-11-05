@@ -10,6 +10,8 @@ import SwiftUI
 
 /// A venue's details that can be paged to the previous and next venue, in library order.
 struct VenueBrowser: View {
+  @Environment(VaultModel.self) private var model
+
   let id: ArchivePath
   let venueIDs: [ArchivePath]
   let digest: (ArchivePath) -> VenueDigest?
@@ -31,5 +33,14 @@ struct VenueBrowser: View {
         digest: digest, isPathNavigable: isPathNavigable,
         bottomContentMargin: bottomContentMargin)
     }
+    #if !os(tvOS)
+      .toolbar {
+        if let venue = digest(id)?.venue {
+          ToolbarItem {
+            OpenInMapsButton(venue: venue, mapItem: model.venueMapItemMap[id])
+          }
+        }
+      }
+    #endif
   }
 }
