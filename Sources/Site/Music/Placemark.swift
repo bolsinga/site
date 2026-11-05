@@ -53,7 +53,7 @@ enum Placemark: Codable {
       guard let mapIdentifier = MKMapItem.Identifier(rawValue: string) else {
         throw PlacemarkError.noIdentifier
       }
-      return try await MKMapItemRequest(mapItemIdentifier: mapIdentifier).mapItem
+      return try await MapItemLookup.mapItem(for: mapIdentifier)
     }
   }
 }

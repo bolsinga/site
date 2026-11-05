@@ -28,7 +28,8 @@ extension AtlasGeocodable {
   func isCurrent(_ place: Place) -> Bool { true }
 }
 
-private enum Constants {
+/// MapKit allows the app this many requests of each kind in each period.
+enum MapKitLimits {
   static let maxRequests = 50
   static let timeUntilReset = Duration.seconds(60)
 }
@@ -37,7 +38,7 @@ actor Atlas<T: AtlasGeocodable> {
   private var cache: AtlasCache<T>?
 
   private let throttle = Throttle<T.Place>(
-    batchSize: Constants.maxRequests, timeUntilReset: Constants.timeUntilReset)
+    batchSize: MapKitLimits.maxRequests, timeUntilReset: MapKitLimits.timeUntilReset)
 
   internal init(cache: AtlasCache<T>? = AtlasCache<T>()) {
     self.cache = cache
