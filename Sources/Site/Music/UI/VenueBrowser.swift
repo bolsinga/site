@@ -35,11 +35,12 @@ struct VenueBrowser: View {
     }
     #if !os(tvOS)
       .toolbar {
-        if let venue = digest(id)?.venue {
-          ToolbarItem {
-            OpenInMapsButton(venue: venue, mapItem: model.venueMapItemMap[id])
-          }
+        ToolbarItem {
+          OpenInMapsButton(mapItem: model.mapsItem(for: id))
         }
+      }
+      .task(id: id) {
+        if let venue = digest(id)?.venue { await model.findPlace(for: id, venue: venue) }
       }
     #endif
   }

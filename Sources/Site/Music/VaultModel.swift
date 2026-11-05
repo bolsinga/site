@@ -30,6 +30,10 @@ enum LocationAuthorization {
 
   internal var todayDayOfLeapYear: Int = Date.now.dayOfLeapYear
   internal var venueMapItemMap: [ArchivePath: MKMapItem] = [:]
+  /// Places in Maps for venues with a MapKit identifier, found when the venue is shown.
+  internal private(set) var venuePlaceMap: [ArchivePath: MKMapItem] = [:]
+  @ObservationIgnored
+  private var venuePlaceLookups = Set<ArchivePath>()
   private var currentLocation: CLLocation?
   internal var locationAuthorization = LocationAuthorization.restricted
   internal private(set) var currentCity: String?
@@ -98,6 +102,28 @@ enum LocationAuthorization {
     geocodeTask?.cancel()
     locationTask?.cancel()
     cityTask?.cancel()
+  }
+
+  /// What a venue opens in Maps: its place when found, otherwise where the app's maps put it.
+  @MainActor
+  func mapsItem(for id: ArchivePath) -> MKMapItem? {
+    venuePlaceMap[id] ?? venueMapItemMap[id]
+  }
+
+  /// Finds a venue's place in Maps once, keeping it for this session.
+  @MainActor
+  func findPlace(for id: ArchivePath, venue: Venue) async {
+    guard venuePlaceMap[id] == nil, !venuePlaceLookups.contains(id),
+      let mapKitID = venue.mapKitID, let identifier = MKMapItem.Identifier(rawValue: mapKitID)
+    else { return }
+    venuePlaceLookups.insert(id)
+    defer { venuePlaceLookups.remove(id) }
+    do {
+      venuePlaceMap[id] = try await MapItemLookup.mapItem(for: identifier)
+    } catch {
+      Logger.vaultModel.error(
+        "place: \(String(describing: id), privacy: .public) \(error, privacy: .public)")
+    }
   }
 
   @MainActor
