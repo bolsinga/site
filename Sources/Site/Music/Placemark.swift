@@ -58,6 +58,16 @@ enum Placemark: Codable {
   }
 }
 
+extension Placemark {
+  /// How the place was found, for logs.
+  var origin: String {
+    switch self {
+    case .coordinate: "address"
+    case .identifier(let string): "MapKit identifier \(string)"
+    }
+  }
+}
+
 extension Placemark: CustomStringConvertible {
   var description: String {
     switch self {
