@@ -218,16 +218,24 @@ public struct Bracket: Codable, Sendable {
   }
 }
 
-private let bracketFileName = "bracket.json"
+/// Bump when the archive's decoded types change, so a copy saved by an older build is downloaded again.
+private let bracketCacheVersion = 2
+
+private func bracketFileName(version: Int = bracketCacheVersion) -> String {
+  version == 1 ? "bracket.json" : "bracket-\(version).json"
+}
 
 extension Bracket {
   static func read(fileManager: FileManager = .default, deleteFile: Bool = false)
     throws -> Self
   {
-    try fileManager.readCache(fileName: bracketFileName, deleteFile: deleteFile)
+    try fileManager.readCache(fileName: bracketFileName(), deleteFile: deleteFile)
   }
 
   func save(fileManager: FileManager = .default) throws {
-    try fileManager.saveCache(cacheData: self, fileName: bracketFileName)
+    try fileManager.saveCache(cacheData: self, fileName: bracketFileName())
+    for version in 1..<bracketCacheVersion {
+      fileManager.removeCache(fileName: bracketFileName(version: version))
+    }
   }
 }

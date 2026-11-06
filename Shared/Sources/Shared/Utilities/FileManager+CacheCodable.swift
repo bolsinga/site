@@ -25,4 +25,10 @@ extension FileManager {
     let fileURL = try cacheFileURL(for: fileName)
     try fileURL.writeJSON(cacheData)
   }
+
+  /// Removes a cache file, if there is one.
+  public func removeCache(fileName: String) {
+    guard let fileURL = try? cacheFileURL(for: fileName) else { return }
+    try? removeItem(at: fileURL)
+  }
 }
