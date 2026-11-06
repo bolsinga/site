@@ -614,7 +614,9 @@ struct ClusterMap<
       }
 
       didFit = true
-      show(rect.proportionallyPadded.zoomedOut(by: fitZoomOutFactor), in: mapView)
+      // Pins are drawn around their coordinates, so leave room for them too.
+      let pin = annotationMap.values.first.map { fittingSize(of: itemContent($0.item)) } ?? .zero
+      show(rect.proportionallyPadded.zoomedOut(by: fitZoomOutFactor), in: mapView, pin: pin)
     }
 
     /// The rect of the map that has `rect` centered in the area left after the insets.
@@ -641,9 +643,12 @@ struct ClusterMap<
     /// How much of the top inset, the bars, items may spill into above and below the clear area.
     private static var spillFraction: CGFloat { 0.45 }
 
-    private func show(_ rect: MKMapRect, in mapView: MKMapView) {
+    private func show(_ rect: MKMapRect, in mapView: MKMapView, pin: CGSize = .zero) {
       // No region change is reported if the map is already there, so don't wait for one.
-      let insets = edgePadding(for: mapView, bottom: mapView.bounds.height * fitBottomFraction)
+      let abovePin = min(anchorY ?? pin.height, pin.height)
+      let insets = edgePadding(
+        for: mapView, top: abovePin, horizontal: pin.width / 2.0,
+        bottom: mapView.bounds.height * fitBottomFraction + pin.height - abovePin)
       let animated = animatesFit && !reducesMotion
       if fitBottomFraction > 0,
         let visible = visibleRect(centering: rect, in: mapView, insets: insets)
