@@ -119,6 +119,8 @@ struct SnapshotMap<Item: Identifiable, Dot: View>: View {
   @State private var size = CGSize.zero
   @State private var insets = EdgeInsets()
   @State private var shown: ShownSnapshot?
+  /// The last map stays when there are no items, but without its dots.
+  @State private var hidesDots = false
 
   /// How much of the top inset, the bars, items may spill into above and below the clear area.
   private static var spillFraction: CGFloat { 0.45 }
@@ -200,8 +202,10 @@ struct SnapshotMap<Item: Identifiable, Dot: View>: View {
           Image(platformImage: shown.image)
             .resizable()
             .frame(width: shown.request.size.width, height: shown.request.size.height)
-          ForEach(Array(shown.dotPoints.enumerated()), id: \.offset) {
-            dot().position($0.element)
+          if !hidesDots {
+            ForEach(Array(shown.dotPoints.enumerated()), id: \.offset) {
+              dot().position($0.element)
+            }
           }
         }
         .id(shown.request)
@@ -217,7 +221,9 @@ struct SnapshotMap<Item: Identifiable, Dot: View>: View {
     .task(id: request) {
       let neighborRequests = neighborRequests
       // With no items there is nothing to fit, so the last map stays.
-      if let request, let shown = await snapshot(for: request, coordinates: coordinates) {
+      if coordinates.isEmpty {
+        withAnimation(animatesChanges ? .default : nil) { hidesDots = true }
+      } else if let request, let shown = await snapshot(for: request, coordinates: coordinates) {
         present(shown)
       }
       // One at a time, after this map, and given up when this map changes.
@@ -275,6 +281,7 @@ struct SnapshotMap<Item: Identifiable, Dot: View>: View {
   private func present(_ shown: ShownSnapshot) {
     withAnimation(animatesChanges ? .default : nil) {
       self.shown = shown
+      hidesDots = false
     }
   }
 }
