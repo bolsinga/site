@@ -60,13 +60,13 @@ struct VenueMapKitIDTests {
     #expect(venue.canUseCached(.coordinate(CLLocationCoordinate2D(latitude: 1, longitude: 2))))
   }
 
-  /// An `Atlas` whose cache file holds a placemark for v1.
-  private func atlas(caching placemark: Placemark, fileName: String) throws -> (
+  /// An `Atlas` whose cache file holds a placemark for v1, geocoded from the venue as it is.
+  private func atlas(caching placemark: Placemark, for venue: Venue, fileName: String) throws -> (
     Atlas<Venue>, ArchivePath
   ) {
     let id = try ArchivePath(raw: "v1")
     var cache = AtlasCache<Venue>(fileName: fileName)
-    cache.add(id, value: placemark)
+    cache.add(id, value: placemark, source: venue.geocodeSource)
     return (Atlas(cache: cache), id)
   }
 
@@ -77,12 +77,12 @@ struct VenueMapKitIDTests {
   @Test func atlasUsesCachedPlaceForMapKitID() async throws {
     let fileName = "atlas-test-\(UUID().uuidString).json"
     defer { removeCache(fileName: fileName) }
+    let venue = Venue(
+      id: "v1", location: Location(city: "c", state: "s"), name: "n", mapKitID: "I1")
     let (atlas, id) = try atlas(
       caching: .place(
         identifier: "I1", coordinate: CLLocationCoordinate2D(latitude: 1, longitude: 2)),
-      fileName: fileName)
-    let venue = Venue(
-      id: "v1", location: Location(city: "c", state: "s"), name: "n", mapKitID: "I1")
+      for: venue, fileName: fileName)
 
     guard case .place(let identifier, let coordinate) = try await atlas.geocode(venue, id: id)
     else {
@@ -96,9 +96,10 @@ struct VenueMapKitIDTests {
   @Test func atlasKeepsCachedAddressWithoutMapKitID() async throws {
     let fileName = "atlas-test-\(UUID().uuidString).json"
     defer { removeCache(fileName: fileName) }
-    let (atlas, id) = try atlas(
-      caching: .coordinate(CLLocationCoordinate2D(latitude: 1, longitude: 2)), fileName: fileName)
     let venue = Venue(id: "v1", location: Location(city: "c", state: "s"), name: "n")
+    let (atlas, id) = try atlas(
+      caching: .coordinate(CLLocationCoordinate2D(latitude: 1, longitude: 2)), for: venue,
+      fileName: fileName)
 
     guard case .coordinate(let coordinate) = try await atlas.geocode(venue, id: id) else {
       Issue.record("not the cached address")

@@ -20,6 +20,8 @@ struct AtlasCache<T: AtlasGeocodable> {
   struct Value: Codable {
     var placemark: T.Place
     let expirationDate: Date
+    /// What the place was geocoded from; none in caches saved before it was kept.
+    var source: String?
   }
 
   private let fileName: String
@@ -45,30 +47,19 @@ struct AtlasCache<T: AtlasGeocodable> {
     }
   }
 
-  func get(_ id: ArchivePath) -> T.Place? { self[id] }
+  func entry(_ id: ArchivePath) -> Value? { cache[id] }
 
-  mutating func add(_ id: ArchivePath, value: T.Place) { self[id] = value }
+  mutating func add(_ id: ArchivePath, value: T.Place, source: String? = nil) {
+    cache[id] = Value(
+      placemark: value, expirationDate: .now + expirationOffset + staggerOffset, source: source)
 
-  private subscript(index: ArchivePath) -> T.Place? {
-    get {
-      cache[index]?.placemark
-    }
-    set(newValue) {
-      if let newValue {
-        cache[index] = Value(
-          placemark: newValue,
-          expirationDate: .now + expirationOffset + staggerOffset)
+    // This allows batch geocodes to be "staggered" in their expiration so they do not run all the time once the day comes.
+    staggerOffset += ExpirationStaggerDuration
 
-        // This allows batch geocodes to be "staggered" in their expiration so they do not run all the time once the day comes.
-        staggerOffset += ExpirationStaggerDuration
-      } else {
-        cache[index] = nil
-      }
-      do {
-        try cache.save(fileName: fileName)
-      } catch {
-        Logger.atlasCache.error("Cache Save Error: \(error, privacy: .public)")
-      }
+    do {
+      try cache.save(fileName: fileName)
+    } catch {
+      Logger.atlasCache.error("Cache Save Error: \(error, privacy: .public)")
     }
   }
 }
