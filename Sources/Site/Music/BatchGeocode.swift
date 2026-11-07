@@ -24,21 +24,51 @@ struct BatchGeocode<T: AtlasGeocodable>: AsyncSequence {
     self.geocodables = geocodables
   }
 
+  /// Cached places come first, so they show at once. Then those never geocoded, then those
+  /// whose cached place is stale, which come again with their new place.
   struct AsyncIterator: AsyncIteratorProtocol {
     let atlas: Atlas<T>
     let geocodables: [(ArchivePath, T)]
 
     var index: Int = 0
+    private var uncached: [(ArchivePath, T)] = []
+    private var uncachedIndex = 0
+    private var stale: [(ArchivePath, T)] = []
+    private var staleIndex = 0
+
+    init(atlas: Atlas<T>, geocodables: [(ArchivePath, T)]) {
+      self.atlas = atlas
+      self.geocodables = geocodables
+    }
 
     mutating func next() async throws -> Element? {
       guard !Task.isCancelled else { return nil }
 
-      guard index < geocodables.count else { return nil }
+      while index < geocodables.count {
+        let (id, geocodable) = geocodables[index]
+        index += 1
+        guard let cached = await atlas.cached(geocodable, id: id) else {
+          uncached.append((id, geocodable))
+          continue
+        }
+        if !cached.isCurrent { stale.append((id, geocodable)) }
+        return (id, geocodable, cached.place)
+      }
 
-      let (id, geocodable) = geocodables[index]
-      let place = try await atlas.geocode(geocodable, id: id)
-      index += 1
-      return (id, geocodable, place)
+      if uncachedIndex < uncached.count {
+        let (id, geocodable) = uncached[uncachedIndex]
+        uncachedIndex += 1
+        return (id, geocodable, try await atlas.geocode(geocodable, id: id))
+      }
+
+      while staleIndex < stale.count {
+        let (id, geocodable) = stale[staleIndex]
+        staleIndex += 1
+        // When it can't be found again, the stale place stays, and a later batch tries again.
+        guard let place = try await atlas.geocode(geocodable, id: id) else { continue }
+        return (id, geocodable, place)
+      }
+      return nil
     }
   }
 

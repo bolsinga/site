@@ -39,6 +39,11 @@ extension Venue: AtlasGeocodable {
     return placemark
   }
 
+  /// Its address and MapKit identifier, so a venue that moves or gets an identifier is found again.
+  var geocodeSource: String? {
+    [location.addressString, mapKitID].compactMap { $0 }.joined(separator: "\n")
+  }
+
   /// A venue with a MapKit identifier uses the place found for it, not one from its address.
   func canUseCached(_ place: Placemark) -> Bool {
     guard let mapKitID else { return true }
