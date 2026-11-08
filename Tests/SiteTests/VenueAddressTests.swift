@@ -54,9 +54,25 @@ struct VenueAddressTests {
     #expect(VenueAddress(MapsAddress(lines: ["London W1D 4HS"], city: "London")) == nil)
   }
 
-  @Test func punctuationAndAbbreviationsMatch() {
-    let venue = VenueAddress(street: "1300 S.E. Stark Street", city: "portland", state: "Oregon")
+  @Test func sameTextMatches() {
+    let venue = VenueAddress(street: " 1300 SE Stark St", city: "Portland", state: "OR")
     #expect(AddressCheck(venue: venue, maps: revolutionHall) == .matches)
+  }
+
+  @Test func differentWordingDiffers() {
+    for street in ["1300 SE Stark St.", "1300 Southeast Stark Street", "1300 se stark st"] {
+      let venue = VenueAddress(street: street, city: "Portland", state: "OR")
+      #expect(
+        AddressCheck(venue: venue, maps: revolutionHall)
+          == .differs(VenueAddress(revolutionHall)!, parts: [.street]))
+    }
+  }
+
+  @Test func stateIsComparedWithMapsCode() {
+    let venue = VenueAddress(street: "1300 SE Stark St", city: "Portland", state: "WA")
+    #expect(
+      AddressCheck(venue: venue, maps: revolutionHall)
+        == .differs(VenueAddress(revolutionHall)!, parts: [.state]))
   }
 
   @Test func differentStreetDiffers() {

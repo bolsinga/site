@@ -60,7 +60,8 @@ extension VenueAddress {
   }
 }
 
-/// How a venue's address compares with the one Maps gave.
+/// How a venue's address compares with the one Maps gave, as plain text, so accepting Maps'
+/// makes the venue's match it exactly.
 enum AddressCheck: Equatable, Sendable {
   enum Part: CaseIterable, Hashable, Sendable {
     case street
@@ -68,7 +69,7 @@ enum AddressCheck: Equatable, Sendable {
     case state
   }
 
-  /// The same, ignoring case, punctuation and abbreviations.
+  /// The same text.
   case matches
   /// Maps gave a different address; accepting it makes these parts the venue's.
   case differs(VenueAddress, parts: Set<Part>)
@@ -83,13 +84,11 @@ enum AddressCheck: Equatable, Sendable {
       return
     }
     var parts = Set<Part>()
-    if Self.normalizedCity(venue.city) != Self.normalizedCity(found.city) { parts.insert(.city) }
-    if Self.normalizedState(venue.state) != Self.normalizedState(found.state) {
-      parts.insert(.state)
-    }
+    if Self.trimmed(venue.city) != Self.trimmed(found.city) { parts.insert(.city) }
+    if Self.trimmed(venue.state) != Self.trimmed(found.state) { parts.insert(.state) }
     switch (venue.street, found.street) {
     case (.some(let street), .some(let foundStreet)):
-      if Self.streetWords(street) != Self.streetWords(foundStreet) { parts.insert(.street) }
+      if Self.trimmed(street) != Self.trimmed(foundStreet) { parts.insert(.street) }
     case (.none, .some):
       parts.insert(.street)
     case (.some, .none):
@@ -103,49 +102,7 @@ enum AddressCheck: Equatable, Sendable {
     self = parts.isEmpty ? .matches : .differs(found, parts: parts)
   }
 
-  /// The words, with periods and apostrophes dropped so "S.E." is "se".
-  private static func words(_ string: String) -> [String] {
-    string.folding(options: [.caseInsensitive, .diacriticInsensitive], locale: nil)
-      .filter { !".'’".contains($0) }
-      .split { !$0.isLetter && !$0.isNumber }
-      .map(String.init)
+  private static func trimmed(_ string: String) -> String {
+    string.trimmingCharacters(in: .whitespaces)
   }
-
-  private static func normalizedCity(_ city: String) -> [String] { words(city) }
-
-  /// A street's words, with its words for directions and kinds of street abbreviated.
-  static func streetWords(_ street: String) -> [String] {
-    words(street).map { streetAbbreviations[$0] ?? $0 }
-  }
-
-  /// A state's two letter code when it's a US state's name, otherwise its words.
-  static func normalizedState(_ state: String) -> String {
-    let words = words(state)
-    return stateCodes[words.joined(separator: " ")] ?? words.joined(separator: " ")
-  }
-
-  private static let streetAbbreviations = [
-    "street": "st", "avenue": "ave", "av": "ave", "boulevard": "blvd", "road": "rd",
-    "drive": "dr", "place": "pl", "lane": "ln", "court": "ct", "terrace": "ter",
-    "highway": "hwy", "parkway": "pkwy", "square": "sq", "circle": "cir", "alley": "aly",
-    "plaza": "plz", "center": "ctr", "centre": "ctr", "expressway": "expy", "freeway": "fwy",
-    "suite": "ste", "building": "bldg", "floor": "fl", "mount": "mt", "fort": "ft",
-    "saint": "st", "north": "n", "south": "s", "east": "e", "west": "w", "northeast": "ne",
-    "northwest": "nw", "southeast": "se", "southwest": "sw",
-  ]
-
-  private static let stateCodes = [
-    "alabama": "al", "alaska": "ak", "arizona": "az", "arkansas": "ar", "california": "ca",
-    "colorado": "co", "connecticut": "ct", "delaware": "de", "district of columbia": "dc",
-    "florida": "fl", "georgia": "ga", "hawaii": "hi", "idaho": "id", "illinois": "il",
-    "indiana": "in", "iowa": "ia", "kansas": "ks", "kentucky": "ky", "louisiana": "la",
-    "maine": "me", "maryland": "md", "massachusetts": "ma", "michigan": "mi", "minnesota": "mn",
-    "mississippi": "ms", "missouri": "mo", "montana": "mt", "nebraska": "ne", "nevada": "nv",
-    "new hampshire": "nh", "new jersey": "nj", "new mexico": "nm", "new york": "ny",
-    "north carolina": "nc", "north dakota": "nd", "ohio": "oh", "oklahoma": "ok",
-    "oregon": "or", "pennsylvania": "pa", "rhode island": "ri", "south carolina": "sc",
-    "south dakota": "sd", "tennessee": "tn", "texas": "tx", "utah": "ut", "vermont": "vt",
-    "virginia": "va", "washington": "wa", "west virginia": "wv", "wisconsin": "wi",
-    "wyoming": "wy",
-  ]
 }
