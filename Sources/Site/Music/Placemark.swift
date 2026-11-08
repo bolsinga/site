@@ -36,18 +36,28 @@ extension CLLocationCoordinate2D: @retroactive Encodable {
 }
 
 enum Placemark: Codable {
-  static func coordinate(_ location: CLLocation) -> Placemark {
-    .coordinate(location.coordinate)
+  /// Where Maps found the address, with the address it gave.
+  static func found(_ item: MKMapItem) -> Placemark {
+    .coordinate(item.location.coordinate, address: MapsAddress(item))
   }
 
-  case coordinate(CLLocationCoordinate2D)
+  /// Where an address is; the address Maps gave is none in places cached before it was kept.
+  case coordinate(CLLocationCoordinate2D, address: MapsAddress? = nil)
   case identifier(String)
   /// A place in Maps with where it is, so showing it needs no lookup.
-  case place(identifier: String, coordinate: CLLocationCoordinate2D)
+  case place(identifier: String, coordinate: CLLocationCoordinate2D, address: MapsAddress? = nil)
+
+  /// The address Maps gave, if it was kept.
+  var address: MapsAddress? {
+    switch self {
+    case .coordinate(_, let address), .place(_, _, let address): address
+    case .identifier: nil
+    }
+  }
 
   func mapItem(for venue: Venue) async throws -> MKMapItem {
     switch self {
-    case .coordinate(let coordinate), .place(_, let coordinate):
+    case .coordinate(let coordinate, _), .place(_, let coordinate, _):
       return MKMapItem(
         venue: venue,
         location: CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude))
@@ -65,7 +75,7 @@ extension Placemark {
   var origin: String {
     switch self {
     case .coordinate: "address"
-    case .identifier(let string), .place(let string, _): "MapKit identifier \(string)"
+    case .identifier(let string), .place(let string, _, _): "MapKit identifier \(string)"
     }
   }
 }
@@ -73,11 +83,11 @@ extension Placemark {
 extension Placemark: CustomStringConvertible {
   var description: String {
     switch self {
-    case .coordinate(let coordinate):
+    case .coordinate(let coordinate, _):
       "\(coordinate)"
     case .identifier(let string):
       string
-    case .place(let identifier, let coordinate):
+    case .place(let identifier, let coordinate, _):
       "\(identifier) \(coordinate)"
     }
   }
