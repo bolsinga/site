@@ -8,6 +8,7 @@
 import Foundation
 import Testing
 
+@testable import Shared
 @testable import SiteApp
 
 @MainActor
@@ -83,5 +84,47 @@ struct VenuePickStoreTests {
     #expect(store.readError != nil)
     store["v1"] = .noPlace
     #expect(try String(contentsOf: fileURL, encoding: .utf8) == "not json")
+  }
+
+  @Test func removeAllDeletesPicksAndFile() {
+    let fileURL = temporaryFileURL()
+    let store = VenuePickStore(fileURL: fileURL)
+    store["v1"] = .place(identifier: "I1")
+
+    store.removeAll()
+    #expect(store.picks.isEmpty)
+    #expect(!FileManager.default.fileExists(atPath: fileURL.path(percentEncoded: false)))
+    #expect(VenuePickStore(fileURL: fileURL).picks.isEmpty)
+  }
+
+  @Test func removeAllRecoversFromUnreadableFile() throws {
+    let fileURL = temporaryFileURL()
+    try FileManager.default.createDirectory(
+      at: fileURL.deletingLastPathComponent(), withIntermediateDirectories: true)
+    try Data("not json".utf8).write(to: fileURL)
+    let store = VenuePickStore(fileURL: fileURL)
+
+    store.removeAll()
+    #expect(store.readError == nil)
+    store["v1"] = .noPlace
+    #expect(VenuePickStore(fileURL: fileURL).picks == ["v1": .noPlace])
+  }
+
+  @Test func placeIdentifierIsPickedOrArchived() {
+    let venue = Venue(
+      id: "v1", location: Location(city: "c", state: "s"), name: "n", mapKitID: "IArchive")
+    #expect(venue.placeIdentifier(pick: nil) == "IArchive")
+    #expect(venue.placeIdentifier(pick: .place(identifier: "IPicked")) == "IPicked")
+    #expect(venue.placeIdentifier(pick: .noPlace) == nil)
+    #expect(venue.placeIdentifier(pick: .coordinate(latitude: 1, longitude: 2)) == nil)
+    let unplaced = Venue(id: "v2", location: Location(city: "c", state: "s"), name: "n")
+    #expect(unplaced.placeIdentifier(pick: nil) == nil)
+  }
+
+  @Test func removeAllWithoutFile() {
+    let store = VenuePickStore(fileURL: temporaryFileURL())
+    store.removeAll()
+    #expect(store.picks.isEmpty)
+    #expect(store.readError == nil)
   }
 }

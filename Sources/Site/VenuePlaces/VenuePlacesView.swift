@@ -124,6 +124,7 @@ struct VenuePlacesSplitView: View {
   @State private var isChoosingVenueMapFolder = false
   /// What writing venuemap.txt did.
   @State private var venueMapMessage: String?
+  @State private var isConfirmingClear = false
 
   private var shownDigests: [VenueDigest] {
     digests.filter { digest in
@@ -136,6 +137,12 @@ struct VenuePlacesSplitView: View {
     SharedLocation.groups(of: digests.map { .init(id: $0.id, location: $0.location) }) {
       model.venueMapItemMap[$0]?.location
     }
+  }
+
+  /// Removes the picks and what the batches found, keeping the venuemap.txt folder.
+  private func clearVenueData() {
+    checks.removeAll()
+    store.removeAll()
   }
 
   private func writeVenueMap(to folder: URL) {
@@ -151,7 +158,7 @@ struct VenuePlacesSplitView: View {
   }
 
   private func status(_ digest: VenueDigest) -> VenuePickStatus {
-    checks.status(venueID: digest.venue.id, pick: store[digest.venue.id])
+    checks.status(venue: digest.venue, pick: store[digest.venue.id])
   }
 
   private func digest(_ id: ArchivePath) -> VenueDigest? {
@@ -259,6 +266,10 @@ struct VenuePlacesSplitView: View {
         }
         .help("Write venuemap.txt")
         .disabled(digests.isEmpty)
+        Button("Clear Saved Data", systemImage: "trash", role: .destructive) {
+          isConfirmingClear = true
+        }
+        .help("Clear Saved Data")
       }
       ToolbarItem {
         Picker("Filter", selection: $filter) {
@@ -280,6 +291,18 @@ struct VenuePlacesSplitView: View {
         }
       }
     #endif
+    .confirmationDialog(
+      "Clear Saved Data?", isPresented: $isConfirmingClear, titleVisibility: .visible
+    ) {
+      Button("Clear Saved Data", role: .destructive) {
+        clearVenueData()
+        VenueMapFolder.forget()
+      }
+    } message: {
+      Text(
+        "Every pick, the venuemap.txt folder, and what Verify All and Auto-match found are removed. This can't be undone."
+      )
+    }
     .alert(
       "venuemap.txt",
       isPresented: Binding(
@@ -295,6 +318,10 @@ struct VenuePlacesSplitView: View {
     }
     .task(id: ObjectIdentifier(model)) {
       digests = model.vault.orderedVenueIDs.compactMap { model.vault.digest(venue: $0) }
+      // Picks for venue data that has since changed are cleared.
+      if VenuesFingerprint().update(digests.map(\.venue)) {
+        clearVenueData()
+      }
     }
   }
 

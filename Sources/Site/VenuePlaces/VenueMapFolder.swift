@@ -47,6 +47,11 @@ enum VenueMapFolder {
     }
   }
 
+  /// Forgets the folder, so it is asked for again next time.
+  static func forget() {
+    UserDefaults.standard.removeObject(forKey: bookmarkKey)
+  }
+
   /// Remembers the folder; if it can't be, it is asked for again next time.
   static func remember(_ folder: URL) {
     withAccess(to: folder) {

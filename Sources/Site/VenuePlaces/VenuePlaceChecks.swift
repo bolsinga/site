@@ -38,34 +38,36 @@ extension Logger {
   var isRunning: Bool { progress != nil }
 
   /// The verification for the pick, if it was the one verified.
-  func verification(venueID: String, pick: VenuePick?) -> PickVerification? {
-    guard let identifier = pick?.identifier, let check = checks[venueID],
+  func verification(venue: Venue, pick: VenuePick?) -> PickVerification? {
+    guard let identifier = venue.placeIdentifier(pick: pick), let check = checks[venue.id],
       check.identifier == identifier
     else { return nil }
     return check.verification
   }
 
-  func status(venueID: String, pick: VenuePick?) -> VenuePickStatus {
-    switch verification(venueID: venueID, pick: pick) {
+  func status(venue: Venue, pick: VenuePick?) -> VenuePickStatus {
+    switch verification(venue: venue, pick: pick) {
     case .verified: return .verified
     case .replaced, .notFound: return .stale
     case nil:
-      if pick == nil, suggestions[venueID] != nil { return .suggested }
+      if pick == nil, suggestions[venue.id] != nil { return .suggested }
       return VenuePickStatus(pick)
     }
   }
 
-  /// Resolves every picked identifier.
+  /// Resolves every venue's identifier, picked or from the archive.
   func verifyAll(_ digests: [VenueDigest], store: VenuePickStore) {
     let places: [(ArchivePath, SavedPlace)] = digests.compactMap { digest in
-      guard let identifier = store[digest.venue.id]?.identifier else { return nil }
+      guard let identifier = digest.venue.placeIdentifier(pick: store[digest.venue.id]) else {
+        return nil
+      }
       return (digest.id, SavedPlace(venue: digest.venue, identifier: identifier))
     }
     run("Verifying Picks", places) { _, place, found in
       let verification = PickVerification(identifier: place.identifier, found: found)
       self.checks[place.venue.id] = Check(identifier: place.identifier, verification: verification)
-      // A verified pick saved without its street gets it from Maps.
-      if verification == .verified, store[place.venue.id]?.street == nil,
+      // A verified pick saved without its street gets it from Maps; unpicked venues stay unpicked.
+      if verification == .verified, let pick = store[place.venue.id], pick.street == nil,
         let foundPick = found?.pick, foundPick.street != nil
       {
         store[place.venue.id] = foundPick
@@ -96,6 +98,14 @@ extension Logger {
 
   func cancel() {
     task?.cancel()
+  }
+
+  /// Stops any batch and forgets what the batches found.
+  func removeAll() {
+    cancel()
+    checks = [:]
+    suggestions = [:]
+    error = nil
   }
 
   /// Runs through an `Atlas` without a cache, so it is rate limited without saving results.

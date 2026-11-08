@@ -57,7 +57,9 @@ struct VenuePlaceDetail: View {
 
   private var pickDescription: String {
     switch pick {
-    case nil: String(localized: "Unpicked")
+    case nil:
+      digest.venue.mapKitID.map { String(localized: "Unpicked, so the archive's: \($0)") }
+        ?? String(localized: "Unpicked")
     case .place(let identifier, let address, _):
       [pickedPlace?.name, address, identifier].compactMap { $0 }.joined(separator: "\n")
     case .coordinate(let latitude, let longitude):
@@ -180,7 +182,7 @@ struct VenuePlaceDetail: View {
 
   /// What Verify All found for the pick.
   @ViewBuilder private var verification: some View {
-    switch checks.verification(venueID: digest.venue.id, pick: pick) {
+    switch checks.verification(venue: digest.venue, pick: pick) {
     case .verified:
       Label("Verified in Maps", systemImage: "checkmark.seal.fill")
         .foregroundStyle(.green)
