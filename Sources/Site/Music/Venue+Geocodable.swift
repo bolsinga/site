@@ -26,7 +26,7 @@ extension Venue: AtlasGeocodable {
       do {
         let item = try await Placemark.identifier(mapKitID).mapItem(for: self)
         placemark = .place(
-          identifier: mapKitID, coordinate: item.location.coordinate, address: MapsAddress(item))
+          identifier: mapKitID, coordinate: item.location.coordinate, maps: MapsAddress(item))
       } catch {
         // Placed by its address until a later launch finds the identifier.
         Logger.geoToolbox.error(

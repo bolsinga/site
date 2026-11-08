@@ -1,5 +1,5 @@
 //
-//  VenuePickStore.swift
+//  PickStore.swift
 //  SiteApp
 //
 //  Created by Greg Bolsinga on 11/3/26.
@@ -9,33 +9,29 @@ import Foundation
 import os
 
 extension Logger {
-  fileprivate static let venuePickStore = Logger(category: "venuePickStore")
+  fileprivate static let pickStore = Logger(category: "pickStore")
 }
 
-/// The venue picks, by venue ID, saved after every change.
-@MainActor @Observable final class VenuePickStore {
-  private(set) var picks: [String: VenuePick]
+/// Picks, by venue ID, saved after every change.
+@MainActor @Observable final class PickStore<Pick: Codable> {
+  private(set) var picks: [String: Pick]
   /// Set when the saved picks can't be read; they are then left alone rather than overwritten.
   private(set) var readError: Error?
 
   @ObservationIgnored private let fileURL: URL
 
-  static var defaultFileURL: URL {
-    URL.applicationSupportDirectory.appending(path: "venue-places.json")
-  }
-
-  init(fileURL: URL = VenuePickStore.defaultFileURL) {
+  init(fileURL: URL) {
     self.fileURL = fileURL
     do {
       picks = try Self.read(from: fileURL)
     } catch {
-      Logger.venuePickStore.error("read: \(error, privacy: .public)")
+      Logger.pickStore.error("read: \(error, privacy: .public)")
       picks = [:]
       readError = error
     }
   }
 
-  subscript(venueID: String) -> VenuePick? {
+  subscript(venueID: String) -> Pick? {
     get { picks[venueID] }
     set {
       picks[venueID] = newValue
@@ -52,7 +48,7 @@ extension Logger {
         try FileManager.default.removeItem(at: fileURL)
       }
     } catch {
-      Logger.venuePickStore.error("remove: \(error, privacy: .public)")
+      Logger.pickStore.error("remove: \(error, privacy: .public)")
     }
   }
 
@@ -62,11 +58,11 @@ extension Logger {
     return encoder
   }
 
-  private static func read(from fileURL: URL) throws -> [String: VenuePick] {
+  private static func read(from fileURL: URL) throws -> [String: Pick] {
     guard FileManager.default.fileExists(atPath: fileURL.path(percentEncoded: false)) else {
       return [:]
     }
-    return try JSONDecoder().decode([String: VenuePick].self, from: Data(contentsOf: fileURL))
+    return try JSONDecoder().decode([String: Pick].self, from: Data(contentsOf: fileURL))
   }
 
   private func save() {
@@ -76,7 +72,25 @@ extension Logger {
         at: fileURL.deletingLastPathComponent(), withIntermediateDirectories: true)
       try Self.encoder.encode(picks).write(to: fileURL, options: .atomic)
     } catch {
-      Logger.venuePickStore.error("save: \(error, privacy: .public)")
+      Logger.pickStore.error("save: \(error, privacy: .public)")
     }
+  }
+}
+
+/// Where each venue is.
+typealias VenuePickStore = PickStore<VenuePick>
+
+/// The address each venue was chosen to have.
+typealias VenueAddressPickStore = PickStore<VenueAddress>
+
+extension PickStore where Pick == VenuePick {
+  convenience init() {
+    self.init(fileURL: URL.applicationSupportDirectory.appending(path: "venue-places.json"))
+  }
+}
+
+extension PickStore where Pick == VenueAddress {
+  convenience init() {
+    self.init(fileURL: URL.applicationSupportDirectory.appending(path: "venue-addresses.json"))
   }
 }

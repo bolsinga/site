@@ -14,13 +14,14 @@ struct VenuePlacesView: View {
   let model: SiteModel
 
   @State private var store = VenuePickStore()
+  @State private var addresses = VenueAddressPickStore()
   @State private var checks = VenuePlaceChecks()
 
   var body: some View {
     if !VenuePlaces.isEnabled {
       ContentUnavailableView("Venue Places Unavailable", systemImage: "map")
     } else if let vaultModel = model.vaultModel {
-      VenuePlacesSplitView(store: store)
+      VenuePlacesSplitView(store: store, addresses: addresses)
         .environment(vaultModel)
         .environment(checks)
     } else {
@@ -101,13 +102,14 @@ extension SharedLocation.Cause {
   }
 }
 
-extension VenuePickStore {
-  func binding(for venueID: String) -> Binding<VenuePick?> {
+extension PickStore {
+  func binding(for venueID: String) -> Binding<Pick?> {
     Binding(get: { self[venueID] }, set: { self[venueID] = $0 })
   }
 }
 
 enum VenuePlacesSelection: Hashable {
+  case dashboard
   case venue(ArchivePath)
   case sharedLocation(ArchivePath)
 }
@@ -116,9 +118,10 @@ struct VenuePlacesSplitView: View {
   @Environment(VaultModel.self) private var model
   @Environment(VenuePlaceChecks.self) private var checks
   let store: VenuePickStore
+  let addresses: VenueAddressPickStore
 
   @State private var digests: [VenueDigest] = []
-  @State private var selection: VenuePlacesSelection?
+  @State private var selection: VenuePlacesSelection? = .dashboard
   @State private var filter = VenuePlacesFilter.all
   @State private var searchString = ""
   @State private var isChoosingVenueMapFolder = false
@@ -143,14 +146,17 @@ struct VenuePlacesSplitView: View {
     }
   }
 
-  /// Removes the picks and what the batches found, keeping the venuemap.txt folder.
+  /// Removes the picks, accepted addresses and what the batches found, keeping the venuemap.txt
+  /// folder.
   private func clearVenueData() {
     checks.removeAll()
     store.removeAll()
+    addresses.removeAll()
   }
 
   private func writeVenueMap(to folder: VenueMapFolder) {
-    let contents = VenueMapFile.contents(digests.map(\.venue), picks: store.picks)
+    let contents = VenueMapFile.contents(
+      digests.map(\.venue), picks: store.picks, addresses: addresses.picks)
     do {
       let file = try folder.write(contents)
       venueMapMessage = String(
@@ -204,16 +210,22 @@ struct VenuePlacesSplitView: View {
 
   @ViewBuilder private var detail: some View {
     switch selection {
+    case .dashboard:
+      VenuePlacesDashboard(digests: digests, addresses: addresses) { selection = .venue($0) }
     case .venue(let id):
       if let digest = digest(id) {
-        VenuePlaceDetail(digest: digest, pick: store.binding(for: digest.venue.id))
-          .id(digest.id)
+        VenuePlaceDetail(
+          digest: digest, pick: store.binding(for: digest.venue.id),
+          address: addresses.binding(for: digest.venue.id)
+        )
+        .id(digest.id)
       }
     case .sharedLocation(let id):
       if let sharedLocation = sharedLocations.first(where: { $0.id == id }) {
         SharedLocationDetail(
           sharedLocation: sharedLocation,
-          digests: sharedLocation.venues.compactMap { digest($0.id) }, store: store
+          digests: sharedLocation.venues.compactMap { digest($0.id) }, store: store,
+          addresses: addresses
         )
         .id(id)
       } else {
@@ -227,6 +239,8 @@ struct VenuePlacesSplitView: View {
   var body: some View {
     NavigationSplitView {
       List(selection: $selection) {
+        Label("Dashboard", systemImage: "list.bullet.clipboard")
+          .tag(VenuePlacesSelection.dashboard)
         checksSection
         sharedLocationsSection
         Section("All Venues") {
@@ -307,7 +321,7 @@ struct VenuePlacesSplitView: View {
       }
     } message: {
       Text(
-        "Every pick, the venuemap.txt folder, and what Verify All and Auto-match found are removed. This can't be undone."
+        "Every pick and accepted address, the venuemap.txt folder, and what Verify All and Auto-match found are removed. This can't be undone."
       )
     }
     .alert(
@@ -341,7 +355,7 @@ struct VenuePlacesSplitView: View {
         .background(.orange.opacity(0.2), in: .rect(cornerRadius: 8))
         .padding()
     }
-    if let readError = store.readError {
+    if let readError = store.readError ?? addresses.readError {
       Text(
         "The saved picks can't be read, so changes aren't saved: \(readError.localizedDescription)"
       )

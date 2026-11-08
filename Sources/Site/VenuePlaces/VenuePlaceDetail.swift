@@ -16,6 +16,8 @@ struct VenuePlaceDetail: View {
 
   let digest: VenueDigest
   @Binding var pick: VenuePick?
+  /// The accepted address; unaccepted venues keep the archive's.
+  @Binding var address: VenueAddress?
 
   @State private var candidates: [MKMapItem] = []
   @State private var isSearching = false
@@ -79,6 +81,7 @@ struct VenuePlaceDetail: View {
           Label("No street", systemImage: "exclamationmark.triangle")
             .foregroundStyle(.orange)
         }
+        mapsAddress
       } header: {
         Text(digest.name)
           .font(.title2.bold())
@@ -177,6 +180,35 @@ struct VenuePlaceDetail: View {
     .navigationTitle(digest.name)
     .task(id: pick) {
       await resolvePickedPlace()
+    }
+  }
+
+  /// The address Maps gave, how it compares, and the accepted address.
+  @ViewBuilder private var mapsAddress: some View {
+    let venueAddress = address ?? VenueAddress(digest.location)
+    let check = AddressCheck(venue: venueAddress, maps: model.venueMapsAddressMap[digest.id])
+    if let address {
+      LabeledContent("Accepted", value: address.formatted)
+    }
+    switch check {
+    case .matches:
+      Label("Matches Maps", systemImage: "checkmark.circle")
+        .foregroundStyle(.green)
+    case .differs(let found):
+      LabeledContent("Maps") {
+        Text(found.formatted)
+          .foregroundStyle(.orange)
+          #if !os(tvOS)
+            .textSelection(.enabled)
+          #endif
+      }
+      Button("Use Maps' Address") { address = found }
+    case .unknown:
+      Label("Not compared with Maps yet", systemImage: "questionmark.circle")
+        .foregroundStyle(.secondary)
+    }
+    if address != nil {
+      Button("Undo Accepted Address") { address = nil }
     }
   }
 
