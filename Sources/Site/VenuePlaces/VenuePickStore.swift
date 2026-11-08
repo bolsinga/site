@@ -43,6 +43,19 @@ extension Logger {
     }
   }
 
+  /// Removes every pick and the saved file, which also starts over after a read error.
+  func removeAll() {
+    picks = [:]
+    readError = nil
+    do {
+      if FileManager.default.fileExists(atPath: fileURL.path(percentEncoded: false)) {
+        try FileManager.default.removeItem(at: fileURL)
+      }
+    } catch {
+      Logger.venuePickStore.error("remove: \(error, privacy: .public)")
+    }
+  }
+
   private static var encoder: JSONEncoder {
     let encoder = JSONEncoder()
     encoder.outputFormatting = [.prettyPrinted, .sortedKeys]

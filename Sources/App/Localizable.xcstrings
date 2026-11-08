@@ -401,6 +401,12 @@
     "Clear City" : {
 
     },
+    "Clear Saved Data" : {
+
+    },
+    "Clear Saved Data?" : {
+
+    },
     "club" : {
 
     },
@@ -468,6 +474,9 @@
 
     },
     "Edit Nearby Settings" : {
+
+    },
+    "Every pick, the venuemap.txt folder, and what Verify All and Auto-match found are removed. This can't be undone." : {
 
     },
     "Filter" : {
@@ -823,6 +832,9 @@
 
     },
     "Unpicked" : {
+
+    },
+    "Unpicked, so the archive's: %@" : {
 
     },
     "Use Pin" : {

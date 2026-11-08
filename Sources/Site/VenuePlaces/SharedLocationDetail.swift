@@ -52,7 +52,7 @@ struct SharedLocationDetail: View {
               NavigationLink(value: digest.id) {
                 VenuePlaceRow(
                   digest: digest,
-                  status: checks.status(venueID: digest.venue.id, pick: store[digest.venue.id]))
+                  status: checks.status(venue: digest.venue, pick: store[digest.venue.id]))
               }
             }
           } header: {

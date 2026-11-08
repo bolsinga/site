@@ -6,6 +6,7 @@
 //
 
 import CoreLocation
+import Shared
 
 /// Where a venue was chosen to be.
 enum VenuePick: Codable, Equatable, Sendable {
@@ -26,6 +27,13 @@ extension VenuePick {
       .coordinate(CLLocationCoordinate2D(latitude: latitude, longitude: longitude))
     case .noPlace: nil
     }
+  }
+}
+
+extension Venue {
+  /// The place in Maps the venue has with the pick: the pick's, or the archive's when unpicked.
+  func placeIdentifier(pick: VenuePick?) -> String? {
+    pick == nil ? mapKitID : pick?.identifier
   }
 }
 
