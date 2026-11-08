@@ -20,8 +20,8 @@ extension VenueAddress {
     self.init(street: location.street, city: location.city, state: location.state)
   }
 
-  /// The parts of Maps' lines: the line starting with the city is "City, ST  ZIP", and the street
-  /// is the last line before it with a number that isn't a floor or suite. None when the lines
+  /// The parts of Maps' lines: the line starting with the city is "City, ST  ZIP", and the lines
+  /// before it, such as the street and a floor or suite, are the street. None when the lines
   /// aren't in that form.
   init?(_ maps: MapsAddress) {
     let cityIndex = maps.lines.lastIndex { line in
@@ -35,23 +35,10 @@ extension VenueAddress {
     let state = parts[1].split(separator: " ").prefix { !$0.contains(where: \.isNumber) }
       .joined(separator: " ")
     guard !state.isEmpty else { return nil }
-    let before = maps.lines[..<cityIndex].filter { !Self.isUnit($0) }
+    let before = maps.lines[..<cityIndex]
     self.init(
-      street: before.last { $0.contains(where: \.isNumber) } ?? before.last,
+      street: before.isEmpty ? nil : before.joined(separator: ", "),
       city: maps.city ?? parts[0].trimmingCharacters(in: .whitespaces), state: state)
-  }
-
-  /// Words that start a line naming a floor, suite or other part of a building.
-  private static let unitWords: Set = [
-    "fl", "floor", "ste", "suite", "unit", "apt", "apartment", "rm", "room", "bldg", "building",
-    "lvl", "level", "dept",
-  ]
-
-  /// Whether the line names part of a building, such as "FL 5" or "#200", not a street.
-  private static func isUnit(_ line: String) -> Bool {
-    if line.hasPrefix("#") { return true }
-    let first = line.split(separator: " ").first.map { $0.lowercased().filter(\.isLetter) }
-    return first.map { unitWords.contains($0) } ?? false
   }
 
   /// The address on one line.

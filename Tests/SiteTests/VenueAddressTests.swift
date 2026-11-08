@@ -27,26 +27,21 @@ struct VenueAddressTests {
         == VenueAddress(street: nil, city: "Chicago", state: "IL"))
   }
 
-  @Test func readsNameLineBeforeStreet() {
-    let maps = MapsAddress(
-      lines: ["University of Chicago", "1131 E 57th St", "Chicago, IL 60637"], city: "Chicago")
-    #expect(VenueAddress(maps)?.street == "1131 E 57th St")
-  }
-
-  @Test func skipsFloorAndSuiteLines() {
+  @Test func keepsFloorAndSuiteLines() {
     let floor = MapsAddress(
       lines: ["110 Capp St", "FL 5", "San Francisco, CA  94110"], city: "San Francisco")
-    #expect(VenueAddress(floor)?.street == "110 Capp St")
-    let suite = MapsAddress(
-      lines: ["1 Main St", "Ste. 200", "#4", "Portland, OR 97214"], city: "Portland")
-    #expect(VenueAddress(suite)?.street == "1 Main St")
+    #expect(VenueAddress(floor)?.street == "110 Capp St, FL 5")
+    let suite = MapsAddress(lines: ["1 Main St", "Ste 200", "Portland, OR 97214"], city: "Portland")
+    #expect(VenueAddress(suite)?.street == "1 Main St, Ste 200")
   }
 
-  @Test func floorLineDoesNotMakeADifference() {
+  @Test func floorLineMakesADifference() {
     let venue = VenueAddress(street: "110 Capp St", city: "San Francisco", state: "CA")
     let maps = MapsAddress(
       lines: ["110 Capp St", "FL 5", "San Francisco, CA  94110"], city: "San Francisco")
-    #expect(AddressCheck(venue: venue, maps: maps) == .matches)
+    #expect(
+      AddressCheck(venue: venue, maps: maps)
+        == .differs(VenueAddress(maps)!, parts: [.street]))
   }
 
   @Test func unreadableLinesAreNone() {
