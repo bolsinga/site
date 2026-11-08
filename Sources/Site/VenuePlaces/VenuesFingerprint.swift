@@ -21,7 +21,7 @@ enum VenuesFingerprint {
   }
 
   /// Whether the venues changed since the saved fingerprint; nothing was saved before the first.
-  static func isChange(saved: String, current: String) -> Bool {
+  static func isChanged(saved: String, current: String) -> Bool {
     !saved.isEmpty && saved != current
   }
 }

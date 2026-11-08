@@ -322,7 +322,7 @@ struct VenuePlacesSplitView: View {
       digests = model.vault.orderedVenueIDs.compactMap { model.vault.digest(venue: $0) }
       // Picks for venue data that has since changed are cleared.
       let current = VenuesFingerprint.fingerprint(digests.map(\.venue))
-      if VenuesFingerprint.isChange(saved: venuesFingerprint, current: current) {
+      if VenuesFingerprint.isChanged(saved: venuesFingerprint, current: current) {
         clearVenueData()
       }
       venuesFingerprint = current

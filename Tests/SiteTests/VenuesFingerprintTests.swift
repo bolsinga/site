@@ -33,14 +33,14 @@ struct VenuesFingerprintTests {
   }
 
   @Test func firstFingerprintIsNotAChange() {
-    #expect(!VenuesFingerprint.isChange(saved: "", current: "a"))
+    #expect(!VenuesFingerprint.isChanged(saved: "", current: "a"))
   }
 
   @Test func sameFingerprintIsNotAChange() {
-    #expect(!VenuesFingerprint.isChange(saved: "a", current: "a"))
+    #expect(!VenuesFingerprint.isChanged(saved: "a", current: "a"))
   }
 
   @Test func differentFingerprintIsAChange() {
-    #expect(VenuesFingerprint.isChange(saved: "a", current: "b"))
+    #expect(VenuesFingerprint.isChanged(saved: "a", current: "b"))
   }
 }
