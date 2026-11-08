@@ -13,48 +13,13 @@ extension VenueAddressPickStore {
   func address(for venue: Venue) -> VenueAddress {
     self[venue.id] ?? VenueAddress(venue.location)
   }
-
-  func accept(_ found: VenueAddress, for venue: Venue) {
-    self[venue.id] = .accepting(found, for: venue)
-  }
-}
-
-extension VenueAddress {
-  /// Maps' address made the venue's, keeping the venue's street when Maps found none.
-  static func accepting(_ found: VenueAddress, for venue: Venue) -> VenueAddress {
-    VenueAddress(
-      street: found.street ?? venue.location.street, city: found.city, state: found.state)
-  }
 }
 
 extension AddressCheck {
   /// The address Maps gave, when it differs.
-  var differingAddress: (VenueAddress, Set<Part>)? {
-    guard case .differs(let found, let parts) = self else { return nil }
-    return (found, parts)
-  }
-
-  var foundOnlyCity: Bool {
-    if case .onlyCityFound = self { true } else { false }
-  }
-}
-
-extension VenueAddress {
-  /// The address on one line, with the parts emphasized.
-  func highlighted(_ parts: Set<AddressCheck.Part>) -> AttributedString {
-    func part(_ string: String, _ part: AddressCheck.Part) -> AttributedString {
-      var text = AttributedString(string)
-      if parts.contains(part) {
-        text.foregroundColor = .orange
-        text.inlinePresentationIntent = .stronglyEmphasized
-      }
-      return text
-    }
-    var text = AttributedString()
-    if let street {
-      text += part(street, .street) + AttributedString(", ")
-    }
-    return text + part(city, .city) + AttributedString(", ") + part(state, .state)
+  var differingAddress: VenueAddress? {
+    guard case .differs(let found) = self else { return nil }
+    return found
   }
 }
 
@@ -76,9 +41,8 @@ struct VenuePlacesDashboard: View {
   var body: some View {
     let checks = digests.map { (digest: $0, check: check($0)) }
     let differing = checks.compactMap { item in
-      item.check.differingAddress.map { (digest: item.digest, found: $0.0, parts: $0.1) }
+      item.check.differingAddress.map { (digest: item.digest, found: $0) }
     }
-    let onlyCity = checks.filter { $0.check.foundOnlyCity }.map(\.digest)
     let accepted = digests.filter { addresses[$0.venue.id] != nil }
 
     Form {
@@ -99,11 +63,11 @@ struct VenuePlacesDashboard: View {
         ForEach(differing, id: \.digest.id) { item in
           VenueAddressRow(
             digest: item.digest, venue: addresses.address(for: item.digest.venue),
-            found: item.found, parts: item.parts
+            found: item.found
           ) {
             open(item.digest.id)
           } use: {
-            addresses.accept(item.found, for: item.digest.venue)
+            addresses[item.digest.venue.id] = item.found
           }
         }
       } header: {
@@ -120,20 +84,11 @@ struct VenuePlacesDashboard: View {
       ) {
         Button("Use All Maps Addresses") {
           for item in differing {
-            addresses.accept(item.found, for: item.digest.venue)
+            addresses[item.digest.venue.id] = item.found
           }
         }
       } message: {
         Text("Each can be undone under Accepted Addresses.")
-      }
-      if !onlyCity.isEmpty {
-        Section("Maps Found Only the City (\(onlyCity.count))") {
-          ForEach(onlyCity) { digest in
-            VenueSummaryRow(digest: digest, detail: digest.location.addressString) {
-              open(digest.id)
-            }
-          }
-        }
       }
       if !accepted.isEmpty {
         Section("Accepted Addresses (\(accepted.count))") {
@@ -154,12 +109,11 @@ struct VenuePlacesDashboard: View {
   }
 }
 
-/// A venue whose address differs from Maps', with both and the parts that differ.
+/// A venue whose address differs from Maps', with both.
 private struct VenueAddressRow: View {
   let digest: VenueDigest
   let venue: VenueAddress
   let found: VenueAddress
-  let parts: Set<AddressCheck.Part>
   let show: () -> Void
   let use: () -> Void
 
@@ -167,10 +121,11 @@ private struct VenueAddressRow: View {
     HStack {
       VStack(alignment: .leading) {
         Text(digest.name)
-        Text("Venue: \(venue.highlighted(parts))")
+        Text("Venue: \(venue.formatted)")
           .font(.caption)
-        Text("Maps: \(found.highlighted(parts))")
+        Text("Maps: \(found.formatted)")
           .font(.caption)
+          .foregroundStyle(.orange)
       }
       #if !os(tvOS)
         .textSelection(.enabled)

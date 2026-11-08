@@ -38,14 +38,15 @@ extension CLLocationCoordinate2D: @retroactive Encodable {
 enum Placemark: Codable {
   /// Where Maps found the address, with the address it gave.
   static func found(_ item: MKMapItem) -> Placemark {
-    .coordinate(item.location.coordinate, address: MapsAddress(item))
+    .coordinate(item.location.coordinate, maps: MapsAddress(item))
   }
 
-  /// Where an address is; the address Maps gave is none in places cached before it was kept.
-  case coordinate(CLLocationCoordinate2D, address: MapsAddress? = nil)
+  /// Where an address is; the address Maps gave is none in places cached before it was kept as
+  /// it is now.
+  case coordinate(CLLocationCoordinate2D, maps: MapsAddress? = nil)
   case identifier(String)
   /// A place in Maps with where it is, so showing it needs no lookup.
-  case place(identifier: String, coordinate: CLLocationCoordinate2D, address: MapsAddress? = nil)
+  case place(identifier: String, coordinate: CLLocationCoordinate2D, maps: MapsAddress? = nil)
 
   /// The address Maps gave, if it was kept.
   var address: MapsAddress? {

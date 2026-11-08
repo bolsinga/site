@@ -563,12 +563,6 @@
     "Maps can't find this place; it may have closed." : {
 
     },
-    "Maps found only the city" : {
-
-    },
-    "Maps Found Only the City (%lld)" : {
-
-    },
     "Maps now knows this place by another identifier." : {
 
     },

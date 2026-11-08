@@ -194,17 +194,15 @@ struct VenuePlaceDetail: View {
     case .matches:
       Label("Matches Maps", systemImage: "checkmark.circle")
         .foregroundStyle(.green)
-    case .differs(let found, let parts):
+    case .differs(let found):
       LabeledContent("Maps") {
-        Text(found.highlighted(parts))
+        Text(found.formatted)
+          .foregroundStyle(.orange)
           #if !os(tvOS)
             .textSelection(.enabled)
           #endif
       }
-      Button("Use Maps' Address") { address = .accepting(found, for: digest.venue) }
-    case .onlyCityFound:
-      Label("Maps found only the city", systemImage: "exclamationmark.triangle")
-        .foregroundStyle(.orange)
+      Button("Use Maps' Address") { address = found }
     case .unknown:
       Label("Not compared with Maps yet", systemImage: "questionmark.circle")
         .foregroundStyle(.secondary)

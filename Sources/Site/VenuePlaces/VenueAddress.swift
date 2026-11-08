@@ -20,48 +20,27 @@ extension VenueAddress {
     self.init(street: location.street, city: location.city, state: location.state)
   }
 
-  /// The parts of Maps' lines: the line starting with the city is "City, ST  ZIP", and the lines
-  /// before it, such as the street and a floor or suite, are the street. None when the lines
-  /// aren't in that form.
+  /// Maps' address, with the state from its "City, ST"; none when Maps gave no city.
   init?(_ maps: MapsAddress) {
-    let cityIndex = maps.lines.lastIndex { line in
-      guard let city = maps.city else { return line.contains(",") }
-      return line.hasPrefix(city + ",")
-    }
-    guard let cityIndex else { return nil }
-    let parts = maps.lines[cityIndex].split(separator: ",", maxSplits: 1)
-    guard parts.count == 2 else { return nil }
-    // The state's words come before the postal code.
-    let state = parts[1].split(separator: " ").prefix { !$0.contains(where: \.isNumber) }
-      .joined(separator: " ")
-    guard !state.isEmpty else { return nil }
-    let before = maps.lines[..<cityIndex]
+    guard let city = maps.city, let cityAndState = maps.cityAndState,
+      cityAndState.hasPrefix(city + ", ")
+    else { return nil }
     self.init(
-      street: before.isEmpty ? nil : before.joined(separator: ", "),
-      city: maps.city ?? parts[0].trimmingCharacters(in: .whitespaces), state: state)
+      street: maps.street, city: city, state: String(cityAndState.dropFirst(city.count + 2)))
   }
 
-  /// The address on one line.
+  /// The address on one line, as the venue shows it.
   var formatted: String {
     [street, "\(city), \(state)"].compactMap { $0 }.joined(separator: ", ")
   }
 }
 
-/// How a venue's address compares with the one Maps gave, as plain text, so accepting Maps'
-/// makes the venue's match it exactly.
+/// How a venue's address compares with the one Maps gave, as one line of text, so accepting
+/// Maps' makes the venue's match it exactly.
 enum AddressCheck: Equatable, Sendable {
-  enum Part: CaseIterable, Hashable, Sendable {
-    case street
-    case city
-    case state
-  }
-
-  /// The same text.
   case matches
-  /// Maps gave a different address; accepting it makes these parts the venue's.
-  case differs(VenueAddress, parts: Set<Part>)
-  /// Maps found only the city, so the venue's street may be wrong or gone.
-  case onlyCityFound(VenueAddress)
+  /// Maps gave a different address, which accepting makes the venue's.
+  case differs(VenueAddress)
   /// Maps gave no address that can be compared.
   case unknown
 
@@ -70,26 +49,6 @@ enum AddressCheck: Equatable, Sendable {
       self = .unknown
       return
     }
-    var parts = Set<Part>()
-    if Self.trimmed(venue.city) != Self.trimmed(found.city) { parts.insert(.city) }
-    if Self.trimmed(venue.state) != Self.trimmed(found.state) { parts.insert(.state) }
-    switch (venue.street, found.street) {
-    case (.some(let street), .some(let foundStreet)):
-      if Self.trimmed(street) != Self.trimmed(foundStreet) { parts.insert(.street) }
-    case (.none, .some):
-      parts.insert(.street)
-    case (.some, .none):
-      if parts.isEmpty {
-        self = .onlyCityFound(found)
-        return
-      }
-    case (.none, .none):
-      break
-    }
-    self = parts.isEmpty ? .matches : .differs(found, parts: parts)
-  }
-
-  private static func trimmed(_ string: String) -> String {
-    string.trimmingCharacters(in: .whitespaces)
+    self = venue.formatted == found.formatted ? .matches : .differs(found)
   }
 }
