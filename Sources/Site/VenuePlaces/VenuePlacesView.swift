@@ -127,6 +127,8 @@ struct VenuePlacesSplitView: View {
   @State private var isConfirmingClear = false
   /// The venues the saved picks were made for.
   @AppStorage("venuePlaces.venuesFingerprint") private var venuesFingerprint = ""
+  /// Where venuemap.txt is written; empty until a folder is chosen.
+  @AppStorage("venue-places.venuemap-folder") private var venueMapFolder: VenueMapFolder?
 
   private var shownDigests: [VenueDigest] {
     digests.filter { digest in
@@ -147,10 +149,10 @@ struct VenuePlacesSplitView: View {
     store.removeAll()
   }
 
-  private func writeVenueMap(to folder: URL) {
+  private func writeVenueMap(to folder: VenueMapFolder) {
     let contents = VenueMapFile.contents(digests.map(\.venue), picks: store.picks)
     do {
-      let file = try VenueMapFolder.write(contents, to: folder)
+      let file = try folder.write(contents)
       venueMapMessage = String(
         localized: "Wrote \(digests.count) venues to \(file.path(percentEncoded: false)).")
     } catch {
@@ -260,7 +262,9 @@ struct VenuePlacesSplitView: View {
         } label: {
           Label("Write venuemap.txt", systemImage: "square.and.arrow.down")
         } primaryAction: {
-          if let folder = VenueMapFolder.remembered {
+          if let folder = venueMapFolder {
+            // Storing it again saves a bookmark that was refreshed when it was read.
+            venueMapFolder = folder
             writeVenueMap(to: folder)
           } else {
             isChoosingVenueMapFolder = true
@@ -286,7 +290,8 @@ struct VenuePlacesSplitView: View {
       .fileImporter(isPresented: $isChoosingVenueMapFolder, allowedContentTypes: [.folder]) {
         switch $0 {
         case .success(let folder):
-          VenueMapFolder.remember(folder)
+          let folder = VenueMapFolder(folder)
+          venueMapFolder = folder
           writeVenueMap(to: folder)
         case .failure(let error):
           venueMapMessage = error.localizedDescription
@@ -298,7 +303,7 @@ struct VenuePlacesSplitView: View {
     ) {
       Button("Clear Saved Data", role: .destructive) {
         clearVenueData()
-        VenueMapFolder.forget()
+        venueMapFolder = nil
       }
     } message: {
       Text(

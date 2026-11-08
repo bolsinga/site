@@ -12,9 +12,12 @@ extension Logger {
   fileprivate static let venueMapFolder = Logger(category: "venueMapFolder")
 }
 
-/// The folder venuemap.txt is written to, remembered with a security-scoped bookmark.
-enum VenueMapFolder {
-  private static var bookmarkKey: String { "venue-places.venuemap-folder" }
+/// The folder venuemap.txt is written to, stored as its security-scoped bookmark so the
+/// sandboxed app can still write to it after a relaunch.
+struct VenueMapFolder: RawRepresentable {
+  let url: URL
+  /// None when a bookmark can't be made, so the folder isn't remembered.
+  private let bookmark: Data?
 
   private static var creationOptions: URL.BookmarkCreationOptions {
     #if os(macOS)
@@ -32,51 +35,53 @@ enum VenueMapFolder {
     #endif
   }
 
-  /// The remembered folder, if its bookmark still resolves.
-  static var remembered: URL? {
-    guard let data = UserDefaults.standard.data(forKey: bookmarkKey) else { return nil }
+  init(_ url: URL) {
+    self.url = url
+    self.bookmark = Self.bookmark(for: url)
+  }
+
+  init?(rawValue: String) {
+    guard let bookmark = Data(base64Encoded: rawValue), !bookmark.isEmpty else { return nil }
     do {
       var isStale = false
-      let folder = try URL(
-        resolvingBookmarkData: data, options: resolutionOptions, bookmarkDataIsStale: &isStale)
-      if isStale { remember(folder) }
-      return folder
+      let url = try URL(
+        resolvingBookmarkData: bookmark, options: Self.resolutionOptions,
+        bookmarkDataIsStale: &isStale)
+      self.url = url
+      // A stale bookmark is replaced the next time the folder is stored.
+      self.bookmark = isStale ? (Self.bookmark(for: url) ?? bookmark) : bookmark
     } catch {
       Logger.venueMapFolder.error("resolve: \(error, privacy: .public)")
       return nil
     }
   }
 
-  /// Forgets the folder, so it is asked for again next time.
-  static func forget() {
-    UserDefaults.standard.removeObject(forKey: bookmarkKey)
-  }
+  var rawValue: String { bookmark?.base64EncodedString() ?? "" }
 
-  /// Remembers the folder; if it can't be, it is asked for again next time.
-  static func remember(_ folder: URL) {
-    withAccess(to: folder) {
+  private static func bookmark(for url: URL) -> Data? {
+    withAccess(to: url) {
       do {
-        let data = try folder.bookmarkData(options: creationOptions)
-        UserDefaults.standard.set(data, forKey: bookmarkKey)
+        return try url.bookmarkData(options: creationOptions)
       } catch {
         Logger.venueMapFolder.error("bookmark: \(error, privacy: .public)")
+        return nil
       }
     }
   }
 
   /// Writes the contents to venuemap.txt in the folder, returning the file.
-  static func write(_ contents: String, to folder: URL) throws -> URL {
-    try withAccess(to: folder) {
-      let file = folder.appending(path: VenueMapFile.fileName)
+  func write(_ contents: String) throws -> URL {
+    try Self.withAccess(to: url) {
+      let file = url.appending(path: VenueMapFile.fileName)
       try contents.write(to: file, atomically: true, encoding: .utf8)
       return file
     }
   }
 
-  private static func withAccess<T>(to folder: URL, _ body: () throws -> T) rethrows -> T {
-    let isAccessing = folder.startAccessingSecurityScopedResource()
+  private static func withAccess<T>(to url: URL, _ body: () throws -> T) rethrows -> T {
+    let isAccessing = url.startAccessingSecurityScopedResource()
     defer {
-      if isAccessing { folder.stopAccessingSecurityScopedResource() }
+      if isAccessing { url.stopAccessingSecurityScopedResource() }
     }
     return try body()
   }
