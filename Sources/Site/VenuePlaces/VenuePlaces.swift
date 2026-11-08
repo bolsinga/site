@@ -23,6 +23,22 @@ enum VenuePlaces {
 }
 
 extension VenuePlaces {
+  /// Wide enough for the sidebar and every toolbar item, with the filter's segments, to show.
+  static var defaultWindowSize: CGSize { CGSize(width: 1280, height: 820) }
+
+  /// Where the window first opens: its default size, kept on the screen, and centered.
+  static func defaultWindowPlacement(in display: CGRect) -> CGRect {
+    let size = CGSize(
+      width: min(defaultWindowSize.width, display.width),
+      height: min(defaultWindowSize.height, display.height))
+    return CGRect(
+      x: display.midX - size.width / 2.0, y: display.midY - size.height / 2.0,
+      width: size.width, height: size.height)
+  }
+
+  /// The name the window's frame is saved under.
+  static var windowFrameName: String { "VenuePlaces" }
+
   /// Panning and zooming, without tilting.
   static var mapInteractionModes: MapInteractionModes { [.pan, .zoom, .rotate] }
 }
