@@ -15,6 +15,7 @@ struct SharedLocationDetail: View {
   let sharedLocation: SharedLocation
   let digests: [VenueDigest]
   let store: VenuePickStore
+  let addresses: VenueAddressPickStore
 
   /// Where each picked venue is, found the way the app finds a venue.
   @State private var pickedPlaces: [ArchivePath: MKMapItem] = [:]
@@ -62,7 +63,9 @@ struct SharedLocationDetail: View {
       }
       .navigationDestination(for: ArchivePath.self) { id in
         if let digest = digests.first(where: { $0.id == id }) {
-          VenuePlaceDetail(digest: digest, pick: store.binding(for: digest.venue.id))
+          VenuePlaceDetail(
+            digest: digest, pick: store.binding(for: digest.venue.id),
+            address: addresses.binding(for: digest.venue.id))
         }
       }
     }

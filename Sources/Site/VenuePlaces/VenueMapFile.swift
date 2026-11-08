@@ -8,18 +8,23 @@
 import Foundation
 import Shared
 
-/// web_generator's venuemap.txt, with each picked place's MapKit identifier and street.
+/// web_generator's venuemap.txt, with each picked place's MapKit identifier and street, and each
+/// accepted address.
 enum VenueMapFile {
   static var fileName: String { "venuemap.txt" }
   static var mapKitTag: String { "mapkit=" }
 
   /// `id*name*city*state`, then the street, URL and sortname when present, then the identifier.
-  static func line(for venue: Venue, pick: VenuePick?) -> String {
-    var fields = [venue.id, venue.name, venue.location.city, venue.location.state]
+  /// An accepted address gives the street, city and state, ahead of the pick's street and the
+  /// archive's.
+  static func line(for venue: Venue, pick: VenuePick?, address: VenueAddress? = nil) -> String {
+    var fields = [
+      venue.id, venue.name, address?.city ?? venue.location.city,
+      address?.state ?? venue.location.state,
+    ]
+    let street = address.map { $0.street } ?? pick?.street ?? venue.location.street
     // Empty fields collapse when read, so only fields with values are written.
-    fields += [
-      pick?.street ?? venue.location.street, venue.location.web?.absoluteString, venue.sortname,
-    ].compactMap { $0 }
+    fields += [street, venue.location.web?.absoluteString, venue.sortname].compactMap { $0 }
     switch pick {
     case .place(let identifier, _, _):
       fields.append(mapKitTag + identifier)
@@ -36,9 +41,11 @@ enum VenueMapFile {
   }
 
   /// Every venue, in ID order, one per line.
-  static func contents(_ venues: [Venue], picks: [String: VenuePick]) -> String {
+  static func contents(
+    _ venues: [Venue], picks: [String: VenuePick], addresses: [String: VenueAddress] = [:]
+  ) -> String {
     venues.sorted { $0.id.localizedStandardCompare($1.id) == .orderedAscending }
-      .map { line(for: $0, pick: picks[$0.id]) }
+      .map { line(for: $0, pick: picks[$0.id], address: addresses[$0.id]) }
       .joined(separator: "\n") + "\n"
   }
 }

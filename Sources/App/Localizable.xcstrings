@@ -323,6 +323,15 @@
     "About" : {
 
     },
+    "Accepted" : {
+
+    },
+    "Accepted Addresses (%lld)" : {
+
+    },
+    "Address Doesn't Match Maps (%lld)" : {
+
+    },
     "All" : {
       "comment" : "ArchiveScope.all"
     },
@@ -446,6 +455,9 @@
     "Current Location" : {
 
     },
+    "Dashboard" : {
+
+    },
     "Date" : {
 
     },
@@ -473,10 +485,16 @@
     "Done" : {
 
     },
+    "Each can be undone under Accepted Addresses." : {
+
+    },
     "Edit Nearby Settings" : {
 
     },
-    "Every pick, the venuemap.txt folder, and what Verify All and Auto-match found are removed. This can't be undone." : {
+    "Every address matches Maps." : {
+
+    },
+    "Every pick and accepted address, the venuemap.txt folder, and what Verify All and Auto-match found are removed. This can't be undone." : {
 
     },
     "Filter" : {
@@ -539,10 +557,25 @@
     "Map" : {
 
     },
+    "Maps" : {
+
+    },
     "Maps can't find this place; it may have closed." : {
 
     },
+    "Maps found only the city" : {
+
+    },
+    "Maps Found Only the City (%lld)" : {
+
+    },
     "Maps now knows this place by another identifier." : {
+
+    },
+    "Maps: %@" : {
+
+    },
+    "Matches Maps" : {
 
     },
     "Matching Venues" : {
@@ -618,6 +651,9 @@
 
     },
     "No venues are in this city. Disable the Location Filter or edit the city." : {
+
+    },
+    "Not compared with Maps yet" : {
 
     },
     "Not ranked" : {
@@ -741,6 +777,9 @@
     "show" : {
 
     },
+    "Show" : {
+
+    },
     "Show concerts" : {
 
     },
@@ -825,6 +864,12 @@
     "Unable to load data." : {
 
     },
+    "Undo" : {
+
+    },
+    "Undo Accepted Address" : {
+
+    },
     "Unknown Date" : {
 
     },
@@ -835,6 +880,15 @@
 
     },
     "Unpicked, so the archive's: %@" : {
+
+    },
+    "Use All Maps Addresses" : {
+
+    },
+    "Use Maps' Address" : {
+
+    },
+    "Use Maps' Address for %lld Venues?" : {
 
     },
     "Use Pin" : {
@@ -870,6 +924,9 @@
     "Venue Places Unavailable" : {
 
     },
+    "Venue: %@" : {
+
+    },
     "venuemap.txt" : {
 
     },
@@ -877,6 +934,9 @@
 
     },
     "Venues" : {
+
+    },
+    "Venues are compared as Maps finds them." : {
 
     },
     "Verified" : {

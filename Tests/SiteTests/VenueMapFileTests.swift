@@ -64,6 +64,30 @@ struct VenueMapFileTests {
         == VenueMapFile.line(for: revolutionHall, pick: nil))
   }
 
+  @Test func acceptedAddressReplacesStreetCityAndState() {
+    let address = VenueAddress(street: "1300 SE Stark St", city: "Portland", state: "OR")
+    #expect(
+      VenueMapFile.line(
+        for: revolutionHall, pick: .place(identifier: "I1", street: "Other St"), address: address)
+        == "v144*Revolution Hall*Portland*OR*1300 SE Stark St*https://www.revolutionhall.com*mapkit=I1"
+    )
+    let moved = VenueAddress(street: "1 Main St", city: "Beaverton", state: "OR")
+    #expect(
+      VenueMapFile.line(for: revolutionHall, pick: nil, address: moved)
+        == "v144*Revolution Hall*Beaverton*OR*1 Main St*https://www.revolutionhall.com")
+  }
+
+  @Test func contentsWriteAcceptedAddresses() {
+    let venues = ["v1", "v2"].map {
+      Venue(id: $0, location: Location(city: "c", state: "s"), name: $0)
+    }
+    #expect(
+      VenueMapFile.contents(
+        venues, picks: [:],
+        addresses: ["v2": VenueAddress(street: "1 Main St", city: "c", state: "s")])
+        == "v1*v1*c*s\nv2*v2*c*s*1 Main St\n")
+  }
+
   @Test func contentsAreInIDOrder() {
     let venues = ["v10", "v2", "v1"].map {
       Venue(id: $0, location: Location(city: "c", state: "s"), name: $0)
