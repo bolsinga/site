@@ -17,13 +17,6 @@ struct VenuesFingerprintTests {
     Venue(id: "v2", location: Location(city: "Portland", state: "OR"), name: "Revolution Hall"),
   ]
 
-  private func withDefaults(_ body: (UserDefaults) throws -> Void) rethrows {
-    let suite = "VenuesFingerprintTests-\(UUID().uuidString)"
-    let defaults = UserDefaults(suiteName: suite)!
-    defer { defaults.removePersistentDomain(forName: suite) }
-    try body(defaults)
-  }
-
   @Test func sameVenuesInAnyOrder() {
     #expect(
       VenuesFingerprint.fingerprint(venues)
@@ -40,27 +33,14 @@ struct VenuesFingerprintTests {
   }
 
   @Test func firstFingerprintIsNotAChange() {
-    withDefaults { defaults in
-      #expect(!VenuesFingerprint(defaults: defaults).update(venues))
-    }
+    #expect(!VenuesFingerprint.isChange(saved: "", current: "a"))
   }
 
-  @Test func sameVenuesAreNotAChange() {
-    withDefaults { defaults in
-      let fingerprint = VenuesFingerprint(defaults: defaults)
-      _ = fingerprint.update(venues)
-      #expect(!fingerprint.update(venues))
-    }
+  @Test func sameFingerprintIsNotAChange() {
+    #expect(!VenuesFingerprint.isChange(saved: "a", current: "a"))
   }
 
-  @Test func newVenueIsAChangeOnce() {
-    withDefaults { defaults in
-      let fingerprint = VenuesFingerprint(defaults: defaults)
-      _ = fingerprint.update(venues)
-      let more =
-        venues + [Venue(id: "v3", location: Location(city: "c", state: "s"), name: "New")]
-      #expect(fingerprint.update(more))
-      #expect(!fingerprint.update(more))
-    }
+  @Test func differentFingerprintIsAChange() {
+    #expect(VenuesFingerprint.isChange(saved: "a", current: "b"))
   }
 }

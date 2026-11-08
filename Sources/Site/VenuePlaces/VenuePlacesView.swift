@@ -125,6 +125,8 @@ struct VenuePlacesSplitView: View {
   /// What writing venuemap.txt did.
   @State private var venueMapMessage: String?
   @State private var isConfirmingClear = false
+  /// The venues the saved picks were made for.
+  @AppStorage("venuePlaces.venuesFingerprint") private var venuesFingerprint = ""
 
   private var shownDigests: [VenueDigest] {
     digests.filter { digest in
@@ -319,9 +321,11 @@ struct VenuePlacesSplitView: View {
     .task(id: ObjectIdentifier(model)) {
       digests = model.vault.orderedVenueIDs.compactMap { model.vault.digest(venue: $0) }
       // Picks for venue data that has since changed are cleared.
-      if VenuesFingerprint().update(digests.map(\.venue)) {
+      let current = VenuesFingerprint.fingerprint(digests.map(\.venue))
+      if VenuesFingerprint.isChange(saved: venuesFingerprint, current: current) {
         clearVenueData()
       }
+      venuesFingerprint = current
     }
   }
 
