@@ -30,6 +30,8 @@ enum LocationAuthorization {
 
   internal var todayDayOfLeapYear: Int = Date.now.dayOfLeapYear
   internal var venueMapItemMap: [ArchivePath: MKMapItem] = [:]
+  /// The address Maps gave each geocoded venue, to compare with the venue's own.
+  internal private(set) var venueMapsAddressMap: [ArchivePath: MapsAddress] = [:]
   /// Places in Maps for venues with a MapKit identifier, found when the venue is shown.
   internal private(set) var venuePlaceMap: [ArchivePath: MKMapItem] = [:]
   @ObservationIgnored
@@ -219,6 +221,7 @@ enum LocationAuthorization {
             "geocoded: \(String(describing: id), privacy: .public) by \(placemark?.origin ?? "nothing", privacy: .public)"
           )
           venueMapItemMap[id] = mapItem
+          venueMapsAddressMap[id] = placemark?.address
         } catch {
           // One venue's place not being found leaves the others to be placed.
           Logger.vaultModel.error(

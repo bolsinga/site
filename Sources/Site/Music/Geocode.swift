@@ -20,6 +20,6 @@ extension String: Geocodable {
     guard let item = try await request.mapItems.first else {
       throw GeocodeError.noPlacemark
     }
-    return Placemark.coordinate(item.location)
+    return .found(item)
   }
 }

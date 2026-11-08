@@ -25,7 +25,8 @@ extension Venue: AtlasGeocodable {
     if let mapKitID {
       do {
         let item = try await Placemark.identifier(mapKitID).mapItem(for: self)
-        placemark = .place(identifier: mapKitID, coordinate: item.location.coordinate)
+        placemark = .place(
+          identifier: mapKitID, coordinate: item.location.coordinate, address: MapsAddress(item))
       } catch {
         // Placed by its address until a later launch finds the identifier.
         Logger.geoToolbox.error(
@@ -44,10 +45,12 @@ extension Venue: AtlasGeocodable {
     [location.addressString, mapKitID].compactMap { $0 }.joined(separator: "\n")
   }
 
-  /// A venue with a MapKit identifier uses the place found for it, not one from its address.
+  /// A venue with a MapKit identifier uses the place found for it, not one from its address. A
+  /// place cached without the address Maps gave is found again, to keep it.
   func canUseCached(_ place: Placemark) -> Bool {
+    guard place.address != nil else { return false }
     guard let mapKitID else { return true }
-    guard case .place(let identifier, _) = place else { return false }
+    guard case .place(let identifier, _, _) = place else { return false }
     return identifier == mapKitID
   }
 }

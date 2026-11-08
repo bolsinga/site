@@ -45,19 +45,52 @@ struct VenueMapKitIDTests {
     #expect(item.name == "n")
   }
 
+  private let address = MapsAddress(lines: ["1 Main St", "c, s"], city: "c")
+
   @Test func cachedAddressGivesWayToMapKitID() {
     let venue = Venue(
       id: "v1", location: Location(city: "c", state: "s"), name: "n", mapKitID: "I1")
     let coordinate = CLLocationCoordinate2D(latitude: 1, longitude: 2)
-    #expect(!venue.canUseCached(.coordinate(coordinate)))
+    #expect(!venue.canUseCached(.coordinate(coordinate, address: address)))
     #expect(!venue.canUseCached(.identifier("I1")))
-    #expect(!venue.canUseCached(.place(identifier: "I2", coordinate: coordinate)))
-    #expect(venue.canUseCached(.place(identifier: "I1", coordinate: coordinate)))
+    #expect(!venue.canUseCached(.place(identifier: "I2", coordinate: coordinate, address: address)))
+    #expect(venue.canUseCached(.place(identifier: "I1", coordinate: coordinate, address: address)))
   }
 
   @Test func cacheHoldsWithoutMapKitID() {
     let venue = Venue(id: "v1", location: Location(city: "c", state: "s"), name: "n")
-    #expect(venue.canUseCached(.coordinate(CLLocationCoordinate2D(latitude: 1, longitude: 2))))
+    #expect(
+      venue.canUseCached(
+        .coordinate(CLLocationCoordinate2D(latitude: 1, longitude: 2), address: address)))
+  }
+
+  @Test func placeCachedWithoutMapsAddressIsFoundAgain() {
+    let coordinate = CLLocationCoordinate2D(latitude: 1, longitude: 2)
+    let venue = Venue(id: "v1", location: Location(city: "c", state: "s"), name: "n")
+    #expect(!venue.canUseCached(.coordinate(coordinate)))
+    let placed = Venue(
+      id: "v1", location: Location(city: "c", state: "s"), name: "n", mapKitID: "I1")
+    #expect(!placed.canUseCached(.place(identifier: "I1", coordinate: coordinate)))
+  }
+
+  @Test func placemarkCachedBeforeAddressStillReads() throws {
+    let json = Data(#"{"coordinate":{"_0":{"latitude":1,"longitude":2}}}"#.utf8)
+    let placemark = try JSONDecoder().decode(Placemark.self, from: json)
+    guard case .coordinate(let coordinate, let address) = placemark else {
+      Issue.record("not a coordinate")
+      return
+    }
+    #expect(coordinate.latitude == 1)
+    #expect(address == nil)
+  }
+
+  @Test func mapsAddressIsSaved() throws {
+    let placemark = Placemark.place(
+      identifier: "I1", coordinate: CLLocationCoordinate2D(latitude: 1, longitude: 2),
+      address: address)
+    let decoded = try JSONDecoder().decode(
+      Placemark.self, from: JSONEncoder().encode(placemark))
+    #expect(decoded.address == address)
   }
 
   /// An `Atlas` whose cache file holds a placemark for v1, geocoded from the venue as it is.
@@ -81,10 +114,11 @@ struct VenueMapKitIDTests {
       id: "v1", location: Location(city: "c", state: "s"), name: "n", mapKitID: "I1")
     let (atlas, id) = try atlas(
       caching: .place(
-        identifier: "I1", coordinate: CLLocationCoordinate2D(latitude: 1, longitude: 2)),
+        identifier: "I1", coordinate: CLLocationCoordinate2D(latitude: 1, longitude: 2),
+        address: address),
       for: venue, fileName: fileName)
 
-    guard case .place(let identifier, let coordinate) = try await atlas.geocode(venue, id: id)
+    guard case .place(let identifier, let coordinate, _) = try await atlas.geocode(venue, id: id)
     else {
       Issue.record("not the cached place")
       return
@@ -98,10 +132,10 @@ struct VenueMapKitIDTests {
     defer { removeCache(fileName: fileName) }
     let venue = Venue(id: "v1", location: Location(city: "c", state: "s"), name: "n")
     let (atlas, id) = try atlas(
-      caching: .coordinate(CLLocationCoordinate2D(latitude: 1, longitude: 2)), for: venue,
-      fileName: fileName)
+      caching: .coordinate(CLLocationCoordinate2D(latitude: 1, longitude: 2), address: address),
+      for: venue, fileName: fileName)
 
-    guard case .coordinate(let coordinate) = try await atlas.geocode(venue, id: id) else {
+    guard case .coordinate(let coordinate, _) = try await atlas.geocode(venue, id: id) else {
       Issue.record("not the cached address")
       return
     }

@@ -43,7 +43,7 @@ struct VenuePickStoreTests {
 
   @Test func pinPickIsACoordinatePlacemark() {
     let pick = VenuePick.coordinate(latitude: 37.5, longitude: -122.25)
-    guard case .coordinate(let coordinate) = pick.placemark else {
+    guard case .coordinate(let coordinate, _) = pick.placemark else {
       Issue.record("not a coordinate")
       return
     }
