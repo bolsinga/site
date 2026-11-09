@@ -13,6 +13,7 @@ import SwiftUI
 struct VenuePlaceDetail: View {
   @Environment(VaultModel.self) private var model
   @Environment(VenuePlaceChecks.self) private var checks
+  @Environment(VenueSuggestionStore.self) private var suggestions
 
   let digest: VenueDigest
   @Binding var pick: VenuePick?
@@ -49,12 +50,14 @@ struct VenuePlaceDetail: View {
     .prefix(Self.headlinerCount).map { $0 }
   }
 
-  private var suggestion: FoundPlace? {
-    pick == nil ? checks.suggestions[digest.venue.id] : nil
+  /// The place suggested for an unpicked venue.
+  private var suggestion: (place: FoundPlace, confidence: SuggestionConfidence)? {
+    pick == nil ? suggestions[digest.venue.id]?.offered : nil
   }
 
+  /// The place's identifier: the pick's, or the archive's when unpicked.
   private var pickedIdentifier: String? {
-    pick?.identifier
+    digest.venue.placeIdentifier(pick: pick)
   }
 
   private var pickDescription: String {
@@ -89,8 +92,9 @@ struct VenuePlaceDetail: View {
       Section {
         VenuePlaceMap(
           geocodedLocation: geocodedLocation, pickedPlace: pickedPlace,
-          pickedIdentifier: pickedIdentifier, candidates: candidates,
-          selectedCandidate: $selectedCandidate, isPlacingPin: isPlacingPin, newPin: $newPin)
+          pickedIdentifier: pickedIdentifier, suggestedPlace: suggestion?.place,
+          candidates: candidates, selectedCandidate: $selectedCandidate,
+          isPlacingPin: isPlacingPin, newPin: $newPin)
       }
       Section("Shows") {
         LabeledContent("Count", value: shows.count.formatted())
@@ -105,10 +109,18 @@ struct VenuePlaceDetail: View {
         }
       }
       Section("Pick") {
-        Text(pickDescription)
+        HStack {
+          Text(pickDescription)
+            #if !os(tvOS)
+              .textSelection(.enabled)
+            #endif
           #if !os(tvOS)
-            .textSelection(.enabled)
+            if pickedIdentifier != nil {
+              Spacer()
+              PlaceCardButton(item: pickedPlace, identifier: pickedIdentifier)
+            }
           #endif
+        }
         if let pickedPlaceError {
           Label(
             "The picked place can't be found: \(pickedPlaceError.localizedDescription)",
@@ -134,14 +146,20 @@ struct VenuePlaceDetail: View {
             .disabled(pick == nil)
         }
       }
-      if let suggestion, let suggestedPick = suggestion.pick {
-        Section("Auto-match Suggestion") {
+      if let suggestion, let suggestedPick = suggestion.place.pick {
+        Section("Suggested Place") {
           Text(
-            [suggestion.name, suggestion.address].compactMap { $0 }.joined(separator: "\n")
+            [suggestion.place.name, suggestion.place.address].compactMap { $0 }
+              .joined(separator: "\n")
           )
+          Label(suggestion.confidence.label, systemImage: suggestion.confidence.systemImage)
+            .foregroundStyle(suggestion.confidence.color)
           HStack {
+            #if !os(tvOS)
+              PlaceCardButton(identifier: suggestion.place.identifier)
+            #endif
             Button("Use Suggestion") { pick = suggestedPick }
-            Button("Dismiss") { checks.dismissSuggestion(venueID: digest.venue.id) }
+            Button("Dismiss") { suggestions[digest.venue.id]?.isDismissed = true }
           }
         }
       }
@@ -180,6 +198,10 @@ struct VenuePlaceDetail: View {
     .navigationTitle(digest.name)
     .task(id: pick) {
       await resolvePickedPlace()
+    }
+    // The places Maps has for the venue, so they're on the map without asking.
+    .task {
+      if !hasSearched { await findPlaces() }
     }
   }
 
@@ -247,11 +269,13 @@ struct VenuePlaceDetail: View {
       .candidates()
   }
 
-  /// Finds the pick the way the app will, which checks that a picked identifier still resolves.
+  /// Finds the pick, or the archive's place when unpicked, the way the app will, which checks that
+  /// the identifier still resolves.
   private func resolvePickedPlace() async {
     pickedPlace = nil
     pickedPlaceError = nil
-    guard let placemark = pick?.placemark else { return }
+    let placemark = pick == nil ? digest.venue.mapKitID.map(Placemark.identifier) : pick?.placemark
+    guard let placemark else { return }
     do {
       pickedPlace = try await placemark.mapItem(for: digest.venue)
     } catch {
@@ -265,10 +289,28 @@ private struct VenuePlaceMap: View {
   let geocodedLocation: CLLocation?
   let pickedPlace: MKMapItem?
   let pickedIdentifier: String?
+  let suggestedPlace: FoundPlace?
   let candidates: [MKMapItem]
   @Binding var selectedCandidate: String?
   let isPlacingPin: Bool
   @Binding var newPin: CLLocationCoordinate2D?
+
+  /// Fits every pin, again as more arrive.
+  @State private var position = MapCameraPosition.automatic
+
+  /// What's pinned, so the map can fit it when it changes.
+  private var pinned: [String] {
+    [geocodedLocation.map { "\($0.coordinate)" }, pickedPlace?.identifier?.rawValue,
+      suggestedPlace?.identifier]
+      .compactMap { $0 } + candidates.compactMap { $0.identifier?.rawValue }
+  }
+
+  /// The suggestion, unless the picked place or a candidate shows it already.
+  private var suggestionIsShown: Bool {
+    guard let identifier = suggestedPlace?.identifier else { return true }
+    return identifier == pickedIdentifier
+      || candidates.contains { $0.identifier?.rawValue == identifier }
+  }
 
   /// The picked place, unless it is a candidate, which shows it already.
   private var pickedPlaceIsShown: Bool {
@@ -278,7 +320,10 @@ private struct VenuePlaceMap: View {
 
   var body: some View {
     MapReader { proxy in
-      Map(interactionModes: VenuePlaces.mapInteractionModes, selection: $selectedCandidate) {
+      Map(
+        position: $position, interactionModes: VenuePlaces.mapInteractionModes,
+        selection: $selectedCandidate
+      ) {
         if let geocodedLocation {
           Marker("Geocoded", systemImage: "scope", coordinate: geocodedLocation.coordinate)
             .tint(.gray)
@@ -286,6 +331,13 @@ private struct VenuePlaceMap: View {
         if let pickedPlace, !pickedPlaceIsShown {
           Marker(item: pickedPlace)
             .tint(.green)
+        }
+        if let suggestedPlace, !suggestionIsShown {
+          Marker(
+            suggestedPlace.name ?? String(localized: "Suggested"),
+            systemImage: "sparkle.magnifyingglass", coordinate: suggestedPlace.location.coordinate
+          )
+          .tint(.orange)
         }
         if let newPin {
           Marker("New Pin", systemImage: "mappin", coordinate: newPin)
@@ -306,6 +358,7 @@ private struct VenuePlaceMap: View {
           isEnabled: isPlacingPin)
       #endif
       .venuePlacesMap()
+      .onChange(of: pinned) { position = .automatic }
     }
     .frame(minHeight: 300)
   }
@@ -318,8 +371,6 @@ private struct VenueCandidateRow: View {
   let isPicked: Bool
   let isSelected: Bool
   let use: () -> Void
-
-  @State private var showsCard = false
 
   private var distance: String? {
     guard let geocodedLocation else { return nil }
@@ -349,10 +400,7 @@ private struct VenueCandidateRow: View {
       }
       Spacer()
       #if !os(tvOS)
-        Button("Place Card", systemImage: "info.circle") { showsCard = true }
-          .labelStyle(.iconOnly)
-          .buttonStyle(.borderless)
-          .mapItemDetailPopover(isPresented: $showsCard, item: candidate)
+        PlaceCardButton(item: candidate)
       #endif
       if isPicked {
         Label("Picked", systemImage: "checkmark.circle.fill")
