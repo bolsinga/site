@@ -15,6 +15,7 @@ struct VenuePlacesView: View {
 
   @State private var store = VenuePickStore()
   @State private var addresses = VenueAddressPickStore()
+  @State private var suggestions = VenueSuggestionStore()
   @State private var checks = VenuePlaceChecks()
 
   var body: some View {
@@ -24,6 +25,7 @@ struct VenuePlacesView: View {
       VenuePlacesSplitView(store: store, addresses: addresses)
         .environment(vaultModel)
         .environment(checks)
+        .environment(suggestions)
     } else {
       ProgressView()
     }
@@ -108,6 +110,12 @@ extension PickStore {
   }
 }
 
+/// When suggesting places is tried: when geocoding finishes or the venues load.
+private struct SuggestionTrigger: Equatable {
+  let isGeocoding: Bool
+  let venues: Int
+}
+
 enum VenuePlacesSelection: Hashable {
   case dashboard
   case venue(ArchivePath)
@@ -117,6 +125,7 @@ enum VenuePlacesSelection: Hashable {
 struct VenuePlacesSplitView: View {
   @Environment(VaultModel.self) private var model
   @Environment(VenuePlaceChecks.self) private var checks
+  @Environment(VenueSuggestionStore.self) private var suggestions
   let store: VenuePickStore
   let addresses: VenueAddressPickStore
 
@@ -154,6 +163,14 @@ struct VenuePlacesSplitView: View {
     addresses.removeAll()
   }
 
+  /// Suggests places for venues that need one, once every venue has geocoded.
+  private func suggestPlaces(again: Bool = false) {
+    guard !model.geocodingInProgress, !digests.isEmpty else { return }
+    checks.suggestPlaces(digests, store: store, suggestions: suggestions, again: again) {
+      model.venueMapItemMap[$0]?.location
+    }
+  }
+
   private func writeVenueMap(to folder: VenueMapFolder) {
     let contents = VenueMapFile.contents(
       digests.map(\.venue), picks: store.picks, addresses: addresses.picks)
@@ -168,7 +185,8 @@ struct VenuePlacesSplitView: View {
   }
 
   private func status(_ digest: VenueDigest) -> VenuePickStatus {
-    checks.status(venue: digest.venue, pick: store[digest.venue.id])
+    checks.status(
+      venue: digest.venue, pick: store[digest.venue.id], suggestion: suggestions[digest.venue.id])
   }
 
   private func digest(_ id: ArchivePath) -> VenueDigest? {
@@ -211,7 +229,9 @@ struct VenuePlacesSplitView: View {
   @ViewBuilder private var detail: some View {
     switch selection {
     case .dashboard:
-      VenuePlacesDashboard(digests: digests, addresses: addresses) { selection = .venue($0) }
+      VenuePlacesDashboard(digests: digests, store: store, addresses: addresses) {
+        selection = .venue($0)
+      }
     case .venue(let id):
       if let digest = digest(id) {
         VenuePlaceDetail(
@@ -266,10 +286,10 @@ struct VenuePlacesSplitView: View {
         }
         .help("Verify All")
         .disabled(checks.isRunning)
-        Button("Auto-match", systemImage: "sparkle.magnifyingglass") {
-          checks.autoMatch(digests, store: store) { model.venueMapItemMap[$0]?.location }
+        Button("Suggest Places Again", systemImage: "sparkle.magnifyingglass") {
+          suggestPlaces(again: true)
         }
-        .help("Auto-match")
+        .help("Suggest Places Again")
         .disabled(checks.isRunning || model.geocodingInProgress)
         Menu {
           Button("Choose Folder…") { isChoosingVenueMapFolder = true }
@@ -317,11 +337,13 @@ struct VenuePlacesSplitView: View {
     ) {
       Button("Clear Saved Data", role: .destructive) {
         clearVenueData()
+        suggestions.removeAll()
         venueMapFolder = nil
+        suggestPlaces()
       }
     } message: {
       Text(
-        "Every pick and accepted address, the venuemap.txt folder, and what Verify All and Auto-match found are removed. This can't be undone."
+        "Every pick, accepted address and suggested place, the venuemap.txt folder, and what Verify All found are removed. Places are then suggested again. This can't be undone."
       )
     }
     .alert(
@@ -346,6 +368,10 @@ struct VenuePlacesSplitView: View {
       }
       venuesFingerprint = current
     }
+    // Once geocoding is done; venues already searched for their name and address are skipped.
+    .task(id: SuggestionTrigger(isGeocoding: model.geocodingInProgress, venues: digests.count)) {
+      suggestPlaces()
+    }
   }
 
   @ViewBuilder private var messages: some View {
@@ -355,7 +381,7 @@ struct VenuePlacesSplitView: View {
         .background(.orange.opacity(0.2), in: .rect(cornerRadius: 8))
         .padding()
     }
-    if let readError = store.readError ?? addresses.readError {
+    if let readError = store.readError ?? addresses.readError ?? suggestions.readError {
       Text(
         "The saved picks can't be read, so changes aren't saved: \(readError.localizedDescription)"
       )

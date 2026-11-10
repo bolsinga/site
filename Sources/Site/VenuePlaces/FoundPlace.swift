@@ -17,6 +17,8 @@ struct FoundPlace: Codable, Equatable, Sendable {
   let street: String?
   let latitude: Double
   let longitude: Double
+  /// The place's point of interest category, by its raw value.
+  var category: String? = nil
 
   var location: CLLocation { CLLocation(latitude: latitude, longitude: longitude) }
 
@@ -31,24 +33,18 @@ extension FoundPlace {
     self.init(
       identifier: item.identifier?.rawValue, name: item.name, address: item.singleLineAddress,
       street: item.street, latitude: item.location.coordinate.latitude,
-      longitude: item.location.coordinate.longitude)
+      longitude: item.location.coordinate.longitude,
+      category: item.pointOfInterestCategory?.rawValue)
   }
 }
 
-extension VenueCandidateSearch {
-  /// The search's places, as values that can leave the main actor.
-  func foundPlaces() async throws -> [FoundPlace] {
-    try await search().map(FoundPlace.init)
-  }
-}
-
-/// The points of interest a search for a venue's name and address finds near where it geocodes.
+/// The places Maps finds for a venue's name and address, near where it geocodes when it has.
 struct VenuePlaceGuess: AtlasGeocodable {
   let venue: Venue
-  let location: CLLocation
+  let location: CLLocation?
 
   func geocode() async throws -> [FoundPlace] {
-    try await VenueCandidateSearch(venue: venue, location: location).foundPlaces()
+    try await VenueCandidateSearch(venue: venue, location: location).foundCandidates()
   }
 }
 
@@ -80,22 +76,8 @@ enum PickVerification: Equatable, Sendable {
   }
 }
 
-/// When a best guess is close enough to suggest as a venue's pick.
+/// Whether a place's name is the venue's.
 enum AutoMatch {
-  /// How far the guess may be from where the venue geocodes.
-  static var maximumDistance: CLLocationDistance { 75 }
-
-  /// The first place that can be suggested.
-  static func suggestion(_ found: [FoundPlace], name: String, location: CLLocation) -> FoundPlace? {
-    found.first { suggests($0, name: name, location: location) }
-  }
-
-  /// Suggests the guess only when its name closely matches and it is near the geocoded point.
-  static func suggests(_ found: FoundPlace, name: String, location: CLLocation?) -> Bool {
-    guard found.identifier != nil, let location, let foundName = found.name else { return false }
-    return namesMatch(name, foundName) && found.location.distance(from: location) <= maximumDistance
-  }
-
   /// The same words, ignoring case, accents, punctuation and a leading "the", or one within the other.
   static func namesMatch(_ lhs: String, _ rhs: String) -> Bool {
     let lhsWords = words(lhs)

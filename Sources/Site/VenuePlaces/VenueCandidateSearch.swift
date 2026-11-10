@@ -27,8 +27,14 @@ struct VenueCandidateSearch {
   /// How far around the geocoded point to look for venue-like places.
   private static var pointsOfInterestDistance: CLLocationDistance { 150 }
 
-  private static var venueCategories: [MKPointOfInterestCategory] {
+  /// The categories of places a venue might be.
+  nonisolated private static var venueCategories: [MKPointOfInterestCategory] {
     [.musicVenue, .nightlife, .theater, .stadium, .conventionCenter]
+  }
+
+  /// The categories of places a venue might be, by their raw values.
+  nonisolated static var venueCategoryNames: Set<String> {
+    Set(venueCategories.map(\.rawValue))
   }
 
   private var hasStreet: Bool { venue.location.street != nil }
@@ -40,13 +46,35 @@ struct VenueCandidateSearch {
 
   /// The places found, the best guess first, each once; places without an identifier are left out.
   func candidates() async -> [MKMapItem] {
+    await gather().items
+  }
+
+  /// The places found, as values that can leave the main actor. Throws when every request failed,
+  /// so a failure isn't taken for finding nothing.
+  func foundCandidates() async throws -> [FoundPlace] {
+    let (items, errors, attempts) = await gather()
+    if let error = errors.first, errors.count == attempts { throw error }
+    return items.map(FoundPlace.init)
+  }
+
+  private func gather() async -> (items: [MKMapItem], errors: [Error], attempts: Int) {
     var lists = [[MKMapItem]]()
-    lists.append(await run("best guess") { [try await venue.toolboxMapItem()] })
-    lists.append(await run("search") { try await search() })
-    if hasStreet, let location {
-      lists.append(await run("points of interest") { try await pointsOfInterest(near: location) })
+    var errors = [Error]()
+    var attempts = 0
+    func run(_ name: String, _ request: () async throws -> [MKMapItem]) async {
+      attempts += 1
+      do {
+        lists.append(try await self.run(name, request))
+      } catch {
+        errors.append(error)
+      }
     }
-    return Self.merge(lists) { $0.identifier?.rawValue }
+    await run("best guess") { [try await venue.toolboxMapItem()] }
+    await run("search") { try await search() }
+    if hasStreet, let location {
+      await run("points of interest") { try await pointsOfInterest(near: location) }
+    }
+    return (Self.merge(lists) { $0.identifier?.rawValue }, errors, attempts)
   }
 
   /// Each item once, in the order first seen, keeping only those with a key.
@@ -58,15 +86,17 @@ struct VenueCandidateSearch {
     }
   }
 
-  /// A failed request is logged and adds nothing, so the others still show.
-  private func run(_ name: String, _ request: () async throws -> [MKMapItem]) async -> [MKMapItem] {
+  /// A failed request is logged and rethrown; the others still run.
+  private func run(_ name: String, _ request: () async throws -> [MKMapItem]) async throws
+    -> [MKMapItem]
+  {
     guard !Task.isCancelled else { return [] }
     do {
       return try await request()
     } catch {
       Logger.venueCandidateSearch.error(
         "\(venue.id, privacy: .public) \(name, privacy: .public): \(error, privacy: .public)")
-      return []
+      throw error
     }
   }
 

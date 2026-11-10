@@ -368,12 +368,6 @@
     "Artists" : {
 
     },
-    "Auto-match" : {
-
-    },
-    "Auto-match Suggestion" : {
-
-    },
     "band" : {
 
     },
@@ -485,6 +479,9 @@
     "Done" : {
 
     },
+    "Each becomes the venue's pick, which can be cleared on its page." : {
+
+    },
     "Each can be undone under Accepted Addresses." : {
 
     },
@@ -494,7 +491,7 @@
     "Every address matches Maps." : {
 
     },
-    "Every pick and accepted address, the venuemap.txt folder, and what Verify All and Auto-match found are removed. This can't be undone." : {
+    "Every pick, accepted address and suggested place, the venuemap.txt folder, and what Verify All found are removed. Places are then suggested again. This can't be undone." : {
 
     },
     "Filter" : {
@@ -542,6 +539,9 @@
     "Last" : {
 
     },
+    "Likely match" : {
+
+    },
     "Lineup" : {
 
     },
@@ -570,9 +570,6 @@
 
     },
     "Matches Maps" : {
-
-    },
-    "Matching Venues" : {
 
     },
     "Month" : {
@@ -630,6 +627,9 @@
 
     },
     "No Place" : {
+
+    },
+    "No Place Found (%lld)" : {
 
     },
     "No places found." : {
@@ -831,7 +831,22 @@
     "Stats" : {
 
     },
+    "Strong match" : {
+
+    },
+    "Suggest Places Again" : {
+
+    },
     "Suggested" : {
+
+    },
+    "Suggested Place" : {
+
+    },
+    "Suggested Places (%lld)" : {
+
+    },
+    "Suggesting Places" : {
 
     },
     "Switch to Current Identifier" : {
@@ -876,7 +891,16 @@
     "Unpicked, so the archive's: %@" : {
 
     },
+    "Use %lld Strong Matches?" : {
+
+    },
     "Use All Maps Addresses" : {
+
+    },
+    "Use All Strong Matches" : {
+
+    },
+    "Use All Strong Matches (%lld)" : {
 
     },
     "Use Maps' Address" : {
@@ -946,6 +970,9 @@
 
     },
     "Version" : {
+
+    },
+    "Weak match" : {
 
     },
     "Weekday" : {

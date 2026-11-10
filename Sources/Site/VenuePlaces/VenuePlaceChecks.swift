@@ -13,7 +13,7 @@ extension Logger {
   fileprivate static let venuePlaceChecks = Logger(category: "venuePlaceChecks")
 }
 
-/// Verify All and Auto-match, one batch at a time, with what each found.
+/// Verify All and place suggestions, one batch at a time, with what Verify All found.
 @MainActor @Observable final class VenuePlaceChecks {
   /// A verification, with the identifier it resolved, so a later pick isn't taken as verified.
   struct Check: Equatable {
@@ -28,8 +28,6 @@ extension Logger {
   }
 
   private(set) var checks: [String: Check] = [:]
-  /// Best guesses to confirm, by venue ID.
-  private(set) var suggestions: [String: FoundPlace] = [:]
   private(set) var progress: Progress?
   private(set) var error: Error?
 
@@ -45,12 +43,12 @@ extension Logger {
     return check.verification
   }
 
-  func status(venue: Venue, pick: VenuePick?) -> VenuePickStatus {
+  func status(venue: Venue, pick: VenuePick?, suggestion: VenueSuggestion?) -> VenuePickStatus {
     switch verification(venue: venue, pick: pick) {
     case .verified: return .verified
     case .replaced, .notFound: return .stale
     case nil:
-      if pick == nil, suggestions[venue.id] != nil { return .suggested }
+      if pick == nil, suggestion?.offered != nil { return .suggested }
       return VenuePickStatus(pick)
     }
   }
@@ -75,25 +73,26 @@ extension Logger {
     }
   }
 
-  /// Searches for each unpicked venue that has geocoded, suggesting a place that matches.
-  func autoMatch(
-    _ digests: [VenueDigest], store: VenuePickStore, location: (ArchivePath) -> CLLocation?
+  /// Searches Maps for each venue without a MapKit identifier or pick, saving the most likely place
+  /// found, or that none was. Venues searched for their current name and address are skipped,
+  /// unless searching again.
+  func suggestPlaces(
+    _ digests: [VenueDigest], store: VenuePickStore, suggestions: VenueSuggestionStore,
+    again: Bool = false, location: (ArchivePath) -> CLLocation?
   ) {
     let guesses: [(ArchivePath, VenuePlaceGuess)] = digests.compactMap { digest in
-      guard store[digest.venue.id] == nil, let location = location(digest.id) else { return nil }
-      return (digest.id, VenuePlaceGuess(venue: digest.venue, location: location))
+      guard digest.venue.mapKitID == nil, store[digest.venue.id] == nil else { return nil }
+      if !again, suggestions[digest.venue.id]?.source == digest.venue.suggestionSource {
+        return nil
+      }
+      return (digest.id, VenuePlaceGuess(venue: digest.venue, location: location(digest.id)))
     }
-    run("Matching Venues", guesses) { _, guess, found in
-      guard
-        let suggestion = AutoMatch.suggestion(
-          found ?? [], name: guess.venue.name, location: guess.location)
-      else { return }
-      self.suggestions[guess.venue.id] = suggestion
+    guard !guesses.isEmpty else { return }
+    run("Suggesting Places", guesses) { _, guess, found in
+      let best = PlaceSuggester.best(found ?? [], for: guess.venue, location: guess.location)
+      suggestions[guess.venue.id] = VenueSuggestion(
+        source: guess.venue.suggestionSource, place: best?.place, confidence: best?.confidence)
     }
-  }
-
-  func dismissSuggestion(venueID: String) {
-    suggestions[venueID] = nil
   }
 
   func cancel() {
@@ -104,7 +103,6 @@ extension Logger {
   func removeAll() {
     cancel()
     checks = [:]
-    suggestions = [:]
     error = nil
   }
 

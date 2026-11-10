@@ -53,7 +53,7 @@ extension VenuePick {
 
 enum VenuePickStatus: CaseIterable, Sendable {
   case unpicked
-  /// Unpicked, with an Auto-match suggestion to confirm.
+  /// Unpicked, with a suggested place to confirm.
   case suggested
   case picked
   /// Picked, and Verify All found it in Maps.

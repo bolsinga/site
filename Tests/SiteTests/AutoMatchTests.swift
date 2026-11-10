@@ -6,8 +6,10 @@
 //
 
 import CoreLocation
+import Foundation
 import Testing
 
+@testable import Shared
 @testable import SiteApp
 
 struct AutoMatchTests {
@@ -42,44 +44,114 @@ struct AutoMatchTests {
     #expect(!AutoMatch.namesMatch(venue, place))
   }
 
-  @Test func suggestsNearbyMatch() {
+  /// A venue at the street, or only the city when there's none.
+  func venue(_ name: String, street: String? = "1805 Geary Blvd") -> Venue {
+    Venue(
+      id: "v1", location: Location(city: "San Francisco", street: street, state: "CA"),
+      name: name)
+  }
+
+  /// A place this many meters north of `location`, at the street, in the category.
+  func place(
+    _ name: String?, metersNorth: Double = 0, street: String? = nil, category: String? = nil,
+    identifier: String? = "I1"
+  ) -> FoundPlace {
+    FoundPlace(
+      identifier: identifier, name: name, address: nil, street: street,
+      latitude: location.coordinate.latitude + metersNorth / 111_320,
+      longitude: location.coordinate.longitude, category: category)
+  }
+
+  let musicVenue = "MKPOICategoryMusicVenue"
+
+  @Test func nameAndNearIsStrong() {
     #expect(
-      AutoMatch.suggests(
-        found("The Fillmore", metersNorth: 50), name: "Fillmore", location: location))
+      PlaceSuggester.confidence(
+        of: place("The Fillmore", metersNorth: 50), for: venue("Fillmore"), location: location)
+        == .strong)
   }
 
-  @Test func doesNotSuggestDistantMatch() {
+  @Test func nameAndNumberIsStrong() {
     #expect(
-      !AutoMatch.suggests(
-        found("The Fillmore", metersNorth: 100), name: "Fillmore", location: location))
+      PlaceSuggester.confidence(
+        of: place("The Fillmore", metersNorth: 500, street: "1805 Geary Blvd"),
+        for: venue("Fillmore"), location: location) == .strong)
   }
 
-  @Test func doesNotSuggestOtherName() {
-    #expect(!AutoMatch.suggests(found("The Warfield"), name: "Fillmore", location: location))
-  }
-
-  @Test func doesNotSuggestWithoutGeocodedPoint() {
-    #expect(!AutoMatch.suggests(found("Fillmore"), name: "Fillmore", location: nil))
-  }
-
-  @Test func doesNotSuggestWithoutIdentifier() {
+  @Test func nameAloneIsMedium() {
     #expect(
-      !AutoMatch.suggests(found("Fillmore", identifier: nil), name: "Fillmore", location: location))
+      PlaceSuggester.confidence(
+        of: place("The Fillmore", metersNorth: 500), for: venue("Fillmore"), location: location)
+        == .medium)
   }
 
-  @Test func suggestionIsFirstMatch() {
-    let address = found("1233 17th St", identifier: nil)
-    let far = found("Bottom of the Hill", metersNorth: 200, identifier: "I1")
-    let near = found("Bottom of the Hill", metersNorth: 14, identifier: "I2")
+  @Test func cityOnlyVenueIsNeverNear() {
     #expect(
-      AutoMatch.suggestion([address, far, near], name: "Bottom of the Hill", location: location)
-        == near)
+      PlaceSuggester.confidence(
+        of: place("The Fillmore"), for: venue("Fillmore", street: nil), location: location)
+        == .medium)
   }
 
-  @Test func noSuggestionWithoutMatch() {
+  @Test func renamedVenueAtTheSameNumberIsMedium() {
     #expect(
-      AutoMatch.suggestion([found("1233 17th St")], name: "Bottom of the Hill", location: location)
+      PlaceSuggester.confidence(
+        of: place("New Name", metersNorth: 10, street: "1805 Geary Blvd", category: musicVenue),
+        for: venue("Fillmore"), location: location) == .medium)
+  }
+
+  @Test func venueLikePlaceNearbyIsWeak() {
+    #expect(
+      PlaceSuggester.confidence(
+        of: place("Other Club", metersNorth: 10, category: musicVenue), for: venue("Fillmore"),
+        location: location) == .weak)
+  }
+
+  @Test func unrelatedPlaceIsNone() {
+    #expect(
+      PlaceSuggester.confidence(
+        of: place("The Warfield", metersNorth: 10), for: venue("Fillmore"), location: location)
         == nil)
+    #expect(
+      PlaceSuggester.confidence(
+        of: place("Fillmore", identifier: nil), for: venue("Fillmore"), location: location)
+        == nil)
+  }
+
+  @Test func bestIsMostLikelyThenFirst() {
+    let weak = place("Other Club", metersNorth: 10, category: musicVenue, identifier: "I1")
+    let medium = place("Fillmore", metersNorth: 500, identifier: "I2")
+    let strong = place("Fillmore", metersNorth: 10, identifier: "I3")
+    let alsoStrong = place("The Fillmore", metersNorth: 20, identifier: "I4")
+    let best = PlaceSuggester.best(
+      [weak, medium, strong, alsoStrong], for: venue("Fillmore"), location: location)
+    #expect(best?.place == strong)
+    #expect(best?.confidence == .strong)
+    #expect(
+      PlaceSuggester.best([place("The Warfield")], for: venue("Fillmore"), location: location)
+        == nil)
+  }
+
+  @Test func readsStreetNumber() {
+    #expect(PlaceSuggester.streetNumber("1300 SE Stark St") == "1300")
+    #expect(PlaceSuggester.streetNumber("924A Gilman St") == "924")
+    #expect(PlaceSuggester.streetNumber("Pier 39") == nil)
+    #expect(PlaceSuggester.streetNumber(nil) == nil)
+  }
+
+  @Test func offeredOnlyWhenFoundAndNotDismissed() {
+    var suggestion = VenueSuggestion(source: "s", place: place("Fillmore"), confidence: .strong)
+    #expect(suggestion.offered != nil)
+    suggestion.isDismissed = true
+    #expect(suggestion.offered == nil)
+    #expect(VenueSuggestion(source: "s", place: nil, confidence: nil).offered == nil)
+  }
+
+  @Test func suggestionRoundTrips() throws {
+    let suggestion = VenueSuggestion(
+      source: "Fillmore\n1805 Geary Blvd", place: place("Fillmore", category: musicVenue),
+      confidence: .medium, isDismissed: true)
+    let data = try JSONEncoder().encode(suggestion)
+    #expect(try JSONDecoder().decode(VenueSuggestion.self, from: data) == suggestion)
   }
 
   @Test func verification() {
