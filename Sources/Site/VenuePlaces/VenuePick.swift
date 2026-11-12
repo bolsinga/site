@@ -56,9 +56,9 @@ enum VenuePickStatus: CaseIterable, Sendable {
   /// Unpicked, with a suggested place to confirm.
   case suggested
   case picked
-  /// Picked, and Verify All found it in Maps.
+  /// Picked, and verifying found it in Maps.
   case verified
-  /// Picked, and Verify All found it moved to another identifier or gone.
+  /// Picked, and verifying found it moved to another identifier or gone.
   case stale
   case noPlace
 

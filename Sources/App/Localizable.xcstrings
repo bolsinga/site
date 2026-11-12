@@ -491,7 +491,7 @@
     "Every address matches Maps." : {
 
     },
-    "Every pick, accepted address and suggested place, the venuemap.txt folder, and what Verify All found are removed. Places are then suggested again. This can't be undone." : {
+    "Every pick, accepted address, suggested place and check result, and the venuemap.txt folder are removed. Places are then checked and suggested again. This can't be undone." : {
 
     },
     "Filter" : {
@@ -533,6 +533,9 @@
     "Headliners" : {
 
     },
+    "Identifier Changed or Gone (%lld)" : {
+
+    },
     "Invalid Data." : {
 
     },
@@ -561,6 +564,9 @@
 
     },
     "Maps can't find this place; it may have closed." : {
+
+    },
+    "Maps couldn't find this place." : {
 
     },
     "Maps now knows this place by another identifier." : {
@@ -717,6 +723,9 @@
     "Place Card" : {
 
     },
+    "Place Not Found" : {
+
+    },
     "Places in Maps" : {
 
     },
@@ -736,6 +745,9 @@
 
     },
     "Retry" : {
+
+    },
+    "Run Checks Again" : {
 
     },
     "Same address" : {
@@ -834,9 +846,6 @@
     "Strong match" : {
 
     },
-    "Suggest Places Again" : {
-
-    },
     "Suggested" : {
 
     },
@@ -847,6 +856,9 @@
 
     },
     "Suggesting Places" : {
+
+    },
+    "Switch to Current" : {
 
     },
     "Switch to Current Identifier" : {
@@ -961,9 +973,6 @@
 
     },
     "Verified in Maps" : {
-
-    },
-    "Verify All" : {
 
     },
     "Verifying Picks" : {
