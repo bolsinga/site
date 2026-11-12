@@ -110,8 +110,8 @@ extension PickStore {
   }
 }
 
-/// When suggesting places is tried: when geocoding finishes or the venues load.
-private struct SuggestionTrigger: Equatable {
+/// When the checks are tried: when geocoding finishes or the venues load.
+private struct ChecksTrigger: Equatable {
   let isGeocoding: Bool
   let venues: Int
 }
@@ -163,10 +163,10 @@ struct VenuePlacesSplitView: View {
     addresses.removeAll()
   }
 
-  /// Suggests places for venues that need one, once every venue has geocoded.
-  private func suggestPlaces(again: Bool = false) {
+  /// Verifies places and suggests them for venues that need one, once every venue has geocoded.
+  private func runChecks(again: Bool = false) {
     guard !model.geocodingInProgress, !digests.isEmpty else { return }
-    checks.suggestPlaces(digests, store: store, suggestions: suggestions, again: again) {
+    checks.run(digests, store: store, suggestions: suggestions, again: again) {
       model.venueMapItemMap[$0]?.location
     }
   }
@@ -281,15 +281,10 @@ struct VenuePlacesSplitView: View {
     }
     .toolbar {
       ToolbarItemGroup {
-        Button("Verify All", systemImage: "checkmark.seal") {
-          checks.verifyAll(digests, store: store)
+        Button("Run Checks Again", systemImage: "arrow.clockwise") {
+          runChecks(again: true)
         }
-        .help("Verify All")
-        .disabled(checks.isRunning)
-        Button("Suggest Places Again", systemImage: "sparkle.magnifyingglass") {
-          suggestPlaces(again: true)
-        }
-        .help("Suggest Places Again")
+        .help("Run Checks Again")
         .disabled(checks.isRunning || model.geocodingInProgress)
         Menu {
           Button("Choose Folder…") { isChoosingVenueMapFolder = true }
@@ -339,11 +334,11 @@ struct VenuePlacesSplitView: View {
         clearVenueData()
         suggestions.removeAll()
         venueMapFolder = nil
-        suggestPlaces()
+        runChecks()
       }
     } message: {
       Text(
-        "Every pick, accepted address and suggested place, the venuemap.txt folder, and what Verify All found are removed. Places are then suggested again. This can't be undone."
+        "Every pick, accepted address, suggested place and check result, and the venuemap.txt folder are removed. Places are then checked and suggested again. This can't be undone."
       )
     }
     .alert(
@@ -368,9 +363,9 @@ struct VenuePlacesSplitView: View {
       }
       venuesFingerprint = current
     }
-    // Once geocoding is done; venues already searched for their name and address are skipped.
-    .task(id: SuggestionTrigger(isGeocoding: model.geocodingInProgress, venues: digests.count)) {
-      suggestPlaces()
+    // Once geocoding is done; venues already checked for their place, name and address are skipped.
+    .task(id: ChecksTrigger(isGeocoding: model.geocodingInProgress, venues: digests.count)) {
+      runChecks()
     }
   }
 
@@ -381,7 +376,9 @@ struct VenuePlacesSplitView: View {
         .background(.orange.opacity(0.2), in: .rect(cornerRadius: 8))
         .padding()
     }
-    if let readError = store.readError ?? addresses.readError ?? suggestions.readError {
+    if let readError = store.readError ?? addresses.readError ?? suggestions.readError
+      ?? checks.readError
+    {
       Text(
         "The saved picks can't be read, so changes aren't saved: \(readError.localizedDescription)"
       )

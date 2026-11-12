@@ -53,6 +53,7 @@ extension SuggestionConfidence {
 struct VenuePlacesDashboard: View {
   @Environment(VaultModel.self) private var model
   @Environment(VenueSuggestionStore.self) private var suggestions
+  @Environment(VenuePlaceChecks.self) private var checks
 
   let digests: [VenueDigest]
   let store: VenuePickStore
@@ -84,6 +85,18 @@ struct VenuePlacesDashboard: View {
         let suggestion = suggestions[digest.venue.id]
       else { return false }
       return suggestion.place == nil
+    }
+  }
+
+  /// Venues whose place Maps now knows by another identifier, or no longer knows.
+  private var unresolved: [(digest: VenueDigest, verification: PickVerification)] {
+    digests.compactMap { digest in
+      guard
+        let verification = checks.verification(
+          venue: digest.venue, pick: store[digest.venue.id]),
+        verification != .verified
+      else { return nil }
+      return (digest, verification)
     }
   }
 
@@ -158,6 +171,7 @@ struct VenuePlacesDashboard: View {
           }
         }
       }
+      unresolvedSection
       if !accepted.isEmpty {
         Section("Accepted Addresses (\(accepted.count))") {
           ForEach(accepted) { digest in
@@ -175,6 +189,33 @@ struct VenuePlacesDashboard: View {
     }
     .formStyle(.grouped)
     .navigationTitle("Dashboard")
+  }
+
+  @ViewBuilder private var unresolvedSection: some View {
+    let unresolved = unresolved
+    if !unresolved.isEmpty {
+      Section("Identifier Changed or Gone (\(unresolved.count))") {
+        ForEach(unresolved, id: \.digest.id) { item in
+          switch item.verification {
+          case .replaced(let found):
+            VenueSummaryRow(
+              digest: item.digest, detail: "Maps: \([found.name, found.address].compactMap { $0 }.joined(separator: ", "))",
+              actionTitle: "Switch to Current"
+            ) {
+              open(item.digest.id)
+            } action: {
+              store[item.digest.venue.id] = found.pick
+            }
+          default:
+            VenueSummaryRow(
+              digest: item.digest, detail: "Maps can't find this place; it may have closed."
+            ) {
+              open(item.digest.id)
+            }
+          }
+        }
+      }
+    }
   }
 
   @ViewBuilder private var suggestedSection: some View {
@@ -283,9 +324,9 @@ private struct VenueAddressRow: View {
 private struct VenueSummaryRow: View {
   let digest: VenueDigest
   let detail: String
-  let actionTitle: LocalizedStringResource
+  var actionTitle: LocalizedStringResource?
   let show: () -> Void
-  let action: () -> Void
+  var action: () -> Void = {}
 
   var body: some View {
     HStack {
@@ -297,7 +338,9 @@ private struct VenueSummaryRow: View {
       }
       Spacer()
       Button("Show", action: show)
-      Button(actionTitle, action: action)
+      if let actionTitle {
+        Button(actionTitle, action: action)
+      }
     }
   }
 }
