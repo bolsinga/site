@@ -59,7 +59,7 @@ struct SavedPlace: AtlasGeocodable {
 }
 
 /// What resolving a picked identifier found.
-enum PickVerification: Equatable, Sendable {
+enum PickVerification: Codable, Equatable, Sendable {
   /// Maps still knows the place by the picked identifier.
   case verified
   /// Maps now knows the place by another identifier.

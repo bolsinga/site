@@ -86,6 +86,9 @@ typealias VenueAddressPickStore = PickStore<VenueAddress>
 /// The place Maps suggested for each venue without one.
 typealias VenueSuggestionStore = PickStore<VenueSuggestion>
 
+/// What verifying each venue's place found.
+typealias VenueCheckStore = PickStore<VenueCheck>
+
 extension PickStore where Pick == VenuePick {
   convenience init() {
     self.init(fileURL: URL.applicationSupportDirectory.appending(path: "venue-places.json"))
@@ -101,5 +104,11 @@ extension PickStore where Pick == VenueAddress {
 extension PickStore where Pick == VenueSuggestion {
   convenience init() {
     self.init(fileURL: URL.applicationSupportDirectory.appending(path: "venue-suggestions.json"))
+  }
+}
+
+extension PickStore where Pick == VenueCheck {
+  convenience init() {
+    self.init(fileURL: URL.applicationSupportDirectory.appending(path: "venue-checks.json"))
   }
 }

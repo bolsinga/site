@@ -162,4 +162,15 @@ struct AutoMatchTests {
     #expect(
       PickVerification(identifier: "I1", found: found("Fillmore", identifier: nil)) == .notFound)
   }
+
+  @Test(arguments: [
+    PickVerification.verified, .replaced(by: FoundPlace(
+      identifier: "I2", name: "Fillmore", address: nil, street: nil, latitude: 1, longitude: 2)),
+    .notFound,
+  ])
+  func checkRoundTrips(verification: PickVerification) throws {
+    let check = VenueCheck(identifier: "I1", verification: verification)
+    let data = try JSONEncoder().encode(check)
+    #expect(try JSONDecoder().decode(VenueCheck.self, from: data) == check)
+  }
 }

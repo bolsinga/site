@@ -234,7 +234,7 @@ struct VenuePlaceDetail: View {
     }
   }
 
-  /// What Verify All found for the pick.
+  /// What verifying found for the pick.
   @ViewBuilder private var verification: some View {
     switch checks.verification(venue: digest.venue, pick: pick) {
     case .verified:

@@ -17,21 +17,45 @@ import SwiftUI
     var identifier: String? = nil
 
     @State private var isPresented = false
+    @State private var isLookingUp = false
+    @State private var lookupFailed = false
     @State private var lookedUp: MKMapItem?
 
     var body: some View {
-      Button("Place Card", systemImage: "info.circle") { isPresented = true }
-        .labelStyle(.iconOnly)
-        .buttonStyle(.borderless)
-        .disabled(item == nil && identifier == nil)
-        // The card shows that it's loading until the place is found.
-        .mapItemDetailPopover(isPresented: $isPresented, item: item ?? lookedUp)
-        .task(id: isPresented) {
-          guard isPresented, item == nil, lookedUp == nil, let identifier,
-            let mapItemIdentifier = MKMapItem.Identifier(rawValue: identifier)
-          else { return }
-          lookedUp = try? await MapItemLookup.mapItem(for: mapItemIdentifier)
+      Button {
+        if item == nil && lookedUp == nil {
+          Task { await lookUp() }
+        } else {
+          isPresented = true
         }
+      } label: {
+        if isLookingUp {
+          ProgressView().controlSize(.small)
+        } else {
+          Label("Place Card", systemImage: "info.circle").labelStyle(.iconOnly)
+        }
+      }
+      .buttonStyle(.borderless)
+      .disabled(isLookingUp || (item == nil && identifier == nil))
+      // The card opens once the place is found, as it doesn't update when it's shown without one.
+      .mapItemDetailPopover(isPresented: $isPresented, item: item ?? lookedUp)
+      .alert("Place Not Found", isPresented: $lookupFailed) {
+      } message: {
+        Text("Maps couldn't find this place.")
+      }
+    }
+
+    private func lookUp() async {
+      guard let identifier, let mapItemIdentifier = MKMapItem.Identifier(rawValue: identifier)
+      else { return }
+      isLookingUp = true
+      defer { isLookingUp = false }
+      do {
+        lookedUp = try await MapItemLookup.mapItem(for: mapItemIdentifier)
+        isPresented = true
+      } catch {
+        lookupFailed = true
+      }
     }
   }
 #endif
