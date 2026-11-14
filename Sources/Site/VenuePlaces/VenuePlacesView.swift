@@ -337,9 +337,7 @@ struct VenuePlacesSplitView: View {
         runChecks()
       }
     } message: {
-      Text(
-        "Every pick, accepted address, suggested place and check result, and the venuemap.txt folder are removed. Places are then checked and suggested again. This can't be undone."
-      )
+      Text("All local data is removed. This can't be undone.")
     }
     .alert(
       "venuemap.txt",

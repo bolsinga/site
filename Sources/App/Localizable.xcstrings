@@ -335,6 +335,9 @@
     "All" : {
       "comment" : "ArchiveScope.all"
     },
+    "All local data is removed. This can't be undone." : {
+
+    },
     "All Months with Shows" : {
 
     },
@@ -489,9 +492,6 @@
 
     },
     "Every address matches Maps." : {
-
-    },
-    "Every pick, accepted address, suggested place and check result, and the venuemap.txt folder are removed. Places are then checked and suggested again. This can't be undone." : {
 
     },
     "Filter" : {
