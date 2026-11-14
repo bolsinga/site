@@ -12,12 +12,12 @@ import Testing
 struct VenuePlacesFilterTests {
   private func facts(
     status: VenuePickStatus = .picked, isModified: Bool = false, hasStreet: Bool = true, sharesLocation: Bool = false,
-    hasWebsite: Bool = true, hasPlace: Bool = true, addressDiffers: Bool = false,
+    hasWebsite: Bool = true, websiteNeedsALook: Bool = false, hasPlace: Bool = true, addressDiffers: Bool = false,
     identifierChanged: Bool = false, placeGone: Bool = false
   ) -> VenueFacts {
     VenueFacts(
       status: status, isModified: isModified, hasStreet: hasStreet, sharesLocation: sharesLocation,
-      hasWebsite: hasWebsite, hasPlace: hasPlace, addressDiffers: addressDiffers,
+      hasWebsite: hasWebsite, websiteNeedsALook: websiteNeedsALook, hasPlace: hasPlace, addressDiffers: addressDiffers,
       identifierChanged: identifierChanged, placeGone: placeGone)
   }
 
@@ -36,6 +36,7 @@ struct VenuePlacesFilterTests {
     #expect(!VenuePlacesFilter.noStreet.includes(facts()))
     #expect(VenuePlacesFilter.sharesLocation.includes(facts(sharesLocation: true)))
     #expect(VenuePlacesFilter.noWebsite.includes(facts(hasWebsite: false)))
+    #expect(VenuePlacesFilter.websiteNeedsALook.includes(facts(websiteNeedsALook: true)))
     #expect(VenuePlacesFilter.noMapKitID.includes(facts(hasPlace: false)))
     #expect(VenuePlacesFilter.addressDiffers.includes(facts(addressDiffers: true)))
     #expect(VenuePlacesFilter.identifierChanged.includes(facts(identifierChanged: true)))

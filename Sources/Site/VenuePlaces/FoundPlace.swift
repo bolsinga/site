@@ -19,6 +19,8 @@ struct FoundPlace: Codable, Equatable, Sendable {
   let longitude: Double
   /// The place's point of interest category, by its raw value.
   var category: String? = nil
+  /// The place's website in Maps.
+  var url: URL? = nil
 
   var location: CLLocation { CLLocation(latitude: latitude, longitude: longitude) }
 
@@ -34,7 +36,7 @@ extension FoundPlace {
       identifier: item.identifier?.rawValue, name: item.name, address: item.singleLineAddress,
       street: item.street, latitude: item.location.coordinate.latitude,
       longitude: item.location.coordinate.longitude,
-      category: item.pointOfInterestCategory?.rawValue)
+      category: item.pointOfInterestCategory?.rawValue, url: item.url)
   }
 }
 
@@ -82,9 +84,17 @@ enum AutoMatch {
   static func namesMatch(_ lhs: String, _ rhs: String) -> Bool {
     let lhsWords = words(lhs)
     let rhsWords = words(rhs)
-    let (shorter, longer) =
-      lhsWords.count <= rhsWords.count ? (lhsWords, rhsWords) : (rhsWords, lhsWords)
-    guard !shorter.isEmpty else { return false }
+    return lhsWords.count <= rhsWords.count
+      ? contains(rhsWords, lhsWords) : contains(lhsWords, rhsWords)
+  }
+
+  /// Whether the text has the name's words, in order, as `namesMatch` compares them.
+  static func text(_ text: String, mentions name: String) -> Bool {
+    contains(words(text), words(name))
+  }
+
+  private static func contains(_ longer: [String], _ shorter: [String]) -> Bool {
+    guard !shorter.isEmpty, shorter.count <= longer.count else { return false }
     return (0...(longer.count - shorter.count)).contains {
       longer[$0..<($0 + shorter.count)].elementsEqual(shorter)
     }

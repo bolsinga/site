@@ -88,6 +88,33 @@ struct VenueMapFileTests {
         == "v1*v1*c*s\nv2*v2*c*s*1 Main St\n")
   }
 
+  @Test func websitePickReplacesArchiveURL() {
+    #expect(
+      VenueMapFile.line(
+        for: revolutionHall, pick: .place(identifier: "I1"),
+        website: URL(string: "https://revolutionhall.com/events")!)
+        == "v144*Revolution Hall*Portland*OR*1300 SE Stark St.*https://revolutionhall.com/events*mapkit=I1"
+    )
+  }
+
+  @Test func websitePickAddsURLBeforeSortname() {
+    let venue = Venue(
+      id: "v2", location: Location(city: "c", state: "s"), name: "The Place", sortname: "Place")
+    #expect(
+      VenueMapFile.line(for: venue, pick: nil, website: URL(string: "https://example.com")!)
+        == "v2*The Place*c*s*https://example.com*Place")
+  }
+
+  @Test func contentsWriteWebsitePicks() {
+    let venues = ["v1", "v2"].map {
+      Venue(id: $0, location: Location(city: "c", state: "s"), name: $0)
+    }
+    #expect(
+      VenueMapFile.contents(
+        venues, picks: [:], websites: ["v2": URL(string: "https://example.com")!])
+        == "v1*v1*c*s\nv2*v2*c*s*https://example.com\n")
+  }
+
   @Test func contentsAreInIDOrder() {
     let venues = ["v10", "v2", "v1"].map {
       Venue(id: $0, location: Location(city: "c", state: "s"), name: $0)

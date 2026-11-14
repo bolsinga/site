@@ -15,6 +15,7 @@ struct VenuePlacesView: View {
 
   @State private var store = VenuePickStore()
   @State private var addresses = VenueAddressPickStore()
+  @State private var websites = VenueWebsitePickStore()
   @State private var suggestions = VenueSuggestionStore()
   @State private var checks = VenuePlaceChecks()
 
@@ -22,7 +23,7 @@ struct VenuePlacesView: View {
     if !VenuePlaces.isEnabled {
       ContentUnavailableView("Venue Places Unavailable", systemImage: "map")
     } else if let vaultModel = model.vaultModel {
-      VenuePlacesSplitView(store: store, addresses: addresses)
+      VenuePlacesSplitView(store: store, addresses: addresses, websites: websites)
         .environment(vaultModel)
         .environment(checks)
         .environment(suggestions)
@@ -94,6 +95,7 @@ struct VenuePlacesSplitView: View {
   @Environment(VenueSuggestionStore.self) private var suggestions
   let store: VenuePickStore
   let addresses: VenueAddressPickStore
+  let websites: VenueWebsitePickStore
 
   @State private var digests: [VenueDigest] = []
   @State private var selection: ArchivePath?
@@ -108,7 +110,7 @@ struct VenuePlacesSplitView: View {
   @State private var venueMapFolder: VenueMapFolder?
 
   /// Whether a pick or address changed since venuemap.txt was written.
-  private var isEdited: Bool { store.isEdited || addresses.isEdited }
+  private var isEdited: Bool { store.isEdited || addresses.isEdited || websites.isEdited }
 
   /// The venues that geocode to the same point as others, by venue.
   private var sharedLocationMap: [ArchivePath: SharedLocation] {
@@ -131,15 +133,23 @@ struct VenuePlacesSplitView: View {
     case .verified, nil: break
     }
     return VenueFacts(
-      status: status(digest), isModified: store[id] != nil || addresses[id] != nil,
+      status: status(digest),
+      isModified: store[id] != nil || addresses[id] != nil || websites[id] != nil,
       hasStreet: digest.location.street != nil,
       sharesLocation: shared.map { $0.cause != .noStreet } ?? false,
-      hasWebsite: digest.location.web != nil,
+      hasWebsite: (websites[id] ?? digest.location.web) != nil,
+      websiteNeedsALook: websiteNotes(digest).issue != nil,
       hasPlace: digest.venue.placeIdentifier(pick: store[id]) != nil,
       addressDiffers: AddressCheck(
         venue: addresses.address(for: digest.venue), maps: model.venueMapsAddressMap[digest.id]
       ).differingAddress != nil,
       identifierChanged: replaced, placeGone: gone)
+  }
+
+  private func websiteNotes(_ digest: VenueDigest) -> [VenueWebsiteNote] {
+    checks.websiteNotes(
+      for: digest, pick: store[digest.venue.id],
+      web: websites[digest.venue.id] ?? digest.location.web)
   }
 
   private var shownDigests: [VenueDigest] {
@@ -153,18 +163,22 @@ struct VenuePlacesSplitView: View {
   /// Verifies places and suggests them for venues that need one, once every venue has geocoded.
   private func runChecks(again: Bool = false) {
     guard !model.geocodingInProgress, !digests.isEmpty else { return }
-    checks.run(digests, store: store, suggestions: suggestions, again: again) {
+    checks.run(
+      digests, store: store, suggestions: suggestions, websites: websites, again: again
+    ) {
       model.venueMapItemMap[$0]?.location
     }
   }
 
   private func writeVenueMap(to folder: VenueMapFolder) {
     let contents = VenueMapFile.contents(
-      digests.map(\.venue), picks: store.picks, addresses: addresses.picks)
+      digests.map(\.venue), picks: store.picks, addresses: addresses.picks,
+      websites: websites.picks)
     do {
       let file = try folder.write(contents)
       store.markSaved()
       addresses.markSaved()
+      websites.markSaved()
       venueMapMessage = String(
         localized: "Wrote \(digests.count) venues to \(file.path(percentEncoded: false)).")
     } catch {
@@ -222,6 +236,7 @@ struct VenuePlacesSplitView: View {
       VenuePlaceDetail(
         digest: selected, pick: store.binding(for: selected.venue.id),
         address: addresses.binding(for: selected.venue.id),
+        website: websites.binding(for: selected.venue.id),
         sharedWith: group?.venues.filter { $0.id != selected.id }.compactMap { digest($0.id) }
           ?? [],
         sharedCause: group?.cause
@@ -286,7 +301,8 @@ struct VenuePlacesSplitView: View {
         progressSection
         Section("\(shownDigests.count) Venues") {
           ForEach(shownDigests) { digest in
-            VenuePlaceRow(digest: digest, status: status(digest))
+            VenuePlaceRow(
+              digest: digest, status: status(digest), websiteNotes: websiteNotes(digest))
               .tag(digest.id)
           }
         }
@@ -399,6 +415,7 @@ struct VenuePlacesSplitView: View {
 struct VenuePlaceRow: View {
   let digest: VenueDigest
   let status: VenuePickStatus
+  let websiteNotes: [VenueWebsiteNote]
 
   var body: some View {
     HStack {
@@ -409,6 +426,11 @@ struct VenuePlaceRow: View {
           .foregroundStyle(.secondary)
       }
       Spacer()
+      if let issue = websiteNotes.issue {
+        Image(systemName: issue.systemImage)
+          .foregroundStyle(issue.severity.color)
+          .help(websiteNotes.map(\.text).joined(separator: "\n"))
+      }
       Image(systemName: status.systemImage)
         .foregroundStyle(status.color)
         .help(Text(status.label))

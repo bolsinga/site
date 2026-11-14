@@ -16,6 +16,8 @@ struct VenueFacts {
   /// Geocodes to the same point as another venue, other than the center of its city.
   let sharesLocation: Bool
   let hasWebsite: Bool
+  /// Loading the website, or comparing it with Maps', found something to look at.
+  let websiteNeedsALook: Bool
   /// Has a MapKit identifier, picked or the archive's.
   let hasPlace: Bool
   /// Maps gave a different address than the venue's.
@@ -33,6 +35,7 @@ enum VenuePlacesFilter: Hashable {
   case noStreet
   case sharesLocation
   case noWebsite
+  case websiteNeedsALook
   case noMapKitID
   case addressDiffers
   case identifierChanged
@@ -44,7 +47,7 @@ enum VenuePlacesFilter: Hashable {
   /// What might be wrong with a venue.
   static var criteria: [Self] {
     [
-      .noStreet, .sharesLocation, .noWebsite, .noMapKitID, .addressDiffers, .identifierChanged,
+      .noStreet, .sharesLocation, .noWebsite, .websiteNeedsALook, .noMapKitID, .addressDiffers, .identifierChanged,
       .placeGone,
     ]
   }
@@ -56,6 +59,7 @@ enum VenuePlacesFilter: Hashable {
     case .noStreet: "No Street (City Center)"
     case .sharesLocation: "Shares a Location"
     case .noWebsite: "No Website"
+    case .websiteNeedsALook: "Website Needs a Look"
     case .noMapKitID: "No MapKit Identifier"
     case .addressDiffers: "Address Differs from Maps"
     case .identifierChanged: "Identifier Changed"
@@ -70,6 +74,7 @@ enum VenuePlacesFilter: Hashable {
     case .noStreet: !facts.hasStreet
     case .sharesLocation: facts.sharesLocation
     case .noWebsite: !facts.hasWebsite
+    case .websiteNeedsALook: facts.websiteNeedsALook
     case .noMapKitID: !facts.hasPlace
     case .addressDiffers: facts.addressDiffers
     case .identifierChanged: facts.identifierChanged
