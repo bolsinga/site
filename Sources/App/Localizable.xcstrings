@@ -334,6 +334,9 @@
     "And %lld more" : {
 
     },
+    "Archive" : {
+
+    },
     "artist" : {
 
     },
@@ -365,6 +368,12 @@
 
     },
     "Category" : {
+
+    },
+    "Check Again" : {
+
+    },
+    "Checking Websites" : {
 
     },
     "Checks are still running, so more may match soon." : {
@@ -457,6 +466,9 @@
     "Displays Venue Details in App." : {
 
     },
+    "Doesn't load: %@" : {
+
+    },
     "Don't Save" : {
 
     },
@@ -502,6 +514,9 @@
     "Geocoding…" : {
 
     },
+    "Goes to another site: %@" : {
+
+    },
     "Headliners" : {
 
     },
@@ -523,6 +538,9 @@
     "List" : {
 
     },
+    "Loads" : {
+
+    },
     "Location Services are disabled. Enable access in Settings." : {
 
     },
@@ -539,6 +557,15 @@
 
     },
     "Maps couldn't find this place." : {
+
+    },
+    "Maps has a different website: %@" : {
+
+    },
+    "Maps has a website: %@" : {
+
+    },
+    "Maps has the same website" : {
 
     },
     "Maps now knows this place by another identifier." : {
@@ -638,10 +665,10 @@
     "No venues match “%@”." : {
 
     },
-    "No Website" : {
+    "No website" : {
 
     },
-    "None" : {
+    "No Website" : {
 
     },
     "Not compared with Maps yet" : {
@@ -683,7 +710,16 @@
     "Open in Maps" : {
 
     },
+    "Open in Safari" : {
+
+    },
     "Open Venue" : {
+
+    },
+    "Other Website" : {
+
+    },
+    "Page Title" : {
 
     },
     "performer" : {
@@ -726,10 +762,16 @@
     "Places in Maps" : {
 
     },
+    "Preview" : {
+
+    },
     "Punctuation" : {
 
     },
     "Rank Unknown" : {
+
+    },
+    "Redirects to %@" : {
 
     },
     "Refresh" : {
@@ -867,6 +909,12 @@
     "The category does not have a URL." : {
 
     },
+    "The domain is parked or for sale: %@" : {
+
+    },
+    "The page doesn't mention “%@”" : {
+
+    },
     "The picked place can't be found: %@" : {
 
     },
@@ -900,7 +948,13 @@
     "Unpicked" : {
 
     },
+    "Unpicked, so the archive's" : {
+
+    },
     "Unpicked, so the archive's: %@" : {
+
+    },
+    "Use" : {
 
     },
     "Use Maps' Address" : {
@@ -913,6 +967,12 @@
 
     },
     "Use This Place" : {
+
+    },
+    "Use This Website" : {
+
+    },
+    "Uses http, so its https version was checked" : {
 
     },
     "Vague address" : {
@@ -966,6 +1026,12 @@
     "Website" : {
 
     },
+    "Website Needs a Look" : {
+
+    },
+    "Websites" : {
+
+    },
     "Weekday" : {
 
     },
@@ -979,6 +1045,9 @@
 
     },
     "Weekdays with %@" : {
+
+    },
+    "Where it ends up" : {
 
     },
     "Wrote %lld venues to %@." : {

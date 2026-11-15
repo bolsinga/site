@@ -9,7 +9,7 @@ import MapKit
 import Shared
 import SwiftUI
 
-/// A venue's address, website, show history, the places in Maps it might be, and its pick.
+/// A venue's address, show history, the places in Maps and websites it might have, and its picks.
 struct VenuePlaceDetail: View {
   @Environment(VaultModel.self) private var model
   @Environment(VenuePlaceChecks.self) private var checks
@@ -19,6 +19,8 @@ struct VenuePlaceDetail: View {
   @Binding var pick: VenuePick?
   /// The accepted address; unaccepted venues keep the archive's.
   @Binding var address: VenueAddress?
+  /// The picked website; unpicked venues keep the archive's.
+  @Binding var website: URL?
   /// The other venues that geocode to the same point, and why they do.
   var sharedWith: [VenueDigest] = []
   var sharedCause: SharedLocation.Cause?
@@ -33,6 +35,10 @@ struct VenuePlaceDetail: View {
   /// Where the pick is, found the way the app finds a venue.
   @State private var pickedPlace: MKMapItem?
   @State private var pickedPlaceError: Error?
+  @State private var previewedWebsite: URL?
+  /// The websites being loaded.
+  @State private var checkingWebsites: Set<URL> = []
+  @State private var otherWebsite = ""
 
   private static var headlinerCount: Int { 5 }
 
@@ -88,10 +94,6 @@ struct VenuePlaceDetail: View {
             .foregroundStyle(.orange)
         }
         mapsAddress
-        LabeledContent("Website") {
-          Text(digest.location.web?.absoluteString ?? String(localized: "None"))
-            .foregroundStyle(digest.location.web == nil ? .secondary : .primary)
-        }
         if let sharedCause, !sharedWith.isEmpty {
           LabeledContent(sharedCause.label) {
             Text(sharedWith.map(\.name).formatted(.list(type: .and)))
@@ -102,6 +104,7 @@ struct VenuePlaceDetail: View {
         Text(digest.name)
           .font(.title2.bold())
       }
+      websitePick
       Section {
         VenuePlaceMap(
           geocodedLocation: geocodedLocation, pickedPlace: pickedPlace,
@@ -247,6 +250,134 @@ struct VenuePlaceDetail: View {
     }
   }
 
+  /// The picked place's website in Maps.
+  private var mapsWebsite: URL? { pickedPlace?.url }
+
+  /// The website venuemap.txt gets: the pick, or the archive's when unpicked.
+  private var chosenWebsite: URL? { website ?? digest.location.web }
+
+  /// The websites the venue might have: the archive's, where it and Maps' end up, and Maps'.
+  private var websiteCandidates: [URL] {
+    let found = [digest.location.web, mapsWebsite].compactMap { $0 }
+    let ended = found.map { url in
+      checks.webCheck(venueID: digest.venue.id, url: url)?.finalURL(from: url)
+        ?? WebCheck.loadable(url)
+    }
+    var seen = Set<URL>()
+    return (found + ended).filter { seen.insert($0).inserted }
+  }
+
+  private var websiteDescription: String {
+    website == nil ? String(localized: "Unpicked, so the archive's") : String(localized: "Picked")
+  }
+
+  @ViewBuilder private var websitePick: some View {
+    Section("Website") {
+      LabeledContent(websiteDescription) {
+        if let chosenWebsite {
+          Text(chosenWebsite.absoluteString)
+            #if !os(tvOS)
+              .textSelection(.enabled)
+            #endif
+        } else {
+          Text("No website")
+            .foregroundStyle(.secondary)
+        }
+      }
+      if let chosenWebsite, checkingWebsites.contains(chosenWebsite) {
+        ProgressView()
+          .controlSize(.small)
+      } else {
+        ForEach(checks.websiteNotes(for: digest, pick: pick, web: chosenWebsite), id: \.self) { $0.label }
+        if let chosenWebsite,
+          let title = checks.webCheck(venueID: digest.venue.id, url: chosenWebsite)?.title
+        {
+          LabeledContent("Page Title", value: title)
+        }
+      }
+      HStack {
+        if let chosenWebsite {
+          Button("Check Again") { Task { await checkWebsite(chosenWebsite) } }
+            .disabled(checkingWebsites.contains(chosenWebsite))
+        }
+        Button("Clear") { website = nil }
+          .disabled(website == nil)
+      }
+      #if !os(tvOS)
+        .sheet(
+          isPresented: Binding(
+            get: { previewedWebsite != nil }, set: { if !$0 { previewedWebsite = nil } })
+        ) {
+          if let previewedWebsite {
+            VenueWebsitePreview(url: previewedWebsite)
+          }
+        }
+      #endif
+    }
+    Section("Websites") {
+      ForEach(websiteCandidates, id: \.self) { url in
+        VenueWebsiteRow(
+          url: url, notes: candidateNotes(url),
+          title: checks.webCheck(venueID: digest.venue.id, url: url)?.title,
+          sources: sources(of: url), isChecking: checkingWebsites.contains(url),
+          isPicked: website == url
+        ) {
+          // The app can't load http, so the preview shows the https version.
+          previewedWebsite = WebCheck.loadable(url)
+        } use: {
+          website = url
+        }
+      }
+      HStack {
+        TextField("Other Website", text: $otherWebsite)
+        Button("Use") {
+          if let url = otherWebsiteURL {
+            website = url
+            otherWebsite = ""
+          }
+        }
+        .disabled(otherWebsiteURL == nil)
+      }
+    }
+    .task(id: websiteCandidates + [chosenWebsite].compactMap { $0 }) {
+      for url in websiteCandidates + [chosenWebsite].compactMap({ $0 })
+      where checks.webCheck(venueID: digest.venue.id, url: url) == nil {
+        await checkWebsite(url)
+      }
+    }
+  }
+
+  /// A typed website, when it is a web URL.
+  private var otherWebsiteURL: URL? {
+    guard let url = URL(string: otherWebsite.trimmingCharacters(in: .whitespaces)),
+      ["http", "https"].contains(url.scheme?.lowercased()), url.host() != nil
+    else { return nil }
+    return url
+  }
+
+  /// What checking the candidate found, without comparing it to Maps.
+  private func candidateNotes(_ url: URL) -> [VenueWebsiteNote] {
+    VenueWebsiteNote.notes(
+      web: url, name: digest.name, webCheck: checks.webCheck(venueID: digest.venue.id, url: url),
+      mapsWebsite: nil)
+  }
+
+  /// Where the candidate came from.
+  private func sources(of url: URL) -> [String] {
+    var sources = [String]()
+    if url == digest.location.web { sources.append(String(localized: "Archive")) }
+    if url == mapsWebsite { sources.append(String(localized: "Maps")) }
+    if sources.isEmpty { sources.append(String(localized: "Where it ends up")) }
+    return sources
+  }
+
+  private func checkWebsite(_ url: URL) async {
+    guard checkingWebsites.insert(url).inserted else { return }
+    await checks.checkWebsite(
+      venue: digest.venue, url: url, isOwn: url == chosenWebsite)
+    checkingWebsites.remove(url)
+  }
+
   /// What verifying found for the pick.
   @ViewBuilder private var verification: some View {
     switch checks.verification(venue: digest.venue, pick: pick) {
@@ -290,7 +421,9 @@ struct VenuePlaceDetail: View {
     let placemark = pick == nil ? digest.venue.mapKitID.map(Placemark.identifier) : pick?.placemark
     guard let placemark else { return }
     do {
-      pickedPlace = try await placemark.mapItem(for: digest.venue)
+      let place = try await placemark.mapItem(for: digest.venue)
+      pickedPlace = place
+      checks.noteMapsWebsite(venueID: digest.venue.id, url: place.url)
     } catch {
       pickedPlaceError = error
     }
@@ -421,6 +554,60 @@ private struct VenueCandidateRow: View {
           .foregroundStyle(.green)
       } else {
         Button("Use This Place", action: use)
+      }
+    }
+  }
+}
+
+/// A website the venue might have, with what checking it found.
+private struct VenueWebsiteRow: View {
+  let url: URL
+  let notes: [VenueWebsiteNote]
+  let title: String?
+  let sources: [String]
+  let isChecking: Bool
+  let isPicked: Bool
+  let preview: () -> Void
+  let use: () -> Void
+
+  private var details: String {
+    ([sources.formatted(.list(type: .and))] + [title].compactMap { $0 }).joined(separator: " · ")
+  }
+
+  var body: some View {
+    HStack {
+      VStack(alignment: .leading) {
+        Text(url.absoluteString)
+          #if !os(tvOS)
+            .textSelection(.enabled)
+          #endif
+        Text(details)
+          .font(.caption)
+          .foregroundStyle(.secondary)
+        if let worst = notes.first, worst.severity > .good {
+          Text(worst.text)
+            .font(.caption)
+            .foregroundStyle(worst.severity.color)
+        }
+      }
+      Spacer()
+      if isChecking {
+        ProgressView()
+          .controlSize(.small)
+      } else if let worst = notes.first {
+        Image(systemName: worst.systemImage)
+          .foregroundStyle(worst.severity.color)
+          .help(notes.map(\.text).joined(separator: "\n"))
+      }
+      #if !os(tvOS)
+        Button("Preview", action: preview)
+      #endif
+      if isPicked {
+        Label("Picked", systemImage: "checkmark.circle.fill")
+          .labelStyle(.iconOnly)
+          .foregroundStyle(.green)
+      } else {
+        Button("Use This Website", action: use)
       }
     }
   }

@@ -104,6 +104,12 @@ typealias VenueSuggestionStore = PickStore<VenueSuggestion>
 /// What verifying each venue's place found.
 typealias VenueCheckStore = PickStore<VenueCheck>
 
+/// Each venue's website.
+typealias VenueWebsitePickStore = PickStore<URL>
+
+/// What loading each venue's website found.
+typealias VenueWebCheckStore = PickStore<VenueWebCheck>
+
 extension PickStore where Pick == VenueSuggestion {
   convenience init() {
     self.init(fileURL: URL.applicationSupportDirectory.appending(path: "venue-suggestions.json"))
@@ -113,5 +119,11 @@ extension PickStore where Pick == VenueSuggestion {
 extension PickStore where Pick == VenueCheck {
   convenience init() {
     self.init(fileURL: URL.applicationSupportDirectory.appending(path: "venue-checks.json"))
+  }
+}
+
+extension PickStore where Pick == VenueWebCheck {
+  convenience init() {
+    self.init(fileURL: URL.applicationSupportDirectory.appending(path: "venue-web-checks.json"))
   }
 }
