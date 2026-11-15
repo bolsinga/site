@@ -9,7 +9,7 @@ import MapKit
 import Shared
 import SwiftUI
 
-/// A venue's address, show history, the places in Maps it might be, and its pick.
+/// A venue's address, website, show history, the places in Maps it might be, and its pick.
 struct VenuePlaceDetail: View {
   @Environment(VaultModel.self) private var model
   @Environment(VenuePlaceChecks.self) private var checks
@@ -19,6 +19,9 @@ struct VenuePlaceDetail: View {
   @Binding var pick: VenuePick?
   /// The accepted address; unaccepted venues keep the archive's.
   @Binding var address: VenueAddress?
+  /// The other venues that geocode to the same point, and why they do.
+  var sharedWith: [VenueDigest] = []
+  var sharedCause: SharedLocation.Cause?
 
   @State private var candidates: [MKMapItem] = []
   @State private var isSearching = false
@@ -85,6 +88,16 @@ struct VenuePlaceDetail: View {
             .foregroundStyle(.orange)
         }
         mapsAddress
+        LabeledContent("Website") {
+          Text(digest.location.web?.absoluteString ?? String(localized: "None"))
+            .foregroundStyle(digest.location.web == nil ? .secondary : .primary)
+        }
+        if let sharedCause, !sharedWith.isEmpty {
+          LabeledContent(sharedCause.label) {
+            Text(sharedWith.map(\.name).formatted(.list(type: .and)))
+          }
+          .foregroundStyle(.orange)
+        }
       } header: {
         Text(digest.name)
           .font(.title2.bold())

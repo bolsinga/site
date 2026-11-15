@@ -204,16 +204,6 @@
         }
       }
     },
-    "%lld in %@, %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$lld in %2$@, %3$@"
-          }
-        }
-      }
-    },
     "%lld Last Seen" : {
 
     },
@@ -326,25 +316,16 @@
     "Accepted" : {
 
     },
-    "Accepted Addresses (%lld)" : {
-
-    },
-    "Address Doesn't Match Maps (%lld)" : {
+    "Address Differs from Maps" : {
 
     },
     "All" : {
       "comment" : "ArchiveScope.all"
     },
-    "All local data is removed. This can't be undone." : {
-
-    },
     "All Months with Shows" : {
 
     },
     "All States with Shows" : {
-
-    },
-    "All Venues" : {
 
     },
     "All Weekdays with Shows" : {
@@ -386,10 +367,13 @@
     "Category" : {
 
     },
+    "Checks are still running, so more may match soon." : {
+
+    },
     "Choose a Venue" : {
 
     },
-    "Choose Folder…" : {
+    "Choose the filter again in the filter menu to turn it off." : {
 
     },
     "City" : {
@@ -405,12 +389,6 @@
 
     },
     "Clear City" : {
-
-    },
-    "Clear Saved Data" : {
-
-    },
-    "Clear Saved Data?" : {
 
     },
     "club" : {
@@ -449,10 +427,10 @@
     "Count" : {
 
     },
-    "Current Location" : {
+    "Criteria" : {
 
     },
-    "Dashboard" : {
+    "Current Location" : {
 
     },
     "Date" : {
@@ -479,19 +457,13 @@
     "Displays Venue Details in App." : {
 
     },
+    "Don't Save" : {
+
+    },
     "Done" : {
 
     },
-    "Each becomes the venue's pick, which can be cleared on its page." : {
-
-    },
-    "Each can be undone under Accepted Addresses." : {
-
-    },
     "Edit Nearby Settings" : {
-
-    },
-    "Every address matches Maps." : {
 
     },
     "Filter" : {
@@ -533,7 +505,7 @@
     "Headliners" : {
 
     },
-    "Identifier Changed or Gone (%lld)" : {
+    "Identifier Changed" : {
 
     },
     "Invalid Data." : {
@@ -572,10 +544,10 @@
     "Maps now knows this place by another identifier." : {
 
     },
-    "Maps: %@" : {
+    "Matches Maps" : {
 
     },
-    "Matches Maps" : {
+    "Modified" : {
 
     },
     "Month" : {
@@ -626,7 +598,7 @@
     "No concerts found." : {
 
     },
-    "No Longer Shared" : {
+    "No MapKit Identifier" : {
 
     },
     "No Matches" : {
@@ -635,22 +607,41 @@
     "No Place" : {
 
     },
-    "No Place Found (%lld)" : {
-
-    },
     "No places found." : {
 
     },
     "No street" : {
 
     },
-    "No Street" : {
+    "No Street (City Center)" : {
 
     },
     "No street, so the city center" : {
 
     },
+    "No Venues" : {
+
+    },
     "No venues are in this city. Disable the Location Filter or edit the city." : {
+
+    },
+    "No venues match “%@” and “%@”." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "No venues match “%1$@” and “%2$@”."
+          }
+        }
+      }
+    },
+    "No venues match “%@”." : {
+
+    },
+    "No Website" : {
+
+    },
+    "None" : {
 
     },
     "Not compared with Maps yet" : {
@@ -723,6 +714,12 @@
     "Place Card" : {
 
     },
+    "Place Changed or Gone" : {
+
+    },
+    "Place Gone" : {
+
+    },
     "Place Not Found" : {
 
     },
@@ -753,6 +750,15 @@
     "Same address" : {
 
     },
+    "Save" : {
+
+    },
+    "Save As…" : {
+
+    },
+    "Save Changes?" : {
+
+    },
     "Search Again" : {
 
     },
@@ -777,13 +783,10 @@
     "See Shows With This Artist" : {
 
     },
-    "Shared Locations" : {
+    "Shares a Location" : {
 
     },
     "show" : {
-
-    },
-    "Show" : {
 
     },
     "Show concerts" : {
@@ -825,9 +828,6 @@
     "Sort By Venue Count" : {
 
     },
-    "Stale" : {
-
-    },
     "State" : {
 
     },
@@ -843,6 +843,9 @@
     "Stats" : {
 
     },
+    "Status" : {
+
+    },
     "Strong match" : {
 
     },
@@ -852,13 +855,7 @@
     "Suggested Place" : {
 
     },
-    "Suggested Places (%lld)" : {
-
-    },
     "Suggesting Places" : {
-
-    },
-    "Switch to Current" : {
 
     },
     "Switch to Current Identifier" : {
@@ -876,6 +873,12 @@
     "The saved picks can't be read, so changes aren't saved: %@" : {
 
     },
+    "There are changes that haven't been saved to venuemap.txt." : {
+
+    },
+    "There are changes that haven't been saved to venuemap.txt. Cancel, then choose File > Save." : {
+
+    },
     "To" : {
 
     },
@@ -883,9 +886,6 @@
 
     },
     "Unable to load data." : {
-
-    },
-    "Undo" : {
 
     },
     "Undo Accepted Address" : {
@@ -903,22 +903,7 @@
     "Unpicked, so the archive's: %@" : {
 
     },
-    "Use %lld Strong Matches?" : {
-
-    },
-    "Use All Maps Addresses" : {
-
-    },
-    "Use All Strong Matches" : {
-
-    },
-    "Use All Strong Matches (%lld)" : {
-
-    },
     "Use Maps' Address" : {
-
-    },
-    "Use Maps' Address for %lld Venues?" : {
 
     },
     "Use Pin" : {
@@ -954,9 +939,6 @@
     "Venue Places Unavailable" : {
 
     },
-    "Venue: %@" : {
-
-    },
     "venuemap.txt" : {
 
     },
@@ -964,9 +946,6 @@
 
     },
     "Venues" : {
-
-    },
-    "Venues are compared as Maps finds them." : {
 
     },
     "Verified" : {
@@ -984,6 +963,9 @@
     "Weak match" : {
 
     },
+    "Website" : {
+
+    },
     "Weekday" : {
 
     },
@@ -997,9 +979,6 @@
 
     },
     "Weekdays with %@" : {
-
-    },
-    "Write venuemap.txt" : {
 
     },
     "Wrote %lld venues to %@." : {

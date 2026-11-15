@@ -32,34 +32,6 @@ struct VenuePlacesView: View {
   }
 }
 
-enum VenuePlacesFilter: CaseIterable, Hashable {
-  case all
-  case unpicked
-  case suggested
-  case stale
-  case noStreet
-
-  var label: LocalizedStringResource {
-    switch self {
-    case .all: "All"
-    case .unpicked: "Unpicked"
-    case .suggested: "Suggested"
-    case .stale: "Stale"
-    case .noStreet: "No Street"
-    }
-  }
-
-  func includes(_ digest: VenueDigest, status: VenuePickStatus) -> Bool {
-    switch self {
-    case .all: true
-    case .unpicked: status == .unpicked || status == .suggested
-    case .suggested: status == .suggested
-    case .stale: status == .stale
-    case .noStreet: digest.location.street == nil
-    }
-  }
-}
-
 extension VenuePickStatus {
   var label: LocalizedStringResource {
     switch self {
@@ -67,7 +39,7 @@ extension VenuePickStatus {
     case .suggested: "Suggested"
     case .picked: "Picked"
     case .verified: "Verified"
-    case .stale: "Stale"
+    case .stale: "Place Changed or Gone"
     case .noPlace: "No Place"
     }
   }
@@ -116,12 +88,6 @@ private struct ChecksTrigger: Equatable {
   let venues: Int
 }
 
-enum VenuePlacesSelection: Hashable {
-  case dashboard
-  case venue(ArchivePath)
-  case sharedLocation(ArchivePath)
-}
-
 struct VenuePlacesSplitView: View {
   @Environment(VaultModel.self) private var model
   @Environment(VenuePlaceChecks.self) private var checks
@@ -130,37 +96,58 @@ struct VenuePlacesSplitView: View {
   let addresses: VenueAddressPickStore
 
   @State private var digests: [VenueDigest] = []
-  @State private var selection: VenuePlacesSelection? = .dashboard
-  @State private var filter = VenuePlacesFilter.all
+  @State private var selection: ArchivePath?
+  /// Always showing the venue list, which dragging it small would otherwise collapse.
+  @State private var columnVisibility = NavigationSplitViewVisibility.all
+  @State private var filter: VenuePlacesFilter?
   @State private var searchString = ""
   @State private var isChoosingVenueMapFolder = false
   /// What writing venuemap.txt did.
   @State private var venueMapMessage: String?
-  @State private var isConfirmingClear = false
-  /// The venues the saved picks were made for.
-  @AppStorage("venuePlaces.venuesFingerprint") private var venuesFingerprint = ""
-  /// Where venuemap.txt is written; empty until a folder is chosen.
-  @AppStorage("venue-places.venuemap-folder") private var venueMapFolder: VenueMapFolder?
+  /// Where venuemap.txt is written; none until the first save chooses a folder.
+  @State private var venueMapFolder: VenueMapFolder?
 
-  private var shownDigests: [VenueDigest] {
-    digests.filter { digest in
-      filter.includes(digest, status: status(digest))
-        && (searchString.isEmpty || digest.name.localizedStandardContains(searchString))
-    }
-  }
+  /// Whether a pick or address changed since venuemap.txt was written.
+  private var isEdited: Bool { store.isEdited || addresses.isEdited }
 
-  private var sharedLocations: [SharedLocation] {
-    SharedLocation.groups(of: digests.map { .init(id: $0.id, location: $0.location) }) {
+  /// The venues that geocode to the same point as others, by venue.
+  private var sharedLocationMap: [ArchivePath: SharedLocation] {
+    let groups = SharedLocation.groups(of: digests.map { .init(id: $0.id, location: $0.location) }) {
       model.venueMapItemMap[$0]?.location
     }
+    return groups.reduce(into: [:]) { map, group in
+      for venue in group.venues { map[venue.id] = group }
+    }
   }
 
-  /// Removes the picks, accepted addresses and what the batches found, keeping the venuemap.txt
-  /// folder.
-  private func clearVenueData() {
-    checks.removeAll()
-    store.removeAll()
-    addresses.removeAll()
+  private func facts(_ digest: VenueDigest, shared: SharedLocation?) -> VenueFacts {
+    let id = digest.venue.id
+    let verification = checks.verification(venue: digest.venue, pick: store[id])
+    var replaced = false
+    var gone = false
+    switch verification {
+    case .replaced: replaced = true
+    case .notFound: gone = true
+    case .verified, nil: break
+    }
+    return VenueFacts(
+      status: status(digest), isModified: store[id] != nil || addresses[id] != nil,
+      hasStreet: digest.location.street != nil,
+      sharesLocation: shared.map { $0.cause != .noStreet } ?? false,
+      hasWebsite: digest.location.web != nil,
+      hasPlace: digest.venue.placeIdentifier(pick: store[id]) != nil,
+      addressDiffers: AddressCheck(
+        venue: addresses.address(for: digest.venue), maps: model.venueMapsAddressMap[digest.id]
+      ).differingAddress != nil,
+      identifierChanged: replaced, placeGone: gone)
+  }
+
+  private var shownDigests: [VenueDigest] {
+    let shared = sharedLocationMap
+    return digests.filter { digest in
+      (filter?.includes(facts(digest, shared: shared[digest.id])) ?? true)
+        && (searchString.isEmpty || digest.name.localizedStandardContains(searchString))
+    }
   }
 
   /// Verifies places and suggests them for venues that need one, once every venue has geocoded.
@@ -176,11 +163,22 @@ struct VenuePlacesSplitView: View {
       digests.map(\.venue), picks: store.picks, addresses: addresses.picks)
     do {
       let file = try folder.write(contents)
+      store.markSaved()
+      addresses.markSaved()
       venueMapMessage = String(
         localized: "Wrote \(digests.count) venues to \(file.path(percentEncoded: false)).")
     } catch {
       venueMapMessage = String(
         localized: "venuemap.txt can't be written: \(error.localizedDescription)")
+    }
+  }
+
+  /// Writes venuemap.txt to the folder chosen before, or asks for one.
+  private func save() {
+    if let venueMapFolder {
+      writeVenueMap(to: venueMapFolder)
+    } else {
+      isChoosingVenueMapFolder = true
     }
   }
 
@@ -194,7 +192,14 @@ struct VenuePlacesSplitView: View {
   }
 
   /// The running batch, in the sidebar like the geocoding progress.
-  @ViewBuilder private var checksSection: some View {
+  @ViewBuilder private var progressSection: some View {
+    if model.geocodingInProgress {
+      Section {
+        ProgressView(value: model.geocodingProgress) {
+          Text("Geocoding Venues")
+        }
+      }
+    }
     if let progress = checks.progress {
       Section {
         HStack {
@@ -211,62 +216,78 @@ struct VenuePlacesSplitView: View {
     }
   }
 
-  @ViewBuilder private var sharedLocationsSection: some View {
-    Section("Shared Locations") {
-      if model.geocodingInProgress {
-        ProgressView(value: model.geocodingProgress) {
-          Text("Geocoding Venues")
-        }
-      } else {
-        ForEach(sharedLocations) { sharedLocation in
-          SharedLocationRow(sharedLocation: sharedLocation)
-            .tag(VenuePlacesSelection.sharedLocation(sharedLocation.id))
-        }
-      }
-    }
-  }
-
   @ViewBuilder private var detail: some View {
-    switch selection {
-    case .dashboard:
-      VenuePlacesDashboard(digests: digests, store: store, addresses: addresses) {
-        selection = .venue($0)
-      }
-    case .venue(let id):
-      if let digest = digest(id) {
-        VenuePlaceDetail(
-          digest: digest, pick: store.binding(for: digest.venue.id),
-          address: addresses.binding(for: digest.venue.id)
-        )
-        .id(digest.id)
-      }
-    case .sharedLocation(let id):
-      if let sharedLocation = sharedLocations.first(where: { $0.id == id }) {
-        SharedLocationDetail(
-          sharedLocation: sharedLocation,
-          digests: sharedLocation.venues.compactMap { digest($0.id) }, store: store,
-          addresses: addresses
-        )
-        .id(id)
-      } else {
-        ContentUnavailableView("No Longer Shared", systemImage: "mappin.slash")
-      }
-    case nil:
+    if let selection, let selected = digest(selection) {
+      let group = sharedLocationMap[selected.id]
+      VenuePlaceDetail(
+        digest: selected, pick: store.binding(for: selected.venue.id),
+        address: addresses.binding(for: selected.venue.id),
+        sharedWith: group?.venues.filter { $0.id != selected.id }.compactMap { digest($0.id) }
+          ?? [],
+        sharedCause: group?.cause
+      )
+      .id(selected.id)
+    } else {
       ContentUnavailableView("Choose a Venue", systemImage: "mappin.and.ellipse")
     }
   }
 
+  /// A filter that is on while it's chosen, and off when it's chosen again.
+  private func filterToggle(_ option: VenuePlacesFilter) -> some View {
+    Toggle(
+      isOn: Binding(
+        get: { filter == option },
+        set: { filter = $0 ? option : nil })
+    ) {
+      Text(option.label)
+    }
+  }
+
+  private var filterMenu: some View {
+    Menu {
+      Section("Status") {
+        ForEach(VenuePlacesFilter.statuses, id: \.self) { filterToggle($0) }
+      }
+      Section("Criteria") {
+        ForEach(VenuePlacesFilter.criteria, id: \.self) { filterToggle($0) }
+      }
+    } label: {
+      Label(
+        filter.map { String(localized: $0.label) } ?? String(localized: "Filter"),
+        systemImage: filter == nil
+          ? "line.3.horizontal.decrease.circle" : "line.3.horizontal.decrease.circle.fill")
+    }
+    .help("Filter")
+  }
+
+  /// Why no venue is listed.
+  @ViewBuilder private var noVenues: some View {
+    if let filter {
+      ContentUnavailableView {
+        Label("No Venues", systemImage: "line.3.horizontal.decrease.circle")
+      } description: {
+        Text(
+          searchString.isEmpty
+            ? "No venues match “\(String(localized: filter.label))”."
+            : "No venues match “\(String(localized: filter.label))” and “\(searchString)”.")
+        if checks.isRunning || model.geocodingInProgress {
+          Text("Checks are still running, so more may match soon.")
+        }
+        Text("Choose the filter again in the filter menu to turn it off.")
+      }
+    } else {
+      ContentUnavailableView.search(text: searchString)
+    }
+  }
+
   var body: some View {
-    NavigationSplitView {
+    NavigationSplitView(columnVisibility: $columnVisibility) {
       List(selection: $selection) {
-        Label("Dashboard", systemImage: "list.bullet.clipboard")
-          .tag(VenuePlacesSelection.dashboard)
-        checksSection
-        sharedLocationsSection
-        Section("All Venues") {
+        progressSection
+        Section("\(shownDigests.count) Venues") {
           ForEach(shownDigests) { digest in
             VenuePlaceRow(digest: digest, status: status(digest))
-              .tag(VenuePlacesSelection.venue(digest.id))
+              .tag(digest.id)
           }
         }
       }
@@ -275,9 +296,23 @@ struct VenuePlacesSplitView: View {
       #else
         .searchable(text: $searchString, placement: .sidebar)
       #endif
+      .overlay {
+        if shownDigests.isEmpty && !digests.isEmpty { noVenues }
+      }
+      // The list always shows, so it has no button to hide it.
+      .toolbar(removing: .sidebarToggle)
+      // In the sidebar's toolbar, so it sits by the list it filters.
+      .toolbar {
+        ToolbarItem {
+          filterMenu
+        }
+      }
       .navigationSplitViewColumnWidth(min: 240, ideal: 300)
     } detail: {
       detail
+    }
+    .onChange(of: columnVisibility) {
+      if columnVisibility != .all { columnVisibility = .all }
     }
     .toolbar {
       ToolbarItemGroup {
@@ -286,33 +321,6 @@ struct VenuePlacesSplitView: View {
         }
         .help("Run Checks Again")
         .disabled(checks.isRunning || model.geocodingInProgress)
-        Menu {
-          Button("Choose Folder…") { isChoosingVenueMapFolder = true }
-        } label: {
-          Label("Write venuemap.txt", systemImage: "square.and.arrow.down")
-        } primaryAction: {
-          if let folder = venueMapFolder {
-            // Storing it again saves a bookmark that was refreshed when it was read.
-            venueMapFolder = folder
-            writeVenueMap(to: folder)
-          } else {
-            isChoosingVenueMapFolder = true
-          }
-        }
-        .help("Write venuemap.txt")
-        .disabled(digests.isEmpty)
-        Button("Clear Saved Data", systemImage: "trash", role: .destructive) {
-          isConfirmingClear = true
-        }
-        .help("Clear Saved Data")
-      }
-      ToolbarItem {
-        Picker("Filter", selection: $filter) {
-          ForEach(VenuePlacesFilter.allCases, id: \.self) {
-            Text($0.label)
-          }
-        }
-        .pickerStyle(.segmented)
       }
     }
     #if !os(tvOS)
@@ -327,18 +335,24 @@ struct VenuePlacesSplitView: View {
         }
       }
     #endif
-    .confirmationDialog(
-      "Clear Saved Data?", isPresented: $isConfirmingClear, titleVisibility: .visible
-    ) {
-      Button("Clear Saved Data", role: .destructive) {
-        clearVenueData()
-        suggestions.removeAll()
-        venueMapFolder = nil
-        runChecks()
+    #if !os(tvOS)
+      .dismissalConfirmationDialog("Save Changes?", shouldPresent: isEdited) {
+        // Without a folder, saving needs one chosen first, so it's left to the Save command.
+        if venueMapFolder != nil {
+          Button("Save") { save() }
+        }
+        Button("Don't Save", role: .destructive) {}
+      } message: {
+        Text(
+          venueMapFolder == nil
+            ? "There are changes that haven't been saved to venuemap.txt. Cancel, then choose File > Save."
+            : "There are changes that haven't been saved to venuemap.txt.")
       }
-    } message: {
-      Text("All local data is removed. This can't be undone.")
-    }
+    #endif
+    .windowEdited(isEdited)
+    .focusedSceneValue(
+      \.venuePlacesActions,
+      VenuePlacesActions(save: save, saveAs: { isChoosingVenueMapFolder = true }))
     .alert(
       "venuemap.txt",
       isPresented: Binding(
@@ -354,12 +368,7 @@ struct VenuePlacesSplitView: View {
     }
     .task(id: ObjectIdentifier(model)) {
       digests = model.vault.orderedVenueIDs.compactMap { model.vault.digest(venue: $0) }
-      // Picks for venue data that has since changed are cleared.
-      let current = VenuesFingerprint.fingerprint(digests.map(\.venue))
-      if VenuesFingerprint.isChanged(saved: venuesFingerprint, current: current) {
-        clearVenueData()
-      }
-      venuesFingerprint = current
+        .sorted { ($0.sortname ?? $0.name).localizedStandardCompare($1.sortname ?? $1.name) == .orderedAscending }
     }
     // Once geocoding is done; venues already checked for their place, name and address are skipped.
     .task(id: ChecksTrigger(isGeocoding: model.geocodingInProgress, venues: digests.count)) {
@@ -383,21 +392,6 @@ struct VenuePlacesSplitView: View {
       .padding()
       .background(.red.opacity(0.2), in: .rect(cornerRadius: 8))
       .padding()
-    }
-  }
-}
-
-private struct SharedLocationRow: View {
-  let sharedLocation: SharedLocation
-
-  var body: some View {
-    VStack(alignment: .leading) {
-      if let first = sharedLocation.venues.first {
-        Text("\(sharedLocation.venues.count) in \(first.location.city), \(first.location.state)")
-      }
-      Text(sharedLocation.cause.label)
-        .font(.caption)
-        .foregroundStyle(.secondary)
     }
   }
 }
