@@ -25,6 +25,8 @@ struct VenueSuggestion: Codable, Equatable, Sendable {
   let place: FoundPlace?
   let confidence: SuggestionConfidence?
   var isDismissed = false
+  /// When Maps was searched; without a date, it is searched again.
+  var checked: Date? = nil
 
   /// The place to offer: found, and not dismissed.
   var offered: (place: FoundPlace, confidence: SuggestionConfidence)? {

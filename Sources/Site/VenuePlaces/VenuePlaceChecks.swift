@@ -17,6 +17,8 @@ extension Logger {
 struct VenueCheck: Codable, Equatable, Sendable {
   let identifier: String
   let verification: PickVerification
+  /// When Maps was asked; without a date, it is asked again.
+  var checked: Date? = nil
 }
 
 /// The checks Venue Places runs on its own: verifying picked and archive identifiers, and suggesting
@@ -72,12 +74,18 @@ struct VenueCheck: Codable, Equatable, Sendable {
       guard let identifier = digest.venue.placeIdentifier(pick: pickStore[digest.venue.id]) else {
         return nil
       }
-      if !again, store[digest.venue.id]?.identifier == identifier { return nil }
+      if !again, let check = store[digest.venue.id], check.identifier == identifier,
+        CacheAge.isFresh(check.checked)
+      {
+        return nil
+      }
       return (digest.id, SavedPlace(venue: digest.venue, identifier: identifier))
     }
     let guesses: [(ArchivePath, VenuePlaceGuess)] = digests.compactMap { digest in
       guard digest.venue.mapKitID == nil, pickStore[digest.venue.id] == nil else { return nil }
-      if !again, suggestions[digest.venue.id]?.source == digest.venue.suggestionSource {
+      if !again, let saved = suggestions[digest.venue.id],
+        saved.source == digest.venue.suggestionSource, CacheAge.isFresh(saved.checked)
+      {
         return nil
       }
       return (digest.id, VenuePlaceGuess(venue: digest.venue, location: location(digest.id)))
@@ -92,7 +100,7 @@ struct VenueCheck: Codable, Equatable, Sendable {
         await batch("Verifying Picks", places) { _, place, found in
           let verification = PickVerification(identifier: place.identifier, found: found)
           self.store[place.venue.id] = VenueCheck(
-            identifier: place.identifier, verification: verification)
+            identifier: place.identifier, verification: verification, checked: .now)
           // A verified pick saved without its street gets it from Maps; unpicked venues stay unpicked.
           if verification == .verified, let pick = pickStore[place.venue.id], pick.street == nil,
             let foundPick = found?.pick, foundPick.street != nil
@@ -107,8 +115,16 @@ struct VenueCheck: Codable, Equatable, Sendable {
         }
         await batch("Suggesting Places", guesses) { _, guess, found in
           let best = PlaceSuggester.best(found ?? [], for: guess.venue, location: guess.location)
-          suggestions[guess.venue.id] = VenueSuggestion(
-            source: guess.venue.suggestionSource, place: best?.place, confidence: best?.confidence)
+          var suggestion = VenueSuggestion(
+            source: guess.venue.suggestionSource, place: best?.place, confidence: best?.confidence,
+            checked: .now)
+          // Searching again keeps a dismissal of the same place.
+          if let old = suggestions[guess.venue.id], old.isDismissed, let place = best?.place,
+            old.place?.identifier == place.identifier
+          {
+            suggestion.isDismissed = true
+          }
+          suggestions[guess.venue.id] = suggestion
         }
       }
       progress = nil
