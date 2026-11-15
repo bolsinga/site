@@ -34,10 +34,33 @@
     func updateNSView(_ view: WindowView, context: Context) {}
   }
 
+  /// Shows the window's close button as edited while there is something to save.
+  private struct WindowEdited: NSViewRepresentable {
+    let isEdited: Bool
+
+    func makeNSView(context: Context) -> NSView { NSView() }
+
+    func updateNSView(_ view: NSView, context: Context) {
+      // The view is only in a window after it is made.
+      DispatchQueue.main.async { view.window?.isDocumentEdited = isEdited }
+    }
+  }
+
   extension View {
+    /// Marks the window as edited, as a document's is.
+    func windowEdited(_ isEdited: Bool) -> some View {
+      background(WindowEdited(isEdited: isEdited))
+    }
+
     /// Remembers the window's position and size under the name, without scene restoration.
     func windowFrameAutosave(_ name: String) -> some View {
       background(WindowFrameAutosave(name: name))
     }
+  }
+#else
+  import SwiftUI
+
+  extension View {
+    func windowEdited(_ isEdited: Bool) -> some View { self }
   }
 #endif

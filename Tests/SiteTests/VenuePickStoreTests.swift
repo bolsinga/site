@@ -127,4 +127,28 @@ struct VenuePickStoreTests {
     #expect(store.picks.isEmpty)
     #expect(store.readError == nil)
   }
+
+  @Test func storeWithoutFileOnlyTracksEdits() {
+    let store = VenuePickStore()
+    #expect(!store.isEdited)
+
+    store["v1"] = .noPlace
+    #expect(store.isEdited)
+    #expect(store.picks == ["v1": .noPlace])
+
+    store.markSaved()
+    #expect(!store.isEdited)
+    #expect(store.picks == ["v1": .noPlace])
+
+    store["v1"] = nil
+    #expect(store.isEdited)
+  }
+
+  @Test func removeAllIsNotAnEdit() {
+    let store = VenuePickStore()
+    store["v1"] = .noPlace
+    store.removeAll()
+    #expect(!store.isEdited)
+    #expect(store.picks.isEmpty)
+  }
 }

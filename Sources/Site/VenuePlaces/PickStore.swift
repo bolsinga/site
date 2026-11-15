@@ -12,16 +12,23 @@ extension Logger {
   fileprivate static let pickStore = Logger(category: "pickStore")
 }
 
-/// Picks, by venue ID, saved after every change.
+/// Picks, by venue ID, kept in a file after every change when it has one; without, they are only
+/// kept while the app runs.
 @MainActor @Observable final class PickStore<Pick: Codable> {
   private(set) var picks: [String: Pick]
   /// Set when the saved picks can't be read; they are then left alone rather than overwritten.
   private(set) var readError: Error?
+  /// Whether a pick changed since the picks were last marked as saved.
+  private(set) var isEdited = false
 
-  @ObservationIgnored private let fileURL: URL
+  @ObservationIgnored private let fileURL: URL?
 
-  init(fileURL: URL) {
+  init(fileURL: URL? = nil) {
     self.fileURL = fileURL
+    guard let fileURL else {
+      picks = [:]
+      return
+    }
     do {
       picks = try Self.read(from: fileURL)
     } catch {
@@ -35,14 +42,22 @@ extension Logger {
     get { picks[venueID] }
     set {
       picks[venueID] = newValue
+      isEdited = true
       save()
     }
+  }
+
+  /// Notes that the picks were written out, so they are no longer edited.
+  func markSaved() {
+    isEdited = false
   }
 
   /// Removes every pick and the saved file, which also starts over after a read error.
   func removeAll() {
     picks = [:]
     readError = nil
+    isEdited = false
+    guard let fileURL else { return }
     do {
       if FileManager.default.fileExists(atPath: fileURL.path(percentEncoded: false)) {
         try FileManager.default.removeItem(at: fileURL)
@@ -66,7 +81,7 @@ extension Logger {
   }
 
   private func save() {
-    guard readError == nil else { return }
+    guard let fileURL, readError == nil else { return }
     do {
       try FileManager.default.createDirectory(
         at: fileURL.deletingLastPathComponent(), withIntermediateDirectories: true)
@@ -88,18 +103,6 @@ typealias VenueSuggestionStore = PickStore<VenueSuggestion>
 
 /// What verifying each venue's place found.
 typealias VenueCheckStore = PickStore<VenueCheck>
-
-extension PickStore where Pick == VenuePick {
-  convenience init() {
-    self.init(fileURL: URL.applicationSupportDirectory.appending(path: "venue-places.json"))
-  }
-}
-
-extension PickStore where Pick == VenueAddress {
-  convenience init() {
-    self.init(fileURL: URL.applicationSupportDirectory.appending(path: "venue-addresses.json"))
-  }
-}
 
 extension PickStore where Pick == VenueSuggestion {
   convenience init() {
