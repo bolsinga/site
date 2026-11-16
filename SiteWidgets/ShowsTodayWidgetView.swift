@@ -98,9 +98,10 @@ struct ShowsTodayWidgetView: View {
           .widgetAccentable()
           HStack(spacing: 4) {
             VenueName(
-                name: featured.venue, isFirstTime: featured.isFirstTimeVenue,
-                isMostRecent: featured.isMostRecentVenue)
-              .lineLimit(1)
+              name: featured.venue, isFirstTime: featured.isFirstTimeVenue,
+              isMostRecent: featured.isMostRecentVenue
+            )
+            .lineLimit(1)
             if let year = featured.date.year {
               Text("·")
               Text(year, format: .number.grouping(.never))
@@ -237,18 +238,20 @@ private struct FeaturedShowView: View {
         // Long names shrink a little, then truncate; the headliner wins vertical space.
         PerformerName(
           name: headliner, isFirstTime: show.isFirstTimeHeadliner,
-          isMostRecent: show.isMostRecentHeadliner)
-          .font(.headline)
-          .lineLimit(2)
-          .minimumScaleFactor(0.8)
-          .layoutPriority(1)
+          isMostRecent: show.isMostRecentHeadliner
+        )
+        .font(.headline)
+        .lineLimit(2)
+        .minimumScaleFactor(0.8)
+        .layoutPriority(1)
       }
       VenueName(
-        name: show.venue, isFirstTime: show.isFirstTimeVenue, isMostRecent: show.isMostRecentVenue)
-        .font(.subheadline)
-        .foregroundStyle(.secondary)
-        .lineLimit(1)
-        .minimumScaleFactor(0.8)
+        name: show.venue, isFirstTime: show.isFirstTimeVenue, isMostRecent: show.isMostRecentVenue
+      )
+      .font(.subheadline)
+      .foregroundStyle(.secondary)
+      .lineLimit(1)
+      .minimumScaleFactor(0.8)
       if let year = show.date.year {
         Text(year, format: .number.grouping(.never))
           .font(.caption)
@@ -447,9 +450,10 @@ private struct DayShowsList: View {
               dateFormat: .relativeTo(date), firstTimeArtistIDs: show.firstTimeArtistIDs,
               isFirstTimeVenue: show.isFirstTimeVenue,
               mostRecentArtistIDs: show.mostRecentArtistIDs,
-              isMostRecentVenue: show.isMostRecentVenue)
-              // A widget can't grow, so a long name or venue gives up its third line, not another show.
-              .lineLimit(2)
+              isMostRecentVenue: show.isMostRecentVenue
+            )
+            // A widget can't grow, so a long name or venue gives up its third line, not another show.
+            .lineLimit(2)
             let hidden = show.performerNames.count - performerLimit
             if labelsHiddenPerformers, hidden > 0 {
               Text("+^[\(hidden) artist](inflect: true)")
@@ -579,11 +583,12 @@ private struct ShowRow: View {
       Group {
         if let headliner = show.performerNames.first {
           PerformerName(
-          name: headliner, isFirstTime: show.isFirstTimeHeadliner,
-          isMostRecent: show.isMostRecentHeadliner)
+            name: headliner, isFirstTime: show.isFirstTimeHeadliner,
+            isMostRecent: show.isMostRecentHeadliner)
         } else {
           VenueName(
-        name: show.venue, isFirstTime: show.isFirstTimeVenue, isMostRecent: show.isMostRecentVenue)
+            name: show.venue, isFirstTime: show.isFirstTimeVenue,
+            isMostRecent: show.isMostRecentVenue)
         }
       }
       .font(.subheadline)
