@@ -48,6 +48,7 @@
 
 /* Begin PBXFileReference section */
 		FE5360FD29CE82CA00618099 /* SiteApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SiteApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FE7CE0DE30AA88F700B59F0E /* CLAUDE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CLAUDE.md; sourceTree = "<group>"; };
 		FE8BA5D33082653F00FC410D /* SiteWidgetsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SiteWidgetsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE8BA5D43082653F00FC410D /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = /System/Library/Frameworks/WidgetKit.framework; sourceTree = "<absolute>"; };
 		FE8BA5D63082653F00FC410D /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = /System/Library/Frameworks/SwiftUI.framework; sourceTree = "<absolute>"; };
@@ -142,6 +143,7 @@
 			isa = PBXGroup;
 			children = (
 				FE9910DC2AC205A70054D229 /* Config.xcconfig */,
+				FE7CE0DE30AA88F700B59F0E /* CLAUDE.md */,
 				FEC1720F2E70F1E800E8EFC8 /* README.md */,
 				FE00AB182EB848A4003DE0C6 /* Sources */,
 				FE00A63E2EB8486D003DE0C6 /* Tests */,
