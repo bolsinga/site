@@ -22,7 +22,9 @@ public struct VenueDigest: Codable, Equatable, Hashable, Identifiable,
   public var sortname: String? { venue.sortname }
   public var location: Location { venue.location }
 
-  public init(id: ArchivePath, venue: Venue, shows: [ShowDigest], related: [ArchiveItem], rank: RankDigest) {
+  public init(
+    id: ArchivePath, venue: Venue, shows: [ShowDigest], related: [ArchiveItem], rank: RankDigest
+  ) {
     self.id = id
     self.venue = venue
     self.shows = shows

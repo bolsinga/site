@@ -114,7 +114,8 @@ struct VenuePlacesSplitView: View {
 
   /// The venues that geocode to the same point as others, by venue.
   private var sharedLocationMap: [ArchivePath: SharedLocation] {
-    let groups = SharedLocation.groups(of: digests.map { .init(id: $0.id, location: $0.location) }) {
+    let groups = SharedLocation.groups(of: digests.map { .init(id: $0.id, location: $0.location) })
+    {
       model.venueMapItemMap[$0]?.location
     }
     return groups.reduce(into: [:]) { map, group in
@@ -302,8 +303,9 @@ struct VenuePlacesSplitView: View {
         Section("\(shownDigests.count) Venues") {
           ForEach(shownDigests) { digest in
             VenuePlaceRow(
-              digest: digest, status: status(digest), websiteNotes: websiteNotes(digest))
-              .tag(digest.id)
+              digest: digest, status: status(digest), websiteNotes: websiteNotes(digest)
+            )
+            .tag(digest.id)
           }
         }
       }
@@ -368,7 +370,8 @@ struct VenuePlacesSplitView: View {
     .windowEdited(isEdited)
     .focusedSceneValue(
       \.venuePlacesActions,
-      VenuePlacesActions(save: save, saveAs: { isChoosingVenueMapFolder = true }))
+      VenuePlacesActions(save: save, saveAs: { isChoosingVenueMapFolder = true })
+    )
     .alert(
       "venuemap.txt",
       isPresented: Binding(
@@ -384,7 +387,10 @@ struct VenuePlacesSplitView: View {
     }
     .task(id: ObjectIdentifier(model)) {
       digests = model.vault.orderedVenueIDs.compactMap { model.vault.digest(venue: $0) }
-        .sorted { ($0.sortname ?? $0.name).localizedStandardCompare($1.sortname ?? $1.name) == .orderedAscending }
+        .sorted {
+          ($0.sortname ?? $0.name).localizedStandardCompare($1.sortname ?? $1.name)
+            == .orderedAscending
+        }
     }
     // Once geocoding is done; venues already checked for their place, name and address are skipped.
     .task(id: ChecksTrigger(isGeocoding: model.geocodingInProgress, venues: digests.count)) {

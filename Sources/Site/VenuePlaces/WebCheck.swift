@@ -82,7 +82,8 @@ struct WebCheck: Codable, Equatable, Sendable {
   static func refreshURL(in page: String, at url: URL) -> URL? {
     guard
       let match = page.firstMatch(
-        of: /(?i)<meta[^>]*http-equiv=["']?refresh["']?[^>]*content=["']\s*\d*\s*;?\s*url\s*=\s*['"]?([^"'>\s]+)/
+        of:
+          /(?i)<meta[^>]*http-equiv=["']?refresh["']?[^>]*content=["']\s*\d*\s*;?\s*url\s*=\s*['"]?([^"'>\s]+)/
       )
     else { return nil }
     return URL(string: String(match.1), relativeTo: url)?.absoluteURL

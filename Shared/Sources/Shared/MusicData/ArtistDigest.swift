@@ -19,8 +19,9 @@ public struct ArtistDigest: Codable, Equatable, Hashable, Identifiable,
   public let related: [ArchiveItem]
   public let rank: RankDigest
 
-  public init(id: ArchivePath, artist: Artist, shows: [ShowDigest], related: [ArchiveItem], rank: RankDigest)
-  {
+  public init(
+    id: ArchivePath, artist: Artist, shows: [ShowDigest], related: [ArchiveItem], rank: RankDigest
+  ) {
     self.id = id
     self.name = artist.name
     self.sortname = artist.sortname

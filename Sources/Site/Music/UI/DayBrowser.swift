@@ -96,12 +96,13 @@ struct DayBrowser: View {
         shows: model.concerts(on: day), title: title, animatesChanges: true,
         neighborShows: [
           model.concerts(on: day.previousDayOfLeapYear), model.concerts(on: day.nextDayOfLeapYear),
-        ])
-        .onGeometryChange(for: CGFloat.self) {
-          $0.size.height
-        } action: {
-          mapHeight = $0
-        }
+        ]
+      )
+      .onGeometryChange(for: CGFloat.self) {
+        $0.size.height
+      } action: {
+        mapHeight = $0
+      }
       pages
     }
     .onChange(of: selection) {

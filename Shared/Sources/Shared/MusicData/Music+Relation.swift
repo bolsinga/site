@@ -8,8 +8,7 @@
 import Foundation
 
 extension Relation {
-  fileprivate func relationMap() throws -> [ArchivePath: Set<ArchivePath>]
-  {
+  fileprivate func relationMap() throws -> [ArchivePath: Set<ArchivePath>] {
     try members.reduce(into: [ArchivePath: Set<ArchivePath>]()) { d, id in
       let aid = try ArchivePath(raw: id)
 
@@ -27,8 +26,7 @@ extension Relation {
 }
 
 extension Music {
-  func relationMap() throws -> [ArchivePath: Set<ArchivePath>]
-  {
+  func relationMap() throws -> [ArchivePath: Set<ArchivePath>] {
     try relations.reduce(into: [ArchivePath: Set<ArchivePath>]()) { d, relation in
       d.merge(try relation.relationMap()) { $0.union($1) }
     }

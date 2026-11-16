@@ -288,7 +288,9 @@ struct VenuePlaceDetail: View {
         ProgressView()
           .controlSize(.small)
       } else {
-        ForEach(checks.websiteNotes(for: digest, pick: pick, web: chosenWebsite), id: \.self) { $0.label }
+        ForEach(checks.websiteNotes(for: digest, pick: pick, web: chosenWebsite), id: \.self) {
+          $0.label
+        }
         if let chosenWebsite,
           let title = checks.webCheck(venueID: digest.venue.id, url: chosenWebsite)?.title
         {
@@ -446,9 +448,11 @@ private struct VenuePlaceMap: View {
 
   /// What's pinned, so the map can fit it when it changes.
   private var pinned: [String] {
-    [geocodedLocation.map { "\($0.coordinate)" }, pickedPlace?.identifier?.rawValue,
-      suggestedPlace?.identifier]
-      .compactMap { $0 } + candidates.compactMap { $0.identifier?.rawValue }
+    [
+      geocodedLocation.map { "\($0.coordinate)" }, pickedPlace?.identifier?.rawValue,
+      suggestedPlace?.identifier,
+    ]
+    .compactMap { $0 } + candidates.compactMap { $0.identifier?.rawValue }
   }
 
   /// The suggestion, unless the picked place or a candidate shows it already.

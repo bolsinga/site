@@ -164,8 +164,10 @@ struct AutoMatchTests {
   }
 
   @Test(arguments: [
-    PickVerification.verified, .replaced(by: FoundPlace(
-      identifier: "I2", name: "Fillmore", address: nil, street: nil, latitude: 1, longitude: 2)),
+    PickVerification.verified,
+    .replaced(
+      by: FoundPlace(
+        identifier: "I2", name: "Fillmore", address: nil, street: nil, latitude: 1, longitude: 2)),
     .notFound,
   ])
   func checkRoundTrips(verification: PickVerification) throws {

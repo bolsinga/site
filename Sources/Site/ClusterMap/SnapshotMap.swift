@@ -57,7 +57,9 @@ private struct SnapshotRequest: Hashable {
     self.size = size
     self.isDark = isDark
     self.scale = scale
-    self.coordinates = coordinates.map { Coordinate(latitude: $0.latitude, longitude: $0.longitude) }
+    self.coordinates = coordinates.map {
+      Coordinate(latitude: $0.latitude, longitude: $0.longitude)
+    }
   }
 
   var cacheKey: NSString { "\(hashValue)" as NSString }
@@ -216,8 +218,16 @@ struct SnapshotMap<Item: Identifiable, Dot: View>: View {
     .frame(
       minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading
     )
-    .onGeometryChange(for: CGSize.self) { $0.size } action: { size = $0 }
-    .onGeometryChange(for: EdgeInsets.self) { $0.safeAreaInsets } action: { insets = $0 }
+    .onGeometryChange(for: CGSize.self) {
+      $0.size
+    } action: {
+      size = $0
+    }
+    .onGeometryChange(for: EdgeInsets.self) {
+      $0.safeAreaInsets
+    } action: {
+      insets = $0
+    }
     .task(id: request) {
       let neighborRequests = neighborRequests
       // With no items there is nothing to fit, so the last map stays.

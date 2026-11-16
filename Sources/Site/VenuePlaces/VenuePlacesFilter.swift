@@ -47,7 +47,8 @@ enum VenuePlacesFilter: Hashable {
   /// What might be wrong with a venue.
   static var criteria: [Self] {
     [
-      .noStreet, .sharesLocation, .noWebsite, .websiteNeedsALook, .noMapKitID, .addressDiffers, .identifierChanged,
+      .noStreet, .sharesLocation, .noWebsite, .websiteNeedsALook, .noMapKitID, .addressDiffers,
+      .identifierChanged,
       .placeGone,
     ]
   }

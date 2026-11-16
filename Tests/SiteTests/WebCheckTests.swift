@@ -162,7 +162,8 @@ struct VenueWebsiteNoteTests {
     WebCheck(outcome: .ok),
     WebCheck(outcome: .redirected(URL(string: "https://example.com/new")!), isInsecure: true),
     WebCheck(outcome: .failed("404 not found")),
-    WebCheck(outcome: .parked(URL(string: "https://sedo.com")!), title: "For sale", hasExpected: false),
+    WebCheck(
+      outcome: .parked(URL(string: "https://sedo.com")!), title: "For sale", hasExpected: false),
   ])
   func savedCheckRoundTrips(check: WebCheck) throws {
     let saved = VenueWebCheck(

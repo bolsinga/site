@@ -73,7 +73,8 @@ enum PlaceSuggester {
       && location.map { place.location.distance(from: $0) <= nearDistance } ?? false
     let sameNumber =
       streetNumber(venue.location.street).map { $0 == streetNumber(place.street) } ?? false
-    let isVenueLike = place.category.map { VenueCandidateSearch.venueCategoryNames.contains($0) }
+    let isVenueLike =
+      place.category.map { VenueCandidateSearch.venueCategoryNames.contains($0) }
       ?? false
 
     if nameMatches && (isNear || sameNumber) { return .strong }

@@ -46,7 +46,8 @@
           .toolbar {
             ToolbarItem(placement: .confirmationAction) {
               Button("Done") { dismiss() }
-            }          }
+            }
+          }
       }
       #if os(macOS)
         .frame(minWidth: 800, minHeight: 600)

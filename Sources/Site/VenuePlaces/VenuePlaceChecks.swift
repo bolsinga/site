@@ -61,8 +61,9 @@ struct VenueWebCheck: Codable, Equatable, Sendable {
   @ObservationIgnored private let webStore: VenueWebCheckStore
   @ObservationIgnored private var task: Task<Void, Never>?
 
-  init(store: VenueCheckStore = VenueCheckStore(), webStore: VenueWebCheckStore = VenueWebCheckStore())
-  {
+  init(
+    store: VenueCheckStore = VenueCheckStore(), webStore: VenueWebCheckStore = VenueWebCheckStore()
+  ) {
     self.store = store
     self.webStore = webStore
   }
@@ -169,40 +170,44 @@ struct VenueWebCheck: Codable, Equatable, Sendable {
 
     var phases: [Phase] = []
     if !places.isEmpty {
-      phases.append(Phase(title: "Verifying Picks", total: places.count) {
-        await self.batch("Verifying Picks", places) { _, place, found in
-          let verification = PickVerification(identifier: place.identifier, found: found)
-          self.store[place.venue.id] = VenueCheck(
-            identifier: place.identifier, verification: verification, mapsWebsite: found?.url,
-            checked: .now)
-          // A verified pick saved without its street gets it from Maps; unpicked venues stay unpicked.
-          if verification == .verified, let pick = pickStore[place.venue.id], pick.street == nil,
-            let foundPick = found?.pick, foundPick.street != nil
-          {
-            pickStore[place.venue.id] = foundPick
+      phases.append(
+        Phase(title: "Verifying Picks", total: places.count) {
+          await self.batch("Verifying Picks", places) { _, place, found in
+            let verification = PickVerification(identifier: place.identifier, found: found)
+            self.store[place.venue.id] = VenueCheck(
+              identifier: place.identifier, verification: verification, mapsWebsite: found?.url,
+              checked: .now)
+            // A verified pick saved without its street gets it from Maps; unpicked venues stay unpicked.
+            if verification == .verified, let pick = pickStore[place.venue.id], pick.street == nil,
+              let foundPick = found?.pick, foundPick.street != nil
+            {
+              pickStore[place.venue.id] = foundPick
+            }
           }
-        }
-      })
+        })
     }
     if !guesses.isEmpty {
-      phases.append(Phase(title: "Suggesting Places", total: guesses.count) {
-        await self.batch("Suggesting Places", guesses) { _, guess, found in
-          let best = PlaceSuggester.best(found ?? [], for: guess.venue, location: guess.location)
-          var suggestion = VenueSuggestion(
-            source: guess.venue.suggestionSource, place: best?.place, confidence: best?.confidence,
-            checked: .now)
-          // Searching again keeps a dismissal of the same place.
-          if let old = suggestions[guess.venue.id], old.isDismissed, let place = best?.place,
-            old.place?.identifier == place.identifier
-          {
-            suggestion.isDismissed = true
+      phases.append(
+        Phase(title: "Suggesting Places", total: guesses.count) {
+          await self.batch("Suggesting Places", guesses) { _, guess, found in
+            let best = PlaceSuggester.best(found ?? [], for: guess.venue, location: guess.location)
+            var suggestion = VenueSuggestion(
+              source: guess.venue.suggestionSource, place: best?.place,
+              confidence: best?.confidence,
+              checked: .now)
+            // Searching again keeps a dismissal of the same place.
+            if let old = suggestions[guess.venue.id], old.isDismissed, let place = best?.place,
+              old.place?.identifier == place.identifier
+            {
+              suggestion.isDismissed = true
+            }
+            suggestions[guess.venue.id] = suggestion
           }
-          suggestions[guess.venue.id] = suggestion
-        }
-      })
+        })
     }
     if !sites.isEmpty {
-      phases.append(Phase(title: "Checking Websites", total: sites.count) { await self.checkWebsites(sites) })
+      phases.append(
+        Phase(title: "Checking Websites", total: sites.count) { await self.checkWebsites(sites) })
     }
     guard !isRunning, let first = phases.first else { return }
     error = nil

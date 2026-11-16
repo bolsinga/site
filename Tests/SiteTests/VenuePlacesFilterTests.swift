@@ -11,13 +11,16 @@ import Testing
 
 struct VenuePlacesFilterTests {
   private func facts(
-    status: VenuePickStatus = .picked, isModified: Bool = false, hasStreet: Bool = true, sharesLocation: Bool = false,
-    hasWebsite: Bool = true, websiteNeedsALook: Bool = false, hasPlace: Bool = true, addressDiffers: Bool = false,
+    status: VenuePickStatus = .picked, isModified: Bool = false, hasStreet: Bool = true,
+    sharesLocation: Bool = false,
+    hasWebsite: Bool = true, websiteNeedsALook: Bool = false, hasPlace: Bool = true,
+    addressDiffers: Bool = false,
     identifierChanged: Bool = false, placeGone: Bool = false
   ) -> VenueFacts {
     VenueFacts(
       status: status, isModified: isModified, hasStreet: hasStreet, sharesLocation: sharesLocation,
-      hasWebsite: hasWebsite, websiteNeedsALook: websiteNeedsALook, hasPlace: hasPlace, addressDiffers: addressDiffers,
+      hasWebsite: hasWebsite, websiteNeedsALook: websiteNeedsALook, hasPlace: hasPlace,
+      addressDiffers: addressDiffers,
       identifierChanged: identifierChanged, placeGone: placeGone)
   }
 
