@@ -112,10 +112,10 @@ independent of this app. Parts 2 and 3 are how the site app and Venue Places app
    identifier: Maps' best guess for the name and address (`placeDescriptor`), a text search near
    where the venue geocodes, and, when it has a street, nearby points of interest of venue-like
    categories. If every request fails, nothing is saved.
-4. Results are kept in `venue-checks.json`, `venue-suggestions.json` and `venue-web-checks.json`
-   in the Caches directory, like `atlas.json`, each with the date it was checked. A verification is keyed by the identifier it resolved; a
-   suggestion by the venue's name and address. A result is asked again when its key changes, when
-   it is older than `CacheAge.maximum` (30 days), or when it has no date.
+4. Results are kept in `venue-checks.json` and `venue-suggestions.json` in the Caches directory,
+   like `atlas.json`, each with the date it was checked. A verification is keyed by the identifier
+   it resolved; a suggestion by the venue's name and address. A result is asked again when its key
+   changes, when it is older than `CacheAge.maximum` (30 days), or when it has no date.
 5. Maps' answers about a place MUST NOT change what the venue has unless a person chooses it. See
    RFC 001.
 
