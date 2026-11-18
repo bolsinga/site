@@ -110,20 +110,31 @@ typealias VenueWebsitePickStore = PickStore<URL>
 /// What loading each venue's website found.
 typealias VenueWebCheckStore = PickStore<VenueWebCheck>
 
+/// Where what Maps and websites said is kept: the Caches directory, as it can be asked for again.
+enum VenuePlacesCache {
+  /// The file's place in the Caches directory, removing the copy from when it was kept elsewhere.
+  static func fileURL(
+    named name: String, caches: URL = .cachesDirectory, legacy: URL = .applicationSupportDirectory
+  ) -> URL {
+    try? FileManager.default.removeItem(at: legacy.appending(path: name))
+    return caches.appending(path: name)
+  }
+}
+
 extension PickStore where Pick == VenueSuggestion {
   convenience init() {
-    self.init(fileURL: URL.applicationSupportDirectory.appending(path: "venue-suggestions.json"))
+    self.init(fileURL: VenuePlacesCache.fileURL(named: "venue-suggestions.json"))
   }
 }
 
 extension PickStore where Pick == VenueCheck {
   convenience init() {
-    self.init(fileURL: URL.applicationSupportDirectory.appending(path: "venue-checks.json"))
+    self.init(fileURL: VenuePlacesCache.fileURL(named: "venue-checks.json"))
   }
 }
 
 extension PickStore where Pick == VenueWebCheck {
   convenience init() {
-    self.init(fileURL: URL.applicationSupportDirectory.appending(path: "venue-web-checks.json"))
+    self.init(fileURL: VenuePlacesCache.fileURL(named: "venue-web-checks.json"))
   }
 }
