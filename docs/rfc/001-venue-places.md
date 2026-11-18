@@ -63,7 +63,7 @@ venues, Maps limits requests, and the tool is only needed until the data is clea
     and no pick; load each venue's website. **Run Checks Again** redoes everything.
 11. Repeated Maps requests MUST go through `Atlas` (a throttle) or `MapItemLookup`; see RFC 002.
     Websites are not MapKit, so they load eight at a time.
-12. Results are cached in Application Support as `venue-checks.json`, `venue-suggestions.json` and
+12. Results are cached in the Caches directory as `venue-checks.json`, `venue-suggestions.json` and
     `venue-web-checks.json`, each with the date it was checked. A result is asked again when the
     thing it was checked for changes (the identifier; the venue's name and address; the website and
     name), or when it is older than `CacheAge.maximum` (30 days), or has no date.

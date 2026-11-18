@@ -152,3 +152,34 @@ struct VenuePickStoreTests {
     #expect(store.picks.isEmpty)
   }
 }
+
+struct VenuePlacesCacheTests {
+  private func temporaryDirectory() throws -> URL {
+    let directory = URL.temporaryDirectory.appending(path: UUID().uuidString)
+    try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+    return directory
+  }
+
+  @Test func cacheFileIsInTheCachesDirectory() throws {
+    let caches = try temporaryDirectory()
+    let legacy = try temporaryDirectory()
+    let url = VenuePlacesCache.fileURL(named: "venue-checks.json", caches: caches, legacy: legacy)
+    #expect(url == caches.appending(path: "venue-checks.json"))
+  }
+
+  @Test func fileKeptElsewhereBeforeIsRemoved() throws {
+    let caches = try temporaryDirectory()
+    let legacy = try temporaryDirectory()
+    let old = legacy.appending(path: "venue-checks.json")
+    try Data("{}".utf8).write(to: old)
+
+    _ = VenuePlacesCache.fileURL(named: "venue-checks.json", caches: caches, legacy: legacy)
+    #expect(!FileManager.default.fileExists(atPath: old.path(percentEncoded: false)))
+  }
+
+  @Test func nothingKeptElsewhereIsFine() throws {
+    let caches = try temporaryDirectory()
+    let legacy = try temporaryDirectory()
+    _ = VenuePlacesCache.fileURL(named: "venue-checks.json", caches: caches, legacy: legacy)
+  }
+}

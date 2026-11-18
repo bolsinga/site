@@ -112,10 +112,10 @@ independent of this app. Parts 2 and 3 are how the site app and Venue Places app
    identifier: Maps' best guess for the name and address (`placeDescriptor`), a text search near
    where the venue geocodes, and, when it has a street, nearby points of interest of venue-like
    categories. If every request fails, nothing is saved.
-4. Results are kept in `venue-checks.json` and `venue-suggestions.json` in Application Support,
-   each with the date it was checked. A verification is keyed by the identifier it resolved; a
-   suggestion by the venue's name and address. A result is asked again when its key changes, when
-   it is older than `CacheAge.maximum` (30 days), or when it has no date.
+4. Results are kept in `venue-checks.json` and `venue-suggestions.json` in the Caches directory,
+   like `atlas.json`, each with the date it was checked. A verification is keyed by the identifier
+   it resolved; a suggestion by the venue's name and address. A result is asked again when its key
+   changes, when it is older than `CacheAge.maximum` (30 days), or when it has no date.
 5. Maps' answers about a place MUST NOT change what the venue has unless a person chooses it. See
    RFC 001.
 
@@ -125,6 +125,9 @@ independent of this app. Parts 2 and 3 are how the site app and Venue Places app
   Whether a place still exists, or kept its identifier, changes more often, and Venue Places is
   there to catch that, so its results last 30 days. The 30 days is one constant,
   `CacheAge.maximum`.
+- **Caches directory.** These are answers that can be asked for again, so the system may remove
+  them when it needs space. The cost is that the next run asks again, through the throttle. Edits
+  a person made are not caches and are never kept there; see RFC 001.
 - **Not in `atlas.json`.** What Venue Places asks is about one venue's place, not where its
   address is, and its results are keyed differently, so they live in their own files.
 
@@ -135,5 +138,4 @@ independent of this app. Parts 2 and 3 are how the site app and Venue Places app
 
 ## Open questions
 
-- Should Venue Places' caches be in the Caches directory, like `atlas.json`? They are in
-  Application Support. See [issue #1698](https://github.com/bolsinga/site/issues/1698).
+None.
