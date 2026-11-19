@@ -38,3 +38,5 @@ Design decisions and rules are in `docs/rfc/`, one file per area, named `NNN-nam
 - [`docs/rfc/002-mapkit-geocoding.md`](docs/rfc/002-mapkit-geocoding.md): MapKit geocoding, identifiers and caching, in general and as the site app and Venue Places use them.
 - [`docs/rfc/003-navigation-entry-points.md`](docs/rfc/003-navigation-entry-points.md): URLs, Handoff, intents, Spotlight, widgets and quick actions, and how they reach the same screens.
 - [`docs/rfc/004-archive-path-category-navigation.md`](docs/rfc/004-archive-path-category-navigation.md): `ArchivePath` and `ArchiveCategory`, their string and URL forms, and the `ArchiveNavigation` state that holds them.
+- [`docs/rfc/005-music-loading.md`](docs/rfc/005-music-loading.md): when the music is downloaded or read from the cache, and how a load replaces the last.
+- [`docs/rfc/006-precomputed-music-data.md`](docs/rfc/006-precomputed-music-data.md): what is computed in advance from the music, saved with it, and kept out of it.
