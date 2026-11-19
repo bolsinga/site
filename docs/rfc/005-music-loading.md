@@ -1,6 +1,6 @@
 # RFC 005: Loading the music
 
-Status: Proposed · Updated: 2026-11-19 · Code: `Sources/Site/Music` (`SiteModel`, `VaultModel`),
+Status: Accepted · Updated: 2026-11-19 · Code: `Sources/Site/Music` (`SiteModel`, `VaultModel`),
 `Shared/Sources/Shared/MusicData` (`Vault`, `Lookup`, `Bracket`, `Music`),
 `Shared/Sources/Shared/Utilities` (`URL+LastModified`, `FileManager+CacheCodable`)
 
