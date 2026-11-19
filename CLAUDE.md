@@ -43,3 +43,4 @@ Design decisions and rules are in `docs/rfc/`, one file per area, named `NNN-nam
 - [`docs/rfc/007-shows-today-widget.md`](docs/rfc/007-shows-today-widget.md): the Shows Today widget, its snapshot in the app group, publishing, the timeline and links.
 - [`docs/rfc/008-nearby-location-filter.md`](docs/rfc/008-nearby-location-filter.md): the Nearby and City filters, the location and current city, and what each state shows.
 - [`docs/rfc/009-entities-siri-spotlight.md`](docs/rfc/009-entities-siri-spotlight.md): the App Intents entities, their queries, the Siri shortcuts, and how Spotlight is kept in step with the archive.
+- [`docs/rfc/010-today-and-day-of-leap-year.md`](docs/rfc/010-today-and-day-of-leap-year.md): the day of the leap year, what today is, and how the Today screen pages between days.
