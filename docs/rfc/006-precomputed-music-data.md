@@ -1,6 +1,6 @@
 # RFC 006: Precomputed music data
 
-Status: Proposed · Updated: 2026-11-19 · Code: `Shared/Sources/Shared/MusicData` (`Bracket`,
+Status: Accepted · Updated: 2026-11-19 · Code: `Shared/Sources/Shared/MusicData` (`Bracket`,
 `Tracker`, `Music`, `Lookup`, `Vault`, `Ranking+Compute`, `RankDigest`)
 
 ## Summary
