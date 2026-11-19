@@ -42,3 +42,4 @@ Design decisions and rules are in `docs/rfc/`, one file per area, named `NNN-nam
 - [`docs/rfc/006-precomputed-music-data.md`](docs/rfc/006-precomputed-music-data.md): what is computed in advance from the music, saved with it, and kept out of it.
 - [`docs/rfc/007-shows-today-widget.md`](docs/rfc/007-shows-today-widget.md): the Shows Today widget, its snapshot in the app group, publishing, the timeline and links.
 - [`docs/rfc/008-nearby-location-filter.md`](docs/rfc/008-nearby-location-filter.md): the Nearby and City filters, the location and current city, and what each state shows.
+- [`docs/rfc/009-entities-siri-spotlight.md`](docs/rfc/009-entities-siri-spotlight.md): the App Intents entities, their queries, the Siri shortcuts, and how Spotlight is kept in step with the archive.
