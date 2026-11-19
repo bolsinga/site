@@ -11,9 +11,9 @@ The app can be opened from many places: a link, Handoff, an App Intent, Siri, Sp
 or an iOS Home Screen quick action. They all arrive in different forms, but each one names an
 `ArchivePath` (a page) or an `ArchiveCategory` (a tab's list), and each one ends in the same
 call on `ArchiveNavigation`. This RFC is how an event gets there, and the rules that keep one
-entry point from needing its own navigation code. It presumes the definitions of `ArchivePath`
-and `ArchiveCategory`, their URL, string and `NSUserActivity` forms, and `Vault.url(for:)`, which
-are in their own RFC.
+entry point from needing its own navigation code. It presumes the definitions of `ArchivePath`,
+`ArchiveCategory` and `ArchiveNavigation`, their URL and string forms, and `Vault.url(for:)`, which
+are in [RFC 004](004-archive-path-category-navigation.md).
 
 ## Entry points
 

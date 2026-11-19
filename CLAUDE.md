@@ -37,3 +37,4 @@ Design decisions and rules are in `docs/rfc/`, one file per area, named `NNN-nam
 - [`docs/rfc/001-venue-places.md`](docs/rfc/001-venue-places.md): the Venue Places window, `venuemap.txt`, and the Maps and website checks.
 - [`docs/rfc/002-mapkit-geocoding.md`](docs/rfc/002-mapkit-geocoding.md): MapKit geocoding, identifiers and caching, in general and as the site app and Venue Places use them.
 - [`docs/rfc/003-navigation-entry-points.md`](docs/rfc/003-navigation-entry-points.md): URLs, Handoff, intents, Spotlight, widgets and quick actions, and how they reach the same screens.
+- [`docs/rfc/004-archive-path-category-navigation.md`](docs/rfc/004-archive-path-category-navigation.md): `ArchivePath` and `ArchiveCategory`, their string and URL forms, and the `ArchiveNavigation` state that holds them.
