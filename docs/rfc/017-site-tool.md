@@ -7,7 +7,7 @@ Status: Accepted · Updated: 2026-11-19 · Code: `Sources/site_tool` (`Program`,
 
 `site_tool` prints the website's data and a few generated files from a terminal, for checking the
 generator's output and to choose new ids. It is not a separate binary: the macOS app
-executable runs it when it is given arguments. The app's loading (RFC 005, RFC 006) is cached and
+executable runs it when it is given arguments. The app's loading ([RFC 005](005-music-loading.md), [RFC 006](006-precomputed-music-data.md)) is cached and
 conditional; the tool's `Bracket`, `Music` and diary reads go straight to a URL.
 
 ## Invocation
@@ -52,7 +52,7 @@ The JSON dumps use sorted keys, pretty printing and ISO 8601 dates, and are prin
 | `dumpDiary` | `Diary.load` | not read | none |
 
 `Bracket(url:)` downloads with `.reloadIgnoringLocalCacheData`, decodes, and derives the snapshot
-(RFC 006); the date it returns is not used. `dumpVault` and `dumpLookup` use RFC 005's
+([RFC 006](006-precomputed-music-data.md)); the date it returns is not used. `dumpVault` and `dumpLookup` use [RFC 005](005-music-loading.md)'s
 `LoadAttempt` unchanged. A `HEAD` that returns a `Last-Modified` is always newer than
 `.distantPast`, so those commands download, save the `Bracket` to the app's Caches file, and
 print from it. Only a server that sent no date also downloads.
@@ -80,7 +80,7 @@ smallest one left. If nothing is left, it prints the number of keys.
 2. A command that fails MUST throw, and swift-argument-parser prints the error and exits
    non-zero. The commands catch no errors.
 3. `dumpVault` and `dumpLookup` MUST NOT be read as cache-free: they save the `Bracket`
-   (RFC 005 rule 3) and, if the network fails, read the one the app saved.
+   ([RFC 005](005-music-loading.md) rule 3) and, if the network fails, read the one the app saved.
 4. `nextID` MUST load all artists, not only those with shows.
 5. The JSON dumps MUST use sorted keys and ISO 8601 dates, so output is stable for diffing.
    The text dumps have no stated stability.

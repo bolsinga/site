@@ -61,7 +61,7 @@ venues, Maps limits requests, and the tool is only needed until the data is clea
 10. After the app's own geocoding finishes, one run does three batches, one after another:
     verify each venue's place identifier; search Maps for a place for each venue with no identifier
     and no pick; load each venue's website. **Run Checks Again** redoes everything.
-11. Repeated Maps requests MUST go through `Atlas` (a throttle) or `MapItemLookup`; see RFC 002.
+11. Repeated Maps requests MUST go through `Atlas` (a throttle) or `MapItemLookup`; see [RFC 002](002-mapkit-geocoding.md).
     Websites are not MapKit, so they load eight at a time.
 12. Results are cached in the Caches directory as `venue-checks.json`, `venue-suggestions.json` and
     `venue-web-checks.json`, each with the date it was checked. A result is asked again when the

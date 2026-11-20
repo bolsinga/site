@@ -11,7 +11,7 @@ The Today tab shows the shows that happened on this calendar date, in any year. 
 by a number, the **day of the leap year**, which is the same for a given month and day whatever
 the year. This RFC is how that number is defined and used, how the app decides what today is and
 keeps it right at midnight and after a resume, and how the Today screen pages from one day to the
-next. The widget's use of it is RFC 007.
+next. The widget's use of it is [RFC 007](007-shows-today-widget.md).
 
 ## The day of the leap year
 
@@ -36,8 +36,8 @@ December 31st, and a given month and day always has the same number.
 3. The text of a day (`3/1`) is formatted for a leap year, 2024, so every day has one.
 4. Only a show with a fully known date has a day. A show with a missing year, month or day is
    not in the day map, and doesn't appear on Today.
-5. The day map in the precomputed archive (RFC 006), the day's rank, the widget's snapshot
-   (RFC 007) and the intents' "today" (RFC 009) MUST all use this one definition, so every
+5. The day map in the precomputed archive ([RFC 006](006-precomputed-music-data.md)), the day's rank, the widget's snapshot
+   ([RFC 007](007-shows-today-widget.md)) and the intents' "today" ([RFC 009](009-entities-siri-spotlight.md)) MUST all use this one definition, so every
    surface agrees about what a day holds.
 
 In a year that is not a leap year, day 60 is never today, since February 28th is followed by
@@ -77,7 +77,7 @@ On iOS and iPadOS, `DayBrowser` shows three pages, yesterday, today and tomorrow
 ### The day being shown
 
 The day the screen shows is `ArchiveTabState.dayOfLeapYear`. It is not saved: a launch starts on
-today, and it is not in the navigation state (RFC 004). The state starts from `Date.now`, and is
+today, and it is not in the navigation state ([RFC 004](004-archive-path-category-navigation.md)). The state starts from `Date.now`, and is
 set to the model's day when the screen appears.
 
 15. The shown day MUST return to today when `todayDayOfLeapYear` changes, so a screen left on
@@ -87,7 +87,7 @@ set to the model's day when the screen appears.
     day, so a tap on a paged Today is a real change of selection, and resets the day.
 17. A link, Handoff or intent that names Today MUST show today, not the day it was paged to. It
     does so by changing a counter (`todayRequest`), because navigating to a category that is
-    already selected changes nothing (RFC 003).
+    already selected changes nothing ([RFC 003](003-navigation-entry-points.md)).
 18. A category shown from elsewhere keeps the day Today was paged to. Only the request above, a
     new day, the tab tap, and the screen appearing reset it.
 
@@ -95,7 +95,7 @@ set to the model's day when the screen appears.
 
 - **A number, not a date.** The question is "which shows were on this date", for any year. A
   single integer is a key that needs no year, gives the days a fixed order, and makes the
-  precomputed map (RFC 006) a plain lookup.
+  precomputed map ([RFC 006](006-precomputed-music-data.md)) a plain lookup.
 - **Leap-year numbering.** Counting every year as if it had a 29th of February keeps March 1st the
   same number, so a show from a leap year and one from another year on that date meet.
 - **February 29th is reachable.** It is a real date with real shows. Paging reaches it in every
@@ -110,6 +110,6 @@ set to the model's day when the screen appears.
 - **The calendar.** `Date.dayOfLeapYear` and a show's `PartialDate.date` both use the user's
   current calendar. The archive's dates are Gregorian, so under another calendar a show's
   year, month and day would be read as that calendar's, and the day keys saved in the cached
-  archive (RFC 005) would be those of the calendar in use when it was built.
+  archive ([RFC 005](005-music-loading.md)) would be those of the calendar in use when it was built.
 - **A badge at midnight.** The badge counts shows for `todayDayOfLeapYear`, so it changes when
   the model's day does, not at the instant the calendar's does.

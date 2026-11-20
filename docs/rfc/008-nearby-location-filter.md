@@ -10,7 +10,7 @@ The Shows, Venues and Artists tabs can be narrowed to the venues near the person
 in a city. The filter chooses venues; everything else it shows (shows, artists, statistics, the
 chart of years) follows from which venues are left. This RFC is the filter's state, how the
 person's location and current city are found and kept, and what each state of the filter shows.
-How a venue gets a place in Maps, which **Nearby** depends on, is RFC 002.
+How a venue gets a place in Maps, which **Nearby** depends on, is [RFC 002](002-mapkit-geocoding.md).
 
 ## State
 
@@ -37,7 +37,7 @@ How a venue gets a place in Maps, which **Nearby** depends on, is RFC 002.
 
 A filter becomes a set of venues, and the rest comes from that set: the shows at those venues,
 the artists who played them, and the statistics and the counts by year of those shows. With the
-filter off, every venue is selected, and the archive's own precomputed values are used (RFC 006).
+filter off, every venue is selected, and the archive's own precomputed values are used ([RFC 006](006-precomputed-music-data.md)).
 
 6. **Nearby** selects the venues whose place in Maps is within the distance of the person.
    A venue with no place yet (not geocoded, or not found) is never nearby. Results grow as
@@ -64,7 +64,7 @@ at hundred-meter accuracy). `VaultModel` listens for as long as it lives.
 ### The current city
 
 The city comes from a reverse geocode of the location, through `CityResolver`. MapKit limits
-reverse geocoding (RFC 002), so `ReverseGeocodePolicy` decides when a location asks:
+reverse geocoding ([RFC 002](002-mapkit-geocoding.md)), so `ReverseGeocodePolicy` decides when a location asks:
 
 | Location | Asks when |
 |---|---|

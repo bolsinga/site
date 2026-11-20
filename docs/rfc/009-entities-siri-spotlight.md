@@ -9,7 +9,7 @@ The app describes its archive to the system as App Intents entities, so Siri, Sh
 Spotlight can find an artist, a venue or a concert and open it, or answer a question about it
 without opening the app. An entity is a read-only view of one archive item, identified by the
 item's `ArchivePath`. Opening one is a URL, and goes through the same code as any other link
-(RFC 003). This RFC is what is exposed, how the entities are built and queried, what the
+([RFC 003](003-navigation-entry-points.md)). This RFC is what is exposed, how the entities are built and queried, what the
 shortcuts do, and how Spotlight is kept in step with the archive.
 
 ## What is exposed
@@ -24,7 +24,7 @@ shortcuts do, and how Spotlight is kept in step with the archive.
 
 ### Rules
 
-1. An entity's id MUST be the item's `ArchivePath` in its `.rawID` form (RFC 004), so an entity from
+1. An entity's id MUST be the item's `ArchivePath` in its `.rawID` form ([RFC 004](004-archive-path-category-navigation.md)), so an entity from
    Siri or Spotlight and the page the app shows are the same thing. A city has no page, and is
    named by its city and state, because a city name alone isn't unique.
 2. `CategoryEnum`'s raw values are saved by the system in shortcuts, so they MUST NOT be renamed
@@ -43,7 +43,7 @@ shortcuts do, and how Spotlight is kept in step with the archive.
 ## Building and finding entities
 
 Entities are made from the archive's digests by the `Vault` (`artistEntity(for:)` and the like),
-which also supplies the URL, from what the digests (RFC 006) already hold.
+which also supplies the URL, from what the digests ([RFC 006](006-precomputed-music-data.md)) already hold.
 
 8. Code that runs in an intent reads the archive through `@Dependency var vault: Vault`.
    `VaultModel` registers the `Vault` with `AppDependencyManager` when it is made.

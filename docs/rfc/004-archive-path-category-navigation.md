@@ -10,7 +10,7 @@ Everything the app can show is named by one of two values. An `ArchivePath` name
 a venue, an artist or a year. An `ArchiveCategory` names a tab and its list. `ArchiveNavigation`
 holds which category is selected and the stack of paths pushed in each one. Links, Handoff,
 intents, Spotlight and widgets reach the app by making one of these two values, which is the
-subject of RFC 003. This RFC defines the values, their forms, and the state that holds them.
+subject of [RFC 003](003-navigation-entry-points.md). This RFC defines the values, their forms, and the state that holds them.
 
 ## ArchivePath
 

@@ -39,3 +39,10 @@ Design decisions and rules are in `docs/rfc/`, one file per area, named `NNN-nam
 - [`docs/rfc/008-nearby-location-filter.md`](docs/rfc/008-nearby-location-filter.md): the Nearby and City filters, the location and current city, and what each state shows.
 - [`docs/rfc/009-entities-siri-spotlight.md`](docs/rfc/009-entities-siri-spotlight.md): the App Intents entities, their queries, the Siri shortcuts, and how Spotlight is kept in step with the archive.
 - [`docs/rfc/010-today-and-day-of-leap-year.md`](docs/rfc/010-today-and-day-of-leap-year.md): the day of the leap year, what today is, and how the Today screen pages between days.
+- [`docs/rfc/011-persisted-state.md`](docs/rfc/011-persisted-state.md): everywhere the app keeps state (scene and app storage, caches, the app group, the Spotlight index), who owns it, and what versions it.
+- [`docs/rfc/012-maps-and-clustering.md`](docs/rfc/012-maps-and-clustering.md): what each map shows, how venues cluster, when a snapshot map is used, and how maps relate to the location filter.
+- [`docs/rfc/013-rankings-first-sets-and-library-order.md`](docs/rfc/013-rankings-first-sets-and-library-order.md): what rankings, first and most recent sets, and library order mean, and how they are shown.
+- [`docs/rfc/014-search-and-sharing.md`](docs/rfc/014-search-and-sharing.md): in-app search, how matching and emphasis work, and what sharing produces.
+- [`docs/rfc/015-ci-and-release.md`](docs/rfc/015-ci-and-release.md): the CI and release workflows, the build and test matrix, and how versions are set.
+- [`docs/rfc/016-testing.md`](docs/rfc/016-testing.md): how the project is tested, the conventions in use, and what is not covered.
+- [`docs/rfc/017-site-tool.md`](docs/rfc/017-site-tool.md): the command-line tool in the app binary, its commands, and the diary data it reads.

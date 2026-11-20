@@ -85,7 +85,7 @@ build with that file signs with the developer's team.
 4. `main.yml` and `release.yml` MUST keep running the same steps, so a release is never built
    with different checks than the commit it was merged with.
 5. The app, the widget and the app group id MUST match across `project.pbxproj` and both
-   entitlements files. The widget reads the app's snapshot through that group (RFC 007).
+   entitlements files. The widget reads the app's snapshot through that group ([RFC 007](007-shows-today-widget.md)).
 6. `SiteApp` and `SiteWidgetsExtension` MUST share `MARKETING_VERSION` and
    `CURRENT_PROJECT_VERSION` in every configuration. A version change edits all four.
 7. A change MUST NOT put a team id, certificate or token in a tracked file. The team id belongs in
