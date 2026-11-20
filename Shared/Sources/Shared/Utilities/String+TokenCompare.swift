@@ -8,12 +8,16 @@
 import Foundation
 
 extension String {
-  func tokenCompare(other: String) -> Bool {
+  func tokenOrder(other: String) -> ComparisonResult {
     var options = String.CompareOptions()
     options.insert(.caseInsensitive)
     options.insert(.diacriticInsensitive)
 
-    return compare(other, options: options) == ComparisonResult.orderedAscending
+    return compare(other, options: options)
+  }
+
+  func tokenCompare(other: String) -> Bool {
+    tokenOrder(other: other) == ComparisonResult.orderedAscending
   }
 
   /// Orders ids that otherwise tie, comparing the numbers in them by value: `sh9` is before `sh10`.

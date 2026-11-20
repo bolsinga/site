@@ -74,9 +74,11 @@ An artist or venue is ordered by a compare token made in advance ([RFC 006](006-
 4. The section is the token's first character: a digit is numeric, punctuation is
    punctuation, and anything else is that character in capitals. Sections sort the letters,
    then numeric, then punctuation.
-5. Ids that tie, or can't be compared, MUST be ordered by id, numbers by value (`ar9` before
-   `ar10`), in `Lookup.libraryOrder`, which makes the id lists a detail screen pages through.
-   Shows order by date, venue, headliner by this order, and then id.
+5. Ids that tie MUST be ordered by id, numbers by value (`ar9` before `ar10`), by the comparator
+   itself (`Bracket.compareIDs`), so every list, search and sort that uses it gives one order
+   whatever order it started from. An id that can't be compared (`TokenSearchError`) is ordered by
+   id in `Lookup.libraryOrder`, which makes the id lists a detail screen pages through. Shows
+   order by date, venue, headliner by this order, and then id.
 
 ## Sorting lists
 
@@ -122,9 +124,6 @@ and start as Alphabetical. Search narrows the items before they are grouped.
 
 ## Open questions
 
-- **Ties in lists.** The comparator the lists and search use (`VaultModel.compare`,
-  `compareIDs`) stops at the token, so ids that tie keep the order their dictionary gave. Only
-  `libraryOrder` falls back to the id. Should the comparator use `idCompare` too? See [#1734](https://github.com/bolsinga/site/issues/1734).
 - **Names inside punctuation.** From the regular expression, a name like "AC/DC" or "(hed) pe"
   keeps its punctuation, since the whole string must match to remove it, so "(hed) pe" would
   be in the punctuation section. No test was read for it. See [#1735](https://github.com/bolsinga/site/issues/1735).
