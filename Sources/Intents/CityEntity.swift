@@ -43,25 +43,25 @@ struct CityEntity: AppEntity {
 struct CityEntityQuery: EntityQuery {
   func entities(for identifiers: [CityEntity.ID]) async throws -> [CityEntity] {
     let ids = Set(identifiers)
-    return vault.cityEntities.filter { ids.contains($0.id) }
+    return catalog.cities.filter { ids.contains($0.id) }
   }
 
   func suggestedEntities() async throws -> [CityEntity] {
-    vault.cityEntities
+    catalog.cities
   }
 
   @Dependency
-  private var vault: Vault
+  private var catalog: EntityCatalog
 }
 
 extension CityEntityQuery: EnumerableEntityQuery {
   func allEntities() async throws -> [CityEntity] {
-    vault.cityEntities
+    catalog.cities
   }
 }
 
 extension CityEntityQuery: EntityStringQuery {
   func entities(matching string: String) async throws -> [CityEntity] {
-    vault.cityEntities.filter { $0.city.localizedStandardContains(string) }
+    catalog.cities.filter { $0.city.localizedStandardContains(string) }
   }
 }

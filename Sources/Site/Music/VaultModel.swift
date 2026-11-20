@@ -84,6 +84,7 @@ enum LocationAuthorization {
     }
 
     AppDependencyManager.shared.add(dependency: vault)
+    AppDependencyManager.shared.add(dependency: EntityCatalog(vault: vault))
     EntityVault.vault = vault
 
     dayChangeTask = Task {

@@ -32,13 +32,16 @@ struct ConcertEntityQuery: EntityQuery {
 
   @Dependency
   private var vault: Vault
+
+  @Dependency
+  private var catalog: EntityCatalog
 }
 
 extension ConcertEntityQuery: EntityStringQuery {
   func entities(matching string: String) async throws -> [ConcertEntity] {
     Logger.concertQuery.log("Matching: \(string)")
 
-    return vault.concertEntities.filter {
+    return catalog.concerts.filter {
       $0.venueName.localizedStandardContains(string)
         || $0.artistNames.contains { $0.localizedStandardContains(string) }
     }
@@ -185,7 +188,7 @@ extension ConcertEntityQuery: EntityPropertyQuery {
   private func entities(matching comparators: [ConcertFilter], mode: ComparatorMode)
     -> [ConcertEntity]
   {
-    vault.concertEntities.compactMap { entity in
+    catalog.concerts.compactMap { entity in
       var includeAsResult = mode == .and ? true : false
       let earlyBreakCondition = includeAsResult
       for comparator in comparators {
