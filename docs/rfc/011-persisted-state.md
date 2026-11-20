@@ -52,7 +52,8 @@ archive or the network can't give back, apart from the person's own choices.
 
 1. State a person chose, or that returns them to where they were, MUST be in `@SceneStorage` or
    `@AppStorage`. A value that can be had again from the archive, the network or Maps MUST be in the
-   Caches directory, which the system may purge, and MUST NOT be anywhere else.
+   Caches directory, which the system may purge, and MUST NOT be anywhere else. Code that keeps
+   one takes a `CacheCodable`, so a test can use one that stays in memory.
 2. State that differs by window (where it is, how it is filtered or sorted) MUST be per scene.
    A preference that isn't about one window (`nearby.distance`) MUST be per app. A new key MUST be
    named in the same dotted lowercase style.

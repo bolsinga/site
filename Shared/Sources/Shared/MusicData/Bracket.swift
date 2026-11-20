@@ -8,6 +8,11 @@
 import Algorithms
 import Foundation
 import OrderedCollections
+import os
+
+extension Logger {
+  fileprivate static let bracketCache = Logger(category: "bracketCache")
+}
 
 extension Collection where Element == Artist {
   fileprivate func lookups(tokenizer: LibraryCompareTokenizer) throws -> (
@@ -219,23 +224,38 @@ public struct Bracket: Codable, Sendable {
 }
 
 /// Bump when the archive's decoded types change, so a copy saved by an older build is downloaded again.
-private let bracketCacheVersion = 2
+let bracketCacheVersion = 2
 
-private func bracketFileName(version: Int = bracketCacheVersion) -> String {
+func bracketFileName(version: Int = bracketCacheVersion) -> String {
   version == 1 ? "bracket.json" : "bracket-\(version).json"
 }
 
 extension Bracket {
-  static func read(fileManager: FileManager = .default, deleteFile: Bool = false)
+  static func read(store: any CacheCodable = FileManager.default, deleteFile: Bool = false)
     throws -> Self
   {
-    try fileManager.readCache(fileName: bracketFileName(), deleteFile: deleteFile)
+    try store.readCache(fileName: bracketFileName(), deleteFile: deleteFile)
   }
 
-  func save(fileManager: FileManager = .default) throws {
-    try fileManager.saveCache(cacheData: self, fileName: bracketFileName())
+  func save(store: any CacheCodable = FileManager.default) throws {
+    try store.saveCache(cacheData: self, fileName: bracketFileName())
     for version in 1..<bracketCacheVersion {
-      fileManager.removeCache(fileName: bracketFileName(version: version))
+      store.removeCache(fileName: bracketFileName(version: version))
+    }
+  }
+
+  /// Saves the cache for the next launch, returning whether it could. It is only a copy of what was
+  /// downloaded, so failing to save doesn't fail the load. The older saved `Bracket` is removed,
+  /// since the next launch would otherwise read it as the copy of this one.
+  @discardableResult
+  func saveIfPossible(store: any CacheCodable = FileManager.default) -> Bool {
+    do {
+      try save(store: store)
+      return true
+    } catch {
+      Logger.bracketCache.error("save failed: \(error.localizedDescription, privacy: .public)")
+      store.removeCache(fileName: bracketFileName())
+      return false
     }
   }
 }

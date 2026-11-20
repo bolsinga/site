@@ -73,8 +73,11 @@ asynchronous tasks the other reasons start, and loads with no previous modified 
 4. `ArchiveNavigation` tests MUST be built with `useDispatchMainWorkaround: false`, so the state
    changes are synchronous. The test file adds convenience initializers that do so. [RFC 004](004-archive-path-category-navigation.md)
    describes the state.
-5. A test that writes a file MUST use a unique name, either under `URL.temporaryDirectory` or an
-   `AtlasCache` file named with a `UUID`, and MUST remove it with `defer`.
+5. A test of a cache MUST NOT use the disk. `Bracket`, `AtlasCache` and the `Dictionary` JSON caches
+   take a `CacheCodable` (`FileManager` is the real one), and tests give them `InMemoryCache`,
+   which keeps files in memory and records what was saved, read and removed. A test that has to
+   write a real file MUST use a unique name under `URL.temporaryDirectory` and remove it with
+   `defer`.
 6. Dates are made with `DateComponents(calendar:…)`. Which calendar is used is an open question.
 
 ## Running

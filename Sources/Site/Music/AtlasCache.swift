@@ -25,21 +25,23 @@ struct AtlasCache<T: AtlasGeocodable> {
   }
 
   private let fileName: String
+  private let store: any CacheCodable
 
   private var staggerOffset = 0.0
   private var cache: [ArchivePath: Value] = [:]
 
-  internal init(fileName: String = "atlas.json") {
+  internal init(fileName: String = "atlas.json", store: any CacheCodable = FileManager.default) {
     self.fileName = fileName
+    self.store = store
 
     do {
-      let diskCache = try [ArchivePath: Value].read(fileName: fileName)
+      let diskCache = try [ArchivePath: Value].read(fileName: fileName, store: store)
       let now = Date.now
       self.cache = diskCache.filter { $0.value.expirationDate >= now }  // Include those whose expiration date has not passed .now
 
       if self.cache.count != diskCache.count {
         Logger.atlasCache.log("removing expired items")
-        try self.cache.save(fileName: fileName)  // Some expired, so re-write the file.
+        try self.cache.save(fileName: fileName, store: store)  // Some expired, so re-write the file.
       }
     } catch {
       Logger.atlasCache.error("Cache Read Error: \(error, privacy: .public)")
@@ -57,7 +59,7 @@ struct AtlasCache<T: AtlasGeocodable> {
     staggerOffset += ExpirationStaggerDuration
 
     do {
-      try cache.save(fileName: fileName)
+      try cache.save(fileName: fileName, store: store)
     } catch {
       Logger.atlasCache.error("Cache Save Error: \(error, privacy: .public)")
     }
