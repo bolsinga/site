@@ -4,11 +4,22 @@
 //
 
 import Foundation
+import Synchronization
 import Testing
-import os
 
 @testable import Shared
 @testable import SiteApp
+
+/// Counts how many times something was made, from closures that outlive the test's stack.
+private final class Counts: Sendable {
+  private let counts = Mutex([String: Int]())
+
+  var values: [String: Int] { counts.withLock { $0 } }
+
+  func increment(_ kind: String) {
+    counts.withLock { $0[kind, default: 0] += 1 }
+  }
+}
 
 struct EntityCatalogTests {
   private func vault() async throws -> Vault {
@@ -34,26 +45,11 @@ struct EntityCatalogTests {
       rootURL: URL(string: "https://www.example.com/")!)
   }
 
-  @Test func makesAValueOnce() {
-    let count = OSAllocatedUnfairLock(initialState: 0)
-    let once = Once {
-      count.withLock { count in
-        count += 1
-        return count
-      }
-    }
-
-    #expect(count.withLock { $0 } == 0)
-    #expect(once.value == 1)
-    #expect(once.value == 1)
-    #expect(count.withLock { $0 } == 1)
-  }
-
   @Test func makesEachKindOnlyWhenAskedForAndOnlyOnce() {
-    let counts = OSAllocatedUnfairLock(initialState: [String: Int]())
+    let counts = Counts()
     func counted<Entity: Sendable>(_ kind: String) -> @Sendable () -> [Entity] {
       {
-        counts.withLock { $0[kind, default: 0] += 1 }
+        counts.increment(kind)
         return []
       }
     }
@@ -61,11 +57,11 @@ struct EntityCatalogTests {
       artists: counted("artists"), venues: counted("venues"), concerts: counted("concerts"),
       cities: counted("cities"))
 
-    #expect(counts.withLock { $0.isEmpty })
+    #expect(counts.values.isEmpty)
     _ = catalog.artists
     _ = catalog.artists
     _ = catalog.cities
-    #expect(counts.withLock { $0 } == ["artists": 1, "cities": 1])
+    #expect(counts.values == ["artists": 1, "cities": 1])
   }
 
   @Test func holdsTheEntitiesOfTheVault() async throws {
@@ -80,17 +76,17 @@ struct EntityCatalogTests {
   }
 
   @Test func aNewCatalogMakesThemAgain() {
-    let count = OSAllocatedUnfairLock(initialState: 0)
+    let counts = Counts()
     func catalog() -> EntityCatalog {
       EntityCatalog(
         artists: {
-          count.withLock { $0 += 1 }
+          counts.increment("artists")
           return []
         }, venues: { [] }, concerts: { [] }, cities: { [] })
     }
 
     _ = catalog().artists
     _ = catalog().artists
-    #expect(count.withLock { $0 } == 2)
+    #expect(counts.values == ["artists": 2])
   }
 }

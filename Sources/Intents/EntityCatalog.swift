@@ -4,12 +4,12 @@
 //
 
 import Shared
-import os
+import Synchronization
 
 /// A value made the first time it is asked for. A caller that asks while it is being made waits.
-final class Once<Value: Sendable>: Sendable {
+private final class Once<Value: Sendable>: Sendable {
   private let make: @Sendable () -> Value
-  private let stored = OSAllocatedUnfairLock<Value?>(initialState: nil)
+  private let stored = Mutex<Value?>(nil)
 
   init(_ make: @escaping @Sendable () -> Value) {
     self.make = make
