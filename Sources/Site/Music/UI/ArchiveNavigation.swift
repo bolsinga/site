@@ -35,6 +35,28 @@ extension Logger {
       self.artistsPath = artistsPath
     }
 
+    /// Reads what it can, so a field that is missing or unreadable falls back to its default and a
+    /// path that no longer decodes is dropped, instead of losing the whole saved state.
+    init(from decoder: any Decoder) throws {
+      let container = try decoder.container(keyedBy: CodingKeys.self)
+      func path(_ key: CodingKeys) -> [ArchivePath] {
+        (try? container.decode([LossyPath].self, forKey: key))?.compactMap(\.path) ?? []
+      }
+      self.init(
+        category: (try? container.decode(ArchiveCategory.self, forKey: .category))
+          ?? .defaultCategory,
+        todayPath: path(.todayPath), showsPath: path(.showsPath), venuesPath: path(.venuesPath),
+        artistsPath: path(.artistsPath))
+    }
+
+    private struct LossyPath: Decodable {
+      let path: ArchivePath?
+
+      init(from decoder: any Decoder) throws {
+        path = try? decoder.singleValueContainer().decode(ArchivePath.self)
+      }
+    }
+
     init?(jsonString: String) {
       guard let data = jsonString.data(using: .utf8),
         let state = try? JSONDecoder().decode(State.self, from: data)
