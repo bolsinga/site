@@ -108,8 +108,8 @@ asynchronous tasks the other reasons start, and loads with no previous modified 
 
 - **Calendar and time zone.** Tests build dates with `Calendar.autoupdatingCurrent`, so they
   assume the machine's calendar and time zone. A fixed Gregorian calendar and time zone would
-  make them the same everywhere.
+  make them the same everywhere. See [#1724](https://github.com/bolsinga/site/issues/1724).
 - **Previews need the network.** `.vaultModel` fetches the live JSON, so a preview fails offline.
-  A bundled sample would not.
-- **Simulator tests.** CI builds for iOS and tvOS but does not test there.
-- **Test plan.** No `.xctestplan` was found; whether one is wanted is not decided.
+  A bundled sample would not. See [#1745](https://github.com/bolsinga/site/issues/1745).
+- **Simulator tests.** CI builds for iOS and tvOS but does not test there. See [#1743](https://github.com/bolsinga/site/issues/1743).
+- **Test plan.** No `.xctestplan` was found; whether one is wanted is not decided. See [#1743](https://github.com/bolsinga/site/issues/1743).

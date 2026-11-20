@@ -110,6 +110,6 @@ set to the model's day when the screen appears.
 - **The calendar.** `Date.dayOfLeapYear` and a show's `PartialDate.date` both use the user's
   current calendar. The archive's dates are Gregorian, so under another calendar a show's
   year, month and day would be read as that calendar's, and the day keys saved in the cached
-  archive ([RFC 005](005-music-loading.md)) would be those of the calendar in use when it was built.
+  archive ([RFC 005](005-music-loading.md)) would be those of the calendar in use when it was built. See [#1724](https://github.com/bolsinga/site/issues/1724).
 - **A badge at midnight.** The badge counts shows for `todayDayOfLeapYear`, so it changes when
   the model's day does, not at the instant the calendar's does.

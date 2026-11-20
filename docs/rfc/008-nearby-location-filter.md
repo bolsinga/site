@@ -107,6 +107,6 @@ neither pushes the map down.
 
 - **When the prompt appears.** `VaultModel` starts listening when it is made, so the system
   asks for location at launch, before the filter has been turned on. Asking when the filter is
-  first turned on would be less surprising, but would leave the current city empty until then.
+  first turned on would be less surprising, but would leave the current city empty until then. See [#1720](https://github.com/bolsinga/site/issues/1720).
 - **A throttled city lookup.** The attempt is recorded before the request, so after a throttled
-  one the policy waits for a move and the interval instead of trying again.
+  one the policy waits for a move and the interval instead of trying again. See [#1721](https://github.com/bolsinga/site/issues/1721).

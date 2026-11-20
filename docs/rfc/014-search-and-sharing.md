@@ -104,11 +104,11 @@ A shared page is its website URL: `Vault.url(for: ArchivePath)` ([RFC 004](004-a
 ## Open questions
 
 - Emphasis is a literal case-insensitive match, while filtering ignores diacritics and width, so
-  "cafe" lists "Café" with nothing emphasized. Is that intended?
-- A name is parsed as Markdown, so one with `*` or `_` may render without them. No test covers it.
-- `Linkable` has no conformers or uses in the repo. Is it still needed?
+  "cafe" lists "Café" with nothing emphasized. Is that intended? See [#1737](https://github.com/bolsinga/site/issues/1737).
+- A name is parsed as Markdown, so one with `*` or `_` may render without them. No test covers it. See [#1738](https://github.com/bolsinga/site/issues/1738).
+- `Linkable` has no conformers or uses in the repo. Is it still needed? See [#1740](https://github.com/bolsinga/site/issues/1740).
 - `SearchResultButton` is a tap gesture with the button trait, not a `Button`. Does it work with
-  keyboard and tvOS focus?
+  keyboard and tvOS focus? See [#1739](https://github.com/bolsinga/site/issues/1739).
 - The comment in `ArchiveSharable.swift` says macOS Ventura shows no subject or message. Is that
-  still true?
+  still true? See [#1740](https://github.com/bolsinga/site/issues/1740).
 - Whether a Search tab result also selects the page's category was not checked here ([RFC 003](003-navigation-entry-points.md), [004](004-archive-path-category-navigation.md)).

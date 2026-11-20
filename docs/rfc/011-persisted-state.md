@@ -78,20 +78,20 @@ archive or the network can't give back, apart from the person's own choices.
 
 - **`music.last.modified` and the `Bracket` can disagree.** The date is in the defaults and the
   `Bracket` is in Caches. A purged cache with a kept date is a cache failure, so it downloads;
-  neither is checked against the other beyond that.
+  neither is checked against the other beyond that. See [#1728](https://github.com/bolsinga/site/issues/1728).
 - **No version on the `Atlas` file, the Venue Places caches or scene state.** A change to
   `AtlasCache.Value` has to stay decodable (`source` is optional for this reason), and an
-  `ArchiveNavigation.State` that stops decoding drops the whole scene state, not one field.
-- **The key `nearby.distance` is a string literal in four places**, with its default beside each.
+  `ArchiveNavigation.State` that stops decoding drops the whole scene state, not one field. See [#1726](https://github.com/bolsinga/site/issues/1726).
+- **The key `nearby.distance` is a string literal in four places**, with its default beside each. See [#1725](https://github.com/bolsinga/site/issues/1725).
 
 ## Open questions
 
 - Is the Atlas file replaced whole after an undecodable read? `AtlasCache` starts empty, and the next
-  `add` saves only what it holds, so the old file is overwritten; this may be intended.
+  `add` saves only what it holds, so the old file is overwritten; this may be intended. See [#1726](https://github.com/bolsinga/site/issues/1726).
 - Should a scene's saved state be dropped when the archive changes, so a path that no longer exists
-  isn't restored? Nothing was found that does it; how a missing path displays is in [RFC 004](004-archive-path-category-navigation.md).
+  isn't restored? Nothing was found that does it; how a missing path displays is in [RFC 004](004-archive-path-category-navigation.md). See [#1727](https://github.com/bolsinga/site/issues/1727).
 - `PickStore` has `removeAll()` for starting over after a read error; whether a user path reaches it
-  was not checked.
+  was not checked. See [#1729](https://github.com/bolsinga/site/issues/1729).
 
 ## Rationale
 

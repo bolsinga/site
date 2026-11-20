@@ -95,14 +95,14 @@ smallest one left. If nothing is left, it prints the number of keys.
 ## Open questions
 
 - `archiveIndices` evaluates `0...(count - 1)`: with an empty map that range is invalid, and
-  `nextID` would trap rather than print `0`. Is an empty map possible?
+  `nextID` would trap rather than print `0`. Is an empty map possible? See [#1746](https://github.com/bolsinga/site/issues/1746).
 - `dumpVault` and `dumpLookup` overwrite the app's saved `Bracket` on a Mac that has run the
-  app, and may read it when offline. Is that intended?
-- `dumpBracket` and `dumpLookup` print `cannot encode ...` and exit zero if the UTF-8 step fails.
-- The `dumpLookup` abstract says "text output" but the output is JSON.
+  app, and may read it when offline. Is that intended? See [#1747](https://github.com/bolsinga/site/issues/1747).
+- `dumpBracket` and `dumpLookup` print `cannot encode ...` and exit zero if the UTF-8 step fails. See [#1748](https://github.com/bolsinga/site/issues/1748).
+- The `dumpLookup` abstract says "text output" but the output is JSON. See [#1748](https://github.com/bolsinga/site/issues/1748).
 - The id format (prefix and number) is not read here; `nextID` assumes digits in each id.
 - Where `shows.json` and `music.json` come from is outside this repo (the generator).
 - Is the diary meant to be used by the app? Today `DiaryData` is compiled into every platform and
-  nothing but the tool uses it.
+  nothing but the tool uses it. See [#1749](https://github.com/bolsinga/site/issues/1749).
 - How the tool is run (path to the built executable, sandbox: the target sets
-  `ENABLE_APP_SANDBOX = YES`) is not documented anywhere in the repo.
+  `ENABLE_APP_SANDBOX = YES`) is not documented anywhere in the repo. See [#1750](https://github.com/bolsinga/site/issues/1750).
