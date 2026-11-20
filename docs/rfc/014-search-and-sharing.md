@@ -17,7 +17,8 @@ different path ([RFC 009](009-entities-siri-spotlight.md)); it shares only the V
 Only the `name` of an artist or venue. Shows and years have no search.
 
 1. Matching MUST be `String.localizedStandardContains` on the name (`Nameable.filter(by:)`), so it
-   is case, diacritic and width insensitive, and the fragment may sit anywhere in the name.
+   is case and diacritic insensitive (full-width letters don't match ASCII ones), and the
+   fragment may sit anywhere in the name.
 2. An empty search string matches nothing in `Vault.artists(filteredBy:)`, `venues(filteredBy:)`
    and `artistIDs(filteredBy:)`, and everything in `Collection.names(filteredBy:)`, which the lists
    use. So the Search tab with an empty string lists nothing, and a list shows all its items.
@@ -59,9 +60,11 @@ string leaves nothing.
 
 ## Emphasis
 
-1. `String.emphasizedAttributed(matching:)` MUST make only the first case-insensitive occurrence of
-   the fragment bold, and return the name unchanged for an empty fragment or no match. Leading and
-   trailing spaces of the matched text stay plain; a match of only spaces is not emphasized.
+1. `String.emphasizedAttributed(matching:)` MUST make only the first occurrence of the fragment
+   bold, found as the filter finds it (`localizedStandardRange(of:)`, ignoring case and
+   diacritics), so a row that passes the filter has its match emphasized. It returns the name
+   unchanged for an empty fragment or no match. Leading and trailing spaces of the matched text
+   stay plain; a match of only spaces is not emphasized.
 2. Emphasis MUST be an attribute set on the name's text. A name MUST NOT be parsed as Markdown, so
    `*`, `_`, brackets, backticks and backslashes show as they are. Rows draw it with `Text`.
 3. Emphasis is display only. Which rows appear is decided by the matching rules above.
@@ -103,8 +106,6 @@ A shared page is its website URL: `Vault.url(for: ArchivePath)` ([RFC 004](004-a
 
 ## Open questions
 
-- Emphasis is a literal case-insensitive match, while filtering ignores diacritics and width, so
-  "cafe" lists "Café" with nothing emphasized. Is that intended? See [#1737](https://github.com/bolsinga/site/issues/1737).
 - `Linkable` has no conformers or uses in the repo. Is it still needed? See [#1740](https://github.com/bolsinga/site/issues/1740).
 - `SearchResultButton` is a tap gesture with the button trait, not a `Button`. Does it work with
   keyboard and tvOS focus? See [#1739](https://github.com/bolsinga/site/issues/1739).

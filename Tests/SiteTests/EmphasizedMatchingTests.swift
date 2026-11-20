@@ -58,6 +58,35 @@ struct EmphasizedMatchingTests {
     #expect(emphasized("Greg Bolsinga", matching: " ") == ("Greg Bolsinga", []))
   }
 
+  @Test func diacriticsAreIgnoredLikeTheFilter() {
+    #expect(emphasized("Café", matching: "cafe") == ("Café", ["Café"]))
+    #expect(emphasized("Cafe", matching: "café") == ("Cafe", ["Cafe"]))
+    #expect(emphasized("Mötley Crüe", matching: "crue") == ("Mötley Crüe", ["Crüe"]))
+    #expect(emphasized("Sigur Rós", matching: "ROS") == ("Sigur Rós", ["Rós"]))
+    #expect(
+      emphasized("Cafe\u{0301} Tacvba", matching: "cafe tac")
+        == ("Cafe\u{0301} Tacvba", ["Cafe\u{0301} Tac"]))
+    #expect(emphasized("Café", matching: "é") == ("Café", ["é"]))
+  }
+
+  @Test func emphasisAndTheFilterAgreeOnWhatMatches() {
+    let names = [
+      "Café Tacvba", "Mötley Crüe", "Sigur Rós", "Björk", "Beyoncé", "Greg Bolsinga",
+      "ＡＢＣ Band", "ｶﾀｶﾅ カタカナ",
+    ]
+    let fragments = [
+      "cafe", "café", "crue", "ros", "bjork", "beyonce", "bolsinga", "greg b", "abc", "ＡＢＣ",
+      "ａｂｃ", "カタ", "ｶﾀ", "zzz",
+    ]
+    for name in names {
+      for fragment in fragments {
+        #expect(
+          emphasized(name, matching: fragment).bold.isEmpty
+            == !name.localizedStandardContains(fragment), "\(name) / \(fragment)")
+      }
+    }
+  }
+
   @Test func charactersMarkdownUsesStayInTheName() {
     #expect(emphasized("*NSYNC", matching: "ns") == ("*NSYNC", ["NS"]))
     #expect(emphasized("*NSYNC", matching: "*") == ("*NSYNC", ["*"]))
