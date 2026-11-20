@@ -1,6 +1,6 @@
 # RFC 002: MapKit geocoding, identifiers and caching
 
-Status: Accepted · Updated: 2026-11-17 · Code: `Sources/Site/Music` (`Atlas`, `AtlasCache`,
+Status: Accepted · Updated: 2026-11-20 · Code: `Sources/Site/Music` (`Atlas`, `AtlasCache`,
 `Throttle`, `MapItemLookup`, `Placemark`), `Sources/Site/VenuePlaces`
 
 ## Summary
@@ -84,7 +84,7 @@ independent of this app. Parts 2 and 3 are how the site app and Venue Places app
    such as Find Places on a venue's page, calls MapKit directly.
 2. A throttled error pauses the throttle until the window resets and retries. A not-found error
    ends that item with no place and the batch goes on. Any other error stops the batch.
-3. The cache is `atlas.json` in the Caches directory, one entry per venue ID. An entry is dropped
+3. The cache is `atlas.json` (`atlas-<n>.json` from version 2, [RFC 011](011-persisted-state.md)) in the Caches directory, one entry per venue ID. An entry is dropped
    on load once its expiry has passed. Expiry is six months, plus six hours for each entry added
    in a run, so a batch doesn't all expire at once.
 4. An entry records `Venue.geocodeSource`: the venue's address and MapKit identifier. It is

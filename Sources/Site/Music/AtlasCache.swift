@@ -16,6 +16,13 @@ extension Logger {
 private let expirationOffset = 60.0 * 60.0 * 24.0 * 30.0 * 6.0  // Six months
 private let ExpirationStaggerDuration = 60.0 * 60.0 * 6.0  // Quarter day
 
+/// Bump when `AtlasCache.Value` changes so that an older saved file is not read as it was.
+let atlasCacheVersion = 1
+
+func atlasFileName(version: Int = atlasCacheVersion) -> String {
+  version == 1 ? "atlas.json" : "atlas-\(version).json"
+}
+
 struct AtlasCache<T: AtlasGeocodable> {
   struct Value: Codable {
     var placemark: T.Place
@@ -24,14 +31,16 @@ struct AtlasCache<T: AtlasGeocodable> {
     var source: String?
   }
 
-  private let fileName: String
+  private let version: Int
   private let store: any CacheCodable
 
   private var staggerOffset = 0.0
   private var cache: [ArchivePath: Value] = [:]
 
-  internal init(fileName: String = "atlas.json", store: any CacheCodable = FileManager.default) {
-    self.fileName = fileName
+  private var fileName: String { atlasFileName(version: version) }
+
+  internal init(version: Int = atlasCacheVersion, store: any CacheCodable = FileManager.default) {
+    self.version = version
     self.store = store
 
     do {
@@ -41,7 +50,7 @@ struct AtlasCache<T: AtlasGeocodable> {
 
       if self.cache.count != diskCache.count {
         Logger.atlasCache.log("removing expired items")
-        try self.cache.save(fileName: fileName, store: store)  // Some expired, so re-write the file.
+        try self.save()  // Some expired, so re-write the file.
       }
     } catch {
       Logger.atlasCache.error("Cache Read Error: \(error, privacy: .public)")
@@ -59,9 +68,17 @@ struct AtlasCache<T: AtlasGeocodable> {
     staggerOffset += ExpirationStaggerDuration
 
     do {
-      try cache.save(fileName: fileName, store: store)
+      try save()
     } catch {
       Logger.atlasCache.error("Cache Save Error: \(error, privacy: .public)")
+    }
+  }
+
+  /// Saves under the current version's name and removes the files of the older versions.
+  private func save() throws {
+    try cache.save(fileName: fileName, store: store)
+    for older in 1..<version {
+      store.removeCache(fileName: atlasFileName(version: older))
     }
   }
 }

@@ -37,7 +37,7 @@ archive or the network can't give back, apart from the person's own choices.
 | File | Where | Written by | Retired by | Unreadable |
 |---|---|---|---|---|
 | `bracket-<n>.json` (`bracket.json` for 1) | Caches | `Bracket.save`, after a download | `bracketCacheVersion`, 3 | cache failure: download ([RFC 005](005-music-loading.md), [006](006-precomputed-music-data.md)) |
-| `atlas.json` | Caches | `AtlasCache`, on each geocode | six-month expiry per entry ([RFC 002](002-mapkit-geocoding.md)) | logged, starts empty |
+| `atlas-<n>.json` (`atlas.json` for 1) | Caches | `AtlasCache`, on each geocode | `atlasCacheVersion`, 1, with a save deleting the older files; six-month expiry per entry ([RFC 002](002-mapkit-geocoding.md)) | logged, starts empty; the next geocode saves a new file |
 | `venue-checks.json`, `venue-suggestions.json`, `venue-web-checks.json` | Caches | Venue Places `PickStore` (Debug, macOS) | `CacheAge.maximum` ([RFC 001](001-venue-places.md)) | left alone, not overwritten; Venue Places shows an error |
 | `shows-today.json` | app group `group.gdb.SiteApp`, `Library/Application Support` | `ShowsTodaySnapshot.write` | `currentVersion`, 2 | no snapshot ([RFC 007](007-shows-today-widget.md)) |
 
@@ -60,12 +60,14 @@ archive or the network can't give back, apart from the person's own choices.
 3. Saved scene state MUST decode with `try?` and a failure MUST fall back to the default, never
    throw. `ArchiveNavigation` and `NearbyModel` return `nil` from `init?(rawValue:)` for it, which
    leaves `@SceneStorage` on its declared default. A field added to saved state MUST decode when
-   absent (`NearbyModel.State.mode` does, with `nearby`), so an older scene still restores.
+   absent (`NearbyModel.State.mode` does, with `nearby`), so an older scene still restores. `ArchiveNavigation.State` does it for every field: a missing or
+   unreadable one takes its default, and a path that no longer decodes is dropped, so one change
+   never costs the whole saved state.
 4. An enum saved by raw value (`RankingSort`, `VenuesMode`, `LocationFilter`) MUST NOT have its
    cases renumbered or reused.
 5. A saved file whose meaning or shape changes MUST be retired, not read as it was. `Bracket` does it
-   by a version in the file name, and a save deletes the older versions' files. `ShowsTodaySnapshot`
-   does it by a `version` field that, when it differs, reads as nil.
+   by a version in the file name, and a save deletes the older versions' files. `AtlasCache` does the same.
+   `ShowsTodaySnapshot` does it by a `version` field that, when it differs, reads as nil.
 6. A cache MUST be recoverable: a read that fails MUST end in a download or a new geocode, never an
    error shown for the cache. `AtlasCache` also drops an entry past its expiry when it loads.
 7. A cache write MUST be atomic (`writeJSON` and the snapshot write both use `.atomic`), and a failed
@@ -79,14 +81,13 @@ archive or the network can't give back, apart from the person's own choices.
 
 ## Not yet
 
-- **No version on the `Atlas` file, the Venue Places caches or scene state.** A change to
-  `AtlasCache.Value` has to stay decodable (`source` is optional for this reason), and an
-  `ArchiveNavigation.State` that stops decoding drops the whole scene state, not one field. See [#1726](https://github.com/bolsinga/site/issues/1726).
+- **No version on the Venue Places caches.** `venue-checks.json`, `venue-suggestions.json` and
+  `venue-web-checks.json` are written by a Debug, macOS tool that is short-term, and age out by
+  `CacheAge.maximum`. A change to what they hold is handled by removing them
+  (`PickStore.removeAll()`), not by a version.
 
 ## Open questions
 
-- Is the Atlas file replaced whole after an undecodable read? `AtlasCache` starts empty, and the next
-  `add` saves only what it holds, so the old file is overwritten; this may be intended. See [#1726](https://github.com/bolsinga/site/issues/1726).
 - `PickStore` has `removeAll()` for starting over after a read error; whether a user path reaches it
   was not checked. See [#1729](https://github.com/bolsinga/site/issues/1729).
 
