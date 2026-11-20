@@ -1,6 +1,6 @@
 # RFC 006: Precomputed music data
 
-Status: Accepted · Updated: 2026-11-19 · Code: `Shared/Sources/Shared/MusicData` (`Bracket`,
+Status: Accepted · Updated: 2026-11-20 · Code: `Shared/Sources/Shared/MusicData` (`Bracket`,
 `Tracker`, `Music`, `Lookup`, `Vault`, `Ranking+Compute`, `RankDigest`)
 
 ## Summary
@@ -45,13 +45,20 @@ and rankings. The `Bracket` holds:
    so the next load downloads.
 6. Artists with no shows are dropped before the `Bracket` is made, so no ranking counts them.
 
+## Computed on load, on purpose
+
+Two orders are functions of the archive alone, and are still made after the `Bracket` is read.
+Rule 1 says what is computed in advance; these are the exception, because saving them gains
+little.
+
+- **Show order.** `Lookup` sorts every show once per load, to make `showIDOrderIndex`.
+- **Library order.** `Vault` sorts every artist and every venue once per load, for paging.
+
 ## Not yet in advance
 
 The rules are what the code is meant to do. These are still computed after the `Bracket` is
 read, and each could be moved into it.
 
-- **Show order.** `Lookup` sorts every show once per load, to make `showIDOrderIndex`. See [#1718](https://github.com/bolsinga/site/issues/1718).
-- **Library order.** `Vault` sorts every artist and every venue once per load, for paging. See [#1718](https://github.com/bolsinga/site/issues/1718).
 - **Per call:** the decades and counts per year (`decadesMap`), a rank distribution, and the new
   and most recent counts for a year each go through the whole archive when they are asked for.
   Searches by name do too. See [#1719](https://github.com/bolsinga/site/issues/1719).
@@ -67,6 +74,11 @@ Moving something into `Bracket` is a cache version bump (rule 5).
   replaces it whole, so a ranking is right until then.
 - **Kept out of the `Bracket`: the session.** What depends on where the user is or what day it
   is changes while the archive doesn't, so saving it with the archive would make it wrong.
+- **Why the orders aren't saved.** On a synthetic archive of 6,000 shows, 2,500 artists and 600
+  venues, both sorts together took about 90 ms, against about 140 ms to decode the `Bracket`.
+  A saved order is as many paths again to decode and index, so it would save a fraction of that,
+  make the file larger, cost every user a download for the version bump, and have to be kept in
+  step with the comparator.
 - **The version.** A saved `Bracket` from a build that computed something differently would be
   read without complaint and show wrong numbers, so a change to the computation has to
   retire it.
