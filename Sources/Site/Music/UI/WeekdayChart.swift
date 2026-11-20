@@ -54,14 +54,14 @@ struct WeekdayChart: View {
   }
 
   private var currentWeekday: Int {
-    Calendar.autoupdatingCurrent.component(.weekday, from: .now)
+    Calendar.archive.component(.weekday, from: .now)
   }
 
   @State private var firstWeekday = Calendar.autoupdatingCurrent.firstWeekday
 
   @ViewBuilder private func subtitle(_ weekdayCounts: [(Int, (Date, Int))]) -> some View {
     if let topDate = weekdayCounts.topDate {
-      Text("Most Shows On \(Date.FormatStyle.dateTime.weekday(.wide).format(topDate))")
+      Text("Most Shows On \(Date.FormatStyle.archiveDateTime.weekday(.wide).format(topDate))")
     } else {
       Text("Multiple Weekdays with Most Shows")
     }
@@ -100,7 +100,7 @@ struct WeekdayChart: View {
           AxisMarks(values: .stride(by: .day)) { _ in
             AxisGridLine()
             AxisTick()
-            AxisValueLabel(format: .dateTime.weekday(format), centered: true)
+            AxisValueLabel(format: .archiveDateTime.weekday(format), centered: true)
           }
         }
       }

@@ -54,12 +54,12 @@ struct MonthChart: View {
   }
 
   private var currentMonth: Int {
-    Calendar.autoupdatingCurrent.component(.month, from: .now)
+    Calendar.archive.component(.month, from: .now)
   }
 
   @ViewBuilder private func subtitle(_ monthCounts: [Int: (Date, Int)]) -> some View {
     if let topDate = monthCounts.map({ $0 }).topDate {
-      Text("Most Shows During \(Date.FormatStyle.dateTime.month(.wide).format(topDate))")
+      Text("Most Shows During \(Date.FormatStyle.archiveDateTime.month(.wide).format(topDate))")
     } else {
       Text("Multiple Months with Most Shows")
     }
@@ -115,7 +115,7 @@ struct MonthChart: View {
           AxisMarks(values: .stride(by: .month)) { _ in
             AxisGridLine()
             AxisTick()
-            AxisValueLabel(format: .dateTime.month(format), centered: true)
+            AxisValueLabel(format: .archiveDateTime.month(format), centered: true)
           }
         }
       }

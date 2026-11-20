@@ -37,7 +37,8 @@ the digest of an artist or a venue has a first set, a most recent set and a libr
 3. A year span MUST count the distinct dates (a `Set<PartialDate>`) that have a year: none is 0,
    and one date, or one dated and the rest undated, is 1. Otherwise it is the whole years
    between the earliest and the latest, never fewer than 1, and one year and any more time
-   counts as 2. A date with no year is left out.
+   counts as 2. A date with no year is left out. Dates are read in `Calendar.archive`, so a span
+   doesn't depend on the calendar of the device that made the `Bracket`.
 4. A date with nothing known MUST NOT count toward a span or become a first or most recent
    date, though the show still counts toward the show rank.
 
@@ -124,8 +125,6 @@ and start as Alphabetical. Search narrows the items before they are grouped.
 - **Ties in lists.** The comparator the lists and search use (`VaultModel.compare`,
   `compareIDs`) stops at the token, so ids that tie keep the order their dictionary gave. Only
   `libraryOrder` falls back to the id. Should the comparator use `idCompare` too? See [#1734](https://github.com/bolsinga/site/issues/1734).
-- **Calendar.** `yearSpan` and `PartialDate.date` use `Calendar.autoupdatingCurrent`, and are
-  saved in the `Bracket`, so a span follows the calendar of the device that made it. See [#1724](https://github.com/bolsinga/site/issues/1724).
 - **Names inside punctuation.** From the regular expression, a name like "AC/DC" or "(hed) pe"
   keeps its punctuation, since the whole string must match to remove it, so "(hed) pe" would
   be in the punctuation section. No test was read for it. See [#1735](https://github.com/bolsinga/site/issues/1735).

@@ -73,7 +73,7 @@ struct ConcertSearchTests {
   @Test func dateIsOneDay() async throws {
     let vault = try await createVault()
     let date = try #require(
-      Calendar.current.date(from: DateComponents(year: 1997, month: 5, day: 1)))
+      Calendar.archive.date(from: DateComponents(year: 1997, month: 5, day: 1)))
     #expect(vault.concertEntities(matching: ConcertSearch(date: date)).count == 1)
   }
 

@@ -13,22 +13,22 @@ import Testing
 
 extension Date {
   fileprivate var dayOfYear: Int {
-    Calendar.autoupdatingCurrent.component(.dayOfYear, from: self)
+    Calendar.archive.component(.dayOfYear, from: self)
   }
 
   fileprivate var month: Int {
-    Calendar.autoupdatingCurrent.component(.month, from: self)
+    Calendar.archive.component(.month, from: self)
   }
 
   fileprivate var day: Int {
-    Calendar.autoupdatingCurrent.component(.day, from: self)
+    Calendar.archive.component(.day, from: self)
   }
 }
 
 struct DayOfLeapYearTests {
   private func date(year: Int, month: Int, day: Int) -> Date {
     let dateComponents = DateComponents(
-      calendar: .autoupdatingCurrent, year: year, month: month, day: day)
+      calendar: .archive, year: year, month: month, day: day)
     return dateComponents.date!
   }
 
@@ -37,7 +37,7 @@ struct DayOfLeapYearTests {
     #expect(lastDay.dayOfYear == 59)
     #expect(lastDay.dayOfLeapYear == 59)
 
-    let nextDay = Calendar.autoupdatingCurrent.date(byAdding: .day, value: 1, to: lastDay)!
+    let nextDay = Calendar.archive.date(byAdding: .day, value: 1, to: lastDay)!
     #expect(nextDay.month == 3)
     #expect(nextDay.day == 1)
     #expect(nextDay.dayOfYear == 60)
@@ -49,13 +49,13 @@ struct DayOfLeapYearTests {
     #expect(lastDay.dayOfYear == 59)
     #expect(lastDay.dayOfLeapYear == 59)
 
-    var nextDay = Calendar.autoupdatingCurrent.date(byAdding: .day, value: 1, to: lastDay)!
+    var nextDay = Calendar.archive.date(byAdding: .day, value: 1, to: lastDay)!
     #expect(nextDay.month == 2)
     #expect(nextDay.day == 29)
     #expect(nextDay.dayOfYear == 60)
     #expect(nextDay.dayOfLeapYear == 60)
 
-    nextDay = Calendar.autoupdatingCurrent.date(byAdding: .day, value: 1, to: nextDay)!
+    nextDay = Calendar.archive.date(byAdding: .day, value: 1, to: nextDay)!
     #expect(nextDay.month == 3)
     #expect(nextDay.day == 1)
     #expect(nextDay.dayOfYear == 61)

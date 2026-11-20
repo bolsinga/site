@@ -78,7 +78,9 @@ asynchronous tasks the other reasons start, and loads with no previous modified 
    which keeps files in memory and records what was saved, read and removed. A test that has to
    write a real file MUST use a unique name under `URL.temporaryDirectory` and remove it with
    `defer`.
-6. Dates are made with `DateComponents(calendar:…)`. Which calendar is used is an open question.
+6. Dates are made with `DateComponents(calendar: .archive, …)`, which is Gregorian, so no test
+   depends on the machine's calendar. A test of code that takes a calendar (`ShowsTodayTimeline`,
+   `dayOfLeapYear(in:)`) MUST pass a Gregorian one with a fixed time zone.
 
 ## Running
 
@@ -109,9 +111,6 @@ asynchronous tasks the other reasons start, and loads with no previous modified 
 
 ## Open questions
 
-- **Calendar and time zone.** Tests build dates with `Calendar.autoupdatingCurrent`, so they
-  assume the machine's calendar and time zone. A fixed Gregorian calendar and time zone would
-  make them the same everywhere. See [#1724](https://github.com/bolsinga/site/issues/1724).
 - **Previews need the network.** `.vaultModel` fetches the live JSON, so a preview fails offline.
   A bundled sample would not. See [#1745](https://github.com/bolsinga/site/issues/1745).
 - **Simulator tests.** CI builds for iOS and tvOS but does not test there. See [#1743](https://github.com/bolsinga/site/issues/1743).

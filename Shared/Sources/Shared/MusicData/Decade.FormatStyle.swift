@@ -38,13 +38,13 @@ extension Decade.FormatStyle: Foundation.FormatStyle {
       switch style {
       case .twoDigits:
         return String(
-          localized: "\(Date.FormatStyle.dateTime.year(.twoDigits).format(date))’s",
+          localized: "\(Date.FormatStyle.archiveDateTime.year(.twoDigits).format(date))’s",
           bundle: #bundle,
           comment: "twoDigits"
         )
       case .defaultDigits:
         return String(
-          localized: "\(Date.FormatStyle.dateTime.year(.defaultDigits).format(date))s",
+          localized: "\(Date.FormatStyle.archiveDateTime.year(.defaultDigits).format(date))s",
           bundle: #bundle,
           comment: "defaultDigits")
       }

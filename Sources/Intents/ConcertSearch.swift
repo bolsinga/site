@@ -16,7 +16,7 @@ struct ConcertSearch: Equatable, Sendable {
   /// A calendar day, with its year.
   var date: Date?
 
-  func matches(_ digest: ShowDigest, calendar: Calendar = .current) -> Bool {
+  func matches(_ digest: ShowDigest, calendar: Calendar = .archive) -> Bool {
     if let artistID, !digest.performers.contains(where: { $0.id == artistID }) { return false }
     if let venueID, digest.venueID != venueID { return false }
     if let cityID, CityEntity(location: digest.location).id != cityID { return false }
