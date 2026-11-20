@@ -96,7 +96,8 @@ what a tap on a cluster does.
     views over it, so they follow the accent color.
 19. Snapshots are cached in memory (`NSCache`, 30 MB by pixel cost), by a hash of the request:
     rect, size, appearance, scale and the dot coordinates. A request MUST be served from the
-    cache before one is made.
+    cache before one is made, but only by a map whose own request equals it, since two requests
+    can share a hash.
 20. While a snapshot is shown, the pages either side have theirs made ahead, one at a time, after
     the shown one, and given up when the shown map changes, so paging shows a map at once.
 21. A header with no venues keeps its last map without dots (at 0.3 opacity) when `animatesChanges`
@@ -125,7 +126,5 @@ what a tap on a cluster does.
 
 ## Open questions
 
-- **Cache key.** The key is the string of `hashValue`, so two requests with a colliding hash would
-  share an image. The request itself isn't compared. See [#1731](https://github.com/bolsinga/site/issues/1731).
 - **Venue pins on tvOS.** Map mode and `UIAlertController` action sheets are not guarded for tvOS;
   whether they work there is not verified. See [#1732](https://github.com/bolsinga/site/issues/1732).
