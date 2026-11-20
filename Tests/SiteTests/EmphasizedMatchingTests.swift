@@ -5,53 +5,66 @@
 //  Created by Greg Bolsinga on 6/15/24.
 //
 
+import Foundation
 import Testing
 
 @testable import SiteApp
 
 struct EmphasizedMatchingTests {
+  /// The text of the name, and the pieces of it that are bold.
+  private func emphasized(_ name: String, matching fragment: String) -> (
+    text: String, bold: [String]
+  ) {
+    let result = name.emphasizedAttributed(matching: fragment)
+    let bold = result.runs.filter { $0.inlinePresentationIntent == .stronglyEmphasized }
+      .map { String(result[$0.range].characters) }
+    return (String(result.characters), bold)
+  }
+
   @Test func justOneLetterMatchingWithOneMatch() {
-    #expect("Gre".emphasized(matching: "G") == "**G**re")
-    #expect("Gre".emphasized(matching: "g") == "**G**re")
+    #expect(emphasized("Gre", matching: "G") == ("Gre", ["G"]))
+    #expect(emphasized("Gre", matching: "g") == ("Gre", ["G"]))
   }
 
   @Test func justOneLetterMatchinWithMultipleMatches() {
-    #expect("Greg".emphasized(matching: "G") == "**G**reg")
-    #expect("Greg".emphasized(matching: "g") == "**G**reg")
+    #expect(emphasized("Greg", matching: "G") == ("Greg", ["G"]))
+    #expect(emphasized("Greg", matching: "g") == ("Greg", ["G"]))
   }
 
   @Test func twoLettersMatchingWithOneMatch() {
-    #expect("Greg".emphasized(matching: "Gr") == "**Gr**eg")
-    #expect("Greg".emphasized(matching: "gr") == "**Gr**eg")
+    #expect(emphasized("Greg", matching: "Gr") == ("Greg", ["Gr"]))
+    #expect(emphasized("Greg", matching: "gr") == ("Greg", ["Gr"]))
   }
 
   @Test func twoLettersMatchingWithMultipleMatches() {
-    #expect("Gregr".emphasized(matching: "Gr") == "**Gr**egr")
-    #expect("GregR".emphasized(matching: "gr") == "**Gr**egR")
+    #expect(emphasized("Gregr", matching: "Gr") == ("Gregr", ["Gr"]))
+    #expect(emphasized("GregR", matching: "gr") == ("GregR", ["Gr"]))
   }
 
   @Test func noMatches() {
-    #expect("Greg".emphasized(matching: "o") == "Greg")
+    #expect(emphasized("Greg", matching: "o") == ("Greg", []))
   }
 
   @Test func emptyStringMatches() {
-    #expect("Greg".emphasized(matching: "") == "Greg")
+    #expect(emphasized("Greg", matching: "") == ("Greg", []))
   }
 
-  @Test func emphasizeRespectingSpacesQuirks() {
-    #expect("A".emphasizedRespectingSpacesQuirks == "**A**")
-    #expect(" A".emphasizedRespectingSpacesQuirks == " **A**")
-    #expect("A ".emphasizedRespectingSpacesQuirks == "**A** ")
-    #expect(" A ".emphasizedRespectingSpacesQuirks == " **A** ")
-    #expect(" ".emphasizedRespectingSpacesQuirks == " ")
+  @Test func spacesAtTheEndsOfAMatchStayPlain() {
+    #expect(emphasized("Greg Bolsinga", matching: "G") == ("Greg Bolsinga", ["G"]))
+    #expect(emphasized("Greg Bolsinga", matching: "G ") == ("Greg Bolsinga", ["g"]))
+    #expect(emphasized("Greg Bolsinga", matching: "G B") == ("Greg Bolsinga", ["g B"]))
+    #expect(emphasized("Greg Bolsinga", matching: " B") == ("Greg Bolsinga", ["B"]))
+    #expect(emphasized("Greg Bolsinga", matching: "B") == ("Greg Bolsinga", ["B"]))
+    #expect(emphasized("Greg Bolsinga", matching: " ") == ("Greg Bolsinga", []))
   }
 
-  @Test func spaceStringMatches() {
-    #expect("Greg Bolsinga".emphasized(matching: "G") == "**G**reg Bolsinga")
-    #expect("Greg Bolsinga".emphasized(matching: "G ") == "Gre**g** Bolsinga")
-    #expect("Greg Bolsinga".emphasized(matching: "G B") == "Gre**g B**olsinga")
-    #expect("Greg Bolsinga".emphasized(matching: " B") == "Greg **B**olsinga")
-    #expect("Greg Bolsinga".emphasized(matching: "B") == "Greg **B**olsinga")
-    #expect("Greg Bolsinga".emphasized(matching: " ") == "Greg Bolsinga")
+  @Test func charactersMarkdownUsesStayInTheName() {
+    #expect(emphasized("*NSYNC", matching: "ns") == ("*NSYNC", ["NS"]))
+    #expect(emphasized("*NSYNC", matching: "*") == ("*NSYNC", ["*"]))
+    #expect(emphasized("M_U_S_I_C", matching: "u_s") == ("M_U_S_I_C", ["U_S"]))
+    #expect(emphasized("__init__", matching: "init") == ("__init__", ["init"]))
+    #expect(emphasized("[Brackets](here)", matching: "ets") == ("[Brackets](here)", ["ets"]))
+    #expect(emphasized("The `Code` Band", matching: "code") == ("The `Code` Band", ["Code"]))
+    #expect(emphasized("Back\\slash", matching: "slash") == ("Back\\slash", ["slash"]))
   }
 }
