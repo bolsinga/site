@@ -1,6 +1,6 @@
 # RFC 011: Persisted state
 
-Status: Accepted · Updated: 2026-11-19 · Code: `Sources/Site/Music/UI/ArchiveStateView.swift`,
+Status: Accepted · Updated: 2026-11-20 · Code: `Sources/Site/Music/UI/ArchiveStateView.swift`,
 `Sources/Site/Music/UI/SiteView.swift`, `Shared/Sources/Shared/Utilities/FileManager+CacheCodable.swift`,
 `Shared/Sources/Shared/MusicData/Bracket.swift`, `Shared/Sources/Shared/Widget`,
 `Sources/Site/Music/AtlasCache.swift`, `Sources/Intents/Vault+Spotlight.swift`
@@ -30,7 +30,7 @@ archive or the network can't give back, apart from the person's own choices.
 | Key | Type | Default | Is |
 |---|---|---|---|
 | `nearby.distance` | `Double`, meters | `defaultNearbyDistanceThreshold`, 10 miles | how far counts as nearby ([RFC 008](008-nearby-location-filter.md)); read in four views |
-| `music.last.modified` | `Date` | `.distantPast` | the archive's date at the last load, passed as `previousModified` ([RFC 005](005-music-loading.md)) |
+| `music.last.modified` | `Date` | `.distantPast` | the archive's date at the last load, passed as `previousModified`; a saved `Bracket` older than it is not used while the network works ([RFC 005](005-music-loading.md)) |
 
 ### Files
 
@@ -79,9 +79,6 @@ archive or the network can't give back, apart from the person's own choices.
 
 ## Not yet
 
-- **`music.last.modified` and the `Bracket` can disagree.** The date is in the defaults and the
-  `Bracket` is in Caches. A purged cache with a kept date is a cache failure, so it downloads;
-  neither is checked against the other beyond that. See [#1728](https://github.com/bolsinga/site/issues/1728).
 - **No version on the `Atlas` file, the Venue Places caches or scene state.** A change to
   `AtlasCache.Value` has to stay decodable (`source` is optional for this reason), and an
   `ArchiveNavigation.State` that stops decoding drops the whole scene state, not one field. See [#1726](https://github.com/bolsinga/site/issues/1726).

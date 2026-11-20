@@ -1,6 +1,6 @@
 # RFC 005: Loading the music
 
-Status: Accepted · Updated: 2026-11-19 · Code: `Sources/Site/Music` (`SiteModel`, `VaultModel`),
+Status: Accepted · Updated: 2026-11-20 · Code: `Sources/Site/Music` (`SiteModel`, `VaultModel`),
 `Shared/Sources/Shared/MusicData` (`Vault`, `Lookup`, `Bracket`, `Music`),
 `Shared/Sources/Shared/Utilities` (`URL+LastModified`, `FileManager+CacheCodable`)
 
@@ -61,13 +61,16 @@ the download it was made from. `SiteModel` keeps it in memory and in `@AppStorag
    when saving it fails. The failure is logged and the older saved `Bracket` is removed, since the
    stored date is the download's and the next launch would otherwise read the older one as its
    copy. The next launch downloads again.
-4. When loads overlap, the one that started last wins, whatever order they finish in. A
+4. A saved `Bracket` whose `timestamp` is older than the stored date MUST NOT be used while the
+   network works. It is a cache failure, so the file is downloaded without a `HEAD`. When the
+   network has failed, it is used anyway.
+5. When loads overlap, the one that started last wins, whatever order they finish in. A
    superseded load MUST NOT change the model.
-5. A new load makes a new `Vault` and `VaultModel`, and cancels the old model's tasks. A `Vault`
+6. A new load makes a new `Vault` and `VaultModel`, and cancels the old model's tasks. A `Vault`
    is never changed in place.
-6. Work that follows a load (the widget snapshot, the Spotlight index, geocoding, location)
+7. Work that follows a load (the widget snapshot, the Spotlight index, geocoding, location)
    starts from the new model, and is skipped for previews.
-7. Code outside `Shared` MUST reach the data through `Vault`. `Bracket` is public only for the
+8. Code outside `Shared` MUST reach the data through `Vault`. `Bracket` is public only for the
    command line tool, which builds one directly and doesn't use the cache.
 
 ## Rationale

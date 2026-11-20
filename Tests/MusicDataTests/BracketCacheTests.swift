@@ -67,4 +67,12 @@ struct BracketCacheTests {
     #expect(!store.contains(fileName: bracketFileName()))
     #expect(throws: (any Error).self) { try Bracket.read(store: store) }
   }
+
+  @Test func aBracketIsOlderOnlyThanALaterDate() async throws {
+    let bracket = try await bracket()
+
+    #expect(bracket.isOlder(than: bracket.timestamp.addingTimeInterval(1)))
+    #expect(!bracket.isOlder(than: bracket.timestamp))
+    #expect(!bracket.isOlder(than: .distantPast))
+  }
 }
