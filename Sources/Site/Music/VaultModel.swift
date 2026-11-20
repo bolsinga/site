@@ -57,6 +57,8 @@ enum LocationAuthorization {
 
   private let locationManager: LocationManager
   private let cityResolver: any CityResolver
+  /// Reverse geocoding is one kind of MapKit request, so its lookups share one window.
+  private let cityThrottle: Throttle<String?>
 
   private let atlas = Atlas<Venue>()
 
@@ -66,10 +68,13 @@ enum LocationAuthorization {
     executeAsynchronousTasks: Bool,
     distanceFilter: CLLocationDistance = 10,
     cityResolver: any CityResolver = MapKitCityResolver(),
+    cityThrottle: Throttle<String?> = Throttle(
+      batchSize: MapKitLimits.maxRequests, timeUntilReset: MapKitLimits.timeUntilReset),
     error: Error? = nil
   ) {
     self.vault = vault
     self.cityResolver = cityResolver
+    self.cityThrottle = cityThrottle
     self.locationManager = LocationManager(
       activityType: .other,
       distanceFilter: distanceFilter,
@@ -294,16 +299,23 @@ enum LocationAuthorization {
     else { return }
     lastReverseGeocode = ReverseGeocodePolicy.Attempt(location: location, date: now)
     cityTask?.cancel()
-    cityTask = Task { [cityResolver] in
+    cityTask = Task { [cityResolver, cityThrottle] in
       do {
-        let city = try await cityResolver.city(for: location)
+        // A throttled lookup waits for the window to reset and asks again for the same location.
+        let found = try await cityThrottle.perform {
+          @Sendable () async throws -> Throttle<String?>.Control in
+          do {
+            return .success(try await cityResolver.city(for: location))
+          } catch let error as NSError where error.isGeocodingThrottledError {
+            Logger.vaultModel.log("city geocode throttled")
+            return .pauseEntry
+          }
+        }
         // A cancelled lookup is stale: a newer one started, or location was lost.
-        guard !Task.isCancelled, let city else { return }
+        guard !Task.isCancelled, let city = found ?? nil else { return }
         Logger.vaultModel.log("current city: \(city, privacy: .public)")
         currentCity = city
       } catch is CancellationError {
-      } catch let error as NSError where error.isGeocodingThrottledError {
-        Logger.vaultModel.log("city geocode throttled")
       } catch {
         Logger.vaultModel.error("city geocode error: \(error, privacy: .public)")
       }

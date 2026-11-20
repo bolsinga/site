@@ -7,6 +7,8 @@
 
 import CoreLocation
 import Foundation
+import MapKit
+import Synchronization
 import Testing
 
 @testable import Shared
@@ -89,7 +91,38 @@ struct CurrentCityTests {
     }
   }
 
-  @MainActor private func createModel(_ resolver: any CityResolver) async throws -> VaultModel {
+  /// Throttled for the first `throttledAsks` asks, then answers, counting every ask.
+  private final class ThrottledResolver: CityResolver {
+    private let asks = Mutex(0)
+    let throttledAsks: Int
+    let city: String
+
+    init(throttledAsks: Int, city: String) {
+      self.throttledAsks = throttledAsks
+      self.city = city
+    }
+
+    var askCount: Int { asks.withLock { $0 } }
+
+    func city(for location: CLLocation) async throws -> String? {
+      let ask = asks.withLock {
+        $0 += 1
+        return $0
+      }
+      if ask <= throttledAsks {
+        throw MKError(.loadingThrottled)
+      }
+      return city
+    }
+  }
+
+  private func shortThrottle() -> Throttle<String?> {
+    Throttle(batchSize: MapKitLimits.maxRequests, timeUntilReset: .milliseconds(50))
+  }
+
+  @MainActor private func createModel(
+    _ resolver: any CityResolver, throttle: Throttle<String?>? = nil
+  ) async throws -> VaultModel {
     let vault = Vault(
       lookup: try await Lookup(
         bracket: try await Bracket(
@@ -98,7 +131,11 @@ struct CurrentCityTests {
             venues: []),
           timestamp: .now)),
       rootURL: URL(string: "https://www.example.com/")!)
-    return VaultModel(vault, executeAsynchronousTasks: false, cityResolver: resolver)
+    guard let throttle else {
+      return VaultModel(vault, executeAsynchronousTasks: false, cityResolver: resolver)
+    }
+    return VaultModel(
+      vault, executeAsynchronousTasks: false, cityResolver: resolver, cityThrottle: throttle)
   }
 
   @MainActor @Test func locationResolvesCity() async throws {
@@ -155,5 +192,55 @@ struct CurrentCityTests {
     model.handle(.location(denver))
     await model.cityTask?.value
     #expect(model.currentCity == "Denver")
+  }
+
+  @MainActor @Test func aThrottledLookupAsksAgainForTheSameLocation() async throws {
+    let resolver = ThrottledResolver(throttledAsks: 1, city: "Denver")
+    let model = try await createModel(resolver, throttle: shortThrottle())
+    model.handle(.location(denver))
+    await model.cityTask?.value
+    #expect(model.currentCity == "Denver")
+    #expect(resolver.askCount == 2)
+  }
+
+  @MainActor @Test func aLookupThrottledTwiceStillResolves() async throws {
+    let resolver = ThrottledResolver(throttledAsks: 2, city: "Denver")
+    let model = try await createModel(resolver, throttle: shortThrottle())
+    model.handle(.location(denver))
+    await model.cityTask?.value
+    #expect(model.currentCity == "Denver")
+    #expect(resolver.askCount == 3)
+  }
+
+  @MainActor @Test func aNewerLocationCancelsAWaitingRetry() async throws {
+    // The first location is throttled, and the window is long, so it is still waiting.
+    let resolver = ThrottledResolver(throttledAsks: 1, city: "Cupertino")
+    let longThrottle = Throttle<String?>(
+      batchSize: MapKitLimits.maxRequests, timeUntilReset: .seconds(3600))
+    let model = try await createModel(resolver, throttle: longThrottle)
+    model.handle(.location(denver))
+    let waiting = try #require(model.cityTask)
+    while resolver.askCount < 1 { await Task.yield() }
+
+    model.handle(.location(cupertino))
+    await model.cityTask?.value
+    await waiting.value
+    #expect(model.currentCity == "Cupertino")
+    #expect(resolver.askCount == 2)
+  }
+
+  @MainActor @Test func losingLocationCancelsAWaitingRetry() async throws {
+    let resolver = ThrottledResolver(throttledAsks: 1, city: "Denver")
+    let longThrottle = Throttle<String?>(
+      batchSize: MapKitLimits.maxRequests, timeUntilReset: .seconds(3600))
+    let model = try await createModel(resolver, throttle: longThrottle)
+    model.handle(.location(denver))
+    let waiting = try #require(model.cityTask)
+    while resolver.askCount < 1 { await Task.yield() }
+
+    model.handle(.denied)
+    await waiting.value
+    #expect(model.currentCity == nil)
+    #expect(resolver.askCount == 1)
   }
 }
