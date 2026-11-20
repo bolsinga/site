@@ -74,8 +74,10 @@ reverse geocoding ([RFC 002](002-mapkit-geocoding.md)), so `ReverseGeocodePolicy
 | any other | never |
 
 12. A new ask MUST cancel the one before it, and a result that was cancelled MUST NOT be kept.
-13. A lookup that finds no city, or fails, MUST leave the current city as it was. A throttled one
-    is logged and isn't an error to show.
+13. A lookup that finds no city, or fails, MUST leave the current city as it was. A throttled
+    lookup MUST wait for the window to reset and ask again for the same location, through the
+    `Throttle` that the city lookups share ([RFC 002](002-mapkit-geocoding.md)), until a newer
+    lookup, or losing location, cancels it.
 
 ## What each state shows
 
@@ -108,5 +110,3 @@ neither pushes the map down.
 - **When the prompt appears.** `VaultModel` starts listening when it is made, so the system
   asks for location at launch, before the filter has been turned on. Asking when the filter is
   first turned on would be less surprising, but would leave the current city empty until then. See [#1720](https://github.com/bolsinga/site/issues/1720).
-- **A throttled city lookup.** The attempt is recorded before the request, so after a throttled
-  one the policy waits for a move and the interval instead of trying again. See [#1721](https://github.com/bolsinga/site/issues/1721).

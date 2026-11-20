@@ -77,7 +77,8 @@ independent of this app. Parts 2 and 3 are how the site app and Venue Places app
 ## Rules
 
 1. `Throttle` allows `MapKitLimits.maxRequests` (50) in each `MapKitLimits.timeUntilReset` (60 s).
-   `Atlas` throttles geocoding. `MapItemLookup` throttles identifier lookups with its own window,
+   `Atlas` throttles geocoding, and `VaultModel` the reverse geocode of the current city (a
+   kind of its own, [RFC 008](008-nearby-location-filter.md)). `MapItemLookup` throttles identifier lookups with its own window,
    five seconds longer, since MapKit's window starts a little after the app's. Anything that
    repeats a request for many venues MUST go through these. A single request a person asks for,
    such as Find Places on a venue's page, calls MapKit directly.
