@@ -14,12 +14,20 @@ extension Logger {
 }
 
 extension ArchiveNavigation {
-  func pathActivity(_ userActivity: NSUserActivity) {
+  /// A page the archive doesn't have opens its category's list, since there's nothing to show.
+  func pathActivity(
+    _ userActivity: NSUserActivity, exists: (ArchivePath) -> Bool = { _ in true }
+  ) {
     Logger.externalEvent.log(
       "userActivity: \(ArchivePath.activityType, privacy: .public)")
 
     guard let path = userActivity.archivePath else {
       Logger.externalEvent.error("no path")
+      return
+    }
+    guard exists(path) else {
+      Logger.externalEvent.error("path not in the archive")
+      self.navigate(toRootOf: path.category)
       return
     }
     self.navigate(to: path)
@@ -37,10 +45,16 @@ extension ArchiveNavigation {
   }
 
   /// Returns the category whose list the URL opened, or nil when it opened a page or nothing.
+  /// A page the archive doesn't have opens its category's list.
   @discardableResult
-  func openURL(_ url: URL) -> ArchiveCategory? {
+  func openURL(_ url: URL, exists: (ArchivePath) -> Bool = { _ in true }) -> ArchiveCategory? {
     Logger.externalEvent.log("openURL: \(url.absoluteString, privacy: .public)")
     if let archivePath = try? ArchivePath(url) {
+      guard exists(archivePath) else {
+        Logger.externalEvent.error("path not in the archive")
+        self.navigate(toRootOf: archivePath.category)
+        return archivePath.category
+      }
       self.navigate(to: archivePath)
       return nil
     }

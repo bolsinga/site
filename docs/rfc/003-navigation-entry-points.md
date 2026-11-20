@@ -47,20 +47,22 @@ a page in the app and the same page on the web have the same address.
    when it is handed over.
 6. A link to a category MUST show that category's list with nothing pushed onto it. A link to a
    path MUST NOT clear the other tabs. Navigating to the page already on top MUST do nothing.
-7. Today is relative to the day it is shown, so any entry point that names Today MUST show today,
+7. An event that names a page the archive doesn't have MUST open that page's category list, not
+   push a page with nothing on it.
+8. Today is relative to the day it is shown, so any entry point that names Today MUST show today,
    not the day Today was last paged to.
-8. Handoff to a category MUST also carry that category's sort, and apply it on arrival. Handoff
+9. Handoff to a category MUST also carry that category's sort, and apply it on arrival. Handoff
    to Venues MUST show the list, because a map has no sort.
-9. Every page and category the app shows MUST advertise an `NSUserActivity` for what is on top of
+10. Every page and category the app shows MUST advertise an `NSUserActivity` for what is on top of
    the stack, with the web URL when the vault has one. The activity's type MUST be listed in
    `NSUserActivityTypes` in `Info.plist`.
-10. An intent or an entity MUST open a page by its URL (`URLRepresentableEntity`,
+11. An intent or an entity MUST open a page by its URL (`URLRepresentableEntity`,
     `OpenURLIntent`), so it goes through the same code as a link. An intent MUST NOT depend on the
     app's navigation types. Intents that only answer, like `ShowConcerts`, don't open the app at
     all.
-11. A widget MUST link by URL. The widget's URL is a category; a row's URL is a path. A row
+12. A widget MUST link by URL. The widget's URL is a category; a row's URL is a path. A row
     without a URL falls through to the widget's, so a tap always opens something.
-12. An entity MUST use the page's `ArchivePath` as its identifier, so an entity from an intent or
+13. An entity MUST use the page's `ArchivePath` as its identifier, so an entity from an intent or
     Spotlight and a page the app is showing are the same thing. The spotlight index MUST be
     replaced when what it holds changes (`spotlightIndexVersion`), and when the vault does.
 

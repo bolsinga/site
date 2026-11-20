@@ -66,6 +66,14 @@ extension Logger {
       }
     }
 
+    /// The state without the pages `exists` says the archive doesn't have.
+    func pruned(keeping exists: (ArchivePath) -> Bool) -> State {
+      State(
+        category: category, todayPath: todayPath.filter(exists),
+        showsPath: showsPath.filter(exists),
+        venuesPath: venuesPath.filter(exists), artistsPath: artistsPath.filter(exists))
+    }
+
     enum Change {
       case none
       case assign
@@ -200,6 +208,14 @@ extension Logger {
     }
     Logger.archive.log("nav to path: \(path.formatted(), privacy: .public)")
     self.update(state: State(path: path))
+  }
+
+  /// Drops the pages the archive doesn't have, such as ones restored from before it changed.
+  func prune(keeping exists: (ArchivePath) -> Bool) {
+    let pruned = state.pruned(keeping: exists)
+    guard pruned != state else { return }
+    Logger.archive.log("pruned pages the archive doesn't have")
+    state = pruned
   }
 
   func navigate(to category: ArchiveCategory) {
