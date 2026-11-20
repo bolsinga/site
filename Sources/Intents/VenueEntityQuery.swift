@@ -36,6 +36,9 @@ struct VenueEntityQuery: EntityQuery {
 
   @Dependency
   private var vault: Vault
+
+  @Dependency
+  private var catalog: EntityCatalog
 }
 
 extension VenueEntityQuery: EntityStringQuery {
@@ -182,7 +185,7 @@ extension VenueEntityQuery: EntityPropertyQuery {
   private func entities(matching comparators: [Predicate<VenueEntity>], mode: ComparatorMode) throws
     -> [VenueEntity]
   {
-    try vault.venueEntities.compactMap { entity in
+    try catalog.venues.compactMap { entity in
       var includeAsResult = mode == .and ? true : false
       let earlyBreakCondition = includeAsResult
       for comparator in comparators {

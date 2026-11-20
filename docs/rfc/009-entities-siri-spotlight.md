@@ -58,6 +58,11 @@ which also supplies the URL, from what the digests ([RFC 006](006-precomputed-mu
       `Vault`'s own name search for artists and venues, and the venue or an artist for concerts.
     - **By property.** `EntityPropertyQuery` with comparators for the properties listed below,
       evaluated over every entity, and sorted before the limit is applied.
+11. A query that goes through every entity (by property, and a concert's by string, and the list
+    of cities) MUST read them from `EntityCatalog`, which makes each kind the first time it is
+    asked for and keeps it until the next load. `VaultModel` registers a new one with each
+    `Vault`, so entities are never kept from an older archive. Entities are kept in memory from the
+    first such query until the next load.
 
 | Entity | Searchable properties | Sortable by |
 |---|---|---|
@@ -71,13 +76,13 @@ which also supplies the URL, from what the digests ([RFC 006](006-precomputed-mu
 `SiteShortcuts` gives Siri phrases for opening a category, for the concerts by an artist, at a
 venue and in a city, and for today's concerts. The phrases are in `AppShortcuts.xcstrings`.
 
-11. The app MUST call `updateAppShortcutParameters()` at launch, so phrases that name an artist, a
+12. The app MUST call `updateAppShortcutParameters()` at launch, so phrases that name an artist, a
     venue or a city know the entities the archive has.
-12. `ShowConcerts` and `ShowConcertsToday` answer: they return the concerts, a spoken count
+13. `ShowConcerts` and `ShowConcertsToday` answer: they return the concerts, a spoken count
     ("Found 3 concerts"), and a snippet of the first six, with "And N more". They MUST NOT open
     the app. A search narrows by any mix of artist, venue, city and date, and a part left out does
     not narrow (`ConcertSearch`).
-13. "Today" is the day of the leap year, as in the app's Today screen.
+14. "Today" is the day of the leap year, as in the app's Today screen.
 
 ## Spotlight
 
@@ -86,15 +91,15 @@ venue and in a city, and for today's concerts. The phrases are in `AppShortcuts.
 and the artists and venue of a concert. It runs after each load that is not a preview, and not on
 tvOS.
 
-14. The index MUST record what it holds, as the client state of its last batch: the
+15. The index MUST record what it holds, as the client state of its last batch: the
     `spotlightIndexVersion` and the archive's `timestamp`. When that equals the current one,
     nothing is indexed.
-15. `spotlightIndexVersion` MUST be bumped whenever what is indexed changes, so an index made by an
+16. `spotlightIndexVersion` MUST be bumped whenever what is indexed changes, so an index made by an
     older build is replaced.
-16. A refresh is one batch: delete the three entity types, index them again, then end the batch
+17. A refresh is one batch: delete the three entity types, index them again, then end the batch
     with the new state. A failure, or a cancelled load, MUST end the batch with the old state,
     so the next load tries again.
-17. When the system asks (`IndexedEntityQuery`), the ids named are indexed again, and ones the
+18. When the system asks (`IndexedEntityQuery`), the ids named are indexed again, and ones the
     archive no longer has are deleted. A request for everything forces a full index.
 
 ## Onscreen content
@@ -120,5 +125,3 @@ a URL, as the entity requires one.
   made, after the archive has loaded. An intent that runs before then has no `Vault` to read.
   What the system does in that case isn't documented here. See [#1722](https://github.com/bolsinga/site/issues/1722).
 - **Cities.** `CityEntity` is a parameter only. It isn't indexed, and has no page to open.
-- **Whole-archive queries.** Searching by property, and the list of cities, build every entity
-  of that type on each call, where the archive could hold them once per load. See [#1723](https://github.com/bolsinga/site/issues/1723).
