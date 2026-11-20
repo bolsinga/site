@@ -54,14 +54,17 @@ little.
 - **Show order.** `Lookup` sorts every show once per load, to make `showIDOrderIndex`.
 - **Library order.** `Vault` sorts every artist and every venue once per load, for paging.
 
-## Not yet in advance
+## Computed per call, on purpose
 
-The rules are what the code is meant to do. These are still computed after the `Bracket` is
-read, and each could be moved into it.
+These go through the whole archive each time they are asked for. Each is a function of the
+archive alone, or of the archive and a filter, and each is left as it is because it costs little.
 
-- **Per call:** the decades and counts per year (`decadesMap`), a rank distribution, and the new
-  and most recent counts for a year each go through the whole archive when they are asked for.
-  Searches by name do too. See [#1719](https://github.com/bolsinga/site/issues/1719).
+- **Counts per decade and year** (`decadesMap`), and the counts for a filter's shows
+  (`decadesMap(showIDs:)`, which depends on the filter).
+- **A rank distribution** (`rankDistribution`), when a stats screen is shown.
+- **The new and most recent counts for a year**, when a year is shown.
+- **Searches by name**, which match with `localizedStandardContains` on each keystroke, so they
+  depend on the locale and the text.
 
 Moving something into `Bracket` is a cache version bump (rule 5).
 
@@ -79,6 +82,12 @@ Moving something into `Bracket` is a cache version bump (rule 5).
   A saved order is as many paths again to decode and index, so it would save a fraction of that,
   make the file larger, cost every user a download for the version bump, and have to be kept in
   step with the comparator.
+- **Why these aren't saved.** On a synthetic archive of 6,000 shows, 2,500 artists and 600
+  venues, a rank distribution took 0.5 ms, the four counts for a year 0.2 ms, `decadesMap`
+  0.02 ms, `decadesMap(showIDs:)` with half the shows 0.8 ms, and a name search over artists and
+  venues 2.3 ms. Each is run when a screen appears or a key is typed, not for each frame, so a
+  cache would add stored state to `Lookup` for no gain anyone could see. A filter and a search
+  string can't be saved ahead of time at all.
 - **The version.** A saved `Bracket` from a build that computed something differently would be
   read without complaint and show wrong numbers, so a change to the computation has to
   retire it.
