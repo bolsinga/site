@@ -57,7 +57,10 @@ the download it was made from. `SiteModel` keeps it in memory and in `@AppStorag
    every load a download.
 3. The saved `Bracket` is a cache: it lives in the Caches directory, and the system may remove
    it. Nothing may depend on it being there. When it can't be read, the load falls back to the
-   network, and when both fail the load fails and the error is shown.
+   network, and when both fail the load fails and the error is shown. A download MUST be used even
+   when saving it fails. The failure is logged and the older saved `Bracket` is removed, since the
+   stored date is the download's and the next launch would otherwise read the older one as its
+   copy. The next launch downloads again.
 4. When loads overlap, the one that started last wins, whatever order they finish in. A
    superseded load MUST NOT change the model.
 5. A new load makes a new `Vault` and `VaultModel`, and cancels the old model's tasks. A `Vault`
@@ -66,12 +69,6 @@ the download it was made from. `SiteModel` keeps it in memory and in `@AppStorag
    starts from the new model, and is skipped for previews.
 7. Code outside `Shared` MUST reach the data through `Vault`. `Bracket` is public only for the
    command line tool, which builds one directly and doesn't use the cache.
-
-## Known gap
-
-`Lookup` saves the new `Bracket` inside the network attempt, so a save that throws is treated as a
-network failure, and the older saved `Bracket`, if there is one, is read in place of the new
-download. See [#1717](https://github.com/bolsinga/site/issues/1717).
 
 ## Rationale
 

@@ -8,6 +8,11 @@
 import Algorithms
 import Foundation
 import OrderedCollections
+import os
+
+extension Logger {
+  fileprivate static let bracketCache = Logger(category: "bracketCache")
+}
 
 extension Collection where Element == Artist {
   fileprivate func lookups(tokenizer: LibraryCompareTokenizer) throws -> (
@@ -236,6 +241,21 @@ extension Bracket {
     try fileManager.saveCache(cacheData: self, fileName: bracketFileName())
     for version in 1..<bracketCacheVersion {
       fileManager.removeCache(fileName: bracketFileName(version: version))
+    }
+  }
+
+  /// Saves the cache for the next launch, returning whether it could. It is only a copy of what was
+  /// downloaded, so failing to save doesn't fail the load. The older saved `Bracket` is removed,
+  /// since the next launch would otherwise read it as the copy of this one.
+  @discardableResult
+  func saveIfPossible(fileManager: FileManager = .default) -> Bool {
+    do {
+      try save(fileManager: fileManager)
+      return true
+    } catch {
+      Logger.bracketCache.error("save failed: \(error.localizedDescription, privacy: .public)")
+      fileManager.removeCache(fileName: bracketFileName())
+      return false
     }
   }
 }

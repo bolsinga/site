@@ -45,7 +45,7 @@ public struct Lookup: Codable, Sendable {
             Logger.bracketCache.info("loading")
 
             let bracket = try await Bracket(url: url)
-            try bracket.save()
+            bracket.saveIfPossible()
             return .complete(bracket)
           } else {
             Logger.bracketCache.info("not updated - read from cache")
