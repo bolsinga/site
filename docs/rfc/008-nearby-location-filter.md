@@ -1,6 +1,6 @@
 # RFC 008: The location filter: Nearby and City
 
-Status: Accepted · Updated: 2026-11-19 · Code: `Sources/Site/Music` (`NearbyModel`, `LocationFilter`,
+Status: Accepted · Updated: 2026-11-20 · Code: `Sources/Site/Music` (`NearbyModel`, `LocationFilter`,
 `CityResolver`, `VaultModel`, `NearbyDefaults`), `Sources/Site/Utility/LocationManager.swift`,
 `Sources/Site/Music/UI` (`Nearby*`, `CityFilterView`, `CityNameField`, `LocationFilterToolbarContent`)
 
@@ -17,7 +17,7 @@ How a venue gets a place in Maps, which **Nearby** depends on, is [RFC 002](002-
 | State | Is | Kept |
 |---|---|---|
 | `NearbyModel` | the filter (`none`, `nearby` or `city`), the mode it uses when on, and a typed city name | per scene, `@SceneStorage("nearby.state")` |
-| Distance | how far counts as nearby, in meters; 10 miles by default | per app, `@AppStorage("nearby.distance")` |
+| Distance | how far counts as nearby, in meters; 10 miles by default | per app, `NearbyDistanceStorage` (`"nearby.distance"`) |
 | Location, authorization, current city | what the device says now | `VaultModel`, not saved |
 
 ### Rules

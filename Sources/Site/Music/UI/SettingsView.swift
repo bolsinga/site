@@ -29,7 +29,7 @@ extension Bundle {
 public struct SettingsView: View {
   public init() {}
 
-  @AppStorage("nearby.distance") private var nearbyDistance = defaultNearbyDistanceThreshold
+  @NearbyDistanceStorage private var nearbyDistance
 
   @Environment(NearbyModel.self) private var nearbyModel: NearbyModel?
 

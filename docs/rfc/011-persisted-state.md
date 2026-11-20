@@ -29,7 +29,7 @@ archive or the network can't give back, apart from the person's own choices.
 
 | Key | Type | Default | Is |
 |---|---|---|---|
-| `nearby.distance` | `Double`, meters | `defaultNearbyDistanceThreshold`, 10 miles | how far counts as nearby ([RFC 008](008-nearby-location-filter.md)); read in four views |
+| `nearby.distance` | `Double`, meters | `defaultNearbyDistanceThreshold`, 10 miles | how far counts as nearby ([RFC 008](008-nearby-location-filter.md)); read through `NearbyDistanceStorage`, which holds the key and the default |
 | `music.last.modified` | `Date` | `.distantPast` | the archive's date at the last load, passed as `previousModified`; a saved `Bracket` older than it is not used while the network works ([RFC 005](005-music-loading.md)) |
 
 ### Files
@@ -82,7 +82,6 @@ archive or the network can't give back, apart from the person's own choices.
 - **No version on the `Atlas` file, the Venue Places caches or scene state.** A change to
   `AtlasCache.Value` has to stay decodable (`source` is optional for this reason), and an
   `ArchiveNavigation.State` that stops decoding drops the whole scene state, not one field. See [#1726](https://github.com/bolsinga/site/issues/1726).
-- **The key `nearby.distance` is a string literal in four places**, with its default beside each. See [#1725](https://github.com/bolsinga/site/issues/1725).
 
 ## Open questions
 
