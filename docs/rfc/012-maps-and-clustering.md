@@ -1,9 +1,8 @@
 # RFC 012: Maps and clustering
 
 Status: Accepted · Updated: 2026-11-19 · Code: `Sources/Site/ClusterMap` (`ClusterMap`, `SnapshotMap`,
-`ViewRepresentable`), `Sources/Site/Music/UI` (`ShowsMapHeader`, `VenuesMap`, `VenuesSummary`,
-`VenuesMode`, `CategoryAnnotationView`, `OpenInMapsButton`), `Sources/Site/Utility` (`MapItem+Geometry`,
-`Placemark+Geometry`)
+`MKMapRect+Fit`, `ViewRepresentable`), `Sources/Site/Music/UI` (`ShowsMapHeader`, `VenuesMap`, `VenuesSummary`,
+`VenuesMode`, `CategoryAnnotationView`, `OpenInMapsButton`), `Sources/Site/Utility` (`MapItem+Geometry`)
 
 ## Summary
 
@@ -82,7 +81,7 @@ what a tap on a cluster does.
     Today included), and 2 for one without (`DayList`'s).
 16. A fit MUST leave room for what covers the map: the safe area, the pin above its coordinate
     (`CategoryAnnotationView.tipOffset`), and, for a header with `animatesChanges`, the fade at the
-    bottom (40% of its height). The live and snapshot maps both have this sizing, in two copies.
+    bottom (40% of its height). The live and snapshot maps both use `MKMapRect.fitted`.
 
 ## Snapshots
 
@@ -122,15 +121,9 @@ what a tap on a cluster does.
 
 ## Open questions
 
-- **Unused geometry.** `Placemark+Geometry` (`center`, `radius`) and `MapItem+Geometry`'s `corners`
-  have no callers in `Sources`. See [#1730](https://github.com/bolsinga/site/issues/1730).
-- **Duplicated fit.** The live and snapshot fits (`visibleRect`, `fittedRect`, and `spillFraction`)
-  are copies; a change to one is easy to miss in the other. See [#1730](https://github.com/bolsinga/site/issues/1730).
 - **Cache key.** The key is the string of `hashValue`, so two requests with a colliding hash would
   share an image. The request itself isn't compared. See [#1731](https://github.com/bolsinga/site/issues/1731).
 - **Venue pins on tvOS.** Map mode and `UIAlertController` action sheets are not guarded for tvOS;
   whether they work there is not verified. See [#1732](https://github.com/bolsinga/site/issues/1732).
-- **Names of the fit constants.** `ShowsMap` names its 2.0 `detailMapFitZoomOutFactor` and 1.3
-  `dayMapFitZoomOutFactor`, but picks them by `animatesChanges`, so the detail pages get 1.3. See [#1730](https://github.com/bolsinga/site/issues/1730).
 - **Single pin size.** The fit measures only the first item's pin to leave room, and the
   cluster pin's badge is not measured. See [#1733](https://github.com/bolsinga/site/issues/1733).

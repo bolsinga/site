@@ -619,30 +619,6 @@ struct ClusterMap<
       show(rect.proportionallyPadded.zoomedOut(by: fitZoomOutFactor), in: mapView, pin: pin)
     }
 
-    /// The rect of the map that has `rect` centered in the area left after the insets.
-    /// `setVisibleMapRect(_:edgePadding:)` doesn't center it on the bottom inset.
-    private func visibleRect(
-      centering rect: MKMapRect, in mapView: MKMapView, insets: MapEdgeInsets
-    ) -> MKMapRect? {
-      let size = mapView.bounds.size
-      let areaWidth = size.width - insets.left - insets.right
-      let areaHeight = size.height - insets.top - insets.bottom
-      guard areaWidth > 0, areaHeight > 0, rect.width > 0, rect.height > 0 else { return nil }
-      // The area is a thin band between the bars and the fade. Items spread far north to south
-      // can spill a little into both, so size the zoom to a taller area around the same center.
-      let spill = insets.top * Self.spillFraction
-      let mapPointsPerPoint = max(rect.width / areaWidth, rect.height / (areaHeight + spill * 2.0))
-      // The middle of the map, unless the bars leave less room above it than the fade does below.
-      let centerY = max(size.height / 2.0, insets.top + areaHeight / 2.0)
-      return MKMapRect(
-        x: rect.midX - (insets.left + areaWidth / 2.0) * mapPointsPerPoint,
-        y: rect.midY - centerY * mapPointsPerPoint,
-        width: size.width * mapPointsPerPoint, height: size.height * mapPointsPerPoint)
-    }
-
-    /// How much of the top inset, the bars, items may spill into above and below the clear area.
-    private static var spillFraction: CGFloat { 0.45 }
-
     private func show(_ rect: MKMapRect, in mapView: MKMapView, pin: CGSize = .zero) {
       // No region change is reported if the map is already there, so don't wait for one.
       let abovePin = min(anchorY ?? pin.height, pin.height)
@@ -651,7 +627,9 @@ struct ClusterMap<
         bottom: mapView.bounds.height * fitBottomFraction + pin.height - abovePin)
       let animated = animatesFit && !reducesMotion
       if fitBottomFraction > 0,
-        let visible = visibleRect(centering: rect, in: mapView, insets: insets)
+        let visible = rect.fitted(
+          in: mapView.bounds.size, top: insets.top, leading: insets.left, bottom: insets.bottom,
+          trailing: insets.right, fades: true)
       {
         guard !visible.isNearlyEqual(to: mapView.visibleMapRect) else { return }
         fitTarget = visible
@@ -973,13 +951,6 @@ private final class SizeReportingMapView: MKMapView {
 }
 
 extension MKMapRect {
-  fileprivate func zoomedOut(by factor: Double) -> MKMapRect {
-    guard factor > 1.0 else { return self }
-    return MKMapRect(
-      x: midX - width * factor / 2.0, y: midY - height * factor / 2.0,
-      width: width * factor, height: height * factor)
-  }
-
   fileprivate func zoomed(by factor: Double, around center: MKMapPoint) -> MKMapRect {
     guard factor > 1.0 else { return self }
     return MKMapRect(

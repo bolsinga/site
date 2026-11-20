@@ -36,26 +36,6 @@ extension MKMapRect {
 
     return padded(widthInMeters * 0.1)
   }
-
-  fileprivate var topLeft: MKMapPoint {
-    MKMapPoint(x: minX, y: maxY)
-  }
-
-  fileprivate var topRight: MKMapPoint {
-    MKMapPoint(x: maxX, y: maxY)
-  }
-
-  fileprivate var bottomRight: MKMapPoint {
-    MKMapPoint(x: maxX, y: minY)
-  }
-
-  fileprivate var bottomLeft: MKMapPoint {
-    MKMapPoint(x: minX, y: minY)
-  }
-
-  var corners: [MKMapPoint] {
-    [topLeft, topRight, bottomRight, bottomLeft]
-  }
 }
 
 extension CLLocationCoordinate2D {
