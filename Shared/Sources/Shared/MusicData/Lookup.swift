@@ -150,12 +150,10 @@ public struct Lookup: Codable, Sendable {
     try bracket.compareIDs(lhs: lhs, rhs: rhs)
   }
 
-  /// The ids in library order. Ids that tie, or that cannot be compared, keep a fixed order by id.
+  /// The ids in library order. Ids that cannot be compared keep a fixed order by id.
   func libraryOrder(of ids: some Collection<ArchivePath>) -> [ArchivePath] {
     ids.sorted { lhs, rhs in
-      if let isBefore = try? compareIDs(lhs: lhs, rhs: rhs), isBefore { return true }
-      if let isAfter = try? compareIDs(lhs: rhs, rhs: lhs), isAfter { return false }
-      return lhs.description.idCompare(other: rhs.description)
+      (try? compareIDs(lhs: lhs, rhs: rhs)) ?? lhs.description.idCompare(other: rhs.description)
     }
   }
 

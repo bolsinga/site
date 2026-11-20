@@ -177,7 +177,15 @@ public struct Bracket: Codable, Sendable {
       throw TokenSearchError.invalidCompareTokenID(rhs.description)
     }
 
-    return lhToken.tokenCompare(other: rhToken)
+    switch lhToken.tokenOrder(other: rhToken) {
+    case .orderedAscending:
+      return true
+    case .orderedDescending:
+      return false
+    case .orderedSame:
+      // Ids that tie keep a fixed order by id, so a list doesn't depend on the order it was built in.
+      return lhs.description.idCompare(other: rhs.description)
+    }
   }
 
   func sortedShowIDs() throws -> [ArchivePath] {
