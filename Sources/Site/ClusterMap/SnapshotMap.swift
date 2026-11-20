@@ -225,7 +225,8 @@ struct SnapshotMap<Item: Identifiable, Dot: View>: View {
   private func snapshot(
     for request: SnapshotRequest, coordinates: [CLLocationCoordinate2D]
   ) async -> ShownSnapshot? {
-    if let cached = snapshotCache.object(forKey: request.cacheKey) {
+    // The key is a hash, so a cached map is used only if it is for this request.
+    if let cached = snapshotCache.object(forKey: request.cacheKey), cached.request == request {
       return cached
     }
 
