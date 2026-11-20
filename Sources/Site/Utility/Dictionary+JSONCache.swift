@@ -6,15 +6,16 @@
 //
 
 import Foundation
+import Shared
 
 extension Dictionary where Key: Codable, Value: Codable {
-  static func read(fileName: String, fileManager: FileManager = .default, deleteFile: Bool = false)
-    throws -> Self
-  {
-    try fileManager.readCache(fileName: fileName, deleteFile: deleteFile)
+  static func read(
+    fileName: String, store: any CacheCodable = FileManager.default, deleteFile: Bool = false
+  ) throws -> Self {
+    try store.readCache(fileName: fileName, deleteFile: deleteFile)
   }
 
-  func save(fileName: String, fileManager: FileManager = .default) throws {
-    try fileManager.saveCache(cacheData: self, fileName: fileName)
+  func save(fileName: String, store: any CacheCodable = FileManager.default) throws {
+    try store.saveCache(cacheData: self, fileName: fileName)
   }
 }

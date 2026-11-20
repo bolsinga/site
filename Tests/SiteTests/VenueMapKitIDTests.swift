@@ -104,29 +104,23 @@ struct VenueMapKitIDTests {
   }
 
   /// An `Atlas` whose cache file holds a placemark for v1, geocoded from the venue as it is.
-  private func atlas(caching placemark: Placemark, for venue: Venue, fileName: String) throws -> (
+  private func atlas(caching placemark: Placemark, for venue: Venue) throws -> (
     Atlas<Venue>, ArchivePath
   ) {
     let id = try ArchivePath(raw: "v1")
-    var cache = AtlasCache<Venue>(fileName: fileName)
+    var cache = AtlasCache<Venue>(store: InMemoryCache())
     cache.add(id, value: placemark, source: venue.geocodeSource)
     return (Atlas(cache: cache), id)
   }
 
-  private func removeCache(fileName: String) {
-    _ = try? [ArchivePath: AtlasCache<Venue>.Value].read(fileName: fileName, deleteFile: true)
-  }
-
   @Test func atlasUsesCachedPlaceForMapKitID() async throws {
-    let fileName = "atlas-test-\(UUID().uuidString).json"
-    defer { removeCache(fileName: fileName) }
     let venue = Venue(
       id: "v1", location: Location(city: "c", state: "s"), name: "n", mapKitID: "I1")
     let (atlas, id) = try atlas(
       caching: .place(
         identifier: "I1", coordinate: CLLocationCoordinate2D(latitude: 1, longitude: 2),
         maps: address),
-      for: venue, fileName: fileName)
+      for: venue)
 
     guard case .place(let identifier, let coordinate, _) = try await atlas.geocode(venue, id: id)
     else {
@@ -138,12 +132,10 @@ struct VenueMapKitIDTests {
   }
 
   @Test func atlasKeepsCachedAddressWithoutMapKitID() async throws {
-    let fileName = "atlas-test-\(UUID().uuidString).json"
-    defer { removeCache(fileName: fileName) }
     let venue = Venue(id: "v1", location: Location(city: "c", state: "s"), name: "n")
     let (atlas, id) = try atlas(
       caching: .coordinate(CLLocationCoordinate2D(latitude: 1, longitude: 2), maps: address),
-      for: venue, fileName: fileName)
+      for: venue)
 
     guard case .coordinate(let coordinate, _) = try await atlas.geocode(venue, id: id) else {
       Issue.record("not the cached address")

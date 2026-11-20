@@ -22,17 +22,10 @@ private struct FixedGeocodable: AtlasGeocodable {
 }
 
 struct AtlasSourceTests {
-  private func removeCache(fileName: String) {
-    _ = try? [ArchivePath: AtlasCache<FixedGeocodable>.Value].read(
-      fileName: fileName, deleteFile: true)
-  }
-
   private func withCache(
     _ body: (inout AtlasCache<FixedGeocodable>) async throws -> Void
   ) async throws {
-    let fileName = "atlas-source-test-\(UUID().uuidString).json"
-    defer { removeCache(fileName: fileName) }
-    var cache = AtlasCache<FixedGeocodable>(fileName: fileName)
+    var cache = AtlasCache<FixedGeocodable>(store: InMemoryCache())
     try await body(&cache)
   }
 
@@ -70,12 +63,11 @@ struct AtlasSourceTests {
   }
 
   @Test func sourceIsSaved() async throws {
-    let fileName = "atlas-source-test-\(UUID().uuidString).json"
-    defer { removeCache(fileName: fileName) }
+    let store = InMemoryCache()
     let id = try ArchivePath(raw: "v1")
-    var cache = AtlasCache<FixedGeocodable>(fileName: fileName)
+    var cache = AtlasCache<FixedGeocodable>(store: store)
     cache.add(id, value: 1, source: "1 Main St")
-    #expect(AtlasCache<FixedGeocodable>(fileName: fileName).entry(id)?.source == "1 Main St")
+    #expect(AtlasCache<FixedGeocodable>(store: store).entry(id)?.source == "1 Main St")
   }
 
   @Test func batchShowsCachedPlacesThenRefreshesStaleOnes() async throws {

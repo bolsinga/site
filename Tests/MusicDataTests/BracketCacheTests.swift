@@ -8,22 +8,6 @@ import Testing
 
 @testable import Shared
 
-/// A file manager whose caches directory is the one given, which doesn't have to exist.
-private final class DirectoryFileManager: FileManager, @unchecked Sendable {
-  let cachesDirectory: URL
-
-  init(cachesDirectory: URL) {
-    self.cachesDirectory = cachesDirectory
-    super.init()
-  }
-
-  override func urls(
-    for directory: FileManager.SearchPathDirectory, in domainMask: FileManager.SearchPathDomainMask
-  ) -> [URL] {
-    [cachesDirectory]
-  }
-}
-
 struct BracketCacheTests {
   private func bracket() async throws -> Bracket {
     let venue = Venue(id: "v0", location: Location(city: "Chicago", state: "IL"), name: "V0")
@@ -38,51 +22,49 @@ struct BracketCacheTests {
       timestamp: .now)
   }
 
-  private func temporaryDirectory() -> URL {
-    FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+  private var olderFileNames: [String] {
+    (1..<bracketCacheVersion).map { bracketFileName(version: $0) }
   }
 
-  @Test func savesTheBracketForTheNextLaunch() async throws {
-    let directory = temporaryDirectory()
-    try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
-    defer { try? FileManager.default.removeItem(at: directory) }
-    let fileManager = DirectoryFileManager(cachesDirectory: directory)
+  @Test func savesUnderTheCurrentNameAndRemovesOlderVersions() async throws {
+    let store = InMemoryCache()
+
+    #expect(try await bracket().saveIfPossible(store: store))
+
+    #expect(store.saves == [bracketFileName()])
+    #expect(store.removals == olderFileNames)
+    #expect(store.contains(fileName: bracketFileName()))
+  }
+
+  @Test func aSavedBracketReadsBack() async throws {
+    let store = InMemoryCache()
     let bracket = try await bracket()
+    try bracket.save(store: store)
 
-    #expect(bracket.saveIfPossible(fileManager: fileManager))
+    let read = try Bracket.read(store: store)
 
-    let read = try Bracket.read(fileManager: fileManager)
     #expect(Set(read.showMap.keys) == Set(bracket.showMap.keys))
-  }
-
-  @Test func aFailedSaveRemovesTheOlderSavedBracket() async throws {
-    let bracket = try await bracket()
-    // Save once to learn the file's name.
-    let scratch = temporaryDirectory()
-    try FileManager.default.createDirectory(at: scratch, withIntermediateDirectories: true)
-    defer { try? FileManager.default.removeItem(at: scratch) }
-    #expect(bracket.saveIfPossible(fileManager: DirectoryFileManager(cachesDirectory: scratch)))
-    let fileName = try #require(
-      try FileManager.default.contentsOfDirectory(atPath: scratch.path).first)
-
-    // Something else is where the file goes, so it can't be replaced, but it can be removed.
-    let directory = temporaryDirectory()
-    let blocker = directory.appendingPathComponent(fileName)
-    try FileManager.default.createDirectory(
-      at: blocker.appendingPathComponent("older"), withIntermediateDirectories: true)
-    defer { try? FileManager.default.removeItem(at: directory) }
-    let fileManager = DirectoryFileManager(cachesDirectory: directory)
-
-    #expect(!bracket.saveIfPossible(fileManager: fileManager))
-    #expect(!FileManager.default.fileExists(atPath: blocker.path))
+    #expect(store.reads == [bracketFileName()])
   }
 
   @Test func aFailedSaveIsNotAnError() async throws {
-    // The directory was never made, so writing into it fails.
-    let fileManager = DirectoryFileManager(cachesDirectory: temporaryDirectory())
+    let store = InMemoryCache()
+    store.failSaves()
     let bracket = try await bracket()
 
-    #expect(throws: (any Error).self) { try bracket.save(fileManager: fileManager) }
-    #expect(!bracket.saveIfPossible(fileManager: fileManager))
+    #expect(throws: InMemoryCache.Failure.self) { try bracket.save(store: store) }
+    #expect(!bracket.saveIfPossible(store: store))
+  }
+
+  @Test func aFailedSaveRemovesTheOlderSavedBracket() async throws {
+    let store = InMemoryCache()
+    let bracket = try await bracket()
+    try bracket.save(store: store)
+    store.failSaves()
+
+    #expect(!bracket.saveIfPossible(store: store))
+
+    #expect(!store.contains(fileName: bracketFileName()))
+    #expect(throws: (any Error).self) { try Bracket.read(store: store) }
   }
 }

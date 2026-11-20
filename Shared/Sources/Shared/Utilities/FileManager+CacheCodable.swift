@@ -7,6 +7,16 @@
 
 import Foundation
 
+/// Reads and writes `Codable` values in the caches directory by file name, which `FileManager` does.
+/// Code that keeps a cache takes one of these, so a test can use one that never touches the disk.
+public protocol CacheCodable: Sendable {
+  func readCache<T: Decodable>(fileName: String, deleteFile: Bool) throws -> T
+  func saveCache<T: Encodable>(cacheData: T, fileName: String) throws
+  func removeCache(fileName: String)
+}
+
+extension FileManager: CacheCodable {}
+
 extension FileManager {
   fileprivate func cacheFileURL(for fileName: String) throws -> URL {
     try fileURL(for: fileName, in: .cachesDirectory)
