@@ -82,6 +82,10 @@ what a tap on a cluster does.
 16. A fit MUST leave room for what covers the map: the safe area, the pin above its coordinate
     (`CategoryAnnotationView.tipOffset`), and, for a header with `animatesChanges`, the fade at the
     bottom (40% of its height). The live and snapshot maps both use `MKMapRect.fitted`.
+    The live fit measures the first item's pin, so every pin and a cluster's MUST have the same
+    frame. `CategoryAnnotationView` draws the count badge inside its frame: at the largest text
+    size it allows (`accessibility1`) the badge reaches 0.5 points past the right edge and stays
+    inside the bottom padding.
 
 ## Snapshots
 
@@ -125,5 +129,3 @@ what a tap on a cluster does.
   share an image. The request itself isn't compared. See [#1731](https://github.com/bolsinga/site/issues/1731).
 - **Venue pins on tvOS.** Map mode and `UIAlertController` action sheets are not guarded for tvOS;
   whether they work there is not verified. See [#1732](https://github.com/bolsinga/site/issues/1732).
-- **Single pin size.** The fit measures only the first item's pin to leave room, and the
-  cluster pin's badge is not measured. See [#1733](https://github.com/bolsinga/site/issues/1733).
