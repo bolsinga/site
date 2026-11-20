@@ -252,6 +252,11 @@ extension Bracket {
     }
   }
 
+  /// Whether this was made from an older archive than the one last loaded.
+  func isOlder(than previousModified: Date) -> Bool {
+    timestamp < previousModified
+  }
+
   /// Saves the cache for the next launch, returning whether it could. It is only a copy of what was
   /// downloaded, so failing to save doesn't fail the load. The older saved `Bracket` is removed,
   /// since the next launch would otherwise read it as the copy of this one.

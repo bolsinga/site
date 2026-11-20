@@ -73,8 +73,12 @@ public struct Lookup: Codable, Sendable {
         do {
           Logger.bracketCache.info("cache")
 
-          async let bracket = try Bracket.read()
-          return .complete(try await bracket)
+          let bracket = try Bracket.read()
+          if !networkLoadFailed && bracket.isOlder(than: previousModified) {
+            Logger.bracketCache.info("cache is older than the last load - download")
+            return .networkLoad(url, previousModified, true)
+          }
+          return .complete(bracket)
         } catch {
           Logger.bracketCache.info(
             "cache error: \(error.localizedDescription, privacy: .public) networkLoadFailed: \(networkLoadFailed, privacy: .public)"
