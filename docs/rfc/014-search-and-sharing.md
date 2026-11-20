@@ -3,7 +3,7 @@
 Status: Accepted · Updated: 2026-11-19 · Code: `Sources/Site/Music/UI` (`ArchiveCrossSearch*`,
 `ArchiveSearchModifier`, `ArchiveScope`, `RankableSearchableSortList`, `ArchiveSharable*`,
 `ArchiveCategorySharable`, `ArchivePathLink`, `ArchiveTabView`), `Sources/Site/Utility`
-(`String+*Matching`, `Linkable`), `Sources/Site/Music` (`VaultModel`, `NSUserActivity+Search`),
+(`String+AttributedMatching`, `Linkable`), `Sources/Site/Music` (`VaultModel`, `NSUserActivity+Search`),
 `Shared/Sources/Shared/MusicData` (`Nameable`, `Vault`, `TokenSearchError`)
 
 ## Summary
@@ -59,11 +59,11 @@ string leaves nothing.
 
 ## Emphasis
 
-1. `String.emphasized(matching:)` MUST wrap only the first case-insensitive occurrence of the
-   fragment in `**`, and return the name unchanged for an empty fragment. Leading and trailing
-   spaces of the matched text stay outside the markers; a match of only spaces is not emphasized.
-2. `emphasizedAttributed(matching:)` MUST parse that as Markdown, and fall back to the plain name if
-   parsing fails. Rows draw it with `Text`.
+1. `String.emphasizedAttributed(matching:)` MUST make only the first case-insensitive occurrence of
+   the fragment bold, and return the name unchanged for an empty fragment or no match. Leading and
+   trailing spaces of the matched text stay plain; a match of only spaces is not emphasized.
+2. Emphasis MUST be an attribute set on the name's text. A name MUST NOT be parsed as Markdown, so
+   `*`, `_`, brackets, backticks and backslashes show as they are. Rows draw it with `Text`.
 3. Emphasis is display only. Which rows appear is decided by the matching rules above.
 
 ## Errors
@@ -105,7 +105,6 @@ A shared page is its website URL: `Vault.url(for: ArchivePath)` ([RFC 004](004-a
 
 - Emphasis is a literal case-insensitive match, while filtering ignores diacritics and width, so
   "cafe" lists "Café" with nothing emphasized. Is that intended? See [#1737](https://github.com/bolsinga/site/issues/1737).
-- A name is parsed as Markdown, so one with `*` or `_` may render without them. No test covers it. See [#1738](https://github.com/bolsinga/site/issues/1738).
 - `Linkable` has no conformers or uses in the repo. Is it still needed? See [#1740](https://github.com/bolsinga/site/issues/1740).
 - `SearchResultButton` is a tap gesture with the button trait, not a `Button`. Does it work with
   keyboard and tvOS focus? See [#1739](https://github.com/bolsinga/site/issues/1739).
