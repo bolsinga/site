@@ -100,15 +100,21 @@ struct ArchiveStateView: View {
     todayRequest += 1
   }
 
+  private func exists(_ path: ArchivePath) -> Bool { model.vault.contains(path) }
+
   var body: some View {
     archiveBody
+      // Pages restored from before the archive changed may not be in the new one.
+      .onChange(of: ObjectIdentifier(model), initial: true) {
+        archiveNavigation.prune(keeping: exists)
+      }
       .onChange(of: pendingExternalEvent?.id, initial: true) {
         guard let pendingExternalEvent else { return }
         switch pendingExternalEvent.kind {
         case .url(let url):
-          if archiveNavigation.openURL(url) == .today { showToday() }
+          if archiveNavigation.openURL(url, exists: exists) == .today { showToday() }
         case .path(let activity):
-          archiveNavigation.pathActivity(activity)
+          archiveNavigation.pathActivity(activity, exists: exists)
         case .category(let activity):
           archiveNavigation.categoryActivity(activity)
           if activity.archiveCategory == .today { showToday() }

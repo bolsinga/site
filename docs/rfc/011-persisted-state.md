@@ -74,6 +74,8 @@ archive or the network can't give back, apart from the person's own choices.
    not stored ([RFC 008](008-nearby-location-filter.md)); only the filter, its mode and a city name the person typed are, per scene.
 9. The widget and the app MUST share only the snapshot and the app group's name ([RFC 007](007-shows-today-widget.md)).
 10. The archive (`Music`) MUST NOT be saved, only the `Bracket` made from it ([RFC 006](006-precomputed-music-data.md)).
+11. Saved navigation MUST be pruned of pages the archive doesn't have, whenever the archive loads
+    ([RFC 004](004-archive-path-category-navigation.md)).
 
 ## Not yet
 
@@ -89,8 +91,6 @@ archive or the network can't give back, apart from the person's own choices.
 
 - Is the Atlas file replaced whole after an undecodable read? `AtlasCache` starts empty, and the next
   `add` saves only what it holds, so the old file is overwritten; this may be intended. See [#1726](https://github.com/bolsinga/site/issues/1726).
-- Should a scene's saved state be dropped when the archive changes, so a path that no longer exists
-  isn't restored? Nothing was found that does it; how a missing path displays is in [RFC 004](004-archive-path-category-navigation.md). See [#1727](https://github.com/bolsinga/site/issues/1727).
 - `PickStore` has `removeAll()` for starting over after a read error; whether a user path reaches it
   was not checked. See [#1729](https://github.com/bolsinga/site/issues/1729).
 

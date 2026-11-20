@@ -170,6 +170,20 @@ public struct Vault: Sendable {
     lookup.firstSetCount(kind)
   }
 
+  /// Whether the archive has the page this path names.
+  public func contains(_ path: ArchivePath) -> Bool {
+    switch path {
+    case .show:
+      lookup.showMap[path] != nil
+    case .venue:
+      lookup.venueMap[path] != nil
+    case .artist:
+      lookup.artistMap[path] != nil
+    case .year:
+      lookup.annumShows[path] != nil
+    }
+  }
+
   public func digest(annum: Annum) -> AnnumDigest? {
     lookup.annumDigest(annum: annum)
   }
