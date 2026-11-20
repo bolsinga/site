@@ -100,7 +100,7 @@ struct State { var category: ArchiveCategory
 
 8. Saved stacks MUST be pruned of pages the archive doesn't have each time an archive loads, so a
    restored scene never shows one. Pruning keeps the category and the other pages in order.
-9. A page the archive doesn't have MUST still show something. `destination(…)` shows a Page Not
+9. A page the archive doesn't have MUST still show something. `destination(…)` shows an Item Not
    Found screen, for any path that reaches it.
 
 ### Changing the category and the path together

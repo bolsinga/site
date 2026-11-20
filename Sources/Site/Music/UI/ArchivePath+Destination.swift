@@ -40,8 +40,8 @@ extension ArchivePath {
       }
     } else {
       ContentUnavailableView(
-        "Page Not Found", systemImage: "doc.questionmark",
-        description: Text("This page isn't in the archive."))
+        "Item Not Found", systemImage: "doc.questionmark",
+        description: Text("This item isn't in the archive."))
     }
   }
 }

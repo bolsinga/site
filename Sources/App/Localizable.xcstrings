@@ -526,6 +526,9 @@
     "Invalid Data." : {
 
     },
+    "Item Not Found" : {
+
+    },
     "Last" : {
 
     },
@@ -717,9 +720,6 @@
 
     },
     "Other Website" : {
-
-    },
-    "Page Not Found" : {
 
     },
     "Page Title" : {
@@ -930,7 +930,7 @@
     "There are changes that haven't been saved to venuemap.txt. Cancel, then choose File > Save." : {
 
     },
-    "This page isn't in the archive." : {
+    "This item isn't in the archive." : {
 
     },
     "To" : {
