@@ -20,11 +20,11 @@ private let dotSize: CGFloat = 14
 private let clearFraction = 0.6
 private let fadeFraction = 1.0 - clearFraction
 
-/// How much wider than its venues a detail map shows; the venue and artist details match.
-let detailMapFitZoomOutFactor = 2.0
+/// How much wider than its venues a header that animates between pages shows.
+private let pagedMapFitZoomOutFactor = 1.3
 
-/// A day's venues are spread across the country; fit them closer than a detail map does.
-private let dayMapFitZoomOutFactor = 1.3
+/// How much wider than its venues a header that doesn't animate shows.
+private let unpagedMapFitZoomOutFactor = 2.0
 
 private struct VenueDot: View {
   var body: some View {
@@ -63,7 +63,7 @@ struct ShowsMap: View {
         // Dots that are close together show as one, with no count.
         SnapshotMap(
           items: places, coordinate: \.coordinate,
-          fitZoomOutFactor: animatesChanges ? dayMapFitZoomOutFactor : detailMapFitZoomOutFactor,
+          fitZoomOutFactor: animatesChanges ? pagedMapFitZoomOutFactor : unpagedMapFitZoomOutFactor,
           fitBottomFraction: animatesChanges ? fadeFraction : 0.0, dotSize: dotSize,
           animatesChanges: animatesChanges, neighborItems: neighborShows.map(places(for:))
         ) {

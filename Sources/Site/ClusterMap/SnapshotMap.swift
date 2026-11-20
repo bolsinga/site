@@ -90,15 +90,6 @@ private final class ShownSnapshot {
   return cache
 }()
 
-extension MKMapRect {
-  fileprivate func zoomedOut(by factor: Double) -> MKMapRect {
-    guard factor > 1.0 else { return self }
-    return MKMapRect(
-      x: midX - width * factor / 2.0, y: midY - height * factor / 2.0,
-      width: width * factor, height: height * factor)
-  }
-}
-
 /// A still image of a map with dots drawn over it, for a map that is never touched. Unlike a live
 /// map it keeps no tiles or rendering state, so having many costs little.
 struct SnapshotMap<Item: Identifiable, Dot: View>: View {
@@ -124,9 +115,6 @@ struct SnapshotMap<Item: Identifiable, Dot: View>: View {
   /// The last map stays when there are no items, but without its dots.
   @State private var hidesDots = false
 
-  /// How much of the top inset, the bars, items may spill into above and below the clear area.
-  private static var spillFraction: CGFloat { 0.45 }
-
   private var coordinates: [CLLocationCoordinate2D] { coordinates(of: items) }
 
   private func coordinates(of items: [Item]) -> [CLLocationCoordinate2D] {
@@ -139,21 +127,10 @@ struct SnapshotMap<Item: Identifiable, Dot: View>: View {
     guard !itemsRect.isNull else { return nil }
     let rect = itemsRect.proportionallyPadded.zoomedOut(by: fitZoomOutFactor)
 
-    let bottom = insets.bottom + size.height * fitBottomFraction
-    let areaWidth = size.width - insets.leading - insets.trailing
-    let areaHeight = size.height - insets.top - bottom
-    guard areaWidth > 0, areaHeight > 0, rect.width > 0, rect.height > 0 else { return nil }
-    // Items spread far north to south can spill a little into the bars and the fade.
-    let spill = fitBottomFraction > 0 ? insets.top * Self.spillFraction : 0
-    let mapPointsPerPoint = max(rect.width / areaWidth, rect.height / (areaHeight + spill * 2.0))
-    // The middle of the map, unless the bars leave less room above it than the fade does below.
-    let centerY =
-      fitBottomFraction > 0
-      ? max(size.height / 2.0, insets.top + areaHeight / 2.0) : insets.top + areaHeight / 2.0
-    return MKMapRect(
-      x: rect.midX - (insets.leading + areaWidth / 2.0) * mapPointsPerPoint,
-      y: rect.midY - centerY * mapPointsPerPoint,
-      width: size.width * mapPointsPerPoint, height: size.height * mapPointsPerPoint)
+    return rect.fitted(
+      in: size, top: insets.top, leading: insets.leading,
+      bottom: insets.bottom + size.height * fitBottomFraction, trailing: insets.trailing,
+      fades: fitBottomFraction > 0)
   }
 
   private var request: SnapshotRequest? { request(for: coordinates) }
