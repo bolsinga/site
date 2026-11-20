@@ -9,7 +9,7 @@ import CoreLocation
 import Foundation
 import SwiftUI
 
-let defaultNearbyDistanceThreshold: CLLocationDistance = 16093.44  // 10 miles
+private let defaultNearbyDistanceThreshold: CLLocationDistance = 16093.44  // 10 miles
 
 /// The nearby distance the person chose, kept per app.
 @propertyWrapper
