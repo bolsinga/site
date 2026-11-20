@@ -20,7 +20,7 @@ extension Set<PartialDate> {
     guard knownDates.count > 1 else { return 1 }
 
     if let max = knownDates.max(), let min = knownDates.min() {
-      let comps = Calendar.autoupdatingCurrent.dateComponents(spanComponents, from: min, to: max)
+      let comps = Calendar.archive.dateComponents(spanComponents, from: min, to: max)
       if let year = comps.year, let month = comps.month, let day = comps.day {
         guard year > 0 else { return 1 }  // It's less than a year difference, so the sequence spans 1 year.
         guard year == 1 else { return year }  // It's more than 1 year, so just count the years, no rounding. Matches RelativeDateTimeFormatter() output.

@@ -8,11 +8,12 @@
 import Foundation
 import Testing
 
+@testable import Shared
 @testable import SiteApp
 
 private func date(year: Int, month: Int, day: Int) -> Date {
   let dateComponents = DateComponents(
-    calendar: .autoupdatingCurrent, year: year, month: month, day: day)
+    calendar: .archive, year: year, month: month, day: day)
   return dateComponents.date!
 }
 

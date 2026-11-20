@@ -11,7 +11,7 @@ private let yearComponents = Set([Calendar.Component.year])
 
 extension Date {
   var year: Int? {
-    let comps = Calendar.autoupdatingCurrent.dateComponents(yearComponents, from: self)
+    let comps = Calendar.archive.dateComponents(yearComponents, from: self)
     return comps.year
   }
 }

@@ -223,8 +223,8 @@ public struct Bracket: Codable, Sendable {
   }
 }
 
-/// Bump when the archive's decoded types change, so a copy saved by an older build is downloaded again.
-let bracketCacheVersion = 2
+/// Bump when the decoded types or what is computed from them change, so an older copy is downloaded again.
+let bracketCacheVersion = 3
 
 func bracketFileName(version: Int = bracketCacheVersion) -> String {
   version == 1 ? "bracket.json" : "bracket-\(version).json"

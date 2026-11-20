@@ -31,6 +31,9 @@ December 31st, and a given month and day always has the same number.
 1. A date MUST be turned into a day with `Date.dayOfLeapYear`, which adds one to the day of the
    year from March 1st on in a year that has 365 days. Code MUST NOT use the plain day of the year
    to compare dates across years, as it differs by one after February in a leap year.
+   The archive's dates are Gregorian, so the day is found in `Calendar.archive`, which is
+   Gregorian in the person's time zone, whatever calendar they use. `dayOfLeapYear(in:)` takes
+   the calendar, for tests. A date of the archive is shown with `.archiveDateTime`, not `.dateTime`.
 2. A day is moved with `nextDayOfLeapYear` and `previousDayOfLeapYear`, which wrap from 366 to 1
    and from 1 to 366. A number outside 1...366 has no next or previous (`-1`) and no date text.
 3. The text of a day (`3/1`) is formatted for a leap year, 2024, so every day has one.
@@ -107,9 +110,5 @@ set to the model's day when the screen appears.
 
 ## Open questions
 
-- **The calendar.** `Date.dayOfLeapYear` and a show's `PartialDate.date` both use the user's
-  current calendar. The archive's dates are Gregorian, so under another calendar a show's
-  year, month and day would be read as that calendar's, and the day keys saved in the cached
-  archive ([RFC 005](005-music-loading.md)) would be those of the calendar in use when it was built. See [#1724](https://github.com/bolsinga/site/issues/1724).
 - **A badge at midnight.** The badge counts shows for `todayDayOfLeapYear`, so it changes when
   the model's day does, not at the instant the calendar's does.

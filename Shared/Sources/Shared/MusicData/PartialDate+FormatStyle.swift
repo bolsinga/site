@@ -30,7 +30,7 @@ extension PartialDate {
 extension PartialDate.FormatStyle: Foundation.FormatStyle {
   public func format(_ value: PartialDate) -> String {
     if !value.isUnknown, let date = value.date {
-      var fmt = Date.FormatStyle.dateTime
+      var fmt = Date.FormatStyle.archiveDateTime
       switch style {
       case .compact:
         if value.year != nil {

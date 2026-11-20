@@ -10,7 +10,7 @@ import Foundation
 extension PartialDate {
   public var date: Date? {
     let dateComponents = DateComponents(
-      calendar: .autoupdatingCurrent, year: year, month: month, day: day)
+      calendar: .archive, year: year, month: month, day: day)
     return dateComponents.date
   }
 

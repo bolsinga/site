@@ -46,10 +46,11 @@ extension Annum.FormatStyle: Foundation.FormatStyle {
       guard let date = PartialDate(year: year).date else { return unknownLocalized }
       if case .shared = self {
         return String(
-          localized: "Shows from \(Date.FormatStyle.dateTime.year(.defaultDigits).format(date))",
+          localized:
+            "Shows from \(Date.FormatStyle.archiveDateTime.year(.defaultDigits).format(date))",
           bundle: #bundle)
       } else {
-        return Date.FormatStyle.dateTime.year(.defaultDigits).format(date)
+        return Date.FormatStyle.archiveDateTime.year(.defaultDigits).format(date)
       }
     case .unknown:
       switch style {

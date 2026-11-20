@@ -6,11 +6,12 @@
 //
 
 import Foundation
+import Shared
 
 // weekday as int: (weekday, int) as Date : count
 private var weekdayAbbreviations: [Int: (Date, Int)] {
   var result = [Int: (Date, Int)]()
-  let dateComponents = DateComponents(calendar: .autoupdatingCurrent, year: 2023, month: 4, day: 23)  // start with known Sunday
+  let dateComponents = DateComponents(calendar: .archive, year: 2023, month: 4, day: 23)  // start with known Sunday
   var date = dateComponents.date
 
   for weekday in 1...7 {
@@ -19,7 +20,7 @@ private var weekdayAbbreviations: [Int: (Date, Int)] {
     result[weekday] = (date!, 0)
 
     // go to next day
-    date = Calendar.autoupdatingCurrent.date(byAdding: .weekday, value: 1, to: date!)
+    date = Calendar.archive.date(byAdding: .weekday, value: 1, to: date!)
   }
   return result
 }
@@ -28,7 +29,7 @@ extension Array where Element == Date {
   // weekday : (weekday represented as Date, count of that weekday)
   internal var weekdayCounts: [Int: (Date, Int)] {
     self.reduce(into: weekdayAbbreviations) {  // weekday (1...7) : (weekday Date, count)
-      let weekday = Calendar.autoupdatingCurrent.component(.weekday, from: $1)
+      let weekday = Calendar.archive.component(.weekday, from: $1)
       let pair = $0[weekday] ?? ($1, 0)
       $0[weekday] = (pair.0, pair.1 + 1)
     }
