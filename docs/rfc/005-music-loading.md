@@ -71,7 +71,7 @@ the download it was made from. `SiteModel` keeps it in memory and in `@AppStorag
 
 `Lookup` saves the new `Bracket` inside the network attempt, so a save that throws is treated as a
 network failure, and the older saved `Bracket`, if there is one, is read in place of the new
-download.
+download. See [#1717](https://github.com/bolsinga/site/issues/1717).
 
 ## Rationale
 

@@ -111,12 +111,12 @@ build with that file signs with the developer's team.
 ## Open questions
 
 - **What a release ships.** `release-builds` produces no artifact, and no file says how the app
-  reaches users or the App Store, or what signing or `ExportOptions` it uses.
+  reaches users or the App Store, or what signing or `ExportOptions` it uses. See [#1741](https://github.com/bolsinga/site/issues/1741).
 - **Release trigger.** Whether the `branches: [ main ]` under `release` limits releases to `main`
-  is not stated anywhere in the repo.
+  is not stated anywhere in the repo. See [#1741](https://github.com/bolsinga/site/issues/1741).
 - **Who bumps versions.** Nothing says when `MARKETING_VERSION` and `CURRENT_PROJECT_VERSION`
-  change, or why `Tests` stays at `1.0` and `1`.
-- **Secrets.** No workflow names a secret or input. How a release is signed is outside the files.
-- **Formatting.** The format check is manual. Whether CI should run `swift-format lint` is open.
-- **Test coverage.** The tests don't run on iOS or tvOS in CI, and no test plan is used.
-- **Xcode pin.** `Xcode_27.2.app` is hard-coded, so a runner image without it fails.
+  change, or why `Tests` stays at `1.0` and `1`. See [#1741](https://github.com/bolsinga/site/issues/1741).
+- **Secrets.** No workflow names a secret or input. How a release is signed is outside the files. See [#1741](https://github.com/bolsinga/site/issues/1741).
+- **Formatting.** The format check is manual. Whether CI should run `swift-format lint` is open. See [#1742](https://github.com/bolsinga/site/issues/1742).
+- **Test coverage.** The tests don't run on iOS or tvOS in CI, and no test plan is used. See [#1743](https://github.com/bolsinga/site/issues/1743).
+- **Xcode pin.** `Xcode_27.2.app` is hard-coded, so a runner image without it fails. See [#1744](https://github.com/bolsinga/site/issues/1744).

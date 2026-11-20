@@ -123,12 +123,12 @@ and start as Alphabetical. Search narrows the items before they are grouped.
 
 - **Ties in lists.** The comparator the lists and search use (`VaultModel.compare`,
   `compareIDs`) stops at the token, so ids that tie keep the order their dictionary gave. Only
-  `libraryOrder` falls back to the id. Should the comparator use `idCompare` too?
+  `libraryOrder` falls back to the id. Should the comparator use `idCompare` too? See [#1734](https://github.com/bolsinga/site/issues/1734).
 - **Calendar.** `yearSpan` and `PartialDate.date` use `Calendar.autoupdatingCurrent`, and are
-  saved in the `Bracket`, so a span follows the calendar of the device that made it.
+  saved in the `Bracket`, so a span follows the calendar of the device that made it. See [#1724](https://github.com/bolsinga/site/issues/1724).
 - **Names inside punctuation.** From the regular expression, a name like "AC/DC" or "(hed) pe"
   keeps its punctuation, since the whole string must match to remove it, so "(hed) pe" would
-  be in the punctuation section. No test was read for it.
-- **Unused styles.** `.dotted` and `.rankAndCount` are defined but nothing in the app calls them.
+  be in the punctuation section. No test was read for it. See [#1735](https://github.com/bolsinga/site/issues/1735).
+- **Unused styles.** `.dotted` and `.rankAndCount` are defined but nothing in the app calls them. See [#1736](https://github.com/bolsinga/site/issues/1736).
 - **Span for years and days.** The code names its venue count the span ranking, and its comment
-  says the names don't quite work.
+  says the names don't quite work. See [#1736](https://github.com/bolsinga/site/issues/1736).

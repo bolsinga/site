@@ -118,7 +118,7 @@ a URL, as the entity requires one.
 
 - **An intent before the first load.** The `Vault` is registered when the first `VaultModel` is
   made, after the archive has loaded. An intent that runs before then has no `Vault` to read.
-  What the system does in that case isn't documented here.
+  What the system does in that case isn't documented here. See [#1722](https://github.com/bolsinga/site/issues/1722).
 - **Cities.** `CityEntity` is a parameter only. It isn't indexed, and has no page to open.
 - **Whole-archive queries.** Searching by property, and the list of cities, build every entity
-  of that type on each call, where the archive could hold them once per load.
+  of that type on each call, where the archive could hold them once per load. See [#1723](https://github.com/bolsinga/site/issues/1723).

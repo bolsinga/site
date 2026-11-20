@@ -123,14 +123,14 @@ what a tap on a cluster does.
 ## Open questions
 
 - **Unused geometry.** `Placemark+Geometry` (`center`, `radius`) and `MapItem+Geometry`'s `corners`
-  have no callers in `Sources`.
+  have no callers in `Sources`. See [#1730](https://github.com/bolsinga/site/issues/1730).
 - **Duplicated fit.** The live and snapshot fits (`visibleRect`, `fittedRect`, and `spillFraction`)
-  are copies; a change to one is easy to miss in the other.
+  are copies; a change to one is easy to miss in the other. See [#1730](https://github.com/bolsinga/site/issues/1730).
 - **Cache key.** The key is the string of `hashValue`, so two requests with a colliding hash would
-  share an image. The request itself isn't compared.
+  share an image. The request itself isn't compared. See [#1731](https://github.com/bolsinga/site/issues/1731).
 - **Venue pins on tvOS.** Map mode and `UIAlertController` action sheets are not guarded for tvOS;
-  whether they work there is not verified.
+  whether they work there is not verified. See [#1732](https://github.com/bolsinga/site/issues/1732).
 - **Names of the fit constants.** `ShowsMap` names its 2.0 `detailMapFitZoomOutFactor` and 1.3
-  `dayMapFitZoomOutFactor`, but picks them by `animatesChanges`, so the detail pages get 1.3.
+  `dayMapFitZoomOutFactor`, but picks them by `animatesChanges`, so the detail pages get 1.3. See [#1730](https://github.com/bolsinga/site/issues/1730).
 - **Single pin size.** The fit measures only the first item's pin to leave room, and the
-  cluster pin's badge is not measured.
+  cluster pin's badge is not measured. See [#1733](https://github.com/bolsinga/site/issues/1733).

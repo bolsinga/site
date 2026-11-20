@@ -50,11 +50,11 @@ and rankings. The `Bracket` holds:
 The rules are what the code is meant to do. These are still computed after the `Bracket` is
 read, and each could be moved into it.
 
-- **Show order.** `Lookup` sorts every show once per load, to make `showIDOrderIndex`.
-- **Library order.** `Vault` sorts every artist and every venue once per load, for paging.
+- **Show order.** `Lookup` sorts every show once per load, to make `showIDOrderIndex`. See [#1718](https://github.com/bolsinga/site/issues/1718).
+- **Library order.** `Vault` sorts every artist and every venue once per load, for paging. See [#1718](https://github.com/bolsinga/site/issues/1718).
 - **Per call:** the decades and counts per year (`decadesMap`), a rank distribution, and the new
   and most recent counts for a year each go through the whole archive when they are asked for.
-  Searches by name do too.
+  Searches by name do too. See [#1719](https://github.com/bolsinga/site/issues/1719).
 
 Moving something into `Bracket` is a cache version bump (rule 5).
 
