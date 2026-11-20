@@ -10,7 +10,7 @@ Status: Accepted · Updated: 2026-11-19 · Code: `Sources/Site/Music/UI` (`Archi
 
 The app searches artist and venue names, in the Search tab and in the Artists and Venues lists. It
 shares a page as its website URL. Both are in-app features. Siri and Spotlight finding an item is a
-different path (RFC 009); it shares only the Vault's name filter.
+different path ([RFC 009](009-entities-siri-spotlight.md)); it shares only the Vault's name filter.
 
 ## What is searched
 
@@ -22,7 +22,7 @@ Only the `name` of an artist or venue. Shows and years have no search.
    and `artistIDs(filteredBy:)`, and everything in `Collection.names(filteredBy:)`, which the lists
    use. So the Search tab with an empty string lists nothing, and a list shows all its items.
 3. `artistIDs(filteredBy:)` and `venueIDs(filteredBy:)` return IDs in dictionary order. The App
-   Intents queries use them (RFC 009), and MUST NOT rely on their order.
+   Intents queries use them ([RFC 009](009-entities-siri-spotlight.md)), and MUST NOT rely on their order.
 
 ## Search tab
 
@@ -31,14 +31,14 @@ Only the `name` of an artist or venue. Shows and years have no search.
 | Tab | `Tab(value:, role: .search)` | a plain tab with the category's title and image |
 | Contents | a `NavigationStack` holding `ArchiveCrossSearchContainer` | the same |
 
-1. The tab is the `.search` `ArchiveCategory`. It has no `ArchivePath` stack and no URL (RFC 004):
+1. The tab is the `.search` `ArchiveCategory`. It has no `ArchivePath` stack and no URL ([RFC 004](004-archive-path-category-navigation.md)):
    `ArchiveCategoryStack` draws `EmptyView` for it, and the tab builds its own stack.
 2. `ArchiveScope` is `all`, `artist` or `venue`, offered by `.searchScopes`. `all` shows both
    sections, the others one. The scope and the string are `@State` in `ArchiveTabView`, so they
    survive a switch of tab and are not saved.
 3. `ArchiveCrossSearchContainer` MUST draw its results only while `isSearching`.
 4. A result is a row of the emphasized name and a trailing arrow, with a tap gesture that calls
-   `navigateToPath` with the item's `ArchivePath` (RFC 003).
+   `navigateToPath` with the item's `ArchivePath` ([RFC 003](003-navigation-entry-points.md)).
 5. With no match in either section and a non-empty string, the view shows
    `ContentUnavailableView.search`. Sections are titled by `ArchiveCategory.localizedString`, and
    an empty section is left out.
@@ -74,7 +74,7 @@ for an ID with no compare token. `VaultModel.artists(filteredBy:)`, `venues(filt
 
 ## Sharing
 
-A shared page is its website URL: `Vault.url(for: ArchivePath)` (RFC 004), or for a category
+A shared page is its website URL: `Vault.url(for: ArchivePath)` ([RFC 004](004-archive-path-category-navigation.md)), or for a category
 `Vault.url(for: ArchiveCategory)`. `ArchiveSharable` supplies the text sent with it.
 
 | Item | `subject` | `message` |
@@ -93,7 +93,7 @@ A shared page is its website URL: `Vault.url(for: ArchivePath)` (RFC 004), or fo
 4. `ArchivePathLink` is a `NavigationLink(value:)` only if `isPathNavigable(path)`, and the plain
    label otherwise.
 5. `addSearchableContent(description:)` sets a Spotlight `contentDescription` on an
-   `NSUserActivity` (not on tvOS). It is part of the activities in RFC 003, not of sharing.
+   `NSUserActivity` (not on tvOS). It is part of the activities in [RFC 003](003-navigation-entry-points.md), not of sharing.
 
 ## Not yet
 
@@ -111,4 +111,4 @@ A shared page is its website URL: `Vault.url(for: ArchivePath)` (RFC 004), or fo
   keyboard and tvOS focus?
 - The comment in `ArchiveSharable.swift` says macOS Ventura shows no subject or message. Is that
   still true?
-- Whether a Search tab result also selects the page's category was not checked here (RFC 003, 004).
+- Whether a Search tab result also selects the page's category was not checked here ([RFC 003](003-navigation-entry-points.md), [004](004-archive-path-category-navigation.md)).

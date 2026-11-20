@@ -10,7 +10,7 @@ Status: Accepted · Updated: 2026-11-19 · Code: `Shared/Sources/Shared/MusicDat
 ## Summary
 
 What a rank, a first set, a most recent set and the order of a library list mean, and how a person
-sees them. RFC 006 is where they are computed and saved, and RFC 010 is the day of the leap year
+sees them. [RFC 006](006-precomputed-music-data.md) is where they are computed and saved, and [RFC 010](010-today-and-day-of-leap-year.md) is the day of the leap year
 that days are ranked by. This RFC is the meaning, and the lists that show it.
 
 ## Ranking dimensions
@@ -63,7 +63,7 @@ year.
 
 ## Library order
 
-An artist or venue is ordered by a compare token made in advance (RFC 006).
+An artist or venue is ordered by a compare token made in advance ([RFC 006](006-precomputed-music-data.md)).
 
 1. The token starts from `sortname`, or `name` without one (`librarySortString`).
 2. A leading "The", "A" or "An" (any case, followed by whitespace) is removed. Then if what is

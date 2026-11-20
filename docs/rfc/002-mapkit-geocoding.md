@@ -117,7 +117,7 @@ independent of this app. Parts 2 and 3 are how the site app and Venue Places app
    it resolved; a suggestion by the venue's name and address. A result is asked again when its key
    changes, when it is older than `CacheAge.maximum` (30 days), or when it has no date.
 5. Maps' answers about a place MUST NOT change what the venue has unless a person chooses it. See
-   RFC 001.
+   [RFC 001](001-venue-places.md).
 
 ## Rationale
 
@@ -127,7 +127,7 @@ independent of this app. Parts 2 and 3 are how the site app and Venue Places app
   `CacheAge.maximum`.
 - **Caches directory.** These are answers that can be asked for again, so the system may remove
   them when it needs space. The cost is that the next run asks again, through the throttle. Edits
-  a person made are not caches and are never kept there; see RFC 001.
+  a person made are not caches and are never kept there; see [RFC 001](001-venue-places.md).
 - **Not in `atlas.json`.** What Venue Places asks is about one venue's place, not where its
   address is, and its results are keyed differently, so they live in their own files.
 

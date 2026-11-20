@@ -8,7 +8,7 @@ Status: Accepted · Updated: 2026-11-19 · Code: `Shared/Sources/Shared/MusicDat
 Nearly everything the app shows about the archive (rankings, first and most recent shows, who
 played where, the order of lists) is a function of the music file alone, and the file doesn't
 change after it loads. So it is computed once, when the file is downloaded, and saved with the
-data. A launch then decodes the result and derives nothing. RFC 005 is when the file is
+data. A launch then decodes the result and derives nothing. [RFC 005](005-music-loading.md) is when the file is
 downloaded and when the saved result is read instead.
 
 ## What is computed

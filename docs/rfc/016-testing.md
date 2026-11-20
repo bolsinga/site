@@ -68,10 +68,10 @@ asynchronous tasks the other reasons start, and loads with no previous modified 
    tested with fixed `Date` values; no test reads `Date.now` for an expectation.
 2. Code that depends on the geocoder MUST be reached through a protocol the test can replace.
    `CityResolver` is stubbed with `StubResolver` and `DelayedResolver`, the latter using
-   `Task.sleep` to order in-flight lookups. RFC 008 describes the policy and RFC 002 the geocoding.
+   `Task.sleep` to order in-flight lookups. [RFC 008](008-nearby-location-filter.md) describes the policy and [RFC 002](002-mapkit-geocoding.md) the geocoding.
 3. Locations in tests are `CLLocation` constants with their distances in a comment.
 4. `ArchiveNavigation` tests MUST be built with `useDispatchMainWorkaround: false`, so the state
-   changes are synchronous. The test file adds convenience initializers that do so. RFC 004
+   changes are synchronous. The test file adds convenience initializers that do so. [RFC 004](004-archive-path-category-navigation.md)
    describes the state.
 5. A test that writes a file MUST use a unique name, either under `URL.temporaryDirectory` or an
    `AtlasCache` file named with a `UUID`, and MUST remove it with `defer`.
@@ -98,7 +98,7 @@ asynchronous tasks the other reasons start, and loads with no previous modified 
 
 - **Plain values, no fixtures.** A small `Music` in the test shows the data a case depends on.
   A shared fixture file would hide it and need updating when the model changes.
-- **Pure policies.** Taking `now` and a resolver as arguments tests the rules of RFC 008
+- **Pure policies.** Taking `now` and a resolver as arguments tests the rules of [RFC 008](008-nearby-location-filter.md)
   without a clock, a network or a location permission prompt.
 - **Previews for views.** The previews load the real archive, so they show real data, and are not
   a substitute for deterministic tests.

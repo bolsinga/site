@@ -22,7 +22,7 @@ many maps cheap. How a venue gets a place in Maps is [RFC 002](002-mapkit-geocod
 | `ShowsMapHeader` | Today (`DayBrowser`), and a day's list (`DayList`) | snapshot | the venues of the day's shows | none |
 
 A venue detail's header also has `OpenInMapsButton` (not on tvOS), which opens `mapsItem(for:)`.
-Items come only from `VaultModel.venueMapItemMap`, the geocoded map items (RFC 002); the map
+Items come only from `VaultModel.venueMapItemMap`, the geocoded map items ([RFC 002](002-mapkit-geocoding.md)); the map
 never geocodes. A venue with no map item is not drawn: `ClusterMap` drops invalid coordinates,
 and `ShowsMap` skips the venue. While nothing is drawn and geocoding is running, a header shows a
 progress view.
@@ -37,16 +37,16 @@ progress view.
    inert (no hit testing, hidden from VoiceOver), when the list shows, so toggling back doesn't
    rebuild it.
 2. The sort control is for the list only; in map mode there is none.
-3. A category link that carries a sort (RFC 003) MUST switch Venues to the list, since only the
+3. A category link that carries a sort ([RFC 003](003-navigation-entry-points.md)) MUST switch Venues to the list, since only the
    list is sorted.
-4. Over the map the filter's message is a card and its progress a floating capsule (RFC 008); a
+4. Over the map the filter's message is a card and its progress a floating capsule ([RFC 008](008-nearby-location-filter.md)); a
    search with no matches shows "No Matches" in a capsule.
 5. The map's search text follows typing after a 400 ms pause (not for the first), so the map
    doesn't re-fit per keystroke. The search's own results are shown wherever the map was moved.
 
 ## Navigation
 
-6. Selecting a venue pin MUST navigate by `navigateToPath(item.id)` (RFC 003, 004), the same as a
+6. Selecting a venue pin MUST navigate by `navigateToPath(item.id)` ([RFC 003](003-navigation-entry-points.md), [004](004-archive-path-category-navigation.md)), the same as a
    list row. The map pushes nothing itself.
 7. Returning from a venue's detail MUST keep the map as it was left; any other appearance
    re-fits (a new `resetID`).

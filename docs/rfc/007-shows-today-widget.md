@@ -10,7 +10,7 @@ own process, which has no network access to the archive and can't afford to load
 the app publishes a **snapshot**, one file with every day's shows, into the app group's
 container, and the widget only reads that file. This RFC is the snapshot, how it is published and
 read, how the timeline follows the calendar, and how the widget links back. How the app itself
-counts and shows a day is in the Today RFC.
+counts and shows a day is in [RFC 010](010-today-and-day-of-leap-year.md).
 
 ## The snapshot
 
@@ -32,7 +32,7 @@ declare in their entitlements.
 1. The widget MUST NOT load the archive, reach the network, or compute rankings. It reads the
    snapshot, and the snapshot holds everything it shows. What each `ShowDigest` carries (first
    and most recent flags, venue, location) is decided when the snapshot is built, from the
-   precomputed data in RFC 006.
+   precomputed data in [RFC 006](006-precomputed-music-data.md).
 2. `currentVersion` MUST be bumped when what is stored changes meaning or shape, which includes a
    change to `ShowDigest`. A snapshot with another version reads as no snapshot, so the widget
    waits for the app to write a new one, instead of misreading an old one.
@@ -55,7 +55,7 @@ preview), on iOS and macOS only; tvOS has no widget.
    launch with an unchanged archive wakes nothing.
 
 The widget is therefore as current as the app's last load. An archive published to the website
-doesn't reach the widget until the app has opened and downloaded it (RFC 005).
+doesn't reach the widget until the app has opened and downloaded it ([RFC 005](005-music-loading.md)).
 
 ## The timeline
 
@@ -75,9 +75,9 @@ chooses which of the day's shows is featured: oldest, newest, or random.
 ## Links
 
 The widget's URL is the Today category's URL, and a row's is that show's page. They are built
-from `URL.archiveRoot` and the `ArchiveCategory` and `ArchivePath` URL forms (RFC 004), because
+from `URL.archiveRoot` and the `ArchiveCategory` and `ArchivePath` URL forms ([RFC 004](004-archive-path-category-navigation.md)), because
 the widget has no `Vault` to ask. A row whose URL can't be built falls through to the widget's.
-How the app handles the link is RFC 003.
+How the app handles the link is [RFC 003](003-navigation-entry-points.md).
 
 ## Appearance
 

@@ -29,22 +29,22 @@ archive or the network can't give back, apart from the person's own choices.
 
 | Key | Type | Default | Is |
 |---|---|---|---|
-| `nearby.distance` | `Double`, meters | `defaultNearbyDistanceThreshold`, 10 miles | how far counts as nearby (RFC 008); read in four views |
-| `music.last.modified` | `Date` | `.distantPast` | the archive's date at the last load, passed as `previousModified` (RFC 005) |
+| `nearby.distance` | `Double`, meters | `defaultNearbyDistanceThreshold`, 10 miles | how far counts as nearby ([RFC 008](008-nearby-location-filter.md)); read in four views |
+| `music.last.modified` | `Date` | `.distantPast` | the archive's date at the last load, passed as `previousModified` ([RFC 005](005-music-loading.md)) |
 
 ### Files
 
 | File | Where | Written by | Retired by | Unreadable |
 |---|---|---|---|---|
-| `bracket-<n>.json` (`bracket.json` for 1) | Caches | `Bracket.save`, after a download | `bracketCacheVersion`, 2 | cache failure: download (RFC 005, 006) |
-| `atlas.json` | Caches | `AtlasCache`, on each geocode | six-month expiry per entry (RFC 002) | logged, starts empty |
-| `venue-checks.json`, `venue-suggestions.json`, `venue-web-checks.json` | Caches | Venue Places `PickStore` (Debug, macOS) | `CacheAge.maximum` (RFC 001) | left alone, not overwritten; Venue Places shows an error |
-| `shows-today.json` | app group `group.gdb.SiteApp`, `Library/Application Support` | `ShowsTodaySnapshot.write` | `currentVersion`, 2 | no snapshot (RFC 007) |
+| `bracket-<n>.json` (`bracket.json` for 1) | Caches | `Bracket.save`, after a download | `bracketCacheVersion`, 2 | cache failure: download ([RFC 005](005-music-loading.md), [006](006-precomputed-music-data.md)) |
+| `atlas.json` | Caches | `AtlasCache`, on each geocode | six-month expiry per entry ([RFC 002](002-mapkit-geocoding.md)) | logged, starts empty |
+| `venue-checks.json`, `venue-suggestions.json`, `venue-web-checks.json` | Caches | Venue Places `PickStore` (Debug, macOS) | `CacheAge.maximum` ([RFC 001](001-venue-places.md)) | left alone, not overwritten; Venue Places shows an error |
+| `shows-today.json` | app group `group.gdb.SiteApp`, `Library/Application Support` | `ShowsTodaySnapshot.write` | `currentVersion`, 2 | no snapshot ([RFC 007](007-shows-today-widget.md)) |
 
 ### Elsewhere
 
 - **Spotlight index "SiteApp".** Its client state is the stamp, `spotlightIndexVersion` (3) and the
-  archive's timestamp (RFC 009). A stamp that can't be fetched reads as empty, so it indexes again.
+  archive's timestamp ([RFC 009](009-entities-siri-spotlight.md)). A stamp that can't be fetched reads as empty, so it indexes again.
 - **Venue Places window frame.** macOS saves it under the name `VenuePlaces` through AppKit's frame
   autosave (`WindowFrameAutosave`).
 
@@ -70,9 +70,9 @@ archive or the network can't give back, apart from the person's own choices.
 7. A cache write MUST be atomic (`writeJSON` and the snapshot write both use `.atomic`), and a failed
    save MUST be logged and MUST NOT stop what the person was doing (`AtlasCache.add`).
 8. Nothing about where the person is MUST be saved. Location, authorization and the current city are
-   not stored (RFC 008); only the filter, its mode and a city name the person typed are, per scene.
-9. The widget and the app MUST share only the snapshot and the app group's name (RFC 007).
-10. The archive (`Music`) MUST NOT be saved, only the `Bracket` made from it (RFC 006).
+   not stored ([RFC 008](008-nearby-location-filter.md)); only the filter, its mode and a city name the person typed are, per scene.
+9. The widget and the app MUST share only the snapshot and the app group's name ([RFC 007](007-shows-today-widget.md)).
+10. The archive (`Music`) MUST NOT be saved, only the `Bracket` made from it ([RFC 006](006-precomputed-music-data.md)).
 
 ## Not yet
 
@@ -89,7 +89,7 @@ archive or the network can't give back, apart from the person's own choices.
 - Is the Atlas file replaced whole after an undecodable read? `AtlasCache` starts empty, and the next
   `add` saves only what it holds, so the old file is overwritten; this may be intended.
 - Should a scene's saved state be dropped when the archive changes, so a path that no longer exists
-  isn't restored? Nothing was found that does it; how a missing path displays is in RFC 004.
+  isn't restored? Nothing was found that does it; how a missing path displays is in [RFC 004](004-archive-path-category-navigation.md).
 - `PickStore` has `removeAll()` for starting over after a read error; whether a user path reaches it
   was not checked.
 

@@ -9,7 +9,7 @@ Status: Accepted · Updated: 2026-11-19 · Code: `Sources/Site/Music` (`SiteMode
 The archive is one JSON file on the website. It is large and only changes when the website is
 regenerated, so the app downloads it only when the server says it changed, and otherwise reads
 what it saved from the last download. What is saved, and what is computed before it is saved, is
-RFC 006. This RFC is when the app goes to the network, when it goes to the cache, and how a
+[RFC 006](006-precomputed-music-data.md). This RFC is when the app goes to the network, when it goes to the cache, and how a
 finished load replaces the one before it.
 
 ## The path
@@ -25,8 +25,8 @@ SiteModel.load ─► Vault.load ─► Vault ─► Lookup ─► Bracket ─�
 | `VaultModel` | one loaded `Vault` and the session state around it: location, Maps, today | until the next load |
 | `Vault` | the read-only query API the app, intents and widgets use; adds URLs and list orders | one load |
 | `Lookup` | chooses where the `Bracket` comes from, and answers per-item questions from it | one load |
-| `Bracket` | the precomputed snapshot; the only thing saved (RFC 006) | the Caches directory |
-| `Tracker`, `Music` | derive the snapshot from the decoded JSON (RFC 006) | one download |
+| `Bracket` | the precomputed snapshot; the only thing saved ([RFC 006](006-precomputed-music-data.md)) | the Caches directory |
+| `Tracker`, `Music` | derive the snapshot from the decoded JSON ([RFC 006](006-precomputed-music-data.md)) | one download |
 
 ## Where the data comes from
 
