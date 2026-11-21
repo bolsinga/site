@@ -1,9 +1,9 @@
 # RFC 014: Search and sharing
 
-Status: Accepted · Updated: 2026-11-19 · Code: `Sources/Site/Music/UI` (`ArchiveCrossSearch*`,
+Status: Accepted · Updated: 2026-11-20 · Code: `Sources/Site/Music/UI` (`ArchiveCrossSearch*`,
 `ArchiveSearchModifier`, `ArchiveScope`, `RankableSearchableSortList`, `ArchiveSharable*`,
 `ArchiveCategorySharable`, `ArchivePathLink`, `ArchiveTabView`), `Sources/Site/Utility`
-(`String+AttributedMatching`, `Linkable`), `Sources/Site/Music` (`VaultModel`, `NSUserActivity+Search`),
+(`String+AttributedMatching`), `Sources/Site/Music` (`VaultModel`, `NSUserActivity+Search`),
 `Shared/Sources/Shared/MusicData` (`Nameable`, `Vault`, `TokenSearchError`)
 
 ## Summary
@@ -95,7 +95,9 @@ A shared page is its website URL: `Vault.url(for: ArchivePath)` ([RFC 004](004-a
    `PagedBrowser`, where it follows the page shown, so swiping pages changes what is shared.
 4. `ArchivePathLink` is a `NavigationLink(value:)` only if `isPathNavigable(path)`, and the plain
    label otherwise.
-5. `addSearchableContent(description:)` sets a Spotlight `contentDescription` on an
+5. On macOS, sharing by Mail shows no subject. The `subject` is still given, and iOS
+   shows it.
+6. `addSearchableContent(description:)` sets a Spotlight `contentDescription` on an
    `NSUserActivity` (not on tvOS). It is part of the activities in [RFC 003](003-navigation-entry-points.md), not of sharing.
 
 ## Not yet
@@ -106,9 +108,6 @@ A shared page is its website URL: `Vault.url(for: ArchivePath)` ([RFC 004](004-a
 
 ## Open questions
 
-- `Linkable` has no conformers or uses in the repo. Is it still needed? See [#1740](https://github.com/bolsinga/site/issues/1740).
 - `SearchResultButton` is a tap gesture with the button trait, not a `Button`. Does it work with
   keyboard and tvOS focus? See [#1739](https://github.com/bolsinga/site/issues/1739).
-- The comment in `ArchiveSharable.swift` says macOS Ventura shows no subject or message. Is that
-  still true? See [#1740](https://github.com/bolsinga/site/issues/1740).
 - Whether a Search tab result also selects the page's category was not checked here ([RFC 003](003-navigation-entry-points.md), [004](004-archive-path-category-navigation.md)).
