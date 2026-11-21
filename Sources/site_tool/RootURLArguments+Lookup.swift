@@ -10,6 +10,6 @@ import Shared
 
 extension RootURLArguments {
   func lookup() async throws -> Lookup {
-    try await Lookup(url: showsURL, policy: .download)
+    try await Lookup(url: showsURL, policy: .uncached)
   }
 }

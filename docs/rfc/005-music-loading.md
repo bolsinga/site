@@ -46,6 +46,10 @@ load.
 **`download`** downloads, saves it, and uses the saved `Bracket` only if that fails. If there is
 none, the load fails.
 
+**`uncached`** downloads, and neither reads nor writes the saved `Bracket`. If the download fails,
+the load fails. It is for the command line tool ([RFC 017](017-site-tool.md)), which must leave
+what the app saved alone.
+
 The date of the archive is the `Bracket`'s `timestamp`, which is the `Last-Modified` of the
 download it was made from. It is kept nowhere else.
 
