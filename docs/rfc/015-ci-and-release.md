@@ -1,7 +1,7 @@
 # RFC 015: Continuous integration and release
 
-Status: Accepted · Updated: 2026-11-19 · Code: `.github/workflows/main.yml`,
-`.github/workflows/release.yml`, `.github/dependabot.yml`, `Config.xcconfig`,
+Status: Accepted · Updated: 2026-11-20 · Code: `.github/workflows/main.yml`,
+`.github/workflows/release.yml`, `.github/actions/setup-xcode/action.yml`, `.github/dependabot.yml`, `Config.xcconfig`,
 `SiteApp.xcodeproj` (scheme `SiteApp`, build settings), `Sources/App/SiteApp.entitlements`,
 `SiteWidgets/SiteWidgetsExtension.entitlements`
 
@@ -33,10 +33,23 @@ One job per destination, with `fail-fast: false`, so one platform failing doesn'
 | `generic/platform=iOS Simulator` | a build of scheme `SiteApp` |
 | `generic/platform=tvOS Simulator` | a build of scheme `SiteApp` |
 
-Before building, each job checks out with `actions/checkout@v7`, selects `/Applications/Xcode_27.2.app`
-with `xcode-select`, accepts the license, runs first launch, and prints `sw_vers`, the installed
-Xcodes, the SDKs and the scheme's destinations. All builds pass `-skipPackagePluginValidation`.
+Before building, each job checks out with `actions/checkout@v7`, then runs the local action
+`.github/actions/setup-xcode`. It prints `sw_vers` and the installed Xcodes, selects the newest
+`/Applications/Xcode_27.*.app` with `xcode-select`, accepts the license, runs first launch,
+checks that the version is at least its `minimum-version` input (27.2), and prints the SDKs and
+the scheme's destinations. All builds pass `-skipPackagePluginValidation`.
 The macOS test run passes `CODE_SIGNING_ALLOWED=NO`; the build steps don't.
+
+### Changing the Xcode version
+
+The floor is the `default` of `minimum-version` in `.github/actions/setup-xcode/action.yml`, and
+the workflows don't pass it.
+
+- **A newer point release (27.3):** nothing changes. The newest installed `Xcode_27.*.app` is used.
+- **A higher floor in the same major version:** raise the default, such as to `'27.3'`.
+- **A new major version (28):** raise the default to `'28.0'` or higher, because the major version
+  of the default decides which `Xcode_*` apps are considered, and change the runner label in both
+  workflows. Rule 3 and the table above change with them.
 
 ### What CI does not do
 
@@ -80,8 +93,10 @@ build with that file signs with the developer's team.
    Simulator` and `generic/platform=tvOS Simulator`. Each is its own job, and a failed job fails
    the pull request.
 2. The `Tests` target MUST pass on macOS. It is the only platform the tests run on in CI.
-3. The workflows MUST build with Xcode 27.2 on a runner labeled `xcode-27`. A change to the Xcode
-   version or the runner label is a change to both workflow files, and they MUST stay the same.
+3. The workflows MUST build with Xcode 27.2 or newer on a runner labeled `xcode-27`, and fail
+   when the newest installed Xcode of that major version is older than 27.2. The minimum is the
+   `minimum-version` input of `.github/actions/setup-xcode`, in one place. A change to the runner
+   label is a change to both workflow files, and they MUST stay the same.
 4. `main.yml` and `release.yml` MUST keep running the same steps, so a release is never built
    with different checks than the commit it was merged with.
 5. The app, the widget and the app group id MUST match across `project.pbxproj` and both
@@ -106,6 +121,9 @@ build with that file signs with the developer's team.
 - **Signing off for tests only.** The test run must not need a team, which CI doesn't have.
 - **Release repeats the checks.** A published release is built the way a pull request is, and the
   workflow can fail visibly on that commit.
+- **Newest of a major version, with a floor.** A runner image that has a later 27.x but not the
+  exact one still builds, and a runner whose Xcode is too old fails with the reason, not with a
+  compile error. The floor is in one action, so both workflows share it.
 - **Hand-edited versions.** The numbers are in one file per target and change in a reviewed commit.
 
 ## Open questions
@@ -119,4 +137,3 @@ build with that file signs with the developer's team.
 - **Secrets.** No workflow names a secret or input. How a release is signed is outside the files. See [#1741](https://github.com/bolsinga/site/issues/1741).
 - **Formatting.** The format check is manual. Whether CI should run `swift-format lint` is open. See [#1742](https://github.com/bolsinga/site/issues/1742).
 - **Test coverage.** The tests don't run on iOS or tvOS in CI, and no test plan is used. See [#1743](https://github.com/bolsinga/site/issues/1743).
-- **Xcode pin.** `Xcode_27.2.app` is hard-coded, so a runner image without it fails. See [#1744](https://github.com/bolsinga/site/issues/1744).

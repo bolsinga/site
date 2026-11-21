@@ -20,22 +20,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v7
-    - name: sw_vers
-      run: sw_vers
-    - name: Available Xcodes
-      run: ls /Applications | grep Xcode
-    - name: Switch to Xcode 27
-      run: sudo xcode-select -s "/Applications/Xcode_27.2.app/Contents/Developer"
-    - name: Xcode - Accept License
-      run: sudo xcodebuild -license accept
-    - name: Xcode - First Launch
-      run: xcodebuild -runFirstLaunch
-    - name: Xcode Version
-      run: xcodebuild -version
-    - name: Show SDKs
-      run: xcodebuild -showsdks
-    - name: Show Destinations
-      run: xcodebuild -scheme SiteApp -showdestinations
+    - uses: ./.github/actions/setup-xcode
     - name: Build / Test
       if: matrix.destination == 'platform=macOS'
       run: xcodebuild test -verbose -skipPackagePluginValidation -scheme SiteApp -destination 'platform=macOS' CODE_SIGNING_ALLOWED=NO
