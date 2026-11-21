@@ -17,8 +17,7 @@ extension Lookup {
 
     let data = try encoder.encode(self)
     guard let value = String(data: data, encoding: .utf8) else {
-      print("cannot encode lookup")
-      return
+      throw OutputEncodingError(subject: "lookup")
     }
     print(value)
   }
@@ -27,7 +26,7 @@ extension Lookup {
 struct DumpLookupCommand: AsyncParsableCommand {
   static let configuration = CommandConfiguration(
     commandName: "dumpLookup",
-    abstract: "Dump a text output of Lookup."
+    abstract: "Dump a json representation of Lookup."
   )
 
   @OptionGroup var rootURL: RootURLArguments

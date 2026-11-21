@@ -17,8 +17,7 @@ extension Bracket {
 
     let data = try encoder.encode(self)
     guard let value = String(data: data, encoding: .utf8) else {
-      print("cannot encode bracket")
-      return
+      throw OutputEncodingError(subject: "bracket")
     }
     print(value)
   }

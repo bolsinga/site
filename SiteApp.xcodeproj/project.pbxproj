@@ -71,6 +71,7 @@
 				site_tool/DumpLookupCommand.swift = (macos, );
 				site_tool/DumpVaultCommand.swift = (macos, );
 				site_tool/NextIDCommand.swift = (macos, );
+				site_tool/OutputEncodingError.swift = (macos, );
 				site_tool/Program.swift = (macos, );
 				"site_tool/RootURLArguments+Bracket.swift" = (macos, );
 				"site_tool/RootURLArguments+Diary.swift" = (macos, );
