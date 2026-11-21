@@ -30,7 +30,7 @@ archive or the network can't give back, apart from the person's own choices.
 | Key | Type | Default | Is |
 |---|---|---|---|
 | `nearby.distance` | `Double`, meters | `defaultNearbyDistanceThreshold`, 10 miles | how far counts as nearby ([RFC 008](008-nearby-location-filter.md)); read through `NearbyDistanceStorage`, which holds the key and the default |
-| `music.last.modified` | `Date` | `.distantPast` | the archive's date at the last load, passed as `previousModified`; a saved `Bracket` older than it is not used while the network works ([RFC 005](005-music-loading.md)) |
+| `music.last.modified` | `Date` | `.distantPast` | the archive's date at the last load, written by `VaultProvider` (`musicLastModifiedKey`) and passed as `previousModified`; a saved `Bracket` older than it is not used while the network works ([RFC 005](005-music-loading.md)) |
 
 ### Files
 

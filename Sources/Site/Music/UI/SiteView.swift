@@ -14,7 +14,7 @@ extension Logger {
 }
 
 public struct SiteView: View {
-  @AppStorage("music.last.modified") private var musicLastModified: Date = .distantPast
+  @AppStorage(musicLastModifiedKey) private var musicLastModified: Date = .distantPast
   private let model: SiteModel
 
   @State private var pendingExternalEvent: ExternalEvent?

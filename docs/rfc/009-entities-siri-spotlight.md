@@ -50,13 +50,14 @@ which also supplies the URL, from what the digests ([RFC 006](006-precomputed-mu
    registers the provider with `AppDependencyManager` in `init`, before any scene exists. The
    system runs an intent in a launched app that has no scene, so no view has loaded the archive,
    and it fails an intent whose dependency is missing at once, not after a wait.
-   The provider answers with the vault the app has loaded, and otherwise loads one itself, from
-   the saved archive when it is current ([RFC 005](005-music-loading.md)), sharing that load
-   among everything that asks while it runs. A failed load throws, and the next ask tries again.
-9. `SiteModel` MUST hand each vault it loads to the provider (`use(_:)`), so a newer load replaces
-   the vault and the `EntityCatalog` an intent sees. A deferred property is asked for by the
-   system outside of an intent, where `@Dependency` can't be read, so it uses
-   `EntityVault.vault()`, which asks the same provider.
+   The provider answers with the vault it has loaded, and otherwise loads one itself, from the
+   saved archive when it is current ([RFC 005](005-music-loading.md)), sharing that load among
+   everything that asks while it runs. A failed load throws, and the next ask tries again.
+9. `SiteModel` loads through the same provider ([RFC 005](005-music-loading.md)), so a newer load
+   replaces the vault and the `EntityCatalog` an intent sees, and the app and an intent never read
+   the archive twice at once. A deferred property is asked for by the system outside of an
+   intent, where `@Dependency` can't be read, so it uses `EntityVault.vault()`, which asks the
+   same provider.
 10. Every entity type has a query with these parts:
     - **By id.** The ids that exist, in the order asked.
     - **Suggested.** The artists, venues or concerts of today's date, or the five most recent

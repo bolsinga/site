@@ -22,7 +22,7 @@ SiteModel.load ─► Vault.load ─► Vault ─► Lookup ─► Bracket ─�
 | Type | Is | Lives |
 |---|---|---|
 | `SiteModel` | decides when to load, and swaps in the new model | the app |
-| `VaultProvider` | the `Vault` for App Intents, which can run with no scene: it is given each load, and loads one itself if asked first | the app |
+| `VaultProvider` | does the loading for `SiteModel` and for App Intents, which can run with no scene, and keeps the last loaded `Vault` | the app |
 | `VaultModel` | one loaded `Vault` and the session state around it: location, Maps, today | until the next load |
 | `Vault` | the read-only query API the app, intents and widgets use; adds URLs and list orders | one load |
 | `Lookup` | chooses where the `Bracket` comes from, and answers per-item questions from it | one load |
@@ -42,7 +42,8 @@ SiteModel.load ─► Vault.load ─► Vault ─► Lookup ─► Bracket ─�
    `HEAD`. If that also fails, the load fails.
 
 The date the app last loaded is the `Bracket`'s `timestamp`, which is the `Last-Modified` of
-the download it was made from. `SiteModel` keeps it in memory and in `@AppStorage`:
+the download it was made from. `SiteModel` keeps it in memory, and `VaultProvider` writes it to
+the `music.last.modified` default after each load, whoever asked for the load:
 
 | Reason | Date used | Effect |
 |---|---|---|
@@ -71,11 +72,14 @@ the download it was made from. `SiteModel` keeps it in memory and in `@AppStorag
    is never changed in place.
 7. Work that follows a load (the widget snapshot, the Spotlight index, geocoding, location)
    starts from the new model, and is skipped for previews.
-8. A load that isn't made by `SiteModel` can still happen: `VaultProvider` loads when an intent
-   asks before the app has, with `Vault.load` and the stored last-modified date, so it follows
-   rules 1 to 5, from the saved `Bracket` when it is current. `SiteModel` hands every vault it
-   loads to the provider, and a vault it hands over replaces the provider's. A launch with a
-   scene and an intent can make both loads. The tasks of rule 7 stay with `SiteModel`.
+8. Every load goes through `VaultProvider`, which calls `Vault.load`. An intent that asks before
+   the app has starts a load with the stored date. The `initial` load MUST join a load that is
+   already running, so a launch with a scene and an intent reads the archive once. A `refresh` and
+   an `errorRetry` MUST start their own, in the caller's task, so cancelling them cancels the
+   load, and an `initial` load doesn't join one that has finished, so it checks the server itself.
+   The provider keeps only the vault of the load that started last (rule 5), and it MUST store
+   that vault's date for the next launch, so a download an intent made isn't downloaded again.
+   The tasks of rule 7 stay with `SiteModel`.
 9. Code outside `Shared` MUST reach the data through `Vault`. `Bracket` is public only for the
    command line tool, which builds one directly and doesn't use the cache.
 
