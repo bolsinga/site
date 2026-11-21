@@ -40,6 +40,7 @@ struct OpenCategory: AppIntent {
   var target: CategoryEnum
 
   @MainActor func perform() async throws -> some IntentResult & OpensIntent {
+    let vault = try await provider.vault()
     guard let categoryURL = vault.url(for: target.archiveCategory) else {
       throw OpenCategoryError.noURL
     }
@@ -48,5 +49,5 @@ struct OpenCategory: AppIntent {
   }
 
   @Dependency
-  private var vault: Vault
+  private var provider: VaultProvider
 }

@@ -37,12 +37,15 @@ struct ConcertEntity: AppEntity {
   // The venue and artists are linked entities, made only when asked for.
   @DeferredProperty(title: "Venue")
   var venue: VenueEntity? {
-    get async { EntityVault.vault?.venueEntity(for: venueID) }
+    get async { await EntityVault.vault()?.venueEntity(for: venueID) }
   }
 
   @DeferredProperty(title: "Artists")
   var artists: [ArtistEntity] {
-    get async { artistIDs.compactMap { EntityVault.vault?.artistEntity(for: $0) } }
+    get async {
+      guard let vault = await EntityVault.vault() else { return [] }
+      return artistIDs.compactMap { vault.artistEntity(for: $0) }
+    }
   }
 
   // The parts of the date, as a date can be partial. A part that is not known is 0.

@@ -5,7 +5,6 @@
 //  Created by Greg Bolsinga on 7/12/23.
 //
 
-import AppIntents
 import CoreLocation
 import Foundation
 import MapKit
@@ -87,10 +86,6 @@ enum LocationAuthorization {
       Logger.vaultModel.log("Ignoring Asynchronous Tasks")
       return
     }
-
-    AppDependencyManager.shared.add(dependency: vault)
-    AppDependencyManager.shared.add(dependency: EntityCatalog(vault: vault))
-    EntityVault.vault = vault
 
     dayChangeTask = Task {
       await self.monitorDayChanges()

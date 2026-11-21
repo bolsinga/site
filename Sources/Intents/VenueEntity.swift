@@ -45,7 +45,7 @@ struct VenueEntity: AppEntity {
   // The concerts are linked entities, made only when asked for.
   @DeferredProperty(title: "Concerts")
   var concerts: [ConcertEntity] {
-    get async { EntityVault.vault?.concertEntities(venueID: id) ?? [] }
+    get async { await EntityVault.vault()?.concertEntities(venueID: id) ?? [] }
   }
 
   var displayRepresentation: DisplayRepresentation {

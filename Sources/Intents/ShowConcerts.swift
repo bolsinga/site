@@ -79,12 +79,13 @@ struct ShowConcerts: AppIntent {
   var date: Date?
 
   @Dependency
-  private var vault: Vault
+  private var provider: VaultProvider
 
   func perform() async throws -> some IntentResult & ReturnsValue<[ConcertEntity]> & ProvidesDialog
     & ShowsSnippetView
   {
-    concertResult(
+    let vault = try await provider.vault()
+    return concertResult(
       vault.concertEntities(
         matching: ConcertSearch(
           artistID: artist?.id, venueID: venue?.id, cityID: city?.id, date: date)))
@@ -98,11 +99,12 @@ struct ShowConcertsToday: AppIntent {
   static let description = IntentDescription("Shows the concerts on this day of any year.")
 
   @Dependency
-  private var vault: Vault
+  private var provider: VaultProvider
 
   func perform() async throws -> some IntentResult & ReturnsValue<[ConcertEntity]> & ProvidesDialog
     & ShowsSnippetView
   {
+    let vault = try await provider.vault()
     let day = Date.now.dayOfLeapYear
     return concertResult(
       ((try? vault.concerts(on: day)) ?? []).compactMap { vault.concertEntity(for: $0.id) })

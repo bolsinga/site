@@ -19,29 +19,27 @@ struct ConcertEntityQuery: EntityQuery {
   func entities(for identifiers: [ConcertEntity.ID]) async throws -> [ConcertEntity] {
     Logger.concertQuery.log("Identifiers: \(identifiers)")
 
+    let vault = try await provider.vault()
     return identifiers.compactMap { vault.concertEntity(for: $0) }
   }
 
   func suggestedEntities() async throws -> [ConcertEntity] {
     Logger.concertQuery.log("Suggested")
 
-    let ids = vault.concertIDs(on: Date.now.dayOfLeapYear, orRecentCount: 5)
+    let ids = try await provider.vault().concertIDs(on: Date.now.dayOfLeapYear, orRecentCount: 5)
 
     return try await entities(for: ids.reversed())
   }
 
   @Dependency
-  private var vault: Vault
-
-  @Dependency
-  private var catalog: EntityCatalog
+  private var provider: VaultProvider
 }
 
 extension ConcertEntityQuery: EntityStringQuery {
   func entities(matching string: String) async throws -> [ConcertEntity] {
     Logger.concertQuery.log("Matching: \(string)")
 
-    return catalog.concerts.filter {
+    return try await provider.catalog().concerts.filter {
       $0.venueName.localizedStandardContains(string)
         || $0.artistNames.contains { $0.localizedStandardContains(string) }
     }
@@ -162,7 +160,7 @@ extension ConcertEntityQuery: EntityPropertyQuery {
   ) async throws -> [ConcertEntity] {
     Logger.concertQuery.log("Predicate")
 
-    var matchedEntities = entities(matching: comparators, mode: mode)
+    var matchedEntities = try await entities(matching: comparators, mode: mode)
 
     for sortOperation in sortedBy {
       switch sortOperation.by {
@@ -186,9 +184,9 @@ extension ConcertEntityQuery: EntityPropertyQuery {
   }
 
   private func entities(matching comparators: [ConcertFilter], mode: ComparatorMode)
-    -> [ConcertEntity]
+    async throws -> [ConcertEntity]
   {
-    catalog.concerts.compactMap { entity in
+    try await provider.catalog().concerts.compactMap { entity in
       var includeAsResult = mode == .and ? true : false
       let earlyBreakCondition = includeAsResult
       for comparator in comparators {
@@ -212,13 +210,13 @@ extension ConcertEntityQuery: EntityPropertyQuery {
       Logger.concertQuery.log(
         "Reindex: \(identifiers.count, privacy: .public) \(String(describing: indexDescription), privacy: .public)"
       )
-      try await vault.reindexConcertsForSpotlight(ids: identifiers)
+      try await provider.vault().reindexConcertsForSpotlight(ids: identifiers)
     }
 
     func reindexAllEntities(indexDescription: CSSearchableIndexDescription) async throws {
       Logger.concertQuery.log(
         "Reindex all: \(String(describing: indexDescription), privacy: .public)")
-      await vault.indexForSpotlight(force: true)
+      try await provider.vault().indexForSpotlight(force: true)
     }
   }
 #endif

@@ -20,6 +20,12 @@ extension Logger {
     case refresh
     case errorRetry
 
+    /// The first load of a launch joins one an intent started, and the others ask again.
+    fileprivate var joinsRunningLoad: Bool {
+      if case .initial = self { return true }
+      return false
+    }
+
     fileprivate var executeAsynchronousTasks: Bool {
       switch self {
       case .preview:
@@ -33,6 +39,9 @@ extension Logger {
   private let urlString: String
 
   public var vaultModel: VaultModel?
+
+  /// Does the loading when there is one, so App Intents and the app share it.
+  @ObservationIgnored internal var vaultProvider: VaultProvider?
   internal var error: Error?
 
   #if !os(tvOS)
@@ -71,7 +80,13 @@ extension Logger {
     do {
       error = nil
 
-      let vault = try await Vault.load(urlString, policy: policy(reason))
+      let vault: Vault
+      if let vaultProvider {
+        vault = try await vaultProvider.load(
+          policy: policy(reason), joining: reason.joinsRunningLoad)
+      } else {
+        vault = try await Vault.load(urlString, policy: policy(reason))
+      }
       guard request == loadCount else {
         Logger.vaultLoader.log("superseded: \(String(describing: reason), privacy: .public)")
         return
