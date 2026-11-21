@@ -45,7 +45,7 @@ struct RankDistributionTests {
 
   @Test func artistsTieOnShowsAndShareABar() async throws {
     let vault = try await createVault()
-    let distribution = vault.rankDistribution(.artist, .shows)
+    let distribution = vault.rankDistribution(.artist, .showCount)
 
     #expect(distribution.bars.map(\.rank) == [1, 2])
     #expect(distribution.bars.map(\.value) == [2, 1])
@@ -57,13 +57,13 @@ struct RankDistributionTests {
 
   @Test func barContainingARanking() async throws {
     let vault = try await createVault()
-    let distribution = vault.rankDistribution(.artist, .shows)
+    let distribution = vault.rankDistribution(.artist, .showCount)
 
     let busy = try #require(vault.digest(artist: .artist(artist0.id)))
-    #expect(distribution.bar(for: busy.rank.showRank)?.rank == 1)
+    #expect(distribution.bar(for: busy.rank.showCountRank)?.rank == 1)
 
     let quiet = try #require(vault.digest(artist: .artist(artist2.id)))
-    #expect(distribution.bar(for: quiet.rank.showRank)?.rank == 2)
+    #expect(distribution.bar(for: quiet.rank.showCountRank)?.rank == 2)
 
     #expect(distribution.bar(for: .empty) == nil)
   }
@@ -71,11 +71,11 @@ struct RankDistributionTests {
   @Test func venuesAndYears() async throws {
     let vault = try await createVault()
 
-    let venues = vault.rankDistribution(.venue, .shows)
+    let venues = vault.rankDistribution(.venue, .showCount)
     #expect(venues.bars.map(\.value) == [2, 1])
     #expect(venues.itemCount == 2)
 
-    let years = vault.rankDistribution(.annum, .shows)
+    let years = vault.rankDistribution(.annum, .showCount)
     #expect(years.bars.map(\.value) == [2, 1])
     #expect(years.itemCount == 2)
   }
@@ -84,26 +84,28 @@ struct RankDistributionTests {
     let vault = try await createVault()
 
     // Artists by the venues they played: ar0 and ar1 one each, ar2 one.
-    let venuesPlayed = vault.rankDistribution(.artist, .associated)
+    let venuesPlayed = vault.rankDistribution(.artist, .venueCount)
     #expect(venuesPlayed.itemCount == 3)
     #expect(venuesPlayed.bars.map(\.value) == [1])
 
     // Venues by the artists that played them: v0 had two, v1 one.
-    let artistsHosted = vault.rankDistribution(.venue, .associated)
+    let artistsHosted = vault.rankDistribution(.venue, .artistCount)
     #expect(artistsHosted.bars.map(\.value) == [2, 1])
   }
 
   @Test func rankDigestPicksTheRankingForAMetric() {
     let shows = Ranking(rank: .rank(1), value: 5)
-    let span = Ranking(rank: .rank(2), value: 4)
-    let associated = Ranking(rank: .rank(3), value: 3)
+    let years = Ranking(rank: .rank(2), value: 4)
+    let venues = Ranking(rank: .rank(3), value: 3)
+    let artists = Ranking(rank: .rank(4), value: 2)
     let digest = RankDigest(
-      firstSet: .empty, mostRecentSet: .empty, spanRank: span, showRank: shows,
-      associatedRank: associated, section: nil)
+      firstSet: .empty, mostRecentSet: .empty, showCountRank: shows, yearRangeRank: years,
+      venueCountRank: venues, artistCountRank: artists, section: nil)
 
-    #expect(digest.ranking(for: .shows) == shows)
-    #expect(digest.ranking(for: .span) == span)
-    #expect(digest.ranking(for: .associated) == associated)
+    #expect(digest.ranking(for: .showCount) == shows)
+    #expect(digest.ranking(for: .yearRange) == years)
+    #expect(digest.ranking(for: .venueCount) == venues)
+    #expect(digest.ranking(for: .artistCount) == artists)
   }
 
   @Test func nothingToRank() async throws {
@@ -116,7 +118,7 @@ struct RankDistributionTests {
           timestamp: .now)),
       rootURL: URL(string: "https://www.example.com/")!)
 
-    let distribution = vault.rankDistribution(.artist, .shows)
+    let distribution = vault.rankDistribution(.artist, .showCount)
     #expect(distribution.bars.isEmpty)
     #expect(distribution.itemCount == 0)
   }
@@ -128,24 +130,24 @@ struct RankDistributionTests {
 
     // May 1 has two shows (one in each year), a venue and two artists.
     let busy = vault.dayRankDigest(on: may1)
-    #expect(busy.showRank == Ranking(rank: .rank(1), value: 2))
-    #expect(busy.spanRank == Ranking(rank: .rank(1), value: 1))
-    #expect(busy.associatedRank == Ranking(rank: .rank(1), value: 2))
+    #expect(busy.showCountRank == Ranking(rank: .rank(1), value: 2))
+    #expect(busy.venueCountRank == Ranking(rank: .rank(1), value: 1))
+    #expect(busy.artistCountRank == Ranking(rank: .rank(1), value: 2))
 
     // June 1 has one show, a venue and one artist.
     let quiet = vault.dayRankDigest(on: jun1)
-    #expect(quiet.showRank == Ranking(rank: .rank(2), value: 1))
-    #expect(quiet.spanRank == Ranking(rank: .rank(1), value: 1))
-    #expect(quiet.associatedRank == Ranking(rank: .rank(2), value: 1))
+    #expect(quiet.showCountRank == Ranking(rank: .rank(2), value: 1))
+    #expect(quiet.venueCountRank == Ranking(rank: .rank(1), value: 1))
+    #expect(quiet.artistCountRank == Ranking(rank: .rank(2), value: 1))
 
     #expect(vault.dayRankDigest(on: 1) == .empty)
 
-    let shows = vault.rankDistribution(.day, .shows)
+    let shows = vault.rankDistribution(.day, .showCount)
     #expect(shows.bars.map(\.value) == [2, 1])
     #expect(shows.itemCount == 2)
 
     // Both days have one venue, so they share a bar.
-    let venues = vault.rankDistribution(.day, .span)
+    let venues = vault.rankDistribution(.day, .venueCount)
     #expect(venues.bars.map(\.value) == [1])
     #expect(venues.bars.map(\.count) == [2])
   }
