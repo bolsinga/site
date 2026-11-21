@@ -24,7 +24,7 @@ public struct RankedArchiveItem: Hashable, Identifiable, LibraryComparable, Name
 
   public var firstSet: FirstSet { rank.firstSet }
 
-  public var showRank: Ranking { rank.showRank }
+  public var showRank: Ranking { rank.showCountRank }
 
   public var section: LibrarySection? { rank.section }
 
@@ -33,11 +33,15 @@ public struct RankedArchiveItem: Hashable, Identifiable, LibraryComparable, Name
     case .alphabetical, .firstSeen:
       Ranking.empty
     case .showCount:
-      rank.showRank
+      rank.showCountRank
     case .showYearRange:
-      rank.spanRank
+      rank.yearRangeRank
     case .associatedRank:
-      rank.associatedRank
+      switch id {
+      case .artist: rank.venueCountRank
+      case .venue: rank.artistCountRank
+      case .show, .year: Ranking.empty
+      }
     }
   }
 }

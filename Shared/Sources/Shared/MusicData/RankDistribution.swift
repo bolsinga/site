@@ -12,7 +12,7 @@ public enum RankKind: Sendable {
 }
 
 public enum RankMetric: Sendable {
-  case shows, span, associated
+  case showCount, yearRange, venueCount, artistCount
 }
 
 /// Every item of a kind, grouped by rank and laid out from the highest value to the lowest, so a
@@ -64,9 +64,10 @@ public struct RankDistribution: Sendable, Equatable {
 extension RankDigest {
   public func ranking(for metric: RankMetric) -> Ranking {
     switch metric {
-    case .shows: showRank
-    case .span: spanRank
-    case .associated: associatedRank
+    case .showCount: showCountRank
+    case .yearRange: yearRangeRank
+    case .venueCount: venueCountRank
+    case .artistCount: artistCountRank
     }
   }
 }

@@ -183,11 +183,11 @@ struct Tracker {
     await computeRankings { venueCounts.map { $0 } }
   }
 
-  private func artistSpanRankings() async -> [ArchivePath: Ranking] {
+  private func artistYearRangeRankings() async -> [ArchivePath: Ranking] {
     await computeRankings { artistSpanDates.mapValues { $0.yearSpan }.map { $0 } }
   }
 
-  private func venueSpanRankings() async -> [ArchivePath: Ranking] {
+  private func venueYearRangeRankings() async -> [ArchivePath: Ranking] {
     await computeRankings { venueSpanDates.mapValues { $0.yearSpan }.map { $0 } }
   }
 
@@ -268,102 +268,103 @@ struct Tracker {
   private func rankDigests<Key>(
     firstSets: [Key: FirstSet],
     mostRecentSets: [Key: MostRecentSet] = [:],
-    spanRankings: [Key: Ranking],
-    showRankings: [Key: Ranking],
-    associatedRankings: [Key: Ranking],
+    showCountRankings: [Key: Ranking],
+    yearRangeRankings: [Key: Ranking] = [:],
+    venueCountRankings: [Key: Ranking] = [:],
+    artistCountRankings: [Key: Ranking] = [:],
     sections: [Key: LibrarySection]
   ) -> [Key: RankDigest] {
-    let ids = Set(firstSets.keys).union(Set(spanRankings.keys)).union(Set(showRankings.keys)).union(
-      Set(associatedRankings.keys))
+    let ids = Set(firstSets.keys).union(Set(showCountRankings.keys))
+      .union(Set(yearRangeRankings.keys)).union(Set(venueCountRankings.keys))
+      .union(Set(artistCountRankings.keys))
 
     return ids.reduce(into: [Key: RankDigest]()) {
       $0[$1] = RankDigest(
         firstSet: firstSets[$1] ?? .empty,
         mostRecentSet: mostRecentSets[$1] ?? .empty,
-        spanRank: spanRankings[$1] ?? .empty,
-        showRank: showRankings[$1] ?? .empty,
-        associatedRank: associatedRankings[$1] ?? .empty,
+        showCountRank: showCountRankings[$1] ?? .empty,
+        yearRangeRank: yearRangeRankings[$1] ?? .empty,
+        venueCountRank: venueCountRankings[$1] ?? .empty,
+        artistCountRank: artistCountRankings[$1] ?? .empty,
         section: sections[$1])
     }
   }
 
   /// Combines multiple ranking dimensions to produce a comprehensive ranking
-  /// digest for each artist, including first set rank, span rank, show rank,
-  /// and associated venue rank.
+  /// digest for each artist, including first set rank, show count rank, year range rank,
+  /// and venue count rank.
   ///
   /// - Parameter sections: A dictionary mapping artist IDs to their `LibrarySection`.
   /// - Returns: A dictionary mapping artist IDs to their rank digests.
   func artistRankDigests(sections: [ArchivePath: LibrarySection]) async -> [ArchivePath: RankDigest]
   {
     async let firstSets = await artistFirstSets()
-    async let spanRankings = await artistSpanRankings()
-    async let showRankings = await artistRankings()
-    async let associatedRankings = await artistVenueRankings()
+    async let showCountRankings = await artistRankings()
+    async let yearRangeRankings = await artistYearRangeRankings()
+    async let venueCountRankings = await artistVenueRankings()
 
     return rankDigests(
       firstSets: await firstSets,
       mostRecentSets: mostRecentSets(artistSpanDates),
-      spanRankings: await spanRankings,
-      showRankings: await showRankings,
-      associatedRankings: await associatedRankings,
+      showCountRankings: await showCountRankings,
+      yearRangeRankings: await yearRangeRankings,
+      venueCountRankings: await venueCountRankings,
       sections: sections)
   }
 
   /// Combines multiple ranking dimensions to produce a comprehensive ranking
-  /// digest for each venue, including first set rank, span rank, show rank,
-  /// and associated artist rank.
+  /// digest for each venue, including first set rank, show count rank, year range rank,
+  /// and artist count rank.
   ///
   /// - Parameter sections: A dictionary mapping venue IDs to their `LibrarySection`.
   /// - Returns: A dictionary mapping venue IDs to their rank digests.
   func venueRankDigests(sections: [ArchivePath: LibrarySection]) async -> [ArchivePath: RankDigest]
   {
     async let firstSets = await venueFirstSets()
-    async let spanRankings = await venueSpanRankings()
-    async let showRankings = await venueRankings()
-    async let associatedRankings = await venueArtistRankings()
+    async let showCountRankings = await venueRankings()
+    async let yearRangeRankings = await venueYearRangeRankings()
+    async let artistCountRankings = await venueArtistRankings()
 
     return rankDigests(
       firstSets: await firstSets,
       mostRecentSets: mostRecentSets(venueSpanDates),
-      spanRankings: await spanRankings,
-      showRankings: await showRankings,
-      associatedRankings: await associatedRankings,
+      showCountRankings: await showCountRankings,
+      yearRangeRankings: await yearRangeRankings,
+      artistCountRankings: await artistCountRankings,
       sections: sections)
   }
 
-  /// Produces ranking digests for annums combining span rankings, show rankings,
-  /// and associated artist rankings. No first set rankings are included for annums.
+  /// Produces ranking digests for annums combining show count rankings, venue count rankings
+  /// and artist count rankings. No first set rankings are included for annums.
   ///
   /// - Returns: A dictionary mapping annum IDs to their rank digests.
   func annumRankDigests() async -> [ArchivePath: RankDigest] {
-    // These names do not quite work.
-    async let spanRankings = await annumVenueRankings()
-    async let showRankings = await annumShowRankings()
-    async let associatedRankings = await annumArtistRankings()
+    async let showCountRankings = await annumShowRankings()
+    async let venueCountRankings = await annumVenueRankings()
+    async let artistCountRankings = await annumArtistRankings()
 
     return rankDigests(
       firstSets: [:],
-      spanRankings: await spanRankings,
-      showRankings: await showRankings,
-      associatedRankings: await associatedRankings,
+      showCountRankings: await showCountRankings,
+      venueCountRankings: await venueCountRankings,
+      artistCountRankings: await artistCountRankings,
       sections: [:])
   }
 
   /// Produces ranking digests for the days of the leap year that have shows, combining show
-  /// rankings, venue rankings (as the span ranking is for an annum) and artist rankings (as the
-  /// associated ranking is). No first set rankings are included for days.
+  /// count, venue count and artist count rankings. No first set rankings are included for days.
   ///
   /// - Returns: A dictionary mapping a day of the leap year (1...366) to its rank digest.
   func dayRankDigests() async -> [Int: RankDigest] {
-    async let spanRankings = await dayVenueRankings()
-    async let showRankings = await dayShowRankings()
-    async let associatedRankings = await dayArtistRankings()
+    async let showCountRankings = await dayShowRankings()
+    async let venueCountRankings = await dayVenueRankings()
+    async let artistCountRankings = await dayArtistRankings()
 
     return rankDigests(
       firstSets: [:],
-      spanRankings: await spanRankings,
-      showRankings: await showRankings,
-      associatedRankings: await associatedRankings,
+      showCountRankings: await showCountRankings,
+      venueCountRankings: await venueCountRankings,
+      artistCountRankings: await artistCountRankings,
       sections: [:])
   }
 }

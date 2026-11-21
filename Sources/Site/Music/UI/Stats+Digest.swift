@@ -44,9 +44,9 @@ extension Stats {
     self.init(
       shows: digest.shows,
       shouldCalculateArtistCount: false,
-      yearsSpanRanking: digest.rank.spanRank,
-      showRanking: digest.rank.showRank,
-      artistVenuesRanking: digest.rank.associatedRank,
+      yearsSpanRanking: digest.rank.yearRangeRank,
+      showRanking: digest.rank.showCountRank,
+      artistVenuesRanking: digest.rank.venueCountRank,
       venueArtistsRanking: nil,
       alwaysShowVenuesArtistsStats: false)
   }
@@ -55,10 +55,10 @@ extension Stats {
     self.init(
       shows: digest.shows,
       shouldCalculateArtistCount: true,
-      yearsSpanRanking: digest.rank.spanRank,
-      showRanking: digest.rank.showRank,
+      yearsSpanRanking: digest.rank.yearRangeRank,
+      showRanking: digest.rank.showCountRank,
       artistVenuesRanking: nil,
-      venueArtistsRanking: digest.rank.associatedRank,
+      venueArtistsRanking: digest.rank.artistCountRank,
       alwaysShowVenuesArtistsStats: false)
   }
 
@@ -89,9 +89,9 @@ extension Stats {
       stateCounts: shows.stateCounts,
       shouldCalculateArtistCount: true,
       yearsSpanRanking: nil,
-      showRanking: rank?.showRank,
-      artistVenuesRanking: rank?.spanRank,
-      venueArtistsRanking: rank?.associatedRank,
+      showRanking: rank?.showCountRank,
+      artistVenuesRanking: rank?.venueCountRank,
+      venueArtistsRanking: rank?.artistCountRank,
       alwaysShowVenuesArtistsStats: true,
       newVenueCount: shows.firstTimeVenueCount,
       newArtistCount: shows.firstTimeArtistCount,

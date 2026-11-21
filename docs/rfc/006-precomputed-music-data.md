@@ -1,6 +1,6 @@
 # RFC 006: Precomputed music data
 
-Status: Accepted · Updated: 2026-11-20 · Code: `Shared/Sources/Shared/MusicData` (`Bracket`,
+Status: Accepted · Updated: 2026-11-21 · Code: `Shared/Sources/Shared/MusicData` (`Bracket`,
 `Tracker`, `Music`, `Lookup`, `Vault`, `Ranking+Compute`, `RankDigest`)
 
 ## Summary
@@ -18,7 +18,8 @@ independent pieces concurrently. `Tracker` walks the shows in date order and bui
 and rankings. The `Bracket` holds:
 
 - **Rank digests** for every artist, venue, year and day of the leap year (`RankDigest`): its
-  rank by number of shows, by span of dates, and by the artists or venues associated with it;
+  rank by number of shows, by years from first to last date, and by the number of venues or
+  artists it has;
   its first and most recent show; and its library section. Equal values share a rank, and the
   next value takes the next rank, with none skipped.
 - **Counts** of artists and venues that have a first show.

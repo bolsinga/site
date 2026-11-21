@@ -140,8 +140,8 @@ struct RankSkyline: View {
 
 #Preview("Venue Shows", traits: .vaultModel) {
   @Previewable @Environment(VaultModel.self) var model
-  let distribution = model.vault.rankDistribution(.venue, .shows)
-  let ranking = model.previewVenue("v103").rank.showRank
+  let distribution = model.vault.rankDistribution(.venue, .showCount)
+  let ranking = model.previewVenue("v103").rank.showCountRank
   VStack(spacing: 24) {
     RankSkyline(
       distribution: distribution, ranking: ranking, kind: .shows, presentation: .card)

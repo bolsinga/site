@@ -1,6 +1,6 @@
 # RFC 013: Rankings, first sets and library order
 
-Status: Accepted · Updated: 2026-11-20 · Code: `Shared/Sources/Shared/MusicData` (`Rank`, `Ranking`,
+Status: Accepted · Updated: 2026-11-21 · Code: `Shared/Sources/Shared/MusicData` (`Rank`, `Ranking`,
 `Ranking+Compute`, `RankDigest`, `RankDistribution`, `Rankable`, `RankedArchiveItem`, `RankingSort`,
 `FirstSet`, `MostRecentSet`, `PartialDate+Span`), `Shared/Sources/Shared/Utilities` (`LibraryComparable`,
 `LibraryCompareTokenizer`, `LibrarySection`, `String+LibrarySection`, `String+TokenCompare`),
@@ -15,17 +15,19 @@ that days are ranked by. This RFC is the meaning, and the lists that show it.
 
 ## Ranking dimensions
 
-A `RankDigest` has three `Ranking`s (a `Rank` and the value it came from) for an artist, venue,
-year or day. What each counts depends on what is ranked.
+A `RankDigest` has four `Ranking`s (a `Rank` and the value it came from) for an artist, venue,
+year or day. Each counts the same thing for every kind, and a kind it doesn't apply to has
+`.empty`.
 
-| Dimension | Artist | Venue | Year | Day |
-|---|---|---|---|---|
-| `showRank` | its shows | its shows | its shows | its shows |
-| `spanRank` | years from first to last date | years from first to last date | its venues | its venues |
-| `associatedRank` | venues played | artists who played | its artists | its artists |
+| Ranking | Counts | Artist | Venue | Year | Day |
+|---|---|---|---|---|---|
+| `showCountRank` | shows | ✓ | ✓ | ✓ | ✓ |
+| `yearRangeRank` | years from first to last date | ✓ | ✓ | | |
+| `venueCountRank` | distinct venues | ✓ | | ✓ | ✓ |
+| `artistCountRank` | distinct artists | | ✓ | ✓ | ✓ |
 
-For a year and a day the span slot holds a count of distinct venues, not a time span, and only
-the digest of an artist or a venue has a first set, a most recent set and a library section.
+Only the digest of an artist or a venue has a first set, a most recent set and a library
+section.
 
 ### Ties and ranks
 
@@ -91,9 +93,9 @@ each is ordered by library order.
 | Sort | Groups | Group order | Row shows |
 |---|---|---|---|
 | Alphabetical | library section | letters, numeric, punctuation | show count |
-| Show Count | `showRank` | rank 1 first | none |
-| Year Range | `spanRank` | rank 1 first | show count |
-| Associated | `associatedRank` | rank 1 first | none |
+| Show Count | `showCountRank` | rank 1 first | none |
+| Year Range | `yearRangeRank` | rank 1 first | show count |
+| Associated | `venueCountRank` for an artist, `artistCountRank` for a venue | rank 1 first | none |
 | First Show | first date | earliest first, unknown last | `#` first set order |
 
 Header of a group is the rank and its value ("#2  5 Show(s)"). Associated reads "Sort By Venue
@@ -103,15 +105,14 @@ and start as Alphabetical. Search narrows the items before they are grouped.
 
 ## Showing a rank
 
-1. `Rank` is formatted `#1` (`.hash`, the default) or `1.` (`.dotted`), with no grouping
-   separator, and unknown is "Rank Unknown". `Ranking` is `#n` (`.rankOnly`) or `#n Count: v`
-   (`.rankAndCount`).
+1. `Rank` is formatted `#1` (`.hash`, the default), with no grouping separator, and unknown is
+   "Rank Unknown". `Ranking` is `#n` (`.rankOnly`).
 2. A stats row MUST show nothing for an unknown rank, and the first set row for an artist or
    venue is only shown with a known one.
 3. A stat row charts its rank against all of the kind with `RankDistribution`, a bar per rank
    as wide as the items that tie. The shows row is charted for every kind, the years row for
-   artists and venues, the venues row for an artist (associated) and a year or day (span), and
-   the artists row for a venue, year and day. Unknown ranks are left out.
+   artists and venues, the venues row for an artist, a year and a day (`venueCountRank`), and
+   the artists row for a venue, year and day (`artistCountRank`). Unknown ranks are left out.
 4. The first set row reads as an ordinal ("12th Artist"), and its line puts a dot at
    (order − 1) ÷ (count − 1), at the start when there is one.
 
@@ -123,10 +124,7 @@ and start as Alphabetical. Search narrows the items before they are grouped.
   rank couldn't, as each item has its own order.
 - **Less specific dates first.** An item with a show in 2005 and another on a day in 2005 has
   2005 as its first date, so the show with no more date than that counts as the first.
+- **One meaning per ranking.** A slot named for what one kind counts is the wrong name for
+  another kind that reuses it. Each ranking counts one thing, and the digest of a kind it doesn't
+  apply to leaves it `.empty`.
 - **Tokens, not names.** Skipping "The" and punctuation puts "The Who" under W.
-
-## Open questions
-
-- **Unused styles.** `.dotted` and `.rankAndCount` are defined but nothing in the app calls them. See [#1736](https://github.com/bolsinga/site/issues/1736).
-- **Span for years and days.** The code names its venue count the span ranking, and its comment
-  says the names don't quite work. See [#1736](https://github.com/bolsinga/site/issues/1736).

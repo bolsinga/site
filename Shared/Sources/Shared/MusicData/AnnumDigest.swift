@@ -36,14 +36,14 @@ public struct AnnumDigest: Codable, Identifiable, Sendable {
   }
 
   public var showRank: Ranking {
-    rank.showRank
+    rank.showCountRank
   }
 
   public var venueRank: Ranking {
-    rank.spanRank
+    rank.venueCountRank
   }
 
   public var artistRank: Ranking {
-    rank.associatedRank
+    rank.artistCountRank
   }
 }
