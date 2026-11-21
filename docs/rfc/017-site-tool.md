@@ -104,5 +104,3 @@ smallest one left. If nothing is left, it prints the number of keys, which for a
 
 - The id format (prefix and number) is not read here; `nextID` assumes digits in each id.
 - Where `shows.json` and `music.json` come from is outside this repo (the generator).
-- How the tool is run (path to the built executable, sandbox: the target sets
-  `ENABLE_APP_SANDBOX = YES`) is not documented anywhere in the repo. See [#1750](https://github.com/bolsinga/site/issues/1750).
