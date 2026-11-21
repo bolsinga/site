@@ -15,7 +15,7 @@ extension Logger {
 extension Vault {
   public static func load(
     _ urlString: String,
-    previousModified: Date
+    policy: Lookup.LoadPolicy
   ) async throws -> Vault {
     Logger.vault.log("start")
     defer {
@@ -24,6 +24,6 @@ extension Vault {
 
     guard let url = URL(string: urlString) else { throw VaultError.illegalURL(urlString) }
 
-    return try await Vault(url: url, previousModified: previousModified)
+    return try await Vault(url: url, policy: policy)
   }
 }

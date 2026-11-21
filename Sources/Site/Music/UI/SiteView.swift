@@ -14,7 +14,6 @@ extension Logger {
 }
 
 public struct SiteView: View {
-  @AppStorage("music.last.modified") private var musicLastModified: Date = .distantPast
   private let model: SiteModel
 
   @State private var pendingExternalEvent: ExternalEvent?
@@ -50,10 +49,7 @@ public struct SiteView: View {
     }.task {
       guard model.vaultModel == nil, model.error == nil else { return }
 
-      await model.load(.initial(musicLastModified))
-    }
-    .onChange(of: model.lastModified) { _, newValue in
-      musicLastModified = newValue
+      await model.load(.initial)
     }
     .onContinueUserActivity(ArchivePath.activityType) {
       Logger.siteView.log("onContinueUserActivity ArchivePath")
