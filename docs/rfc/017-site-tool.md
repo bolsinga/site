@@ -60,7 +60,9 @@ from it. No `HEAD` is sent.
 
 `Diary` (`timestamp`, `colophon`, `header`, `title`, `statics`, `friends`, `entries`) and `Entry`
 (`timestamp`, optional `title`, `id`, `comment`) decode `diary.json` at the archive root with the
-shared `fromJSON` (ISO 8601 dates), next to `shows.json` and `music.json`. Only `dumpDiary` reads it; the app, widgets and intents do not.
+shared `fromJSON` (ISO 8601 dates), next to `shows.json` and `music.json`. Only `dumpDiary` reads it
+today; the app, widgets and intents do not yet. The app is meant to use the diary in the future,
+which is why `DiaryData` is compiled into every platform and not limited to the tool.
 `Diary.load` does a plain `URLSession.shared` request with no cache policy and no status check.
 
 ## Next IDs
@@ -90,6 +92,8 @@ smallest one left. If nothing is left, it prints the number of keys.
   dependence on what an earlier run saved.
 - **Gaps first.** A new id fills a gap before extending the sequence, so ids stay dense.
 - **One executable.** The tool shares the app's model code without a second target.
+- **The diary on every platform.** The app will use it, so it is built for the app's platforms
+  now, and the tool is its only reader until then.
 
 ## Open questions
 
@@ -101,7 +105,5 @@ smallest one left. If nothing is left, it prints the number of keys.
 - The `dumpLookup` abstract says "text output" but the output is JSON. See [#1748](https://github.com/bolsinga/site/issues/1748).
 - The id format (prefix and number) is not read here; `nextID` assumes digits in each id.
 - Where `shows.json` and `music.json` come from is outside this repo (the generator).
-- Is the diary meant to be used by the app? Today `DiaryData` is compiled into every platform and
-  nothing but the tool uses it. See [#1749](https://github.com/bolsinga/site/issues/1749).
 - How the tool is run (path to the built executable, sandbox: the target sets
   `ENABLE_APP_SANDBOX = YES`) is not documented anywhere in the repo. See [#1750](https://github.com/bolsinga/site/issues/1750).
