@@ -13,7 +13,7 @@ extension Collection where Element == String {
     let existingIndices = self.compactMap {
       Int($0.trimmingCharacters(in: .decimalDigits.inverted))
     }
-    let expectedIndices = Set(0...(existingIndices.count - 1))
+    let expectedIndices = Set(0..<existingIndices.count)
     return expectedIndices.subtracting(existingIndices)
   }
 }
