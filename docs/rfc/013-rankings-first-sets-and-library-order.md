@@ -1,6 +1,6 @@
 # RFC 013: Rankings, first sets and library order
 
-Status: Accepted · Updated: 2026-11-19 · Code: `Shared/Sources/Shared/MusicData` (`Rank`, `Ranking`,
+Status: Accepted · Updated: 2026-11-20 · Code: `Shared/Sources/Shared/MusicData` (`Rank`, `Ranking`,
 `Ranking+Compute`, `RankDigest`, `RankDistribution`, `Rankable`, `RankedArchiveItem`, `RankingSort`,
 `FirstSet`, `MostRecentSet`, `PartialDate+Span`), `Shared/Sources/Shared/Utilities` (`LibraryComparable`,
 `LibraryCompareTokenizer`, `LibrarySection`, `String+LibrarySection`, `String+TokenCompare`),
@@ -70,6 +70,8 @@ An artist or venue is ordered by a compare token made in advance ([RFC 006](006-
 2. A leading "The", "A" or "An" (any case, followed by whitespace) is removed. Then if what is
    left is words with only spaces, with punctuation before and after, that punctuation is
    removed too.
+   Punctuation inside the name stops that: "AC/DC" and "(hed) pe" keep theirs, so "AC/DC" is
+   under A, and "(hed) pe" is in the punctuation section, not under H.
 3. Tokens compare ascending, ignoring case and diacritics.
 4. The section is the token's first character: a digit is numeric, punctuation is
    punctuation, and anything else is that character in capitals. Sections sort the letters,
@@ -124,9 +126,6 @@ and start as Alphabetical. Search narrows the items before they are grouped.
 
 ## Open questions
 
-- **Names inside punctuation.** From the regular expression, a name like "AC/DC" or "(hed) pe"
-  keeps its punctuation, since the whole string must match to remove it, so "(hed) pe" would
-  be in the punctuation section. No test was read for it. See [#1735](https://github.com/bolsinga/site/issues/1735).
 - **Unused styles.** `.dotted` and `.rankAndCount` are defined but nothing in the app calls them. See [#1736](https://github.com/bolsinga/site/issues/1736).
 - **Span for years and days.** The code names its venue count the span ranking, and its comment
   says the names don't quite work. See [#1736](https://github.com/bolsinga/site/issues/1736).
