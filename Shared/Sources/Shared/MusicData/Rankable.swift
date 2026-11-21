@@ -9,7 +9,7 @@ import Foundation
 
 public protocol Rankable {
   var firstSet: FirstSet { get }
-  var showRank: Ranking { get }
+  var showCountRank: Ranking { get }
   var section: LibrarySection? { get }
   func ranking(for sort: RankingSort) -> Ranking
 }

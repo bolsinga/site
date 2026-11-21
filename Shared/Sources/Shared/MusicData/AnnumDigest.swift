@@ -35,15 +35,15 @@ public struct AnnumDigest: Codable, Identifiable, Sendable {
     self.mostRecentVenueCount = mostRecentVenueCount
   }
 
-  public var showRank: Ranking {
+  public var showCountRank: Ranking {
     rank.showCountRank
   }
 
-  public var venueRank: Ranking {
+  public var venueCountRank: Ranking {
     rank.venueCountRank
   }
 
-  public var artistRank: Ranking {
+  public var artistCountRank: Ranking {
     rank.artistCountRank
   }
 }

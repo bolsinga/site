@@ -24,7 +24,7 @@ public struct RankedArchiveItem: Hashable, Identifiable, LibraryComparable, Name
 
   public var firstSet: FirstSet { rank.firstSet }
 
-  public var showRank: Ranking { rank.showCountRank }
+  public var showCountRank: Ranking { rank.showCountRank }
 
   public var section: LibrarySection? { rank.section }
 

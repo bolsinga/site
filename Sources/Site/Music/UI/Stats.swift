@@ -14,10 +14,10 @@ struct Stats {
   let artistCount: Int
   let dates: [Date]
   let stateCounts: [String: Int]
-  let yearsSpanRanking: Ranking?
-  let showRanking: Ranking?
-  let artistVenuesRanking: Ranking?
-  let venueArtistsRanking: Ranking?
+  let yearRangeRanking: Ranking?
+  let showCountRanking: Ranking?
+  let venueCountRanking: Ranking?
+  let artistCountRanking: Ranking?
   let alwaysShowVenuesArtistsStats: Bool
   /// The venues and artists whose first show was in what is being summarized, when it is known.
   let newVenueCount: Int?
@@ -34,10 +34,10 @@ struct Stats {
     dates: [Date],
     stateCounts: [String: Int],
     shouldCalculateArtistCount: Bool,
-    yearsSpanRanking: Ranking?,
-    showRanking: Ranking?,
-    artistVenuesRanking: Ranking?,
-    venueArtistsRanking: Ranking?,
+    yearRangeRanking: Ranking?,
+    showCountRanking: Ranking?,
+    venueCountRanking: Ranking?,
+    artistCountRanking: Ranking?,
     alwaysShowVenuesArtistsStats: Bool,
     newVenueCount: Int? = nil,
     newArtistCount: Int? = nil,
@@ -49,10 +49,10 @@ struct Stats {
     self.artistCount = shouldCalculateArtistCount ? artistCount : 0
     self.dates = dates
     self.stateCounts = stateCounts
-    self.yearsSpanRanking = yearsSpanRanking
-    self.showRanking = showRanking
-    self.artistVenuesRanking = artistVenuesRanking
-    self.venueArtistsRanking = venueArtistsRanking
+    self.yearRangeRanking = yearRangeRanking
+    self.showCountRanking = showCountRanking
+    self.venueCountRanking = venueCountRanking
+    self.artistCountRanking = artistCountRanking
     self.alwaysShowVenuesArtistsStats = alwaysShowVenuesArtistsStats
     self.newVenueCount = newVenueCount
     self.newArtistCount = newArtistCount
@@ -73,7 +73,7 @@ struct Stats {
     // This needs to be broken down like this or the swift compiler says it is too complex.
     var statsCategoryCases = [StatsCategory]()
     statsCategoryCases.append(.shows)
-    if (yearsSpanRanking?.value ?? 0) > 1 {
+    if (yearRangeRanking?.value ?? 0) > 1 {
       statsCategoryCases.append(.years)
     }
     if showVenues {

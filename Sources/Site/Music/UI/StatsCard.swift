@@ -368,20 +368,20 @@ struct StatsCard: View {
     switch category {
     case .shows:
       StatRow(
-        count: stats.concertsCount, kind: .shows, ranking: stats.showRanking,
+        count: stats.concertsCount, kind: .shows, ranking: stats.showCountRanking,
         rankChart: rankChart(for: category))
     case .years:
       StatRow(
-        count: stats.yearsSpanRanking?.value ?? 0, kind: .years, ranking: stats.yearsSpanRanking,
+        count: stats.yearRangeRanking?.value ?? 0, kind: .years, ranking: stats.yearRangeRanking,
         rankChart: rankChart(for: category))
     case .venues:
       StatRow(
-        count: stats.venueCount, kind: .venues, ranking: stats.artistVenuesRanking,
+        count: stats.venueCount, kind: .venues, ranking: stats.venueCountRanking,
         rankChart: rankChart(for: category), newCount: stats.newVenueCount,
         mostRecentCount: stats.mostRecentVenueCount)
     case .artists:
       StatRow(
-        count: stats.artistCount, kind: .artists, ranking: stats.venueArtistsRanking,
+        count: stats.artistCount, kind: .artists, ranking: stats.artistCountRanking,
         rankChart: rankChart(for: category), newCount: stats.newArtistCount,
         mostRecentCount: stats.mostRecentArtistCount)
     case .weekday:

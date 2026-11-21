@@ -22,7 +22,7 @@ struct RankableSortList<
   var summary: ListSummary?
 
   @ViewBuilder private func showCount(for venueDigest: T) -> some View {
-    Text("\(venueDigest.showRank.value) Show(s)")
+    Text("\(venueDigest.showCountRank.value) Show(s)")
   }
 
   @ViewBuilder private var listElement: some View {
