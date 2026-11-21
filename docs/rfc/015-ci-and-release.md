@@ -23,6 +23,13 @@ what a release process should be.
 The steps are identical, so a release gets the same checks a pull request does, on the release's
 commit, and nothing more. `release.yml` also lists `branches: [ main ]` under `release`.
 
+### Jobs
+
+Each workflow has two jobs. `build` is the matrix below. `format` runs the setup action, then
+`xcrun swift-format format --in-place --recursive Sources Shared/Sources Tests SiteWidgets`, and
+fails if that changes any file (`git diff --exit-code`), printing the change and the command that
+fixes it.
+
 ### Matrix
 
 One job per destination, with `fail-fast: false`, so one platform failing doesn't cancel the others.
@@ -53,7 +60,7 @@ the workflows don't pass it.
 
 ### What CI does not do
 
-No step runs `swift-format`, a UI test, a physical-device build, an archive, a notarization or an
+No step runs a UI test, a physical-device build, an archive, a notarization or an
 upload. No step reads a repository secret or an input; the only credential-shaped setting is
 `DEVELOPMENT_TEAM`, which comes from a local file (see Versions and signing).
 
@@ -105,8 +112,8 @@ build with that file signs with the developer's team.
    `CURRENT_PROJECT_VERSION` in every configuration. A version change edits all four.
 7. A change MUST NOT put a team id, certificate or token in a tracked file. The team id belongs in
    the git-ignored `DevelopmentTeam.xcconfig`.
-8. Code MUST be `swift-format` clean (default configuration) before each commit is pushed, per
-   `CLAUDE.md`. CI doesn't check this, so the author does.
+8. Code MUST be `swift-format` clean (default configuration): the `format` job fails a change
+   that `swift-format format` would alter, and a release is checked the same way.
 9. Code new on a platform MUST be guarded for the platforms that lack it, such as
    `#if !os(tvOS)`, since the tvOS build is a CI job.
 10. Dependabot MAY open pull requests for `github-actions`, weekly and grouped into one. They are
@@ -124,6 +131,10 @@ build with that file signs with the developer's team.
 - **Newest of a major version, with a floor.** A runner image that has a later 27.x but not the
   exact one still builds, and a runner whose Xcode is too old fails with the reason, not with a
   compile error. The floor is in one action, so both workflows share it.
+- **Format, not lint.** The check formats and then looks for changes, so it asks whether the code
+  is what the formatter makes. `swift-format lint` also reports rules the formatter doesn't fix
+  (such as `ReplaceForEachWithForLoop` and `AlwaysUseLowerCamelCase`), which the code base
+  doesn't follow.
 - **Hand-edited versions.** The numbers are in one file per target and change in a reviewed commit.
 
 ## Open questions
@@ -135,5 +146,7 @@ build with that file signs with the developer's team.
 - **Who bumps versions.** Nothing says when `MARKETING_VERSION` and `CURRENT_PROJECT_VERSION`
   change, or why `Tests` stays at `1.0` and `1`. See [#1741](https://github.com/bolsinga/site/issues/1741).
 - **Secrets.** No workflow names a secret or input. How a release is signed is outside the files. See [#1741](https://github.com/bolsinga/site/issues/1741).
-- **Formatting.** The format check is manual. Whether CI should run `swift-format lint` is open. See [#1742](https://github.com/bolsinga/site/issues/1742).
 - **Test coverage.** The tests don't run on iOS or tvOS in CI, and no test plan is used. See [#1743](https://github.com/bolsinga/site/issues/1743).
+- **Lint.** `swift-format lint` with the default configuration reports 28 errors on the code
+  base as it is, in rules the formatter doesn't fix. Whether CI should run it, with those fixed or
+  a configuration that turns them off, is open. See [#1742](https://github.com/bolsinga/site/issues/1742).
