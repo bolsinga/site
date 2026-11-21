@@ -1,6 +1,6 @@
 # RFC 015: Continuous integration and release
 
-Status: Accepted · Updated: 2026-11-20 · Code: `.github/workflows/main.yml`,
+Status: Accepted · Updated: 2026-11-21 · Code: `.github/workflows/main.yml`,
 `.github/workflows/release.yml`, `.github/actions/setup-xcode/action.yml`, `.github/actions/check-format/action.yml`, `.github/dependabot.yml`, `Config.xcconfig`,
 `SiteApp.xcodeproj` (scheme `SiteApp`, build settings), `Sources/App/SiteApp.entitlements`,
 `SiteWidgets/SiteWidgetsExtension.entitlements`
@@ -9,8 +9,8 @@ Status: Accepted · Updated: 2026-11-20 · Code: `.github/workflows/main.yml`,
 
 Two GitHub Actions workflows build the app, and one of them also runs the tests. Neither signs,
 archives, uploads or publishes anything. This RFC is what each workflow runs and when, how the
-project is versioned and signed, and what a change has to pass. It records what the files do, not
-what a release process should be.
+project is versioned and signed, and what a change has to pass. It records what the files do, and
+how a release is made by hand today, not what a release process should be.
 
 ## Workflows
 
@@ -21,7 +21,9 @@ what a release process should be.
 | Steps | identical | identical |
 
 The steps are identical, so a release gets the same checks a pull request does, on the release's
-commit, and nothing more. `release.yml` also lists `branches: [ main ]` under `release`.
+commit, and nothing more. `release.yml` also lists `branches: [ main ]` under `release`. GitHub
+documents `branches` filters for push and pull request events, so under `release` it has no
+documented effect, and a release is built from the tag it was published on.
 
 ### Jobs
 
@@ -59,6 +61,21 @@ the workflows don't pass it.
   of the default decides which `Xcode_*` apps are considered, and change the runner label in both
   workflows. Rule 3 and the table above change with them.
 
+### How a release is made today
+
+There is one developer and one branch (`main`). Nothing about a release is automated:
+
+1. The developer bumps `MARKETING_VERSION` and `CURRENT_PROJECT_VERSION` by hand ([#1785](https://github.com/bolsinga/site/issues/1785)
+   would automate it).
+2. The developer builds a signed app locally, with their team id in the git-ignored
+   `DevelopmentTeam.xcconfig`, and distributes it from there ([#1786](https://github.com/bolsinga/site/issues/1786)
+   would build and sign it in CI).
+3. Publishing a GitHub release runs `release.yml`, which repeats the checks of `main.yml` and
+   produces no artifact.
+
+The team id is kept out of the repository by `DevelopmentTeam.xcconfig` (see Versions and
+signing). No workflow reads a secret.
+
 ### What CI does not do
 
 No step runs a UI test, a physical-device build, an archive, a notarization or an
@@ -91,7 +108,8 @@ configuration, which is Debug for a build and a test.
 | `DEVELOPMENT_TEAM` | `$(inherited)`, from `Config.xcconfig` | project |
 
 Versions are literal numbers in `project.pbxproj`, edited by hand in a commit. No workflow, script
-or build phase sets or increments them. `Config.xcconfig` includes `DevelopmentTeam.xcconfig` with
+or build phase sets or increments them. `Tests` keeps `1.0` and `1`, as its bundle isn't
+distributed. `Config.xcconfig` includes `DevelopmentTeam.xcconfig` with
 `#include?`, so the file is optional. It is git-ignored, so CI builds without a team, and a local
 build with that file signs with the developer's team.
 
@@ -138,17 +156,13 @@ build with that file signs with the developer's team.
   is what the formatter makes. `swift-format lint` also reports rules the formatter doesn't fix
   (such as `ReplaceForEachWithForLoop` and `AlwaysUseLowerCamelCase`), which the code base
   doesn't follow.
-- **Hand-edited versions.** The numbers are in one file per target and change in a reviewed commit.
+- **Hand-edited versions.** The numbers are in one file per target and change in a commit, by the
+  one developer who also builds the release.
 
 ## Open questions
 
-- **What a release ships.** `release-builds` produces no artifact, and no file says how the app
-  reaches users or the App Store, or what signing or `ExportOptions` it uses. See [#1741](https://github.com/bolsinga/site/issues/1741).
-- **Release trigger.** Whether the `branches: [ main ]` under `release` limits releases to `main`
-  is not stated anywhere in the repo. See [#1741](https://github.com/bolsinga/site/issues/1741).
-- **Who bumps versions.** Nothing says when `MARKETING_VERSION` and `CURRENT_PROJECT_VERSION`
-  change, or why `Tests` stays at `1.0` and `1`. See [#1741](https://github.com/bolsinga/site/issues/1741).
-- **Secrets.** No workflow names a secret or input. How a release is signed is outside the files. See [#1741](https://github.com/bolsinga/site/issues/1741).
+- **Automated version bump.** The versions are bumped by hand. See [#1785](https://github.com/bolsinga/site/issues/1785).
+- **Signed builds from CI.** Signed builds are made locally, and CI has no secrets. See [#1786](https://github.com/bolsinga/site/issues/1786).
 - **Test coverage.** The tests don't run on iOS or tvOS in CI, and no test plan is used. See [#1743](https://github.com/bolsinga/site/issues/1743).
 - **Lint.** `swift-format lint` with the default configuration reports 28 errors on the code
   base as it is, in rules the formatter doesn't fix. Whether CI should run it, with those fixed or
