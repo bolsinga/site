@@ -5,6 +5,7 @@
 //  Created by Greg Bolsinga on 10/18/24.
 //
 
+import CoreLocation
 import SwiftUI
 
 extension Bundle {
