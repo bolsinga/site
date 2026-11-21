@@ -72,7 +72,8 @@ artists each have their own map. `nextID` loads the music with
 `artistsWithShowsOnly: false`, so artists without shows still hold their ids. For each of the
 three maps it strips every non-digit from each key, and parses the result as an `Int` (keys
 with no digits are dropped). It builds `0..<count`, removes the existing numbers, and prints the
-smallest one left. If nothing is left, it prints the number of keys.
+smallest one left. If nothing is left, it prints the number of keys, which for an empty map is
+`0`.
 
 ## Rules
 
@@ -97,8 +98,6 @@ smallest one left. If nothing is left, it prints the number of keys.
 
 ## Open questions
 
-- `archiveIndices` evaluates `0...(count - 1)`: with an empty map that range is invalid, and
-  `nextID` would trap rather than print `0`. Is an empty map possible? See [#1746](https://github.com/bolsinga/site/issues/1746).
 - `dumpVault` and `dumpLookup` overwrite the app's saved `Bracket` on a Mac that has run the
   app, and may read it when offline. Is that intended? See [#1747](https://github.com/bolsinga/site/issues/1747).
 - `dumpBracket` and `dumpLookup` print `cannot encode ...` and exit zero if the UTF-8 step fails. See [#1748](https://github.com/bolsinga/site/issues/1748).
