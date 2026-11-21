@@ -16,7 +16,7 @@ extension Logger {
 @Observable public final class SiteModel {
   public enum Reason {
     case preview
-    case initial(Date)
+    case initial
     case refresh
     case errorRetry
 
@@ -44,8 +44,6 @@ extension Logger {
   @ObservationIgnored internal var vaultProvider: VaultProvider?
   internal var error: Error?
 
-  var lastModified: Date = .distantPast
-
   #if !os(tvOS)
     /// The latest widget snapshot publish, so the next one can cancel it.
     @ObservationIgnored var widgetPublish: Task<Void, Never>?
@@ -62,14 +60,12 @@ extension Logger {
     self.error = error
   }
 
-  private func modifiedDate(_ reason: Reason) -> Date {
+  private func policy(_ reason: Reason) -> Lookup.LoadPolicy {
     switch reason {
     case .preview, .errorRetry:
-      .distantPast
-    case .initial(let date):
-      date
-    case .refresh:
-      lastModified
+      .download
+    case .initial, .refresh:
+      .savedIfCurrent
     }
   }
 
@@ -87,15 +83,14 @@ extension Logger {
       let vault: Vault
       if let vaultProvider {
         vault = try await vaultProvider.load(
-          previousModified: modifiedDate(reason), joining: reason.joinsRunningLoad)
+          policy: policy(reason), joining: reason.joinsRunningLoad)
       } else {
-        vault = try await Vault.load(urlString, previousModified: modifiedDate(reason))
+        vault = try await Vault.load(urlString, policy: policy(reason))
       }
       guard request == loadCount else {
         Logger.vaultLoader.log("superseded: \(String(describing: reason), privacy: .public)")
         return
       }
-      self.lastModified = vault.timestamp
 
       vaultModel?.cancelTasks()
       vaultModel = VaultModel(vault, executeAsynchronousTasks: reason.executeAsynchronousTasks)
