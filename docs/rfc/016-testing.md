@@ -1,7 +1,7 @@
 # RFC 016: Testing
 
-Status: Accepted · Updated: 2026-11-19 · Code: `Tests/` (`SiteTests`, `MusicDataTests`,
-`UtilitiesTests`), `Sources/Site/Music/UI` (`VaultPreviewModifier`, `NearbyPreviewModifer`),
+Status: Accepted · Updated: 2026-11-20 · Code: `Tests/` (`SiteTests`, `MusicDataTests`,
+`UtilitiesTests`), `Sources/Site/Music/UI` (`VaultPreviewModifier`, `SampleMusic`, `NearbyPreviewModifer`),
 `.github/workflows/main.yml`
 
 ## Summary
@@ -37,13 +37,14 @@ The tests run as the one `Tests` target of `SiteApp.xcodeproj`, hosted by the ap
 
 ## Making data
 
-There is no sample data file and no fixture in `Tests/`. A test builds what it needs in code.
+There is no data file and no fixture in `Tests/`. A test builds what it needs in code. The one
+sample archive is `SampleMusic`, for previews, and a test checks it ([Previews](#previews)).
 
 - A `Vault` is made from a small `Music(albums:artists:relations:shows:songs:venues:)` value,
   wrapped as `Vault(lookup: Lookup(bracket: Bracket(music:timestamp:)), rootURL:)`. A test that
   only needs the shape passes empty arrays and `https://www.example.com/` as the root.
 - A test that needs a `VaultModel` makes it from such a `Vault` (see `CurrentCityTests`).
-- Tests MUST NOT fetch from the network. The live JSON is only for previews.
+- Tests MUST NOT fetch from the network. Previews don't either.
 
 ## Previews
 
@@ -52,14 +53,16 @@ Previews are the fixture for views, not the tests. `PreviewTrait` extensions in
 
 | Trait | Gives |
 |---|---|
-| `.vaultModel` | a `VaultModel` loaded with `SiteModel.load(.preview)` from `https://www.bolsinga.com/json/shows.json` |
+| `.vaultModel` | `VaultModel.sample()`: a `VaultModel` of `SampleMusic`, made with `Vault(json:rootURL:)`, with no network |
 | `.vaultModelWithError` | the same model with its `error` set to `VaultError.illegalURL` |
 | `.nearbyModel` | a fresh `NearbyModel` |
 
 `VaultModel` has `preview…` helpers (`previewShow`, `previewVenue`, `previewArtist`,
 `previewAnnum`, `previewAllArtists`, `previewAllVenues`). They force-unwrap, so they are for
-previews only, and no test uses these traits or helpers. `Reason.preview` does not start the
-asynchronous tasks the other reasons start, and loads with no previous modified date.
+previews only. `SampleMusic` is 20 shows of the real archive, with their artists, venues and one
+relation, and keeps their ids. The previews look up some of them (`sh1`, `sh100`, `sh500`,
+`sh899`, `ar692`, `v0`, `v103` and the years 2000 to 2002), and `SampleMusicTests` checks that
+they are there. A preview that needs another id adds its show to the sample.
 
 ## Determinism
 
@@ -105,13 +108,11 @@ asynchronous tasks the other reasons start, and loads with no previous modified 
   A shared fixture file would hide it and need updating when the model changes.
 - **Pure policies.** Taking `now` and a resolver as arguments tests the rules of [RFC 008](008-nearby-location-filter.md)
   without a clock, a network or a location permission prompt.
-- **Previews for views.** The previews load the real archive, so they show real data, and are not
-  a substitute for deterministic tests.
+- **Previews for views.** The previews show real shows from a small sample, so they work offline,
+  and are not a substitute for deterministic tests.
 - **One target.** A single `Tests` target gives one scheme action for CI.
 
 ## Open questions
 
-- **Previews need the network.** `.vaultModel` fetches the live JSON, so a preview fails offline.
-  A bundled sample would not. See [#1745](https://github.com/bolsinga/site/issues/1745).
 - **Simulator tests.** CI builds for iOS and tvOS but does not test there. See [#1743](https://github.com/bolsinga/site/issues/1743).
 - **Test plan.** No `.xctestplan` was found; whether one is wanted is not decided. See [#1743](https://github.com/bolsinga/site/issues/1743).
