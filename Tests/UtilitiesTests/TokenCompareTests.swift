@@ -115,4 +115,23 @@ struct TokenCompareTests {
     #expect("\"Song Title\"".removeCommonInitialPunctuation == "Song Title")
     #expect("\"Longer Song Title\"".removeCommonInitialPunctuation == "Longer Song Title")
   }
+
+  @Test func punctuationInsideANameKeepsTheName() {
+    #expect("AC/DC".removeCommonInitialPunctuation == "AC/DC")
+    #expect("!!!".removeCommonInitialPunctuation == "!!!")
+  }
+
+  @Test func punctuationAroundTheWordsOfANameIsRemoved() {
+    #expect("(hed) pe".removeCommonInitialPunctuation == "hed pe")
+    #expect("(hed) pe)".removeCommonInitialPunctuation == "hed pe")
+    #expect("\"Quoted\" Words".removeCommonInitialPunctuation == "Quoted Words")
+    #expect("(AC/DC)".removeCommonInitialPunctuation == "AC/DC")
+  }
+
+  @Test func punctuationInsideANameSetsItsSection() {
+    #expect("AC/DC".removeCommonInitialPunctuation.librarySection == .alphabetic("A"))
+    #expect("(hed) pe".removeCommonInitialPunctuation.librarySection == .alphabetic("H"))
+    #expect("(Smog)".removeCommonInitialPunctuation.librarySection == .alphabetic("S"))
+    #expect("!!!".removeCommonInitialPunctuation.librarySection == .punctuation)
+  }
 }

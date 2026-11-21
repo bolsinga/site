@@ -36,7 +36,7 @@ archive or the network can't give back, apart from the person's own choices.
 
 | File | Where | Written by | Retired by | Unreadable |
 |---|---|---|---|---|
-| `bracket-<n>.json` (`bracket.json` for 1) | Caches | `Bracket.save`, after a download | `bracketCacheVersion`, 3 | cache failure: download ([RFC 005](005-music-loading.md), [006](006-precomputed-music-data.md)) |
+| `bracket-<n>.json` (`bracket.json` for 1) | Caches | `Bracket.save`, after a download | `bracketCacheVersion`, 4 | cache failure: download ([RFC 005](005-music-loading.md), [006](006-precomputed-music-data.md)) |
 | `atlas-<n>.json` (`atlas.json` for 1) | Caches | `AtlasCache`, on each geocode | `atlasCacheVersion`, 1, with a save deleting the older files; six-month expiry per entry ([RFC 002](002-mapkit-geocoding.md)) | logged, starts empty; the next geocode saves a new file |
 | `venue-checks.json`, `venue-suggestions.json`, `venue-web-checks.json` | Caches | Venue Places `PickStore` (Debug, macOS) | `CacheAge.maximum` ([RFC 001](001-venue-places.md)) | left alone, not overwritten; Venue Places shows an error |
 | `shows-today.json` | app group `group.gdb.SiteApp`, `Library/Application Support` | `ShowsTodaySnapshot.write` | `currentVersion`, 2 | no snapshot ([RFC 007](007-shows-today-widget.md)) |
