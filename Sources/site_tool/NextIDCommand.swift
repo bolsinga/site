@@ -9,23 +9,21 @@ import Foundation
 import Shared
 
 extension Collection where Element == String {
-  /// The numbers below the count of the ids that no id has.
-  var archiveIndices: Set<Int> {
+  fileprivate var archiveIndices: Set<Int> {
     let existingIndices = self.compactMap {
       Int($0.trimmingCharacters(in: .decimalDigits.inverted))
     }
-    return Set(0..<existingIndices.count).subtracting(existingIndices)
-  }
-
-  /// The smallest gap in the ids, or the count of them when there is none.
-  var nextArchiveIndex: Int {
-    archiveIndices.min() ?? count
+    let expectedIndices = Set(0..<existingIndices.count)
+    return expectedIndices.subtracting(existingIndices)
   }
 }
 
 extension Bracket {
   fileprivate func nextIndex(_ items: any Collection<ArchivePath>) -> Int {
-    items.map { String(describing: $0) }.nextArchiveIndex
+    guard let first = items.map({ String(describing: $0) }).archiveIndices.sorted().first else {
+      return items.count
+    }
+    return first
   }
 
   fileprivate var nextShowIndex: Int {
