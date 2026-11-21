@@ -33,6 +33,9 @@ extension Logger {
   private let urlString: String
 
   public var vaultModel: VaultModel?
+
+  /// Told of each vault that loads, so App Intents use it.
+  @ObservationIgnored internal var vaultProvider: VaultProvider?
   internal var error: Error?
 
   var lastModified: Date = .distantPast
@@ -83,6 +86,7 @@ extension Logger {
         return
       }
       self.lastModified = vault.timestamp
+      await vaultProvider?.use(vault)
 
       vaultModel?.cancelTasks()
       vaultModel = VaultModel(vault, executeAsynchronousTasks: reason.executeAsynchronousTasks)

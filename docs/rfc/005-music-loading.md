@@ -22,6 +22,7 @@ SiteModel.load ─► Vault.load ─► Vault ─► Lookup ─► Bracket ─�
 | Type | Is | Lives |
 |---|---|---|
 | `SiteModel` | decides when to load, and swaps in the new model | the app |
+| `VaultProvider` | the `Vault` for App Intents, which can run with no scene: it is given each load, and loads one itself if asked first | the app |
 | `VaultModel` | one loaded `Vault` and the session state around it: location, Maps, today | until the next load |
 | `Vault` | the read-only query API the app, intents and widgets use; adds URLs and list orders | one load |
 | `Lookup` | chooses where the `Bracket` comes from, and answers per-item questions from it | one load |
@@ -70,7 +71,12 @@ the download it was made from. `SiteModel` keeps it in memory and in `@AppStorag
    is never changed in place.
 7. Work that follows a load (the widget snapshot, the Spotlight index, geocoding, location)
    starts from the new model, and is skipped for previews.
-8. Code outside `Shared` MUST reach the data through `Vault`. `Bracket` is public only for the
+8. A load that isn't made by `SiteModel` can still happen: `VaultProvider` loads when an intent
+   asks before the app has, with `Vault.load` and the stored last-modified date, so it follows
+   rules 1 to 5, from the saved `Bracket` when it is current. `SiteModel` hands every vault it
+   loads to the provider, and a vault it hands over replaces the provider's. A launch with a
+   scene and an intent can make both loads. The tasks of rule 7 stay with `SiteModel`.
+9. Code outside `Shared` MUST reach the data through `Vault`. `Bracket` is public only for the
    command line tool, which builds one directly and doesn't use the cache.
 
 ## Rationale

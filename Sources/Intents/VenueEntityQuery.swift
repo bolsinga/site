@@ -20,6 +20,7 @@ struct VenueEntityQuery: EntityQuery {
   func entities(for identifiers: [VenueEntity.ID]) async throws -> [VenueEntity] {
     Logger.venueQuery.log("Identifiers: \(identifiers)")
 
+    let vault = try await provider.vault()
     return identifiers.reduce(into: [VenueEntity]()) { partialResult, id in
       guard let entity = vault.venueEntity(for: id) else { return }
       partialResult.append(entity)
@@ -29,23 +30,20 @@ struct VenueEntityQuery: EntityQuery {
   func suggestedEntities() async throws -> [VenueEntity] {
     Logger.venueQuery.log("Suggested")
 
-    let ids = vault.venueIDs(on: Date.now.dayOfLeapYear, orRecentCount: 5)
+    let ids = try await provider.vault().venueIDs(on: Date.now.dayOfLeapYear, orRecentCount: 5)
 
     return try await entities(for: ids.reversed())
   }
 
   @Dependency
-  private var vault: Vault
-
-  @Dependency
-  private var catalog: EntityCatalog
+  private var provider: VaultProvider
 }
 
 extension VenueEntityQuery: EntityStringQuery {
   func entities(matching string: String) async throws -> [VenueEntity] {
     Logger.venueQuery.log("Matching: \(string)")
 
-    return vault.venueEntities(filteredBy: string)
+    return try await provider.vault().venueEntities(filteredBy: string)
   }
 }
 
@@ -151,7 +149,7 @@ extension VenueEntityQuery: EntityPropertyQuery {
   ) async throws -> [VenueEntity] {
     Logger.venueQuery.log("Predicate")
 
-    var matchedEntities = try entities(matching: comparators, mode: mode)
+    var matchedEntities = try await entities(matching: comparators, mode: mode)
 
     for sortOperation in sortedBy {
       switch sortOperation.by {
@@ -182,10 +180,10 @@ extension VenueEntityQuery: EntityPropertyQuery {
     return matchedEntities
   }
 
-  private func entities(matching comparators: [Predicate<VenueEntity>], mode: ComparatorMode) throws
-    -> [VenueEntity]
+  private func entities(matching comparators: [Predicate<VenueEntity>], mode: ComparatorMode)
+    async throws -> [VenueEntity]
   {
-    try catalog.venues.compactMap { entity in
+    try await provider.catalog().venues.compactMap { entity in
       var includeAsResult = mode == .and ? true : false
       let earlyBreakCondition = includeAsResult
       for comparator in comparators {
@@ -209,13 +207,13 @@ extension VenueEntityQuery: EntityPropertyQuery {
       Logger.venueQuery.log(
         "Reindex: \(identifiers.count, privacy: .public) \(String(describing: indexDescription), privacy: .public)"
       )
-      try await vault.reindexVenuesForSpotlight(ids: identifiers)
+      try await provider.vault().reindexVenuesForSpotlight(ids: identifiers)
     }
 
     func reindexAllEntities(indexDescription: CSSearchableIndexDescription) async throws {
       Logger.venueQuery.log(
         "Reindex all: \(String(describing: indexDescription), privacy: .public)")
-      await vault.indexForSpotlight(force: true)
+      try await provider.vault().indexForSpotlight(force: true)
     }
   }
 #endif

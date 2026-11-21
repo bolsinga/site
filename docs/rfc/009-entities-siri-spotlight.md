@@ -1,6 +1,6 @@
 # RFC 009: App Intents entities, Siri and Spotlight
 
-Status: Accepted · Updated: 2026-11-19 · Code: `Sources/Intents`, `Sources/Site/Music/VaultModel.swift`,
+Status: Accepted · Updated: 2026-11-20 · Code: `Sources/Intents`, `Sources/Site/Music/VaultProvider.swift`, `Sources/App/SiteAppApp.swift`,
 `Sources/Site/Music/*+NSUserActivity.swift`, `Sources/Site/Music/SiteModel.swift`
 
 ## Summary
@@ -45,11 +45,18 @@ shortcuts do, and how Spotlight is kept in step with the archive.
 Entities are made from the archive's digests by the `Vault` (`artistEntity(for:)` and the like),
 which also supplies the URL, from what the digests ([RFC 006](006-precomputed-music-data.md)) already hold.
 
-8. Code that runs in an intent reads the archive through `@Dependency var vault: Vault`.
-   `VaultModel` registers the `Vault` with `AppDependencyManager` when it is made.
-9. A deferred property is asked for by the system outside of an intent, where `@Dependency` can't
-   be read, so it uses `EntityVault.vault`, which `VaultModel` sets alongside. A load that is
-   not for a preview MUST set both, and a newer load replaces them.
+8. Code that runs in an intent reads the archive through `@Dependency var provider:
+   VaultProvider`, and `try await provider.vault()` (or `provider.catalog()`). `SiteAppApp`
+   registers the provider with `AppDependencyManager` in `init`, before any scene exists. The
+   system runs an intent in a launched app that has no scene, so no view has loaded the archive,
+   and it fails an intent whose dependency is missing at once, not after a wait.
+   The provider answers with the vault the app has loaded, and otherwise loads one itself, from
+   the saved archive when it is current ([RFC 005](005-music-loading.md)), sharing that load
+   among everything that asks while it runs. A failed load throws, and the next ask tries again.
+9. `SiteModel` MUST hand each vault it loads to the provider (`use(_:)`), so a newer load replaces
+   the vault and the `EntityCatalog` an intent sees. A deferred property is asked for by the
+   system outside of an intent, where `@Dependency` can't be read, so it uses
+   `EntityVault.vault()`, which asks the same provider.
 10. Every entity type has a query with these parts:
     - **By id.** The ids that exist, in the order asked.
     - **Suggested.** The artists, venues or concerts of today's date, or the five most recent
@@ -60,7 +67,7 @@ which also supplies the URL, from what the digests ([RFC 006](006-precomputed-mu
       evaluated over every entity, and sorted before the limit is applied.
 11. A query that goes through every entity (by property, and a concert's by string, and the list
     of cities) MUST read them from `EntityCatalog`, which makes each kind the first time it is
-    asked for and keeps it until the next load. `VaultModel` registers a new one with each
+    asked for and keeps it until the next load. The provider makes a new one with each
     `Vault`, so entities are never kept from an older archive. Entities are kept in memory from the
     first such query until the next load.
 
@@ -77,7 +84,8 @@ which also supplies the URL, from what the digests ([RFC 006](006-precomputed-mu
 venue and in a city, and for today's concerts. The phrases are in `AppShortcuts.xcstrings`.
 
 12. The app MUST call `updateAppShortcutParameters()` at launch, so phrases that name an artist, a
-    venue or a city know the entities the archive has.
+    venue or a city know the entities the archive has. It reads them through the provider, so it
+    works when the app was launched for an intent and has no scene.
 13. `ShowConcerts` and `ShowConcertsToday` answer: they return the concerts, a spoken count
     ("Found 3 concerts"), and a snippet of the first six, with "And N more". They MUST NOT open
     the app. A search narrows by any mix of artist, venue, city and date, and a part left out does
@@ -116,12 +124,14 @@ a URL, as the entity requires one.
   app keeps one way to turn a URL into a screen.
 - **Answer in the intent.** A question like "what shows were here today" is better answered with
   a list than by opening the app, so those intents return a value, dialog and snippet.
+- **A provider, not a view.** Intents are the one entry point that can run with no scene, and a
+  scene is what loads the archive. Registering the vault when a view had loaded it left them
+  with nothing, and Shortcuts showed "This current action is not allowed" for every parameter.
+  A provider that exists from launch, and loads on demand, makes the archive available to
+  whatever asks.
 - **A stamp on the index.** Indexing everything is slow work. The stamp makes a launch on the same
   archive cost one read, and the version covers changes the archive's date can't show.
 
 ## Open questions
 
-- **An intent before the first load.** The `Vault` is registered when the first `VaultModel` is
-  made, after the archive has loaded. An intent that runs before then has no `Vault` to read.
-  What the system does in that case isn't documented here. See [#1722](https://github.com/bolsinga/site/issues/1722).
 - **Cities.** `CityEntity` is a parameter only. It isn't indexed, and has no page to open.
