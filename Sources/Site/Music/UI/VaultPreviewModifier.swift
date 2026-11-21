@@ -5,20 +5,17 @@
 //  Created by Greg Bolsinga on 7/29/25.
 //
 
+import Foundation
 import Shared
 import SwiftUI
 
 private enum VaultPreviewError: Error {
-  case noModel
+  case noSample
 }
 
 struct VaultPreviewModifier: PreviewModifier {
   static func makeSharedContext() async throws -> VaultModel {
-    let siteModel = SiteModel(urlString: "https://www.bolsinga.com/json/shows.json")
-    await siteModel.load(.preview)
-    guard siteModel.error == nil else { throw siteModel.error! }
-    guard let vaultModel = siteModel.vaultModel else { throw VaultPreviewError.noModel }
-    return vaultModel
+    try await VaultModel.sample()
   }
 
   func body(content: Content, context: VaultModel) -> some View {
@@ -31,11 +28,7 @@ struct VaultErrorPreviewModifier: PreviewModifier {
   let error: Error
 
   static func makeSharedContext() async throws -> VaultModel {
-    let siteModel = SiteModel(urlString: "https://www.bolsinga.com/json/shows.json")
-    await siteModel.load(.preview)
-    guard siteModel.error == nil else { throw siteModel.error! }
-    guard let vaultModel = siteModel.vaultModel else { throw VaultPreviewError.noModel }
-    return vaultModel
+    try await VaultModel.sample()
   }
 
   func body(content: Content, context: VaultModel) -> some View {
@@ -55,6 +48,16 @@ extension PreviewTrait where T == Preview.ViewTraits {
 }
 
 extension VaultModel {
+  /// A model of a few shows of the archive, which starts no tasks.
+  @MainActor static func sample() async throws -> VaultModel {
+    guard let url = Bundle.main.url(forResource: "sample-shows", withExtension: "json") else {
+      throw VaultPreviewError.noSample
+    }
+    let vault = try await Vault(
+      json: try Data(contentsOf: url), rootURL: URL(string: "https://www.bolsinga.com/")!)
+    return VaultModel(vault, executeAsynchronousTasks: false)
+  }
+
   func previewArtist(_ id: String) -> ArtistDigest {
     vault.digest(artist: .artist(id))!
   }
