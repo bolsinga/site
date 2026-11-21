@@ -9,6 +9,10 @@ import Foundation
 import Shared
 import SwiftUI
 
+private enum VaultPreviewError: Error {
+  case noSample
+}
+
 struct VaultPreviewModifier: PreviewModifier {
   static func makeSharedContext() async throws -> VaultModel {
     try await VaultModel.sample()
@@ -44,10 +48,13 @@ extension PreviewTrait where T == Preview.ViewTraits {
 }
 
 extension VaultModel {
-  /// A model of `SampleMusic`, which starts no tasks.
+  /// A model of a few shows of the archive, which starts no tasks.
   @MainActor static func sample() async throws -> VaultModel {
+    guard let url = Bundle.main.url(forResource: "sample-shows", withExtension: "json") else {
+      throw VaultPreviewError.noSample
+    }
     let vault = try await Vault(
-      json: Data(SampleMusic.json.utf8), rootURL: URL(string: "https://www.bolsinga.com/")!)
+      json: try Data(contentsOf: url), rootURL: URL(string: "https://www.bolsinga.com/")!)
     return VaultModel(vault, executeAsynchronousTasks: false)
   }
 

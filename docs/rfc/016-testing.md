@@ -1,7 +1,7 @@
 # RFC 016: Testing
 
 Status: Accepted · Updated: 2026-11-20 · Code: `Tests/` (`SiteTests`, `MusicDataTests`,
-`UtilitiesTests`), `Sources/Site/Music/UI` (`VaultPreviewModifier`, `SampleMusic`, `NearbyPreviewModifer`),
+`UtilitiesTests`), `Sources/Site/Music/UI` (`VaultPreviewModifier`, `NearbyPreviewModifer`), `Sources/App/Preview Content/sample-shows.json`,
 `.github/workflows/main.yml`
 
 ## Summary
@@ -38,7 +38,7 @@ The tests run as the one `Tests` target of `SiteApp.xcodeproj`, hosted by the ap
 ## Making data
 
 There is no data file and no fixture in `Tests/`. A test builds what it needs in code. The one
-sample archive is `SampleMusic`, for previews, and a test checks it ([Previews](#previews)).
+sample archive is `sample-shows.json`, for previews, and a test checks it ([Previews](#previews)).
 
 - A `Vault` is made from a small `Music(albums:artists:relations:shows:songs:venues:)` value,
   wrapped as `Vault(lookup: Lookup(bracket: Bracket(music:timestamp:)), rootURL:)`. A test that
@@ -53,16 +53,17 @@ Previews are the fixture for views, not the tests. `PreviewTrait` extensions in
 
 | Trait | Gives |
 |---|---|
-| `.vaultModel` | `VaultModel.sample()`: a `VaultModel` of `SampleMusic`, made with `Vault(json:rootURL:)`, with no network |
+| `.vaultModel` | `VaultModel.sample()`: a `VaultModel` of `sample-shows.json`, made with `Vault(json:rootURL:)`, with no network |
 | `.vaultModelWithError` | the same model with its `error` set to `VaultError.illegalURL` |
 | `.nearbyModel` | a fresh `NearbyModel` |
 
 `VaultModel` has `preview…` helpers (`previewShow`, `previewVenue`, `previewArtist`,
 `previewAnnum`, `previewAllArtists`, `previewAllVenues`). They force-unwrap, so they are for
-previews only. `SampleMusic` is 20 shows of the real archive, with their artists, venues and one
+previews only. `sample-shows.json` is 20 shows of the real archive, with their artists, venues and one
 relation, and keeps their ids. The previews look up some of them (`sh1`, `sh100`, `sh500`,
 `sh899`, `ar692`, `v0`, `v103` and the years 2000 to 2002), and `SampleMusicTests` checks that
-they are there. A preview that needs another id adds its show to the sample.
+they are there. A preview that needs another id adds its show to the sample. The file is in `Preview Content`, a
+development asset path, so it is not in a release build.
 
 ## Determinism
 
