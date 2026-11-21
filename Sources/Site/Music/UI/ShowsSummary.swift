@@ -5,6 +5,7 @@
 //  Created by Greg Bolsinga on 9/23/24.
 //
 
+import CoreLocation
 import Shared
 import SwiftUI
 
