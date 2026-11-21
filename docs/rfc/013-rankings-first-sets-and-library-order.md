@@ -70,8 +70,9 @@ An artist or venue is ordered by a compare token made in advance ([RFC 006](006-
 2. A leading "The", "A" or "An" (any case, followed by whitespace) is removed. Then if what is
    left is words with only spaces, with punctuation before and after, that punctuation is
    removed too.
-   Punctuation inside the name stops that: "AC/DC" and "(hed) pe" keep theirs, so "AC/DC" is
-   under A, and "(hed) pe" is in the punctuation section, not under H.
+   Otherwise, a name that begins with punctuation loses the punctuation around each of its words,
+   so "(hed) pe" is "hed pe" and is under H. Punctuation inside a word stays, so "AC/DC" is under
+   A, and a name of only punctuation, "!!!", stays in the punctuation section.
 3. Tokens compare ascending, ignoring case and diacritics.
 4. The section is the token's first character: a digit is numeric, punctuation is
    punctuation, and anything else is that character in capitals. Sections sort the letters,
