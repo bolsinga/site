@@ -28,6 +28,8 @@ public struct Lookup: Codable, Sendable {
     case savedIfCurrent
     /// Download, and use the saved `Bracket` only if that fails.
     case download
+    /// Download, and neither read nor write the saved `Bracket`.
+    case uncached
   }
 
   /// The `Bracket` to build from. The saved copy's `timestamp` is the date of the archive it was
@@ -81,6 +83,8 @@ public struct Lookup: Codable, Sendable {
       return try await downloaded { saved }
     case .download:
       return try await downloaded { saved() }
+    case .uncached:
+      return try await download(url)
     }
   }
 

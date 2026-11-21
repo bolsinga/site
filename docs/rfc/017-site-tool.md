@@ -48,13 +48,13 @@ The JSON dumps use sorted keys, pretty printing and ISO 8601 dates, and are prin
 |---|---|---|---|
 | `dumpBracket` | `Bracket(url:)` | not read | not read or written |
 | `nextID` | `Bracket(url:artistsWithShowsOnly: false)` | not read | not read or written |
-| `dumpVault`, `dumpLookup` | `Vault.load` / `Lookup(url:)` with `policy: .download` | not read | the saved `Bracket` only if the download fails, and the download is saved |
+| `dumpVault`, `dumpLookup` | `Vault.load` / `Lookup(url:)` with `policy: .uncached` | not read | not read or written |
 | `dumpDiary` | `Diary.load` | not read | none |
 
 `Bracket(url:)` downloads with `.reloadIgnoringLocalCacheData`, decodes, and derives the snapshot
 ([RFC 006](006-precomputed-music-data.md)); the date it returns is not used. `dumpVault` and `dumpLookup` use [RFC 005](005-music-loading.md)'s
-`download` policy, so they always download, save the `Bracket` to the app's Caches file, and print
-from it. No `HEAD` is sent.
+`uncached` policy, so they always download and print from the download. No `HEAD` is sent, and the
+`Bracket` the app saved in its Caches is neither read nor replaced.
 
 ## The diary
 
@@ -81,8 +81,9 @@ smallest one left. If nothing is left, it prints the number of keys, which for a
    with `NSTreatUnknownArgumentsAsOpen` first) the app starts.
 2. A command that fails MUST throw, and swift-argument-parser prints the error and exits
    non-zero. The commands catch no errors.
-3. `dumpVault` and `dumpLookup` MUST NOT be read as cache-free: they save the `Bracket`
-   ([RFC 005](005-music-loading.md) rule 3) and, if the network fails, read the one the app saved.
+3. The tool MUST NOT read or write what the app saved. `dumpVault` and `dumpLookup` load with
+   the `uncached` policy, so a Mac that has run the app keeps its saved `Bracket`, and a failed
+   download is an error and not a stale answer.
 4. `nextID` MUST load all artists, not only those with shows.
 5. The JSON dumps MUST use sorted keys and ISO 8601 dates, so output is stable for diffing.
    The text dumps have no stated stability.
@@ -90,7 +91,8 @@ smallest one left. If nothing is left, it prints the number of keys, which for a
 ## Rationale
 
 - **Straight to the URL.** `Bracket(url:)` shows what the generator produced now, with no
-  dependence on what an earlier run saved.
+  dependence on what an earlier run saved, and no change to it. The tool runs in the app's
+  executable and so shares its container, which is why it is kept away from the app's cache.
 - **Gaps first.** A new id fills a gap before extending the sequence, so ids stay dense.
 - **One executable.** The tool shares the app's model code without a second target.
 - **The diary on every platform.** The app will use it, so it is built for the app's platforms
@@ -98,8 +100,6 @@ smallest one left. If nothing is left, it prints the number of keys, which for a
 
 ## Open questions
 
-- `dumpVault` and `dumpLookup` overwrite the app's saved `Bracket` on a Mac that has run the
-  app, and may read it when offline. Is that intended? See [#1747](https://github.com/bolsinga/site/issues/1747).
 - `dumpBracket` and `dumpLookup` print `cannot encode ...` and exit zero if the UTF-8 step fails. See [#1748](https://github.com/bolsinga/site/issues/1748).
 - The `dumpLookup` abstract says "text output" but the output is JSON. See [#1748](https://github.com/bolsinga/site/issues/1748).
 - The id format (prefix and number) is not read here; `nextID` assumes digits in each id.

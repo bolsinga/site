@@ -183,4 +183,32 @@ struct BracketLoadTests {
       try await load(.download, store: store, network: network)
     }
   }
+
+  @Test func uncachedDownloadsWithoutReadingOrWritingTheSavedCopy() async throws {
+    let store = InMemoryCache()
+    try await bracket(artistName: "Saved", timestamp: old).save(store: store)
+    let savesBefore = store.saves
+    let removalsBefore = store.removals
+    let network = Network(
+      updated: false, download: try await bracket(artistName: "Downloaded", timestamp: new))
+
+    let result = try await load(.uncached, store: store, network: network)
+
+    #expect(names(result) == ["Downloaded"])
+    #expect(network.checkedSince.isEmpty)
+    #expect(store.reads.isEmpty)
+    #expect(store.saves == savesBefore)
+    #expect(store.removals == removalsBefore)
+    #expect(try Bracket.read(store: store).timestamp == old)
+  }
+
+  @Test func uncachedDoesNotFallBackToTheSavedCopy() async throws {
+    let store = InMemoryCache()
+    try await bracket(artistName: "Saved", timestamp: old).save(store: store)
+    let network = Network(updated: false, download: nil)
+
+    await #expect(throws: NetworkFailure.self) {
+      try await load(.uncached, store: store, network: network)
+    }
+  }
 }
