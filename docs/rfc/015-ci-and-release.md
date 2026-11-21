@@ -63,12 +63,12 @@ the workflows don't pass it.
 
 ### How a release is made today
 
-There is one developer and one branch (`main`). Nothing about a release is automated:
+A release is made at the desk. Nothing about it is automated:
 
-1. The developer bumps `MARKETING_VERSION` and `CURRENT_PROJECT_VERSION` by hand ([#1785](https://github.com/bolsinga/site/issues/1785)
-   would automate it).
-2. The developer builds a signed app locally, with their team id in the git-ignored
-   `DevelopmentTeam.xcconfig`, and distributes it from there ([#1786](https://github.com/bolsinga/site/issues/1786)
+1. The versions are bumped at the desk: `MARKETING_VERSION` and `CURRENT_PROJECT_VERSION`, by
+   hand ([#1785](https://github.com/bolsinga/site/issues/1785) would automate it).
+2. The signed app is built at the desk, with the team id in the git-ignored
+   `DevelopmentTeam.xcconfig`, and distributed from there ([#1786](https://github.com/bolsinga/site/issues/1786)
    would build and sign it in CI).
 3. Publishing a GitHub release runs `release.yml`, which repeats the checks of `main.yml` and
    produces no artifact.
@@ -156,8 +156,8 @@ build with that file signs with the developer's team.
   is what the formatter makes. `swift-format lint` also reports rules the formatter doesn't fix
   (such as `ReplaceForEachWithForLoop` and `AlwaysUseLowerCamelCase`), which the code base
   doesn't follow.
-- **Hand-edited versions.** The numbers are in one file per target and change in a commit, by the
-  one developer who also builds the release.
+- **Hand-edited versions.** The numbers are in one file per target and change in a commit, made at
+  the desk where the release is built.
 
 ## Open questions
 
