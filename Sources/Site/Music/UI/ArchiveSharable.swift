@@ -11,7 +11,7 @@ import Shared
 // iOS Only:
 // When sharing via Messages, link is shared followed by the message text.
 // When sharing via Mail, subject is as expected, and message is link followed by message text.
-// macos ventura: no subject nor message shown messages nor mail
+// macOS: Mail shows no subject.
 
 protocol ArchiveSharable {
   var subject: String { get }
