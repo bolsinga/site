@@ -16,6 +16,7 @@ extension Logger {
 }
 
 enum LocationAuthorization {
+  case notDetermined  // Not asked yet; location is first asked for when the filter is turned on.
   case allowed
   case restricted  // Locations are not possible.
   case denied  // Locations denied by user.
@@ -36,7 +37,7 @@ enum LocationAuthorization {
   @ObservationIgnored
   private var venuePlaceLookups = Set<ArchivePath>()
   private var currentLocation: CLLocation?
-  internal var locationAuthorization = LocationAuthorization.restricted
+  internal var locationAuthorization = LocationAuthorization.notDetermined
   internal private(set) var currentCity: String?
 
   @ObservationIgnored
@@ -54,6 +55,7 @@ enum LocationAuthorization {
 
   private var batchGeocodeCompleted = false
 
+  private let runsAsynchronousTasks: Bool
   private let locationManager: LocationManager
   private let cityResolver: any CityResolver
   /// Reverse geocoding is one kind of MapKit request, so its lookups share one window.
@@ -72,6 +74,7 @@ enum LocationAuthorization {
     error: Error? = nil
   ) {
     self.vault = vault
+    self.runsAsynchronousTasks = executeAsynchronousTasks
     self.cityResolver = cityResolver
     self.cityThrottle = cityThrottle
     self.locationManager = LocationManager(
@@ -95,6 +98,17 @@ enum LocationAuthorization {
       await self.geocodeVenues()
     }
 
+    // Asking is left until the filter is turned on, but an answer already given costs no prompt.
+    if LocationManager.isAuthorizationDetermined {
+      startLocationMonitoring()
+    }
+  }
+
+  /// Starts listening for location, which asks for access if it hasn't been decided. It is
+  /// started once.
+  @MainActor
+  func startLocationMonitoring() {
+    guard runsAsynchronousTasks, locationTask == nil else { return }
     locationTask = Task {
       await self.monitorUserLocation()
     }

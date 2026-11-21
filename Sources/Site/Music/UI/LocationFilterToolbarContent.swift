@@ -15,7 +15,7 @@ extension LocationAuthorization {
       filter.isActive ? "building.2.crop.circle.fill" : "building.2.crop.circle"
     case .none, .nearby:
       switch self {
-      case .allowed:
+      case .allowed, .notDetermined:
         filter.isActive ? "location.circle.fill" : "location.circle"
       case .restricted, .denied:
         filter.isActive ? "location.slash.circle.fill" : "location.slash.circle"

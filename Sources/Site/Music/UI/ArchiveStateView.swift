@@ -74,6 +74,13 @@ struct ArchiveStateView: View {
     }
     .environment(nearbyModel)
     .environment(\.archiveNavigationState, archiveNavigation.state)
+    .onChange(of: nearbyModel.isOn, initial: true) { startLocationIfFiltering() }
+    .onChange(of: ObjectIdentifier(model)) { startLocationIfFiltering() }
+  }
+
+  private func startLocationIfFiltering() {
+    guard nearbyModel.isOn else { return }
+    model.startLocationMonitoring()
   }
 
   /// The sort of the category being shown, which Handoff carries.
