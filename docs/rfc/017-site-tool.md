@@ -80,7 +80,9 @@ smallest one left. If nothing is left, it prints the number of keys, which for a
 1. The tool MUST run only on macOS, and only when `main.swift` finds arguments; with none (or
    with `NSTreatUnknownArgumentsAsOpen` first) the app starts.
 2. A command that fails MUST throw, and swift-argument-parser prints the error and exits
-   non-zero. The commands catch no errors.
+   non-zero. The commands catch no errors. A JSON dump that can't be made into text throws
+   `OutputEncodingError` ("cannot encode bracket" or "cannot encode lookup"), so the command exits
+   non-zero instead of printing the message as if it were the dump.
 3. The tool MUST NOT read or write what the app saved. `dumpVault` and `dumpLookup` load with
    the `uncached` policy, so a Mac that has run the app keeps its saved `Bracket`, and a failed
    download is an error and not a stale answer.
@@ -100,8 +102,6 @@ smallest one left. If nothing is left, it prints the number of keys, which for a
 
 ## Open questions
 
-- `dumpBracket` and `dumpLookup` print `cannot encode ...` and exit zero if the UTF-8 step fails. See [#1748](https://github.com/bolsinga/site/issues/1748).
-- The `dumpLookup` abstract says "text output" but the output is JSON. See [#1748](https://github.com/bolsinga/site/issues/1748).
 - The id format (prefix and number) is not read here; `nextID` assumes digits in each id.
 - Where `shows.json` and `music.json` come from is outside this repo (the generator).
 - How the tool is run (path to the built executable, sandbox: the target sets

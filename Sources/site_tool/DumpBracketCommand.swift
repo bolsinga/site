@@ -9,6 +9,13 @@ import ArgumentParser
 import Foundation
 import Shared
 
+/// Thrown when a dump's JSON can't be made into text, so the command exits non-zero.
+struct OutputEncodingError: LocalizedError {
+  let subject: String
+
+  var errorDescription: String? { "cannot encode \(subject)" }
+}
+
 extension Bracket {
   fileprivate func dump() throws {
     let encoder = JSONEncoder()
@@ -17,8 +24,7 @@ extension Bracket {
 
     let data = try encoder.encode(self)
     guard let value = String(data: data, encoding: .utf8) else {
-      print("cannot encode bracket")
-      return
+      throw OutputEncodingError(subject: "bracket")
     }
     print(value)
   }
