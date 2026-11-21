@@ -31,13 +31,13 @@ public struct Vault: Sendable {
     }
   }
 
-  public init(url: URL, previousModified: Date) async throws {
+  public init(url: URL, policy: Lookup.LoadPolicy) async throws {
     var signpost = Signpost(category: "vault", name: "process")
     signpost.start()
 
     guard let rootURL = url.rootURL else { throw VaultError.noRootURL(url.absoluteString) }
 
-    async let asyncLookup = await Lookup(url: url, previousModified: previousModified)
+    async let asyncLookup = await Lookup(url: url, policy: policy)
     self.init(lookup: try await asyncLookup, rootURL: rootURL)
   }
 

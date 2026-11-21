@@ -22,101 +22,65 @@ public struct Lookup: Codable, Sendable {
 
   private let showIDOrderIndex: [ArchivePath: Int]
 
-  private enum LoadAttempt {
-    // URL, previousModified, cacheLoadFailed
-    case networkLoad(URL, Date, Bool)
-    // URL, previousModified, networkLoadFailed
-    case cacheRead(URL, Date, Bool)
-    case complete(Bracket)
+  /// Where a load starts: from the saved `Bracket`, or from a download.
+  public enum LoadPolicy: Sendable {
+    /// Use the saved `Bracket` unless the server has a newer archive than its `timestamp`.
+    case savedIfCurrent
+    /// Download, and use the saved `Bracket` only if that fails.
+    case download
+  }
 
-    private func load() async throws -> LoadAttempt {
-      switch self {
-      case .networkLoad(let url, let previousModified, let cacheLoadFailed):
-        var signpost = Signpost(category: "bracket", name: "network")
-        signpost.start()
-
-        do {
-          var loadDataFromURL = cacheLoadFailed
-          if !loadDataFromURL {
-            loadDataFromURL = try await url.isUpdated(since: previousModified)
-          }
-
-          if loadDataFromURL {
-            Logger.bracketCache.info("loading")
-
-            let bracket = try await Bracket(url: url)
-            bracket.saveIfPossible()
-            return .complete(bracket)
-          } else {
-            Logger.bracketCache.info("not updated - read from cache")
-
-            return .cacheRead(url, previousModified, false)
-          }
-        } catch {
-          Logger.bracketCache.info(
-            "network error: \(error.localizedDescription, privacy: .public) cacheLoadFailed: \(cacheLoadFailed, privacy: .public)"
-          )
-
-          if cacheLoadFailed {
-            // The previous cache load failed, so go ahead and throw this error
-            throw error
-          }
-
-          // Try the cache
-          return .cacheRead(url, previousModified, true)
-        }
-
-      case .cacheRead(let url, let previousModified, let networkLoadFailed):
-        var signpost = Signpost(category: "bracket", name: "cache")
-        signpost.start()
-
-        do {
-          Logger.bracketCache.info("cache")
-
-          let bracket = try Bracket.read()
-          if !networkLoadFailed && bracket.isOlder(than: previousModified) {
-            Logger.bracketCache.info("cache is older than the last load - download")
-            return .networkLoad(url, previousModified, true)
-          }
-          return .complete(bracket)
-        } catch {
-          Logger.bracketCache.info(
-            "cache error: \(error.localizedDescription, privacy: .public) networkLoadFailed: \(networkLoadFailed, privacy: .public)"
-          )
-
-          if networkLoadFailed {
-            // Networking has already failed, so throw this error.
-            throw error
-          }
-
-          // Go back to the network, since the cache did not work.
-          return .networkLoad(url, previousModified, true)
-        }
-      case .complete(_):
-        return self
+  /// The `Bracket` to build from. The saved copy's `timestamp` is the date of the archive it was
+  /// made from, so it is what the server is asked about.
+  static func bracket(
+    url: URL,
+    policy: LoadPolicy,
+    store: any CacheCodable = FileManager.default,
+    isUpdated: @Sendable (URL, Date) async throws -> Bool = { try await $0.isUpdated(since: $1) },
+    download: @Sendable (URL) async throws -> Bracket = { try await Bracket(url: $0) }
+  ) async throws -> Bracket {
+    func saved() -> Bracket? {
+      do {
+        return try Bracket.read(store: store)
+      } catch {
+        Logger.bracketCache.info("cache error: \(error.localizedDescription, privacy: .public)")
+        return nil
       }
     }
 
-    var bracket: Bracket? {
-      switch self {
-      case .networkLoad(_, _, _), .cacheRead(_, _, _):
-        nil
-      case .complete(let bracket):
-        bracket
+    func downloaded(fallback: () -> Bracket?) async throws -> Bracket {
+      var signpost = Signpost(category: "bracket", name: "network")
+      signpost.start()
+      do {
+        Logger.bracketCache.info("loading")
+        let bracket = try await download(url)
+        bracket.saveIfPossible(store: store)
+        return bracket
+      } catch {
+        Logger.bracketCache.info("network error: \(error.localizedDescription, privacy: .public)")
+        guard let fallback = fallback() else { throw error }
+        return fallback
       }
     }
 
-    static func load(url: URL, previousModified: Date) async throws
-      -> Bracket
-    {
-      var attempt = LoadAttempt.networkLoad(url, previousModified, false)
-
-      repeat {
-        attempt = try await attempt.load()
-        if let bracket = attempt.bracket {
-          return bracket
+    switch policy {
+    case .savedIfCurrent:
+      var signpost = Signpost(category: "bracket", name: "cache")
+      signpost.start()
+      guard let saved = saved() else { return try await downloaded { nil } }
+      do {
+        guard try await isUpdated(url, saved.timestamp) else {
+          Logger.bracketCache.info("not updated - use the saved copy")
+          return saved
         }
-      } while true
+      } catch {
+        Logger.bracketCache.info(
+          "network error: \(error.localizedDescription, privacy: .public) - use the saved copy")
+        return saved
+      }
+      return try await downloaded { saved }
+    case .download:
+      return try await downloaded { saved() }
     }
   }
 
@@ -139,15 +103,10 @@ public struct Lookup: Codable, Sendable {
   ///
   /// - Parameters:
   ///   - url: The `URL` where the JSON music data is.
-  ///   - previousModified: The `Date` saved as the last modified date of the music data.
+  ///   - policy: Whether to start from the saved `Bracket` or from a download.
   /// - Throws: Any error encountered while reading the archive or computing derived structures.
-  public init(
-    url: URL,
-    previousModified: Date
-  ) async throws {
-    try await self.init(
-      bracket: try await LoadAttempt.load(
-        url: url, previousModified: previousModified))
+  public init(url: URL, policy: LoadPolicy) async throws {
+    try await self.init(bracket: try await Self.bracket(url: url, policy: policy))
   }
 
   func compareIDs(lhs: ArchivePath, rhs: ArchivePath) throws -> Bool {

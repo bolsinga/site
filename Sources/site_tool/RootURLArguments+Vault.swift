@@ -12,6 +12,6 @@ extension RootURLArguments {
   func vault(fileName: String = "shows.json") async throws -> Vault {
     try await Vault.load(
       url.appending(path: fileName).absoluteString,
-      previousModified: .distantPast)
+      policy: .download)
   }
 }

@@ -30,13 +30,12 @@ archive or the network can't give back, apart from the person's own choices.
 | Key | Type | Default | Is |
 |---|---|---|---|
 | `nearby.distance` | `Double`, meters | `defaultNearbyDistanceThreshold`, 10 miles | how far counts as nearby ([RFC 008](008-nearby-location-filter.md)); read through `NearbyDistanceStorage`, which holds the key and the default |
-| `music.last.modified` | `Date` | `.distantPast` | the archive's date at the last load, passed as `previousModified`; a saved `Bracket` older than it is not used while the network works ([RFC 005](005-music-loading.md)) |
 
 ### Files
 
 | File | Where | Written by | Retired by | Unreadable |
 |---|---|---|---|---|
-| `bracket-<n>.json` (`bracket.json` for 1) | Caches | `Bracket.save`, after a download | `bracketCacheVersion`, 4 | cache failure: download ([RFC 005](005-music-loading.md), [006](006-precomputed-music-data.md)) |
+| `bracket-<n>.json` (`bracket.json` for 1), which holds the archive's date | Caches | `Bracket.save`, after a download | `bracketCacheVersion`, 4 | cache failure: download ([RFC 005](005-music-loading.md), [006](006-precomputed-music-data.md)) |
 | `atlas-<n>.json` (`atlas.json` for 1) | Caches | `AtlasCache`, on each geocode | `atlasCacheVersion`, 1, with a save deleting the older files; six-month expiry per entry ([RFC 002](002-mapkit-geocoding.md)) | logged, starts empty; the next geocode saves a new file |
 | `venue-checks.json`, `venue-suggestions.json`, `venue-web-checks.json` | Caches | Venue Places `PickStore` (Debug, macOS) | `CacheAge.maximum` ([RFC 001](001-venue-places.md)) | left alone, not overwritten; Venue Places shows an error |
 | `shows-today.json` | app group `group.gdb.SiteApp`, `Library/Application Support` | `ShowsTodaySnapshot.write` | `currentVersion`, 2 | no snapshot ([RFC 007](007-shows-today-widget.md)) |

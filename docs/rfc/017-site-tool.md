@@ -1,6 +1,6 @@
 # RFC 017: The command-line tool and the diary data
 
-Status: Accepted · Updated: 2026-11-19 · Code: `Sources/site_tool` (`Program`, `*Command`,
+Status: Accepted · Updated: 2026-11-20 · Code: `Sources/site_tool` (`Program`, `*Command`,
 `RootURLArguments*`), `Sources/App/main.swift`, `Sources/DiaryData` (`Diary`, `Entry`, `Diary+URL`)
 
 ## Summary
@@ -48,14 +48,13 @@ The JSON dumps use sorted keys, pretty printing and ISO 8601 dates, and are prin
 |---|---|---|---|
 | `dumpBracket` | `Bracket(url:)` | not read | not read or written |
 | `nextID` | `Bracket(url:artistsWithShowsOnly: false)` | not read | not read or written |
-| `dumpVault`, `dumpLookup` | `Vault.load` / `Lookup(url:)` with `previousModified: .distantPast` | `HEAD` is sent | see rule 3 |
+| `dumpVault`, `dumpLookup` | `Vault.load` / `Lookup(url:)` with `policy: .download` | not read | the saved `Bracket` only if the download fails, and the download is saved |
 | `dumpDiary` | `Diary.load` | not read | none |
 
 `Bracket(url:)` downloads with `.reloadIgnoringLocalCacheData`, decodes, and derives the snapshot
 ([RFC 006](006-precomputed-music-data.md)); the date it returns is not used. `dumpVault` and `dumpLookup` use [RFC 005](005-music-loading.md)'s
-`LoadAttempt` unchanged. A `HEAD` that returns a `Last-Modified` is always newer than
-`.distantPast`, so those commands download, save the `Bracket` to the app's Caches file, and
-print from it. Only a server that sent no date also downloads.
+`download` policy, so they always download, save the `Bracket` to the app's Caches file, and print
+from it. No `HEAD` is sent.
 
 ## The diary
 
