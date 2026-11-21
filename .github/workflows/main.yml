@@ -32,11 +32,4 @@ jobs:
 
     steps:
     - uses: actions/checkout@v7
-    - uses: ./.github/actions/setup-xcode
-    - name: swift-format
-      run: |
-        xcrun swift-format format --in-place --recursive Sources Shared/Sources Tests SiteWidgets
-        if ! git diff --exit-code; then
-          echo "::error::swift-format changed files. Run: xcrun swift-format format --in-place --recursive Sources Shared/Sources Tests SiteWidgets"
-          exit 1
-        fi
+    - uses: ./.github/actions/check-format

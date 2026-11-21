@@ -1,7 +1,7 @@
 # RFC 015: Continuous integration and release
 
 Status: Accepted · Updated: 2026-11-20 · Code: `.github/workflows/main.yml`,
-`.github/workflows/release.yml`, `.github/actions/setup-xcode/action.yml`, `.github/dependabot.yml`, `Config.xcconfig`,
+`.github/workflows/release.yml`, `.github/actions/setup-xcode/action.yml`, `.github/actions/check-format/action.yml`, `.github/dependabot.yml`, `Config.xcconfig`,
 `SiteApp.xcodeproj` (scheme `SiteApp`, build settings), `Sources/App/SiteApp.entitlements`,
 `SiteWidgets/SiteWidgetsExtension.entitlements`
 
@@ -25,10 +25,11 @@ commit, and nothing more. `release.yml` also lists `branches: [ main ]` under `r
 
 ### Jobs
 
-Each workflow has two jobs. `build` is the matrix below. `format` runs the setup action, then
+Each workflow has two jobs. `build` is the matrix below. `format` is one step, the local action
+`.github/actions/check-format`, so both workflows share it. It runs the setup action, then
 `xcrun swift-format format --in-place --recursive Sources Shared/Sources Tests SiteWidgets`, and
 fails if that changes any file (`git diff --exit-code`), printing the change and the command that
-fixes it.
+fixes it. The directories are its `paths` input.
 
 ### Matrix
 
@@ -113,7 +114,9 @@ build with that file signs with the developer's team.
 7. A change MUST NOT put a team id, certificate or token in a tracked file. The team id belongs in
    the git-ignored `DevelopmentTeam.xcconfig`.
 8. Code MUST be `swift-format` clean (default configuration): the `format` job fails a change
-   that `swift-format format` would alter, and a release is checked the same way.
+   that `swift-format format` would alter, and a release is checked the same way. `CLAUDE.md`
+   still says to format before pushing, so the job doesn't fail a change that could have been
+   formatted first.
 9. Code new on a platform MUST be guarded for the platforms that lack it, such as
    `#if !os(tvOS)`, since the tvOS build is a CI job.
 10. Dependabot MAY open pull requests for `github-actions`, weekly and grouped into one. They are
