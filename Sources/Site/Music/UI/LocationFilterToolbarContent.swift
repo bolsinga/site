@@ -76,6 +76,8 @@ struct LocationFilterToolbarContent: ToolbarContent {
       } primaryAction: {
         nearbyModel.isOn.toggle()
       }
+      // macOS keeps the menu it first built, so a new mode rebuilds it to move the checkmark.
+      .id(nearbyModel.mode)
       .accessibilityValue(nearbyModel.isOn ? String(localized: "On") : String(localized: "Off"))
     }
   }
