@@ -56,7 +56,8 @@ at hundred-meter accuracy). `VaultModel` listens, once started, for as long as i
 
 9. A denial MUST be reported once, until a location comes back. It clears the location, stops any
    city lookup, forgets the last attempt and the current city. Restricted and denied
-   look the same to the person: "Location Unavailable".
+   look the same to the person: "Location Unavailable". Allowing again
+   reports the authorization at once, without waiting for a location, so the denial clears.
 10. Authorization is asked for when-in-use, and only if it hasn't been decided. Listening starts
     when the filter is first turned on, which includes a scene restored with it on, and at
     launch only when the person has already answered, so the prompt is never a surprise. Until

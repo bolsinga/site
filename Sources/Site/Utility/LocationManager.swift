@@ -33,6 +33,7 @@ actor LocationManager {
 
   enum Event {
     case denied  // The user, or the system, has not allowed locations.
+    case allowed  // Locations are allowed again after a denial, and none has arrived yet.
     case location(CLLocation)  // A location, far enough from the one before it.
   }
 
@@ -94,7 +95,12 @@ actor LocationManager {
         return .denied
       }
 
-      guard let location = update.location else { continue }
+      guard let location = update.location else {
+        guard isDenied else { continue }
+        isDenied = false
+        Logger.location.log("allowed")
+        return .allowed
+      }
       isDenied = false
 
       if let lastLocation {
