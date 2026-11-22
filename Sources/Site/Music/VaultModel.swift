@@ -55,7 +55,7 @@ enum LocationAuthorization {
 
   private var batchGeocodeCompleted = false
 
-  private let runsAsynchronousTasks: Bool
+  private let executeAsynchronousTasks: Bool
   private let locationManager: LocationManager
   private let cityResolver: any CityResolver
   /// Reverse geocoding is one kind of MapKit request, so its lookups share one window.
@@ -74,7 +74,7 @@ enum LocationAuthorization {
     error: Error? = nil
   ) {
     self.vault = vault
-    self.runsAsynchronousTasks = executeAsynchronousTasks
+    self.executeAsynchronousTasks = executeAsynchronousTasks
     self.cityResolver = cityResolver
     self.cityThrottle = cityThrottle
     self.locationManager = LocationManager(
@@ -108,7 +108,7 @@ enum LocationAuthorization {
   /// started once.
   @MainActor
   func startLocationMonitoring() {
-    guard runsAsynchronousTasks, locationTask == nil else { return }
+    guard executeAsynchronousTasks, locationTask == nil else { return }
     locationTask = Task {
       await self.monitorUserLocation()
     }
