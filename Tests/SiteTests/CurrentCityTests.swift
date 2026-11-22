@@ -157,6 +157,14 @@ struct CurrentCityTests {
     #expect(model.locationAuthorization == .denied)
   }
 
+  @MainActor @Test func allowedAgainBeforeALocationClearsTheDenial() async throws {
+    let model = try await createModel(DelayedResolver(answers: [:]))
+    model.handle(.denied)
+    model.handle(.allowed)
+    #expect(model.locationAuthorization == .allowed)
+    #expect(model.currentCity == nil)
+  }
+
   @MainActor @Test func cancellingTheTasksDropsAnInFlightCity() async throws {
     let model = try await createModel(
       DelayedResolver(answers: [denver.coordinate.latitude: ("Denver", .milliseconds(100))]))

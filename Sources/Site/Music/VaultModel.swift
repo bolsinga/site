@@ -279,6 +279,8 @@ enum LocationAuthorization {
       cityTask = nil
       lastReverseGeocode = nil
       currentCity = nil
+    case .allowed:
+      locationAuthorization = .allowed
     case .location(let location):
       locationAuthorization = .allowed
       currentLocation = location

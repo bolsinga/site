@@ -56,7 +56,8 @@ at hundred-meter accuracy). `VaultModel` listens for as long as it lives.
 
 9. A denial MUST be reported once, until a location comes back. It clears the location, stops any
    city lookup, forgets the last attempt and the current city. Restricted and denied
-   look the same to the person: "Location Unavailable".
+   look the same to the person: "Location Unavailable". Allowing again
+   reports the authorization at once, without waiting for a location, so the denial clears.
 10. Authorization is asked for when-in-use, and only if it hasn't been decided.
 11. The location and city are for this session only. Nothing about where the person has been is
     saved, and the scene state holds only the filter and the typed name.
