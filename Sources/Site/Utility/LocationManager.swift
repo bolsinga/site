@@ -37,6 +37,11 @@ actor LocationManager {
     case location(CLLocation)  // A location, far enough from the one before it.
   }
 
+  /// Whether the person has already answered the location prompt.
+  nonisolated static var isAuthorizationDetermined: Bool {
+    CLLocationManager().authorizationStatus != .notDetermined
+  }
+
   private let manager: CLLocationManager
   private let delegate = Delegate()
   private let accessRequest: AccessRequest

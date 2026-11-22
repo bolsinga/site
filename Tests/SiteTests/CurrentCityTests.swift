@@ -138,6 +138,14 @@ struct CurrentCityTests {
       vault, executeAsynchronousTasks: false, cityResolver: resolver, cityThrottle: throttle)
   }
 
+  @MainActor @Test func locationIsNotDeterminedUntilHeard() async throws {
+    let model = try await createModel(DelayedResolver(answers: [:]))
+    #expect(model.locationAuthorization == .notDetermined)
+
+    model.handle(.location(denver))
+    #expect(model.locationAuthorization == .allowed)
+  }
+
   @MainActor @Test func locationResolvesCity() async throws {
     let model = try await createModel(
       DelayedResolver(answers: [denver.coordinate.latitude: ("Denver", .zero)]))

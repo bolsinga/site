@@ -52,13 +52,16 @@ filter off, every venue is selected, and the archive's own precomputed values ar
 
 `LocationManager` is an actor that wraps Core Location's live updates in an `AsyncThrowingStream`
 of two events: `denied`, and a `location` that is far enough from the one before it (10 meters,
-at hundred-meter accuracy). `VaultModel` listens for as long as it lives.
+at hundred-meter accuracy). `VaultModel` listens, once started, for as long as it lives.
 
 9. A denial MUST be reported once, until a location comes back. It clears the location, stops any
    city lookup, forgets the last attempt and the current city. Restricted and denied
    look the same to the person: "Location Unavailable". Allowing again
    reports the authorization at once, without waiting for a location, so the denial clears.
-10. Authorization is asked for when-in-use, and only if it hasn't been decided.
+10. Authorization is asked for when-in-use, and only if it hasn't been decided. Listening starts
+    when the filter is first turned on, which includes a scene restored with it on, and at
+    launch only when the person has already answered, so the prompt is never a surprise. Until
+    then the authorization is `notDetermined`, and the filter control looks available.
 11. The location and city are for this session only. Nothing about where the person has been is
     saved, and the scene state holds only the filter and the typed name.
 
@@ -105,9 +108,6 @@ neither pushes the map down.
   City names change slowly, so a move of a kilometre, at most once a minute, is enough, and a
   large jump is a new place and skips the wait.
 - **Per scene and per app.** Two windows can filter differently. The distance is a preference.
-
-## Open questions
-
-- **When the prompt appears.** `VaultModel` starts listening when it is made, so the system
-  asks for location at launch, before the filter has been turned on. Asking when the filter is
-  first turned on would be less surprising, but would leave the current city empty until then. See [#1720](https://github.com/bolsinga/site/issues/1720).
+- **Asking when the filter is turned on.** A prompt at launch comes before the person has any
+  reason for it. The cost is that a person who has never answered has no current city until the
+  filter is first on; one who has answered gets it at launch with no prompt.

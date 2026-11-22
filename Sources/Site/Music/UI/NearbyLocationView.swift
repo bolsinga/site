@@ -19,7 +19,7 @@ extension LocationAuthorization {
     switch self {
     case .allowed:
       .allowed
-    case .restricted, .denied:
+    case .notDetermined, .restricted, .denied:
       .denied
     }
   }
