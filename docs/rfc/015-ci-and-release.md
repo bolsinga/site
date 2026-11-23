@@ -29,7 +29,7 @@ documented effect, and a release is built from the tag it was published on.
 
 Each workflow has two jobs. `build` is the matrix below. `format` is one step, the local action
 `.github/actions/check-format`, so both workflows share it. It runs the setup action, then
-`xcrun swift-format format --in-place --recursive Sources Shared/Sources Tests SiteWidgets`, and
+`xcrun swift-format format --in-place --recursive Sources Shared/Sources Shared/Tests Shared/Package.swift SiteKit/Sources SiteKit/Tests SiteKit/Package.swift Tests SiteWidgets`, and
 fails if that changes any file (`git diff --exit-code`), printing the change and the command that
 fixes it. The directories are its `paths` input.
 
