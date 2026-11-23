@@ -22,7 +22,7 @@ extension MKMapRect {
     return insetBy(dx: -mapPointOffset, dy: -mapPointOffset)
   }
 
-  public var proportionallyPadded: MKMapRect {
+  package var proportionallyPadded: MKMapRect {
     let midY = (maxY + minY) / 2.0
 
     let midLeft = MKMapPoint(x: minX, y: midY)
@@ -39,7 +39,7 @@ extension MKMapRect {
 }
 
 extension CLLocationCoordinate2D {
-  public var rect: MKMapRect {
+  package var rect: MKMapRect {
     let unitSize = MKMapSize(width: 1.0, height: 1.0)
     let centerPoint = MKMapPoint(self)
     let originPoint = MKMapPoint(
@@ -53,7 +53,7 @@ extension MKMapItem {
     self.location.coordinate
   }
 
-  public var rect: MKMapRect {
+  package var rect: MKMapRect {
     let centerCoordinate = center
     guard CLLocationCoordinate2DIsValid(centerCoordinate) else { return .null }
 
@@ -62,13 +62,13 @@ extension MKMapItem {
 }
 
 extension MKAnnotation {
-  public var rect: MKMapRect {
+  package var rect: MKMapRect {
     coordinate.rect
   }
 }
 
 extension Collection where Element == MKAnnotation {
-  public var rect: MKMapRect {
+  package var rect: MKMapRect {
     reduce(into: MKMapRect.null) { $0 = $0.union($1.rect) }
   }
 }

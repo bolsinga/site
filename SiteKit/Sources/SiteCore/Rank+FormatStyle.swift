@@ -9,19 +9,19 @@ import Foundation
 import Shared
 
 extension Rank {
-  public struct FormatStyle: Codable, Equatable, Hashable {
-    public enum Style: Codable, Equatable, Hashable {
+  package struct FormatStyle: Codable, Equatable, Hashable {
+    package enum Style: Codable, Equatable, Hashable {
       case hash  // #1
       case dotted  // 1.
     }
 
-    public let style: Style
+    package let style: Style
 
-    public init(_ style: Style = .hash) {
+    package init(_ style: Style = .hash) {
       self.style = style
     }
 
-    public func style(_ style: Style) -> Self {
+    package func style(_ style: Style) -> Self {
       .init(style)
     }
   }
@@ -32,7 +32,7 @@ extension Rank.FormatStyle: Foundation.FormatStyle {
     return String(localized: "Rank Unknown", bundle: #bundle)
   }
 
-  public func format(_ value: Rank) -> String {
+  package func format(_ value: Rank) -> String {
     switch value {
     case .rank(let rank):
       switch style {
@@ -52,21 +52,21 @@ extension Rank.FormatStyle: Foundation.FormatStyle {
 }
 
 extension Rank {
-  public func formatted() -> String {
+  package func formatted() -> String {
     Self.FormatStyle().format(self)
   }
 
-  public func formatted<F: Foundation.FormatStyle>(_ style: F) -> F.FormatOutput
+  package func formatted<F: Foundation.FormatStyle>(_ style: F) -> F.FormatOutput
   where F.FormatInput == Rank {
     style.format(self)
   }
 }
 
 extension FormatStyle where Self == Rank.FormatStyle {
-  public static var hash: Self { .init(.hash) }
-  public static var dotted: Self { .init(.dotted) }
+  package static var hash: Self { .init(.hash) }
+  package static var dotted: Self { .init(.dotted) }
 
-  public static func rank(style: Rank.FormatStyle.Style = .hash) -> Self {
+  package static func rank(style: Rank.FormatStyle.Style = .hash) -> Self {
     .init(style)
   }
 }

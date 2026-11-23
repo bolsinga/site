@@ -9,7 +9,7 @@ import GeoToolbox
 import Shared
 
 extension Venue {
-  public var placeDescriptor: PlaceDescriptor {
+  package var placeDescriptor: PlaceDescriptor {
     PlaceDescriptor(representations: location.placeRepresentations, commonName: name)
   }
 }

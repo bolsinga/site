@@ -14,15 +14,15 @@ extension Logger {
   fileprivate static let nearby = Logger(category: "nearby")
 }
 
-@Observable public final class NearbyModel {
-  public struct State: Codable, Equatable, Sendable {
-    public var locationFilter: LocationFilter
+@Observable package final class NearbyModel {
+  package struct State: Codable, Equatable, Sendable {
+    package var locationFilter: LocationFilter
     /// The mode the filter uses when it is turned on.
-    public var mode: LocationFilter
+    package var mode: LocationFilter
     /// The city the person typed; the current city is used when this is empty.
-    public var cityName: String?
+    package var cityName: String?
 
-    public init(
+    package init(
       locationFilter: LocationFilter = .default, mode: LocationFilter = .nearby,
       cityName: String? = nil
     ) {
@@ -35,7 +35,7 @@ extension Logger {
       case locationFilter, mode, cityName
     }
 
-    public init(from decoder: Decoder) throws {
+    package init(from decoder: Decoder) throws {
       let container = try decoder.container(keyedBy: CodingKeys.self)
       let locationFilter = try container.decode(LocationFilter.self, forKey: .locationFilter)
       let mode = try container.decodeIfPresent(LocationFilter.self, forKey: .mode) ?? .nearby
@@ -44,14 +44,14 @@ extension Logger {
         cityName: try container.decodeIfPresent(String.self, forKey: .cityName))
     }
 
-    public init?(jsonString: String) {
+    package init?(jsonString: String) {
       guard let data = jsonString.data(using: .utf8),
         let state = try? JSONDecoder().decode(State.self, from: data)
       else { return nil }
       self = state
     }
 
-    public var jsonString: String {
+    package var jsonString: String {
       let encoder = JSONEncoder()
       encoder.outputFormatting = [.sortedKeys]
       guard let data = try? encoder.encode(self), let value = String(data: data, encoding: .utf8)
@@ -62,11 +62,11 @@ extension Logger {
 
   private var state: State
 
-  public init(_ state: State = State()) {
+  package init(_ state: State = State()) {
     self.state = state
   }
 
-  public var locationFilter: LocationFilter {
+  package var locationFilter: LocationFilter {
     get {
       state.locationFilter
     }
@@ -77,7 +77,7 @@ extension Logger {
   }
 
   /// The mode the filter uses when on; changing it switches a filter that is already on.
-  public var mode: LocationFilter {
+  package var mode: LocationFilter {
     get {
       state.mode
     }
@@ -88,7 +88,7 @@ extension Logger {
     }
   }
 
-  public var isOn: Bool {
+  package var isOn: Bool {
     get {
       state.locationFilter.isActive
     }
@@ -98,7 +98,7 @@ extension Logger {
   }
 
   /// The city the person typed, if any.
-  public var cityName: String {
+  package var cityName: String {
     get {
       state.cityName ?? ""
     }
@@ -109,7 +109,7 @@ extension Logger {
   }
 
   /// The typed city, or the current city when nothing was typed.
-  public func effectiveCity(current: String?) -> String? {
+  package func effectiveCity(current: String?) -> String? {
     let typed = cityName.trimmingCharacters(in: .whitespacesAndNewlines)
     let city = typed.isEmpty ? current?.trimmingCharacters(in: .whitespacesAndNewlines) : typed
     return city?.isEmpty == false ? city : nil
@@ -117,13 +117,13 @@ extension Logger {
 }
 
 extension NearbyModel: RawRepresentable {
-  public convenience init?(rawValue: String) {
+  package convenience init?(rawValue: String) {
     Logger.nearby.log("loading: \(rawValue, privacy: .public)")
     guard let state = State(jsonString: rawValue) else { return nil }
     self.init(state)
   }
 
-  public var rawValue: String {
+  package var rawValue: String {
     let value = state.jsonString
     Logger.nearby.log("saving: \(value, privacy: .public)")
     return value

@@ -38,7 +38,7 @@ extension String {
     }
   }
 
-  public var asAttributedString: AttributedString {
+  package var asAttributedString: AttributedString {
     do {
       return try AttributedString(markdown: markdownString)
     } catch {

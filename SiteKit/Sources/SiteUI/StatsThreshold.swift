@@ -8,7 +8,7 @@
 import SwiftUI
 
 extension EnvironmentValues {
-  public var statsThreshold: Int {
+  package var statsThreshold: Int {
     get {
       return self[StatsThresholdKey.self]
     }
@@ -18,6 +18,6 @@ extension EnvironmentValues {
   }
 }
 
-public struct StatsThresholdKey: EnvironmentKey {
-  public static let defaultValue: Int = 5
+package struct StatsThresholdKey: EnvironmentKey {
+  package static let defaultValue: Int = 5
 }

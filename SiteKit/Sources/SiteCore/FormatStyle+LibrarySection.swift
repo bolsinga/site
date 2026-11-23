@@ -9,26 +9,26 @@ import Foundation
 import Shared
 
 extension LibrarySection {
-  public struct FormatStyle: Codable, Equatable, Hashable {
-    public enum Style: Codable, Equatable, Hashable {
+  package struct FormatStyle: Codable, Equatable, Hashable {
+    package enum Style: Codable, Equatable, Hashable {
       case short
       case long
     }
 
-    public let style: Style
+    package let style: Style
 
-    public init(_ style: Style = .long) {
+    package init(_ style: Style = .long) {
       self.style = style
     }
 
-    public func style(_ style: Style) -> Self {
+    package func style(_ style: Style) -> Self {
       .init(style)
     }
   }
 }
 
 extension LibrarySection.FormatStyle: Foundation.FormatStyle {
-  public func format(_ value: LibrarySection) -> String {
+  package func format(_ value: LibrarySection) -> String {
     switch value {
     case .alphabetic(let string):
       return string
@@ -47,21 +47,21 @@ extension LibrarySection.FormatStyle: Foundation.FormatStyle {
 }
 
 extension LibrarySection {
-  public func formatted() -> String {
+  package func formatted() -> String {
     Self.FormatStyle().format(self)
   }
 
-  public func formatted<F: Foundation.FormatStyle>(_ style: F) -> F.FormatOutput
+  package func formatted<F: Foundation.FormatStyle>(_ style: F) -> F.FormatOutput
   where F.FormatInput == LibrarySection {
     style.format(self)
   }
 }
 
 extension FormatStyle where Self == LibrarySection.FormatStyle {
-  public static var short: Self { .init(.short) }
-  public static var long: Self { .init(.long) }
+  package static var short: Self { .init(.short) }
+  package static var long: Self { .init(.long) }
 
-  public static func librarySection(style: LibrarySection.FormatStyle.Style = .long) -> Self {
+  package static func librarySection(style: LibrarySection.FormatStyle.Style = .long) -> Self {
     .init(style)
   }
 }

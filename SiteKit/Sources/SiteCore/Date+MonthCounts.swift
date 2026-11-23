@@ -23,7 +23,7 @@ private var monthAbbreviations: [Int: (Date, Int)] {
 
 extension Array where Element == Date {
   // month as int: (month as Date, count for that month)
-  public var monthCounts: [Int: (Date, Int)] {
+  package var monthCounts: [Int: (Date, Int)] {
     reduce(into: monthAbbreviations) {
       let month = Calendar.archive.component(.month, from: $1)
       let pair = $0[month] ?? ($1, 0)

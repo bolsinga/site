@@ -46,19 +46,19 @@ extension Logger {
 
   /// Does the loading when there is one, so App Intents and the app share it.
   @ObservationIgnored public var vaultProvider: (any VaultLoading)?
-  public var error: Error?
+  package var error: Error?
 
   /// Makes the model of a loaded archive, which a test gives its own services.
-  @ObservationIgnored public var makeVaultModel: @MainActor (Vault, Bool) -> VaultModel = {
+  @ObservationIgnored package var makeVaultModel: @MainActor (Vault, Bool) -> VaultModel = {
     VaultModel($0, executeAsynchronousTasks: $1)
   }
 
   #if !os(tvOS)
     /// The latest widget snapshot publish, so the next one can cancel it.
-    @ObservationIgnored public var widgetPublish: Task<Void, Never>?
+    @ObservationIgnored package var widgetPublish: Task<Void, Never>?
 
     /// What a load asks of the system, which a test replaces.
-    @ObservationIgnored public var writeWidgetSnapshot:
+    @ObservationIgnored package var writeWidgetSnapshot:
       @Sendable (ShowsTodaySnapshot) throws -> Bool = {
         try $0.write()
       }

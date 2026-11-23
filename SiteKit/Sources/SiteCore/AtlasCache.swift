@@ -19,16 +19,16 @@ private let ExpirationStaggerDuration = 60.0 * 60.0 * 6.0  // Quarter day
 /// Bump when `AtlasCache.Value` changes so that an older saved file is not read as it was.
 public let atlasCacheVersion = 1
 
-public func atlasFileName(version: Int = atlasCacheVersion) -> String {
+package func atlasFileName(version: Int = atlasCacheVersion) -> String {
   version == 1 ? "atlas.json" : "atlas-\(version).json"
 }
 
 public struct AtlasCache<T: AtlasGeocodable>: Sendable {
   public struct Value: Codable, Sendable {
-    public var placemark: T.Place
-    public let expirationDate: Date
+    package var placemark: T.Place
+    package let expirationDate: Date
     /// What the place was geocoded from; none in caches saved before it was kept.
-    public var source: String?
+    package var source: String?
   }
 
   private let version: Int
@@ -63,9 +63,9 @@ public struct AtlasCache<T: AtlasGeocodable>: Sendable {
     }
   }
 
-  public func entry(_ id: ArchivePath) -> Value? { cache[id] }
+  package func entry(_ id: ArchivePath) -> Value? { cache[id] }
 
-  public mutating func add(_ id: ArchivePath, value: T.Place, source: String? = nil) {
+  package mutating func add(_ id: ArchivePath, value: T.Place, source: String? = nil) {
     cache[id] = Value(
       placemark: value, expirationDate: now() + expirationOffset + staggerOffset, source: source)
 

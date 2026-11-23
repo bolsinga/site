@@ -27,7 +27,7 @@ private var weekdayAbbreviations: [Int: (Date, Int)] {
 
 extension Array where Element == Date {
   // weekday : (weekday represented as Date, count of that weekday)
-  public var weekdayCounts: [Int: (Date, Int)] {
+  package var weekdayCounts: [Int: (Date, Int)] {
     self.reduce(into: weekdayAbbreviations) {  // weekday (1...7) : (weekday Date, count)
       let weekday = Calendar.archive.component(.weekday, from: $1)
       let pair = $0[weekday] ?? ($1, 0)
@@ -36,7 +36,7 @@ extension Array where Element == Date {
   }
 
   // weekday as int: (month as Date, count for that month)
-  public func computeWeekdayCounts(_ firstWeekday: Int) -> [(Int, (Date, Int))] {
+  package func computeWeekdayCounts(_ firstWeekday: Int) -> [(Int, (Date, Int))] {
     let sortedWeekdayCounts = weekdayCounts.sorted { $0.key < $1.key }
     let zeroBasedFirstWeekday = Swift.min(6, Swift.max(0, firstWeekday - 1))
     let weekdayCountsFirstDayOrdered =

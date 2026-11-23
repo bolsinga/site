@@ -24,7 +24,7 @@
     /// - Returns: The publish, so a caller can wait for it.
     @MainActor
     @discardableResult
-    public func publishWidgetSnapshot(
+    package func publishWidgetSnapshot(
       build: @escaping @Sendable () throws -> ShowsTodaySnapshot,
       write: @escaping @Sendable (ShowsTodaySnapshot) throws -> Bool,
       reload: @escaping @MainActor @Sendable () -> Void
@@ -62,7 +62,7 @@
     }
 
     @MainActor
-    public func publishWidgetSnapshot(_ vault: Vault) {
+    package func publishWidgetSnapshot(_ vault: Vault) {
       publishWidgetSnapshot(
         build: { try vault.showsTodaySnapshot },
         write: writeWidgetSnapshot,
