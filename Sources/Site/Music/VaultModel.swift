@@ -28,7 +28,7 @@ enum LocationAuthorization {
 
   internal var error: Error?
 
-  internal var todayDayOfLeapYear: Int = Date.now.dayOfLeapYear
+  internal var todayDayOfLeapYear: Int
   internal var venueMapItemMap: [ArchivePath: MKMapItem] = [:]
   /// The address Maps gave each geocoded venue, to compare with the venue's own.
   internal private(set) var venueMapsAddressMap: [ArchivePath: MapsAddress] = [:]
@@ -51,12 +51,14 @@ enum LocationAuthorization {
   @ObservationIgnored
   private var geocodeTask: Task<Void, Never>?
   @ObservationIgnored
-  private var locationTask: Task<Void, Never>?
+  internal private(set) var locationTask: Task<Void, Never>?
 
   private var batchGeocodeCompleted = false
 
   private let executeAsynchronousTasks: Bool
-  private let locationManager: LocationManager
+  private let locationSource: any LocationSource
+  private let now: @Sendable () -> Date
+  private let notificationCenter: NotificationCenter
   private let cityResolver: any CityResolver
   /// Reverse geocoding is one kind of MapKit request, so its lookups share one window.
   private let cityThrottle: Throttle<String?>
@@ -71,17 +73,25 @@ enum LocationAuthorization {
     cityResolver: any CityResolver = MapKitCityResolver(),
     cityThrottle: Throttle<String?> = Throttle(
       batchSize: MapKitLimits.maxRequests, timeUntilReset: MapKitLimits.timeUntilReset),
+    locationSource: (any LocationSource)? = nil,
+    now: @escaping @Sendable () -> Date = { .now },
+    notificationCenter: NotificationCenter = .default,
     error: Error? = nil
   ) {
     self.vault = vault
     self.executeAsynchronousTasks = executeAsynchronousTasks
     self.cityResolver = cityResolver
     self.cityThrottle = cityThrottle
-    self.locationManager = LocationManager(
-      activityType: .other,
-      distanceFilter: distanceFilter,
-      desiredAccuracy: kCLLocationAccuracyHundredMeters,
-      accessRequest: .inUse)
+    self.locationSource =
+      locationSource
+      ?? LocationManager(
+        activityType: .other,
+        distanceFilter: distanceFilter,
+        desiredAccuracy: kCLLocationAccuracyHundredMeters,
+        accessRequest: .inUse)
+    self.now = now
+    self.notificationCenter = notificationCenter
+    self.todayDayOfLeapYear = now().dayOfLeapYear
 
     self.error = error
 
@@ -99,7 +109,7 @@ enum LocationAuthorization {
     }
 
     // Asking is left until the filter is turned on, but an answer already given costs no prompt.
-    if LocationManager.isAuthorizationDetermined {
+    if self.locationSource.isAuthorizationDetermined {
       startLocationMonitoring()
     }
   }
@@ -207,7 +217,7 @@ enum LocationAuthorization {
       Logger.vaultModel.log("end day monitoring")
     }
 
-    for await _ in NotificationCenter.default.notifications(named: .NSCalendarDayChanged).map({
+    for await _ in notificationCenter.notifications(named: .NSCalendarDayChanged).map({
       $0.name
     }) {
       refreshToday()
@@ -217,7 +227,7 @@ enum LocationAuthorization {
   /// Catches up with the calendar, which the day change notification may not have done after a resume.
   @MainActor
   func refreshToday() {
-    let today = Date.now.dayOfLeapYear
+    let today = now().dayOfLeapYear
     guard today != todayDayOfLeapYear else { return }
     todayDayOfLeapYear = today
 
@@ -275,7 +285,7 @@ enum LocationAuthorization {
     }
 
     do {
-      for try await event in locationManager.events() {
+      for try await event in locationSource.events() {
         handle(event)
       }
     } catch {
@@ -304,7 +314,7 @@ enum LocationAuthorization {
 
   @MainActor
   private func resolveCity(for location: CLLocation) {
-    let now = Date.now
+    let now = self.now()
     guard
       ReverseGeocodePolicy.shouldGeocode(last: lastReverseGeocode, location: location, now: now)
     else { return }

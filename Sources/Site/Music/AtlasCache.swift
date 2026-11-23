@@ -33,20 +33,25 @@ struct AtlasCache<T: AtlasGeocodable> {
 
   private let version: Int
   private let store: any CacheCodable
+  private let now: @Sendable () -> Date
 
   private var staggerOffset = 0.0
   private var cache: [ArchivePath: Value] = [:]
 
   private var fileName: String { atlasFileName(version: version) }
 
-  internal init(version: Int = atlasCacheVersion, store: any CacheCodable = FileManager.default) {
+  internal init(
+    version: Int = atlasCacheVersion, store: any CacheCodable = FileManager.default,
+    now: @escaping @Sendable () -> Date = { .now }
+  ) {
     self.version = version
     self.store = store
+    self.now = now
 
     do {
       let diskCache = try [ArchivePath: Value].read(fileName: fileName, store: store)
-      let now = Date.now
-      self.cache = diskCache.filter { $0.value.expirationDate >= now }  // Include those whose expiration date has not passed .now
+      let now = self.now()
+      self.cache = diskCache.filter { $0.value.expirationDate >= now }  // Include those whose expiration date has not passed now
 
       if self.cache.count != diskCache.count {
         Logger.atlasCache.log("removing expired items")
@@ -62,7 +67,7 @@ struct AtlasCache<T: AtlasGeocodable> {
 
   mutating func add(_ id: ArchivePath, value: T.Place, source: String? = nil) {
     cache[id] = Value(
-      placemark: value, expirationDate: .now + expirationOffset + staggerOffset, source: source)
+      placemark: value, expirationDate: now() + expirationOffset + staggerOffset, source: source)
 
     // This allows batch geocodes to be "staggered" in their expiration so they do not run all the time once the day comes.
     staggerOffset += ExpirationStaggerDuration
