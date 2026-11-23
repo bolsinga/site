@@ -1,13 +1,14 @@
 # RFC 016: Testing
 
-Status: Accepted · Updated: 2026-11-20 · Code: `Tests/` (`SiteTests`, `MusicDataTests`,
-`UtilitiesTests`), `Sources/Site/Music/UI` (`VaultPreviewModifier`, `NearbyPreviewModifer`), `Sources/App/Preview Content/sample-shows.json`,
+Status: Accepted · Updated: 2026-11-22 · Code: `Tests/` (`SiteTests`, `MusicDataTests`,
+`UtilitiesTests`), `Shared/Tests/SharedTests`, `Sources/Site/Music/UI` (`VaultPreviewModifier`, `NearbyPreviewModifer`), `Sources/App/Preview Content/sample-shows.json`,
 `.github/workflows/main.yml`
 
 ## Summary
 
 The tests are unit tests of the data model, the navigation state and the pure policies, written
-with the Testing framework. They run in one target, `Tests`, through the `SiteApp` scheme. There
+with the Testing framework. They run in two places: the app-hosted `Tests` target, through the
+`SiteApp` scheme, and the `Shared` package's own `SharedTests`, which need no host. There
 are no UI tests. SwiftUI previews are the way views are checked, and they have their own fixtures.
 This RFC says how the tests are laid out, how a `Vault` is made for them, how time, location and
 files are made deterministic, and what has no tests.
@@ -16,12 +17,16 @@ files are made deterministic, and what has no tests.
 
 | Folder | Imports | Tests |
 |---|---|---|
-| `Tests/MusicDataTests` | `Shared`, some `SiteApp` | `ArchivePath`, `ArchiveCategory`, `Annum`, `PartialDate`, `Decade`, ranking, `Vault` statistics, Shows Today snapshot and stats |
-| `Tests/UtilitiesTests` | `Shared`, some `SiteApp` | `DayOfLeapYear`, Shows Today timeline, library sorting, token comparison |
+| `Shared/Tests/SharedTests` | `Shared` | calendar and day of the leap year, `Vault` statistics, first and most recent sets, ID comparison, Shows Today snapshot, stats and timeline |
+| `Tests/MusicDataTests` | `Shared`, some `SiteApp` | `ArchivePath`, `ArchiveCategory`, `Annum`, `PartialDate`, `Decade`, ranking, `Bracket` loading and cache |
+| `Tests/UtilitiesTests` | `Shared`, some `SiteApp` | `DayOfLeapYear`, library sorting, token comparison |
 | `Tests/SiteTests` | `Shared` and `SiteApp` | navigation, user activities, entity identifiers, location filter and city, venue places, atlas cache, search, paging |
 
-The tests run as the one `Tests` target of `SiteApp.xcodeproj`, hosted by the app (`TEST_HOST`).
-`Shared` has no test target of its own.
+`SharedTests` is a test target of the `Shared` package, run with `swift test --package-path Shared`.
+It has no host, so it starts nothing from the app. The rest run as the one `Tests` target of
+`SiteApp.xcodeproj`, hosted by the app (`TEST_HOST`). A test that imports only `Shared` belongs in
+`SharedTests`. The `Bracket` loading and cache tests stay in `Tests` for now, as they share
+`InMemoryCache` with tests of the app's atlas and venue code.
 
 ## Framework
 
@@ -88,7 +93,8 @@ development asset path, so it is not in a release build.
 
 ## Running
 
-- `xcodebuild test` runs the `SiteApp` scheme on `platform=macOS`. The iOS and tvOS simulator
+- `xcodebuild test` runs the `SiteApp` scheme on `platform=macOS`, and `swift test --package-path
+  Shared` runs `SharedTests`. The iOS and tvOS simulator
   destinations only build; no test runs there. This matches CLAUDE.md.
 - Nothing runs on a physical device. Locally, tests run on My Mac or a simulator.
 
@@ -111,7 +117,8 @@ development asset path, so it is not in a release build.
   without a clock, a network or a location permission prompt.
 - **Previews for views.** The previews show real shows from a small sample, so they work offline,
   and are not a substitute for deterministic tests.
-- **One target.** A single `Tests` target gives one scheme action for CI.
+- **A hostless target for `Shared`.** Its tests run without launching the app, so they don't
+  start the app's own work or depend on the website being reachable.
 
 ## Open questions
 
