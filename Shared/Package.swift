@@ -30,6 +30,12 @@ let package = Package(
       ],
       swiftSettings: [
         .treatAllWarnings(as: .error)
-      ])
+      ]),
+    .testTarget(
+      name: "SharedTests",
+      dependencies: ["Shared"],
+      swiftSettings: [
+        .treatAllWarnings(as: .error)
+      ]),
   ]
 )

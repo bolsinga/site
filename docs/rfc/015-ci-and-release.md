@@ -1,6 +1,6 @@
 # RFC 015: Continuous integration and release
 
-Status: Accepted · Updated: 2026-11-21 · Code: `.github/workflows/main.yml`,
+Status: Accepted · Updated: 2026-11-22 · Code: `.github/workflows/main.yml`,
 `.github/workflows/release.yml`, `.github/actions/setup-xcode/action.yml`, `.github/actions/check-format/action.yml`, `.github/dependabot.yml`, `Config.xcconfig`,
 `SiteApp.xcodeproj` (scheme `SiteApp`, build settings), `Sources/App/SiteApp.entitlements`,
 `SiteWidgets/SiteWidgetsExtension.entitlements`
@@ -39,7 +39,7 @@ One job per destination, with `fail-fast: false`, so one platform failing doesn'
 
 | Destination | Runs |
 |---|---|
-| `platform=macOS` | `xcodebuild test` of scheme `SiteApp`, then a build of the same scheme |
+| `platform=macOS` | `xcodebuild test` of scheme `SiteApp`, `swift test` of the `Shared` package, then a build of scheme `SiteApp` |
 | `generic/platform=iOS Simulator` | a build of scheme `SiteApp` |
 | `generic/platform=tvOS Simulator` | a build of scheme `SiteApp` |
 
@@ -118,7 +118,8 @@ build with that file signs with the developer's team.
 1. A change MUST build with scheme `SiteApp` for `platform=macOS`, `generic/platform=iOS
    Simulator` and `generic/platform=tvOS Simulator`. Each is its own job, and a failed job fails
    the pull request.
-2. The `Tests` target MUST pass on macOS. It is the only platform the tests run on in CI.
+2. The `Tests` target and the `Shared` package's tests MUST pass on macOS. It is the only platform
+   the tests run on in CI.
 3. The workflows MUST build with Xcode 27.2 or newer on a runner labeled `xcode-27`, and fail
    when the newest installed Xcode of that major version is older than 27.2. The minimum is the
    `minimum-version` input of `.github/actions/setup-xcode`, in one place. A change to the runner
