@@ -1,6 +1,6 @@
 # RFC 014: Search and sharing
 
-Status: Accepted · Updated: 2026-11-22 · Code: `Sources/Site/Music/UI` (`ArchiveCrossSearch*`,
+Status: Accepted · Updated: 2026-11-23 · Code: `SiteKit/Sources/SiteUI` (`ArchiveCrossSearch*`,
 `ArchiveSearchModifier`, `ArchiveScope`, `RankableSearchableSortList`, `ArchiveSharable*`,
 `ArchiveCategorySharable`, `ArchivePathLink`, `ArchiveTabView`), `SiteKit/Sources/SiteCore`
 (`String+AttributedMatching`), `SiteKit/Sources/SiteCore` (`VaultModel`, `NSUserActivity+Search`),

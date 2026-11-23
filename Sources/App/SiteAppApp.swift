@@ -8,6 +8,7 @@
 import AppIntents
 import Shared
 import SiteCore
+import SiteUI
 import SwiftUI
 
 struct SiteAppApp: App {
@@ -37,6 +38,7 @@ struct SiteAppApp: App {
   var body: some Scene {
     WindowGroup {
       SiteView(model)
+        .environment(\.appHooks, .app)
     }
     #if !os(tvOS)
       .commands {

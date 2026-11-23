@@ -1,0 +1,60 @@
+//
+//  ArchiveCategoryToolbarContent.swift
+//  site
+//
+//  Created by Greg Bolsinga on 8/6/25.
+//
+
+import Shared
+import SiteCore
+import SwiftUI
+
+struct ArchiveCategoryToolbarContent: ToolbarContent {
+  @Environment(VaultModel.self) var model
+
+  let category: ArchiveCategory
+
+  @Binding var venueSort: RankingSort
+  @Binding var artistSort: RankingSort
+  @Binding var showNearbyDistanceSettings: Bool
+  @Binding var venuesMode: VenuesMode
+
+  private func sortableData(_ category: ArchiveCategory) -> (
+    sort: Binding<RankingSort>, associatedRankName: String
+  )? {
+    switch category {
+    case .today, .shows, .settings, .search:
+      nil
+    case .venues:
+      switch venuesMode {
+      case .map:
+        nil
+      case .grouped:
+        ($venueSort, String(localized: "Sort By Artist Count", bundle: #bundle))
+      }
+    case .artists:
+      ($artistSort, String(localized: "Sort By Venue Count", bundle: #bundle))
+    }
+  }
+
+  var body: some ToolbarContent {
+    if let sortableData = sortableData(category) {
+      SortModifierToolbarContent(algorithm: sortableData.sort) {
+        switch $0 {
+        case .associatedRank:
+          return sortableData.associatedRankName
+        default:
+          return $0.localizedString
+        }
+      }
+    }
+    if category.isLocationFilterable {
+      LocationFilterToolbarContent(locationAuthorization: model.locationAuthorization) {
+        showNearbyDistanceSettings = true
+      }
+    }
+    ArchiveSharableToolbarContent(
+      item: ArchiveCategorySharable(
+        category: category), url: model.vault.url(for: category))
+  }
+}

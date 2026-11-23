@@ -1,0 +1,36 @@
+//
+//  SortModifierToolbarContent.swift
+//  site
+//
+//  Created by Greg Bolsinga on 10/1/24.
+//
+
+import Shared
+import SiteCore
+import SwiftUI
+
+struct SortModifierToolbarContent: ToolbarContent {
+  @Binding var algorithm: RankingSort
+  let algorithmNameBuilder: (RankingSort) -> String
+
+  var body: some ToolbarContent {
+    ToolbarItem(placement: .primaryAction) {
+      let sortText = Text("Sort", bundle: #bundle)
+      Menu {
+        Picker(selection: $algorithm) {
+          ForEach(RankingSort.allCases, id: \.self) { category in
+            Text(algorithmNameBuilder(category)).tag(category)
+          }
+        } label: {
+          sortText
+        }
+      } label: {
+        Label {
+          sortText
+        } icon: {
+          Image(systemName: "line.3.horizontal.decrease.circle")
+        }
+      }
+    }
+  }
+}

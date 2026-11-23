@@ -1,10 +1,10 @@
 # RFC 013: Rankings, first sets and library order
 
-Status: Accepted · Updated: 2026-11-22 · Code: `Shared/Sources/Shared/MusicData` (`Rank`, `Ranking`,
+Status: Accepted · Updated: 2026-11-23 · Code: `Shared/Sources/Shared/MusicData` (`Rank`, `Ranking`,
 `Ranking+Compute`, `RankDigest`, `RankDistribution`, `Rankable`, `RankedArchiveItem`, `RankingSort`,
 `FirstSet`, `MostRecentSet`, `PartialDate+Span`), `Shared/Sources/Shared/Utilities` (`LibraryComparable`,
 `LibraryCompareTokenizer`, `LibrarySection`, `String+LibrarySection`, `String+TokenCompare`),
-`SiteKit/Sources/SiteCore` (`Rank+FormatStyle`, `FormatStyle+Ranking`), `Sources/Site/Music/UI`
+`SiteKit/Sources/SiteCore` (`Rank+FormatStyle`, `FormatStyle+Ranking`), `SiteKit/Sources/SiteUI`
 (`StatsCard`, `RankableSortList`, `RankingList`, `FirstSetLine`)
 
 ## Summary

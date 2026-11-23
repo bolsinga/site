@@ -1,8 +1,8 @@
 # RFC 012: Maps and clustering
 
-Status: Accepted · Updated: 2026-11-22 · Code: `Sources/Site/ClusterMap` (`ClusterMap`, `SnapshotMap`,
-`MKMapRect+Fit`, `ViewRepresentable`), `Sources/Site/Music/UI` (`ShowsMapHeader`, `VenuesMap`, `VenuesSummary`,
-`VenuesMode`, `CategoryAnnotationView`, `OpenInMapsButton`), `SiteKit/Sources/SiteCore` (`MapItem+Geometry`)
+Status: Accepted · Updated: 2026-11-23 · Code: `SiteKit/Sources/SiteUI` (`ClusterMap`, `SnapshotMap`,
+`MKMapRect+Fit`, `ViewRepresentable`, `ShowsMapHeader`, `VenuesMap`, `VenuesSummary`, `VenuesMode`,
+`CategoryAnnotationView`, `OpenInMapsButton`), `SiteKit/Sources/SiteCore` (`MapItem+Geometry`)
 
 ## Summary
 

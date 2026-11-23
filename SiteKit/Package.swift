@@ -12,7 +12,10 @@ let package = Package(
   products: [
     .library(
       name: "SiteCore",
-      targets: ["SiteCore"])
+      targets: ["SiteCore"]),
+    .library(
+      name: "SiteUI",
+      targets: ["SiteUI"]),
   ],
   dependencies: [
     .package(path: "../Shared")
@@ -25,6 +28,31 @@ let package = Package(
       ],
       resources: [
         .process("Localizable.xcstrings")
+      ],
+      swiftSettings: [
+        .treatAllWarnings(as: .error),
+        .enableUpcomingFeature("MemberImportVisibility"),
+      ]),
+    .target(
+      name: "SiteUI",
+      dependencies: [
+        "SiteCore",
+        .product(name: "Shared", package: "Shared"),
+      ],
+      resources: [
+        .process("Localizable.xcstrings"),
+        .process("sample-shows.json"),
+      ],
+      swiftSettings: [
+        .treatAllWarnings(as: .error),
+        .enableUpcomingFeature("MemberImportVisibility"),
+      ]),
+    .testTarget(
+      name: "SiteUITests",
+      dependencies: [
+        "SiteUI",
+        "SiteCore",
+        .product(name: "SharedTestSupport", package: "Shared"),
       ],
       swiftSettings: [
         .treatAllWarnings(as: .error),

@@ -1,0 +1,148 @@
+//
+//  MonthChart.swift
+//
+//
+//  Created by Greg Bolsinga on 4/29/23.
+//
+
+import Charts
+import Shared
+import SiteCore
+import SwiftUI
+
+extension MonthChart.Presentation {
+  fileprivate var titleAlignment: ChartTitle.Alignment {
+    switch self {
+    case .default:
+      .center
+    case .compact, .card:
+      .default
+    }
+  }
+}
+
+struct MonthChart: View {
+  enum Presentation {
+    case `default`
+    case compact
+    case card
+  }
+
+  @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+
+  let dates: [Date]
+  let title: LocalizedStringResource
+  let presentation: Presentation
+  let highlightsCurrent: Bool
+
+  internal init(
+    dates: [Date], title: LocalizedStringResource, presentation: Presentation = .default,
+    highlightsCurrent: Bool = false
+  ) {
+    self.dates = dates
+    self.title = title
+    self.presentation = presentation
+    self.highlightsCurrent = highlightsCurrent
+  }
+
+  private var format: Date.FormatStyle.Symbol.Month {
+    switch presentation {
+    case .default:
+      horizontalSizeClass == .compact ? .narrow : .abbreviated
+    case .compact, .card:
+      .narrow
+    }
+  }
+
+  private var currentMonth: Int {
+    Calendar.archive.component(.month, from: .now)
+  }
+
+  @ViewBuilder private func subtitle(_ monthCounts: [Int: (Date, Int)]) -> some View {
+    if let topDate = monthCounts.map({ $0 }).topDate {
+      Text(
+        "Most Shows During \(Date.FormatStyle.archiveDateTime.month(.wide).format(topDate))",
+        bundle: #bundle)
+    } else {
+      Text("Multiple Months with Most Shows", bundle: #bundle)
+    }
+  }
+
+  @ViewBuilder private var titleText: some View {
+    Text(title)
+      .font(.title2).fontWeight(.bold)
+  }
+
+  @ViewBuilder private var titleView: some View {
+    switch presentation {
+    case .default:
+      HStack {
+        Spacer()
+        titleText
+        Spacer()
+      }
+    case .compact, .card:
+      titleText
+    }
+  }
+
+  var body: some View {
+    VStack(alignment: .leading) {
+      let monthCounts = dates.monthCounts
+
+      if presentation != .card {
+        ChartTitle(title: title, alignment: presentation.titleAlignment)
+
+        subtitle(monthCounts)
+          .font(.subheadline)
+      }
+
+      Chart(monthCounts.sorted { $0.key < $1.key }, id: \.key) { item in  // array of dictionary elements
+        let (date, count) = item.value
+        BarMark(
+          x: .value("Month", date, unit: .month),
+          y: .value("Count", count),
+          width: presentation == .card ? .fixed(3) : .automatic
+        )
+        .chartBarStyle(isCurrent: highlightsCurrent && item.key == currentMonth)
+        .annotation(position: .top) {
+          if count > 0, presentation == .default {
+            Text(count.formatted(.number))
+              .font(.caption2)
+          }
+        }
+      }
+      .chartYAxis(presentation == .default ? .automatic : .hidden)
+      .chartXAxis {
+        if presentation != .card {
+          AxisMarks(values: .stride(by: .month)) { _ in
+            AxisGridLine()
+            AxisTick()
+            AxisValueLabel(format: .archiveDateTime.month(format), centered: true)
+          }
+        }
+      }
+      .frame(height: presentation == .compact ? 100 : nil)
+    }
+  }
+}
+
+#Preview("Default", traits: .vaultModel) {
+  @Previewable @Environment(VaultModel.self) var model
+  MonthChart(
+    dates: Stats(vault: model.vault).dates,
+    title: LocalizedStringResource("Months", bundle: #bundle),
+    presentation: .default
+  )
+  .padding()
+}
+
+#Preview("Compact", traits: .vaultModel) {
+  @Previewable @Environment(VaultModel.self) var model
+  MonthChart(
+    dates: Stats(vault: model.vault).dates,
+    title: LocalizedStringResource("Months", bundle: #bundle),
+    presentation: .compact
+  )
+  .padding()
+}
