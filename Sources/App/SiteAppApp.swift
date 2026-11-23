@@ -11,6 +11,10 @@ import SiteCore
 import SiteUI
 import SwiftUI
 
+#if !os(tvOS)
+  import WidgetKit
+#endif
+
 struct SiteAppApp: App {
   #if os(iOS)
     @UIApplicationDelegateAdaptor private var appDelegate: SiteAppDelegate
@@ -33,6 +37,9 @@ struct SiteAppApp: App {
     model.vaultProvider = provider
     #if !os(tvOS)
       model.indexSpotlight = { await $0.indexForSpotlight() }
+      model.reloadWidgetTimelines = {
+        WidgetCenter.shared.reloadTimelines(ofKind: ShowsTodayWidgetKind.kind)
+      }
     #endif
 
     SiteShortcuts.updateAppShortcutParameters()

@@ -9,10 +9,6 @@ import Foundation
 import Shared
 import os
 
-#if !os(tvOS)
-  import WidgetKit
-#endif
-
 extension Logger {
   fileprivate static let vaultLoader = Logger(category: "vaultLoader")
 }
@@ -62,9 +58,7 @@ extension Logger {
       @Sendable (ShowsTodaySnapshot) throws -> Bool = {
         try $0.write()
       }
-    @ObservationIgnored public var reloadWidgetTimelines: @MainActor @Sendable () -> Void = {
-      WidgetCenter.shared.reloadTimelines(ofKind: ShowsTodayWidgetKind.kind)
-    }
+    @ObservationIgnored public var reloadWidgetTimelines: @MainActor @Sendable () -> Void = {}
     @ObservationIgnored public var indexSpotlight: @Sendable (Vault) async -> Void = { _ in }
   #endif
 

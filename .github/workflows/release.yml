@@ -39,3 +39,10 @@ jobs:
     steps:
     - uses: actions/checkout@v7
     - uses: ./.github/actions/check-format
+
+  boundaries:
+    runs-on: xcode-27
+
+    steps:
+    - uses: actions/checkout@v7
+    - uses: ./.github/actions/check-boundaries

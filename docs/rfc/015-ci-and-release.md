@@ -1,7 +1,7 @@
 # RFC 015: Continuous integration and release
 
 Status: Accepted · Updated: 2026-11-23 · Code: `.github/workflows/main.yml`,
-`.github/workflows/release.yml`, `.github/actions/setup-xcode/action.yml`, `.github/actions/check-format/action.yml`, `.github/dependabot.yml`, `Config.xcconfig`,
+`.github/workflows/release.yml`, `.github/actions/setup-xcode/action.yml`, `.github/actions/check-format/action.yml`, `.github/actions/check-boundaries`, `.github/dependabot.yml`, `Config.xcconfig`,
 `SiteApp.xcodeproj` (scheme `SiteApp`, build settings), `Sources/App/SiteApp.entitlements`,
 `SiteWidgets/SiteWidgetsExtension.entitlements`
 
@@ -27,11 +27,16 @@ documented effect, and a release is built from the tag it was published on.
 
 ### Jobs
 
-Each workflow has two jobs. `build` is the matrix below. `format` is one step, the local action
+Each workflow has three jobs. `build` is the matrix below. `format` is one step, the local action
 `.github/actions/check-format`, so both workflows share it. It runs the setup action, then
 `xcrun swift-format format --in-place --recursive Sources Shared/Sources Shared/Tests Shared/Package.swift SiteKit/Sources SiteKit/Tests SiteKit/Package.swift Tests SiteWidgets`, and
 fails if that changes any file (`git diff --exit-code`), printing the change and the command that
-fixes it. The directories are its `paths` input.
+fixes it. The directories are its `paths` input. `boundaries` is one step too, the local action
+`.github/actions/check-boundaries`, which runs `check.sh` (it takes a repository root, so it can be
+run by hand). It fails if a file of `SiteKit/Sources/SiteCore` imports `SwiftUI`, `UIKit`, `AppKit`,
+`WidgetKit` or `AppIntents`; if it uses `.shared`, `UserDefaults`, `.standard`, `Bundle.main` or
+`ProcessInfo.processInfo`; or if it uses `FileManager.default` or `NotificationCenter.default`
+anywhere but as the default value of a parameter.
 
 ### Matrix
 
@@ -142,6 +147,9 @@ build with that file signs with the developer's team.
    `#if !os(tvOS)`, since the tvOS build is a CI job.
 10. Dependabot MAY open pull requests for `github-actions`, weekly and grouped into one. They are
     held to rules 1 and 2 like any other change.
+11. `SiteCore` MUST NOT import a UI or App Intents framework or reach global state. What it needs
+    from the system comes in through a parameter, and the app supplies its own; the `boundaries`
+    job enforces it ([RFC 016](016-testing.md)).
 
 ## Rationale
 
@@ -159,6 +167,9 @@ build with that file signs with the developer's team.
   is what the formatter makes. `swift-format lint` also reports rules the formatter doesn't fix
   (such as `ReplaceForEachWithForLoop` and `AlwaysUseLowerCamelCase`), which the code base
   doesn't follow.
+- **Boundaries by search.** The model is in a package so it can be tested without the app, which
+  only holds while it takes the system's services as parameters. A search of its sources is
+  enough to notice a framework import or a singleton, and it runs in seconds, without a build.
 - **Hand-edited versions.** The numbers are in one file per target and change in a commit, made at
   the desk where the release is built.
 
