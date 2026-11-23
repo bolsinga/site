@@ -5,6 +5,7 @@
 //  Created by Greg Bolsinga on 11/3/26.
 //
 
+import CoreLocation
 import Foundation
 import Testing
 

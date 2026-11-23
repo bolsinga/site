@@ -5,6 +5,7 @@
 //  Created by Greg Bolsinga on 6/24/23.
 //
 
+import CoreSpotlight
 import Foundation
 import Testing
 
