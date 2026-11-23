@@ -7,6 +7,7 @@
 
 import AppIntents
 import Shared
+import SiteCore
 import SiteUI
 
 extension AppHooks {
@@ -20,5 +21,12 @@ extension AppHooks {
       case .year: nil
       }
     },
-    restorableActivity: { vault, path in vault.restorableSharableLinkable(for: path) })
+    restorableActivity: { vault, path in
+      switch path {
+      case .show: vault.digest(show: path)
+      case .venue: vault.digest(venue: path)
+      case .artist: vault.digest(artist: path)
+      case .year(let annum): vault.digest(annum: annum)
+      }
+    })
 }
