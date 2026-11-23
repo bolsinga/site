@@ -915,7 +915,7 @@ private struct StandByPreviewProvider: TimelineProvider {
   }
 }
 
-private func standByPreview(
+@MainActor private func standByPreview(
   _ entry: ShowsTodayEntry, renderingMode: WidgetRenderingMode
 ) -> some View {
   ShowsTodayWidgetView(entry: entry)
