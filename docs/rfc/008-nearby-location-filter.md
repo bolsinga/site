@@ -1,8 +1,8 @@
 # RFC 008: The location filter: Nearby and City
 
-Status: Accepted · Updated: 2026-11-22 · Code: `SiteKit/Sources/SiteCore` (`NearbyModel`, `LocationFilter`,
+Status: Accepted · Updated: 2026-11-23 · Code: `SiteKit/Sources/SiteCore` (`NearbyModel`, `LocationFilter`,
 `CityResolver`, `VaultModel`, `NearbyDefaults`), `SiteKit/Sources/SiteCore/LocationManager.swift`,
-`Sources/Site/Music/UI` (`Nearby*`, `CityFilterView`, `CityNameField`, `LocationFilterToolbarContent`)
+`SiteKit/Sources/SiteUI` (`Nearby*`, `CityFilterView`, `CityNameField`, `LocationFilterToolbarContent`)
 
 ## Summary
 

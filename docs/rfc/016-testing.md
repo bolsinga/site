@@ -1,13 +1,13 @@
 # RFC 016: Testing
 
-Status: Accepted · Updated: 2026-11-22 · Code: `Tests/SiteTests`, `Shared/Tests/SharedTests`, `SiteKit/Tests/SiteCoreTests`, `Sources/Site/Music/UI` (`VaultPreviewModifier`, `NearbyPreviewModifer`), `Sources/App/Preview Content/sample-shows.json`,
+Status: Accepted · Updated: 2026-11-23 · Code: `Tests/SiteTests`, `Shared/Tests/SharedTests`, `SiteKit/Tests/SiteCoreTests`, `SiteKit/Sources/SiteUI` (`VaultPreviewModifier`, `NearbyPreviewModifer`), `SiteKit/Sources/SiteUI/sample-shows.json`,
 `.github/workflows/main.yml`
 
 ## Summary
 
 The tests are unit tests of the data model, the navigation state and the pure policies, written
-with the Testing framework. They run in three places: the app-hosted `Tests` target, through the
-`SiteApp` scheme, and the `SharedTests` and `SiteCoreTests` of the `Shared` and `SiteKit` packages, which need no host. There
+with the Testing framework. They run in four places: the app-hosted `Tests` target, through the
+`SiteApp` scheme, and the `SharedTests`, `SiteCoreTests` and `SiteUITests` of the `Shared` and `SiteKit` packages, which need no host. There
 are no UI tests. SwiftUI previews are the way views are checked, and they have their own fixtures.
 This RFC says how the tests are laid out, how a `Vault` is made for them, how time, location and
 files are made deterministic, and what has no tests.
@@ -17,11 +17,12 @@ files are made deterministic, and what has no tests.
 | Folder | Imports | Tests |
 |---|---|---|
 | `Shared/Tests/SharedTests` | `Shared`, `SharedTestSupport` | `ArchivePath`, `ArchiveCategory`, `Annum` formats, `PartialDate`, `Decade`, ranking, calendar and day of the leap year, library sorting, token and ID comparison, `Vault` statistics, first and most recent sets, `Bracket` loading and cache, Shows Today snapshot, stats and timeline |
+| `SiteKit/Tests/SiteUITests` | `SiteUI`, `SiteCore`, `SharedTestSupport` | navigation state, the missing path rules, tab state, paging, map fit, the sample archive, persisted state versions, `Annum` neighbours |
 | `SiteKit/Tests/SiteCoreTests` | `SiteCore`, `Shared`, `SharedTestSupport` | `VaultModel` and its location source, location filter and city, `SiteModel` loading, `VaultLoader`, atlas cache, category sort activities, search matching, months, weekdays, rank distribution, library sections, digest comparison, the widget snapshot publish |
-| `Tests/SiteTests` | `SiteApp`, `SiteCore`, `Shared` | navigation, tab state, entity identifiers and catalog, concert search, venue places, atlas source of venues, persisted state versions, paging, map fit, the sample archive |
+| `Tests/SiteTests` | `SiteApp`, `SiteCore`, `Shared` | entity identifiers and catalog, concert search, user activities of entities, venue places, the cache age of places |
 
-`SharedTests` and `SiteCoreTests` are test targets of the `Shared` and `SiteKit` packages, run with
-`swift test --package-path Shared` and `swift test --package-path SiteKit`. They have no host, so
+`SharedTests`, `SiteCoreTests` and `SiteUITests` are test targets of the `Shared` and `SiteKit`
+packages, run with `swift test --package-path Shared` and `swift test --package-path SiteKit`. They have no host, so
 they start nothing from the app. The rest run as the one `Tests` target of `SiteApp.xcodeproj`,
 hosted by the app (`TEST_HOST`). A test that imports nothing from `SiteApp` belongs in a package
 target. `SharedTestSupport` is a target of `Shared` that holds `InMemoryCache`, for the package
@@ -56,7 +57,7 @@ sample archive is `sample-shows.json`, for previews, and a test checks it ([Prev
 ## Previews
 
 Previews are the fixture for views, not the tests. `PreviewTrait` extensions in
-`Sources/Site/Music/UI` give them their environment:
+`SiteKit/Sources/SiteUI` give them their environment:
 
 | Trait | Gives |
 |---|---|
@@ -69,8 +70,8 @@ Previews are the fixture for views, not the tests. `PreviewTrait` extensions in
 previews only. `sample-shows.json` is 20 shows of the real archive, with their artists, venues and one
 relation, and keeps their ids. The previews look up some of them (`sh1`, `sh100`, `sh500`,
 `sh899`, `ar692`, `v0`, `v103` and the years 2000 to 2002), and `SampleMusicTests` checks that
-they are there. A preview that needs another id adds its show to the sample. The file is in `Preview Content`, a
-development asset path, so it is not in a release build.
+they are there. A preview that needs another id adds its show to the sample. The file is a resource of `SiteUI`, read with `#bundle`, so a
+preview of a view in the package finds it, and it is in a release build too, at 16 KB.
 
 ## Determinism
 
@@ -110,7 +111,7 @@ development asset path, so it is not in a release build.
 
 ## Not yet covered
 
-- Views: `Sources/Site/Music/UI` and `Shared/Sources/Shared/UI` have no tests; previews only.
+- Views: `SiteKit/Sources/SiteUI` and `Shared/Sources/Shared/UI` have no tests; previews only.
 - Widgets: the Shows Today snapshot, stats and timeline have tests, `SiteWidgets` does not.
 - Intents: entity identifiers and `ConcertSearch` have tests; the queries, `Open…` intents and
   `SiteShortcuts` have none that this RFC found.

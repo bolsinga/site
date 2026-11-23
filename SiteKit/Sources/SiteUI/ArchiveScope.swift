@@ -1,0 +1,26 @@
+//
+//  ArchiveScope.swift
+//  site
+//
+//  Created by Greg Bolsinga on 8/17/25.
+//
+
+import Foundation
+import Shared
+
+enum ArchiveScope: CaseIterable {
+  case all
+  case artist
+  case venue
+
+  var localizedString: String {
+    switch self {
+    case .all:
+      String(localized: "All", bundle: #bundle, comment: "ArchiveScope.all")
+    case .artist:
+      String(localized: "Artist", bundle: #bundle, comment: "ArchiveScope.artist")
+    case .venue:
+      String(localized: "Venue", bundle: #bundle, comment: "ArchiveScope.venue")
+    }
+  }
+}

@@ -1,0 +1,178 @@
+//
+//  ArchiveTabView.swift
+//
+//
+//  Created by Greg Bolsinga on 7/31/24.
+//
+
+import Shared
+import SiteCore
+import SwiftUI
+
+extension ArchiveCategory {
+  @MainActor
+  fileprivate func badge(_ model: VaultModel) -> Text? {
+    let count = model.concerts(on: model.todayDayOfLeapYear).count
+    guard count > 0 else { return nil }
+    switch self {
+    case .today:
+      return Text(String(count))
+    case .shows, .venues, .artists, .settings, .search:
+      return nil
+    }
+  }
+
+  @MainActor
+  static var ordered: [ArchiveCategory] {
+    allCases.filter {
+      if case .settings = $0 { return showSettingsInTabView }
+      return true
+    }
+  }
+}
+
+struct ArchiveTabView: View {
+  @Environment(VaultModel.self) var model
+
+  @Binding var venueSort: RankingSort
+  @Binding var artistSort: RankingSort
+  @Binding var venuesMode: VenuesMode
+  @Binding var showsDescending: Bool
+  /// Changes each time a link asks for today.
+  let todayRequest: Int
+
+  @Binding var activeCategory: ArchiveCategory
+  let pathForCategory: (ArchiveCategory) -> Binding<[ArchivePath]>
+  let reloadModel: @MainActor () async -> Void
+  let navigateToPath: (ArchivePath) -> Void
+
+  @State private var searchString: String = ""
+  @State private var scope: ArchiveScope = .all
+  @State private var tabState: ArchiveTabState
+
+  init(
+    venueSort: Binding<RankingSort>,
+    artistSort: Binding<RankingSort>,
+    venuesMode: Binding<VenuesMode>,
+    showsDescending: Binding<Bool>,
+    todayRequest: Int,
+    activeCategory: Binding<ArchiveCategory>,
+    pathForCategory: @escaping (ArchiveCategory) -> Binding<[ArchivePath]>,
+    reloadModel: @escaping @MainActor () async -> Void,
+    navigateToPath: @escaping (ArchivePath) -> Void
+  ) {
+    self._venueSort = venueSort
+    self._artistSort = artistSort
+    self._venuesMode = venuesMode
+    self._showsDescending = showsDescending
+    self.todayRequest = todayRequest
+    self._activeCategory = activeCategory
+    self.pathForCategory = pathForCategory
+    self.reloadModel = reloadModel
+    self.navigateToPath = navigateToPath
+    // Start on the restored category. Assigning it in onAppear instead echoes back through
+    // onChange(of: tabState.category) a frame later, overwriting a deep link handled on cold launch.
+    self.tabState = ArchiveTabState(
+      category: activeCategory.wrappedValue, dayOfLeapYear: Date.now.dayOfLeapYear)
+  }
+
+  private func tabValue(for category: ArchiveCategory) -> TabSelection {
+    TabSelection(category: category, dayOfLeapYear: model.todayDayOfLeapYear)
+  }
+
+  @ViewBuilder private var searchTabContent: some View {
+    NavigationStack {
+      ArchiveCrossSearchContainer(
+        searchString: $searchString, scope: $scope, navigateToPath: navigateToPath,
+        artistSearch: model.artists(filteredBy:),
+        venueSearch: model.venues(filteredBy:)
+      )
+      .searchable(
+        text: $searchString,
+        prompt: String(localized: "Artist or Venue Name", bundle: #bundle)
+      )
+      .searchScopes($scope) {
+        ForEach(ArchiveScope.allCases, id: \.self) {
+          Text($0.localizedString).tag($0)
+        }
+      }
+      .navigationTitle(Text(ArchiveCategory.search.localizedString))
+    }
+  }
+
+  var body: some View {
+    TabView(selection: Binding(get: { tabState.selection }, set: { tabState.select($0) })) {
+      ForEach(ArchiveCategory.ordered, id: \.self) { category in
+        if category != .search {
+          Tab(
+            category.localizedString, systemImage: category.systemImage,
+            value: tabValue(for: category)
+          ) {
+            ArchiveCategoryStack(
+              category: category,
+              path: pathForCategory(category),
+              venueSort: $venueSort,
+              artistSort: $artistSort,
+              venuesMode: $venuesMode,
+              showsDescending: $showsDescending,
+              dayOfLeapYear: $tabState.dayOfLeapYear,
+              reloadModel: reloadModel,
+              navigateToPath: navigateToPath)
+          }
+          #if !os(tvOS)
+            .badge(category.badge(model))
+          #endif
+        } else {
+          #if os(macOS)
+            Tab(
+              category.localizedString, systemImage: category.systemImage,
+              value: tabValue(for: category)
+            ) {
+              searchTabContent
+            }
+          #else
+            Tab(value: tabValue(for: category), role: .search) { searchTabContent }
+          #endif
+        }
+      }
+
+    }
+    .onAppear {
+      tabState.dayOfLeapYear = model.todayDayOfLeapYear
+    }
+    .onChange(of: model.todayDayOfLeapYear) { _, newValue in
+      tabState.dayOfLeapYear = newValue
+    }
+    .onChange(of: todayRequest) {
+      tabState.dayOfLeapYear = model.todayDayOfLeapYear
+    }
+    .onChange(of: tabState.category) { _, newValue in
+      activeCategory = newValue
+    }
+    .onChange(of: activeCategory) { _, newValue in
+      tabState.activate(newValue)
+    }
+    .tabViewStyle(.sidebarAdaptable)
+  }
+}
+
+#Preview(traits: .nearbyModel, .vaultModel) {
+  @Previewable @State var venueSort = RankingSort.alphabetical
+  @Previewable @State var artistSort = RankingSort.alphabetical
+  @Previewable @State var category = ArchiveCategory.defaultCategory
+  @Previewable @State var venuesMode = VenuesMode.default
+  @Previewable @State var showsDescending = false
+
+  ArchiveTabView(
+    venueSort: $venueSort,
+    artistSort: $artistSort,
+    venuesMode: $venuesMode,
+    showsDescending: $showsDescending,
+    todayRequest: 0,
+    activeCategory: $category
+  ) { _ in
+    .constant([])
+  } reloadModel: {
+  } navigateToPath: { _ in
+  }
+}

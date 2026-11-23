@@ -1,7 +1,7 @@
 # RFC 004: ArchivePath, ArchiveCategory and ArchiveNavigation
 
-Status: Accepted · Updated: 2026-11-19 · Code: `Shared/Sources/Shared/MusicData` (`ArchivePath*`,
-`ArchiveCategory*`, `Vault`), `Sources/Site/Music/UI` (`ArchiveNavigation`, `ArchiveCategoryStack`,
+Status: Accepted · Updated: 2026-11-23 · Code: `Shared/Sources/Shared/MusicData` (`ArchivePath*`,
+`ArchiveCategory*`, `Vault`), `SiteKit/Sources/SiteUI` (`ArchiveNavigation`, `ArchiveCategoryStack`,
 `ArchivePath+Destination`, `ArchiveStateView`)
 
 ## Summary

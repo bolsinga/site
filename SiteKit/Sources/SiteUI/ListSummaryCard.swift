@@ -1,0 +1,98 @@
+//
+//  ListSummaryCard.swift
+//
+//
+//  Created by Greg Bolsinga on 10/20/26.
+//
+
+import Shared
+import SiteCore
+import SwiftUI
+
+enum ListSummary {
+  case artists(count: Int)
+  case venues(count: Int, stats: Stats)
+  case shows(count: Int, years: Int, stats: Stats)
+}
+
+struct ListSummaryCard: View {
+  @Environment(VaultModel.self) private var model
+  @Environment(\.statsThreshold) private var statsThreshold: Int
+  @Environment(NearbyModel.self) private var nearbyModel: NearbyModel?
+  @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+  let summary: ListSummary
+
+  var body: some View {
+    content
+      .animation(reduceMotion ? nil : .default, value: nearbyModel?.locationFilter)
+  }
+
+  @ViewBuilder private var content: some View {
+    switch summary {
+    case .artists(let count):
+      DetailCard(title: Text("Stats", bundle: #bundle)) {
+        StatRow(count: count, kind: .artists)
+      }
+    case .venues(let count, let stats):
+      venuesCards(count: count, stats: stats)
+    case .shows(let count, let years, let stats):
+      showsCards(count: count, years: years, stats: stats)
+    }
+  }
+
+  @ViewBuilder private func venuesCards(count: Int, stats: Stats) -> some View {
+    DetailCard(title: Text("Stats", bundle: #bundle)) {
+      StatRows {
+        StatRow(count: count, kind: .venues)
+        if stats.stateCounts.keys.count > 1 {
+          ChartRow(label: StatsTitles.generic.state) {
+            StateChart(
+              counts: stats.stateCounts, title: StatsTitles.generic.state, presentation: .card)
+          } sheet: {
+            StateChart(counts: stats.stateCounts, title: StatsTitles(vault: model.vault).state)
+          }
+        }
+      }
+    }
+  }
+
+  @ViewBuilder private func showsCards(count: Int, years: Int, stats: Stats) -> some View {
+    let titles = StatsTitles.generic
+    let categories = stats.categories(weekdayOrMonthChartConcertThreshold: statsThreshold)
+    DetailCard(title: Text("Stats", bundle: #bundle)) {
+      StatRows {
+        StatRow(count: count, kind: .shows)
+        StatRow(count: years, kind: .years)
+        if categories.contains(.weekday) {
+          ChartRow(label: titles.weekday) {
+            WeekdayChart(
+              dates: stats.dates, title: titles.weekday, presentation: .card,
+              highlightsCurrent: true)
+          } sheet: {
+            WeekdayChart(dates: stats.dates, title: titles.weekday, highlightsCurrent: true)
+          }
+        }
+        if categories.contains(.month) {
+          ChartRow(label: titles.month) {
+            MonthChart(
+              dates: stats.dates, title: titles.month, presentation: .card,
+              highlightsCurrent: true)
+          } sheet: {
+            MonthChart(dates: stats.dates, title: titles.month, highlightsCurrent: true)
+          }
+        }
+      }
+    }
+  }
+}
+
+extension View {
+  func listSummaryRowStyle() -> some View {
+    listRowInsets(.init(top: 8, leading: 16, bottom: 8, trailing: 16))
+      .listRowBackground(Color.clear)
+      #if !os(tvOS)
+        .listRowSeparator(.hidden)
+      #endif
+  }
+}

@@ -1,0 +1,348 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "**%@** Artist" : {
+
+    },
+    "**%@** Venue" : {
+
+    },
+    "**%lld** Artists" : {
+
+    },
+    "**%lld** Shows" : {
+
+    },
+    "**%lld** Venues" : {
+
+    },
+    "**%lld** Years" : {
+
+    },
+    "#%lld · %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "#%1$lld · %2$lld"
+          }
+        }
+      }
+    },
+    "#%lld · %lld · %lld tied" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "#%1$lld · %2$lld · %3$lld tied"
+          }
+        }
+      }
+    },
+    "#%lld of %lld ranks" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "#%1$lld of %2$lld ranks"
+          }
+        }
+      }
+    },
+    "#%lld of %lld ranks · %lld tied" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "#%1$lld of %2$lld ranks · %3$lld tied"
+          }
+        }
+      }
+    },
+    "%@ of %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ of %2$lld"
+          }
+        }
+      }
+    },
+    "%@, %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@, %2$@"
+          }
+        }
+      }
+    },
+    "%lld Artist(s)" : {
+
+    },
+    "%lld Last Seen" : {
+
+    },
+    "%lld Last Visited" : {
+
+    },
+    "%lld New" : {
+
+    },
+    "%lld Show(s)" : {
+
+    },
+    "%lld Venue(s)" : {
+
+    },
+    "%lld Year(s)" : {
+
+    },
+    "About" : {
+
+    },
+    "All" : {
+      "comment" : "ArchiveScope.all"
+    },
+    "All Months with Shows" : {
+
+    },
+    "All States with Shows" : {
+
+    },
+    "All Weekdays with Shows" : {
+
+    },
+    "Artist" : {
+      "comment" : "ArchiveScope.artist"
+    },
+    "Artist Names" : {
+
+    },
+    "Artist or Venue Name" : {
+
+    },
+    "Base" : {
+
+    },
+    "Cancel" : {
+
+    },
+    "City" : {
+
+    },
+    "City Limits" : {
+
+    },
+    "City Name" : {
+
+    },
+    "Clear City" : {
+
+    },
+    "Cluster, %lld venues" : {
+
+    },
+    "Comment" : {
+
+    },
+    "Count" : {
+
+    },
+    "Current Location" : {
+
+    },
+    "Done" : {
+
+    },
+    "Edit Nearby Settings" : {
+
+    },
+    "Filter City" : {
+
+    },
+    "Filter Mode" : {
+
+    },
+    "Filter Nearby" : {
+
+    },
+    "From" : {
+
+    },
+    "Geocoding…" : {
+
+    },
+    "Invalid Data." : {
+
+    },
+    "Item Not Found" : {
+
+    },
+    "Lineup" : {
+
+    },
+    "List" : {
+
+    },
+    "Location Services are disabled. Enable access in Settings." : {
+
+    },
+    "Location Unavailable" : {
+
+    },
+    "Map" : {
+
+    },
+    "Month" : {
+
+    },
+    "Months" : {
+
+    },
+    "Months at %@" : {
+
+    },
+    "Months in %@" : {
+
+    },
+    "Months with %@" : {
+
+    },
+    "Most Shows During %@" : {
+
+    },
+    "Most Shows On %@" : {
+
+    },
+    "Multiple Months with Most Shows" : {
+
+    },
+    "Multiple Weekdays with Most Shows" : {
+
+    },
+    "Nearby Distance" : {
+
+    },
+    "Nearby To Me" : {
+
+    },
+    "No City" : {
+
+    },
+    "No city. Allow location or enter a city." : {
+
+    },
+    "No Matches" : {
+
+    },
+    "No venues are in this city. Disable the Location Filter or edit the city." : {
+
+    },
+    "Not ranked" : {
+
+    },
+    "Nothing in %@" : {
+
+    },
+    "Nothing is nearby. Disable the Location Filter or increase the nearby distance filter." : {
+
+    },
+    "Nothing Nearby" : {
+
+    },
+    "Off" : {
+
+    },
+    "On" : {
+
+    },
+    "Open in Maps" : {
+
+    },
+    "Refresh" : {
+
+    },
+    "Related Artists" : {
+
+    },
+    "Related Venues" : {
+
+    },
+    "Retry" : {
+
+    },
+    "Show Years" : {
+
+    },
+    "Shows" : {
+
+    },
+    "Shows at %@" : {
+
+    },
+    "Shows with %@" : {
+
+    },
+    "Sort" : {
+
+    },
+    "Sort By Artist Count" : {
+
+    },
+    "Sort By Venue Count" : {
+
+    },
+    "States" : {
+
+    },
+    "States visited in %@" : {
+
+    },
+    "States with Shows with %@" : {
+
+    },
+    "Stats" : {
+
+    },
+    "This item isn't in the archive." : {
+
+    },
+    "To" : {
+
+    },
+    "Unable to load data." : {
+
+    },
+    "Value" : {
+
+    },
+    "Venue" : {
+      "comment" : "ArchiveScope.venue"
+    },
+    "Venue Names" : {
+
+    },
+    "Version" : {
+
+    },
+    "Weekday" : {
+
+    },
+    "Weekdays" : {
+
+    },
+    "Weekdays at %@" : {
+
+    },
+    "Weekdays in %@" : {
+
+    },
+    "Weekdays with %@" : {
+
+    }
+  },
+  "version" : "1.0"
+}

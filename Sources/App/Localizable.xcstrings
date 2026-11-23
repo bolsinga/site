@@ -1,13 +1,8 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "**%@** Artist" : {
-
-    },
-    "**%@** Venue" : {
-
-    },
     "**%lld** Artists" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "variations" : {
@@ -30,6 +25,7 @@
       }
     },
     "**%lld** Shows" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "variations" : {
@@ -52,6 +48,7 @@
       }
     },
     "**%lld** Venues" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "variations" : {
@@ -74,6 +71,7 @@
       }
     },
     "**%lld** Years" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "variations" : {
@@ -91,46 +89,6 @@
                 }
               }
             }
-          }
-        }
-      }
-    },
-    "#%lld · %lld" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "#%1$lld · %2$lld"
-          }
-        }
-      }
-    },
-    "#%lld · %lld · %lld tied" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "#%1$lld · %2$lld · %3$lld tied"
-          }
-        }
-      }
-    },
-    "#%lld of %lld ranks" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "#%1$lld of %2$lld ranks"
-          }
-        }
-      }
-    },
-    "#%lld of %lld ranks · %lld tied" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "#%1$lld of %2$lld ranks · %3$lld tied"
           }
         }
       }
@@ -160,6 +118,7 @@
       }
     },
     "%lld Artist(s)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "variations" : {
@@ -187,15 +146,6 @@
         }
       }
     },
-    "%lld Last Seen" : {
-
-    },
-    "%lld Last Visited" : {
-
-    },
-    "%lld New" : {
-
-    },
     "%lld of %lld" : {
       "localizations" : {
         "en" : {
@@ -207,6 +157,7 @@
       }
     },
     "%lld Show(s)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "variations" : {
@@ -235,6 +186,7 @@
       }
     },
     "%lld Venue(s)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "variations" : {
@@ -266,6 +218,7 @@
 
     },
     "%lld Year(s)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "variations" : {
@@ -293,25 +246,10 @@
         }
       }
     },
-    "About" : {
-
-    },
     "Accepted" : {
 
     },
     "Address Differs from Maps" : {
-
-    },
-    "All" : {
-      "comment" : "ArchiveScope.all"
-    },
-    "All Months with Shows" : {
-
-    },
-    "All States with Shows" : {
-
-    },
-    "All Weekdays with Shows" : {
 
     },
     "And %lld more" : {
@@ -329,12 +267,6 @@
     "Artist Count" : {
 
     },
-    "Artist Names" : {
-
-    },
-    "Artist or Venue Name" : {
-
-    },
     "Artists" : {
 
     },
@@ -342,9 +274,6 @@
 
     },
     "Bands" : {
-
-    },
-    "Base" : {
 
     },
     "Cancel" : {
@@ -371,28 +300,13 @@
     "City" : {
 
     },
-    "City Limits" : {
-
-    },
-    "City Name" : {
-
-    },
     "Clear" : {
-
-    },
-    "Clear City" : {
 
     },
     "club" : {
 
     },
     "Clubs" : {
-
-    },
-    "Cluster, %lld venues" : {
-
-    },
-    "Comment" : {
 
     },
     "concert" : {
@@ -420,9 +334,6 @@
 
     },
     "Criteria" : {
-
-    },
-    "Current Location" : {
 
     },
     "Date" : {
@@ -458,19 +369,7 @@
     "Done" : {
 
     },
-    "Edit Nearby Settings" : {
-
-    },
     "Filter" : {
-
-    },
-    "Filter City" : {
-
-    },
-    "Filter Mode" : {
-
-    },
-    "Filter Nearby" : {
 
     },
     "Find Places" : {
@@ -485,16 +384,10 @@
     "Found 1 concert." : {
 
     },
-    "From" : {
-
-    },
     "Geocoded" : {
 
     },
     "Geocoding Venues" : {
-
-    },
-    "Geocoding…" : {
 
     },
     "Goes to another site: %@" : {
@@ -506,34 +399,13 @@
     "Identifier Changed" : {
 
     },
-    "Invalid Data." : {
-
-    },
-    "Item Not Found" : {
-
-    },
     "Last" : {
 
     },
     "Likely match" : {
 
     },
-    "Lineup" : {
-
-    },
-    "List" : {
-
-    },
     "Loads" : {
-
-    },
-    "Location Services are disabled. Enable access in Settings." : {
-
-    },
-    "Location Unavailable" : {
-
-    },
-    "Map" : {
 
     },
     "Maps" : {
@@ -566,55 +438,16 @@
     "Month" : {
 
     },
-    "Months" : {
-
-    },
-    "Months at %@" : {
-
-    },
-    "Months in %@" : {
-
-    },
-    "Months with %@" : {
-
-    },
-    "Most Shows During %@" : {
-
-    },
-    "Most Shows On %@" : {
-
-    },
-    "Multiple Months with Most Shows" : {
-
-    },
-    "Multiple Weekdays with Most Shows" : {
-
-    },
     "Name Or Related Names" : {
 
     },
-    "Nearby Distance" : {
-
-    },
-    "Nearby To Me" : {
-
-    },
     "New Pin" : {
-
-    },
-    "No City" : {
-
-    },
-    "No city. Allow location or enter a city." : {
 
     },
     "No concerts found." : {
 
     },
     "No MapKit Identifier" : {
-
-    },
-    "No Matches" : {
 
     },
     "No Place" : {
@@ -633,9 +466,6 @@
 
     },
     "No Venues" : {
-
-    },
-    "No venues are in this city. Disable the Location Filter or edit the city." : {
 
     },
     "No venues match “%@” and “%@”." : {
@@ -660,24 +490,6 @@
     "Not compared with Maps yet" : {
 
     },
-    "Not ranked" : {
-
-    },
-    "Nothing in %@" : {
-
-    },
-    "Nothing is nearby. Disable the Location Filter or increase the nearby distance filter." : {
-
-    },
-    "Nothing Nearby" : {
-
-    },
-    "Off" : {
-
-    },
-    "On" : {
-
-    },
     "Open ${target}" : {
 
     },
@@ -688,9 +500,6 @@
 
     },
     "Open Concert" : {
-
-    },
-    "Open in Maps" : {
 
     },
     "Open in Safari" : {
@@ -751,18 +560,6 @@
     "Redirects to %@" : {
 
     },
-    "Refresh" : {
-
-    },
-    "Related Artists" : {
-
-    },
-    "Related Venues" : {
-
-    },
-    "Retry" : {
-
-    },
     "Run Checks Again" : {
 
     },
@@ -817,13 +614,7 @@
     "Show Count" : {
 
     },
-    "Show Years" : {
-
-    },
     "Shows" : {
-
-    },
-    "Shows at %@" : {
 
     },
     "Shows concerts by an artist, at a venue, in a city or on a date." : {
@@ -832,31 +623,7 @@
     "Shows the concerts on this day of any year." : {
 
     },
-    "Shows with %@" : {
-
-    },
-    "Sort" : {
-
-    },
-    "Sort By Artist Count" : {
-
-    },
-    "Sort By Venue Count" : {
-
-    },
     "State" : {
-
-    },
-    "States" : {
-
-    },
-    "States visited in %@" : {
-
-    },
-    "States with Shows with %@" : {
-
-    },
-    "Stats" : {
 
     },
     "Status" : {
@@ -901,16 +668,7 @@
     "There are changes that haven't been saved to venuemap.txt. Cancel, then choose File > Save." : {
 
     },
-    "This item isn't in the archive." : {
-
-    },
-    "To" : {
-
-    },
     "Today" : {
-
-    },
-    "Unable to load data." : {
 
     },
     "Undo Accepted Address" : {
@@ -955,9 +713,6 @@
     "Vague address" : {
 
     },
-    "Value" : {
-
-    },
     "venue" : {
 
     },
@@ -966,9 +721,6 @@
     },
     "Venue Count" : {
 
-    },
-    "Venue Names" : {
-      "comment" : "VenueSearchScope.names\nVenueSearchScope.names prompt"
     },
     "Venue Places" : {
 
@@ -994,9 +746,6 @@
     "Verifying Picks" : {
 
     },
-    "Version" : {
-
-    },
     "Weak match" : {
 
     },
@@ -1007,21 +756,6 @@
 
     },
     "Websites" : {
-
-    },
-    "Weekday" : {
-
-    },
-    "Weekdays" : {
-
-    },
-    "Weekdays at %@" : {
-
-    },
-    "Weekdays in %@" : {
-
-    },
-    "Weekdays with %@" : {
 
     },
     "Where it ends up" : {
