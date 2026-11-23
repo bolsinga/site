@@ -8,7 +8,6 @@
 import Testing
 
 @testable import Shared
-@testable import SiteApp
 
 struct DecadeTests {
   @Test func int() {

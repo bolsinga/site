@@ -17,16 +17,19 @@ files are made deterministic, and what has no tests.
 
 | Folder | Imports | Tests |
 |---|---|---|
-| `Shared/Tests/SharedTests` | `Shared` | calendar and day of the leap year, `Vault` statistics, first and most recent sets, ID comparison, Shows Today snapshot, stats and timeline |
-| `Tests/MusicDataTests` | `Shared`, some `SiteApp` | `ArchivePath`, `ArchiveCategory`, `Annum`, `PartialDate`, `Decade`, ranking, `Bracket` loading and cache |
-| `Tests/UtilitiesTests` | `Shared`, some `SiteApp` | `DayOfLeapYear`, library sorting, token comparison |
+| `Shared/Tests/SharedTests` | `Shared` | `ArchivePath`, `ArchiveCategory`, `Annum` formats, `PartialDate`, `Decade`, ranking, calendar and day of the leap year, library sorting, token and ID comparison, `Vault` statistics, first and most recent sets, Shows Today snapshot, stats and timeline |
+| `Tests/MusicDataTests` | `Shared`, some `SiteApp` | `Annum` neighbours, `Bracket` loading and cache |
+| `Tests/UtilitiesTests` | `Shared` | `InMemoryCache`, the test double for `CacheCodable` |
 | `Tests/SiteTests` | `Shared` and `SiteApp` | navigation, user activities, entity identifiers, location filter and city, venue places, atlas cache, search, paging |
 
 `SharedTests` is a test target of the `Shared` package, run with `swift test --package-path Shared`.
 It has no host, so it starts nothing from the app. The rest run as the one `Tests` target of
 `SiteApp.xcodeproj`, hosted by the app (`TEST_HOST`). A test that imports only `Shared` belongs in
 `SharedTests`. The `Bracket` loading and cache tests stay in `Tests` for now, as they share
-`InMemoryCache` with tests of the app's atlas and venue code.
+`InMemoryCache` with tests of the app's atlas and venue code. `Tests` turns on
+`MemberImportVisibility`, as the app does, so a test file imports `SiteApp` only when it uses
+something that module declares; an import it doesn't need is how a test that could run without
+the app is spotted.
 
 ## Framework
 
