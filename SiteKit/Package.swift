@@ -40,5 +40,6 @@ let package = Package(
         .treatAllWarnings(as: .error),
         .enableUpcomingFeature("MemberImportVisibility"),
       ]),
-  ]
+  ],
+  swiftLanguageModes: [.v6]
 )

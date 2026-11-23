@@ -46,5 +46,6 @@ let package = Package(
       swiftSettings: [
         .treatAllWarnings(as: .error)
       ]),
-  ]
+  ],
+  swiftLanguageModes: [.v6]
 )
