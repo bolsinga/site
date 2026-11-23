@@ -7,6 +7,7 @@
 
 import AppIntents
 import Shared
+import SiteCore
 
 extension ArchivePath: @retroactive EntityIdentifierConvertible {
   public var entityIdentifierString: String {

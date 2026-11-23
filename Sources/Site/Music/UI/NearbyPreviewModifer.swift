@@ -5,6 +5,7 @@
 //  Created by Greg Bolsinga on 7/29/25.
 //
 
+import SiteCore
 import SwiftUI
 
 struct NearbyPreviewModifer: PreviewModifier {

@@ -1,0 +1,435 @@
+//
+//  VaultModel.swift
+//
+//
+//  Created by Greg Bolsinga on 7/12/23.
+//
+
+import CoreLocation
+import Foundation
+import MapKit
+import Shared
+import os
+
+extension Logger {
+  fileprivate static let vaultModel = Logger(category: "vaultModel")
+}
+
+public enum LocationAuthorization {
+  case notDetermined  // Not asked yet; location is first asked for when the filter is turned on.
+  case allowed
+  case restricted  // Locations are not possible.
+  case denied  // Locations denied by user.
+}
+
+@Observable public final class VaultModel {
+
+  public let vault: Vault
+
+  public var error: Error?
+
+  public var todayDayOfLeapYear: Int
+  public var venueMapItemMap: [ArchivePath: MKMapItem] = [:]
+  /// The address Maps gave each geocoded venue, to compare with the venue's own.
+  public private(set) var venueMapsAddressMap: [ArchivePath: MapsAddress] = [:]
+  /// Places in Maps for venues with a MapKit identifier, found when the venue is shown.
+  public private(set) var venuePlaceMap: [ArchivePath: MKMapItem] = [:]
+  @ObservationIgnored
+  private var venuePlaceLookups = Set<ArchivePath>()
+  private var currentLocation: CLLocation?
+  public var locationAuthorization = LocationAuthorization.notDetermined
+  public private(set) var currentCity: String?
+
+  @ObservationIgnored
+  private var lastReverseGeocode: ReverseGeocodePolicy.Attempt?
+  /// The city lookup in flight; a newer one, or losing location, cancels it.
+  @ObservationIgnored
+  public private(set) var cityTask: Task<Void, Never>?
+
+  @ObservationIgnored
+  private var dayChangeTask: Task<Void, Never>?
+  @ObservationIgnored
+  private var geocodeTask: Task<Void, Never>?
+  @ObservationIgnored
+  public private(set) var locationTask: Task<Void, Never>?
+
+  private var batchGeocodeCompleted = false
+
+  private let executeAsynchronousTasks: Bool
+  private let locationSource: any LocationSource
+  private let now: @Sendable () -> Date
+  private let notificationCenter: NotificationCenter
+  private let cityResolver: any CityResolver
+  /// Reverse geocoding is one kind of MapKit request, so its lookups share one window.
+  private let cityThrottle: Throttle<String?>
+
+  private let atlas = Atlas<Venue>()
+
+  @MainActor
+  public init(
+    _ vault: Vault,
+    executeAsynchronousTasks: Bool,
+    distanceFilter: CLLocationDistance = 10,
+    cityResolver: any CityResolver = MapKitCityResolver(),
+    cityThrottle: Throttle<String?> = Throttle(
+      batchSize: MapKitLimits.maxRequests, timeUntilReset: MapKitLimits.timeUntilReset),
+    locationSource: (any LocationSource)? = nil,
+    now: @escaping @Sendable () -> Date = { .now },
+    notificationCenter: NotificationCenter = .default,
+    error: Error? = nil
+  ) {
+    self.vault = vault
+    self.executeAsynchronousTasks = executeAsynchronousTasks
+    self.cityResolver = cityResolver
+    self.cityThrottle = cityThrottle
+    self.locationSource =
+      locationSource
+      ?? LocationManager(
+        activityType: .other,
+        distanceFilter: distanceFilter,
+        desiredAccuracy: kCLLocationAccuracyHundredMeters,
+        accessRequest: .inUse)
+    self.now = now
+    self.notificationCenter = notificationCenter
+    self.todayDayOfLeapYear = now().dayOfLeapYear
+
+    self.error = error
+
+    guard executeAsynchronousTasks else {
+      Logger.vaultModel.log("Ignoring Asynchronous Tasks")
+      return
+    }
+
+    dayChangeTask = Task {
+      await self.monitorDayChanges()
+    }
+
+    geocodeTask = Task {
+      await self.geocodeVenues()
+    }
+
+    // Asking is left until the filter is turned on, but an answer already given costs no prompt.
+    if self.locationSource.isAuthorizationDetermined {
+      startLocationMonitoring()
+    }
+  }
+
+  /// Starts listening for location, which asks for access if it hasn't been decided. It is
+  /// started once.
+  @MainActor
+  public func startLocationMonitoring() {
+    guard executeAsynchronousTasks, locationTask == nil else { return }
+    locationTask = Task {
+      await self.monitorUserLocation()
+    }
+  }
+
+  public func cancelTasks() {
+    dayChangeTask?.cancel()
+    geocodeTask?.cancel()
+    locationTask?.cancel()
+    cityTask?.cancel()
+  }
+
+  /// What a venue opens in Maps: its place when found, otherwise where the app's maps put it.
+  @MainActor
+  public func mapsItem(for id: ArchivePath) -> MKMapItem? {
+    venuePlaceMap[id] ?? venueMapItemMap[id]
+  }
+
+  /// Finds a venue's place in Maps once, keeping it for this session.
+  @MainActor
+  public func findPlace(for id: ArchivePath, venue: Venue) async {
+    guard venuePlaceMap[id] == nil, !venuePlaceLookups.contains(id),
+      let mapKitID = venue.mapKitID, let identifier = MKMapItem.Identifier(rawValue: mapKitID)
+    else { return }
+    venuePlaceLookups.insert(id)
+    defer { venuePlaceLookups.remove(id) }
+    do {
+      venuePlaceMap[id] = try await MapItemLookup.mapItem(for: identifier)
+    } catch {
+      Logger.vaultModel.error(
+        "place: \(String(describing: id), privacy: .public) \(error, privacy: .public)")
+    }
+  }
+
+  @MainActor
+  public func concerts(on dayOfLeapYear: Int) -> [ShowDigest] {
+    do {
+      return try vault.concerts(on: dayOfLeapYear)
+    } catch {
+      self.error = error
+      return []
+    }
+  }
+
+  public func artists(filteredBy searchString: String) -> [ArchiveItem] {
+    do {
+      return try vault.artists(filteredBy: searchString)
+    } catch {
+      self.error = error
+      return []
+    }
+  }
+
+  public func venues(filteredBy searchString: String) -> [ArchiveItem] {
+    do {
+      return try vault.venues(filteredBy: searchString)
+    } catch {
+      self.error = error
+      return []
+    }
+  }
+
+  public func compare<Comparable: Identifiable>(lhs: Comparable, rhs: Comparable)
+    -> Bool where Comparable.ID == ArchivePath
+  {
+    do {
+      return try vault.compareIDs(lhs: lhs.id, rhs: rhs.id)
+    } catch {
+      self.error = error
+      return false
+    }
+  }
+
+  public func compareIDs(lhs: ArchivePath, rhs: ArchivePath) -> Bool {
+    do {
+      return try vault.compareIDs(lhs: lhs, rhs: rhs)
+    } catch {
+      self.error = error
+      return false
+    }
+  }
+
+  public func sort(showIDs: any Collection<ArchivePath>) -> [ArchivePath] {
+    do {
+      return try vault.sort(showIDs: showIDs)
+    } catch {
+      self.error = error
+      return []
+    }
+  }
+
+  @MainActor
+  private func monitorDayChanges() async {
+    Logger.vaultModel.log("start day monitoring")
+    defer {
+      Logger.vaultModel.log("end day monitoring")
+    }
+
+    for await _ in notificationCenter.notifications(named: .NSCalendarDayChanged).map({
+      $0.name
+    }) {
+      refreshToday()
+    }
+  }
+
+  /// Catches up with the calendar, which the day change notification may not have done after a resume.
+  @MainActor
+  public func refreshToday() {
+    let today = now().dayOfLeapYear
+    guard today != todayDayOfLeapYear else { return }
+    todayDayOfLeapYear = today
+
+    Logger.vaultModel.log("Today dayOfLeapYear: \(self.todayDayOfLeapYear, privacy: .public)")
+  }
+
+  @MainActor
+  private func geocodeVenues() async {
+    Logger.vaultModel.log("start batch geocode")
+
+    do {
+      for try await (id, venue, placemark) in BatchGeocode(atlas: atlas, vault: vault) {
+        do {
+          let mapItem = try await placemark?.mapItem(for: venue)
+          Logger.vaultModel.log(
+            "geocoded: \(String(describing: id), privacy: .public) by \(placemark?.origin ?? "nothing", privacy: .public)"
+          )
+          venueMapItemMap[id] = mapItem
+          venueMapsAddressMap[id] = placemark?.address
+        } catch {
+          // One venue's place not being found leaves the others to be placed.
+          Logger.vaultModel.error(
+            "map item: \(String(describing: id), privacy: .public) by \(placemark?.origin ?? "nothing", privacy: .public): \(error, privacy: .public)"
+          )
+        }
+      }
+    } catch {
+      Logger.vaultModel.error("batch geocode error: \(error, privacy: .public)")
+    }
+    // A cancelled batch stopped early; it must not report the progress as complete.
+    if !Task.isCancelled {
+      batchGeocodeCompleted = true
+    }
+
+    Logger.vaultModel.log("end batch geocode")
+  }
+
+  public var geocodingProgress: Double {
+    guard !batchGeocodeCompleted else { return 1.0 }
+    let batchGeocodeTotalCount = vault.venueIDs().count
+    guard batchGeocodeTotalCount != 0 else { return 1.0 }
+    return Double(venueMapItemMap.count) / Double(batchGeocodeTotalCount)
+  }
+
+  public var geocodingInProgress: Bool {
+    geocodingProgress < 1.0
+  }
+
+  @MainActor
+  private func monitorUserLocation() async {
+    Logger.vaultModel.log("start location monitoring")
+    defer {
+      cityTask?.cancel()
+      Logger.vaultModel.log("end location monitoring")
+    }
+
+    do {
+      for try await event in locationSource.events() {
+        handle(event)
+      }
+    } catch {
+      Logger.vaultModel.error("locationstream error: \(error, privacy: .public)")
+    }
+  }
+
+  @MainActor
+  public func handle(_ event: LocationManager.Event) {
+    switch event {
+    case .denied:
+      locationAuthorization = .denied
+      currentLocation = nil
+      cityTask?.cancel()
+      cityTask = nil
+      lastReverseGeocode = nil
+      currentCity = nil
+    case .allowed:
+      locationAuthorization = .allowed
+    case .location(let location):
+      locationAuthorization = .allowed
+      currentLocation = location
+      resolveCity(for: location)
+    }
+  }
+
+  @MainActor
+  private func resolveCity(for location: CLLocation) {
+    let now = self.now()
+    guard
+      ReverseGeocodePolicy.shouldGeocode(last: lastReverseGeocode, location: location, now: now)
+    else { return }
+    lastReverseGeocode = ReverseGeocodePolicy.Attempt(location: location, date: now)
+    cityTask?.cancel()
+    cityTask = Task { [cityResolver, cityThrottle] in
+      do {
+        // A throttled lookup waits for the window to reset and asks again for the same location.
+        let found = try await cityThrottle.perform {
+          @Sendable () async throws -> Throttle<String?>.Control in
+          do {
+            return .success(try await cityResolver.city(for: location))
+          } catch let error as NSError where error.isGeocodingThrottledError {
+            Logger.vaultModel.log("city geocode throttled")
+            return .pauseEntry
+          }
+        }
+        // A cancelled lookup is stale: a newer one started, or location was lost.
+        guard !Task.isCancelled, let city = found ?? nil else { return }
+        Logger.vaultModel.log("current city: \(city, privacy: .public)")
+        currentCity = city
+      } catch is CancellationError {
+      } catch {
+        Logger.vaultModel.error("city geocode error: \(error, privacy: .public)")
+      }
+    }
+  }
+
+  private func venueIDsNearby(_ distanceThreshold: CLLocationDistance) -> any Collection<
+    ArchivePath
+  > {
+    guard let currentLocation else {
+      Logger.vaultModel.log("Nearby: No Location")
+      return []
+    }
+    let nearbyVenueIDs = venues(nearby: currentLocation, distanceThreshold: distanceThreshold)
+    Logger.vaultModel.log("Nearby: Venues: \(nearbyVenueIDs.count, privacy: .public)")
+    return nearbyVenueIDs
+  }
+
+  public func venueIDsInCity(_ city: String?) -> any Collection<ArchivePath> {
+    guard let city else {
+      Logger.vaultModel.log("City: No City")
+      return []
+    }
+    return vault.venueIDs().compactMap {
+      cityMatches($0.1.location.city, filter: city) ? $0.0 : nil
+    }
+  }
+
+  /// The venues the filter leaves, or nil if it is off.
+  private func filteredVenueIDs(_ nearbyModel: NearbyModel, distanceThreshold: CLLocationDistance)
+    -> (any Collection<ArchivePath>)?
+  {
+    switch nearbyModel.locationFilter {
+    case .none:
+      nil
+    case .nearby:
+      venueIDsNearby(distanceThreshold)
+    case .city:
+      venueIDsInCity(nearbyModel.effectiveCity(current: currentCity))
+    }
+  }
+
+  private func decadesMap(venueIDs: any Collection<ArchivePath>) -> [Decade: [Annum: Int]] {
+    let concertIDs = Set(venueIDs.flatMap { vault.shows(venueID: $0) })
+    return vault.decadesMap(showIDs: concertIDs)
+  }
+
+  private func venues(nearby location: CLLocation, distanceThreshold: CLLocationDistance)
+    -> any Collection<ArchivePath>
+  {
+    venueMapItemMap.compactMap { (id, mapItem) in
+      guard mapItem.location.distance(from: location) <= distanceThreshold else { return nil }
+      return id
+    }
+  }
+
+  public func filteredDecadesMap(_ nearbyModel: NearbyModel, distanceThreshold: CLLocationDistance)
+    -> [Decade: [Annum: Int]]
+  {
+    guard let ids = filteredVenueIDs(nearbyModel, distanceThreshold: distanceThreshold) else {
+      return vault.decadesMap
+    }
+    return decadesMap(venueIDs: ids)
+  }
+
+  /// The statistics of what the location filter leaves, or of everything if it is off.
+  public func filteredStatisticsData(
+    _ nearbyModel: NearbyModel, distanceThreshold: CLLocationDistance
+  )
+    -> (showsCount: Int, venueCount: Int, artistCount: Int, dates: [Date], states: [String: Int])
+  {
+    guard let ids = filteredVenueIDs(nearbyModel, distanceThreshold: distanceThreshold) else {
+      return vault.statisticsData
+    }
+    return vault.statisticsData(venueIDs: ids)
+  }
+
+  public func nearbyVenues(_ nearbyModel: NearbyModel, distanceThreshold: CLLocationDistance)
+    -> any Collection<RankedArchiveItem>
+  {
+    guard let ids = filteredVenueIDs(nearbyModel, distanceThreshold: distanceThreshold) else {
+      return vault.venueIDs().compactMap { vault.rankedVenue(id: $0.0) }
+    }
+    return ids.compactMap { vault.rankedVenue(id: $0) }
+  }
+
+  public func nearbyArtists(_ nearbyModel: NearbyModel, distanceThreshold: CLLocationDistance)
+    -> any Collection<RankedArchiveItem>
+  {
+    guard let ids = filteredVenueIDs(nearbyModel, distanceThreshold: distanceThreshold) else {
+      return vault.artistIDs().compactMap { vault.rankedArtist(id: $0.0) }
+    }
+    let artistIDs = Set(ids.flatMap { vault.artists(venueID: $0) })
+    return artistIDs.compactMap { vault.rankedArtist(id: $0) }
+  }
+}

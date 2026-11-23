@@ -6,6 +6,7 @@
 //
 
 import Shared
+import SiteCore
 import SwiftUI
 
 struct VenueList<V: Hashable & Identifiable & Nameable & Rankable>: View

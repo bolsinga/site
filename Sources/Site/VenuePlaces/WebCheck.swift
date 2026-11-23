@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SiteCore
 
 /// What loading a URL found.
 struct WebCheck: Codable, Equatable, Sendable {

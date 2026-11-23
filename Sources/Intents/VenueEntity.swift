@@ -9,6 +9,7 @@ import AppIntents
 import CoreSpotlight
 import Foundation
 import Shared
+import SiteCore
 
 struct VenueEntity: AppEntity {
   static var typeDisplayRepresentation: TypeDisplayRepresentation {

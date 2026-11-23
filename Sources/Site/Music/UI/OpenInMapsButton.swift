@@ -6,6 +6,7 @@
 //
 
 import MapKit
+import SiteCore
 import SwiftUI
 
 /// Opens a map item in Maps.

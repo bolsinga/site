@@ -9,6 +9,7 @@ import Foundation
 import Testing
 
 @testable import SiteApp
+@testable import SiteCore
 
 struct WebCheckTests {
   let url = URL(string: "https://www.example.com")!

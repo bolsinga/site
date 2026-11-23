@@ -10,6 +10,7 @@ import Testing
 
 @testable import Shared
 @testable import SiteApp
+@testable import SiteCore
 
 struct ConcertSearchTests {
   let chicago = Venue(id: "v0", location: Location(city: "Chicago", state: "IL"), name: "V0")

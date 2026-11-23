@@ -7,6 +7,7 @@
 
 import MapKit
 import Shared
+import SiteCore
 import SwiftUI
 
 private struct VenuePlace: Identifiable {

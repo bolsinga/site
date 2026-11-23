@@ -27,6 +27,9 @@ jobs:
     - name: Test Shared
       if: matrix.destination == 'platform=macOS'
       run: swift test --package-path Shared
+    - name: Test SiteKit
+      if: matrix.destination == 'platform=macOS'
+      run: swift test --package-path SiteKit
     - name: Build iOS / macOS / tvOS
       run: xcodebuild -verbose -skipPackagePluginValidation -scheme SiteApp -destination '${{ matrix.destination }}'
 

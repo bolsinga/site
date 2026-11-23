@@ -7,6 +7,7 @@
 
 import Foundation
 import Shared
+import SiteCore
 
 extension Vault {
   func restorableSharableLinkable(for path: ArchivePath) -> (any ArchivePathUserActivity)? {

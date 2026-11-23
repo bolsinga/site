@@ -4,6 +4,7 @@
 //
 
 import Shared
+import SiteCore
 import Synchronization
 
 /// A value made the first time it is asked for. A caller that asks while it is being made waits.

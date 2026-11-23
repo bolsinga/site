@@ -12,6 +12,7 @@ import Testing
 
 @testable import Shared
 @testable import SiteApp
+@testable import SiteCore
 
 struct VenueMapKitIDTests {
   let json = """

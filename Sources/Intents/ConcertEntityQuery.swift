@@ -9,6 +9,7 @@
 import CoreSpotlight
 import Foundation
 import Shared
+import SiteCore
 import os
 
 extension Logger {

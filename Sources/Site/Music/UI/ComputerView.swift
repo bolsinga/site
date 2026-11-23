@@ -5,6 +5,7 @@
 //  Created by Greg Bolsinga on 10/8/26.
 //
 
+import SiteCore
 import SwiftUI
 
 /// A vector recreation of an old 4-color GIF: two reel-to-reel decks

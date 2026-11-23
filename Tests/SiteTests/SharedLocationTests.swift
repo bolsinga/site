@@ -10,6 +10,7 @@ import Testing
 
 @testable import Shared
 @testable import SiteApp
+@testable import SiteCore
 
 struct SharedLocationTests {
   private let cityCenter = CLLocation(latitude: 37.871_59, longitude: -122.272_75)

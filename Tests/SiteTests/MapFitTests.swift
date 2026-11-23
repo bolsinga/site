@@ -7,6 +7,7 @@ import MapKit
 import Testing
 
 @testable import SiteApp
+@testable import SiteCore
 
 struct MapFitTests {
   private let rect = MKMapRect(x: 1000, y: 2000, width: 100, height: 100)

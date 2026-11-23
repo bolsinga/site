@@ -6,6 +6,7 @@
 //
 
 import Shared
+import SiteCore
 import SwiftUI
 
 /// An artist's details that can be paged to the previous and next artist, in library order.

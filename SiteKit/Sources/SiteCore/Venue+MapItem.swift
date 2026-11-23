@@ -1,0 +1,22 @@
+//
+//  Venue+MapItem.swift
+//  SiteApp
+//
+//  Created by Greg Bolsinga on 11/12/25.
+//
+
+import MapKit
+import Shared
+
+extension Venue {
+  fileprivate var mkAddress: MKAddress? {
+    MKAddress(fullAddress: location.addressString, shortAddress: nil)
+  }
+}
+
+extension MKMapItem {
+  public convenience init(venue: Venue, location: CLLocation) {
+    self.init(location: location, address: venue.mkAddress)
+    self.name = venue.name
+  }
+}

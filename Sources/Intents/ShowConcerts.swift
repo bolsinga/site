@@ -8,6 +8,7 @@
 @preconcurrency import AppIntents
 import Foundation
 import Shared
+import SiteCore
 import SwiftUI
 
 /// Answers a request for concerts with a dialog and a list, which Siri can show without the app.

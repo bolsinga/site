@@ -9,6 +9,7 @@ import Foundation
 import Testing
 
 @testable import SiteApp
+@testable import SiteCore
 
 struct CacheAgeTests {
   let now = Date(timeIntervalSinceReferenceDate: 800_000_000)

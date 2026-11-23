@@ -1,7 +1,7 @@
 # RFC 007: The Shows Today widget and its snapshot
 
-Status: Accepted · Updated: 2026-11-19 · Code: `SiteWidgets`, `Shared/Sources/Shared/Widget`,
-`Sources/Site/Music/SiteModel+Widget.swift`, `Sources/Site/Music/SiteModel.swift`
+Status: Accepted · Updated: 2026-11-22 · Code: `SiteWidgets`, `Shared/Sources/Shared/Widget`,
+`SiteKit/Sources/SiteCore/SiteModel+Widget.swift`, `SiteKit/Sources/SiteCore/SiteModel.swift`
 
 ## Summary
 

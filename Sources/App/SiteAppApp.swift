@@ -7,6 +7,7 @@
 
 import AppIntents
 import Shared
+import SiteCore
 import SwiftUI
 
 struct SiteAppApp: App {
@@ -25,6 +26,9 @@ struct SiteAppApp: App {
 
     let model = SiteModel(urlString: urlString)
     model.vaultProvider = provider
+    #if !os(tvOS)
+      model.indexSpotlight = { await $0.indexForSpotlight() }
+    #endif
     _model = State(initialValue: model)
 
     SiteShortcuts.updateAppShortcutParameters()

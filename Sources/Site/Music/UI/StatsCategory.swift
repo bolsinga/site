@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SiteCore
 
 enum StatsCategory: CaseIterable {
   case shows

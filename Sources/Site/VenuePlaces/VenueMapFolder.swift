@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SiteCore
 import os
 
 extension Logger {

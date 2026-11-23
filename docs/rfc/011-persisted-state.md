@@ -1,9 +1,9 @@
 # RFC 011: Persisted state
 
-Status: Accepted · Updated: 2026-11-21 · Code: `Sources/Site/Music/UI/ArchiveStateView.swift`,
+Status: Accepted · Updated: 2026-11-22 · Code: `Sources/Site/Music/UI/ArchiveStateView.swift`,
 `Sources/Site/Music/UI/SiteView.swift`, `Shared/Sources/Shared/Utilities/FileManager+CacheCodable.swift`,
 `Shared/Sources/Shared/MusicData/Bracket.swift`, `Shared/Sources/Shared/Widget`,
-`Sources/Site/Music/AtlasCache.swift`, `Sources/Intents/Vault+Spotlight.swift`
+`SiteKit/Sources/SiteCore/AtlasCache.swift`, `Sources/Intents/Vault+Spotlight.swift`
 
 ## Summary
 

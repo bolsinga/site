@@ -10,6 +10,7 @@ import Testing
 
 @testable import Shared
 @testable import SiteApp
+@testable import SiteCore
 
 struct PagedBrowserTests {
   @Test func neighborsWrap() {

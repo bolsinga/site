@@ -1,6 +1,6 @@
 # RFC 002: MapKit geocoding, identifiers and caching
 
-Status: Accepted · Updated: 2026-11-20 · Code: `Sources/Site/Music` (`Atlas`, `AtlasCache`,
+Status: Accepted · Updated: 2026-11-22 · Code: `SiteKit/Sources/SiteCore` (`Atlas`, `AtlasCache`,
 `Throttle`, `MapItemLookup`, `Placemark`), `Sources/Site/VenuePlaces`
 
 ## Summary

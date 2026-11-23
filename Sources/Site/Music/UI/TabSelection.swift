@@ -4,6 +4,7 @@
 //
 
 import Shared
+import SiteCore
 
 extension ArchiveCategory {
   @MainActor

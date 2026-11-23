@@ -7,6 +7,7 @@
 
 import Foundation
 import Shared
+import SiteCore
 
 extension StatsTitles {
   init(artistDigest digest: ArtistDigest) {

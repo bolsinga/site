@@ -5,6 +5,7 @@
 //  Created by Greg Bolsinga on 10/20/26.
 //
 
+import SiteCore
 import SwiftUI
 
 struct DetailCard<Content: View>: View {

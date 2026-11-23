@@ -4,6 +4,7 @@
 //
 
 import Foundation
+import SiteCore
 
 // Captured at the scene root so it survives arriving before ArchiveNavigation exists
 // (e.g. a cold launch, before the vault has finished loading).

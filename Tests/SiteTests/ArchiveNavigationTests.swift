@@ -9,6 +9,7 @@ import Testing
 
 @testable import Shared
 @testable import SiteApp
+@testable import SiteCore
 
 extension ArchiveCategory {
   var isRegularActivity: Bool {

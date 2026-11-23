@@ -7,6 +7,7 @@
 
 import Foundation
 import Shared
+import SiteCore
 
 extension Vault {
   fileprivate func entity(for digest: ArtistDigest) -> ArtistEntity? {

@@ -6,6 +6,7 @@
 //
 
 import Charts
+import SiteCore
 import SwiftUI
 
 extension ChartContent {

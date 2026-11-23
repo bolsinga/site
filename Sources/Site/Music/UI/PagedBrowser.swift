@@ -5,6 +5,7 @@
 //  Created by Greg Bolsinga on 10/26/26.
 //
 
+import SiteCore
 import SwiftUI
 
 extension Collection where Element: Hashable {

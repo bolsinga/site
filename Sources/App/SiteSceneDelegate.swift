@@ -8,6 +8,7 @@
 #if os(iOS)
   import Shared
   import UIKit
+  import SiteCore
 
   final class SiteSceneDelegate: NSObject, UIWindowSceneDelegate {
     /// A cold launch's quick action waits until the scene is active and SwiftUI is listening.

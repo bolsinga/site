@@ -39,7 +39,7 @@ One job per destination, with `fail-fast: false`, so one platform failing doesn'
 
 | Destination | Runs |
 |---|---|
-| `platform=macOS` | `xcodebuild test` of scheme `SiteApp`, `swift test` of the `Shared` package, then a build of scheme `SiteApp` |
+| `platform=macOS` | `xcodebuild test` of scheme `SiteApp`, `swift test` of the `Shared` and `SiteKit` packages, then a build of scheme `SiteApp` |
 | `generic/platform=iOS Simulator` | a build of scheme `SiteApp` |
 | `generic/platform=tvOS Simulator` | a build of scheme `SiteApp` |
 
@@ -118,7 +118,7 @@ build with that file signs with the developer's team.
 1. A change MUST build with scheme `SiteApp` for `platform=macOS`, `generic/platform=iOS
    Simulator` and `generic/platform=tvOS Simulator`. Each is its own job, and a failed job fails
    the pull request.
-2. The `Tests` target and the `Shared` package's tests MUST pass on macOS. It is the only platform
+2. The `Tests` target and the tests of the `Shared` and `SiteKit` packages MUST pass on macOS. It is the only platform
    the tests run on in CI.
 3. The workflows MUST build with Xcode 27.2 or newer on a runner labeled `xcode-27`, and fail
    when the newest installed Xcode of that major version is older than 27.2. The minimum is the

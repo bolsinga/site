@@ -7,6 +7,7 @@
 
 import Foundation
 import Shared
+import SiteCore
 
 /// web_generator's venuemap.txt, with each picked place's MapKit identifier and street, and each
 /// accepted address and picked website.

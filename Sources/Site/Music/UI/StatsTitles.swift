@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SiteCore
 
 struct StatsTitles {
   let weekday: LocalizedStringResource

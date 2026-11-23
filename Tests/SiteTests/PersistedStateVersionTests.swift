@@ -8,6 +8,7 @@ import Testing
 
 @testable import Shared
 @testable import SiteApp
+@testable import SiteCore
 
 private struct NumberGeocodable: AtlasGeocodable {
   func geocode() async throws -> Int { 1 }

@@ -9,6 +9,7 @@
   import CoreSpotlight
   import Shared
   import os
+  import SiteCore
 
   extension Logger {
     fileprivate static let spotlight = Logger(category: "spotlight")
