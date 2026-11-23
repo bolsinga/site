@@ -1,6 +1,6 @@
 # RFC 016: Testing
 
-Status: Accepted · Updated: 2026-11-23 · Code: `Tests/SiteTests`, `Shared/Tests/SharedTests`, `SiteKit/Tests/SiteCoreTests`, `SiteKit/Sources/SiteUI` (`VaultPreviewModifier`, `NearbyPreviewModifer`), `SiteKit/Sources/SiteUI/sample-shows.json`,
+Status: Accepted · Updated: 2026-11-23 · Code: `Tests/SiteTests`, `Sources/App/LaunchMode.swift`, `Shared/Tests/SharedTests`, `SiteKit/Tests/SiteCoreTests`, `SiteKit/Sources/SiteUI` (`VaultPreviewModifier`, `NearbyPreviewModifer`), `SiteKit/Sources/SiteUI/sample-shows.json`,
 `.github/workflows/main.yml`
 
 ## Summary
@@ -108,10 +108,17 @@ preview of a view in the package finds it, and it is in a release build too, at 
   Shared` and `swift test --package-path SiteKit` run the package tests. The iOS and tvOS simulator
   destinations only build; no test runs there. This matches CLAUDE.md.
 - Nothing runs on a physical device. Locally, tests run on My Mac or a simulator.
+- The app that hosts `Tests` is launched in the quiet mode. The scheme's test action sets
+  `SITE_QUIET_HOST=1` in its own environment, and `LaunchMode` reads it. In that mode `SiteAppApp`
+  shows an empty scene and skips its startup: the loader and its registration with App Intents, the
+  shortcut parameters, and so the archive load, the widget publish, the Spotlight index, the
+  day-change monitoring and the batch geocode. No test depends on any of them. The mode is a setting
+  the scheme gives, and the app doesn't look for a test run; `LaunchModeTests` fails if the scheme
+  loses the setting.
 
 ## Not yet covered
 
-- Views: `SiteKit/Sources/SiteUI` and `Shared/Sources/Shared/UI` have no tests; previews only.
+- Views: how `SiteKit/Sources/SiteUI` and `Shared/Sources/Shared/UI` look and lay out has no tests; previews only.
 - Widgets: the Shows Today snapshot, stats and timeline have tests, `SiteWidgets` does not.
 - Intents: entity identifiers and `ConcertSearch` have tests; the queries, `Open…` intents and
   `SiteShortcuts` have none that this RFC found.

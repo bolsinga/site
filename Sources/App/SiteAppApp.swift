@@ -16,29 +16,34 @@ struct SiteAppApp: App {
     @UIApplicationDelegateAdaptor private var appDelegate: SiteAppDelegate
   #endif
   @State private var model: SiteModel
+  private let launchMode = LaunchMode()
 
   init() {
     let urlString =
       URL.archiveRoot?.appendingPathComponent("json/shows.json").absoluteString ?? ""
     // Intents can run before there is a scene to load the archive, so they get it from this.
+    let model = SiteModel(urlString: urlString)
+    _model = State(initialValue: model)
+    guard launchMode == .normal else { return }
+
     let provider = VaultProvider(urlString: urlString)
     AppDependencyManager.shared.add(dependency: provider)
     EntityVault.provider = provider
 
-    let model = SiteModel(urlString: urlString)
     model.vaultProvider = provider
     #if !os(tvOS)
       model.indexSpotlight = { await $0.indexForSpotlight() }
     #endif
-    _model = State(initialValue: model)
 
     SiteShortcuts.updateAppShortcutParameters()
   }
 
   var body: some Scene {
     WindowGroup {
-      SiteView(model)
-        .environment(\.appHooks, .app)
+      if launchMode == .normal {
+        SiteView(model)
+          .environment(\.appHooks, .app)
+      }
     }
     #if !os(tvOS)
       .commands {
