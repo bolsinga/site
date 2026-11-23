@@ -34,9 +34,9 @@ extension AtlasGeocodable {
 }
 
 /// MapKit allows the app this many requests of each kind in each period.
-public enum MapKitLimits {
-  public static let maxRequests = 50
-  public static let timeUntilReset = Duration.seconds(60)
+package enum MapKitLimits {
+  package static let maxRequests = 50
+  package static let timeUntilReset = Duration.seconds(60)
 }
 
 public actor Atlas<T: AtlasGeocodable> {
@@ -50,14 +50,14 @@ public actor Atlas<T: AtlasGeocodable> {
   }
 
   /// The cached place, and whether it is still current for what the item is geocoded from.
-  public func cached(_ geocodable: T, id: ArchivePath) -> (place: T.Place, isCurrent: Bool)? {
+  package func cached(_ geocodable: T, id: ArchivePath) -> (place: T.Place, isCurrent: Bool)? {
     guard let entry = cache?.entry(id) else { return nil }
     let isCurrent =
       geocodable.canUseCached(entry.placemark) && entry.source == geocodable.geocodeSource
     return (entry.placemark, isCurrent)
   }
 
-  public func geocode(_ geocodable: T, id: ArchivePath) async throws -> T.Place? {
+  package func geocode(_ geocodable: T, id: ArchivePath) async throws -> T.Place? {
     if let cached = cached(geocodable, id: id), cached.isCurrent {
       Logger.atlas.log("cached result")
       return cached.place

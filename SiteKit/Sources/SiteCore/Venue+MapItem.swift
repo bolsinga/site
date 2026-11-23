@@ -15,7 +15,7 @@ extension Venue {
 }
 
 extension MKMapItem {
-  public convenience init(venue: Venue, location: CLLocation) {
+  package convenience init(venue: Venue, location: CLLocation) {
     self.init(location: location, address: venue.mkAddress)
     self.name = venue.name
   }

@@ -15,7 +15,7 @@ extension Array where Element == (Date, Int) {
 }
 
 extension Array where Element == (Int, (Date, Int)) {
-  public var topDate: Date? {
+  package var topDate: Date? {
     let tops = map { $0.1 }.matching(rank: .rank(1))
     return tops.count == 1 ? tops.first : nil
   }

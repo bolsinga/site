@@ -15,7 +15,7 @@ extension Logger {
   fileprivate static let vaultModel = Logger(category: "vaultModel")
 }
 
-public enum LocationAuthorization {
+package enum LocationAuthorization {
   case notDetermined  // Not asked yet; location is first asked for when the filter is turned on.
   case allowed
   case restricted  // Locations are not possible.
@@ -26,32 +26,32 @@ public enum LocationAuthorization {
 
   public let vault: Vault
 
-  public var error: Error?
+  package var error: Error?
 
-  public var todayDayOfLeapYear: Int
+  package var todayDayOfLeapYear: Int
   public var venueMapItemMap: [ArchivePath: MKMapItem] = [:]
   /// The address Maps gave each geocoded venue, to compare with the venue's own.
   public private(set) var venueMapsAddressMap: [ArchivePath: MapsAddress] = [:]
   /// Places in Maps for venues with a MapKit identifier, found when the venue is shown.
-  public private(set) var venuePlaceMap: [ArchivePath: MKMapItem] = [:]
+  package private(set) var venuePlaceMap: [ArchivePath: MKMapItem] = [:]
   @ObservationIgnored
   private var venuePlaceLookups = Set<ArchivePath>()
   private var currentLocation: CLLocation?
-  public var locationAuthorization = LocationAuthorization.notDetermined
-  public private(set) var currentCity: String?
+  package var locationAuthorization = LocationAuthorization.notDetermined
+  package private(set) var currentCity: String?
 
   @ObservationIgnored
   private var lastReverseGeocode: ReverseGeocodePolicy.Attempt?
   /// The city lookup in flight; a newer one, or losing location, cancels it.
   @ObservationIgnored
-  public private(set) var cityTask: Task<Void, Never>?
+  package private(set) var cityTask: Task<Void, Never>?
 
   @ObservationIgnored
   private var dayChangeTask: Task<Void, Never>?
   @ObservationIgnored
   private var geocodeTask: Task<Void, Never>?
   @ObservationIgnored
-  public private(set) var locationTask: Task<Void, Never>?
+  package private(set) var locationTask: Task<Void, Never>?
 
   private var batchGeocodeCompleted = false
 
@@ -65,8 +65,14 @@ public enum LocationAuthorization {
 
   private let atlas = Atlas<Venue>()
 
+  /// A model that asks the system for what it needs, as the app's does.
   @MainActor
-  public init(
+  public convenience init(_ vault: Vault, executeAsynchronousTasks: Bool) {
+    self.init(vault, executeAsynchronousTasks: executeAsynchronousTasks, distanceFilter: 10)
+  }
+
+  @MainActor
+  package init(
     _ vault: Vault,
     executeAsynchronousTasks: Bool,
     distanceFilter: CLLocationDistance = 10,
@@ -117,14 +123,14 @@ public enum LocationAuthorization {
   /// Starts listening for location, which asks for access if it hasn't been decided. It is
   /// started once.
   @MainActor
-  public func startLocationMonitoring() {
+  package func startLocationMonitoring() {
     guard executeAsynchronousTasks, locationTask == nil else { return }
     locationTask = Task {
       await self.monitorUserLocation()
     }
   }
 
-  public func cancelTasks() {
+  package func cancelTasks() {
     dayChangeTask?.cancel()
     geocodeTask?.cancel()
     locationTask?.cancel()
@@ -133,13 +139,13 @@ public enum LocationAuthorization {
 
   /// What a venue opens in Maps: its place when found, otherwise where the app's maps put it.
   @MainActor
-  public func mapsItem(for id: ArchivePath) -> MKMapItem? {
+  package func mapsItem(for id: ArchivePath) -> MKMapItem? {
     venuePlaceMap[id] ?? venueMapItemMap[id]
   }
 
   /// Finds a venue's place in Maps once, keeping it for this session.
   @MainActor
-  public func findPlace(for id: ArchivePath, venue: Venue) async {
+  package func findPlace(for id: ArchivePath, venue: Venue) async {
     guard venuePlaceMap[id] == nil, !venuePlaceLookups.contains(id),
       let mapKitID = venue.mapKitID, let identifier = MKMapItem.Identifier(rawValue: mapKitID)
     else { return }
@@ -154,7 +160,7 @@ public enum LocationAuthorization {
   }
 
   @MainActor
-  public func concerts(on dayOfLeapYear: Int) -> [ShowDigest] {
+  package func concerts(on dayOfLeapYear: Int) -> [ShowDigest] {
     do {
       return try vault.concerts(on: dayOfLeapYear)
     } catch {
@@ -181,7 +187,7 @@ public enum LocationAuthorization {
     }
   }
 
-  public func compare<Comparable: Identifiable>(lhs: Comparable, rhs: Comparable)
+  package func compare<Comparable: Identifiable>(lhs: Comparable, rhs: Comparable)
     -> Bool where Comparable.ID == ArchivePath
   {
     do {
@@ -226,7 +232,7 @@ public enum LocationAuthorization {
 
   /// Catches up with the calendar, which the day change notification may not have done after a resume.
   @MainActor
-  public func refreshToday() {
+  package func refreshToday() {
     let today = now().dayOfLeapYear
     guard today != todayDayOfLeapYear else { return }
     todayDayOfLeapYear = today
@@ -294,7 +300,7 @@ public enum LocationAuthorization {
   }
 
   @MainActor
-  public func handle(_ event: LocationManager.Event) {
+  package func handle(_ event: LocationManager.Event) {
     switch event {
     case .denied:
       locationAuthorization = .denied
@@ -355,7 +361,7 @@ public enum LocationAuthorization {
     return nearbyVenueIDs
   }
 
-  public func venueIDsInCity(_ city: String?) -> any Collection<ArchivePath> {
+  package func venueIDsInCity(_ city: String?) -> any Collection<ArchivePath> {
     guard let city else {
       Logger.vaultModel.log("City: No City")
       return []
@@ -393,7 +399,7 @@ public enum LocationAuthorization {
     }
   }
 
-  public func filteredDecadesMap(_ nearbyModel: NearbyModel, distanceThreshold: CLLocationDistance)
+  package func filteredDecadesMap(_ nearbyModel: NearbyModel, distanceThreshold: CLLocationDistance)
     -> [Decade: [Annum: Int]]
   {
     guard let ids = filteredVenueIDs(nearbyModel, distanceThreshold: distanceThreshold) else {
@@ -403,7 +409,7 @@ public enum LocationAuthorization {
   }
 
   /// The statistics of what the location filter leaves, or of everything if it is off.
-  public func filteredStatisticsData(
+  package func filteredStatisticsData(
     _ nearbyModel: NearbyModel, distanceThreshold: CLLocationDistance
   )
     -> (showsCount: Int, venueCount: Int, artistCount: Int, dates: [Date], states: [String: Int])
@@ -414,7 +420,7 @@ public enum LocationAuthorization {
     return vault.statisticsData(venueIDs: ids)
   }
 
-  public func nearbyVenues(_ nearbyModel: NearbyModel, distanceThreshold: CLLocationDistance)
+  package func nearbyVenues(_ nearbyModel: NearbyModel, distanceThreshold: CLLocationDistance)
     -> any Collection<RankedArchiveItem>
   {
     guard let ids = filteredVenueIDs(nearbyModel, distanceThreshold: distanceThreshold) else {
@@ -423,7 +429,7 @@ public enum LocationAuthorization {
     return ids.compactMap { vault.rankedVenue(id: $0) }
   }
 
-  public func nearbyArtists(_ nearbyModel: NearbyModel, distanceThreshold: CLLocationDistance)
+  package func nearbyArtists(_ nearbyModel: NearbyModel, distanceThreshold: CLLocationDistance)
     -> any Collection<RankedArchiveItem>
   {
     guard let ids = filteredVenueIDs(nearbyModel, distanceThreshold: distanceThreshold) else {

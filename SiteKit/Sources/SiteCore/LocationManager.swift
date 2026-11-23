@@ -14,17 +14,17 @@ extension Logger {
 }
 
 /// Where locations, and whether the person has answered the permission prompt, come from.
-public protocol LocationSource: Sendable {
+package protocol LocationSource: Sendable {
   var isAuthorizationDetermined: Bool { get }
   func events() -> AsyncThrowingStream<LocationManager.Event, Error>
 }
 
-public actor LocationManager: LocationSource {
-  public enum AccessRequest: String {
+package actor LocationManager: LocationSource {
+  package enum AccessRequest: String {
     case inUse
     case always
 
-    public func request(_ manager: CLLocationManager) {
+    package func request(_ manager: CLLocationManager) {
       #if os(tvOS)
         manager.requestWhenInUseAuthorization()
       #else
@@ -38,14 +38,14 @@ public actor LocationManager: LocationSource {
     }
   }
 
-  public enum Event: Sendable {
+  package enum Event: Sendable {
     case denied  // The user, or the system, has not allowed locations.
     case allowed  // Locations are allowed again after a denial, and none has arrived yet.
     case location(CLLocation)  // A location, far enough from the one before it.
   }
 
   /// Whether the person has already answered the location prompt.
-  public nonisolated var isAuthorizationDetermined: Bool {
+  package nonisolated var isAuthorizationDetermined: Bool {
     CLLocationManager().authorizationStatus != .notDetermined
   }
 
@@ -58,7 +58,7 @@ public actor LocationManager: LocationSource {
   private var lastLocation: CLLocation?
   private var isDenied = false
 
-  public init(
+  package init(
     activityType: CLActivityType = .other,
     distanceFilter: CLLocationDistance = kCLDistanceFilterNone,
     desiredAccuracy: CLLocationAccuracy = kCLLocationAccuracyBest,
@@ -77,7 +77,7 @@ public actor LocationManager: LocationSource {
 
   /// Asks for location access, then reports the user's location and whether it is denied. The live
   /// updates carry authorization, so a change made in Settings while the app runs is reported too.
-  public nonisolated func events() -> AsyncThrowingStream<Event, Error> {
+  package nonisolated func events() -> AsyncThrowingStream<Event, Error> {
     AsyncThrowingStream { try await self.nextEvent() }
   }
 
@@ -135,7 +135,7 @@ public actor LocationManager: LocationSource {
   }
 
   private class Delegate: NSObject, CLLocationManagerDelegate {
-    public func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+    package func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
       guard let nsError = error as NSError?, nsError.domain == kCLErrorDomain,
         nsError.code != 0 /* kCLErrorLocationUnknown */
       else {

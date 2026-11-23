@@ -15,9 +15,9 @@ extension Logger {
 }
 
 extension NSUserActivity {
-  public static let archivePathKey = "archivePath"
+  package static let archivePathKey = "archivePath"
 
-  public func update<T: ArchivePathUserActivity>(_ item: T, url: URL?) {
+  package func update<T: ArchivePathUserActivity>(_ item: T, url: URL?) {
     let identifier = item.id.formatted(.json)
     Logger.updateActivity.log("advertise: \(identifier, privacy: .public)")
     self.targetContentIdentifier = identifier
@@ -36,7 +36,7 @@ extension NSUserActivity {
     self.expirationDate = .now + (60 * 60 * 24)
   }
 
-  public var archivePath: ArchivePath? {
+  package var archivePath: ArchivePath? {
     Logger.decodeActivity.log("type: \(self.activityType, privacy: .public)")
 
     guard let userInfo = self.userInfo else {

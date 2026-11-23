@@ -9,14 +9,14 @@ import CoreLocation
 import Foundation
 import MapKit
 
-public protocol CityResolver: Sendable {
+package protocol CityResolver: Sendable {
   func city(for location: CLLocation) async throws -> String?
 }
 
-public struct MapKitCityResolver: CityResolver {
-  public init() {}
+package struct MapKitCityResolver: CityResolver {
+  package init() {}
 
-  public func city(for location: CLLocation) async throws -> String? {
+  package func city(for location: CLLocation) async throws -> String? {
     guard let request = MKReverseGeocodingRequest(location: location) else { return nil }
     // cancel() is made to be called from another thread.
     nonisolated(unsafe) let pending = request
@@ -30,18 +30,18 @@ public struct MapKitCityResolver: CityResolver {
 }
 
 /// When to ask the geocoder again; reverse geocoding is rate limited.
-public struct ReverseGeocodePolicy {
-  public static let minimumDistance: CLLocationDistance = 1000
-  public static let minimumInterval: TimeInterval = 60
+package struct ReverseGeocodePolicy {
+  package static let minimumDistance: CLLocationDistance = 1000
+  package static let minimumInterval: TimeInterval = 60
   /// A move this far is a new place, so it geocodes without waiting out the interval.
-  public static let jumpDistance: CLLocationDistance = 50_000
+  package static let jumpDistance: CLLocationDistance = 50_000
 
-  public struct Attempt {
-    public let location: CLLocation
-    public let date: Date
+  package struct Attempt {
+    package let location: CLLocation
+    package let date: Date
   }
 
-  public static func shouldGeocode(last: Attempt?, location: CLLocation, now: Date) -> Bool {
+  package static func shouldGeocode(last: Attempt?, location: CLLocation, now: Date) -> Bool {
     guard let last else { return true }
     let distance = location.distance(from: last.location)
     if distance > jumpDistance { return true }

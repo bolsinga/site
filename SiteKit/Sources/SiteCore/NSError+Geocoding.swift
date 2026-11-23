@@ -28,11 +28,11 @@ extension NSError {
     self.domain.isGeocodingDomain
   }
 
-  public var isGeocodingThrottledError: Bool {
+  package var isGeocodingThrottledError: Bool {
     self.isGeocodingError && self.code.isThrottledCode
   }
 
-  public var isGeocodingFailureError: Bool {
+  package var isGeocodingFailureError: Bool {
     self.isGeocodingError && self.code.matchesGeocodingCode
   }
 }

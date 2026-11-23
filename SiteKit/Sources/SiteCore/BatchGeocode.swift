@@ -12,7 +12,7 @@ public struct BatchGeocode<T: AtlasGeocodable>: AsyncSequence {
 
   public typealias Element = (ArchivePath, T, T.Place?)
 
-  public let atlas: Atlas<T>
+  package let atlas: Atlas<T>
   private let geocodables: [(ArchivePath, T)]
 
   /// Create a BatchGeocode.
@@ -27,10 +27,10 @@ public struct BatchGeocode<T: AtlasGeocodable>: AsyncSequence {
   /// Cached places come first, so they show at once. Then those never geocoded, then those
   /// whose cached place is stale, which come again with their new place.
   public struct AsyncIterator: AsyncIteratorProtocol {
-    public let atlas: Atlas<T>
-    public let geocodables: [(ArchivePath, T)]
+    package let atlas: Atlas<T>
+    package let geocodables: [(ArchivePath, T)]
 
-    public var index: Int = 0
+    package var index: Int = 0
     private var uncached: [(ArchivePath, T)] = []
     private var uncachedIndex = 0
     private var stale: [(ArchivePath, T)] = []

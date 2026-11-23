@@ -9,7 +9,7 @@ import GeoToolbox
 import Shared
 
 extension Location {
-  public var placeRepresentations: [PlaceDescriptor.PlaceRepresentation] {
+  package var placeRepresentations: [PlaceDescriptor.PlaceRepresentation] {
     [.address(addressString)]
   }
 }

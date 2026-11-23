@@ -9,22 +9,22 @@ import Foundation
 import Shared
 
 /// The order a category's list is shown in, so a Handoff arrives with the same one.
-public enum ArchiveCategorySort: Equatable {
+package enum ArchiveCategorySort: Equatable {
   case venues(RankingSort)
   case artists(RankingSort)
   case shows(descending: Bool)
 }
 
 extension NSUserActivity {
-  public static let archiveSortVersionKey = "archiveSortVersion"
-  public static let archiveSortAlgorithmKey = "archiveSortAlgorithm"
-  public static let archiveSortDescendingKey = "archiveSortDescending"
+  package static let archiveSortVersionKey = "archiveSortVersion"
+  package static let archiveSortAlgorithmKey = "archiveSortAlgorithm"
+  package static let archiveSortDescendingKey = "archiveSortDescending"
 
   private static let archiveSortVersion = 1
 
   /// The `userInfo` entries that carry `sort`: the algorithm as the `RankingSort` raw value, or
   /// the direction of the shows' years.
-  public static func userInfoEntries(for sort: ArchiveCategorySort) -> [String: Any] {
+  package static func userInfoEntries(for sort: ArchiveCategorySort) -> [String: Any] {
     var entries: [String: Any] = [archiveSortVersionKey: archiveSortVersion]
     switch sort {
     case .venues(let algorithm), .artists(let algorithm):
@@ -36,7 +36,7 @@ extension NSUserActivity {
   }
 
   /// The sort advertised with the category, when there is one this version understands.
-  public var archiveCategorySort: ArchiveCategorySort? {
+  package var archiveCategorySort: ArchiveCategorySort? {
     guard let category = archiveCategory, let userInfo,
       userInfo[Self.archiveSortVersionKey] as? Int == Self.archiveSortVersion
     else { return nil }

@@ -37,7 +37,7 @@ extension CLLocationCoordinate2D: @retroactive Encodable {
 
 public enum Placemark: Codable, Sendable {
   /// Where Maps found the address, with the address it gave.
-  public static func found(_ item: MKMapItem) -> Placemark {
+  package static func found(_ item: MKMapItem) -> Placemark {
     .coordinate(item.location.coordinate, maps: MapsAddress(item))
   }
 
@@ -49,7 +49,7 @@ public enum Placemark: Codable, Sendable {
   case place(identifier: String, coordinate: CLLocationCoordinate2D, maps: MapsAddress? = nil)
 
   /// The address Maps gave, if it was kept.
-  public var address: MapsAddress? {
+  package var address: MapsAddress? {
     switch self {
     case .coordinate(_, let address), .place(_, _, let address): address
     case .identifier: nil
@@ -73,7 +73,7 @@ public enum Placemark: Codable, Sendable {
 
 extension Placemark {
   /// How the place was found, for logs.
-  public var origin: String {
+  package var origin: String {
     switch self {
     case .coordinate: "address"
     case .identifier(let string), .place(let string, _, _): "MapKit identifier \(string)"

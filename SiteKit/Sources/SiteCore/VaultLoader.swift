@@ -27,8 +27,8 @@ public actor VaultLoader<Derived: Sendable>: VaultLoading {
   }
 
   private struct Running {
-    public let generation: Int
-    public let task: Task<Vault, any Error>
+    package let generation: Int
+    package let task: Task<Vault, any Error>
   }
 
   private let urlString: String
@@ -86,7 +86,7 @@ public actor VaultLoader<Derived: Sendable>: VaultLoading {
   }
 
   /// Keeps a vault that was made without a load, in place of any earlier one.
-  public func use(_ vault: Vault) {
+  package func use(_ vault: Vault) {
     generation += 1
     keep(vault, generation: generation)
   }

@@ -18,7 +18,7 @@ extension Logger {
 extension NSUserActivity {
   public static let archiveCategoryKey = "archiveCategory"
 
-  public func update(_ category: ArchiveCategory, url: URL?, sort: ArchiveCategorySort? = nil) {
+  package func update(_ category: ArchiveCategory, url: URL?, sort: ArchiveCategorySort? = nil) {
     let identifier = category.rawValue
     Logger.updateCategoryActivity.log("advertise: \(identifier, privacy: .public)")
     self.targetContentIdentifier = identifier
@@ -43,7 +43,7 @@ extension NSUserActivity {
     self.expirationDate = .now + (60 * 60 * 24)
   }
 
-  public var archiveCategory: ArchiveCategory? {
+  package var archiveCategory: ArchiveCategory? {
     Logger.decodeCategoryActivity.log("type: \(self.activityType, privacy: .public)")
 
     guard let userInfo = self.userInfo else {
