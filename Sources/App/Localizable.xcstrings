@@ -95,9 +95,6 @@
         }
       }
     },
-    "#%@" : {
-      "comment" : "rank.hash"
-    },
     "#%lld · %lld" : {
       "localizations" : {
         "en" : {
@@ -141,17 +138,6 @@
     "%@" : {
 
     },
-    "%@ Count: %@" : {
-      "comment" : "ranking.rankAndCount",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ Count: %2$@"
-          }
-        }
-      }
-    },
     "%@ of %lld" : {
       "localizations" : {
         "en" : {
@@ -172,9 +158,6 @@
           }
         }
       }
-    },
-    "%@." : {
-      "comment" : "rank.dotted"
     },
     "%lld Artist(s)" : {
       "localizations" : {
@@ -689,9 +672,6 @@
     "Nothing Nearby" : {
 
     },
-    "Numeric" : {
-
-    },
     "Off" : {
 
     },
@@ -768,12 +748,6 @@
     "Preview" : {
 
     },
-    "Punctuation" : {
-
-    },
-    "Rank Unknown" : {
-
-    },
     "Redirects to %@" : {
 
     },
@@ -820,9 +794,6 @@
 
     },
     "See Shows At This Venue" : {
-
-    },
-    "See Shows From This Year" : {
 
     },
     "See Shows With This Artist" : {

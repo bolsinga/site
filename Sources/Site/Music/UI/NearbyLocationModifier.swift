@@ -5,6 +5,7 @@
 //  Created by Greg Bolsinga on 10/6/24.
 //
 
+import SiteCore
 import SwiftUI
 
 struct NearbyLocationModifier: ViewModifier {

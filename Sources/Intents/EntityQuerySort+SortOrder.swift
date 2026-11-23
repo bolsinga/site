@@ -6,6 +6,7 @@
 //
 
 import AppIntents
+import SiteCore
 
 extension EntityQuerySort.Ordering {
   var sortOrder: SortOrder {

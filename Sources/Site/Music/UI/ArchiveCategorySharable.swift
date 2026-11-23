@@ -7,6 +7,7 @@
 
 import Foundation
 import Shared
+import SiteCore
 
 struct ArchiveCategorySharable: ArchiveSharable {
   let category: ArchiveCategory

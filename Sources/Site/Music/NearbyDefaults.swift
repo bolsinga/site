@@ -7,6 +7,7 @@
 
 import CoreLocation
 import Foundation
+import SiteCore
 import SwiftUI
 
 private let defaultNearbyDistanceThreshold: CLLocationDistance = 16093.44  // 10 miles

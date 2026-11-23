@@ -8,6 +8,7 @@
 import AppIntents
 import Foundation
 import Shared
+import SiteCore
 
 struct CityEntity: AppEntity {
   static var typeDisplayRepresentation: TypeDisplayRepresentation {

@@ -5,6 +5,7 @@
 //  Created by Greg Bolsinga on 10/30/26.
 //
 
+import SiteCore
 import SwiftUI
 
 /// The city the location filter uses: the current city, selected when tapped, or a typed one.

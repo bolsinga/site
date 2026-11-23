@@ -7,6 +7,7 @@
 
 import CoreLocation
 import Shared
+import SiteCore
 
 /// Where a venue was chosen to be.
 enum VenuePick: Codable, Equatable, Sendable {

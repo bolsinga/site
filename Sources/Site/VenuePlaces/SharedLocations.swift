@@ -7,6 +7,7 @@
 
 import CoreLocation
 import Shared
+import SiteCore
 
 /// Venues that geocode to the same point.
 struct SharedLocation: Identifiable {

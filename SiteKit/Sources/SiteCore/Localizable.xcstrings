@@ -1,0 +1,27 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "#%@": {
+      "comment": "rank.hash"
+    },
+    "%@ Count: %@": {
+      "comment": "ranking.rankAndCount",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@ Count: %2$@"
+          }
+        }
+      }
+    },
+    "%@.": {
+      "comment": "rank.dotted"
+    },
+    "Numeric": {},
+    "Punctuation": {},
+    "Rank Unknown": {},
+    "See Shows From This Year": {}
+  },
+  "version": "1.0"
+}

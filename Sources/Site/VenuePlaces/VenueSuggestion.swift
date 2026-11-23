@@ -7,6 +7,7 @@
 
 import CoreLocation
 import Shared
+import SiteCore
 
 /// How sure a suggested place is the venue.
 enum SuggestionConfidence: Int, Codable, Comparable, CaseIterable, Sendable {

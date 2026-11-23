@@ -8,6 +8,7 @@
 import Testing
 
 @testable import SiteApp
+@testable import SiteCore
 
 struct VenuePlacesFilterTests {
   private func facts(

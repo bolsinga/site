@@ -12,7 +12,10 @@ let package = Package(
   products: [
     .library(
       name: "Shared",
-      targets: ["Shared"])
+      targets: ["Shared"]),
+    .library(
+      name: "SharedTestSupport",
+      targets: ["SharedTestSupport"]),
   ],
   dependencies: [
     .package(url: "https://github.com/apple/swift-algorithms.git", from: "1.2.1"),
@@ -31,11 +34,18 @@ let package = Package(
       swiftSettings: [
         .treatAllWarnings(as: .error)
       ]),
-    .testTarget(
-      name: "SharedTests",
+    .target(
+      name: "SharedTestSupport",
       dependencies: ["Shared"],
       swiftSettings: [
         .treatAllWarnings(as: .error)
       ]),
-  ]
+    .testTarget(
+      name: "SharedTests",
+      dependencies: ["Shared", "SharedTestSupport"],
+      swiftSettings: [
+        .treatAllWarnings(as: .error)
+      ]),
+  ],
+  swiftLanguageModes: [.v6]
 )

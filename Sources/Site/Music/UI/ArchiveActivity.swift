@@ -7,6 +7,7 @@
 
 import Foundation
 import Shared
+import SiteCore
 
 enum ArchiveActivity: Equatable {
   /// Just a category is selected.

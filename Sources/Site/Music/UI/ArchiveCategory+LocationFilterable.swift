@@ -6,6 +6,7 @@
 //
 
 import Shared
+import SiteCore
 
 extension ArchiveCategory {
   var isLocationFilterable: Bool {

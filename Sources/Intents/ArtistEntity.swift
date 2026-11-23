@@ -9,6 +9,7 @@ import AppIntents
 import CoreSpotlight
 import Foundation
 import Shared
+import SiteCore
 
 struct ArtistEntity: AppEntity {
   static var typeDisplayRepresentation: TypeDisplayRepresentation {

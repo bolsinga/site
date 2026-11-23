@@ -6,6 +6,7 @@
 //
 
 import Shared
+import SiteCore
 import SwiftUI
 
 struct ArtistList<A: Hashable & Identifiable & Nameable & Rankable>: View

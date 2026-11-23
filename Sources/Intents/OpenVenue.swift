@@ -8,6 +8,7 @@
 import AppIntents
 import Foundation
 import Shared
+import SiteCore
 
 struct OpenVenue: OpenIntent, URLRepresentableIntent {
   static let title = LocalizedStringResource("Open Venue")

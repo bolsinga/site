@@ -6,6 +6,7 @@
 //
 
 import Shared
+import SiteCore
 import SwiftUI
 
 /// A venue's details that can be paged to the previous and next venue, in library order.

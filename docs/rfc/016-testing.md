@@ -1,14 +1,13 @@
 # RFC 016: Testing
 
-Status: Accepted · Updated: 2026-11-22 · Code: `Tests/` (`SiteTests`, `MusicDataTests`,
-`UtilitiesTests`), `Shared/Tests/SharedTests`, `Sources/Site/Music/UI` (`VaultPreviewModifier`, `NearbyPreviewModifer`), `Sources/App/Preview Content/sample-shows.json`,
+Status: Accepted · Updated: 2026-11-22 · Code: `Tests/SiteTests`, `Shared/Tests/SharedTests`, `SiteKit/Tests/SiteCoreTests`, `Sources/Site/Music/UI` (`VaultPreviewModifier`, `NearbyPreviewModifer`), `Sources/App/Preview Content/sample-shows.json`,
 `.github/workflows/main.yml`
 
 ## Summary
 
 The tests are unit tests of the data model, the navigation state and the pure policies, written
-with the Testing framework. They run in two places: the app-hosted `Tests` target, through the
-`SiteApp` scheme, and the `Shared` package's own `SharedTests`, which need no host. There
+with the Testing framework. They run in three places: the app-hosted `Tests` target, through the
+`SiteApp` scheme, and the `SharedTests` and `SiteCoreTests` of the `Shared` and `SiteKit` packages, which need no host. There
 are no UI tests. SwiftUI previews are the way views are checked, and they have their own fixtures.
 This RFC says how the tests are laid out, how a `Vault` is made for them, how time, location and
 files are made deterministic, and what has no tests.
@@ -17,19 +16,19 @@ files are made deterministic, and what has no tests.
 
 | Folder | Imports | Tests |
 |---|---|---|
-| `Shared/Tests/SharedTests` | `Shared` | `ArchivePath`, `ArchiveCategory`, `Annum` formats, `PartialDate`, `Decade`, ranking, calendar and day of the leap year, library sorting, token and ID comparison, `Vault` statistics, first and most recent sets, Shows Today snapshot, stats and timeline |
-| `Tests/MusicDataTests` | `Shared`, some `SiteApp` | `Annum` neighbours, `Bracket` loading and cache |
-| `Tests/UtilitiesTests` | `Shared` | `InMemoryCache`, the test double for `CacheCodable` |
-| `Tests/SiteTests` | `Shared` and `SiteApp` | navigation, user activities, entity identifiers, location filter and city, venue places, atlas cache, search, paging |
+| `Shared/Tests/SharedTests` | `Shared`, `SharedTestSupport` | `ArchivePath`, `ArchiveCategory`, `Annum` formats, `PartialDate`, `Decade`, ranking, calendar and day of the leap year, library sorting, token and ID comparison, `Vault` statistics, first and most recent sets, `Bracket` loading and cache, Shows Today snapshot, stats and timeline |
+| `SiteKit/Tests/SiteCoreTests` | `SiteCore`, `Shared`, `SharedTestSupport` | `VaultModel` and its location source, location filter and city, `SiteModel` loading, `VaultLoader`, atlas cache, category sort activities, search matching, months, weekdays, rank distribution, library sections, digest comparison, the widget snapshot publish |
+| `Tests/SiteTests` | `SiteApp`, `SiteCore`, `Shared` | navigation, tab state, entity identifiers and catalog, concert search, venue places, atlas source of venues, persisted state versions, paging, map fit, the sample archive |
 
-`SharedTests` is a test target of the `Shared` package, run with `swift test --package-path Shared`.
-It has no host, so it starts nothing from the app. The rest run as the one `Tests` target of
-`SiteApp.xcodeproj`, hosted by the app (`TEST_HOST`). A test that imports only `Shared` belongs in
-`SharedTests`. The `Bracket` loading and cache tests stay in `Tests` for now, as they share
-`InMemoryCache` with tests of the app's atlas and venue code. `Tests` turns on
-`MemberImportVisibility`, as the app does, so a test file imports `SiteApp` only when it uses
-something that module declares; an import it doesn't need is how a test that could run without
-the app is spotted.
+`SharedTests` and `SiteCoreTests` are test targets of the `Shared` and `SiteKit` packages, run with
+`swift test --package-path Shared` and `swift test --package-path SiteKit`. They have no host, so
+they start nothing from the app. The rest run as the one `Tests` target of `SiteApp.xcodeproj`,
+hosted by the app (`TEST_HOST`). A test that imports nothing from `SiteApp` belongs in a package
+target. `SharedTestSupport` is a target of `Shared` that holds `InMemoryCache`, for the package
+tests. `Tests` compiles that one file itself, and doesn't link the product, so there is no second
+copy of `Shared` in the test bundle. `Tests` and the packages turn on `MemberImportVisibility`, as
+the app does, so a test file imports a module only when it uses something that module declares; an
+import it doesn't need is how a test that could run without the app is spotted.
 
 ## Framework
 
@@ -97,7 +96,7 @@ development asset path, so it is not in a release build.
    and the app's own is the default. `VaultModel` takes a `LocationSource` (where locations and the
    answer to the prompt come from), the clock as `now`, and the `NotificationCenter` that reports a
    day change. `AtlasCache` takes `now`. `SiteModel` has the widget write and reload, the Spotlight
-   index and how a `VaultModel` is made as properties, and its `VaultProvider` takes the load. A
+   index and how a `VaultModel` is made as properties, and its `VaultLoader` takes the load. A
    test of work in flight orders it with a `Gate` and not with `Task.sleep`. `EntityVault.provider`
    is the one global, as the system asks an entity for some properties outside an intent, and no
    test reads it.
@@ -105,7 +104,7 @@ development asset path, so it is not in a release build.
 ## Running
 
 - `xcodebuild test` runs the `SiteApp` scheme on `platform=macOS`, and `swift test --package-path
-  Shared` runs `SharedTests`. The iOS and tvOS simulator
+  Shared` and `swift test --package-path SiteKit` run the package tests. The iOS and tvOS simulator
   destinations only build; no test runs there. This matches CLAUDE.md.
 - Nothing runs on a physical device. Locally, tests run on My Mac or a simulator.
 

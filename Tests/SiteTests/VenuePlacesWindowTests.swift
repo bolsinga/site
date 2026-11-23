@@ -9,6 +9,7 @@ import CoreGraphics
 import Testing
 
 @testable import SiteApp
+@testable import SiteCore
 
 struct VenuePlacesWindowTests {
   @Test func defaultSizeIsCenteredOnALargeDisplay() {

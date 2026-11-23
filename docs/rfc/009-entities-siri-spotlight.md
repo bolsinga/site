@@ -1,7 +1,7 @@
 # RFC 009: App Intents entities, Siri and Spotlight
 
-Status: Accepted · Updated: 2026-11-20 · Code: `Sources/Intents`, `Sources/Site/Music/VaultProvider.swift`, `Sources/App/SiteAppApp.swift`,
-`Sources/Site/Music/*+NSUserActivity.swift`, `Sources/Site/Music/SiteModel.swift`
+Status: Accepted · Updated: 2026-11-22 · Code: `Sources/Intents`, `SiteKit/Sources/SiteCore/VaultLoader.swift`, `Sources/Intents/VaultProvider.swift`, `Sources/App/SiteAppApp.swift`,
+`SiteKit/Sources/SiteCore/*+NSUserActivity.swift`, `SiteKit/Sources/SiteCore/SiteModel.swift`
 
 ## Summary
 
@@ -48,6 +48,8 @@ which also supplies the URL, from what the digests ([RFC 006](006-precomputed-mu
 8. Code that runs in an intent reads the archive through `@Dependency var provider:
    VaultProvider`, and `try await provider.vault()` (or `provider.catalog()`). `SiteAppApp`
    registers the provider with `AppDependencyManager` in `init`, before any scene exists. The
+   provider is `VaultLoader<EntityCatalog>`: the loading is in `SiteCore`, and the catalog, which
+   holds `AppEntity` values, stays in the app. The
    system runs an intent in a launched app that has no scene, so no view has loaded the archive,
    and it fails an intent whose dependency is missing at once, not after a wait.
    The provider answers with the vault it has loaded, and otherwise loads one itself, from the

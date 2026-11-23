@@ -7,6 +7,7 @@
 
 import CoreLocation
 import Shared
+import SiteCore
 import SwiftUI
 
 struct ArtistsSummary: View {

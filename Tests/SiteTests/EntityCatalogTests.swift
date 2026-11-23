@@ -9,6 +9,7 @@ import Testing
 
 @testable import Shared
 @testable import SiteApp
+@testable import SiteCore
 
 /// Counts how many times something was made, from closures that outlive the test's stack.
 private final class Counts: Sendable {

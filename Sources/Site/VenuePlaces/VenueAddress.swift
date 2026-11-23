@@ -7,6 +7,7 @@
 
 import Foundation
 import Shared
+import SiteCore
 
 /// A venue's street, city and state, as the archive has them or as Maps gave them.
 struct VenueAddress: Codable, Equatable, Hashable, Sendable {

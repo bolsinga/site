@@ -8,6 +8,7 @@
 #if os(iOS)
   import Shared
   import UIKit
+  import SiteCore
 
   extension UIApplicationShortcutItem {
     private static let typePrefix = "gdb.SiteApp.quickAction."

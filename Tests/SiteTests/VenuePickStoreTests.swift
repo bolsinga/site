@@ -11,6 +11,7 @@ import Testing
 
 @testable import Shared
 @testable import SiteApp
+@testable import SiteCore
 
 @MainActor
 struct VenuePickStoreTests {

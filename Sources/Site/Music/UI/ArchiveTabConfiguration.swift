@@ -7,6 +7,7 @@
 
 #if canImport(UIKit)
   import UIKit
+  import SiteCore
 
   extension UIDevice {
     fileprivate var showSettingsInTabView: Bool {

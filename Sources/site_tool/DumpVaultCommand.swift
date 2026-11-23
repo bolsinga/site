@@ -8,6 +8,7 @@
 import ArgumentParser
 import Foundation
 import Shared
+import SiteCore
 
 extension Vault {
   fileprivate func concertsForArtist(artistID: ArchivePath) -> any Collection<ShowDigest> {

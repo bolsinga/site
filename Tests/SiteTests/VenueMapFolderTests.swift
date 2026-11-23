@@ -9,6 +9,7 @@ import Foundation
 import Testing
 
 @testable import SiteApp
+@testable import SiteCore
 
 struct VenueMapFolderTests {
   @Test func noBookmarkIsNoFolder() {

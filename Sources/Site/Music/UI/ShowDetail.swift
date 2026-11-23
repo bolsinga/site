@@ -7,6 +7,7 @@
 
 import AppIntents
 import Shared
+import SiteCore
 import SwiftUI
 
 struct ShowDetail: View {

@@ -1,8 +1,8 @@
 # RFC 003: Navigation and entry points
 
-Status: Accepted · Updated: 2026-11-19 · Code: `Sources/Site/Music/UI` (`SiteView`, `ArchiveStateView`,
+Status: Accepted · Updated: 2026-11-22 · Code: `Sources/Site/Music/UI` (`SiteView`, `ArchiveStateView`,
 `ArchiveNavigation`, `ArchiveNavigation+External`, `ExternalEvent`, `ArchiveNavigationUserActivityModifier`),
-`Sources/Site/Music` (`NSUserActivity+*`), `Sources/Intents`, `Sources/App` (`SiteAppDelegate`,
+`SiteKit/Sources/SiteCore` (`NSUserActivity+*`), `Sources/Intents`, `Sources/App` (`SiteAppDelegate`,
 `SiteSceneDelegate`), `SiteWidgets`
 
 ## Summary

@@ -5,6 +5,7 @@
 //  Created by Greg Bolsinga on 11/16/25.
 //
 
+import SiteCore
 import SwiftUI
 
 struct NearbyProgressView: View {

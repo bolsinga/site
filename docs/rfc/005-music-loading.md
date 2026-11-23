@@ -1,6 +1,6 @@
 # RFC 005: Loading the music
 
-Status: Accepted · Updated: 2026-11-20 · Code: `Sources/Site/Music` (`SiteModel`, `VaultModel`),
+Status: Accepted · Updated: 2026-11-22 · Code: `SiteKit/Sources/SiteCore` (`SiteModel`, `VaultModel`),
 `Shared/Sources/Shared/MusicData` (`Vault`, `Lookup`, `Bracket`, `Music`),
 `Shared/Sources/Shared/Utilities` (`URL+LastModified`, `FileManager+CacheCodable`)
 
@@ -22,7 +22,8 @@ SiteModel.load ─► Vault.load ─► Vault ─► Lookup ─► Bracket ─�
 | Type | Is | Lives |
 |---|---|---|
 | `SiteModel` | decides when to load, and swaps in the new model | the app |
-| `VaultProvider` | does the loading for `SiteModel` and for App Intents, which can run with no scene, and keeps the last loaded `Vault` | the app |
+| `VaultLoader` | does the loading for `SiteModel` and for App Intents, which can run with no scene, and keeps the last loaded `Vault` and a value made from it | `SiteCore` |
+| `VaultProvider` | `VaultLoader` keeping the entity catalog of the loaded `Vault` | the app |
 | `VaultModel` | one loaded `Vault` and the session state around it: location, Maps, today | until the next load |
 | `Vault` | the read-only query API the app, intents and widgets use; adds URLs and list orders | one load |
 | `Lookup` | chooses where the `Bracket` comes from, and answers per-item questions from it | one load |
@@ -78,7 +79,7 @@ download it was made from. It is kept nowhere else.
    is never changed in place.
 7. Work that follows a load (the widget snapshot, the Spotlight index, geocoding, location)
    starts from the new model, and is skipped for previews.
-8. Every load goes through `VaultProvider`, which calls `Vault.load`. An intent that asks before
+8. Every load goes through `VaultLoader` (the app's `VaultProvider`), which calls `Vault.load`. An intent that asks before
    the app has starts a `savedIfCurrent` load. The `initial` load MUST join a load that is already
    running, so a launch with a scene and an intent reads the archive once. A `refresh` and an
    `errorRetry` MUST start their own, in the caller's task, so cancelling them cancels the load,

@@ -11,6 +11,7 @@ import Testing
 
 @testable import Shared
 @testable import SiteApp
+@testable import SiteCore
 
 struct AutoMatchTests {
   let location = CLLocation(latitude: 37.784, longitude: -122.433)

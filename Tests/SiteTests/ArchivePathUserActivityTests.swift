@@ -11,6 +11,7 @@ import Testing
 
 @testable import Shared
 @testable import SiteApp
+@testable import SiteCore
 
 struct ArchivePathUserActivityTests {
   let rootURL = URL(string: "https://www.example.com/")!
