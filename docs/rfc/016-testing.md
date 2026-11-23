@@ -93,6 +93,14 @@ development asset path, so it is not in a release build.
 6. Dates are made with `DateComponents(calendar: .archive, …)`, which is Gregorian, so no test
    depends on the machine's calendar. A test of code that takes a calendar (`ShowsTodayTimeline`,
    `dayOfLeapYear(in:)`) MUST pass a Gregorian one with a fixed time zone.
+7. Code that needs the system MUST take it through an initializer or a property a test can set,
+   and the app's own is the default. `VaultModel` takes a `LocationSource` (where locations and the
+   answer to the prompt come from), the clock as `now`, and the `NotificationCenter` that reports a
+   day change. `AtlasCache` takes `now`. `SiteModel` has the widget write and reload, the Spotlight
+   index and how a `VaultModel` is made as properties, and its `VaultProvider` takes the load. A
+   test of work in flight orders it with a `Gate` and not with `Task.sleep`. `EntityVault.provider`
+   is the one global, as the system asks an entity for some properties outside an intent, and no
+   test reads it.
 
 ## Running
 
@@ -107,7 +115,7 @@ development asset path, so it is not in a release build.
 - Widgets: the Shows Today snapshot, stats and timeline have tests, `SiteWidgets` does not.
 - Intents: entity identifiers and `ConcertSearch` have tests; the queries, `Open…` intents and
   `SiteShortcuts` have none that this RFC found.
-- `SiteModel` loading, refresh ordering and `LocationManager`.
+- `LocationManager` itself, the CoreLocation calls under `LocationSource`.
 - `ClusterMap`, and the MapKit and geocoding calls themselves (the atlas cache and the batch
   logic are tested through stand-ins).
 - `site_tool`.

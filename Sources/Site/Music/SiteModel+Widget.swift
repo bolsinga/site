@@ -7,7 +7,6 @@
 
 #if !os(tvOS)
   import Shared
-  import WidgetKit
   import os
 
   extension Logger {
@@ -66,8 +65,8 @@
     func publishWidgetSnapshot(_ vault: Vault) {
       publishWidgetSnapshot(
         build: { try vault.showsTodaySnapshot },
-        write: { try $0.write() },
-        reload: { WidgetCenter.shared.reloadTimelines(ofKind: ShowsTodayWidgetKind.kind) })
+        write: writeWidgetSnapshot,
+        reload: reloadWidgetTimelines)
     }
   }
 #endif

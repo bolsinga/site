@@ -29,6 +29,22 @@ struct AtlasSourceTests {
     try await body(&cache)
   }
 
+  @Test func entriesExpireByTheClockGiven() async throws {
+    let store = InMemoryCache()
+    let start = Date(timeIntervalSince1970: 1_000_000)
+    var cache = AtlasCache<FixedGeocodable>(store: store, now: { start })
+    let id = try ArchivePath(raw: "v1")
+    cache.add(id, value: 1)
+
+    let aDayLater = AtlasCache<FixedGeocodable>(
+      store: store, now: { start.addingTimeInterval(60 * 60 * 24) })
+    let aYearLater = AtlasCache<FixedGeocodable>(
+      store: store, now: { start.addingTimeInterval(60 * 60 * 24 * 365) })
+
+    #expect(aDayLater.entry(id) != nil)
+    #expect(aYearLater.entry(id) == nil)
+  }
+
   @Test func sameSourceIsCurrent() async throws {
     try await withCache { cache in
       let id = try ArchivePath(raw: "v1")

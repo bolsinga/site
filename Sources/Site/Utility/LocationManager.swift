@@ -12,7 +12,13 @@ extension Logger {
   fileprivate static let location = Logger(category: "location")
 }
 
-actor LocationManager {
+/// Where locations, and whether the person has answered the permission prompt, come from.
+protocol LocationSource: Sendable {
+  var isAuthorizationDetermined: Bool { get }
+  func events() -> AsyncThrowingStream<LocationManager.Event, Error>
+}
+
+actor LocationManager: LocationSource {
   enum AccessRequest: String {
     case inUse
     case always
@@ -38,7 +44,7 @@ actor LocationManager {
   }
 
   /// Whether the person has already answered the location prompt.
-  nonisolated static var isAuthorizationDetermined: Bool {
+  nonisolated var isAuthorizationDetermined: Bool {
     CLLocationManager().authorizationStatus != .notDetermined
   }
 

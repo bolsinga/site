@@ -9,6 +9,10 @@ import Foundation
 import Shared
 import os
 
+#if !os(tvOS)
+  import WidgetKit
+#endif
+
 extension Logger {
   fileprivate static let vaultLoader = Logger(category: "vaultLoader")
 }
@@ -44,9 +48,25 @@ extension Logger {
   @ObservationIgnored internal var vaultProvider: VaultProvider?
   internal var error: Error?
 
+  /// Makes the model of a loaded archive, which a test gives its own services.
+  @ObservationIgnored internal var makeVaultModel: @MainActor (Vault, Bool) -> VaultModel = {
+    VaultModel($0, executeAsynchronousTasks: $1)
+  }
+
   #if !os(tvOS)
     /// The latest widget snapshot publish, so the next one can cancel it.
     @ObservationIgnored var widgetPublish: Task<Void, Never>?
+
+    /// What a load asks of the system, which a test replaces.
+    @ObservationIgnored var writeWidgetSnapshot: @Sendable (ShowsTodaySnapshot) throws -> Bool = {
+      try $0.write()
+    }
+    @ObservationIgnored var reloadWidgetTimelines: @MainActor @Sendable () -> Void = {
+      WidgetCenter.shared.reloadTimelines(ofKind: ShowsTodayWidgetKind.kind)
+    }
+    @ObservationIgnored var indexSpotlight: @Sendable (Vault) async -> Void = {
+      await $0.indexForSpotlight()
+    }
   #endif
 
   /// Loads can overlap, as a refresh can start while another load is still going. The one that
@@ -93,7 +113,7 @@ extension Logger {
       }
 
       vaultModel?.cancelTasks()
-      vaultModel = VaultModel(vault, executeAsynchronousTasks: reason.executeAsynchronousTasks)
+      vaultModel = makeVaultModel(vault, reason.executeAsynchronousTasks)
 
       #if !os(tvOS)
         if reason.executeAsynchronousTasks {
@@ -103,7 +123,7 @@ extension Logger {
 
       #if !os(tvOS)
         if reason.executeAsynchronousTasks {
-          await vault.indexForSpotlight()
+          await indexSpotlight(vault)
         }
       #endif
     } catch {
