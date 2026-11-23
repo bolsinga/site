@@ -1,0 +1,9 @@
+name: Check boundaries
+description: Fails if SiteCore imports a UI framework or reaches global state.
+
+runs:
+  using: composite
+  steps:
+    - name: Check SiteCore
+      shell: bash
+      run: bash "$GITHUB_ACTION_PATH/check.sh" "$GITHUB_WORKSPACE"

@@ -97,7 +97,9 @@ preview of a view in the package finds it, and it is in a release build too, at 
    and the app's own is the default. `VaultModel` takes a `LocationSource` (where locations and the
    answer to the prompt come from), the clock as `now`, and the `NotificationCenter` that reports a
    day change. `AtlasCache` takes `now`. `SiteModel` has the widget write and reload, the Spotlight
-   index and how a `VaultModel` is made as properties, and its `VaultLoader` takes the load. A
+   index and how a `VaultModel` is made as properties, which the app sets, and its `VaultLoader` takes
+   the load. The `boundaries` CI job fails a `SiteCore` source that imports a UI framework or reaches
+   a singleton ([RFC 015](015-ci-and-release.md)). A
    test of work in flight orders it with a `Gate` and not with `Task.sleep`. `EntityVault.provider`
    is the one global, as the system asks an entity for some properties outside an intent, and no
    test reads it.
