@@ -1,6 +1,6 @@
 # RFC 015: Continuous integration and release
 
-Status: Accepted · Updated: 2026-11-22 · Code: `.github/workflows/main.yml`,
+Status: Accepted · Updated: 2026-11-23 · Code: `.github/workflows/main.yml`,
 `.github/workflows/release.yml`, `.github/actions/setup-xcode/action.yml`, `.github/actions/check-format/action.yml`, `.github/dependabot.yml`, `Config.xcconfig`,
 `SiteApp.xcodeproj` (scheme `SiteApp`, build settings), `Sources/App/SiteApp.entitlements`,
 `SiteWidgets/SiteWidgetsExtension.entitlements`
@@ -92,7 +92,9 @@ upload. No step reads a repository secret or an input; the only credential-shape
 
 The shared scheme `SiteApp` builds `SiteApp.app` for testing and runs the `Tests` testable in
 Debug. Its archive action uses Release. `xcodebuild` builds with the scheme's default
-configuration, which is Debug for a build and a test.
+configuration, which is Debug for a build and a test. The test action has its own environment, not
+the run action's, and sets `SITE_QUIET_HOST=1`, which makes the app that hosts the tests start none
+of its own work ([RFC 016](016-testing.md)).
 
 ## Versions and signing
 
