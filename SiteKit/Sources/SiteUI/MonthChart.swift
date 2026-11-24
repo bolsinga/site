@@ -96,7 +96,8 @@ struct MonthChart: View {
           .font(.subheadline)
       }
 
-      Chart(monthCounts.sorted { $0.key < $1.key }, id: \.key) { item in  // array of dictionary elements
+      // array of dictionary elements
+      Chart(monthCounts.sorted { $0.key < $1.key }, id: \.key) { item in
         let (date, count) = item.value
         BarMark(
           x: .value("Month", date, unit: .month),

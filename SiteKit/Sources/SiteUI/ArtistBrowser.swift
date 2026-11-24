@@ -19,6 +19,7 @@ struct ArtistBrowser: View {
   let didShow: (ArchivePath) -> Void
 
   var body: some View {
+    // swift-format-ignore: OnlyOneTrailingClosureArgument
     PagedBrowser(
       item: id, neighbors: { artistIDs.wrappingNeighbors(of: $0) }, digest: digest, url: url,
       title: { _, digest in digest?.name ?? "" }, didShow: didShow

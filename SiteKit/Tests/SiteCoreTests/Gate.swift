@@ -17,6 +17,7 @@ actor Gate {
 
   func open() {
     isOpen = true
+    // swift-format-ignore: ReplaceForEachWithForLoop
     waiters.forEach { $0.resume() }
     waiters = []
   }

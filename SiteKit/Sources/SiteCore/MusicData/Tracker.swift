@@ -114,6 +114,7 @@ struct Tracker {
     let annum = show.date.annum
     let annumID = ArchivePath.year(annum)
 
+    // swift-format-ignore: ReplaceForEachWithForLoop
     try show.artists.reversed().forEach {
       let artistID = try ArchivePath(raw: $0)
 
@@ -152,6 +153,7 @@ struct Tracker {
     var signpost = Signpost(category: "tracker", name: "process")
     signpost.start()
 
+    // swift-format-ignore: ReplaceForEachWithForLoop
     try shows.sorted { lhs, rhs in
       if lhs.date == rhs.date {
         // Shows on the same date keep a fixed order, so the ranks don't depend on the sort.

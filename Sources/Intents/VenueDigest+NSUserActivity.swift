@@ -9,6 +9,7 @@ import AppIntents
 import Foundation
 import SiteCore
 
+// swift-format-ignore: AvoidRetroactiveConformances
 extension VenueDigest: @retroactive ArchivePathUserActivity {
   public func updateActivity(_ userActivity: NSUserActivity, url: URL?) {
     userActivity.isEligibleForHandoff = true

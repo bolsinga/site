@@ -13,6 +13,7 @@ extension Logger {
 }
 
 private let expirationOffset = 60.0 * 60.0 * 24.0 * 30.0 * 6.0  // Six months
+// swift-format-ignore: AlwaysUseLowerCamelCase
 private let ExpirationStaggerDuration = 60.0 * 60.0 * 6.0  // Quarter day
 
 /// Bump when `AtlasCache.Value` changes so that an older saved file is not read as it was.
@@ -50,7 +51,8 @@ public struct AtlasCache<T: AtlasGeocodable>: Sendable {
     do {
       let diskCache = try [ArchivePath: Value].read(fileName: fileName, store: store)
       let now = self.now()
-      self.cache = diskCache.filter { $0.value.expirationDate >= now }  // Include those whose expiration date has not passed now
+      // Include those whose expiration date has not passed now
+      self.cache = diskCache.filter { $0.value.expirationDate >= now }
 
       if self.cache.count != diskCache.count {
         Logger.atlasCache.log("removing expired items")
