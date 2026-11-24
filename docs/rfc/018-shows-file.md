@@ -1,18 +1,17 @@
-# RFC 018: Creating shows and writing the shows file
+# RFC 018: The shows file
 
 Status: Accepted · Updated: 2026-11-24 · Code: not written yet. Planned: `SiteKit/Sources/SiteCore/MusicData`
-(`ShowsFile`, `ArchiveCheck`, `Music+NextID`), `Sources/Site/ShowsEditor`, `Sources/site_tool`
-(`NextIDCommand`)
+(`ShowsFile`, `ArchiveCheck`, `Music+NextID`), `Sources/site_tool` (`NextIDCommand`)
 
 ## Summary
 
 Shows are added today by editing text files by hand and running
 [web_generator](https://github.com/bolsinga/web_generator), which makes the website and the JSON
-this app reads. Under this RFC, the app becomes where shows are created. A Debug-only macOS
-window adds shows, artists and venues, checks the result, and saves a **shows file**,
-`shows.json`: JSON in the same format as the website's `json/shows.json`. web_generator reads that file, together with the
-iTunes data it already has, and keeps making the website. Played music (albums and songs) stays
-with web_generator.
+this app reads. Under this RFC and [RFC 019](019-shows-editor.md), the app becomes where shows are
+created. This RFC is the data: the **shows file**, `shows.json`, in the same format as the
+website's `json/shows.json`; how new IDs are made; the checks every saved file passes; what
+web_generator does with the file; and the move away from the text files. RFC 019 is the window
+that edits it. Played music (albums and songs) stays with web_generator.
 
 ## Motivation
 
@@ -51,47 +50,44 @@ The facts that shape this design:
 
 ## Design
 
-### The shows file
+### The file
 
 1. The shows file MUST be the format of `json/shows.json`: a `Music` with `albums` and `songs`
    empty. The app writes it with its own `Music` types, so whatever the app writes it can read.
 2. It MUST hold every artist, including artists with no shows, and every relation. The app loads
    it as `nextID` does today ([RFC 017](017-site-tool.md)), with `artistsWithShowsOnly: false`.
-   Artists known only from iTunes keep their IDs here, because their pages are URLs too.
+   Artists known only from iTunes keep their IDs here, because their pages are URLs too. See
+   [Artists with no shows](#artists-with-no-shows).
 3. `ShowsFile.write` MUST use `.prettyPrinted`, `.sortedKeys` and `.withoutEscapingSlashes`, and
    ISO 8601 dates, and MUST write `venues`, `artists`, `relations` and `shows` in ID order
    (`localizedStandardCompare`, as `VenueMapFile` does). The same data then gives the same bytes,
    so the file diffs well in git. web_generator sorts for itself, so order doesn't change the site.
-4. `timestamp` MUST be the time of the save.
+4. `timestamp` MUST be the time of the write.
 5. Optional values that are `nil` MUST be left out, which the synthesized `Codable` already does.
    An unknown part of a date is a missing key, and a wholly unknown date is `{}`. Never `0`.
 6. Fields web_generator writes that the app does not model (`Location.zip`, `Venue.comment`,
    `Artist.location` and `Artist.comment`) are never set by web_generator's raw input, so the
-   shows file drops nothing that exists. `ArchiveCheck` (below) MUST fail a file that has them,
+   shows file drops nothing that exists. `ArchiveCheck` (rule 10) MUST fail a file that has them,
    so the assumption is checked, not trusted.
-
-### Where it lives
-
-7. The shows file MUST be named `shows.json`, live with web_generator's other inputs (the folder
-   passed to `site`), and be committed there. It has the same name and format as the website's
-   `json/shows.json`, which web_generator goes on writing from it. The app opens it from that folder, not from the website: the website lags
-   behind until web_generator runs and the site is copied up.
-8. The folder is chosen the way Venue Places chooses one ([RFC 001](001-venue-places.md), rule 7):
-   on first use in a window, not remembered after it closes.
+7. The file MUST be named `shows.json`, live with web_generator's other inputs (the folder passed
+   to `site`), and be committed there. It has the same name and format as the website's
+   `json/shows.json`, which web_generator goes on writing from it. The app reads it from that
+   folder, not from the website: the website lags behind until web_generator runs and the site is
+   copied up.
 
 ### IDs
 
-9. A new show, venue or artist MUST get the next number after the highest one of its kind, with
+8. A new show, venue or artist MUST get the next number after the highest one of its kind, with
    the kind's prefix (`sh`, `v`, `ar`). An ID MUST NOT be reused, even if its show, venue or
    artist was deleted: a reused ID makes old links, Spotlight items and saved navigation open
    something else.
-10. `site_tool nextID` MUST change to the same rule, through the same `Music+NextID` code. This
-    replaces RFC 017's "gaps first" rule, and RFC 017 is updated in the same PR.
+9. `site_tool nextID` MUST change to the same rule, through the same `Music+NextID` code. This
+   replaces RFC 017's "gaps first" rule, and RFC 017 is updated in the same PR.
 
 ### Checks
 
-11. `ArchiveCheck` in `SiteCore` MUST run on every save, and a save MUST NOT happen while it reports
-    a problem. It checks:
+10. `ShowsFile.write` MUST run `ArchiveCheck` first, and MUST NOT write while it reports a problem.
+    It checks:
     - IDs are unique within each kind, and start with their kind's prefix.
     - Every show's `venue` and `artists`, and every relation's members, are IDs in the file.
     - Every show has at least one artist.
@@ -101,57 +97,30 @@ The facts that shape this design:
     - No two venues have the same name, and no two artists have the same name. web_generator's raw
       files and iTunes join by name.
     - The fields of rule 6 are absent.
-12. `ArchiveCheck` is a pure function of a `Music`, so `SiteCoreTests` can test each problem
-    with a small `Music` built in code ([RFC 016](016-testing.md)).
+11. `ArchiveCheck` is a pure function of a `Music` that returns every problem it finds, so
+    `SiteCoreTests` can test each one with a small `Music` built in code ([RFC 016](016-testing.md)).
 
 ### Sort names
 
-13. A new artist or venue's `sortname` is entered by the person, or left out.
-14. When a new artist's name has accented letters and no sortname is given, the editor MUST set
-    `sortname` to `name.decomposedStringWithCanonicalMapping`, which is what web_generator's raw
-    reader derives. Existing sort names are written back unchanged.
-
-### The editor window
-
-15. The editor MUST exist only in Debug builds on macOS, like Venue Places, as a `Window` scene
-    opened from the Window menu. It is not a `DocumentGroup`, for the reasons in RFC 001.
-16. **New Show** is a form:
-    - **Date**: year, month and day, each of which may be unknown (`PartialDate`).
-    - **Venue**: search the existing venues by name, using library order. Or **New Venue**: name,
-      city, state, street, website, and a Maps place found the way Venue Places finds one
-      ([RFC 002](002-mapkit-geocoding.md)).
-    - **Artists**: an ordered list, headliner first, that can be reordered. Each one is found among
-      the existing artists, or added as a new artist with a name and optional sort name.
-    - **Comment**: optional text.
-
-    **New Artist** adds an artist with no show: a name and an optional sort name, with the next
-    `ar` ID. It is for an artist web_generator reports as missing from iTunes (rule 21).
-17. Until the file is saved, a new show, artist or venue can be edited or removed. After the save,
-    it is part of the archive, and changing it is a non-goal of this RFC.
-18. Edits are kept in memory only, as in Venue Places. The window is marked edited until it is
-    saved, and closing it with unsaved changes asks first.
-19. After a save, the window shows the new show's URL path (`/dates/shN.html`), so it can be
-    checked once the site is rebuilt.
-
-### Venue Places
-
-20. Once the shows file is the source, Venue Places MUST save its changes into the shows file's
-    venues, not `venuemap.txt`. Renaming a venue becomes possible, because shows refer to it by ID.
+12. When a new artist's name has accented letters and it has no sortname, it MUST get the sortname
+    `name.decomposedStringWithCanonicalMapping`, which is what web_generator's raw reader derives.
+    Existing sort names are written back unchanged.
 
 ### web_generator
 
-21. web_generator needs a way to make the site from the shows file, its iTunes data and the diary
+13. web_generator needs a way to make the site from the shows file, its iTunes data and the diary
     files. That is web_generator's change, described in its own RFC. What this RFC needs from it:
     - Albums and songs from iTunes are joined to the shows file's artists by name.
     - An iTunes artist not in the shows file stops the run with its name, as missing artist IDs do
-      today. The person adds it here with **New Artist** (rule 16), and runs web_generator again.
+      today. The person adds it with **New Artist** ([RFC 019](019-shows-editor.md)), and runs
+      web_generator again.
     - The shows file's sort names win over iTunes'.
-    - The same checks as rule 11, so a file not written by the app is also checked.
+    - The same checks as rule 10, so a file not written by the app is also checked.
 
 ### Migration
 
-22. In order:
-    1. web_generator gains its new input (rule 21). Making the site from the raw files and from the
+14. In order:
+    1. web_generator gains its new input (rule 13). Making the site from the raw files and from the
        `json/shows.json` they export MUST give the same HTML, compared with `diff -r` as in
        web_generator's RFC 004, leaving out what that RFC lists as changing from run to run. Only
        the HTML must match. The site's other files, including the JSON exports in `json/`, may
@@ -164,13 +133,17 @@ The facts that shape this design:
        writing it once with `ShowsFile`. From then on, `shows.txt`, `venuemap.txt`,
        `bandsort.txt`, `artistids.txt` and `relations.txt` are no longer edited, and web_generator
        is run with the new input.
-    4. The editor window and the Venue Places change follow.
+    4. The editor ([RFC 019](019-shows-editor.md)) follows. Venue Places then saves its changes into
+       the shows file's venues instead of `venuemap.txt`, which makes renaming a venue possible;
+       RFC 001 is updated with that change.
 
 ## Rationale
 
 - **Same format as `shows.json`.** The app already decodes it, web_generator already writes it,
   and the website already publishes it. No new format, and the first shows file is the one the
   website already has.
+- **The name `shows.json`.** The file is the website's `json/shows.json`, moved to where it is
+  edited. One name for one format; the folder says which copy it is.
 - **Shows apart from iTunes.** The app models only part of `Album` and `Song`, and not
   `Song.live` or `Album.purchase`. Writing the full `music.json` would mean modeling all of
   iTunes' data to pass it through. Keeping iTunes data with web_generator keeps this change to
@@ -182,22 +155,18 @@ The facts that shape this design:
   URLs that stay put do.
 - **Sorted, stable output.** The shows file becomes the archive's history in git, so a change
   should be a small diff.
-- **The name `shows.json`.** The file is the website's `json/shows.json`, moved to where it is
-  edited. One name for one format; the folder says which copy it is.
+- **Checks in the writer.** Every way of saving the file, the editor's or any later one, goes
+  through `ShowsFile.write`, so none can skip them.
 - **Only the HTML must match.** The HTML is what people see and link to. The JSON exports are
   read by this app, which doesn't depend on their key order or byte layout.
-- **A Debug window.** It follows Venue Places: one person edits the data, on a Mac, and the shipping
-  app stays a viewer.
 
 ## Non-goals
 
-- Changing or deleting a show, artist or venue once saved. Fixes go through the file until there
-  is a need for more.
+- The editor window. That is [RFC 019](019-shows-editor.md).
 - Albums, songs, and anything else from iTunes, for now. See [Later: iTunes in the app](#later-itunes-in-the-app).
 - The diary. web_generator keeps reading `comments.txt` and `statics.txt`.
 - Editing relations. They are written back as read.
 - Generating or uploading the website. web_generator and the rsync step stay as they are.
-- iOS, iPadOS and tvOS.
 
 ## Artists with no shows
 
@@ -221,15 +190,15 @@ hold only artists with shows.
 
 The first and second rows are why rule 2 was chosen: one owner for IDs, and a band's page keeps
 its URL when it goes from albums only to albums and shows. The cost, accepted, is the third row: a
-new iTunes artist stops web_generator until it is added in the app with **New Artist** (rule 16).
-web_generator does not make an ID for it and leave it to be copied back later, because then two
-places would make `ar` IDs.
+new iTunes artist stops web_generator until it is added in the app with **New Artist**
+([RFC 019](019-shows-editor.md)). web_generator does not make an ID for it and leave it to be
+copied back later, because then two places would make `ar` IDs.
 
 ## Later: iTunes in the app
 
 Once this is working, the app will read the iTunes data itself. It can then find artists that are
 in iTunes but not in the shows file, and give them new `ar` IDs on its own, with the rules for IDs
-(rules 9 and 10) and the checks (rule 11) unchanged. That removes the cost above: web_generator no
+(rules 8 and 9) and the checks (rule 10) unchanged. That removes the cost above: web_generator no
 longer stops for a new iTunes artist, because the shows file already has it, and **New Artist** is
 left for artists that are typed in by hand.
 
