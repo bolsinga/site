@@ -14,8 +14,7 @@ struct Signpost: ~Copyable {
   var state: OSSignpostIntervalState?
 
   init(category: String, name: StaticString) {
-    self.signPost = OSSignposter(
-      subsystem: Bundle.main.bundleIdentifier ?? "unknown", category: category)
+    self.signPost = OSSignposter(subsystem: Logger.subsystem, category: category)
     self.name = name
   }
 

@@ -35,8 +35,9 @@ fixes it. The directories are its `paths` input. `boundaries` is one step too, t
 `.github/actions/check-boundaries`, which runs `check.sh` (it takes a repository root, so it can be
 run by hand). It fails if a file of `SiteKit/Sources/SiteCore` imports `SwiftUI`, `UIKit`, `AppKit`,
 `WidgetKit` or `AppIntents`; if it uses `.shared`, `UserDefaults`, `.standard`, `Bundle.main` or
-`ProcessInfo.processInfo`; or if it uses `FileManager.default` or `NotificationCenter.default`
-anywhere but as the default value of a parameter.
+`ProcessInfo.processInfo`, except `Bundle.main` in `Logger+Category.swift`, which names the log
+subsystem; or if it uses `FileManager.default` or `NotificationCenter.default` anywhere but as
+the default value of a parameter.
 
 ### Matrix
 

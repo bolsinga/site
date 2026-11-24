@@ -15,7 +15,8 @@ extension Logger {
 extension Music {
   public static func load(
     url: URL,
-    artistsWithShowsOnly: Bool
+    artistsWithShowsOnly: Bool,
+    session: URLSession = .shared
   ) async throws -> (Music, Date) {
     Logger.music.log("start: \(String(describing: url))")
     defer {
@@ -24,7 +25,7 @@ extension Music {
 
     // The server's Last-Modified has already said this is newer, so a cached copy can't be used.
     let request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData)
-    let (data, response) = try await URLSession.shared.data(for: request)
+    let (data, response) = try await session.data(for: request)
 
     var lastModified = Date.distantPast
     if let lastModifiedDate = try response.lastModified() {

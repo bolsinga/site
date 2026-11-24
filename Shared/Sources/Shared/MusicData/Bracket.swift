@@ -158,13 +158,16 @@ public struct Bracket: Codable, Sendable {
   /// - Parameters:
   ///   - url: The `URL` where the JSON music data is.
   ///   - artistsWithShowsOnly: filter out Artists that do not have shows. Defaults to true.
+  ///   - session: The `URLSession` that downloads it. Defaults to the shared one.
   /// - Throws: Any error encountered while reading the archive or computing derived structures.
-  public init(url: URL, artistsWithShowsOnly: Bool = true) async throws {
+  public init(url: URL, artistsWithShowsOnly: Bool = true, session: URLSession = .shared)
+    async throws
+  {
     var signpost = Signpost(category: "bracket", name: "url")
     signpost.start()
 
     let (music, lastModified) = try await Music.load(
-      url: url, artistsWithShowsOnly: artistsWithShowsOnly)
+      url: url, artistsWithShowsOnly: artistsWithShowsOnly, session: session)
     try await self.init(music: music, timestamp: lastModified)
   }
 

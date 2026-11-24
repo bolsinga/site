@@ -9,7 +9,9 @@ import Foundation
 import os
 
 extension Logger {
+  static let subsystem = Bundle.main.bundleIdentifier ?? "unknown"
+
   public init(category: String) {
-    self.init(subsystem: Bundle.main.bundleIdentifier ?? "unknown", category: category)
+    self.init(subsystem: Logger.subsystem, category: category)
   }
 }
