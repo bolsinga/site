@@ -24,7 +24,7 @@ package struct LibraryCompareTokenizer {
   private let bodyReference: Reference<Substring>
   private let removeCommonInitialPunctuationRegex: any RegexComponent<(Substring, Substring)>
 
-  public init() {
+  package init() {
     let body = Reference(Substring.self)
     let removeCommonInitialPunctuation = Regex {
       ZeroOrMore { .word.inverted }

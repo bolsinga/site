@@ -7,18 +7,18 @@
 
 import Foundation
 
-public struct Song: Codable, Identifiable, Sendable {
-  package let artist: String
+package struct Song: Codable, Identifiable, Sendable {
+  public let artist: String
   package let digitized: Bool
   package let genre: String?
-  public let id: String
+  package let id: String
   package let lastPlayed: Date?
   package let playCount: Int?
   package let release: PartialDate?
-  package let title: String
+  public let title: String
   package let track: Int?
 
-  public init(
+  package init(
     artist: String, digitized: Bool, genre: String? = nil, id: String, lastPlayed: Date? = nil,
     playCount: Int? = nil, release: PartialDate? = nil, title: String, track: Int? = nil
   ) {

@@ -31,7 +31,7 @@ extension Decade.FormatStyle: Foundation.FormatStyle {
     return String(localized: "Decade Unknown", bundle: #bundle)
   }
 
-  public func format(_ value: Decade) -> String {
+  package func format(_ value: Decade) -> String {
     switch value {
     case .decade(let year):
       guard let date = PartialDate(year: year).date else { return unknown }

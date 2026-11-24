@@ -23,7 +23,7 @@ extension ArchivePath.FormatStyle {
 
     static let validSeparatorSet = CharacterSet(charactersIn: ArchivePath.separator)
 
-    public init() {}
+    package init() {}
 
     public func parse(_ value: String) throws -> ArchivePath {
       let trimmedValue = value.trimmingCharacters(in: .whitespaces)
@@ -73,7 +73,7 @@ extension ArchivePath.FormatStyle {
       case invalidPrefix
     }
 
-    public init() {}
+    package init() {}
 
     package func parse(_ url: URL) throws -> ArchivePath {
       let urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false)
@@ -137,7 +137,7 @@ extension ArchivePath.FormatStyle {
       .union(CharacterSet(charactersIn: ArchivePath.venuePrefix))
       .union(CharacterSet(charactersIn: ArchivePath.artistPrefix))
 
-    public init() {}
+    package init() {}
 
     package func parse(_ value: String) throws -> ArchivePath {
       let trimmedValue = value.trimmingCharacters(in: .whitespaces)

@@ -36,7 +36,7 @@ package actor Throttle<T: Sendable> {
   /// Current time to wait until for the next batch through the throttle.
   var waitUntil: ContinuousClock.Instant
 
-  public init(batchSize: Int, timeUntilReset: Duration) {
+  package init(batchSize: Int, timeUntilReset: Duration) {
     self.batchSize = batchSize
     self.timeUntilReset = timeUntilReset
     self.count = 0

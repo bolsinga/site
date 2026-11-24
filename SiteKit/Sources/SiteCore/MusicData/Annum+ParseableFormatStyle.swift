@@ -17,7 +17,7 @@ extension Annum.FormatStyle {
 
     static let validCharacterSet = CharacterSet(charactersIn: "0123456789")
 
-    public init() {}
+    package init() {}
 
     package func parse(_ value: String) throws -> Annum {
       let trimmedValue = value.trimmingCharacters(in: .whitespaces)

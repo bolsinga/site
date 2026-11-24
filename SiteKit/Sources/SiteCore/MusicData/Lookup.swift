@@ -227,7 +227,7 @@ public struct Lookup: Codable, Sendable {
   ///
   /// - Parameter venueID: The stable venue identifier.
   /// - Returns: A set of artist IDs.
-  public func artists(venueID: ArchivePath) -> Set<ArchivePath> {
+  package func artists(venueID: ArchivePath) -> Set<ArchivePath> {
     bracket.venueArtists[venueID] ?? []
   }
 
@@ -235,7 +235,7 @@ public struct Lookup: Codable, Sendable {
   ///
   /// - Parameter showID: The stable show identifier.
   /// - Returns: An array of artist IDs that appeared in the show, headliner to opener.
-  public func artists(showID: ArchivePath) -> [ArchivePath] {
+  package func artists(showID: ArchivePath) -> [ArchivePath] {
     bracket.showArtists[showID] ?? []
   }
 
@@ -245,7 +245,7 @@ public struct Lookup: Codable, Sendable {
   ///
   /// - Parameter showID: The stable show identifier.
   /// - Returns: The venue ID for the show, if available; otherwise nil.
-  public func venues(showID: ArchivePath) -> ArchivePath? {
+  package func venues(showID: ArchivePath) -> ArchivePath? {
     bracket.showVenue[showID]
   }
 

@@ -41,7 +41,7 @@ package enum RankingSort: Int, CaseIterable, Sendable {
     }
   }
 
-  package var localizedString: String {
+  public var localizedString: String {
     switch self {
     case .alphabetical:
       return String(localized: "Sort Alphabetically", bundle: #bundle)

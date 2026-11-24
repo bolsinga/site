@@ -8,7 +8,7 @@
 import Foundation
 
 extension Collection where Element == Location {
-  public var stateCounts: [String: Int] {
+  package var stateCounts: [String: Int] {
     self.map { $0.state }.reduce(
       into: [String: Int]()
     ) {

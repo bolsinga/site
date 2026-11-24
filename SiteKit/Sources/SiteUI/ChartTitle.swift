@@ -17,7 +17,7 @@ package struct ChartTitle: View {
   let title: LocalizedStringResource
   let alignment: Alignment
 
-  public init(title: LocalizedStringResource, alignment: Alignment) {
+  package init(title: LocalizedStringResource, alignment: Alignment) {
     self.title = title
     self.alignment = alignment
   }

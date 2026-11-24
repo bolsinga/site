@@ -9,7 +9,7 @@ import Algorithms
 import Foundation
 
 extension Collection where Element == ShowDigest {
-  public var stateCounts: [String: Int] {
+  package var stateCounts: [String: Int] {
     self.map { $0.location }.stateCounts
   }
 
@@ -17,11 +17,11 @@ extension Collection where Element == ShowDigest {
     self.map { $0.date }.knownDates
   }
 
-  public var venueCount: Int {
+  package var venueCount: Int {
     Array(self.map { $0.venue }.uniqued()).count
   }
 
-  public var artistCount: Int {
+  package var artistCount: Int {
     Array(self.flatMap { $0.performers }.uniqued()).count
   }
 

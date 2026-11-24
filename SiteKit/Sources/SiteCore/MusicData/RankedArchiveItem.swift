@@ -9,8 +9,8 @@ import Foundation
 
 package struct RankedArchiveItem: Hashable, Identifiable, LibraryComparable, Nameable, Rankable {
   package let id: ArchivePath
-  package let sortname: String?
-  package let name: String
+  public let sortname: String?
+  public let name: String
   private let rank: RankDigest
 
   init(

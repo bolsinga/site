@@ -7,16 +7,16 @@
 
 import Foundation
 
-public struct Music: Codable, Sendable {
+package struct Music: Codable, Sendable {
   package let albums: [Album]
-  public let artists: [Artist]
+  package let artists: [Artist]
   package let relations: [Relation]
   public let shows: [Show]
   package let songs: [Song]
   public let timestamp: Date
-  public let venues: [Venue]
+  package let venues: [Venue]
 
-  public init(
+  package init(
     albums: [Album], artists: [Artist], relations: [Relation], shows: [Show], songs: [Song],
     timestamp: Date, venues: [Venue]
   ) {

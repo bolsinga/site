@@ -41,20 +41,20 @@ extension Annum: Comparable {
 }
 
 extension Int {
-  public var annum: Annum {
+  package var annum: Annum {
     .year(self)
   }
 }
 
 extension Date {
-  public var annum: Annum {
+  package var annum: Annum {
     guard let year = self.year else { return .unknown }
     return year.annum
   }
 }
 
 extension PartialDate {
-  public var annum: Annum {
+  package var annum: Annum {
     guard year != nil else { return .unknown }
     guard let date else { return .unknown }
     return date.annum

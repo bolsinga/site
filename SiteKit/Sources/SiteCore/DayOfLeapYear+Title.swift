@@ -28,7 +28,7 @@ extension Int {
     return .unknown
   }
 
-  public var isToday: Bool {
+  package var isToday: Bool {
     switch day {
     case .today:
       true

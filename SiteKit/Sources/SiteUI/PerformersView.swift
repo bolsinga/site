@@ -169,7 +169,7 @@ package struct PerformersView: View {
   let firstTimeArtistIDs: Set<ArchivePath>
   let mostRecentArtistIDs: Set<ArchivePath>
 
-  public init(
+  package init(
     performers: [ArchiveItem], firstTimeArtistIDs: Set<ArchivePath> = [],
     mostRecentArtistIDs: Set<ArchivePath> = []
   ) {

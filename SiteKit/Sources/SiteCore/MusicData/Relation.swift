@@ -7,12 +7,12 @@
 
 import Foundation
 
-public struct Relation: Codable, Identifiable, Sendable {
-  public let id: String
+package struct Relation: Codable, Identifiable, Sendable {
+  package let id: String
   package let members: [String]
   package let reason: String?
 
-  public init(id: String, members: [String], reason: String? = nil) {
+  package init(id: String, members: [String], reason: String? = nil) {
     self.id = id
     self.members = members
     self.reason = reason

@@ -7,15 +7,15 @@
 
 import Foundation
 
-public struct Album: Codable, Equatable, Identifiable, Sendable {
-  public let id: String
+package struct Album: Codable, Equatable, Identifiable, Sendable {
+  package let id: String
   package let performer: String?
   package let release: PartialDate?
   package let songs: [String]
-  package let title: String
+  public let title: String
   package let compilation: Bool?
 
-  public init(
+  package init(
     id: String, performer: String? = nil, release: PartialDate? = nil, songs: [String],
     title: String, compilation: Bool? = false
   ) {

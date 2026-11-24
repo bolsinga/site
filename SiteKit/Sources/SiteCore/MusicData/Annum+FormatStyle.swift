@@ -40,7 +40,7 @@ extension Annum.FormatStyle: Foundation.FormatStyle {
   static let unknown = "unknown"
   static let other = "other"
 
-  public func format(_ value: Annum) -> String {
+  package func format(_ value: Annum) -> String {
     switch value {
     case .year(let year):
       guard let date = PartialDate(year: year).date else { return unknownLocalized }
