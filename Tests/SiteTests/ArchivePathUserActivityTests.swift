@@ -21,7 +21,7 @@ struct ArchivePathUserActivityTests {
     let concert = ShowDigest(
       id: .show("sh17"), date: PartialDate(), performers: [], venue: "v",
       venueID: .venue("v0"), location: Location(city: "c", state: "s"), comment: nil)
-    userActivity.update(concert, url: rootURL)
+    userActivity.update(concert.restorableActivity, url: rootURL)
 
     #expect(userActivity.isEligibleForHandoff)
 
@@ -44,7 +44,7 @@ struct ArchivePathUserActivityTests {
     let artist = Artist(id: "ar0", name: "AR0")
     let digest = ArtistDigest(
       id: .artist(artist.id), artist: artist, shows: [], related: [], rank: .empty)
-    userActivity.update(digest, url: rootURL)
+    userActivity.update(digest.restorableActivity, url: rootURL)
 
     #expect(userActivity.isEligibleForHandoff)
 
@@ -65,7 +65,7 @@ struct ArchivePathUserActivityTests {
     let venue = Venue(id: "v10", location: Location(city: "c", state: "s"), name: "V10")
     let digest = VenueDigest(
       id: .venue(venue.id), venue: venue, shows: [], related: [], rank: .empty)
-    userActivity.update(digest, url: rootURL)
+    userActivity.update(digest.restorableActivity, url: rootURL)
 
     #expect(userActivity.isEligibleForHandoff)
 
@@ -85,7 +85,7 @@ struct ArchivePathUserActivityTests {
 
     let item = AnnumDigest(annum: .year(1990), shows: [], rank: .empty)
 
-    userActivity.update(item, url: rootURL)
+    userActivity.update(item.restorableActivity, url: rootURL)
 
     #expect(userActivity.isEligibleForHandoff)
 
@@ -107,7 +107,7 @@ struct ArchivePathUserActivityTests {
       id: .show("sh17"), date: PartialDate(), performers: [], venue: "V",
       venueID: .venue("v0"), location: Location(city: "c", state: "s"), comment: nil)
 
-    userActivity.update(concert, url: rootURL)
+    userActivity.update(concert.restorableActivity, url: rootURL)
 
     #expect(userActivity.isEligibleForPublicIndexing)
     #expect(userActivity.webpageURL == rootURL)

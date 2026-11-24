@@ -15,12 +15,11 @@ public final class AppHooks: Sendable {
   public let entityIdentifier: @Sendable (ArchivePath) -> EntityIdentifier?
 
   /// What a path restores, shares and links to.
-  public let restorableActivity: @Sendable (Vault, ArchivePath) -> (any ArchivePathUserActivity)?
+  public let restorableActivity: @Sendable (Vault, ArchivePath) -> RestorableActivity?
 
   public init(
     entityIdentifier: @escaping @Sendable (ArchivePath) -> EntityIdentifier?,
-    restorableActivity:
-      @escaping @Sendable (Vault, ArchivePath) -> (any ArchivePathUserActivity)?
+    restorableActivity: @escaping @Sendable (Vault, ArchivePath) -> RestorableActivity?
   ) {
     self.entityIdentifier = entityIdentifier
     self.restorableActivity = restorableActivity

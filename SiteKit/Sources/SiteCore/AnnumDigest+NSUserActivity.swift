@@ -7,13 +7,16 @@
 
 import Foundation
 
-extension AnnumDigest: ArchivePathUserActivity {
-  public func updateActivity(_ userActivity: NSUserActivity, url: URL?) {
-    userActivity.isEligibleForHandoff = true
+extension AnnumDigest {
+  public var restorableActivity: RestorableActivity {
+    let annum = annum
+    return RestorableActivity(id: id) { userActivity, _ in
+      userActivity.isEligibleForHandoff = true
 
-    userActivity.isEligibleForSearch = true
-    userActivity.title = annum.formatted()
-    userActivity.addSearchableContent(
-      description: String(localized: "See Shows From This Year", bundle: #bundle))
+      userActivity.isEligibleForSearch = true
+      userActivity.title = annum.formatted()
+      userActivity.addSearchableContent(
+        description: String(localized: "See Shows From This Year", bundle: #bundle))
+    }
   }
 }
