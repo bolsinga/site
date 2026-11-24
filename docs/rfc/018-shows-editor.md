@@ -123,6 +123,9 @@ The facts that shape this design:
     - **Artists**: an ordered list, headliner first, that can be reordered. Each one is found among
       the existing artists, or added as a new artist with a name and optional sort name.
     - **Comment**: optional text.
+
+    **New Artist** adds an artist with no show: a name and an optional sort name, with the next
+    `ar` ID. It is for an artist web_generator reports as missing from iTunes (rule 21).
 17. Until the file is saved, a new show, artist or venue can be edited or removed. After the save,
     it is part of the archive, and changing it is a non-goal of this RFC.
 18. Edits are kept in memory only, as in Venue Places. The window is marked edited until it is
@@ -141,7 +144,7 @@ The facts that shape this design:
     files. That is web_generator's change, described in its own RFC. What this RFC needs from it:
     - Albums and songs from iTunes are joined to the shows file's artists by name.
     - An iTunes artist not in the shows file stops the run with its name, as missing artist IDs do
-      today, so it is added with an ID here.
+      today. The person adds it here with **New Artist** (rule 16), and runs web_generator again.
     - The shows file's sort names win over iTunes'.
     - The same checks as rule 11, so a file not written by the app is also checked.
 
@@ -173,7 +176,8 @@ The facts that shape this design:
   iTunes' data to pass it through. Keeping iTunes data with web_generator keeps this change to
   what the app understands.
 - **Every artist in the file.** Artist IDs come from one place, the app, rather than the app
-  for some artists and `artistids.txt` for others.
+  for some artists and `artistids.txt` for others. See
+  [Artists with no shows](#artists-with-no-shows).
 - **Highest plus one, not gaps.** Gaps are IDs that were published. Dense numbers don't matter;
   URLs that stay put do.
 - **Sorted, stable output.** The shows file becomes the archive's history in git, so a change
@@ -195,9 +199,7 @@ The facts that shape this design:
 - Generating or uploading the website. web_generator and the rsync step stay as they are.
 - iOS, iPadOS and tvOS.
 
-## Open questions
-
-### Who owns artists with no shows
+## Artists with no shows
 
 Some artists are known only from iTunes: there are albums by them, but no show. web_generator makes
 a page for each (`/bands/arN.html`, listing the albums), so their IDs are URLs like any other
@@ -205,9 +207,9 @@ artist's. Today they get IDs the same way as every artist, from `artistids.txt`,
 `json/shows.json` includes them. Relations can name them too; `Music+ShowsOnly` removes them only
 for the viewer.
 
-Rule 2 keeps them in the shows file. The other choice is for web_generator to keep owning them,
-for example with `artistids.txt` cut down to just these artists, and for the shows file to hold
-only artists with shows.
+Rule 2 keeps them in the shows file. The choice not taken is for web_generator to keep owning
+them, for example with `artistids.txt` cut down to just these artists, and for the shows file to
+hold only artists with shows.
 
 | | Shows file has every artist (rule 2) | web_generator owns artists with no shows |
 |---|---|---|
@@ -217,10 +219,12 @@ only artists with shows.
 | Relations that name such artists | stay in one file and are checked by `ArchiveCheck` | refer to artists in another file, so `ArchiveCheck` can't check them, and web_generator joins relations from two places |
 | What the app holds | artists it doesn't show | only what it shows |
 
-The first row and second row are why rule 2 is the choice: one owner for IDs, and a band's page
-keeps its URL when it goes from albums only to albums and shows. The cost is the third row. A new
-iTunes artist stops web_generator until it is added in the app, so the editor needs a **New Artist**
-action that adds an artist with no show. Rule 16 only adds artists as part of a show.
+The first and second rows are why rule 2 was chosen: one owner for IDs, and a band's page keeps
+its URL when it goes from albums only to albums and shows. The cost, accepted, is the third row: a
+new iTunes artist stops web_generator until it is added in the app with **New Artist** (rule 16).
+web_generator does not make an ID for it and leave it to be copied back later, because then two
+places would make `ar` IDs.
 
-Open: whether that cost is acceptable, or whether web_generator should give a new iTunes artist an
-ID itself and print it, for the person to add to the shows file in the app afterward.
+## Open questions
+
+None.
