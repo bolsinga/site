@@ -49,3 +49,4 @@ Design decisions and rules are in `docs/rfc/`, one file per area, named `NNN-nam
 - [`docs/rfc/015-ci-and-release.md`](docs/rfc/015-ci-and-release.md): the CI and release workflows, the build and test matrix, and how versions are set.
 - [`docs/rfc/016-testing.md`](docs/rfc/016-testing.md): how the project is tested, the conventions in use, and what is not covered.
 - [`docs/rfc/017-site-tool.md`](docs/rfc/017-site-tool.md): the command-line tool in the app binary, its commands, and the diary data it reads.
+- [`docs/rfc/018-shows-editor.md`](docs/rfc/018-shows-editor.md): proposed: creating shows in a Debug macOS window, the shows file it saves for web_generator, new IDs and checks, and the move from web_generator's text files.
