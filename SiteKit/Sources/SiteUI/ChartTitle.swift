@@ -8,8 +8,8 @@
 import SiteCore
 import SwiftUI
 
-public struct ChartTitle: View {
-  public enum Alignment: Sendable {
+package struct ChartTitle: View {
+  package enum Alignment: Sendable {
     case `default`
     case center
   }
@@ -27,7 +27,7 @@ public struct ChartTitle: View {
       .font(.title2).fontWeight(.bold)
   }
 
-  public var body: some View {
+  package var body: some View {
     switch alignment {
     case .default:
       titleText

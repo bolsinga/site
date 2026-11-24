@@ -62,7 +62,7 @@ extension ArchivePath.FormatStyle {
     }
   }
 
-  public struct URLParseStrategy: Foundation.ParseStrategy {
+  package struct URLParseStrategy: Foundation.ParseStrategy {
     enum ValidationError: Error {
       case url
       case scheme
@@ -75,7 +75,7 @@ extension ArchivePath.FormatStyle {
 
     public init() {}
 
-    public func parse(_ url: URL) throws -> ArchivePath {
+    package func parse(_ url: URL) throws -> ArchivePath {
       let urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false)
 
       guard let urlComponents else {
@@ -127,7 +127,7 @@ extension ArchivePath.FormatStyle {
     }
   }
 
-  public struct RawParseStrategy: Foundation.ParseStrategy {
+  package struct RawParseStrategy: Foundation.ParseStrategy {
     enum ValidationError: Error {
       case emptyInput
       case invalidPrefix
@@ -139,7 +139,7 @@ extension ArchivePath.FormatStyle {
 
     public init() {}
 
-    public func parse(_ value: String) throws -> ArchivePath {
+    package func parse(_ value: String) throws -> ArchivePath {
       let trimmedValue = value.trimmingCharacters(in: .whitespaces)
 
       guard !trimmedValue.isEmpty else {
@@ -168,11 +168,11 @@ extension ArchivePath.FormatStyle: ParseableFormatStyle {
     .init()
   }
 
-  public var urlParseStrategy: ArchivePath.FormatStyle.URLParseStrategy {
+  package var urlParseStrategy: ArchivePath.FormatStyle.URLParseStrategy {
     .init()
   }
 
-  public var rawParseStrategy: ArchivePath.FormatStyle.RawParseStrategy {
+  package var rawParseStrategy: ArchivePath.FormatStyle.RawParseStrategy {
     .init()
   }
 }
@@ -210,5 +210,5 @@ extension ArchivePath {
 }
 
 extension ParseableFormatStyle where Self == ArchivePath.FormatStyle {
-  public static var archivePath: Self { .init() }
+  package static var archivePath: Self { .init() }
 }

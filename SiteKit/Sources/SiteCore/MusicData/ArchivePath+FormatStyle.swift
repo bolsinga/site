@@ -8,9 +8,9 @@
 import Foundation
 
 extension ArchivePath {
-  public static let showPrefix = "sh"
-  public static let venuePrefix = "v"
-  public static let artistPrefix = "ar"
+  package static let showPrefix = "sh"
+  package static let venuePrefix = "v"
+  package static let artistPrefix = "ar"
   static let yearPrefix = "y"
   static let separator = "-"
 
@@ -42,7 +42,7 @@ extension ArchivePath {
       self.style = style
     }
 
-    public func style(_ style: Style) -> Self {
+    package func style(_ style: Style) -> Self {
       .init(style)
     }
   }
@@ -103,8 +103,8 @@ extension ArchivePath {
 }
 
 extension FormatStyle where Self == ArchivePath.FormatStyle {
-  public static var json: Self { .init(.json) }
-  public static var urlPath: Self { .init(.urlPath) }
+  package static var json: Self { .init(.json) }
+  package static var urlPath: Self { .init(.urlPath) }
   public static var rawID: Self { .init(.rawID) }
 
   static func archivePath(style: ArchivePath.FormatStyle.Style = .json) -> Self {

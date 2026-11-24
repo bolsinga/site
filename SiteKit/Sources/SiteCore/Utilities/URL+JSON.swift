@@ -8,7 +8,7 @@
 import Foundation
 
 extension URL {
-  public func writeJSON<T>(_ item: T) throws where T: Encodable {
+  package func writeJSON<T>(_ item: T) throws where T: Encodable {
     let encoder = JSONEncoder()
     encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
     encoder.dateEncodingStrategy = .iso8601

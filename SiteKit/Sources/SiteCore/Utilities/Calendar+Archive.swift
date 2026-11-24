@@ -17,5 +17,5 @@ extension Calendar {
 
 extension FormatStyle where Self == Date.FormatStyle {
   /// `.dateTime` for a date of the archive, which is written in the Gregorian calendar.
-  public static var archiveDateTime: Self { Date.FormatStyle(calendar: .archive) }
+  package static var archiveDateTime: Self { Date.FormatStyle(calendar: .archive) }
 }

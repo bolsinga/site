@@ -41,7 +41,7 @@ extension Int {
     .atURL(#bundle.bundleURL)
   }
 
-  public var relativeTitle: LocalizedStringResource {
+  package var relativeTitle: LocalizedStringResource {
     switch day {
     case .yesterday:
       LocalizedStringResource("Yesterday: \(dayOfLeapYearFormatted)", bundle: resourceBundle)

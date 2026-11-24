@@ -151,7 +151,7 @@ public struct Lookup: Codable, Sendable {
   }
 
   /// Groups shows by decade, then by annum (e.g., year), returning the count of Shows for each.
-  public func decadesMap(showIDs: Set<ArchivePath>) -> [Decade: [Annum: Int]] {
+  package func decadesMap(showIDs: Set<ArchivePath>) -> [Decade: [Annum: Int]] {
     let matchingAnnumShows = annumShows.reduce(into: [ArchivePath: Set<ArchivePath>]()) {
       let (key, value) = $1
       let matchedShowIDs = value.intersection(showIDs)
@@ -162,7 +162,7 @@ public struct Lookup: Codable, Sendable {
     return decadesMap(for: matchingAnnumShows)
   }
 
-  public func decadesMap(for annumShows: [ArchivePath: Set<ArchivePath>]) -> [Decade: [Annum: Int]]
+  package func decadesMap(for annumShows: [ArchivePath: Set<ArchivePath>]) -> [Decade: [Annum: Int]]
   {
     annumShows.reduce(into: [Decade: [Annum: Int]]()) {
       guard case .year(let annum) = $1.key else { return }
@@ -173,7 +173,7 @@ public struct Lookup: Codable, Sendable {
     }
   }
 
-  public var decadesMap: [Decade: [Annum: Int]] {
+  package var decadesMap: [Decade: [Annum: Int]] {
     decadesMap(for: annumShows)
   }
 
@@ -198,12 +198,12 @@ public struct Lookup: Codable, Sendable {
     }
   }
 
-  public var annumShows: [ArchivePath: Set<ArchivePath>] {
+  package var annumShows: [ArchivePath: Set<ArchivePath>] {
     bracket.annumShows
   }
 
   /// Maps a day-of-leap-year index (1...366) to the set of show IDs that occurred on that day.
-  public var concertDayMap: [Int: Set<ArchivePath>] {
+  package var concertDayMap: [Int: Set<ArchivePath>] {
     bracket.concertDayMap
   }
 
@@ -253,7 +253,7 @@ public struct Lookup: Codable, Sendable {
   ///
   /// - Parameter showID: The stable show identifier.
   /// - Returns: The `Venue` if found, otherwise `nil`.
-  public func venueForShow(showID: ArchivePath) -> Venue? {
+  package func venueForShow(showID: ArchivePath) -> Venue? {
     guard let venueID = venues(showID: showID) else { return nil }
     return venueMap[venueID]
   }
@@ -262,7 +262,7 @@ public struct Lookup: Codable, Sendable {
   ///
   /// - Parameter showID: The stable show identifier.
   /// - Returns: An array of `Artist` values, in the order they are stored for the show.
-  public func artistsForShow(showID: ArchivePath) -> [Artist] {
+  package func artistsForShow(showID: ArchivePath) -> [Artist] {
     artists(showID: showID).compactMap { artistMap[$0] }
   }
 
@@ -350,7 +350,7 @@ public struct Lookup: Codable, Sendable {
   ///
   /// - Parameter count: The number of most-recent shows to return.
   /// - Returns: An array of show IDs ordered from oldest to newest within the requested window.
-  public func recentConcerts(_ count: Int) -> [ArchivePath] {
+  package func recentConcerts(_ count: Int) -> [ArchivePath] {
     bracket.showOrder.suffix(count)
   }
 

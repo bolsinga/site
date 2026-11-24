@@ -7,9 +7,9 @@
 
 import Foundation
 
-public struct FirstSet: Codable, Equatable, Hashable, Sendable {
-  public let rank: Rank
-  public let date: PartialDate
+package struct FirstSet: Codable, Equatable, Hashable, Sendable {
+  package let rank: Rank
+  package let date: PartialDate
 
   public init(rank: Rank, date: PartialDate) {
     self.rank = rank
@@ -22,11 +22,11 @@ public struct FirstSet: Codable, Equatable, Hashable, Sendable {
   /// A date with only some of its parts, like just a year, still counts: `Tracker` orders the less
   /// specific date before the more specific ones, so that show is the first. Only a date with
   /// nothing known can't be first.
-  public func isFirst(on showDate: PartialDate) -> Bool {
+  package func isFirst(on showDate: PartialDate) -> Bool {
     rank != .unknown && !showDate.isUnknown && date == showDate
   }
 
-  public static var empty: FirstSet {
+  package static var empty: FirstSet {
     FirstSet(rank: .unknown, date: PartialDate())
   }
 }

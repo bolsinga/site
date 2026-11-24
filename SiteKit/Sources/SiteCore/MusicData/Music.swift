@@ -8,11 +8,11 @@
 import Foundation
 
 public struct Music: Codable, Sendable {
-  public let albums: [Album]
+  package let albums: [Album]
   public let artists: [Artist]
-  public let relations: [Relation]
+  package let relations: [Relation]
   public let shows: [Show]
-  public let songs: [Song]
+  package let songs: [Song]
   public let timestamp: Date
   public let venues: [Venue]
 

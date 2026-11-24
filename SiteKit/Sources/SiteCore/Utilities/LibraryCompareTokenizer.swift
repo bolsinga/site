@@ -7,7 +7,7 @@
 
 import RegexBuilder
 
-public struct LibraryCompareTokenizer {
+package struct LibraryCompareTokenizer {
   private let removeCommonInitialWordsRegex = Regex {
     Optionally {
       ChoiceOf {

@@ -16,7 +16,7 @@ public struct VenueDigest: Codable, Equatable, Hashable, Identifiable,
   public let venue: Venue  // TODO: This is still public for geocoding.
   public let shows: [ShowDigest]
   public let related: [ArchiveItem]
-  public let rank: RankDigest
+  package let rank: RankDigest
 
   public var name: String { venue.name }
   public var sortname: String? { venue.sortname }

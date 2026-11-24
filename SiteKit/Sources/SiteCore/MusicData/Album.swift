@@ -9,11 +9,11 @@ import Foundation
 
 public struct Album: Codable, Equatable, Identifiable, Sendable {
   public let id: String
-  public let performer: String?
-  public let release: PartialDate?
-  public let songs: [String]
-  public let title: String
-  public let compilation: Bool?
+  package let performer: String?
+  package let release: PartialDate?
+  package let songs: [String]
+  package let title: String
+  package let compilation: Bool?
 
   public init(
     id: String, performer: String? = nil, release: PartialDate? = nil, songs: [String],

@@ -8,7 +8,7 @@
 import Foundation
 
 extension Array where Element == ArchivePath {
-  public func isPathNavigable(_ archivePath: ArchivePath) -> Bool {
+  package func isPathNavigable(_ archivePath: ArchivePath) -> Bool {
     // Drop the last path so that when going back the state is correct. Otherwise the '>' will flash on after animating in.
     return !self.dropLast().contains { $0 == archivePath }
   }

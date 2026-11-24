@@ -14,7 +14,7 @@ extension Logger {
 
 extension Vault {
   /// Uses the same `concerts(on:)` lookup the in-app Today UI uses.
-  public var showsTodaySnapshot: ShowsTodaySnapshot {
+  package var showsTodaySnapshot: ShowsTodaySnapshot {
     get throws {
       Logger.showsTodaySnapshot.log("start")
       defer {

@@ -8,8 +8,8 @@
 import Foundation
 
 extension Annum {
-  public struct FormatStyle: Codable, Equatable, Hashable {
-    public enum Style: Codable, Equatable, Hashable {
+  package struct FormatStyle: Codable, Equatable, Hashable {
+    package enum Style: Codable, Equatable, Hashable {
       case year  // 1989 / "Year Unknown"
       case json  // 1989 / unknown
       case urlPath  // 1989 / other
@@ -22,7 +22,7 @@ extension Annum {
       self.style = style
     }
 
-    public func style(_ style: Style) -> Self {
+    package func style(_ style: Style) -> Self {
       .init(style)
     }
   }
@@ -79,10 +79,10 @@ extension Annum {
 }
 
 extension FormatStyle where Self == Annum.FormatStyle {
-  public static var year: Self { .init(.year) }
-  public static var json: Self { .init(.json) }
-  public static var urlPath: Self { .init(.urlPath) }
-  public static var shared: Self { .init(.shared) }
+  package static var year: Self { .init(.year) }
+  package static var json: Self { .init(.json) }
+  package static var urlPath: Self { .init(.urlPath) }
+  package static var shared: Self { .init(.shared) }
 
   static func annum(style: Annum.FormatStyle.Style = .year) -> Self {
     .init(style)

@@ -69,12 +69,12 @@ extension Int {
     return newDayOfLeapYear
   }
 
-  public var nextDayOfLeapYear: Int {
+  package var nextDayOfLeapYear: Int {
     guard isValidDayOfLeapYear else { return -1 }
     return offsetDayOfLeapYear(by: 1)
   }
 
-  public var previousDayOfLeapYear: Int {
+  package var previousDayOfLeapYear: Int {
     guard isValidDayOfLeapYear else { return -1 }
     return offsetDayOfLeapYear(by: -1)
   }

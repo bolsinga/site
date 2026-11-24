@@ -14,7 +14,7 @@ extension PartialDate {
     return dateComponents.date
   }
 
-  public var isUnknown: Bool {
+  package var isUnknown: Bool {
     if year == nil, month == nil, day == nil {
       return true
     }
@@ -42,7 +42,7 @@ extension PartialDate: Comparable {
     }
   }
 
-  public static func compareWithUnknownsMuted(lhs: PartialDate, rhs: PartialDate) -> Bool {
+  package static func compareWithUnknownsMuted(lhs: PartialDate, rhs: PartialDate) -> Bool {
     // Sort the unknown dates after known dates
     let lhUnknown = lhs.isUnknown
     let rhUnknown = rhs.isUnknown

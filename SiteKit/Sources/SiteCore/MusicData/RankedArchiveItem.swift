@@ -7,10 +7,10 @@
 
 import Foundation
 
-public struct RankedArchiveItem: Hashable, Identifiable, LibraryComparable, Nameable, Rankable {
-  public let id: ArchivePath
-  public let sortname: String?
-  public let name: String
+package struct RankedArchiveItem: Hashable, Identifiable, LibraryComparable, Nameable, Rankable {
+  package let id: ArchivePath
+  package let sortname: String?
+  package let name: String
   private let rank: RankDigest
 
   init(
@@ -22,13 +22,13 @@ public struct RankedArchiveItem: Hashable, Identifiable, LibraryComparable, Name
     self.rank = rank
   }
 
-  public var firstSet: FirstSet { rank.firstSet }
+  package var firstSet: FirstSet { rank.firstSet }
 
-  public var showCountRank: Ranking { rank.showCountRank }
+  package var showCountRank: Ranking { rank.showCountRank }
 
-  public var section: LibrarySection? { rank.section }
+  package var section: LibrarySection? { rank.section }
 
-  public func ranking(for sort: RankingSort) -> Ranking {
+  package func ranking(for sort: RankingSort) -> Ranking {
     switch sort {
     case .alphabetical, .firstSeen:
       Ranking.empty
@@ -47,13 +47,13 @@ public struct RankedArchiveItem: Hashable, Identifiable, LibraryComparable, Name
 }
 
 extension Artist {
-  public func rankedArchiveItem(id: ArchivePath, _ rank: RankDigest) -> RankedArchiveItem {
+  package func rankedArchiveItem(id: ArchivePath, _ rank: RankDigest) -> RankedArchiveItem {
     RankedArchiveItem(id: id, sortname: sortname, name: name, rank: rank)
   }
 }
 
 extension Venue {
-  public func rankedArchiveItem(id: ArchivePath, _ rank: RankDigest) -> RankedArchiveItem {
+  package func rankedArchiveItem(id: ArchivePath, _ rank: RankDigest) -> RankedArchiveItem {
     RankedArchiveItem(id: id, sortname: sortname, name: name, rank: rank)
   }
 }

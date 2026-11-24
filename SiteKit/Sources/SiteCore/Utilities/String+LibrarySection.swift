@@ -8,7 +8,7 @@
 import Foundation
 
 extension String {
-  public var librarySection: LibrarySection {
+  package var librarySection: LibrarySection {
     let pfx = prefix(1)
     if let first = pfx.first {
       if first.isNumber {

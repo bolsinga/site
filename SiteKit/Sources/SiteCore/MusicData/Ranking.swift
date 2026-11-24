@@ -7,20 +7,20 @@
 
 import Foundation
 
-public struct Ranking: Codable, Comparable, Hashable, Sendable {
-  public let rank: Rank
-  public let value: Int
+package struct Ranking: Codable, Comparable, Hashable, Sendable {
+  package let rank: Rank
+  package let value: Int
 
   public init(rank: Rank, value: Int) {
     self.rank = rank
     self.value = value
   }
 
-  public static var empty: Ranking {
+  package static var empty: Ranking {
     Ranking(rank: .unknown, value: 0)
   }
 
-  public static func < (lhs: Ranking, rhs: Ranking) -> Bool {
+  package static func < (lhs: Ranking, rhs: Ranking) -> Bool {
     if lhs.rank == rhs.rank {
       return lhs.value < rhs.value
     }

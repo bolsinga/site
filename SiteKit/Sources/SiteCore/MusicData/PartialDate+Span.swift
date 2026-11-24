@@ -12,7 +12,7 @@ private let spanComponents = Set([
 ])
 
 extension Set<PartialDate> {
-  public var yearSpan: Int {
+  package var yearSpan: Int {
     guard !isEmpty else { return 0 }
     guard count > 1 else { return 1 }
 

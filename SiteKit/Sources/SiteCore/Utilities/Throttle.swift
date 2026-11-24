@@ -12,8 +12,8 @@ extension Logger {
   fileprivate static let throttle = Logger(category: "throttle")
 }
 
-public actor Throttle<T: Sendable> {
-  public enum Control {
+package actor Throttle<T: Sendable> {
+  package enum Control {
     /// Client requires the throttle to be paused
     case pauseEntry
 
@@ -55,7 +55,7 @@ public actor Throttle<T: Sendable> {
     reset()
   }
 
-  public func perform(_ action: @escaping () async throws -> Control) async throws -> T? {
+  package func perform(_ action: @escaping () async throws -> Control) async throws -> T? {
     Logger.throttle.log("start")
     defer {
       Logger.throttle.log("end")

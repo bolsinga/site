@@ -8,17 +8,17 @@
 import Foundation
 
 public struct AnnumDigest: Codable, Identifiable, Sendable {
-  public let annum: Annum
-  public let shows: [ShowDigest]
+  package let annum: Annum
+  package let shows: [ShowDigest]
   private let rank: RankDigest
   /// The number of artists whose first show was in this annum.
-  public let newArtistCount: Int
+  package let newArtistCount: Int
   /// The number of venues whose first show was in this annum.
-  public let newVenueCount: Int
+  package let newVenueCount: Int
   /// The number of artists whose most recent show was in this annum.
-  public let mostRecentArtistCount: Int
+  package let mostRecentArtistCount: Int
   /// The number of venues whose most recent show was in this annum.
-  public let mostRecentVenueCount: Int
+  package let mostRecentVenueCount: Int
 
   public var id: ArchivePath { .year(annum) }
 
@@ -35,15 +35,15 @@ public struct AnnumDigest: Codable, Identifiable, Sendable {
     self.mostRecentVenueCount = mostRecentVenueCount
   }
 
-  public var showCountRank: Ranking {
+  package var showCountRank: Ranking {
     rank.showCountRank
   }
 
-  public var venueCountRank: Ranking {
+  package var venueCountRank: Ranking {
     rank.venueCountRank
   }
 
-  public var artistCountRank: Ranking {
+  package var artistCountRank: Ranking {
     rank.artistCountRank
   }
 }

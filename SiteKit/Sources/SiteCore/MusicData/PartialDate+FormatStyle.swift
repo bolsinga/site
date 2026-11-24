@@ -21,7 +21,7 @@ extension PartialDate {
       self.style = style
     }
 
-    public func style(_ style: Style) -> Self {
+    package func style(_ style: Style) -> Self {
       .init(style)
     }
   }
@@ -80,8 +80,8 @@ extension PartialDate {
 
 extension FormatStyle where Self == PartialDate.FormatStyle {
   public static var compact: Self { .init(.compact) }
-  public static var noYear: Self { .init(.noYear) }
-  public static var yearOnly: Self { .init(.yearOnly) }
+  package static var noYear: Self { .init(.noYear) }
+  package static var yearOnly: Self { .init(.yearOnly) }
 
   static func partialDate(style: PartialDate.FormatStyle.Style = .compact) -> Self {
     .init(style)

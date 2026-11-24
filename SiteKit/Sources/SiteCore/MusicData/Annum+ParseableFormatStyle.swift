@@ -8,7 +8,7 @@
 import Foundation
 
 extension Annum.FormatStyle {
-  public struct ParseStrategy: Foundation.ParseStrategy {
+  package struct ParseStrategy: Foundation.ParseStrategy {
     enum ValidationError: Error {
       case invalidCharacters
       case emptyInput
@@ -19,7 +19,7 @@ extension Annum.FormatStyle {
 
     public init() {}
 
-    public func parse(_ value: String) throws -> Annum {
+    package func parse(_ value: String) throws -> Annum {
       let trimmedValue = value.trimmingCharacters(in: .whitespaces)
 
       guard !trimmedValue.isEmpty else { throw ValidationError.emptyInput }
@@ -42,7 +42,7 @@ extension Annum.FormatStyle {
 }
 
 extension Annum.FormatStyle: ParseableFormatStyle {
-  public var parseStrategy: Annum.FormatStyle.ParseStrategy {
+  package var parseStrategy: Annum.FormatStyle.ParseStrategy {
     .init()
   }
 }
@@ -59,5 +59,5 @@ extension Annum {
 }
 
 extension ParseableFormatStyle where Self == Annum.FormatStyle {
-  public static var annum: Self { .init() }
+  package static var annum: Self { .init() }
 }

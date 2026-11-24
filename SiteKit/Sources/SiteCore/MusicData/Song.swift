@@ -8,15 +8,15 @@
 import Foundation
 
 public struct Song: Codable, Identifiable, Sendable {
-  public let artist: String
-  public let digitized: Bool
-  public let genre: String?
+  package let artist: String
+  package let digitized: Bool
+  package let genre: String?
   public let id: String
-  public let lastPlayed: Date?
-  public let playCount: Int?
-  public let release: PartialDate?
-  public let title: String
-  public let track: Int?
+  package let lastPlayed: Date?
+  package let playCount: Int?
+  package let release: PartialDate?
+  package let title: String
+  package let track: Int?
 
   public init(
     artist: String, digitized: Bool, genre: String? = nil, id: String, lastPlayed: Date? = nil,
