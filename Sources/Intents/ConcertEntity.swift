@@ -22,7 +22,7 @@ struct ConcertEntity: AppEntity {
 
   static let defaultQuery = ConcertEntityQuery()
 
-  var id: ArchivePath
+  var id: EntityPath
   var title: String
   var subtitle: String
 
@@ -76,7 +76,7 @@ struct ConcertEntity: AppEntity {
 
   init(digest: ShowDigest, url: URL) {
     // The plain values first, as setting a property wrapper uses self.
-    self.id = digest.id
+    self.id = EntityPath(digest.id)
     self.title = digest.performers.map { $0.name }.formatted(.list(type: .and, width: .narrow))
     self.subtitle = "\(digest.venue) - \(digest.date.formatted())"
     self.venueID = digest.venueID

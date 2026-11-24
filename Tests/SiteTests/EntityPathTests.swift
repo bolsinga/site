@@ -1,5 +1,5 @@
 //
-//  ArchivePathEntityIdentifierTests.swift
+//  EntityPathTests.swift
 //  SiteApp
 //
 //  Created by Greg Bolsinga on 10/25/26.
@@ -11,7 +11,7 @@ import Testing
 @testable import SiteApp
 @testable import SiteCore
 
-struct ArchivePathEntityIdentifierTests {
+struct EntityPathTests {
   @Test(arguments: [
     ("ar0", ArchivePath.artist("ar0")),
     ("ar1234", ArchivePath.artist("ar1234")),
@@ -20,12 +20,12 @@ struct ArchivePathEntityIdentifierTests {
     ("sh0", ArchivePath.show("sh0")),
   ])
   func roundTripsTheStringID(string: String, path: ArchivePath) {
-    #expect(path.entityIdentifierString == string)
-    #expect(ArchivePath.entityIdentifier(for: string) == path)
+    #expect(EntityPath(path).entityIdentifierString == string)
+    #expect(EntityPath.entityIdentifier(for: string)?.path == path)
   }
 
   @Test func unknownPrefixIsNotAnIdentifier() {
-    #expect(ArchivePath.entityIdentifier(for: "x0") == nil)
-    #expect(ArchivePath.entityIdentifier(for: "") == nil)
+    #expect(EntityPath.entityIdentifier(for: "x0") == nil)
+    #expect(EntityPath.entityIdentifier(for: "") == nil)
   }
 }

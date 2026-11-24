@@ -21,7 +21,7 @@ struct VenueEntity: AppEntity {
 
   static let defaultQuery = VenueEntityQuery()
 
-  var id: ArchivePath
+  var id: EntityPath
   var address: String
 
   @Property var url: URL
@@ -45,7 +45,7 @@ struct VenueEntity: AppEntity {
   // The concerts are linked entities, made only when asked for.
   @DeferredProperty(title: "Concerts")
   var concerts: [ConcertEntity] {
-    get async { await EntityVault.vault()?.concertEntities(venueID: id) ?? [] }
+    get async { await EntityVault.vault()?.concertEntities(venueID: id.path) ?? [] }
   }
 
   var displayRepresentation: DisplayRepresentation {
@@ -54,7 +54,7 @@ struct VenueEntity: AppEntity {
   }
 
   init(digest: VenueDigest, url: URL) {
-    self.id = digest.id
+    self.id = EntityPath(digest.id)
     let location = digest.location
     self.address = location.formatted(.oneLineNoURL)
 

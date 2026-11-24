@@ -20,7 +20,7 @@ struct ConcertEntityQuery: EntityQuery {
     Logger.concertQuery.log("Identifiers: \(identifiers)")
 
     let vault = try await provider.vault()
-    return identifiers.compactMap { vault.concertEntity(for: $0) }
+    return identifiers.compactMap { vault.concertEntity(for: $0.path) }
   }
 
   func suggestedEntities() async throws -> [ConcertEntity] {
@@ -28,7 +28,7 @@ struct ConcertEntityQuery: EntityQuery {
 
     let ids = try await provider.vault().concertIDs(on: Date.now.dayOfLeapYear, orRecentCount: 5)
 
-    return try await entities(for: ids.reversed())
+    return try await entities(for: ids.reversed().map(EntityPath.init))
   }
 
   @Dependency
@@ -62,13 +62,13 @@ extension ConcertEntityQuery: EntityPropertyQuery {
   static let properties = QueryProperties {
     Property(\ConcertEntity.$venue) {
       EqualToComparator { venue in
-        ConcertFilter { $0.venueID == venue?.id }
+        ConcertFilter { $0.venueID == venue?.id.path }
       }
     }
 
     Property(\ConcertEntity.$artists) {
       ContainsComparator { artist in
-        ConcertFilter { $0.artistIDs.contains(artist.id) }
+        ConcertFilter { $0.artistIDs.contains(artist.id.path) }
       }
     }
 

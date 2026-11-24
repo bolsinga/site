@@ -22,7 +22,7 @@ struct ArtistEntityQuery: EntityQuery {
 
     let vault = try await provider.vault()
     return identifiers.reduce(into: [ArtistEntity]()) { partialResult, id in
-      guard let entity = vault.artistEntity(for: id) else { return }
+      guard let entity = vault.artistEntity(for: id.path) else { return }
       partialResult.append(entity)
     }
   }
@@ -32,7 +32,7 @@ struct ArtistEntityQuery: EntityQuery {
 
     let ids = try await provider.vault().artistIDs(on: Date.now.dayOfLeapYear, orRecentCount: 5)
 
-    return try await entities(for: ids.reversed())
+    return try await entities(for: ids.reversed().map(EntityPath.init))
   }
 
   @Dependency

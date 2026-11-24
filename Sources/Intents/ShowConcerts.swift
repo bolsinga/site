@@ -88,7 +88,7 @@ struct ShowConcerts: AppIntent {
     return concertResult(
       vault.concertEntities(
         matching: ConcertSearch(
-          artistID: artist?.id, venueID: venue?.id, cityID: city?.id, date: date)))
+          artistID: artist?.id.path, venueID: venue?.id.path, cityID: city?.id, date: date)))
   }
 }
 

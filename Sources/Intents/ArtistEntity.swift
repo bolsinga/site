@@ -24,7 +24,7 @@ struct ArtistEntity: AppEntity {
 
   static let defaultQuery = ArtistEntityQuery()
 
-  var id: ArchivePath
+  var id: EntityPath
 
   @Property var url: URL
   @Property var name: String
@@ -41,7 +41,7 @@ struct ArtistEntity: AppEntity {
   // The concerts are linked entities, made only when asked for.
   @DeferredProperty(title: "Concerts")
   var concerts: [ConcertEntity] {
-    get async { await EntityVault.vault()?.concertEntities(artistID: id) ?? [] }
+    get async { await EntityVault.vault()?.concertEntities(artistID: id.path) ?? [] }
   }
 
   var displayRepresentation: DisplayRepresentation {
@@ -50,7 +50,7 @@ struct ArtistEntity: AppEntity {
   }
 
   init(digest: ArtistDigest, url: URL) {
-    self.id = digest.id
+    self.id = EntityPath(digest.id)
     self.url = url
     self.name = digest.name
     self.showCount = digest.shows.count

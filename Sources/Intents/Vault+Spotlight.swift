@@ -70,7 +70,7 @@
     /// Indexes these artists again, removing ones the vault no longer has.
     func reindexArtistsForSpotlight(ids: [ArtistEntity.ID]) async throws {
       let index = CSSearchableIndex(name: spotlightIndexName)
-      let entities = ids.compactMap { artistEntity(for: $0) }
+      let entities = ids.compactMap { artistEntity(for: $0.path) }
       try await index.indexAppEntities(entities)
       let found = Set(entities.map(\.id))
       let missing = ids.filter { !found.contains($0) }
@@ -84,7 +84,7 @@
     /// Indexes these venues again, removing ones the vault no longer has.
     func reindexVenuesForSpotlight(ids: [VenueEntity.ID]) async throws {
       let index = CSSearchableIndex(name: spotlightIndexName)
-      let entities = ids.compactMap { venueEntity(for: $0) }
+      let entities = ids.compactMap { venueEntity(for: $0.path) }
       try await index.indexAppEntities(entities)
       let found = Set(entities.map(\.id))
       let missing = ids.filter { !found.contains($0) }
@@ -98,7 +98,7 @@
     /// Indexes these concerts again, removing ones the vault no longer has.
     func reindexConcertsForSpotlight(ids: [ConcertEntity.ID]) async throws {
       let index = CSSearchableIndex(name: spotlightIndexName)
-      let entities = ids.compactMap { concertEntity(for: $0) }
+      let entities = ids.compactMap { concertEntity(for: $0.path) }
       try await index.indexAppEntities(entities)
       let found = Set(entities.map(\.id))
       let missing = ids.filter { !found.contains($0) }

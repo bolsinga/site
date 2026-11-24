@@ -19,7 +19,7 @@ extension Vault {
     return VenueEntity(digest: digest, url: url)
   }
 
-  func concertEntity(for id: ConcertEntity.ID) -> ConcertEntity? {
+  func concertEntity(for id: ArchivePath) -> ConcertEntity? {
     guard let digest = digest(show: id), let url = url(for: digest.id) else { return nil }
     return ConcertEntity(digest: digest, url: url)
   }
@@ -41,12 +41,12 @@ extension Vault {
     showIDs().compactMap { concertEntity(for: $0) }
   }
 
-  func artistEntity(for id: ArtistEntity.ID) -> ArtistEntity? {
+  func artistEntity(for id: ArchivePath) -> ArtistEntity? {
     guard let digest = digest(artist: id) else { return nil }
     return entity(for: digest)
   }
 
-  func venueEntity(for id: VenueEntity.ID) -> VenueEntity? {
+  func venueEntity(for id: ArchivePath) -> VenueEntity? {
     guard let digest = digest(venue: id) else { return nil }
     return entity(for: digest)
   }
