@@ -1,5 +1,5 @@
 //
-//  AnnumDigest+NSUserActivity.swift
+//  AnnumDigest+RestorableActivity.swift
 //
 //
 //  Created by Greg Bolsinga on 6/21/23.

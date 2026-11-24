@@ -1,3 +1,10 @@
+//
+//  VenueDigest+RestorableActivity.swift
+//
+//
+//  Created by Greg Bolsinga on 6/21/23.
+//
+
 import AppIntents
 import Foundation
 import SiteCore
