@@ -54,8 +54,7 @@ extension Venue {
 extension FormatStyle where Self == Venue.FormatStyle {
   public static var oneLine: Self { .init(.oneLine) }
 
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func Venue(style: Venue.FormatStyle.Style = .oneLine) -> Self {
+  static func venue(style: Venue.FormatStyle.Style = .oneLine) -> Self {
     .init(style)
   }
 }

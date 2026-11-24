@@ -295,8 +295,7 @@ struct ClusterMap<
         return fadingIn.remove(ObjectIdentifier(annotation)) != nil
       }
       guard !itemViews.isEmpty else { return }
-      // swift-format-ignore: ReplaceForEachWithForLoop
-      itemViews.forEach { $0.opacity = 0.0 }
+      for view in itemViews { view.opacity = 0.0 }
       fade(itemViews, to: 1.0, duration: Self.itemFadeDuration)
     }
 
@@ -918,17 +917,15 @@ extension MKAnnotationView {
   completion: (@MainActor () -> Void)? = nil
 ) {
   #if canImport(UIKit)
-    // swift-format-ignore: OnlyOneTrailingClosureArgument
-    // swift-format-ignore: ReplaceForEachWithForLoop
     UIView.animate(
-      withDuration: duration, animations: { views.forEach { $0.opacity = opacity } }
-    ) { _ in completion?() }
+      withDuration: duration,
+      animations: { for view in views { view.opacity = opacity } },
+      completion: { _ in completion?() })
   #else
     NSAnimationContext.runAnimationGroup(
       { context in
         context.duration = duration
-        // swift-format-ignore: ReplaceForEachWithForLoop
-        views.forEach { $0.animator().alphaValue = opacity }
+        for view in views { view.animator().alphaValue = opacity }
       }, completionHandler: { MainActor.assumeIsolated { completion?() } })
   #endif
 }
