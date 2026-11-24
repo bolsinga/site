@@ -24,7 +24,7 @@ extension VenuePick {
     switch self {
     case .place(let identifier, _, _): .identifier(identifier)
     case .coordinate(let latitude, let longitude):
-      .coordinate(CLLocationCoordinate2D(latitude: latitude, longitude: longitude))
+      .coordinate(Placemark.Coordinate(latitude: latitude, longitude: longitude))
     case .noPlace: nil
     }
   }

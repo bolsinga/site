@@ -12,42 +12,33 @@ private enum PlacemarkError: Error {
   case noIdentifier
 }
 
-private enum Keys: String, CodingKey {
-  case latitude
-  case longitude
-}
-
-// swift-format-ignore: AvoidRetroactiveConformances
-extension CLLocationCoordinate2D: @retroactive Decodable {
-  public init(from decoder: any Decoder) throws {
-    let values = try decoder.container(keyedBy: Keys.self)
-    let latitude = try values.decode(Double.self, forKey: .latitude)
-    let longitude = try values.decode(Double.self, forKey: .longitude)
-    self.init(latitude: latitude, longitude: longitude)
-  }
-}
-
-// swift-format-ignore: AvoidRetroactiveConformances
-extension CLLocationCoordinate2D: @retroactive Encodable {
-  public func encode(to encoder: any Encoder) throws {
-    var container = encoder.container(keyedBy: Keys.self)
-    try container.encode(latitude, forKey: .latitude)
-    try container.encode(longitude, forKey: .longitude)
-  }
-}
-
 public enum Placemark: Codable, Sendable {
+  /// A point on the map as it is saved: its latitude and longitude.
+  public struct Coordinate: Codable, Sendable {
+    public let latitude: Double
+    public let longitude: Double
+
+    public init(latitude: Double, longitude: Double) {
+      self.latitude = latitude
+      self.longitude = longitude
+    }
+
+    init(_ coordinate: CLLocationCoordinate2D) {
+      self.init(latitude: coordinate.latitude, longitude: coordinate.longitude)
+    }
+  }
+
   /// Where Maps found the address, with the address it gave.
   package static func found(_ item: MKMapItem) -> Placemark {
-    .coordinate(item.location.coordinate, maps: MapsAddress(item))
+    .coordinate(Coordinate(item.location.coordinate), maps: MapsAddress(item))
   }
 
   /// Where an address is; the address Maps gave is none in places cached before it was kept as
   /// it is now.
-  case coordinate(CLLocationCoordinate2D, maps: MapsAddress? = nil)
+  case coordinate(Coordinate, maps: MapsAddress? = nil)
   case identifier(String)
   /// A place in Maps with where it is, so showing it needs no lookup.
-  case place(identifier: String, coordinate: CLLocationCoordinate2D, maps: MapsAddress? = nil)
+  case place(identifier: String, coordinate: Coordinate, maps: MapsAddress? = nil)
 
   /// The address Maps gave, if it was kept.
   package var address: MapsAddress? {
