@@ -168,8 +168,7 @@ struct ArchiveNavigationTests {
     #expect(activity.matches(category: category) || !path.isEmpty)
     #expect(activity.matches(path: ArchivePath.artist("id")) || path.isEmpty)
 
-    // swift-format-ignore: ReplaceForEachWithForLoop
-    ArchiveCategory.allCases.filter { $0 != category }.forEach { categoryCase in
+    for categoryCase in ArchiveCategory.allCases where categoryCase != category {
       #expect(!activity.matches(category: categoryCase))
     }
   }
@@ -185,8 +184,7 @@ struct ArchiveNavigationTests {
     #expect(activity.matches(category: category))
     #expect(!activity.matches(path: ArchivePath.artist("id")))
 
-    // swift-format-ignore: ReplaceForEachWithForLoop
-    ArchiveCategory.allCases.filter { $0 != category }.forEach { categoryCase in
+    for categoryCase in ArchiveCategory.allCases where categoryCase != category {
       #expect(!activity.matches(category: categoryCase))
     }
   }

@@ -25,8 +25,7 @@ where V: Hashable, V: Comparable {
   // T : Ordinal rank (1, 2, 3 etc)
   let itemRankMap: [T: R] = itemsOrdered.reduce(into: [:]) {
     dictionary, itemRankings in
-    // swift-format-ignore: ReplaceForEachWithForLoop
-    itemRankings.0.forEach { item in
+    for item in itemRankings.0 {
       dictionary[item] = rankBuilder(.rank(rank), itemRankings.1)
     }
     rank += 1

@@ -13,8 +13,7 @@ extension Logger {
 }
 
 private let expirationOffset = 60.0 * 60.0 * 24.0 * 30.0 * 6.0  // Six months
-// swift-format-ignore: AlwaysUseLowerCamelCase
-private let ExpirationStaggerDuration = 60.0 * 60.0 * 6.0  // Quarter day
+private let expirationStaggerDuration = 60.0 * 60.0 * 6.0  // Quarter day
 
 /// Bump when `AtlasCache.Value` changes so that an older saved file is not read as it was.
 public let atlasCacheVersion = 1
@@ -71,7 +70,7 @@ public struct AtlasCache<T: AtlasGeocodable>: Sendable {
       placemark: value, expirationDate: now() + expirationOffset + staggerOffset, source: source)
 
     // This allows batch geocodes to be "staggered" in their expiration so they do not run all the time once the day comes.
-    staggerOffset += ExpirationStaggerDuration
+    staggerOffset += expirationStaggerDuration
 
     do {
       try save()

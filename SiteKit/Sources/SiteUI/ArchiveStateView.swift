@@ -111,7 +111,6 @@ struct ArchiveStateView: View {
   private func exists(_ path: ArchivePath) -> Bool { model.vault.contains(path) }
 
   var body: some View {
-    // swift-format-ignore: OnlyOneTrailingClosureArgument
     archiveBody
       // Pages restored from before the archive changed may not be in the new one.
       .onChange(of: ObjectIdentifier(model), initial: true) {
@@ -138,10 +137,9 @@ struct ArchiveStateView: View {
       }
       .advertiseUserActivity(
         for: archiveNavigation.activity, urlForCategory: { model.vault.url(for: $0) },
-        categorySort: categorySort
-      ) {
-        appHooks.restorableActivity(model.vault, $0)
-      }
+        categorySort: categorySort,
+        activityForPath: { appHooks.restorableActivity(model.vault, $0) }
+      )
   }
 }
 

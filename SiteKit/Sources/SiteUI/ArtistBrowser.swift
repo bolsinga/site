@@ -19,18 +19,18 @@ struct ArtistBrowser: View {
   let didShow: (ArchivePath) -> Void
 
   var body: some View {
-    // swift-format-ignore: OnlyOneTrailingClosureArgument
     PagedBrowser(
       item: id, neighbors: { artistIDs.wrappingNeighbors(of: $0) }, digest: digest, url: url,
-      title: { _, digest in digest?.name ?? "" }, didShow: didShow
-    ) { _, digest, neighbors in
-      ShowsMapHeader(
-        shows: digest?.shows ?? [], title: digest?.name ?? "", animatesChanges: true,
-        neighborShows: neighbors.map(\.shows))
-    } page: { digest, bottomContentMargin in
-      ArtistDetail(
-        digest: digest, isPathNavigable: isPathNavigable,
-        bottomContentMargin: bottomContentMargin)
-    }
+      title: { _, digest in digest?.name ?? "" }, didShow: didShow,
+      header: { _, digest, neighbors in
+        ShowsMapHeader(
+          shows: digest?.shows ?? [], title: digest?.name ?? "", animatesChanges: true,
+          neighborShows: neighbors.map(\.shows))
+      },
+      page: { digest, bottomContentMargin in
+        ArtistDetail(
+          digest: digest, isPathNavigable: isPathNavigable,
+          bottomContentMargin: bottomContentMargin)
+      })
   }
 }
