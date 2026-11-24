@@ -161,7 +161,9 @@ build with that file signs with the developer's team.
 - **Simulator by id.** `.github/actions/test-package-simulator` takes the first simulator
   `-showdestinations` offers for the package scheme whose name matches its `device` input
   (`iPhone`, `Apple TV`), as runner simulator names differ and an iPad was chosen once without
-  the filter. The steps have a 20 minute timeout, so a simulator that doesn't start fails the job.
+  the filter. The action boots that simulator once and runs both packages on it, as each launch of
+  a cold simulator is slow. The steps have a 20 minute timeout, so a simulator that doesn't start
+  fails the job.
 - **Simulators and generic destinations.** They need no device or signing, so any runner can
   build them.
 - **Signing off for tests only.** The test run must not need a team, which CI doesn't have.

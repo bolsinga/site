@@ -19,10 +19,12 @@ runs:
         DEVICE: ${{ inputs.device }}
       run: |
         set -euo pipefail
+        cd "$GITHUB_WORKSPACE/SiteKit"
+        id=$(xcodebuild -scheme SiteKit-Package -showdestinations 2>/dev/null \
+          | grep "platform:$PLATFORM" | grep -v placeholder | grep -E "name:$DEVICE" \
+          | grep -m1 -oE 'id:[0-9A-F-]{36}' | cut -d: -f2)
+        xcrun simctl bootstatus "$id" -b
         for package in Shared SiteKit; do
           cd "$GITHUB_WORKSPACE/$package"
-          id=$(xcodebuild -scheme "$package-Package" -showdestinations 2>/dev/null \
-            | grep "platform:$PLATFORM" | grep -v placeholder | grep -E "name:$DEVICE" \
-            | grep -m1 -oE 'id:[0-9A-F-]{36}' | cut -d: -f2)
           xcodebuild test -scheme "$package-Package" -skipPackagePluginValidation -destination "id=$id" CODE_SIGNING_ALLOWED=NO
         done
