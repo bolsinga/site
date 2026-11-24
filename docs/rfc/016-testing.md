@@ -108,7 +108,8 @@ preview of a view in the package finds it, and it is in a release build too, at 
 
 - `xcodebuild test` runs the `SiteApp` scheme on `platform=macOS`, and `swift test --package-path
   Shared` and `swift test --package-path SiteKit` run the package tests. The iOS and tvOS simulator
-  destinations only build; no test runs there. This matches CLAUDE.md.
+  destinations only build; no test runs there, as a simulator costs minutes in CI for seconds of
+  tests ([RFC 015](015-ci-and-release.md)). This matches CLAUDE.md.
 - Nothing runs on a physical device. Locally, tests run on My Mac or a simulator.
 - The app that hosts `Tests` is launched in the quiet mode. The scheme's test action sets
   `SITE_QUIET_HOST=1` in its own environment, and `LaunchMode` reads it. In that mode `SiteAppApp`
@@ -139,8 +140,3 @@ preview of a view in the package finds it, and it is in a release build too, at 
   and are not a substitute for deterministic tests.
 - **A hostless target for `Shared`.** Its tests run without launching the app, so they don't
   start the app's own work or depend on the website being reachable.
-
-## Open questions
-
-- **Simulator tests.** CI builds for iOS and tvOS but does not test there. See [#1743](https://github.com/bolsinga/site/issues/1743).
-- **Test plan.** No `.xctestplan` was found; whether one is wanted is not decided. See [#1743](https://github.com/bolsinga/site/issues/1743).

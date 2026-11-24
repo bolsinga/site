@@ -154,7 +154,9 @@ build with that file signs with the developer's team.
 ## Rationale
 
 - **Build all three, test one.** The tvOS and iOS builds catch API gaps and unguarded code. The
-  tests are about data and logic, and one platform covers them.
+  tests are about data and logic, and one platform covers them. The package tests were tried on
+  the iOS and tvOS simulators and passed, but booting a simulator and building each package for it
+  took 5 to 15 minutes against seconds of tests, so they stay on macOS.
 - **Simulators and generic destinations.** They need no device or signing, so any runner can
   build them.
 - **Signing off for tests only.** The test run must not need a team, which CI doesn't have.
@@ -177,7 +179,7 @@ build with that file signs with the developer's team.
 
 - **Automated version bump.** The versions are bumped by hand. See [#1785](https://github.com/bolsinga/site/issues/1785).
 - **Signed builds from CI.** Signed builds are made locally, and CI has no secrets. See [#1786](https://github.com/bolsinga/site/issues/1786).
-- **Test coverage.** The tests don't run on iOS or tvOS in CI, and no test plan is used. See [#1743](https://github.com/bolsinga/site/issues/1743).
+- **Test coverage.** The tests don't run on iOS or tvOS in CI, and no test plan is used, as one test target in one environment gains nothing from it.
 - **Lint.** `swift-format lint` with the default configuration reports 28 errors on the code
   base as it is, in rules the formatter doesn't fix. Whether CI should run it, with those fixed or
   a configuration that turns them off, is open. See [#1742](https://github.com/bolsinga/site/issues/1742).
