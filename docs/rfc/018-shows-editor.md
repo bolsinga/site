@@ -193,7 +193,7 @@ The facts that shape this design:
 
 - Changing or deleting a show, artist or venue once saved. Fixes go through the file until there
   is a need for more.
-- Albums, songs, and anything else from iTunes.
+- Albums, songs, and anything else from iTunes, for now. See [Later: iTunes in the app](#later-itunes-in-the-app).
 - The diary. web_generator keeps reading `comments.txt` and `statics.txt`.
 - Editing relations. They are written back as read.
 - Generating or uploading the website. web_generator and the rsync step stay as they are.
@@ -224,6 +224,18 @@ its URL when it goes from albums only to albums and shows. The cost, accepted, i
 new iTunes artist stops web_generator until it is added in the app with **New Artist** (rule 16).
 web_generator does not make an ID for it and leave it to be copied back later, because then two
 places would make `ar` IDs.
+
+## Later: iTunes in the app
+
+Once this is working, the app will read the iTunes data itself. It can then find artists that are
+in iTunes but not in the shows file, and give them new `ar` IDs on its own, with the rules for IDs
+(rules 9 and 10) and the checks (rule 11) unchanged. That removes the cost above: web_generator no
+longer stops for a new iTunes artist, because the shows file already has it, and **New Artist** is
+left for artists that are typed in by hand.
+
+Rule 2 is what makes this possible. The app already owns every artist ID, so adding iTunes artists
+is one more way the app makes IDs, not a second owner. That later change gets its own RFC, which
+also says whether albums and songs move to the app or stay with web_generator.
 
 ## Open questions
 
