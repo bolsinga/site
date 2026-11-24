@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Shared
 import SiteCore
 
 enum ArchiveActivity: Equatable {

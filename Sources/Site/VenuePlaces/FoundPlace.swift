@@ -7,7 +7,6 @@
 
 import CoreLocation
 import MapKit
-import Shared
 import SiteCore
 
 /// A place in Maps found by a batch request, kept as values that can be saved and sent.

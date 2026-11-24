@@ -6,7 +6,6 @@
 //
 
 #if os(iOS)
-  import Shared
   import UIKit
   import SiteCore
 

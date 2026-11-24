@@ -1,7 +1,7 @@
 # RFC 010: Today and the day of the leap year
 
-Status: Accepted · Updated: 2026-11-23 · Code: `Shared/Sources/Shared/Utilities/Date+DayOfLeapYear.swift`,
-`Shared/Sources/Shared/DayOfLeapYear+Title.swift`, `Shared/Sources/Shared/NoShowsMessage.swift`,
+Status: Accepted · Updated: 2026-11-23 · Code: `SiteKit/Sources/SiteCore/Utilities/Date+DayOfLeapYear.swift`,
+`SiteKit/Sources/SiteCore/DayOfLeapYear+Title.swift`, `SiteKit/Sources/SiteCore/NoShowsMessage.swift`,
 `SiteKit/Sources/SiteCore/VaultModel.swift`, `SiteKit/Sources/SiteUI` (`ArchiveTabView`, `ArchiveTabState`,
 `TabSelection`, `ArchiveStateView`, `DayBrowser`, `DayList`, `DaySummary`)
 

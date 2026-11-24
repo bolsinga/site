@@ -6,7 +6,6 @@
 //
 
 #if !os(tvOS)
-  import Shared
   import os
 
   extension Logger {

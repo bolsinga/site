@@ -1,6 +1,6 @@
 # RFC 006: Precomputed music data
 
-Status: Accepted · Updated: 2026-11-21 · Code: `Shared/Sources/Shared/MusicData` (`Bracket`,
+Status: Accepted · Updated: 2026-11-21 · Code: `SiteKit/Sources/SiteCore/MusicData` (`Bracket`,
 `Tracker`, `Music`, `Lookup`, `Vault`, `Ranking+Compute`, `RankDigest`)
 
 ## Summary

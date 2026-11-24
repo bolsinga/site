@@ -5,7 +5,8 @@
 //  Created by Greg Bolsinga on 10/16/26.
 //
 
-import Shared
+import SiteCore
+import SiteUI
 import SwiftUI
 import WidgetKit
 

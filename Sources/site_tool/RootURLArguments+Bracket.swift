@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Shared
+import SiteCore
 
 extension RootURLArguments {
   func bracket(artistsWithShowsOnly: Bool = true) async throws -> Bracket {

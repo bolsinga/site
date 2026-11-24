@@ -3,7 +3,6 @@
 //  SiteApp
 //
 
-import Shared
 import SiteCore
 import Synchronization
 

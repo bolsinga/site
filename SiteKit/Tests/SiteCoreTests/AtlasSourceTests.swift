@@ -6,10 +6,9 @@
 //
 
 import Foundation
-import SharedTestSupport
+import SiteTestSupport
 import Testing
 
-@testable import Shared
 @testable import SiteCore
 
 /// Geocodes to a fixed place, from a source that can change.

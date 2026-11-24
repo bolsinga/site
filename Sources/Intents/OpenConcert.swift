@@ -7,7 +7,6 @@
 
 import AppIntents
 import Foundation
-import Shared
 import SiteCore
 
 struct OpenConcert: OpenIntent, URLRepresentableIntent {

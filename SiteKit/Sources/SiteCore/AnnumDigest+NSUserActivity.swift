@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Shared
 
 extension AnnumDigest: ArchivePathUserActivity {
   public func updateActivity(_ userActivity: NSUserActivity, url: URL?) {

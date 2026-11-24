@@ -5,7 +5,7 @@
 //  Created by Greg Bolsinga on 6/7/24.
 //
 
-import Shared
+import SiteCore
 import SwiftUI
 
 extension Ranking {

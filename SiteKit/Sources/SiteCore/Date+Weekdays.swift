@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Shared
 
 // weekday as int: (weekday, int) as Date : count
 private var weekdayAbbreviations: [Int: (Date, Int)] {

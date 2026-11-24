@@ -3,7 +3,6 @@
 //  site
 //
 
-import Shared
 import SiteCore
 
 extension ArchiveCategory {

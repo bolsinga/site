@@ -8,7 +8,6 @@
 import CoreLocation
 import Testing
 
-@testable import Shared
 @testable import SiteApp
 @testable import SiteCore
 

@@ -59,6 +59,16 @@
         }
       }
     },
+    "%@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ %2$@"
+          }
+        }
+      }
+    },
     "%@ of %lld" : {
       "localizations" : {
         "en" : {
@@ -169,6 +179,24 @@
     "Filter Nearby" : {
 
     },
+    "First and Most Recent Show" : {
+
+    },
+    "First and most recent time at %@" : {
+
+    },
+    "First and most recent time seeing %@" : {
+
+    },
+    "First Show" : {
+
+    },
+    "First time at %@" : {
+
+    },
+    "First time seeing %@" : {
+
+    },
     "From" : {
 
     },
@@ -211,13 +239,28 @@
     "Months with %@" : {
 
     },
+    "Most Recent Show" : {
+
+    },
+    "Most recent time at %@" : {
+
+    },
+    "Most recent time seeing %@" : {
+
+    },
     "Most Shows During %@" : {
+
+    },
+    "Most Shows In %@" : {
 
     },
     "Most Shows On %@" : {
 
     },
     "Multiple Months with Most Shows" : {
+
+    },
+    "Multiple States with Most Shows" : {
 
     },
     "Multiple Weekdays with Most Shows" : {
@@ -293,6 +336,9 @@
 
     },
     "Sort By Venue Count" : {
+
+    },
+    "State" : {
 
     },
     "States" : {

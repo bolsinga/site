@@ -4,10 +4,9 @@
 //
 
 import Foundation
-import SharedTestSupport
+import SiteTestSupport
 import Testing
 
-@testable import Shared
 @testable import SiteCore
 @testable import SiteUI
 

@@ -5,7 +5,7 @@
 //  Created by Greg Bolsinga on 10/27/26.
 //
 
-import Shared
+import SiteCore
 import Synchronization
 
 /// The vault, for the properties of an entity that are made when asked for. `@AppDependency` can

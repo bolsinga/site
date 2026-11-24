@@ -1,27 +1,164 @@
 {
-  "sourceLanguage": "en",
-  "strings": {
-    "#%@": {
-      "comment": "rank.hash"
+  "sourceLanguage" : "en",
+  "strings" : {
+    "#%@" : {
+      "comment" : "rank.hash"
     },
-    "%@ Count: %@": {
-      "comment": "ranking.rankAndCount",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "new",
-            "value": "%1$@ Count: %2$@"
+    "%@ @ %@" : {
+      "comment" : "artistAndVenue.no.venue",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ @ %2$@"
           }
         }
       }
     },
-    "%@.": {
-      "comment": "rank.dotted"
+    "%@ @ %@ : %@" : {
+      "comment" : "full.venue",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ @ %2$@ : %3$@"
+          }
+        }
+      }
     },
-    "Numeric": {},
-    "Punctuation": {},
-    "Rank Unknown": {},
-    "See Shows From This Year": {}
+    "%@ Count: %@" : {
+      "comment" : "ranking.rankAndCount",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ Count: %2$@"
+          }
+        }
+      }
+    },
+    "%@, %@" : {
+      "comment" : "headlinerAndVenue.no.venue",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@, %2$@"
+          }
+        }
+      }
+    },
+    "%@." : {
+      "comment" : "rank.dotted"
+    },
+    "%@’s" : {
+      "comment" : "twoDigits"
+    },
+    "%@s" : {
+      "comment" : "defaultDigits"
+    },
+    "Artists" : {
+
+    },
+    "Check again tomorrow." : {
+
+    },
+    "Date Unknown" : {
+
+    },
+    "Decade Unknown" : {
+
+    },
+    "Display Shows On This Date" : {
+
+    },
+    "Invalid Token: %@." : {
+
+    },
+    "No Shows" : {
+
+    },
+    "No Shows Today" : {
+
+    },
+    "Numeric" : {
+
+    },
+    "On Date: %@" : {
+
+    },
+    "Punctuation" : {
+
+    },
+    "Rank Unknown" : {
+
+    },
+    "Search" : {
+
+    },
+    "See Shows From This Year" : {
+
+    },
+    "Settings" : {
+
+    },
+    "Show All Shows" : {
+
+    },
+    "Show Artists" : {
+
+    },
+    "Show Venues" : {
+
+    },
+    "Shows" : {
+
+    },
+    "Shows from %@" : {
+
+    },
+    "Shows from Unknown Years" : {
+
+    },
+    "Sort Alphabetically" : {
+
+    },
+    "Sort By Associated" : {
+
+    },
+    "Sort By First Show" : {
+
+    },
+    "Sort By Show Count" : {
+
+    },
+    "Sort By Year Range" : {
+
+    },
+    "Today" : {
+
+    },
+    "Today: %@" : {
+
+    },
+    "Tomorrow: %@" : {
+
+    },
+    "URL (%@) cannot create root URL." : {
+
+    },
+    "URL (%@) is not valid." : {
+
+    },
+    "Venues" : {
+
+    },
+    "Year Unknown" : {
+
+    },
+    "Yesterday: %@" : {
+
+    }
   },
-  "version": "1.0"
+  "version" : "1.0"
 }

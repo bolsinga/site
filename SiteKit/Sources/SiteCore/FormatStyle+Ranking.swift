@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Shared
 
 extension Ranking {
   package struct FormatStyle: Codable, Equatable, Hashable {

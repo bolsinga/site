@@ -7,7 +7,6 @@
 
 import Foundation
 import MapKit
-import Shared
 import os
 
 extension Logger {

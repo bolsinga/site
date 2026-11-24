@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Shared
+import SiteCore
 
 extension RootURLArguments {
   func vault(fileName: String = "shows.json") async throws -> Vault {

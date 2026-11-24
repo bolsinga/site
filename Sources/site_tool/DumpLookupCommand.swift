@@ -7,7 +7,7 @@
 
 import ArgumentParser
 import Foundation
-import Shared
+import SiteCore
 
 extension Lookup {
   fileprivate func dump() throws {

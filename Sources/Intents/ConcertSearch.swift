@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Shared
 import SiteCore
 
 /// What a request for concerts narrows them by. A part left nil does not narrow.

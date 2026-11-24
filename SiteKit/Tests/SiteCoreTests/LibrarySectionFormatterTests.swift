@@ -7,7 +7,6 @@
 
 import Testing
 
-@testable import Shared
 @testable import SiteCore
 
 struct LibrarySectionFormatterTests {

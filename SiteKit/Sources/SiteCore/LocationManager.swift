@@ -6,7 +6,6 @@
 //
 
 import CoreLocation
-import Shared
 import os
 
 extension Logger {

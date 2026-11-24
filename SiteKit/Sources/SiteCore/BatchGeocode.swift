@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Shared
 
 public struct BatchGeocode<T: AtlasGeocodable>: AsyncSequence {
 

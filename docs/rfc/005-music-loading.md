@@ -1,8 +1,8 @@
 # RFC 005: Loading the music
 
 Status: Accepted · Updated: 2026-11-22 · Code: `SiteKit/Sources/SiteCore` (`SiteModel`, `VaultModel`),
-`Shared/Sources/Shared/MusicData` (`Vault`, `Lookup`, `Bracket`, `Music`),
-`Shared/Sources/Shared/Utilities` (`URL+LastModified`, `FileManager+CacheCodable`)
+`SiteKit/Sources/SiteCore/MusicData` (`Vault`, `Lookup`, `Bracket`, `Music`),
+`SiteKit/Sources/SiteCore/Utilities` (`URL+LastModified`, `FileManager+CacheCodable`)
 
 ## Summary
 
@@ -87,7 +87,7 @@ download it was made from. It is kept nowhere else.
    provider keeps only the vault of the load that started last (rule 5). It stores no date, as
    the `Bracket` a download saves carries it (rule 4), so a download an intent made isn't
    downloaded again. The tasks of rule 7 stay with `SiteModel`.
-9. Code outside `Shared` MUST reach the data through `Vault`. `Bracket` is public only for the
+9. Code outside `SiteKit/Sources/SiteCore/MusicData` MUST reach the data through `Vault`. `Bracket` is public only for the
    command line tool, which builds one directly and doesn't use the cache.
 
 ## Rationale
