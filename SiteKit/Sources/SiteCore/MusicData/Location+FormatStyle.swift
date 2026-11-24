@@ -20,7 +20,7 @@ extension Location {
       self.style = style
     }
 
-    public func style(_ style: Style) -> Self {
+    package func style(_ style: Style) -> Self {
       .init(style)
     }
   }
@@ -67,7 +67,7 @@ extension Location {
 }
 
 extension FormatStyle where Self == Location.FormatStyle {
-  public static var oneLine: Self { .init(.oneLine) }
+  package static var oneLine: Self { .init(.oneLine) }
   public static var oneLineNoURL: Self { .init(.oneLineNoURL) }
 
   static func Location(style: Location.FormatStyle.Style = .oneLine) -> Self {

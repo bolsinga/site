@@ -8,8 +8,8 @@
 import Foundation
 
 /// The date of the most recent show of an artist or venue, wherever that was the only show.
-public struct MostRecentSet: Codable, Equatable, Hashable, Sendable {
-  public let date: PartialDate
+package struct MostRecentSet: Codable, Equatable, Hashable, Sendable {
+  package let date: PartialDate
 
   public init(date: PartialDate) {
     self.date = date
@@ -21,11 +21,11 @@ public struct MostRecentSet: Codable, Equatable, Hashable, Sendable {
   /// A date with only some of its parts, like just a year, still counts when nothing more
   /// specific is later, as `Tracker` orders the less specific date before the more specific ones.
   /// Only a date with nothing known can't be the most recent.
-  public func isMostRecent(on showDate: PartialDate) -> Bool {
+  package func isMostRecent(on showDate: PartialDate) -> Bool {
     !date.isUnknown && !showDate.isUnknown && date == showDate
   }
 
-  public static var empty: MostRecentSet {
+  package static var empty: MostRecentSet {
     MostRecentSet(date: PartialDate())
   }
 }

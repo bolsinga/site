@@ -17,7 +17,7 @@ public struct ArtistDigest: Codable, Equatable, Hashable, Identifiable,
   public let sortname: String?
   public let shows: [ShowDigest]
   public let related: [ArchiveItem]
-  public let rank: RankDigest
+  package let rank: RankDigest
 
   public init(
     id: ArchivePath, artist: Artist, shows: [ShowDigest], related: [ArchiveItem], rank: RankDigest

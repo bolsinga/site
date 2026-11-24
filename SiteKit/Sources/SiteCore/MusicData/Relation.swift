@@ -9,8 +9,8 @@ import Foundation
 
 public struct Relation: Codable, Identifiable, Sendable {
   public let id: String
-  public let members: [String]
-  public let reason: String?
+  package let members: [String]
+  package let reason: String?
 
   public init(id: String, members: [String], reason: String? = nil) {
     self.id = id

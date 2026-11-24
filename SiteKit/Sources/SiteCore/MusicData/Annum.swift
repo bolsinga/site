@@ -26,7 +26,7 @@ extension Annum: Comparable {
     }
   }
 
-  public static func compareDescendingUnknownLast(lhs: Annum, rhs: Annum) -> Bool {
+  package static func compareDescendingUnknownLast(lhs: Annum, rhs: Annum) -> Bool {
     switch (lhs, rhs) {
     case (.year(let lh), .year(let rh)):
       return lh > rh
@@ -62,7 +62,7 @@ extension PartialDate {
 }
 
 extension Annum {
-  public var decade: Decade {
+  package var decade: Decade {
     switch self {
     case .year(let year):
       return year.decade

@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum VaultError: Error {
+package enum VaultError: Error {
   case illegalURL(String)
   case noRootURL(String)
 }

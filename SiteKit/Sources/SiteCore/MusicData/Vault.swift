@@ -11,7 +11,7 @@ public struct Vault: Sendable {
   public let rootURL: URL
 
   /// The artists in library order, for paging from one to the next.
-  public let orderedArtistIDs: [ArchivePath]
+  package let orderedArtistIDs: [ArchivePath]
   /// The venues in library order, for paging from one to the next.
   public let orderedVenueIDs: [ArchivePath]
 
@@ -41,11 +41,11 @@ public struct Vault: Sendable {
     self.init(lookup: try await asyncLookup, rootURL: rootURL)
   }
 
-  public var decadesMap: [Decade: [Annum: Int]] {
+  package var decadesMap: [Decade: [Annum: Int]] {
     lookup.decadesMap
   }
 
-  public func decadesMap(showIDs: Set<ArchivePath>) -> [Decade: [Annum: Int]] {
+  package func decadesMap(showIDs: Set<ArchivePath>) -> [Decade: [Annum: Int]] {
     lookup.decadesMap(showIDs: showIDs)
   }
 
@@ -158,15 +158,15 @@ public struct Vault: Sendable {
   }
 
   /// How a day of the leap year ranks among the days that have shows.
-  public func dayRankDigest(on dayOfLeapYear: Int) -> RankDigest {
+  package func dayRankDigest(on dayOfLeapYear: Int) -> RankDigest {
     lookup.dayRankDigest(on: dayOfLeapYear)
   }
 
-  public func rankDistribution(_ kind: RankKind, _ metric: RankMetric) -> RankDistribution {
+  package func rankDistribution(_ kind: RankKind, _ metric: RankMetric) -> RankDistribution {
     lookup.rankDistribution(kind, metric)
   }
 
-  public func firstSetCount(_ kind: RankKind) -> Int {
+  package func firstSetCount(_ kind: RankKind) -> Int {
     lookup.firstSetCount(kind)
   }
 
@@ -228,15 +228,15 @@ public struct Vault: Sendable {
     lookup.shows(venueID: venueID)
   }
 
-  public func rankedArtist(id: ArchivePath) -> RankedArchiveItem? {
+  package func rankedArtist(id: ArchivePath) -> RankedArchiveItem? {
     lookup.artistMap[id]?.rankedArchiveItem(id: id, lookup.rankDigest(artist: id))
   }
 
-  public func rankedVenue(id: ArchivePath) -> RankedArchiveItem? {
+  package func rankedVenue(id: ArchivePath) -> RankedArchiveItem? {
     lookup.venueMap[id]?.rankedArchiveItem(id: id, lookup.rankDigest(venue: id))
   }
 
-  public var statisticsData:
+  package var statisticsData:
     (showsCount: Int, venueCount: Int, artistCount: Int, dates: [Date], states: [String: Int])
   {
     (
@@ -251,7 +251,7 @@ public struct Vault: Sendable {
   }
 
   /// The statistics of just these venues and their shows.
-  public func statisticsData(venueIDs: any Collection<ArchivePath>)
+  package func statisticsData(venueIDs: any Collection<ArchivePath>)
     -> (showsCount: Int, venueCount: Int, artistCount: Int, dates: [Date], states: [String: Int])
   {
     let venues = venueIDs.compactMap { id in lookup.venueMap[id].map { (id, $0) } }

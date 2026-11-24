@@ -8,7 +8,7 @@
 import Foundation
 
 extension Collection where Element == PartialDate {
-  public var knownDates: [Date] {
+  package var knownDates: [Date] {
     self.compactMap {
       guard !$0.isUnknown else { return nil }
       return $0.date

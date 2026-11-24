@@ -7,14 +7,14 @@
 
 import Foundation
 
-public enum LibrarySection: Codable, Hashable, Sendable {
+package enum LibrarySection: Codable, Hashable, Sendable {
   case alphabetic(String)
   case numeric
   case punctuation
 }
 
 extension LibrarySection: Comparable {
-  public static func < (lhs: LibrarySection, rhs: LibrarySection) -> Bool {
+  package static func < (lhs: LibrarySection, rhs: LibrarySection) -> Bool {
     switch (lhs, rhs) {
     case (.alphabetic(let lh), .alphabetic(let rh)):
       return lh < rh

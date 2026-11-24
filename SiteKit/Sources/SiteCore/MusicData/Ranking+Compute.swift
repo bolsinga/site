@@ -33,7 +33,7 @@ where V: Hashable, V: Comparable {
   return itemRankMap
 }
 
-public func computeRankings<T>(items: [(T, Int)]) -> [T: Ranking] {
+package func computeRankings<T>(items: [(T, Int)]) -> [T: Ranking] {
   computeRankings(items: items) {
     Ranking(rank: $0, value: $1)
   } rankSorted: {

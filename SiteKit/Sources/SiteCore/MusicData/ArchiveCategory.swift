@@ -15,7 +15,7 @@ public enum ArchiveCategory: String, CaseIterable, Codable, Sendable {
   case settings
   case search
 
-  public static var defaultCategory: ArchiveCategory { .today }
+  package static var defaultCategory: ArchiveCategory { .today }
 
   public var localizedString: String {
     switch self {

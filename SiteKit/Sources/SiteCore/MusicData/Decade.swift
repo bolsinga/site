@@ -7,13 +7,13 @@
 
 import Foundation
 
-public enum Decade: Codable, Equatable, Hashable, Sendable {
+package enum Decade: Codable, Equatable, Hashable, Sendable {
   case decade(Int)
   case unknown
 }
 
 extension Decade: Comparable {
-  public static func < (lhs: Decade, rhs: Decade) -> Bool {
+  package static func < (lhs: Decade, rhs: Decade) -> Bool {
     switch (lhs, rhs) {
     case (.decade(let lh), .decade(let rh)):
       return lh < rh
@@ -26,7 +26,7 @@ extension Decade: Comparable {
     }
   }
 
-  public static func compareDescendingUnknownLast(lhs: Decade, rhs: Decade) -> Bool {
+  package static func compareDescendingUnknownLast(lhs: Decade, rhs: Decade) -> Bool {
     switch (lhs, rhs) {
     case (.decade(let lh), .decade(let rh)):
       return lh > rh
@@ -41,20 +41,20 @@ extension Decade: Comparable {
 }
 
 extension Int {
-  public var decade: Decade {
+  package var decade: Decade {
     .decade((self / 10) * 10)
   }
 }
 
 extension Date {
-  public var decade: Decade {
+  package var decade: Decade {
     guard let year = self.year else { return .unknown }
     return year.decade
   }
 }
 
 extension PartialDate {
-  public var decade: Decade {
+  package var decade: Decade {
     guard year != nil else { return .unknown }
     guard let date else { return .unknown }
     return date.decade

@@ -8,8 +8,8 @@
 import Foundation
 
 extension ArchiveCategory {
-  public struct FormatStyle: Codable, Equatable, Hashable {
-    public enum Style: Codable, Equatable, Hashable {
+  package struct FormatStyle: Codable, Equatable, Hashable {
+    package enum Style: Codable, Equatable, Hashable {
       case urlPath
     }
 
@@ -19,7 +19,7 @@ extension ArchiveCategory {
       self.style = style
     }
 
-    public func style(_ style: Style) -> Self {
+    package func style(_ style: Style) -> Self {
       .init(style)
     }
   }
@@ -59,7 +59,7 @@ extension ArchiveCategory {
 }
 
 extension FormatStyle where Self == ArchiveCategory.FormatStyle {
-  public static var urlPath: Self { .init(.urlPath) }
+  package static var urlPath: Self { .init(.urlPath) }
 
   static func archiveCategory(style: ArchiveCategory.FormatStyle.Style = .urlPath) -> Self {
     .init(style)

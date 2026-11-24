@@ -164,7 +164,7 @@ public struct VenueName: View {
   }
 }
 
-public struct PerformersView: View {
+package struct PerformersView: View {
   let performers: [ArchiveItem]
   let firstTimeArtistIDs: Set<ArchivePath>
   let mostRecentArtistIDs: Set<ArchivePath>
@@ -178,7 +178,7 @@ public struct PerformersView: View {
     self.mostRecentArtistIDs = mostRecentArtistIDs
   }
 
-  public var body: some View {
+  package var body: some View {
     VStack(alignment: .leading) {
       // Keyed by id, as two performers can share a name.
       ForEach(Array(performers.enumerated()), id: \.element.id) { index, performer in

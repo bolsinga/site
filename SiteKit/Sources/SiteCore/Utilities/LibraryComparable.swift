@@ -7,13 +7,13 @@
 
 import Foundation
 
-public protocol LibraryComparable {
+package protocol LibraryComparable {
   var sortname: String? { get }
   var name: String { get }
 }
 
 extension LibraryComparable {
-  public var librarySortString: String {
+  package var librarySortString: String {
     sortname ?? name
   }
 }

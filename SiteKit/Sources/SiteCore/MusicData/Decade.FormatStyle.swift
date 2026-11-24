@@ -8,8 +8,8 @@
 import Foundation
 
 extension Decade {
-  public struct FormatStyle: Codable, Equatable, Hashable {
-    public enum Style: Codable, Equatable, Hashable {
+  package struct FormatStyle: Codable, Equatable, Hashable {
+    package enum Style: Codable, Equatable, Hashable {
       case twoDigits  // 80’s
       case defaultDigits  // 1980s
     }
@@ -20,7 +20,7 @@ extension Decade {
       self.style = style
     }
 
-    public func style(_ style: Style) -> Self {
+    package func style(_ style: Style) -> Self {
       .init(style)
     }
   }
@@ -66,8 +66,8 @@ extension Decade {
 }
 
 extension FormatStyle where Self == Decade.FormatStyle {
-  public static var twoDigits: Self { .init(.twoDigits) }
-  public static var defaultDigits: Self { .init(.defaultDigits) }
+  package static var twoDigits: Self { .init(.twoDigits) }
+  package static var defaultDigits: Self { .init(.defaultDigits) }
 
   static func decade(style: Decade.FormatStyle.Style = .defaultDigits) -> Self {
     .init(style)

@@ -10,17 +10,17 @@ import Foundation
 /// Written by the host app into an App Group container so the widget extension can read it
 /// without a network fetch or a loaded `Vault`.
 public struct ShowsTodaySnapshot: Codable, Equatable, Sendable {
-  public static let currentVersion = 2
+  package static let currentVersion = 2
 
   fileprivate static let appGroup = "group.gdb.SiteApp"
 
   fileprivate static let fileName = "shows-today.json"
 
   public let version: Int
-  public let generated: Date
+  package let generated: Date
 
   /// Keyed by `dayOfLeapYear` (1...366); days with no shows are absent.
-  public let days: [Int: [ShowDigest]]
+  package let days: [Int: [ShowDigest]]
 
   public init(generated: Date = .now, days: [Int: [ShowDigest]]) {
     self.version = Self.currentVersion
@@ -39,7 +39,7 @@ public struct ShowsTodaySnapshot: Codable, Equatable, Sendable {
 }
 
 extension ShowsTodaySnapshot {
-  public enum SnapshotError: Error {
+  package enum SnapshotError: Error {
     case noAppGroupContainer
   }
 

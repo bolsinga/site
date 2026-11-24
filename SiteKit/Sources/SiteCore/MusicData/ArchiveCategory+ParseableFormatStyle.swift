@@ -8,7 +8,7 @@
 import Foundation
 
 extension ArchiveCategory.FormatStyle {
-  public struct URLPathParseStrategy: Foundation.ParseStrategy {
+  package struct URLPathParseStrategy: Foundation.ParseStrategy {
     enum ValidationError: Error {
       case path
       case filenameFormat
@@ -18,7 +18,7 @@ extension ArchiveCategory.FormatStyle {
 
     public init() {}
 
-    public func parse(_ urlPath: String) throws -> ArchiveCategory {
+    package func parse(_ urlPath: String) throws -> ArchiveCategory {
       let pathComponents = urlPath.components(separatedBy: "/")
 
       let directory = (pathComponents.count == 3) ? pathComponents[1] : nil
@@ -59,7 +59,7 @@ extension ArchiveCategory.FormatStyle {
     }
   }
 
-  public struct URLParseStrategy: Foundation.ParseStrategy {
+  package struct URLParseStrategy: Foundation.ParseStrategy {
     enum ValidationError: Error {
       case url
       case scheme
@@ -72,7 +72,7 @@ extension ArchiveCategory.FormatStyle {
 
     public init() {}
 
-    public func parse(_ url: URL) throws -> ArchiveCategory {
+    package func parse(_ url: URL) throws -> ArchiveCategory {
       let urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false)
 
       guard let urlComponents else {
@@ -93,11 +93,11 @@ extension ArchiveCategory.FormatStyle {
 }
 
 extension ArchiveCategory.FormatStyle: ParseableFormatStyle {
-  public var parseStrategy: ArchiveCategory.FormatStyle.URLPathParseStrategy {
+  package var parseStrategy: ArchiveCategory.FormatStyle.URLPathParseStrategy {
     .init()
   }
 
-  public var urlParseStrategy: ArchiveCategory.FormatStyle.URLParseStrategy {
+  package var urlParseStrategy: ArchiveCategory.FormatStyle.URLParseStrategy {
     .init()
   }
 }
@@ -130,5 +130,5 @@ extension ArchiveCategory {
 }
 
 extension ParseableFormatStyle where Self == ArchiveCategory.FormatStyle {
-  public static var archiveCategory: Self { .init() }
+  package static var archiveCategory: Self { .init() }
 }

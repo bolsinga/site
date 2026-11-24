@@ -7,13 +7,13 @@
 
 import Foundation
 
-public enum Rank: Codable, Sendable {
+package enum Rank: Codable, Sendable {
   case rank(Int)  // 1..n The Rank.
   case unknown  // Rank is somehow unknown.
 }
 
 extension Rank: Comparable {
-  public static func < (lhs: Rank, rhs: Rank) -> Bool {
+  package static func < (lhs: Rank, rhs: Rank) -> Bool {
     switch (lhs, rhs) {
     case (.rank(let lh), .rank(let rh)):
       return lh < rh
