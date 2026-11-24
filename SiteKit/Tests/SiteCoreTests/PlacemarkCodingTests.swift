@@ -1,4 +1,3 @@
-import CoreLocation
 import Foundation
 import Testing
 
@@ -6,9 +5,9 @@ import Testing
 
 struct PlacemarkCodingTests {
   private static let address = MapsAddress(street: "1 Main St", city: "c", cityAndState: "c, s")
-  private static let coordinate = CLLocationCoordinate2D(latitude: 1.5, longitude: -2.5)
+  private static let coordinate = Placemark.Coordinate(latitude: 1.5, longitude: -2.5)
 
-  // What was saved before the coding was written by hand.
+  // What caches hold.
   private static let saved: [(Placemark, String)] = [
     (
       .coordinate(coordinate, maps: address),

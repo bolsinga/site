@@ -40,7 +40,7 @@ struct VenueMapKitIDTests {
     let venue = Venue(
       id: "v1", location: Location(city: "c", state: "s"), name: "n", mapKitID: "I1")
     let item = try await Placemark.place(
-      identifier: "I1", coordinate: CLLocationCoordinate2D(latitude: 1, longitude: 2)
+      identifier: "I1", coordinate: Placemark.Coordinate(latitude: 1, longitude: 2)
     ).mapItem(for: venue)
     #expect(item.location.coordinate.latitude == 1)
     #expect(item.name == "n")
@@ -51,7 +51,7 @@ struct VenueMapKitIDTests {
   @Test func cachedAddressGivesWayToMapKitID() {
     let venue = Venue(
       id: "v1", location: Location(city: "c", state: "s"), name: "n", mapKitID: "I1")
-    let coordinate = CLLocationCoordinate2D(latitude: 1, longitude: 2)
+    let coordinate = Placemark.Coordinate(latitude: 1, longitude: 2)
     #expect(!venue.canUseCached(.coordinate(coordinate, maps: address)))
     #expect(!venue.canUseCached(.identifier("I1")))
     #expect(!venue.canUseCached(.place(identifier: "I2", coordinate: coordinate, maps: address)))
@@ -62,11 +62,11 @@ struct VenueMapKitIDTests {
     let venue = Venue(id: "v1", location: Location(city: "c", state: "s"), name: "n")
     #expect(
       venue.canUseCached(
-        .coordinate(CLLocationCoordinate2D(latitude: 1, longitude: 2), maps: address)))
+        .coordinate(Placemark.Coordinate(latitude: 1, longitude: 2), maps: address)))
   }
 
   @Test func placeCachedWithoutMapsAddressIsFoundAgain() {
-    let coordinate = CLLocationCoordinate2D(latitude: 1, longitude: 2)
+    let coordinate = Placemark.Coordinate(latitude: 1, longitude: 2)
     let venue = Venue(id: "v1", location: Location(city: "c", state: "s"), name: "n")
     #expect(!venue.canUseCached(.coordinate(coordinate)))
     let placed = Venue(
@@ -97,7 +97,7 @@ struct VenueMapKitIDTests {
 
   @Test func mapsAddressIsSaved() throws {
     let placemark = Placemark.place(
-      identifier: "I1", coordinate: CLLocationCoordinate2D(latitude: 1, longitude: 2),
+      identifier: "I1", coordinate: Placemark.Coordinate(latitude: 1, longitude: 2),
       maps: address)
     let decoded = try JSONDecoder().decode(
       Placemark.self, from: JSONEncoder().encode(placemark))
@@ -119,7 +119,7 @@ struct VenueMapKitIDTests {
       id: "v1", location: Location(city: "c", state: "s"), name: "n", mapKitID: "I1")
     let (atlas, id) = try atlas(
       caching: .place(
-        identifier: "I1", coordinate: CLLocationCoordinate2D(latitude: 1, longitude: 2),
+        identifier: "I1", coordinate: Placemark.Coordinate(latitude: 1, longitude: 2),
         maps: address),
       for: venue)
 
@@ -135,7 +135,7 @@ struct VenueMapKitIDTests {
   @Test func atlasKeepsCachedAddressWithoutMapKitID() async throws {
     let venue = Venue(id: "v1", location: Location(city: "c", state: "s"), name: "n")
     let (atlas, id) = try atlas(
-      caching: .coordinate(CLLocationCoordinate2D(latitude: 1, longitude: 2), maps: address),
+      caching: .coordinate(Placemark.Coordinate(latitude: 1, longitude: 2), maps: address),
       for: venue)
 
     guard case .coordinate(let coordinate, _) = try await atlas.geocode(venue, id: id) else {
