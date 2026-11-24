@@ -22,7 +22,7 @@ struct VenueEntityQuery: EntityQuery {
 
     let vault = try await provider.vault()
     return identifiers.reduce(into: [VenueEntity]()) { partialResult, id in
-      guard let entity = vault.venueEntity(for: id) else { return }
+      guard let entity = vault.venueEntity(for: id.path) else { return }
       partialResult.append(entity)
     }
   }
@@ -32,7 +32,7 @@ struct VenueEntityQuery: EntityQuery {
 
     let ids = try await provider.vault().venueIDs(on: Date.now.dayOfLeapYear, orRecentCount: 5)
 
-    return try await entities(for: ids.reversed())
+    return try await entities(for: ids.reversed().map(EntityPath.init))
   }
 
   @Dependency

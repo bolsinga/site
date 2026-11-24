@@ -14,9 +14,9 @@ extension AppHooks {
   static let app = AppHooks(
     entityIdentifier: { path in
       switch path {
-      case .show: EntityIdentifier(for: ConcertEntity.self, identifier: path)
-      case .artist: EntityIdentifier(for: ArtistEntity.self, identifier: path)
-      case .venue: EntityIdentifier(for: VenueEntity.self, identifier: path)
+      case .show: EntityIdentifier(for: ConcertEntity.self, identifier: EntityPath(path))
+      case .artist: EntityIdentifier(for: ArtistEntity.self, identifier: EntityPath(path))
+      case .venue: EntityIdentifier(for: VenueEntity.self, identifier: EntityPath(path))
       case .year: nil
       }
     },
