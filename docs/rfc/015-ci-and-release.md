@@ -45,8 +45,8 @@ One job per destination, with `fail-fast: false`, so one platform failing doesn'
 | Destination | Runs |
 |---|---|
 | `platform=macOS` | `xcodebuild test` of scheme `SiteApp`, `swift test` of the `Shared` and `SiteKit` packages, then a build of scheme `SiteApp` |
-| `generic/platform=iOS Simulator` | a build of scheme `SiteApp` |
-| `generic/platform=tvOS Simulator` | a build of scheme `SiteApp` |
+| `generic/platform=iOS Simulator` | the `Shared` and `SiteKit` package tests on a simulator, then a build of scheme `SiteApp` |
+| `generic/platform=tvOS Simulator` | the `Shared` and `SiteKit` package tests on a simulator, then a build of scheme `SiteApp` |
 
 Before building, each job checks out with `actions/checkout@v7`, then runs the local action
 `.github/actions/setup-xcode`. It prints `sw_vers` and the installed Xcodes, selects the newest
@@ -125,8 +125,9 @@ build with that file signs with the developer's team.
 1. A change MUST build with scheme `SiteApp` for `platform=macOS`, `generic/platform=iOS
    Simulator` and `generic/platform=tvOS Simulator`. Each is its own job, and a failed job fails
    the pull request.
-2. The `Tests` target and the tests of the `Shared` and `SiteKit` packages MUST pass on macOS. It is the only platform
-   the tests run on in CI.
+2. The `Tests` target and the tests of the `Shared` and `SiteKit` packages MUST pass on macOS, and
+   the tests of the two packages MUST pass on the iOS and tvOS simulators. `Tests` runs only on
+   macOS.
 3. The workflows MUST build with Xcode 27.2 or newer on a runner labeled `xcode-27`, and fail
    when the newest installed Xcode of that major version is older than 27.2. The minimum is the
    `minimum-version` input of `.github/actions/setup-xcode`, in one place. A change to the runner
@@ -153,8 +154,12 @@ build with that file signs with the developer's team.
 
 ## Rationale
 
-- **Build all three, test one.** The tvOS and iOS builds catch API gaps and unguarded code. The
-  tests are about data and logic, and one platform covers them.
+- **Build all three, test packages on all three.** The tvOS and iOS builds catch API gaps and
+  unguarded code, and the package tests, which need no host, also run there to cover code that
+  differs by platform. `Tests` stays on macOS: it needs the app's App Intents and Venue Places
+  code, and has no tvOS destination.
+- **Simulator by id.** `.github/actions/test-package-simulator` takes the first simulator
+  `-showdestinations` offers for the package scheme, as runner simulator names differ.
 - **Simulators and generic destinations.** They need no device or signing, so any runner can
   build them.
 - **Signing off for tests only.** The test run must not need a team, which CI doesn't have.
@@ -177,7 +182,7 @@ build with that file signs with the developer's team.
 
 - **Automated version bump.** The versions are bumped by hand. See [#1785](https://github.com/bolsinga/site/issues/1785).
 - **Signed builds from CI.** Signed builds are made locally, and CI has no secrets. See [#1786](https://github.com/bolsinga/site/issues/1786).
-- **Test coverage.** The tests don't run on iOS or tvOS in CI, and no test plan is used. See [#1743](https://github.com/bolsinga/site/issues/1743).
+- **Test coverage.** `Tests` doesn't run on iOS or tvOS in CI, and no test plan is used, as one test target in one environment gains nothing from it.
 - **Lint.** `swift-format lint` with the default configuration reports 28 errors on the code
   base as it is, in rules the formatter doesn't fix. Whether CI should run it, with those fixed or
   a configuration that turns them off, is open. See [#1742](https://github.com/bolsinga/site/issues/1742).
