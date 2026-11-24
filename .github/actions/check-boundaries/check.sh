@@ -17,6 +17,11 @@ code() {
   grep -rn --include='*.swift' '' "$core" | grep -vE '^[^:]+:[0-9]+:\s*//'
 }
 
+# The log subsystem is the one reading of the main bundle, in Logger+Category.swift.
+singletons() {
+  code | grep -v '/Logger+Category\.swift:' | grep -E '[A-Za-z0-9_)]\.shared\b|UserDefaults|\.standard\b|Bundle\.main|ProcessInfo\.processInfo'
+}
+
 # 1. A UI or App Intents framework.
 if hits=$(code | grep -E ':\s*import\s+(SwiftUI|UIKit|AppKit|WidgetKit|AppIntents)\b'); then
   echo "$hits"
@@ -24,7 +29,7 @@ if hits=$(code | grep -E ':\s*import\s+(SwiftUI|UIKit|AppKit|WidgetKit|AppIntent
 fi
 
 # 2. Global state, reached without being given.
-if hits=$(code | grep -E '\.shared\b|UserDefaults|\.standard\b|Bundle\.main|ProcessInfo\.processInfo'); then
+if hits=$(singletons); then
   echo "$hits"
   fail "SiteCore must not reach a singleton, user defaults, the main bundle or the process. Take it as a parameter, with the app's own as the app's choice."
 fi
