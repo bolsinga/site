@@ -30,20 +30,6 @@ jobs:
     - name: Test SiteKit
       if: matrix.destination == 'platform=macOS'
       run: swift test --package-path SiteKit
-    - name: Test packages on iOS Simulator
-      if: matrix.destination == 'generic/platform=iOS Simulator'
-      timeout-minutes: 20
-      uses: ./.github/actions/test-package-simulator
-      with:
-        platform: iOS Simulator
-        device: iPhone
-    - name: Test packages on tvOS Simulator
-      if: matrix.destination == 'generic/platform=tvOS Simulator'
-      timeout-minutes: 20
-      uses: ./.github/actions/test-package-simulator
-      with:
-        platform: tvOS Simulator
-        device: Apple TV
     - name: Build iOS / macOS / tvOS
       run: xcodebuild -verbose -skipPackagePluginValidation -scheme SiteApp -destination '${{ matrix.destination }}'
 

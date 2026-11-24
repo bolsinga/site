@@ -108,8 +108,8 @@ preview of a view in the package finds it, and it is in a release build too, at 
 
 - `xcodebuild test` runs the `SiteApp` scheme on `platform=macOS`, and `swift test --package-path
   Shared` and `swift test --package-path SiteKit` run the package tests. The iOS and tvOS simulator
-  jobs run the package tests with `xcodebuild test` on their `-Package` schemes and only build
-  the app; `Tests` runs on macOS only.
+  destinations only build; no test runs there, as a simulator costs minutes in CI for seconds of
+  tests ([RFC 015](015-ci-and-release.md)). This matches CLAUDE.md.
 - Nothing runs on a physical device. Locally, tests run on My Mac or a simulator.
 - The app that hosts `Tests` is launched in the quiet mode. The scheme's test action sets
   `SITE_QUIET_HOST=1` in its own environment, and `LaunchMode` reads it. In that mode `SiteAppApp`
