@@ -5,6 +5,9 @@ inputs:
   platform:
     description: The simulator platform, iOS Simulator or tvOS Simulator.
     required: true
+  device:
+    description: A pattern the simulator's name must match.
+    required: true
 
 runs:
   using: composite
@@ -13,12 +16,13 @@ runs:
       shell: bash
       env:
         PLATFORM: ${{ inputs.platform }}
+        DEVICE: ${{ inputs.device }}
       run: |
         set -euo pipefail
         for package in Shared SiteKit; do
           cd "$GITHUB_WORKSPACE/$package"
           id=$(xcodebuild -scheme "$package-Package" -showdestinations 2>/dev/null \
-            | grep "platform:$PLATFORM" | grep -v placeholder \
+            | grep "platform:$PLATFORM" | grep -v placeholder | grep -E "name:$DEVICE" \
             | grep -m1 -oE 'id:[0-9A-F-]{36}' | cut -d: -f2)
           xcodebuild test -scheme "$package-Package" -skipPackagePluginValidation -destination "id=$id" CODE_SIGNING_ALLOWED=NO
         done

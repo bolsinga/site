@@ -159,7 +159,9 @@ build with that file signs with the developer's team.
   differs by platform. `Tests` stays on macOS: it needs the app's App Intents and Venue Places
   code, and has no tvOS destination.
 - **Simulator by id.** `.github/actions/test-package-simulator` takes the first simulator
-  `-showdestinations` offers for the package scheme, as runner simulator names differ.
+  `-showdestinations` offers for the package scheme whose name matches its `device` input
+  (`iPhone`, `Apple TV`), as runner simulator names differ and an iPad was chosen once without
+  the filter. The steps have a 20 minute timeout, so a simulator that doesn't start fails the job.
 - **Simulators and generic destinations.** They need no device or signing, so any runner can
   build them.
 - **Signing off for tests only.** The test run must not need a team, which CI doesn't have.
