@@ -16,7 +16,7 @@ extension Logger {
 extension NSUserActivity {
   package static let archivePathKey = "archivePath"
 
-  package func update<T: ArchivePathUserActivity>(_ item: T, url: URL?) {
+  package func update(_ item: RestorableActivity, url: URL?) {
     let identifier = item.id.formatted(.json)
     Logger.updateActivity.log("advertise: \(identifier, privacy: .public)")
     self.targetContentIdentifier = identifier

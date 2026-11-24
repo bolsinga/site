@@ -1,7 +1,7 @@
 # RFC 009: App Intents entities, Siri and Spotlight
 
 Status: Accepted · Updated: 2026-11-22 · Code: `Sources/Intents`, `SiteKit/Sources/SiteCore/VaultLoader.swift`, `Sources/Intents/VaultProvider.swift`, `Sources/App/SiteAppApp.swift`,
-`SiteKit/Sources/SiteCore/*+NSUserActivity.swift`, `SiteKit/Sources/SiteCore/SiteModel.swift`
+`SiteKit/Sources/SiteCore/NSUserActivity+*.swift`, `SiteKit/Sources/SiteCore/RestorableActivity.swift`, `Sources/Intents/*+RestorableActivity.swift`, `SiteKit/Sources/SiteCore/SiteModel.swift`
 
 ## Summary
 

@@ -22,10 +22,10 @@ extension AppHooks {
     },
     restorableActivity: { vault, path in
       switch path {
-      case .show: vault.digest(show: path)
-      case .venue: vault.digest(venue: path)
-      case .artist: vault.digest(artist: path)
-      case .year(let annum): vault.digest(annum: annum)
+      case .show: vault.digest(show: path)?.restorableActivity
+      case .venue: vault.digest(venue: path)?.restorableActivity
+      case .artist: vault.digest(artist: path)?.restorableActivity
+      case .year(let annum): vault.digest(annum: annum)?.restorableActivity
       }
     })
 }
