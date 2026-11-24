@@ -16,7 +16,7 @@ extension ArchiveCategory.FormatStyle {
       case archiveCategoryType
     }
 
-    public init() {}
+    package init() {}
 
     package func parse(_ urlPath: String) throws -> ArchiveCategory {
       let pathComponents = urlPath.components(separatedBy: "/")
@@ -70,7 +70,7 @@ extension ArchiveCategory.FormatStyle {
       case archiveCategoryType
     }
 
-    public init() {}
+    package init() {}
 
     package func parse(_ url: URL) throws -> ArchiveCategory {
       let urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false)

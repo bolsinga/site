@@ -8,8 +8,8 @@
 import Foundation
 
 public struct Show: Codable, Equatable, Hashable, Identifiable, Sendable {
-  public let artists: [String]
-  public let comment: String?
+  package let artists: [String]
+  package let comment: String?
   public let date: PartialDate
   public let id: String
   public let venue: String

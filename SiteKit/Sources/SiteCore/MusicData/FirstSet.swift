@@ -9,9 +9,9 @@ import Foundation
 
 package struct FirstSet: Codable, Equatable, Hashable, Sendable {
   package let rank: Rank
-  package let date: PartialDate
+  public let date: PartialDate
 
-  public init(rank: Rank, date: PartialDate) {
+  package init(rank: Rank, date: PartialDate) {
     self.rank = rank
     self.date = date
   }

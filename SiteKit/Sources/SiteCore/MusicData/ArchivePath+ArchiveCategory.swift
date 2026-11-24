@@ -8,7 +8,7 @@
 import Foundation
 
 extension ArchivePath {
-  public var category: ArchiveCategory {
+  package var category: ArchiveCategory {
     switch self {
     case .show(_), .year(_):
       return .shows

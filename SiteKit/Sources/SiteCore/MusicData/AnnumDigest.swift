@@ -9,16 +9,16 @@ import Foundation
 
 public struct AnnumDigest: Codable, Identifiable, Sendable {
   package let annum: Annum
-  package let shows: [ShowDigest]
+  public let shows: [ShowDigest]
   private let rank: RankDigest
   /// The number of artists whose first show was in this annum.
-  package let newArtistCount: Int
+  public let newArtistCount: Int
   /// The number of venues whose first show was in this annum.
-  package let newVenueCount: Int
+  public let newVenueCount: Int
   /// The number of artists whose most recent show was in this annum.
-  package let mostRecentArtistCount: Int
+  public let mostRecentArtistCount: Int
   /// The number of venues whose most recent show was in this annum.
-  package let mostRecentVenueCount: Int
+  public let mostRecentVenueCount: Int
 
   public var id: ArchivePath { .year(annum) }
 

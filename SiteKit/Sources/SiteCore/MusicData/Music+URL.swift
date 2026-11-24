@@ -13,7 +13,7 @@ extension Logger {
 }
 
 extension Music {
-  public static func load(
+  package static func load(
     url: URL,
     artistsWithShowsOnly: Bool,
     session: URLSession = .shared

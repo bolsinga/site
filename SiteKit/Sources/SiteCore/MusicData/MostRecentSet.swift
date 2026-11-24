@@ -9,9 +9,9 @@ import Foundation
 
 /// The date of the most recent show of an artist or venue, wherever that was the only show.
 package struct MostRecentSet: Codable, Equatable, Hashable, Sendable {
-  package let date: PartialDate
+  public let date: PartialDate
 
-  public init(date: PartialDate) {
+  package init(date: PartialDate) {
     self.date = date
   }
 

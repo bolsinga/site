@@ -8,7 +8,7 @@
 import Foundation
 
 public struct Vault: Sendable {
-  public let rootURL: URL
+  package let rootURL: URL
 
   /// The artists in library order, for paging from one to the next.
   package let orderedArtistIDs: [ArchivePath]
@@ -111,7 +111,7 @@ public struct Vault: Sendable {
     try lookup.sort(showIDs: showIDs)
   }
 
-  public func compareIDs(lhs: ArchivePath, rhs: ArchivePath) throws -> Bool {
+  package func compareIDs(lhs: ArchivePath, rhs: ArchivePath) throws -> Bool {
     try lookup.compareIDs(lhs: lhs, rhs: rhs)
   }
 
@@ -124,7 +124,7 @@ public struct Vault: Sendable {
     }
   }
 
-  public func artists(filteredBy searchString: String) throws -> [ArchiveItem] {
+  package func artists(filteredBy searchString: String) throws -> [ArchiveItem] {
     guard !searchString.isEmpty else { return [] }
 
     let matchingPairs: [(ArchivePath, Artist)] = artistIDs().compactMap {
@@ -145,7 +145,7 @@ public struct Vault: Sendable {
     }
   }
 
-  public func venues(filteredBy searchString: String) throws -> [ArchiveItem] {
+  package func venues(filteredBy searchString: String) throws -> [ArchiveItem] {
     guard !searchString.isEmpty else { return [] }
 
     let matchingPairs: [(ArchivePath, Venue)] = venueIDs().compactMap {
@@ -171,7 +171,7 @@ public struct Vault: Sendable {
   }
 
   /// Whether the archive has the page this path names.
-  public func contains(_ path: ArchivePath) -> Bool {
+  package func contains(_ path: ArchivePath) -> Bool {
     switch path {
     case .show:
       lookup.showMap[path] != nil
@@ -216,7 +216,7 @@ public struct Vault: Sendable {
     Set(lookup.showMap.keys)
   }
 
-  public func artists(venueID: ArchivePath) -> Set<ArchivePath> {
+  package func artists(venueID: ArchivePath) -> Set<ArchivePath> {
     lookup.artists(venueID: venueID)
   }
 

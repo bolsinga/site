@@ -14,7 +14,7 @@ public struct ShowDigest: Codable, Equatable, Hashable, Identifiable, Sendable {
   public let venue: String
   public let venueID: ArchivePath
   public let location: Location
-  public let comment: String?
+  package let comment: String?
   /// The performers this show was the first time seeing, by id.
   public let firstTimeArtistIDs: Set<ArchivePath>
   /// Whether this show was the first time at its venue.

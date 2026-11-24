@@ -26,7 +26,7 @@ extension ArchiveCategory {
 }
 
 extension ArchiveCategory.FormatStyle: Foundation.FormatStyle {
-  public func format(_ value: ArchiveCategory) -> String {
+  package func format(_ value: ArchiveCategory) -> String {
     switch style {
     case .urlPath:
       switch value {

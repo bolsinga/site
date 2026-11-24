@@ -181,6 +181,6 @@ build with that file signs with the developer's team.
 - **Automated version bump.** The versions are bumped by hand. See [#1785](https://github.com/bolsinga/site/issues/1785).
 - **Signed builds from CI.** Signed builds are made locally, and CI has no secrets. See [#1786](https://github.com/bolsinga/site/issues/1786).
 - **Test coverage.** The tests don't run on iOS or tvOS in CI, and no test plan is used, as one test target in one environment gains nothing from it.
-- **Lint.** `swift-format lint` with the default configuration reports 28 errors on the code
+- **Lint.** `swift-format lint` with the default configuration reports warnings on the code
   base as it is, in rules the formatter doesn't fix. Whether CI should run it, with those fixed or
   a configuration that turns them off, is open. See [#1742](https://github.com/bolsinga/site/issues/1742).

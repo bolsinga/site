@@ -11,7 +11,7 @@ package struct Ranking: Codable, Comparable, Hashable, Sendable {
   package let rank: Rank
   package let value: Int
 
-  public init(rank: Rank, value: Int) {
+  package init(rank: Rank, value: Int) {
     self.rank = rank
     self.value = value
   }

@@ -13,7 +13,7 @@ package enum VaultError: Error {
 }
 
 extension VaultError: LocalizedError {
-  public var errorDescription: String? {
+  package var errorDescription: String? {
     switch self {
     case .illegalURL(let urlString):
       return String(localized: "URL (\(urlString)) is not valid.", bundle: #bundle)
