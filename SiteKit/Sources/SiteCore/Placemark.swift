@@ -7,7 +7,6 @@
 
 import CoreLocation
 import MapKit
-import Shared
 
 private enum PlacemarkError: Error {
   case noIdentifier

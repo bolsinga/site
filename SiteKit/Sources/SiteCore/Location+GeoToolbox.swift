@@ -6,7 +6,6 @@
 //
 
 import GeoToolbox
-import Shared
 
 extension Location {
   package var placeRepresentations: [PlaceDescriptor.PlaceRepresentation] {

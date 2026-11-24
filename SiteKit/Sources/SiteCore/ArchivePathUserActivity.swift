@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Shared
 
 public protocol ArchivePathUserActivity: Identifiable where ID == ArchivePath {
   func updateActivity(_ userActivity: NSUserActivity, url: URL?)

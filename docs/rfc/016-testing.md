@@ -1,13 +1,13 @@
 # RFC 016: Testing
 
-Status: Accepted · Updated: 2026-11-23 · Code: `Tests/SiteTests`, `Sources/App/LaunchMode.swift`, `Shared/Tests/SharedTests`, `SiteKit/Tests/SiteCoreTests`, `SiteKit/Sources/SiteUI` (`VaultPreviewModifier`, `NearbyPreviewModifer`), `SiteKit/Sources/SiteUI/sample-shows.json`,
+Status: Accepted · Updated: 2026-11-23 · Code: `Tests/SiteTests`, `Sources/App/LaunchMode.swift`, `SiteKit/Tests/SiteCoreTests`, `SiteKit/Sources/SiteUI` (`VaultPreviewModifier`, `NearbyPreviewModifer`), `SiteKit/Sources/SiteUI/sample-shows.json`,
 `.github/workflows/main.yml`
 
 ## Summary
 
 The tests are unit tests of the data model, the navigation state and the pure policies, written
-with the Testing framework. They run in four places: the app-hosted `Tests` target, through the
-`SiteApp` scheme, and the `SharedTests`, `SiteCoreTests` and `SiteUITests` of the `Shared` and `SiteKit` packages, which need no host. There
+with the Testing framework. They run in three places: the app-hosted `Tests` target, through the
+`SiteApp` scheme, and the `SiteCoreTests` and `SiteUITests` of the `SiteKit` package, which need no host. There
 are no UI tests. SwiftUI previews are the way views are checked, and they have their own fixtures.
 This RFC says how the tests are laid out, how a `Vault` is made for them, how time, location and
 files are made deterministic, and what has no tests.
@@ -16,19 +16,18 @@ files are made deterministic, and what has no tests.
 
 | Folder | Imports | Tests |
 |---|---|---|
-| `Shared/Tests/SharedTests` | `Shared`, `SharedTestSupport` | `ArchivePath`, `ArchiveCategory`, `Annum` formats, `PartialDate`, `Decade`, ranking, calendar and day of the leap year, library sorting, token and ID comparison, `Vault` statistics, first and most recent sets, `Bracket` loading and cache, Shows Today snapshot, stats and timeline |
-| `SiteKit/Tests/SiteUITests` | `SiteUI`, `SiteCore`, `SharedTestSupport` | navigation state, the missing path rules, tab state, paging, map fit, the sample archive, persisted state versions, `Annum` neighbours |
-| `SiteKit/Tests/SiteCoreTests` | `SiteCore`, `Shared`, `SharedTestSupport` | `VaultModel` and its location source, location filter and city, `SiteModel` loading, `VaultLoader`, atlas cache, category sort activities, search matching, months, weekdays, rank distribution, library sections, digest comparison, the widget snapshot publish |
-| `Tests/SiteTests` | `SiteApp`, `SiteCore`, `Shared` | entity identifiers and catalog, concert search, user activities of entities, venue places, the cache age of places |
+| `SiteKit/Tests/SiteUITests` | `SiteUI`, `SiteCore`, `SiteTestSupport` | navigation state, the missing path rules, tab state, paging, map fit, the sample archive, persisted state versions, `Annum` neighbours |
+| `SiteKit/Tests/SiteCoreTests` | `SiteCore`, `SiteTestSupport` | `ArchivePath`, `ArchiveCategory`, `Annum` formats, `PartialDate`, `Decade`, ranking, calendar and day of the leap year, library sorting, token and ID comparison, `Vault` statistics, first and most recent sets, `Bracket` loading and cache, Shows Today snapshot, stats and timeline, `VaultModel` and its location source, location filter and city, `SiteModel` loading, `VaultLoader`, atlas cache, category sort activities, search matching, months, weekdays, rank distribution, library sections, digest comparison, the widget snapshot publish |
+| `Tests/SiteTests` | `SiteApp`, `SiteCore` | entity identifiers and catalog, concert search, user activities of entities, venue places, the cache age of places |
 
-`SharedTests`, `SiteCoreTests` and `SiteUITests` are test targets of the `Shared` and `SiteKit`
-packages, run with `swift test --package-path Shared` and `swift test --package-path SiteKit`. They have no host, so
-they start nothing from the app. The rest run as the one `Tests` target of `SiteApp.xcodeproj`,
-hosted by the app (`TEST_HOST`). A test that imports nothing from `SiteApp` belongs in a package
-target. `SharedTestSupport` is a target of `Shared` that holds `InMemoryCache`, for the package
-tests. `Tests` compiles that one file itself, and doesn't link the product, so there is no second
-copy of `Shared` in the test bundle. `Tests` and the packages turn on `MemberImportVisibility`, as
-the app does, so a test file imports a module only when it uses something that module declares; an
+`SiteCoreTests` and `SiteUITests` are test targets of the `SiteKit` package, run with
+`swift test --package-path SiteKit`. They have no host, so they start nothing from the app. The
+rest run as the one `Tests` target of `SiteApp.xcodeproj`, hosted by the app (`TEST_HOST`). A test
+that imports nothing from `SiteApp` belongs in a package target. `SiteTestSupport` is a target of
+`SiteKit` that holds `InMemoryCache`, for the package tests. `Tests` compiles that one file itself,
+and doesn't link the target, so there is no second copy of `SiteCore` in the test bundle. `Tests`
+and the packages turn on `MemberImportVisibility`, as the app does, so a test file imports a module
+only when it uses something that module declares; an
 import it doesn't need is how a test that could run without the app is spotted.
 
 ## Framework
@@ -37,7 +36,7 @@ import it doesn't need is how a test that could run without the app is spotted.
    No file uses XCTest.
 2. A suite is a `struct` named for what it covers, in `<Subject>Tests.swift`. `@Suite` is not
    used. A suite that touches main-actor types is marked `@MainActor`.
-3. Tests import their subjects with `@testable import Shared` or `@testable import SiteApp`.
+3. Tests import their subjects with `@testable import SiteCore` or `@testable import SiteApp`.
 4. A test that runs one case over many inputs SHOULD use `@Test(arguments:)`, with
    `ArchiveCategory.allCases` for each category. A display name is optional; the
    navigation tests give one, most tests don't.
@@ -107,7 +106,7 @@ preview of a view in the package finds it, and it is in a release build too, at 
 ## Running
 
 - `xcodebuild test` runs the `SiteApp` scheme on `platform=macOS`, and `swift test --package-path
-  Shared` and `swift test --package-path SiteKit` run the package tests. The iOS and tvOS simulator
+  SiteKit` runs the package tests. The iOS and tvOS simulator
   destinations only build; no test runs there, as a simulator costs minutes in CI for seconds of
   tests ([RFC 015](015-ci-and-release.md)). This matches CLAUDE.md.
 - Nothing runs on a physical device. Locally, tests run on My Mac or a simulator.
@@ -121,7 +120,7 @@ preview of a view in the package finds it, and it is in a release build too, at 
 
 ## Not yet covered
 
-- Views: how `SiteKit/Sources/SiteUI` and `Shared/Sources/Shared/UI` look and lay out has no tests; previews only.
+- Views: how `SiteKit/Sources/SiteUI` and `SiteKit/Sources/SiteUI` look and lay out has no tests; previews only.
 - Widgets: the Shows Today snapshot, stats and timeline have tests, `SiteWidgets` does not.
 - Intents: entity identifiers and `ConcertSearch` have tests; the queries, `Open…` intents and
   `SiteShortcuts` have none that this RFC found.
@@ -138,5 +137,5 @@ preview of a view in the package finds it, and it is in a release build too, at 
   without a clock, a network or a location permission prompt.
 - **Previews for views.** The previews show real shows from a small sample, so they work offline,
   and are not a substitute for deterministic tests.
-- **A hostless target for `Shared`.** Its tests run without launching the app, so they don't
+- **A hostless target for `SiteCore`.** Its tests run without launching the app, so they don't
   start the app's own work or depend on the website being reachable.

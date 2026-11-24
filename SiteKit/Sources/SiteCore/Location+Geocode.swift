@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Shared
 
 extension Location: Geocodable {
   public var addressString: String {

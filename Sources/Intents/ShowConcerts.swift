@@ -7,7 +7,6 @@
 
 @preconcurrency import AppIntents
 import Foundation
-import Shared
 import SiteCore
 import SwiftUI
 

@@ -8,7 +8,6 @@
 import Foundation
 import Testing
 
-@testable import Shared
 @testable import SiteCore
 
 private func date(year: Int, month: Int, day: Int) -> Date {

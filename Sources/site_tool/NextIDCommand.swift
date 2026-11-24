@@ -6,7 +6,7 @@
 
 import ArgumentParser
 import Foundation
-import Shared
+import SiteCore
 
 extension Collection where Element == String {
   fileprivate var archiveIndices: Set<Int> {

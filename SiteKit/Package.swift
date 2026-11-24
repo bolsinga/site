@@ -18,13 +18,15 @@ let package = Package(
       targets: ["SiteUI"]),
   ],
   dependencies: [
-    .package(path: "../Shared")
+    .package(url: "https://github.com/apple/swift-algorithms.git", from: "1.2.1"),
+    .package(url: "https://github.com/apple/swift-collections.git", from: "1.7.1"),
   ],
   targets: [
     .target(
       name: "SiteCore",
       dependencies: [
-        .product(name: "Shared", package: "Shared")
+        .product(name: "Algorithms", package: "swift-algorithms"),
+        .product(name: "Collections", package: "swift-collections"),
       ],
       resources: [
         .process("Localizable.xcstrings")
@@ -36,8 +38,7 @@ let package = Package(
     .target(
       name: "SiteUI",
       dependencies: [
-        "SiteCore",
-        .product(name: "Shared", package: "Shared"),
+        "SiteCore"
       ],
       resources: [
         .process("Localizable.xcstrings"),
@@ -47,23 +48,23 @@ let package = Package(
         .treatAllWarnings(as: .error),
         .enableUpcomingFeature("MemberImportVisibility"),
       ]),
+    .target(
+      name: "SiteTestSupport",
+      dependencies: ["SiteCore"],
+      swiftSettings: [
+        .treatAllWarnings(as: .error),
+        .enableUpcomingFeature("MemberImportVisibility"),
+      ]),
     .testTarget(
       name: "SiteUITests",
-      dependencies: [
-        "SiteUI",
-        "SiteCore",
-        .product(name: "SharedTestSupport", package: "Shared"),
-      ],
+      dependencies: ["SiteUI", "SiteCore", "SiteTestSupport"],
       swiftSettings: [
         .treatAllWarnings(as: .error),
         .enableUpcomingFeature("MemberImportVisibility"),
       ]),
     .testTarget(
       name: "SiteCoreTests",
-      dependencies: [
-        "SiteCore",
-        .product(name: "SharedTestSupport", package: "Shared"),
-      ],
+      dependencies: ["SiteCore", "SiteTestSupport"],
       swiftSettings: [
         .treatAllWarnings(as: .error),
         .enableUpcomingFeature("MemberImportVisibility"),

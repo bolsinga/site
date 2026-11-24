@@ -7,7 +7,6 @@
 
 #if !os(tvOS)
   import CoreSpotlight
-  import Shared
   import os
   import SiteCore
 

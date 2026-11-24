@@ -7,7 +7,6 @@
 
 import Foundation
 import Intents
-import Shared
 import os
 
 extension Logger {

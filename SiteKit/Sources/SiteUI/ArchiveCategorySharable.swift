@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Shared
 import SiteCore
 
 struct ArchiveCategorySharable: ArchiveSharable {

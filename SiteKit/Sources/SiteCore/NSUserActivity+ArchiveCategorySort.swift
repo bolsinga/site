@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Shared
 
 /// The order a category's list is shown in, so a Handoff arrives with the same one.
 package enum ArchiveCategorySort: Equatable {

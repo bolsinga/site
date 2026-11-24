@@ -6,7 +6,6 @@
 //
 
 import MapKit
-import Shared
 
 /// Every identifier lookup in the app takes its turn here, as MapKit limits them across the app.
 public enum MapItemLookup {

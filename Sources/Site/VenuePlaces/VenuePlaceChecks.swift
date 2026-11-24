@@ -7,7 +7,6 @@
 
 import CoreLocation
 import Foundation
-import Shared
 import SiteCore
 import os
 

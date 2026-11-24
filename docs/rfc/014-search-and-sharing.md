@@ -4,7 +4,7 @@ Status: Accepted · Updated: 2026-11-23 · Code: `SiteKit/Sources/SiteUI` (`Arch
 `ArchiveSearchModifier`, `ArchiveScope`, `RankableSearchableSortList`, `ArchiveSharable*`,
 `ArchiveCategorySharable`, `ArchivePathLink`, `ArchiveTabView`), `SiteKit/Sources/SiteCore`
 (`String+AttributedMatching`), `SiteKit/Sources/SiteCore` (`VaultModel`, `NSUserActivity+Search`),
-`Shared/Sources/Shared/MusicData` (`Nameable`, `Vault`, `TokenSearchError`)
+`SiteKit/Sources/SiteCore/MusicData` (`Nameable`, `Vault`, `TokenSearchError`)
 
 ## Summary
 

@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Shared
 
 extension Array where Element == (Date, Int) {
   fileprivate func matching(rank: Rank) -> [Date] {

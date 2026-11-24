@@ -1,6 +1,6 @@
 # RFC 007: The Shows Today widget and its snapshot
 
-Status: Accepted · Updated: 2026-11-22 · Code: `SiteWidgets`, `Shared/Sources/Shared/Widget`,
+Status: Accepted · Updated: 2026-11-22 · Code: `SiteWidgets`, `SiteKit/Sources/SiteCore/Widget`,
 `SiteKit/Sources/SiteCore/SiteModel+Widget.swift`, `SiteKit/Sources/SiteCore/SiteModel.swift`
 
 ## Summary
@@ -84,8 +84,9 @@ How the app handles the link is [RFC 003](003-navigation-entry-points.md).
 The widget offers the system families (small, medium, large, and extra large on iPad and Mac),
 and on iOS the Lock Screen families (rectangular, inline, circular).
 
-13. Views that the app also uses live in `Shared` and take their settings from the environment.
-    The widget MUST NOT depend on the app's models.
+13. Views that the app also uses live in `SiteUI` and take their settings from the environment.
+    The widget links `SiteCore` and `SiteUI` for the data types and those views, and MUST NOT
+    depend on the app's models (`SiteModel`, `VaultModel`).
 14. The new and last-seen markers are colored dots, which mean something only in color. They are
     shown only for the full-color rendering mode, and omitted in tinted and vibrant renderings.
 15. Text MUST truncate or shrink, not grow, since a widget can't. A list shows as many rows as

@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Shared
 
 extension Dictionary where Key: Codable, Value: Codable {
   package static func read(

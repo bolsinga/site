@@ -6,7 +6,7 @@
 //
 
 import AppIntents
-import Shared
+import SiteCore
 import WidgetKit
 
 /// Raw values are persisted in people's widget configurations; never rename or remove them.

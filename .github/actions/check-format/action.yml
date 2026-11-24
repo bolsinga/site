@@ -4,7 +4,7 @@ description: Runs swift-format over the code base and fails if it changes any fi
 inputs:
   paths:
     description: The directories to format.
-    default: Sources Shared/Sources Shared/Tests Shared/Package.swift SiteKit/Sources SiteKit/Tests SiteKit/Package.swift Tests SiteWidgets
+    default: Sources SiteKit/Sources SiteKit/Tests SiteKit/Package.swift Tests SiteWidgets
 
 runs:
   using: composite

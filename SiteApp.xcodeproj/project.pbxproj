@@ -10,11 +10,11 @@
 		FE5C0DE1308F000100AA0001 /* SiteCore in Frameworks */ = {isa = PBXBuildFile; productRef = FE5C0DE2308F000100AA0001 /* SiteCore */; };
 		FE5C0DE5308F000100AA0001 /* InMemoryCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE5C0DE4308F000100AA0001 /* InMemoryCache.swift */; };
 		FE5C0DE7308F000100AA0001 /* SiteUI in Frameworks */ = {isa = PBXBuildFile; productRef = FE5C0DE6308F000100AA0001 /* SiteUI */; };
-		FE8B98233081D3F400FC410D /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = FE8B98223081D3F400FC410D /* Shared */; };
+		FE5C0DF1308F000100AA0001 /* SiteCore in Frameworks */ = {isa = PBXBuildFile; productRef = FE5C0DE2308F000100AA0001 /* SiteCore */; };
+		FE5C0DF2308F000100AA0001 /* SiteUI in Frameworks */ = {isa = PBXBuildFile; productRef = FE5C0DE6308F000100AA0001 /* SiteUI */; };
 		FE8BA5D53082653F00FC410D /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE8BA5D43082653F00FC410D /* WidgetKit.framework */; };
 		FE8BA5D73082653F00FC410D /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE8BA5D63082653F00FC410D /* SwiftUI.framework */; };
 		FE8BA5E43082654000FC410D /* SiteWidgetsExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FE8BA5D33082653F00FC410D /* SiteWidgetsExtension.appex */; platformFilters = (ios, macos, ); settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		FE8BA5EB3082656300FC410D /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = FE8BA5EA3082656300FC410D /* Shared */; };
 		FEB722BE2E776336006A4DA2 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = FEB722BD2E776336006A4DA2 /* Algorithms */; };
 		FED94E0A2F1D481100E7A555 /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = FED94E092F1D481100E7A555 /* ArgumentParser */; };
 		FED95A502F1D7A9C00E7A555 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = FED95A4F2F1D7A9C00E7A555 /* Collections */; };
@@ -51,7 +51,7 @@
 
 /* Begin PBXFileReference section */
 		FE5360FD29CE82CA00618099 /* SiteApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SiteApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		FE5C0DE4308F000100AA0001 /* InMemoryCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = InMemoryCache.swift; path = Shared/Sources/SharedTestSupport/InMemoryCache.swift; sourceTree = SOURCE_ROOT; };
+		FE5C0DE4308F000100AA0001 /* InMemoryCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = InMemoryCache.swift; path = SiteKit/Sources/SiteTestSupport/InMemoryCache.swift; sourceTree = SOURCE_ROOT; };
 		FE7CE0DE30AA88F700B59F0E /* CLAUDE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CLAUDE.md; sourceTree = "<group>"; };
 		FE7CE0DF30AA88F700B59F0E /* docs */ = {isa = PBXFileReference; lastKnownFileType = folder; path = docs; sourceTree = "<group>"; };
 		FE8BA5D33082653F00FC410D /* SiteWidgetsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SiteWidgetsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -124,7 +124,6 @@
 			isa = PBXFrameworksBuildPhase;
 			files = (
 				FED95A502F1D7A9C00E7A555 /* Collections in Frameworks */,
-				FE8B98233081D3F400FC410D /* Shared in Frameworks */,
 				FE5C0DE1308F000100AA0001 /* SiteCore in Frameworks */,
 				FE5C0DE7308F000100AA0001 /* SiteUI in Frameworks */,
 				FED94E0A2F1D481100E7A555 /* ArgumentParser in Frameworks */,
@@ -136,7 +135,8 @@
 			files = (
 				FE8BA5D73082653F00FC410D /* SwiftUI.framework in Frameworks */,
 				FE8BA5D53082653F00FC410D /* WidgetKit.framework in Frameworks */,
-				FE8BA5EB3082656300FC410D /* Shared in Frameworks */,
+				FE5C0DF1308F000100AA0001 /* SiteCore in Frameworks */,
+				FE5C0DF2308F000100AA0001 /* SiteUI in Frameworks */,
 			);
 		};
 		FEE0AEC92E6E74F5005CE1AB /* Frameworks */ = {
@@ -207,7 +207,6 @@
 				FEB722BD2E776336006A4DA2 /* Algorithms */,
 				FED94E092F1D481100E7A555 /* ArgumentParser */,
 				FED95A4F2F1D7A9C00E7A555 /* Collections */,
-				FE8B98223081D3F400FC410D /* Shared */,
 				FE5C0DE2308F000100AA0001 /* SiteCore */,
 				FE5C0DE6308F000100AA0001 /* SiteUI */,
 			);
@@ -230,7 +229,8 @@
 			);
 			name = SiteWidgetsExtension;
 			packageProductDependencies = (
-				FE8BA5EA3082656300FC410D /* Shared */,
+				FE5C0DE2308F000100AA0001 /* SiteCore */,
+				FE5C0DE6308F000100AA0001 /* SiteUI */,
 			);
 			productName = SiteWidgetsExtension;
 			productReference = FE8BA5D33082653F00FC410D /* SiteWidgetsExtension.appex */;
@@ -292,7 +292,6 @@
 				FEB4895C2E6E6E8F0043057D /* XCRemoteSwiftPackageReference "swift-argument-parser" */,
 				FEB722BC2E776336006A4DA2 /* XCRemoteSwiftPackageReference "swift-algorithms" */,
 				FED95A4E2F1D7A9C00E7A555 /* XCRemoteSwiftPackageReference "swift-collections" */,
-				FE8B98213081D3F400FC410D /* XCLocalSwiftPackageReference "Shared" */,
 				FE5C0DE3308F000100AA0001 /* XCLocalSwiftPackageReference "SiteKit" */,
 			);
 			preferredProjectObjectVersion = 110;
@@ -787,10 +786,6 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = SiteKit;
 		};
-		FE8B98213081D3F400FC410D /* XCLocalSwiftPackageReference "Shared" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = Shared;
-		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
@@ -830,15 +825,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FE5C0DE3308F000100AA0001 /* XCLocalSwiftPackageReference "SiteKit" */;
 			productName = SiteUI;
-		};
-		FE8B98223081D3F400FC410D /* Shared */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Shared;
-		};
-		FE8BA5EA3082656300FC410D /* Shared */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = FE8B98213081D3F400FC410D /* XCLocalSwiftPackageReference "Shared" */;
-			productName = Shared;
 		};
 		FEB722BD2E776336006A4DA2 /* Algorithms */ = {
 			isa = XCSwiftPackageProductDependency;

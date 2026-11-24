@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Shared
+import SiteCore
 
 enum ArchiveScope: CaseIterable {
   case all
