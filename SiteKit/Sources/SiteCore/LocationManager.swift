@@ -135,6 +135,7 @@ package actor LocationManager: LocationSource {
 
   private class Delegate: NSObject, CLLocationManagerDelegate {
     package func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+      // swift-format-ignore: NoBlockComments
       guard let nsError = error as NSError?, nsError.domain == kCLErrorDomain,
         nsError.code != 0 /* kCLErrorLocationUnknown */
       else {

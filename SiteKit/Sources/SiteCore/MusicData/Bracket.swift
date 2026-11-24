@@ -108,7 +108,8 @@ public struct Bracket: Codable, Sendable {
 
   private let compareTokenMap: [ArchivePath: String]
 
-  let relationMap: [ArchivePath: Set<ArchivePath>]  // Artist/Venue ArchivePath : Set<Artist/Venue ArchivePath>
+  // Artist/Venue ArchivePath : Set<Artist/Venue ArchivePath>
+  let relationMap: [ArchivePath: Set<ArchivePath>]
 
   let timestamp: Date
 

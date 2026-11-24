@@ -31,7 +31,8 @@ Each workflow has three jobs. `build` is the matrix below. `format` is one step,
 `.github/actions/check-format`, so both workflows share it. It runs the setup action, then
 `xcrun swift-format format --in-place --recursive Sources SiteKit/Sources SiteKit/Tests SiteKit/Package.swift Tests SiteWidgets`, and
 fails if that changes any file (`git diff --exit-code`), printing the change and the command that
-fixes it. The directories are its `paths` input. `boundaries` is one step too, the local action
+fixes it. It then runs `xcrun swift-format lint --strict --recursive` over the same directories,
+which fails on any warning. The directories are its `paths` input. `boundaries` is one step too, the local action
 `.github/actions/check-boundaries`, which runs `check.sh` (it takes a repository root, so it can be
 run by hand). It fails if a file of `SiteKit/Sources/SiteCore` imports `SwiftUI`, `UIKit`, `AppKit`,
 `WidgetKit` or `AppIntents`; if it uses `.shared`, `UserDefaults`, `.standard`, `Bundle.main` or
@@ -141,7 +142,10 @@ build with that file signs with the developer's team.
 7. A change MUST NOT put a team id, certificate or token in a tracked file. The team id belongs in
    the git-ignored `DevelopmentTeam.xcconfig`.
 8. Code MUST be `swift-format` clean (default configuration): the `format` job fails a change
-   that `swift-format format` would alter, and a release is checked the same way. `CLAUDE.md`
+   that `swift-format format` would alter or that `swift-format lint --strict` reports, and a
+   release is checked the same way. A finding that is deliberate is marked with
+   `// swift-format-ignore: <Rule>` above the statement or declaration; `EndOfLineComment` can't
+   be marked, so such a comment goes on the line above. `CLAUDE.md`
    still says to format before pushing, so the job doesn't fail a change that could have been
    formatted first.
 9. Code new on a platform MUST be guarded for the platforms that lack it, such as
@@ -166,10 +170,11 @@ build with that file signs with the developer's team.
 - **Newest of a major version, with a floor.** A runner image that has a later 27.x but not the
   exact one still builds, and a runner whose Xcode is too old fails with the reason, not with a
   compile error. The floor is in one action, so both workflows share it.
-- **Format, not lint.** The check formats and then looks for changes, so it asks whether the code
+- **Format and lint.** The check formats and then looks for changes, so it asks whether the code
   is what the formatter makes. `swift-format lint` also reports rules the formatter doesn't fix
-  (such as `ReplaceForEachWithForLoop` and `AlwaysUseLowerCamelCase`), which the code base
-  doesn't follow.
+  (such as `ReplaceForEachWithForLoop` and `AlwaysUseLowerCamelCase`). Those that were already in
+  the code base are marked as ignored, so that lint can run in CI and a new finding fails at once,
+  and each mark is a finding still to be judged.
 - **Boundaries by search.** The model is in a package so it can be tested without the app, which
   only holds while it takes the system's services as parameters. A search of its sources is
   enough to notice a framework import or a singleton, and it runs in seconds, without a build.
@@ -181,6 +186,5 @@ build with that file signs with the developer's team.
 - **Automated version bump.** The versions are bumped by hand. See [#1785](https://github.com/bolsinga/site/issues/1785).
 - **Signed builds from CI.** Signed builds are made locally, and CI has no secrets. See [#1786](https://github.com/bolsinga/site/issues/1786).
 - **Test coverage.** The tests don't run on iOS or tvOS in CI, and no test plan is used, as one test target in one environment gains nothing from it.
-- **Lint.** `swift-format lint` with the default configuration reports warnings on the code
-  base as it is, in rules the formatter doesn't fix. Whether CI should run it, with those fixed or
-  a configuration that turns them off, is open. See [#1742](https://github.com/bolsinga/site/issues/1742).
+- **Lint.** The findings that are marked `swift-format-ignore` are each to be fixed or kept with a
+  reason. See [#1742](https://github.com/bolsinga/site/issues/1742).

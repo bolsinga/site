@@ -8,6 +8,7 @@
 import AppIntents
 import SiteCore
 
+// swift-format-ignore: AvoidRetroactiveConformances
 extension ArchivePath: @retroactive EntityIdentifierConvertible {
   public var entityIdentifierString: String {
     formatted(.rawID)

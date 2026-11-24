@@ -111,6 +111,7 @@ struct ArchiveStateView: View {
   private func exists(_ path: ArchivePath) -> Bool { model.vault.contains(path) }
 
   var body: some View {
+    // swift-format-ignore: OnlyOneTrailingClosureArgument
     archiveBody
       // Pages restored from before the archive changed may not be in the new one.
       .onChange(of: ObjectIdentifier(model), initial: true) {

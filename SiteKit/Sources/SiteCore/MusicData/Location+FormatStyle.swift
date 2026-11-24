@@ -70,6 +70,7 @@ extension FormatStyle where Self == Location.FormatStyle {
   package static var oneLine: Self { .init(.oneLine) }
   public static var oneLineNoURL: Self { .init(.oneLineNoURL) }
 
+  // swift-format-ignore: AlwaysUseLowerCamelCase
   static func Location(style: Location.FormatStyle.Style = .oneLine) -> Self {
     .init(style)
   }

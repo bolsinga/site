@@ -27,6 +27,7 @@ struct YearBrowser: View {
   let didShowAnnum: (Annum) -> Void
 
   var body: some View {
+    // swift-format-ignore: OnlyOneTrailingClosureArgument
     PagedBrowser(
       item: annum, neighbors: { $0.neighbors(in: annums) }, digest: digest, url: url,
       title: { annum, _ in annum.formatted() }, didShow: didShowAnnum

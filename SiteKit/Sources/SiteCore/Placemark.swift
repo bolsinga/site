@@ -17,6 +17,7 @@ private enum Keys: String, CodingKey {
   case longitude
 }
 
+// swift-format-ignore: AvoidRetroactiveConformances
 extension CLLocationCoordinate2D: @retroactive Decodable {
   public init(from decoder: any Decoder) throws {
     let values = try decoder.container(keyedBy: Keys.self)
@@ -26,6 +27,7 @@ extension CLLocationCoordinate2D: @retroactive Decodable {
   }
 }
 
+// swift-format-ignore: AvoidRetroactiveConformances
 extension CLLocationCoordinate2D: @retroactive Encodable {
   public func encode(to encoder: any Encoder) throws {
     var container = encoder.container(keyedBy: Keys.self)

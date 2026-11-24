@@ -110,7 +110,8 @@ struct ShowDetail: View {
       .padding(.horizontal)
     }
     .appEntityIdentifier(appHooks.entityIdentifier(concert.id))
-    .navigationTitle(concert.formatted(.headlinerAndVenue))  // Hidden below, but still titles the back button.
+    // Hidden below, but still titles the back button.
+    .navigationTitle(concert.formatted(.headlinerAndVenue))
     #if !os(tvOS)
       .toolbar(removing: .title)
     #endif
