@@ -41,11 +41,16 @@ changes in memory, and saves them back through `ShowsFile`. The file, its IDs an
 
 7. Until the file is saved, a new show, artist or venue can be edited or removed. After the save,
    it is part of the archive.
+   Removing a new show can leave a new venue that no show names. The editor MUST then offer to
+   remove the venue too, or to keep it so a show can be added to it, and MUST NOT save while a
+   venue has no show ([RFC 018](018-shows-file.md), rule 10). A removed venue's `vN` is not handed
+   out again, as for any ID (RFC 018, rule 8).
 8. Edits are kept in memory only, as in Venue Places. The window is marked edited until it is
    saved, and closing it, or quitting the app, with unsaved changes asks first.
 9. Save MUST be in the File menu (⌘S) and MUST write with `ShowsFile.write`. When `ArchiveCheck`
    reports problems, nothing is written, and the window lists every problem with the show, artist
-   or venue it is about, so each can be fixed.
+   or venue it is about, so each can be fixed. A venue that no show names is one of them, and is
+   offered the same two ways out as in rule 7.
 10. After a save, the window shows each new show's URL path (`/dates/shN.html`), so it can be
     checked once the site is rebuilt.
 
@@ -58,11 +63,15 @@ changes in memory, and saves them back through `ShowsFile`. The file, its IDs an
 - **IDs shown when added.** The ID is the show's URL, so seeing it before saving lets the person
   check it, and find the page afterward.
 - **All problems at once.** A save that stopped at the first problem would need a save per fix.
+- **A venue goes with its last show, or gets another.** web_generator stops on a venue with no
+  show, so the file can't be saved that way. Removing the venue is what the person usually means,
+  and keeping it lets them add the show it was for, so the editor offers both.
 
 ## Non-goals
 
 - Changing or deleting a show, artist or venue once saved. Fixes go through the file until there
-  is a need for more.
+  is a need for more. A saved venue whose last show is taken out through the file is caught by
+  `ArchiveCheck` when the file is next written ([RFC 018](018-shows-file.md), rule 10).
 - Editing relations.
 - iOS, iPadOS and tvOS.
 
