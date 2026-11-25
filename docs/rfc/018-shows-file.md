@@ -91,6 +91,7 @@ The facts that shape this design:
     - IDs are unique within each kind, and start with their kind's prefix.
     - Every show's `venue` and `artists`, and every relation's members, are IDs in the file.
     - Every show has at least one artist.
+    - Every venue is named by at least one show. An artist needs none (rule 2).
     - Dates are possible: month 1–12, and a day that exists in its month (in a leap year when the
       year is unknown).
     - Each relation's members are all artists or all venues.
@@ -157,6 +158,10 @@ The facts that shape this design:
   should be a small diff.
 - **Checks in the writer.** Every way of saving the file, the editor's or any later one, goes
   through `ShowsFile.write`, so none can skip them.
+- **A venue needs a show.** web_generator makes a page for every venue that lists its shows, and
+  stops the run on a venue with none. Checking it here keeps the app from writing a file that
+  web_generator rejects, for example once a venue's last show is removed or moved to another venue.
+  Artists differ: an artist with no shows is fine, as iTunes-only artists are.
 - **Only the HTML must match.** The HTML is what people see and link to. The JSON exports are
   read by this app, which doesn't depend on their key order or byte layout.
 
