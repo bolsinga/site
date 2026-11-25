@@ -65,8 +65,8 @@ The facts that shape this design:
 4. `timestamp` MUST be the time of the write.
 5. Optional values that are `nil` MUST be left out, which the synthesized `Codable` already does.
    An unknown part of a date is a missing key, and a wholly unknown date is `{}`. Never `0`.
-6. Fields web_generator writes that the app does not model (`Location.zip`, `Venue.comment`,
-   `Artist.location` and `Artist.comment`) are never set by web_generator's raw input, so the
+6. Fields web_generator writes that the app does not model (`Venue.comment`, `Artist.location`
+   and `Artist.comment`) are never set by web_generator's raw input, so the
    shows file drops nothing that exists. `ArchiveCheck` (rule 10) MUST fail a file that has them,
    so the assumption is checked, not trusted.
 7. The file MUST be named `shows.json`, live with web_generator's other inputs (the folder passed
